@@ -10,7 +10,7 @@ env_setup (void)
 	char *name;
 
 	if (getenv ("BARIS_PATH") == NULL) {
-		if ((name = getlogin ()) != NULL) {
+		if ((name = getenv ("USER")) != NULL) {
 			if (strcmp (name, "pace") == 0)
 				putenv ("BARIS_PATH=/l/baris");
 		}
@@ -160,14 +160,6 @@ open_gamedat (char *name)
 		exit (1);
 	}
 
-#if 0	
-	sprintf (fullname, "%s/GAMEDAT/%s", barisDirectoryPath, name);
-	if ((f = fopen (fullname, "r")) == NULL) {
-//		fprintf (stderr, "can't open %s\n", fullname);
-		//exit (1);
-	}
-#endif
-
 	for (i=0;i<strlen(name)+1;i++)
 		try_name[i] = toupper(name[i]);
 	sprintf (fullname, "%s/GAMEDAT/%s", barisDirectoryPath, try_name);
@@ -177,6 +169,18 @@ open_gamedat (char *name)
 	for (i=0;i<strlen(name)+1;i++)
 		try_name[i] = tolower(name[i]);
 	sprintf (fullname, "%s/gamedat/%s", barisDirectoryPath, try_name);
+	if ((f = fopen (fullname, "r")) != NULL)
+		return (f);
+
+	for (i=0;i<strlen(name)+1;i++)
+		try_name[i] = toupper(name[i]);
+	sprintf (fullname, "%s/ROM/%s", barisDirectoryPath, try_name);
+	if ((f = fopen (fullname, "r")) != NULL)
+		return (f);
+
+	for (i=0;i<strlen(name)+1;i++)
+		try_name[i] = tolower(name[i]);
+	sprintf (fullname, "%s/rom/%s", barisDirectoryPath, try_name);
 	if ((f = fopen (fullname, "r")) != NULL)
 		return (f);
 
