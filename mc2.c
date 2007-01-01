@@ -118,7 +118,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
     case 'D': case 'E': case 'F': case 'G': case 'K':
     case 'M': case 'N': case 'O': case 'X': case 'Y':
     case 'f': case 'g':
-         if (MH[pad][1]->ID[1]==0x32) Mev[step].Class=1;       // Kicker-C
+	    if (MH[pad][1] && MH[pad][1]->ID[1]==0x32) Mev[step].Class=1;       // Kicker-C
 	      else Mev[step].Class=0;
 	      break;
     case 'b': case 'c':   // Duration Step
@@ -153,7 +153,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
          if (step>11 && MH[pad][0]!=NULL) Mev[step].Class=0; // Cap L->E
 	      break;
     case 'Q': case 'R': case 'S': case 'T':
-         if (MH[pad][1]->ID[1]==0x32) Mev[step].Class=1;       // Kicker-C
+         if (MH[pad][1] && MH[pad][1]->ID[1]==0x32) Mev[step].Class=1;       // Kicker-C
          else if (MH[pad][2]!=NULL) Mev[step].Class=2; // LM
          else if (MH[pad][0]!=NULL) Mev[step].Class=0; // Capsule
          else Mev[step].Class=3;                            // Satellite
@@ -173,7 +173,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
                Mev[step].PComp=WhichPart(plr,Mev[step].Prest=-18);  // CAP
              else Mev[step].Prest=-100;Mev[step].PComp=0;
              break;
-   case 'C': if (MH[pad][3]->ID[1]==0x30) Mev[step].Prest=0;
+   case 'C': if (MH[pad][3] && MH[pad][3]->ID[1]==0x30) Mev[step].Prest=0;
              else Mev[step].Prest=-100;
              break;
    case 'E': Mev[step].PComp=WhichPart(plr,Mev[step].Prest=-27); break;
@@ -182,7 +182,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
    case 'M': Mev[step].PComp=WhichPart(plr,Mev[step].Prest=-20); break;
    case 'O': Mev[step].PComp=WhichPart(plr,Mev[step].Prest=-19); break;
    case 'P': Mev[step].PComp=WhichPart(plr,Mev[step].Prest=26); break;
-   case 'S': if (MH[pad][3]->ID[1]==0x32)
+   case 'S': if (MH[pad][3] && MH[pad][3]->ID[1]==0x32)
                Mev[step].PComp=WhichPart(plr,Mev[step].Prest=-7);
              break;
    case 'T': // Done on lunar launch for good reason
@@ -301,8 +301,8 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 
 
       if (Mev[step].Class==5) {
-         if (MH[0][1]->ID[1]==0x32) strncat(Mev[step].Name,"M2",2); //Kicker C
-         else if (MH[pad][0]->ID[1]==0x34) strncat(Mev[step].Name,"C4",2); // FourMan
+         if (MH[0][1] && MH[0][1]->ID[1]==0x32) strncat(Mev[step].Name,"M2",2); //Kicker C
+         else if (MH[pad][0] && MH[pad][0]->ID[1]==0x34) strncat(Mev[step].Name,"C4",2); // FourMan
          else {  // standard LMs
             if (mcode=='P') {
                if (MH[pad][2]!=NULL) strncat(Mev[step].Name,MH[pad][2]->ID,2);
@@ -344,13 +344,16 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 
   // Special Cases for the Failure Mode Charts
    if ((Mev[step].loc==0) &&  // MS Failure Launch
+     MH[pad][Mev[step].Class] &&
      strncmp(Data->P[plr].Manned[3].Name,MH[pad][Mev[step].Class]->Name,5)==0)
       Mev[step].FName[1]='1';
    else if (Mev[step].loc==4 &&   // MS Failure Landing
+     MH[pad][Mev[step].Class] &&
      strncmp(Data->P[plr].Manned[3].Name,MH[pad][Mev[step].Class]->Name,5)==0)
       Mev[step].FName[1]='3';
    else if (plr==1 && Mev[step].loc==4) {
       if ((Mev[step].loc==4) &&  // Soviet Capsules : Vostok
+       MH[pad][Mev[step].Class] &&
        strncmp(Data->P[plr].Manned[0].Name,MH[pad][Mev[step].Class]->Name,5)==0)
          Mev[step].FName[1]='1';
       else Mev[step].FName[1]='2'; // Other Capsules

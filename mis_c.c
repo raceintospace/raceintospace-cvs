@@ -390,17 +390,21 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			printf ("can't open frm seq %d,%d\n", aidx, mode);
 			break;
 		}
-
 		j=0;
 
 		hold_count = 0;
 		while (1) {
+			av_step ();
+
 			if (BABY==0 && BIG==0) Tick(plr);
-			if (Data->Def.Sound==1) UpdateAudio();
 
 			if (hold_count == 0) {
 				if (frm_get2 (frm, &vhptr.vptr[40000], &pal[384]) <= 0)
 					break;
+
+				if (j == 0)
+					printf ("frame rate %d\n",
+						frm->frame_rate);
 
 				if (frm->next_frame_chunks == 0 && j == 0) {
 					printf ("need fancy handling for hold\n");
@@ -425,7 +429,10 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			if (BIG==0)SMove(&vhptr.vptr[40000],80,3+plr*10);
 			else LMove(&vhptr.vptr[40000]);
 
-			idle_loop (FRM_Delay * 3);
+			if (frm->frame_rate)
+				idle_loop_secs (1.0 / frm->frame_rate);
+			else
+				idle_loop_secs (1.0 / 8.0);
 
 			if (sts<23) {
 				// pace

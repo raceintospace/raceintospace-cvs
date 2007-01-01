@@ -207,6 +207,7 @@ char cdrom_dir[1000];
 void remove_savedat (char *name);
 
 void idle_loop (int ticks);
+void idle_loop_secs (double secs);
 void unimp (void);
 
 void env_setup (void);

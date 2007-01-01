@@ -4,9 +4,6 @@ extern int gtk_mouse_x, gtk_mouse_y, gtk_mouse_pressed;
 
 extern void unimp (void);
 
-int grGetPixel (int x, int y){unimp();return 0;}
-void grSetLineStyle (int style, int width){unimp();}
-
 extern unsigned char *screen;
 extern char pal[];
 
@@ -223,6 +220,20 @@ grGetMouseBounds(int *x1p, int *y1p, int *x2p, int *y2p)
 
 void
 grSetMouseBounds (int x1, int y1, int x2, int y2)
+{
+}
+
+int
+grGetPixel (int x, int y)
+{
+	if (x >= 0 && x < 320
+	    && y >= 0 && y < 200)
+		return (screen[y * 320 + x]);
+	return (0);
+}
+
+void
+grSetLineStyle (int style, int width)
 {
 }
 

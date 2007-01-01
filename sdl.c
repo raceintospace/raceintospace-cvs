@@ -156,6 +156,7 @@ int keybuf[KEYBUF_SIZE];
 int keybuf_in_idx, keybuf_out_idx;
 
 
+/* non-blocking */
 void
 av_step (void)
 {

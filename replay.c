@@ -251,7 +251,11 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 		   goto skip_step;
 	   }
 
-	   idle_loop (FRM_Delay * 3);
+	   if (frm->frame_rate)
+		   idle_loop_secs (1.0 / frm->frame_rate);
+	   else
+		   idle_loop_secs (1.0 / 8.0);
+
    }
 
    frm_close (frm);

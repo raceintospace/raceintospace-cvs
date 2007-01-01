@@ -766,18 +766,42 @@ randomize (void)
 }
 
 void
-idle_loop (int ticks)
+idle_loop_secs (double secs)
 {
 	double start;
-	double secs;
+	double delta;
+	double thistime;
+	struct timeval tv;
 
 	gr_sync ();
 
-	secs = ticks / 2000.0;
-
 	start = get_time ();
-	while (get_time () - start < secs)
-		UpdateAudio ();
+
+	while (1) {
+		av_step ();
+
+		delta = get_time () - start;
+
+		if (delta >= secs)
+			break;
+
+		thistime = secs - delta;
+		if (thistime > .030)
+			thistime = .030;
+
+		tv.tv_sec = floor (thistime);
+		tv.tv_usec = (thistime - tv.tv_sec) * 1000000.0;
+		if (tv.tv_usec >= 1000000)
+			tv.tv_usec = 999999;
+
+		select (0, NULL, NULL, NULL, &tv);
+	}
+}
+
+void
+idle_loop (int ticks)
+{
+	idle_loop_secs (ticks / 2000.0);
 }
 
 char Sounds;

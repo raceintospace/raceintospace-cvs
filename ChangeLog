@@ -1,5 +1,9 @@
 2007-01-01  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V13
+	
+	* make mission display work; fix up inter-frame delays in video;
+
 	* V12
 
 	* switch from gtk to sdl; make use of toupper safe against
