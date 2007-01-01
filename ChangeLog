@@ -1,0 +1,41 @@
+2007-01-01  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V8
+	
+	* PlaySequence, Replay
+	
+	* change "kill()" to "remove_savegame()"
+
+	* remove uses of SetROMDir, chdir, unlink
+
+2006-12-31  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V7
+	
+	* old bug: initialization of FList when looking for saved games
+
+	* frm decoding; first page of mission history screen (with
+	still image from movie)
+
+2006-12-30  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V6
+	
+	* change many RLED to RLED_img
+	
+	* avoid segfaults due to NULL pointers
+	
+2006-12-29  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V5
+
+	* V4
+
+2006-12-28  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V3
+
+	* V2
+
+	* V1
+

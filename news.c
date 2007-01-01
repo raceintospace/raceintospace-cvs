@@ -1,0 +1,1026 @@
+/*
+    Copyright (C) 2005 Michael K. McCarty & Fritz Bronner
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+// Interplay's BUZZ ALDRIN's RACE into SPACE
+//
+// Formerly -=> LiftOff : Race to the Moon :: IBM version MCGA
+// Copyright 1991 by Strategic Visions, Inc.
+// Designed by Fritz Bronner
+// Programmed by Michael K McCarty
+//
+// NewsCaster Main Files
+
+#include "Buzz_inc.h"
+#include "externs.h"
+#include "replay.h"
+
+char *totnews_dat;
+int totnews_offset;
+
+#define PHYS_PAGE_OFFSET  0x4000
+#define BUFFR_FRAMES 1
+#define FIRST_FRAME 0
+
+int bufsize;
+int evflag,LOAD_US=0,LOAD_SV=0;
+BYTE Frame,X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex,SYNC;
+WORD handle0,handle1,handle2,handle3,handle4,handle5;
+extern char Option;
+extern char Musics,Sounds;
+
+struct MTAB {
+ ui16 size;
+ long offset;
+} table[99];
+
+struct rNews
+ {
+  i16 offset;
+  char chrs;
+ };
+
+
+void NFrame(int x1, int y1, int x2, int y2)
+{
+  grSetColor(0);Box(x1,y1,x2,y2+1);
+  OutBox(x1,y1,x2,y2);
+  grSetColor(3);
+  Box(x1+1,y1+1,x2-1,y2-1);Box(x1+2,y1+2,x2-2,y2-2);
+  InBox(x1+3,y1+3,x2-3,y2-3);
+}
+
+void GoNews(char plr)
+{
+  int i,j;
+  struct rNews *list;
+
+  memset(Name,0x00,sizeof Name);
+  memset(buffer,0x00,20480);  // clear buffer
+  grSetColor(1);
+
+  j=ResolveEvent(plr);
+  if (j>0) Data->Events[Data->Count]=j+99;
+  OpenNews(plr,buffer+6000,(int) Data->Events[Data->Count]);
+
+  Data->P[plr].eCount++;
+
+  DispNews(plr,buffer+6000,buffer);
+
+  j=0;
+  memset(buffer+6000,0x00,8000);  //clear memory
+  list=(struct rNews *) buffer+6000;
+  for(i=0;i<strlen(buffer);i++) {
+    if (buffer[i]=='x') {list[i].chrs=j;list[i].offset=i;}
+    else j++;
+  }
+}
+
+// Open News Constructs a complete event array.
+void OpenNews(char plr,char *buf,int bud)
+{
+  int j,fout,size;
+  FILE *fp,*gork;
+  char old[120];
+  long i,len[5];
+  ONEWS oNews;
+  size=(plr==0) ? 232: 177;
+  i=(long)500*bud+(long)plr*250;
+  //if (plr==1 && bud==22) i=11250L;
+  // Event Card Info
+  if (plr==0) strcpy(&buf[0],"IN THE NEWS TODAY...x");
+  else strcpy(&buf[0],"DEVELOPMENTS IN THE WORLD...x");
+
+  fp=sOpen("EVENT.DAT","rb",0);
+  fseek(fp,i,SEEK_SET);
+  bufsize=strlen(buf);
+  fread(&buf[bufsize],249,1,fp); 
+  fclose(fp);
+  bufsize=strlen(buf);
+  buf[bufsize]='x';
+  //Astronaut info
+
+  fp=sOpen("NEWS.DAT","rb",0);
+  fread(&len[0],sizeof (len),1,fp);
+
+  i=0;
+
+  for (j=0;j<Data->P[plr].AstroCount;j++)
+    if (Data->P[plr].Pool[j].Special>0) i++;
+
+  bufsize=strlen(buf);
+  if (i>0) {
+    if (plr==0) strcpy(&buf[bufsize],"xASTRONAUTS IN THE NEWS...x");
+    else strcpy(&buf[bufsize],"xIN COSMONAUT NEWS...x");
+  }
+
+  for (j=0;j<Data->P[plr].AstroCount;j++) {
+    if (Data->P[plr].Pool[j].Special>0) {    // 12 ideas
+      bufsize=strlen(buf);
+      strcpy(&buf[bufsize],Data->P[plr].Pool[j].Name);
+      i=len[0]+len[1]+(sizeof len)+50*(Data->P[plr].Pool[j].Special-1);
+      fseek(fp,i,SEEK_SET);
+      bufsize=strlen(buf);
+      fread(&buf[bufsize],50,1,fp);
+    }
+    if (Data->P[plr].Pool[j].Special==1 || (Data->P[plr].Pool[j].Special>0 && Data->P[plr].Pool[j].RetReas==8)) {  //13 other things
+      i=len[0]+len[1]+len[2]+(sizeof len)+50*(Data->P[plr].Pool[j].RetReas-1);
+      if (plr==1) i+=len[3];
+      fseek(fp,i,SEEK_SET);
+      bufsize=strlen(buf);
+      fread(&buf[bufsize],50,1,fp);
+    }
+    Data->P[plr].Pool[j].Special=0;
+  }
+
+  if (Data->Year>=58) {
+    if (Data->Season==1 && plr==0)
+      strcpy(&buf[strlen(buf)],"xCHECK INTELLIGENCE, THE CIA REPORTS NEW INFORMATION.x\0");
+    else if (Data->Season==1 && plr==1)
+      strcpy(&buf[strlen(buf)],"xCHECK INTELLIGENCE, THE KGB REPORTS NEW INFORMATION.x\0");
+  }
+
+  //-----------------------------------------------------
+  //Specs: check tracking station for directors message | 
+  //-----------------------------------------------------
+ #if 1
+  if (Option!=-1)
+   {
+    if ((gork = sOpen((Option==0) ? "SENDR.MSG" : "SENDH.MSG", "r+b",0)) != NULL)
+     {
+      fread(&old,sizeof(old),1,gork);
+      if (old[0]!=0x00)
+       {
+        if (Option==0) {
+         strcpy(&buf[strlen(buf)],"xCHECK THE TRACKING STATION, THE SOVIETx");
+         strcpy(&buf[strlen(buf)],"DIRECTOR HAS SENT A NEW MESSAGE.x\0");
+        }
+        else if (Option==1) {
+         strcpy(&buf[strlen(buf)],"xCHECK THE TRACKING STATION, THE UNITEDx");
+         strcpy(&buf[strlen(buf)],"STATES DIRECTOR HAS SENT A NEW MESSAGE.x\0");
+        }
+       }
+      fclose(gork);
+     }
+   };
+ #endif
+
+  bufsize=strlen(buf);
+  if (Data->P[plr].Plans && 0xff)
+     strcpy(&buf[bufsize],"xPLANETARY MISSION UPDATES...x");
+
+  // Past Mission Info
+  if (Data->P[plr].Plans & 0x0f) {  // Failures
+     if (Data->P[plr].Plans & 0x01) strcpy(&buf[strlen(buf)],"MARS FLYBY FAILS!x");
+     if (Data->P[plr].Plans & 0x02) strcpy(&buf[strlen(buf)],"JUPITER FLYBY FAILS!x");
+     if (Data->P[plr].Plans & 0x04) strcpy(&buf[strlen(buf)],"SATURN FLYBY FAILS!x");
+  }
+  if (Data->P[plr].Plans & 0xf0) {
+     if (Data->P[plr].Plans & 0x10) strcpy(&buf[strlen(buf)],"MARS FLYBY SUCCESS!x");
+     if (Data->P[plr].Plans & 0x20) strcpy(&buf[strlen(buf)],"JUPITER FLYBY SUCCESS!x");
+     if (Data->P[plr].Plans & 0x40) strcpy(&buf[strlen(buf)],"SATURN FLYBY SUCCESS!x");
+  }
+  Data->P[plr].Plans=0;
+
+  // History info
+  fseek(fp,sizeof(len),SEEK_SET);
+  bufsize=strlen(buf);
+  if (plr==0) strcpy(&buf[bufsize],"xALSO IN THE NEWS...x");
+  else strcpy(&buf[bufsize],"xOTHER EVENTS IN THE NEWS...x");
+  bufsize=strlen(buf);
+
+  if (plr==1) fseek(fp,len[0],SEEK_CUR); // go to start of Soviet news
+  if (plr==0) i=((Data->Year-57)*6+Data->Season*3+random(3))*size;
+  else i=((Data->Year-57)*4+Data->Season*2+random(2))*size;
+  fseek(fp,i,SEEK_CUR);
+
+  fread(&buf[bufsize],size,1,fp);
+  fclose(fp);
+  strcat(buf,"x");
+  bufsize=strlen(buf);
+  if (plr==0) strcpy(&buf[bufsize],"xAND THAT'S THE NEWS, I'M CARTER WALCRITE.x");
+  else strcpy(&buf[bufsize],"xTHIS CONCLUDES OUR NEWS, I'M SVETLANA IZVESTIA.x");
+}
+
+void DispNews(char plr,char *src,char *dest)
+{
+  int i=0,j=0,k=0,l,fout;
+  for (i=0;i<strlen(src);i++) {
+    dest[j]=src[i];
+    switch(dest[j]) {
+      case 'a': case 'd': case 'f': case 'j': case 'i':
+		itoa(evflag,&Name[0],10);
+		strncpy(&dest[j],&Name[0],strlen(Name));
+		j+=strlen(Name)-1;
+		break;
+     case 'b': switch(evflag) {
+		  case 0: strcpy(&Name[0],"FIRST");break;
+		  case 1: strcpy(&Name[0],"SECOND");break;
+		  case 2: strcpy(&Name[0],"THIRD");break;
+		};
+		strncpy(&dest[j],&Name[0],strlen(Name));
+		j+=strlen(Name)-1;
+		break;
+      case 'c': strncpy(&dest[j],&Name[0],strlen(Name));
+		j+=strlen(Name)-1;
+		break;
+      case 'e': strncpy(&dest[j],&Name[0],strlen(Name));
+		j+=strlen(Name)-1;
+		break;
+      case 'h':switch(evflag)
+                {
+                 case 0:strcpy(&Name[0],"PRIMARY");break;
+                 case 1:strcpy(&Name[0],"SECONDARY");break;
+                 case 2:strcpy(&Name[0],"THIRD");break;
+                 default:break;
+                }
+               break;
+      case 'g': if (plr==0) {
+		  if (Data->Year<=59) strcpy(&Name[0],"EISENHOWER");
+		  if (Data->Year>=60 && Data->Year<=63) strcpy(&Name[0],"KENNEDY");
+		  if (Data->Year>=64 && Data->Year<=67) strcpy(&Name[0],"JOHNSON");
+		  if (Data->Year>=68 && Data->Year<=73) strcpy(&Name[0],"NIXON");
+		  if (Data->Year>=74 && Data->Year<=75) strcpy(&Name[0],"FORD");
+		  if (Data->Year>=76 && Data->Year<=79) strcpy(&Name[0],"CARTER");
+		};
+		if (plr==1) {
+		  if (Data->Year<64) strcpy(&Name[0],"KHRUSHCHEV");
+		  if (Data->Year==64 && Data->Season==0) strcpy(&Name[0],"KHRUSHCHEV");
+		  if (Data->Year==64 && Data->Season==1) strcpy(&Name[0],"BREZHNEV");
+		  if (Data->Year>65) strcpy(&Name[0],"BREZHNEV");
+		};
+		strncpy(&dest[j],&Name[0],strlen(Name));
+		j+=strlen(Name)-1;
+		break;
+      case 'm': strncpy(&dest[j],Data->P[plr].Name,strlen(Data->P[plr].Name));
+		j+=strlen(Data->P[plr].Name)-1;
+		break;
+      case 'x': k=0;
+		break;
+      case ' ': if (k>34) {
+		  dest[j]='x';
+		  k=0; 
+		  if (src[i+1]==' ') i++;
+		};
+      default: break;
+    };
+    j++;k++;
+  };
+}
+
+void PreLoadAnim(char plr,char mode)
+{
+ MouseOff();
+ gxClearDisplay(0,0);
+ ShBox(49,54,262,122);
+ InBox(53,57,258,105);
+ InBox(53,108,258,119);
+ RectFill(54,109,257,118,11);
+ InBox(56,60,255,72);
+ RectFill(57,61,254,71,7);
+ grSetColor(11);
+ PrintAt(73,68,"UPDATING NEWSCASTER ANIMATION");
+ grSetColor(11);
+ PrintAt(64,81,"INSTALLING YOUR NEW");
+ if (mode==1) PrintAt(64,90,"BLACK AND WHITE TV SET.");
+  else PrintAt(64,90,"COLOR TV SET.");
+ grSetColor(9);
+ if (plr==0) {PrintAt(64,99,"TYPE: ");grSetColor(1);PrintAt(0,0,"U.S. NEWSCASTER");}
+  else {PrintAt(64,99,"TYPE: ");grSetColor(1);PrintAt(0,0,"SOVIET NEWSCASTER");}
+ FadeIn(2,pal,10,0,0);
+ if (plr==1) {
+  LoadNewsAnim((mode==0)? 10 : 11,BUFFR_FRAMES); //Angle
+  LoadNewsAnim((mode==0)? 6 : 7,BUFFR_FRAMES); //Closing
+  LoadNewsAnim((mode==0)? 4 : 5,BUFFR_FRAMES); //Opening
+ } else {
+  LoadNewsAnim((mode==0) ? 9 : 8,BUFFR_FRAMES);  //Angle
+  LoadNewsAnim((mode==0) ? 3 : 2,BUFFR_FRAMES);  //Closing
+  LoadNewsAnim((mode==0) ? 1 : 0,BUFFR_FRAMES);  //Opening
+ };
+ FadeOut(2,pal,10,0,0);
+ MouseOn();
+ return;
+}
+
+void CloseNewsAnim(void)
+{
+ if (LOAD_US==1 || LOAD_US==2) {
+  DeAlloc(0);
+  DeAlloc(1);
+  DeAlloc(2);
+  LOAD_US=0;
+ }
+ if (LOAD_SV==1 || LOAD_SV==2) {
+  DeAlloc(3);
+  DeAlloc(4);
+  DeAlloc(5);
+  LOAD_SV=0;
+ }
+ return;
+}
+
+void DrawNews(char plr)
+{
+  int i,fin;
+  long len[2];
+
+  MouseOff();
+  gxClearDisplay(0,0);
+  memset(screen,0xff,320*113);
+  pal[767]=pal[766]=pal[765]=0x00;
+  OutBox(0,0,319,113);
+  grSetColor(3);
+  Box(1,1,318,112);Box(2,2,317,111);
+  InBox(3,3,316,110);
+  ShBox(240,3,316,22);
+  RectFill(315,20,317,21,3);
+  RectFill(241,2,242,4,3);
+  IOBox(243,3,316,19);
+  grSetColor(1);PrintAt(258,13,"CONTINUE");
+  ShBox(0,115,319,199);
+  InBox(4,118,297,196);  RectFill(5,119,296,195,7+3*plr);
+  InBox(301,118,315,196); RectFill(302,119,314,195,0);
+  ShBox(303,120,313,156); ShBox(303,158,313,194);
+  UPArrow(305,126);DNArrow(305,163);
+  MouseOn();
+}
+
+void DrawNText(char plr,char got)
+{
+  int xx=12,yy=128,i,j;
+  char *buf;
+  buf=buffer;
+  grSetColor(1);
+  for (i=0;i<got;i++) {
+    while(*buf!='x') buf++;
+    buf++;              
+    if (strncmp(&buf[0],"ASTRONAUTS IN THE NEWS",22)==0) grSetColor(11);
+    if (strncmp(&buf[0],"ALSO IN THE NEWS",16)==0) grSetColor(12);
+    if (strncmp(&buf[0],"IN COSMONAUT NEWS",17)==0) grSetColor(11);
+    if (strncmp(&buf[0],"OTHER EVENTS IN THE NEWS",24)==0) grSetColor(12);
+    if (strncmp(&buf[0],"PLANETARY",9)==0) grSetColor(11);
+    if (strncmp(&buf[0],"CHECK INTEL",11)==0) grSetColor(11);
+    if (strncmp(&buf[0],"CHECK THE TRACKING STATION",26)==0) grSetColor((plr==0) ? 9 : 7);
+  }
+  MouseOff();
+  for(i=0;i<8;i++) {
+    RectFill(5,yy-7,296,yy+1,7+3*plr);
+    grMoveTo(xx,yy);
+    if (strncmp(&buf[0],"ASTRONAUTS IN THE NEWS",22)==0) grSetColor(11);
+    if (strncmp(&buf[0],"ALSO IN THE NEWS",16)==0) grSetColor(12);
+    if (strncmp(&buf[0],"IN COSMONAUT NEWS",17)==0) grSetColor(11);
+    if (strncmp(&buf[0],"OTHER EVENTS IN THE NEWS",24)==0) grSetColor(12);
+    if (strncmp(&buf[0],"PLANETARY",9)==0) grSetColor(11);
+    if (strncmp(&buf[0],"AND THAT'S THE NEWS",19)==0) grSetColor(11);
+    if (strncmp(&buf[0],"THIS CONCLUDES OUR NEWS",23)==0) grSetColor(11);
+    if (strncmp(&buf[0],"CHECK INTEL",11)==0) grSetColor(11);
+    if (strncmp(&buf[0],"CHECK THE TRACKING STATION",26)==0) grSetColor((plr==0) ? 9 : 7);
+
+    while(buf[0]!='x'&& buf[0]!=NULL) {DispChr(buf[0]);buf++;};
+    yy+=9;
+    buf++;
+    if (*buf==NULL) i=9;
+  }
+  MouseOn();
+}
+
+void News(char plr)
+{
+  int bline=0,ctop=0,i;
+  FILE *fout;
+  char cYr[5];
+  struct rNews *list;
+  ONEWS oNews;
+  long pl;
+  char loc=0,Index;
+  BYTE Status=0,BW=0,play_rate;
+  unsigned long tim;
+
+  //: LOAD_US & LOAD_SV  0 None 1 B/W 2 Color
+  if (Data->Year<=63)
+   {
+    BW=1;
+    if (plr==0 && LOAD_US==2) {
+     DeAlloc(0);DeAlloc(1);DeAlloc(2);
+     LOAD_US=0;
+    };
+    if (plr==1 && LOAD_SV==2) {
+     DeAlloc(3);DeAlloc(4);DeAlloc(5);
+     LOAD_SV=0;
+    };
+   }
+   else
+   {
+    BW=0;
+    if (plr==0 && LOAD_US==1) {
+      DeAlloc(0);DeAlloc(1);DeAlloc(2);
+      LOAD_US=0;
+     };
+    if (plr==1 && LOAD_SV==1) {
+      DeAlloc(3);DeAlloc(4);DeAlloc(5);
+      LOAD_SV=0;
+    };
+   };
+
+ ///Specs: preload anims
+  if (plr==0 && LOAD_US==0) {
+   PreLoadAnim(plr,BW);
+   if (BW==1) LOAD_US=1; else LOAD_US=2;
+  }
+  else if (plr==1 && LOAD_SV==0) {
+   PreLoadAnim(plr,BW);
+   if (BW==1) LOAD_SV=1; else LOAD_SV=2;
+  }
+//  DrawNews(plr);
+  GoNews(plr);
+
+
+ #if 1
+  if ((plr==0 && LOAD_US==0) || (plr==1 && LOAD_SV==0))
+   {
+    MouseOff();
+    itoa(1900+Data->Year,cYr,10);
+    if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
+     else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
+    DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
+    MouseOn();
+   };
+ #endif
+  for (i=0;i<strlen(buffer);i++) if (buffer[i]=='x') bline++;
+  bline-=8;
+
+  // File Structure is 84 longs 42 per side 
+
+  fout=sOpen("EVENT.TMP","r+b",1);
+  fseek(fout,0,SEEK_END);
+  oNews.offset=ftell(fout); oNews.size=(strlen(buffer));
+  fwrite(buffer,strlen(buffer),1,fout);
+  fseek(fout,(plr*42+Data->P[plr].eCount-1)*(sizeof (struct oldNews)),SEEK_SET);
+  fwrite(&oNews,sizeof (struct oldNews),1,fout);
+  fclose(fout); 
+  PreLoadMusic(M_NEW1970);
+
+  PlayMusic(0);
+
+   if (plr==1) LoadNewsAnim((BW==0) ? 10 : 11,69);    // Tom's News kludge
+    else if (plr==0) LoadNewsAnim((BW==0) ? 9 : 8,69);   // search TCS001 to find code
+   loc = 1;
+   Status = 0;
+
+  strcpy(IDT,"i002\0");
+  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  while (1)
+  {
+   key=0;
+   GetMouse();
+   BzTimer=0;
+   if (!(loc==0 && Status==1)) NUpdateVoice();
+   i=AnimSoundCheck();
+   if (Status==1 || (loc==3 && i==1))
+    switch(loc)
+     {
+      case 0://: Angle In
+             if (plr==1) LoadNewsAnim((BW==0) ? 10 : 11,FIRST_FRAME);
+              else if (plr==0) LoadNewsAnim((BW==0) ? 9 : 8,FIRST_FRAME);
+           #if 1
+             MouseOff();
+             itoa(1900+Data->Year,cYr,10);
+             if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
+              else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
+             DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
+             MouseOn();VBlank();
+           #endif
+             Status=0;
+             loc++;
+             break; 
+      case 1://: Intro
+             if (plr==1) LoadNewsAnim((BW==0) ? 4 : 5,FIRST_FRAME);
+              else if (plr==0) LoadNewsAnim((BW==0) ? 1 : 0,FIRST_FRAME);
+             Status=0;
+             if (AnimIndex==5) {
+               MouseOff();
+               RectFill(227,108,228,108,grGetPixel(227,108));
+               MouseOn();
+              }
+             PlayNewsAnim(AnimIndex);
+             PlayNewsAnim(AnimIndex);
+             PlayNewsAnim(AnimIndex);
+             PlayNewsAnim(AnimIndex);
+             NGetVoice(plr,0);
+             PlayVoice();
+             loc++;
+             break; 
+      case 2://: Event (sound)
+             NGetVoice(plr,Data->Events[Data->Count]+2);PlayVoice();
+             Status=0;
+             loc++;
+             if (Sounds==0) Status=1;  //no sound klugge(skip over event picture)
+             i=bline;ShowEvt(plr,Data->Events[Data->Count]);bline=i;
+             break;
+      case 3://: Close
+             if (plr==1) LoadNewsAnim((BW==0) ? 6 : 7,FIRST_FRAME);
+              else if (plr==0) LoadNewsAnim((BW==0) ? 3 : 2,FIRST_FRAME);
+             Status=0;
+             if (plr==0) {
+              PlayNewsAnim(AnimIndex);
+              PlayNewsAnim(AnimIndex);
+              PlayNewsAnim(AnimIndex);
+              PlayNewsAnim(AnimIndex);
+              PlayNewsAnim(AnimIndex);
+             }
+             NGetVoice(plr,1);
+             PlayVoice();
+             if (plr==1) {
+              BzTimer=0;while(BzTimer<170);
+             };
+             loc++;
+             break;
+      case 4://: Angle Out
+             if (plr==1) LoadNewsAnim((BW==0) ? 10 : 11,FIRST_FRAME);
+              else if (plr==0) LoadNewsAnim((BW==0) ? 9 : 8,FIRST_FRAME);
+            #if 1
+             MouseOff();
+             itoa(1900+Data->Year,cYr,10);
+             if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
+              else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
+             DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
+             MouseOn();
+            #endif
+             Status=0;
+             loc++;
+             break; 
+      case 5://: Event (no sound)
+             Status=0;  
+             loc++;
+             if (AnimIndex==9) {
+              MouseOff();
+              ShBox(240,3,316,22);
+              RectFill(315,20,317,21,3);
+              RectFill(241,2,242,4,3);
+              IOBox(243,3,316,19);
+              grSetColor(1);PrintAt(258,13,"CONTINUE");
+              MouseOn();
+             };
+             i=bline;ShowEvt(plr,Data->Events[Data->Count]);bline=i;
+             break; 
+      default:break;
+    };
+
+   if (Frame!=MaxFrame)
+    { 
+     PlayNewsAnim(AnimIndex);
+     if (Frame==MaxFrame) Status=1;
+    };
+   
+   //: Repeat News Sequence
+    if (key=='R' && loc==6)
+     {
+      KillVoice();
+      loc=0;Status=1;
+     }
+     if (ctop>0 && key==0x4900)
+      {  // Page Up Key
+       ctop-=9;
+       if (ctop<0) ctop=0;
+       DrawNText(plr,ctop);
+      }
+     else
+     if (ctop<bline && key==0x5100)
+      {  // Page Down Key
+       ctop+=9;
+       if (ctop>bline) ctop=bline;
+       DrawNText(plr,ctop);
+      }
+     else
+     if (ctop>0 && ((x>=303 && y>120 && x<=313 && y<=156 && mousebuttons>0) || (key>>8)==72 ))
+      {  // Up Arrow
+       MouseOff();InBox(303,120,313,156);MouseOn();
+       ctop--;
+       DrawNText(plr,ctop);
+       MouseOff();OutBox(303,120,313,156);MouseOn();
+      }  
+     else 
+     if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || (key==0x0d))
+      {  // Continue
+	    MouseOff();InBox(245,5,314,17);MouseOn();
+	    key=0;i=0;
+       KillMusic();
+       KillVoice();
+	    return; 
+      }
+     else
+     if (ctop<bline && ((x>=303 && y>158 && x<=313 && y<=194 && mousebuttons>0) || (key>>8)==80 ))
+      {  // Down Arrow
+       MouseOff();InBox(303,158,313,194);MouseOn();
+       ctop++;
+       DrawNText(plr,ctop);
+       MouseOff();OutBox(303,158,313,194);MouseOn();
+      }
+   if (SYNC==3) play_rate=10;
+    else if (SYNC==2) play_rate=7;
+     else play_rate=4;
+//   tim=BzTimer;while(BzTimer-tim<play_rate);
+   gr_sync ();
+   usleep (play_rate * 1000);
+  };
+}
+
+void DeAlloc(BYTE Page)
+{
+  switch(Page) {
+   case 0:EMS_DeAlloc(handle0);break;
+   case 1:EMS_DeAlloc(handle1);break;
+   case 2:EMS_DeAlloc(handle2);break;
+   case 3:EMS_DeAlloc(handle3);break;
+   case 4:EMS_DeAlloc(handle4);break;
+   case 5:EMS_DeAlloc(handle5);break;
+   default:break;
+  };
+}
+
+void AIEvent(char plr)
+{
+  int i,fin;
+  FILE *in;
+  char chai[23];
+  ResolveEvent(plr);
+}             
+
+char ResolveEvent(char plr)
+{
+  int i,j,bad,ctr;
+  bad=REvent(plr);
+  if (bad!=0) {
+    while  (Data->P[plr].BadCard[bad]!=0) {
+      bad=random(14);ctr++;
+      if (ctr>30) {memset(&Data->P[plr].BadCard[0],0x00,15);ctr=0;};
+    }
+    Data->P[plr].BadCard[bad]=1;
+    bad++;
+  }
+  return bad;  // zero if card is good
+}
+
+
+void Breakgrp(char plr)
+{
+  int i,j,k,l,temp;
+  j=plr;
+  if (plr==4)
+  for (k=0;k<6;k++) {
+    for (l=0;l<8;l++) {
+      temp=0;
+      if (Data->P[j].Gcnt[k][l]>0) {
+	for (i=0;i<Data->P[j].Gcnt[k][l];i++) {
+	  if (Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Status==1 ||
+	      Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Status==2 ||
+	      Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Status==3) temp++;
+	}; /* for i */
+	if (temp>0) {
+	  for (i=0;i<Data->P[j].Gcnt[k][l];i++) {
+	    Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].oldAssign=
+	       Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Assign;
+	    Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Assign=0;
+	    Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Crew=0;
+      Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Prime=0;
+	    Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Task=0;
+	    Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Moved=0;
+	    if (Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Special==0)
+		Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Special=6;
+	      Data->P[j].Crew[k][l][i]=0;
+	  };                        /* for i */
+	  Data->P[j].Gcnt[k][l]=0;
+	};                          /* it temp */
+      };                            /* if Gcnt */
+    };                              /* for l */
+  };                                /* for k */
+}
+
+void PlayNewsAnim(BYTE Index)
+{
+ GXHEADER local;
+ unsigned i,j;
+ int offset;
+
+ if (Frame==1) BzTimer=0;
+ GV(&local,Depth,Length);
+
+ RLED_img (totnews_dat + totnews_offset + table[Frame].offset,
+	   &local.vptr[0],
+	   table[Frame%MaxFrame].size,
+	   Depth,Length);
+ MouseOff();
+ gxPutImage(&local,gxXOR,X_Offset,Y_Offset,0);
+ MouseOn();
+ if (Frame==1 && (Index>=8 && Index<=11))
+  {
+   if (BzTimer<5) SYNC=3;
+    else if (BzTimer<7) SYNC=2;
+     else SYNC=1;
+  }
+ DV(&local);
+ Frame+=1;
+
+ if (gr_slow)
+	 gr_sync ();
+ return;
+}
+
+void FillAnim(unsigned index,unsigned maxf)
+{
+ unsigned fill;
+
+ MouseOff();
+ fill=((float)index/(float)maxf)*203;
+ if (index==maxf) fill=203;
+ if (fill>0 && fill<=203)
+  RectFill(54,109,54+(unsigned int)fill,118,7);
+ MouseOn();
+ return;
+}
+
+void LoadNewsAnim(BYTE Index,BYTE Mode)
+{
+ GXHEADER local;
+
+ int i,j;
+ long atotal;
+ BYTE *pix,*temp;
+ WORD seg,xf=0x00,aseg=0x00;
+ int aframe;
+ FILE *out,*gork;
+ unsigned MAX=0,TOT=0; 
+
+ struct aCHART {
+  BYTE frames;
+  BYTE x_off;
+  BYTE y_off;
+  BYTE width;
+  BYTE height;
+ } aChart;
+
+ struct GOD {
+  long size;
+  long offset;
+ } god[12];
+
+ if (Mode==1) {
+  switch(Index)
+   {
+    case 0:TOT=118;MAX=170;break;
+    case 1:TOT=135;MAX=181;break;
+    case 2:TOT=58;MAX=170;break;
+    case 3:TOT=75;MAX=181;break;
+    case 4:TOT=151;MAX=211;break;
+    case 5:TOT=167;MAX=227;break;
+    case 6:TOT=66;MAX=211;break;
+    case 7:TOT=68;MAX=227;break;
+    case 8:TOT=0;MAX=170;break;
+    case 9:TOT=0;MAX=181;break;
+    case 10:TOT=0;MAX=211;break;
+    case 11:TOT=0;MAX=227;break;
+    default:break;
+   }
+ };
+
+ totnews_dat = slurp_gamedat ("totnews.cdr");
+
+ out=sOpen("TOTNEWS.CDR","rb",0);
+ fseek(out,0x00,SEEK_SET);
+ fread(&god,sizeof god,1,out);
+
+ totnews_offset = god[Index].offset;
+
+ fseek(out,god[Index].offset,SEEK_SET);
+ fread(&aChart,sizeof aChart,1,out);
+ fread(table,sizeof(struct MTAB),aChart.frames,out);
+ fread(&pal[96],1,672,out);
+
+ Frame=1;
+ AnimIndex=Index;
+ MaxFrame=aChart.frames;
+ X_Offset=aChart.x_off;
+ Y_Offset=aChart.y_off;
+ Depth=aChart.width;
+ Length=aChart.height;
+
+ //Specs: calculate frames for allocation
+ aframe=god[Index].size/16384L;
+ aframe+=2; //buffer between animations in EMS
+ if (Mode==1)
+  {
+   switch(Index)
+    {
+     case 0:case 1:EMS_Alloc(&handle0,aframe);break;
+     case 2:case 3:EMS_Alloc(&handle1,aframe);break;
+     case 8:case 9:EMS_Alloc(&handle2,aframe);break;
+     case 4:case 5:EMS_Alloc(&handle3,aframe);break;
+     case 6:case 7:EMS_Alloc(&handle4,aframe);break;
+     case 10:case 11:EMS_Alloc(&handle5,aframe);break;
+     default:break;
+    }
+  }
+
+ if (Mode==0) {
+  MouseOff();
+  RectFill(4,4,239,109,0);
+  RectFill(240,23,315,109,0);
+  MouseOn();
+ };
+ if (Mode==0)
+  if (Index==9 || Index==1 || Index==3)
+   {
+    MouseOff();
+    ShBox(240,3,316,22);
+    RectFill(315,20,317,21,3);
+    RectFill(241,2,242,4,3);
+    IOBox(243,3,316,19);
+    grSetColor(1);PrintAt(258,13,"CONTINUE");
+    MouseOn();
+   };
+//Specs: Display Single Frame
+ if (Mode==0) {
+  gxSetDisplayPalette(pal);VBlank();
+  fseek(out,table[0].offset+god[Index].offset,SEEK_SET);
+  fread(vhptr.vptr,table[0].size,1,out);
+  gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
+  RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
+  GV(&local,79,23);
+  MouseOff();
+  gxGetImage(&local,240,0,319,23,0);
+  gxPutImage(&vhptr2,gxSET,4,4,0);
+  VBlank();
+  gxPutImage(&local,gxSET,240,0,0);
+  MouseOn();
+  gxDestroyVirtual(&vhptr2);
+  DV(&local);
+ };
+
+if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94
+
+      RectFill(0,0,319,239,0);   // clears screen
+
+//  RectFill(4,4,239,109,0);    //clears news anim space
+//  RectFill(240,23,315,109,0);
+
+  gxSetDisplayPalette(pal);
+  FadeOut(2,pal,1,0,0);
+
+  MouseOff();                                               // DrawNews() conv
+  gxClearDisplay(0,0);                                      // DrawNews() conv
+  memset(screen,0xff,320*113);                              // DrawNews() conv
+  OutBox(0,0,319,113);                                      // DrawNews() conv
+  grSetColor(3);                                            // DrawNews() conv
+  Box(1,1,318,112);Box(2,2,317,111);                        // DrawNews() conv
+  InBox(3,3,316,110);                                       // DrawNews() conv
+  ShBox(240,3,316,22);                                      // DrawNews() conv
+  RectFill(315,20,317,21,3);                                // DrawNews() conv
+  RectFill(241,2,242,4,3);                                  // DrawNews() conv
+  IOBox(243,3,316,19);                                      // DrawNews() conv
+  grSetColor(1);PrintAt(258,13,"CONTINUE");                 // DrawNews() conv
+  ShBox(0,115,319,199);                                     // DrawNews() conv
+  InBox(4,118,297,196);                                     // DrawNews() conv
+  if (Index ==  9 || Index == 8) RectFill(5,119,296,195,7); // If US
+  else RectFill(5,119,296,195,10);                          // else USSR
+
+  InBox(301,118,315,196); RectFill(302,119,314,195,0);      // DrawNews() conv
+  ShBox(303,120,313,156); ShBox(303,158,313,194);           // DrawNews() conv
+  UPArrow(305,126);DNArrow(305,163);                        // DrawNews() conv
+
+ if (Index == 9 || Index ==8) DrawNText(0,0);         // if US
+   else  DrawNText(1,0);         // else USSR      DRAWS THE TEXT
+
+  fseek(out,table[0].offset+god[Index].offset,SEEK_SET);
+  fread(vhptr.vptr,table[0].size,1,out);
+  gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
+  RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
+  GV(&local,79,23);
+  gxGetImage(&local,240,0,319,23,0);
+  gxPutImage(&local,gxSET,240,0,0);
+  gxPutImage(&vhptr2,gxSET,4,4,0);        // put under setpal
+   VBlank();
+  
+  if (Index==10 || Index==11 )        // Russian Whitespace in corner kludge
+   {
+    RectFill(240,4,315,22,0);    //clears news anim space
+    ShBox(240,3,316,22);
+    RectFill(315,20,317,21,3);
+    RectFill(241,2,242,4,3);
+    IOBox(243,3,316,19);
+    grSetColor(1);PrintAt(258,13,"CONTINUE");
+   }
+   else
+      {
+       ShBox(240,3,316,22);
+       RectFill(315,20,317,21,3);
+       RectFill(241,2,242,4,3);
+       IOBox(243,3,316,19);
+       grSetColor(1);PrintAt(258,13,"CONTINUE");
+      }
+
+    MouseOn();
+
+  FadeIn(2,pal,50,0,0);
+
+  gxDestroyVirtual(&vhptr2);
+  DV(&local);
+
+ }       // end TCS kludge ************************************
+
+
+
+//Specs: Map Into EMS
+#if 0 /* pace */
+ if (Mode==1)
+  {
+   for (i=0;i<aChart.frames;i++)
+    {
+     fseek(out,table[i].offset+god[Index].offset,SEEK_SET);
+     fread(&vhptr.vptr[0],table[i].size,1,out);
+     if (i!=0)
+      {
+       //calcalate page into EMS put into xf
+       atotal=0L;
+       for (j=1;j<i;j++)
+        atotal+=table[j].size;
+       xf=atotal/16384L;aseg=atotal%16384L;
+       switch(Index)
+        {
+         case 0:case 1:EMS_Map(handle0,0,xf);EMS_Map(handle0,1,xf+1);break;
+         case 2:case 3:EMS_Map(handle1,0,xf);EMS_Map(handle1,1,xf+1);break;
+         case 8:case 9:EMS_Map(handle2,0,xf);EMS_Map(handle2,1,xf+1);break;
+         case 4:case 5:EMS_Map(handle3,0,xf);EMS_Map(handle3,1,xf+1);break;
+         case 6:case 7:EMS_Map(handle4,0,xf);EMS_Map(handle4,1,xf+1);break;
+         case 10:case 11:EMS_Map(handle5,0,xf);EMS_Map(handle5,1,xf+1);break;
+         default:break;
+        };
+      for (j=0;j<table[i].size;j++)
+       ems[aseg+j]=vhptr.vptr[j];
+      FillAnim((unsigned)i+TOT,MAX);
+     }
+    };
+   if (Index==0 || Index==1 || Index==4 || Index==5)
+    FillAnim((unsigned)aChart.frames,(unsigned)aChart.frames);
+  }  
+#endif
+ fclose(out);
+ return;
+}
+
+void ShowEvt(char plr,char crd)
+{
+  FILE *ffin;
+  size_t i;
+  struct mm {
+    long off;
+    long size;
+  } MM;
+
+  memset(&pal[96],0,672);VBlank();SetPal(pal);
+  if (plr==0) {
+   switch(crd)
+    {
+     case 41:crd=45;break;
+     case 50:crd=67;break;
+     case 8:crd=98;break;
+     case 105:crd=112;break;
+     case 33:crd=111;break;
+     case 109:crd=108;break;
+     default:break;
+    }
+  }
+  ffin=sOpen("NEWS.CDR","rb",0);
+  if (ffin==NULL) return; // file does not exist
+  fseek(ffin,(plr*115+crd)*(sizeof MM),SEEK_SET);
+  fread(&MM,sizeof MM,1,ffin);
+
+  MouseOff();
+  if (MM.off!=0) {
+    fseek(ffin,MM.off,SEEK_SET);
+    fread(&pal[384],384,1,ffin);
+    fread(vhptr.vptr,(size_t) MM.size,1,ffin);
+
+    for (i=0;i<MM.size;i++) {
+     if (screen[i]>=32) screen[i]=vhptr.vptr[i];
+    }
+  }
+  VBlank();SetPal(pal);
+  MouseOn();
+  fclose(ffin);
+}
+
+// EOF
+

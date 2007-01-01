@@ -1,0 +1,2100 @@
+/*
+    Copyright (C) 2005 Michael K. McCarty & Fritz Bronner
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+//ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+//บInterplay's BUZZ ALDRIN's RACE into SPACE                     บ
+//บ                                                              บ
+//บFormerly -=> LiftOff : Race to the Moon :: IBM version MCGA   บ
+//บCopyright 1991 by Strategic Visions, Inc.                     บ
+//บDesigned by Fritz Bronner                                     บ
+//บProgrammed by Michael K McCarty                               บ
+//บ                                                              บ
+//ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+#include "Buzz_inc.h"
+//#include "cdmaster.h"
+  int cdROM,hDISK;
+
+void _ExceptInit(void) {}  // reduce EXE size
+
+  char Name[20];
+  struct Players far *Data;
+  int x,y,mousebuttons,key,oldx,oldy;
+  unsigned char far *screen;
+  unsigned char LOAD,QUIT,HARD1,UNIT1,BUTLOAD,FADE,AL_CALL,XMAS;
+  char pal[768],plr[2],IDT[5],IKEY[5],df,IDLE[2];
+  char far *buffer;
+  GXHEADER vhptr,vhptr2;
+  char far * oldpal,pNeg[2][3];
+  long xMODE;
+  unsigned long BzTimer,BzTimer2;
+  HTIMER server;
+  extern char Musics,Sounds;
+  char Option=-1,MAIL=-1;
+  int KO,SEG=15,FadeVal,fOFF=-1;
+  extern struct mStr Mis;
+  extern struct Prest_Upd MP[3];
+  struct cdtable *cdt;
+  BYTE far *ems;
+  long PalOff;
+  WORD LetHand;
+  char BIG;
+
+char *S_Name[] = {
+   "LAUNCH",
+   "ORBITAL INS. BURN",
+   "HARDWARE POWER-ON",
+   "RE-ENTRY",
+   "RECOVERY/LANDING",
+   "EARTH ORBITAL ACTIVITIES",
+   "EARTH DE-ORBIT BURN",
+   "ORBITAL EVA",
+   "DOCKING",
+   "TRANS-LUNAR INJECTION",
+   "TRANS-EARTH INJECTION",
+   "LUNAR ORBITAL INS. BURN",
+   "LUNAR ORBITAL ACTIVITIES",
+   "EARTH MID-COURSE ACT.",
+   "LUNAR MID-COURSE ACT.",
+   "LUNAR EVA",
+   "LEM ACTIVITIES",
+   "LUNAR DE-ORBIT BURN",
+   "LUNAR LANDING",
+   "LUNAR LIFTOFF",
+   "PHOTO RECONNAISSANCE",
+   "PLANET ORBIT BURN",
+   "PLANETARY ACTIVITIES",
+   "EARTH RENDEZVOUS",
+   "LUNAR RENDEZVOUS",
+   "TRANS-PLANETARY INJ.",
+   "LEM THRUST TEST",
+   "DURATION",
+   "JOINT DURATION",
+   "\0",
+   "MID-COURSE CORR. BURN",
+   "MID-COURSE CORR. BURN",
+   "EARTH ORBITAL INS. BURN"
+   };
+
+#define BSOUND 1
+#define HOST 0
+#define SLAVE 1
+#define MODEM_ERROR 4
+
+extern struct order Order[7];
+extern struct ManPool far *Men;
+char AI[2]={0,0};
+
+static char BUZZ_DIR[32];
+
+
+void far * far pascal FMalloc(unsigned long bytes){return(farmalloc(bytes));};
+int far pascal FFree(void far *ptr) {farfree(ptr); return(0);}
+unsigned long far pascal FCore(void) {return(farcoreleft());}
+char far *sbuf0,far *sbuf1;
+void timer_callback(void) {BzTimer++;}
+void HandleTimer1(void) {BzTimer++;}
+void HandleTimer2(void) {BzTimer2++;}
+void Plop(char plr,char mode);
+void killgame(char *fName);
+
+int TimingThing(void);
+
+/////////////////////////////////////////////
+// Set the Directory to the current ROM Directory
+//
+int cDrive;
+
+void SetROMDir(void)
+{
+}
+
+////////////////////////////////////////////
+// Restore the Directory to the original directory
+// on the hard disk
+//
+void RestoreDir(void)
+{
+
+}
+
+void mikeCrearScreen(void)
+{
+  MouseOff();
+  memset(screen,0x00,64000);
+  MouseOn();
+}
+
+/////////////////////////////////////////////////
+//
+//
+//  loc == 0 for FIND_FILE
+//         1 for SAVEDAT DIR
+//         2 for
+//
+FILE * sOpen(char *Name,char *mode,int loc)
+{
+   FILE *file,*fout;
+   char *fName;
+   char *p;
+
+   fName=(char *) malloc(128);
+   memset(fName,0x00,128);
+
+   if (loc==1) {
+	   sprintf (fName, "%s/savedat/%s", BUZZ_DIR, Name);
+   } else {
+	   sprintf (fName, "/l/baris/gamedat/%s", Name);
+   }
+
+   for (p = fName; *p; p++)
+	   *p = tolower (*p);
+		
+   file=fopen(fName,mode);
+
+   if (file == NULL) {
+	   strcpy (fName, Name);
+	   for (p = fName; *p; p++)
+		   *p = tolower (*p);
+	   file=fopen (fName, mode);
+   }
+
+   if (file == NULL) {
+	   sprintf (fName, "/l/baris/rom/%s", Name);
+	   for (p = fName; *p; p++)
+		   *p = tolower (*p);
+	   file = fopen (fName, mode);
+   }
+
+   printf ("open (\"%s\", \"%s\") = %p\n", fName, mode, file);
+
+   if (file == NULL && loc == 0) {
+	   extern void unimp (void);
+	   fprintf (stderr, "error in sOpen(\"%s\",\"%s\",%d) \"%s\"\n",
+		    Name, mode, loc, fName);
+	   unimp ();
+	   exit (1);
+   }
+
+#if 0
+   fout=fopen("C:\\USAGE.TXT","at+");
+   fprintf(fout,"Opening File: %s  Mode:%s  Result:%d\n",fName,mode,(file!=NULL));
+   fclose(fout);
+#endif
+
+   free(fName);
+   return file;
+}
+
+void killgame(char *fName)
+{
+	char fullname[1000];
+	char *p;
+
+	sprintf (fullname, "gamedat/%s", fName);
+	for (p = fullname; *p; p++)
+		*p = tolower (*p);
+	remove (fullname);
+}
+
+void remove_savedat(char *fName)
+{
+	char fullname[1000];
+	char *p;
+
+	sprintf (fullname, "savedat/%s", fName);
+	for (p = fullname; *p; p++)
+		*p = tolower (*p);
+
+	printf ("remove_savedat(\"%s\")...", fullname);
+
+	if (remove (fullname) < 0)
+		printf ("error %s\n", strerror (errno));
+	else
+		printf ("ok\n");
+
+}
+
+void
+usage (void)
+{
+	fprintf (stderr, "usage: baris\n");
+	exit (1);
+}
+
+int main(int argc, char *argv[])
+{
+  int i,_,T,purp,cdstat;
+  FILE *fin,*fout;
+  char *plc;
+  WORD seg;
+  unsigned long remain;
+  struct diskfree_t dfg;
+  int c;
+
+  unsigned int j;
+  char AName[6][22]={"NEW GAME","OLD GAME","MODEM","PLAY BY MAIL","CREDITS","EXIT TO DOS"};
+  char ex,side=0;
+
+  setup_gtk (&argc, &argv);
+
+  while ((c = getopt (argc, argv, "i")) != EOF) {
+	  switch (c) {
+	  case 'i':
+		  show_intro_flag = 1;
+		  break;
+	  default:
+		  usage ();
+	  }
+  }
+
+  // window(x1,y1,x2,y2);
+  //_setcursortype(_NOCURSOR);
+  //gotoxy(1,1);
+  //textbackground(BLUE);clrscr();
+  //textbackground(RED);clreol();
+  //textcolor(WHITE);
+  //cprintf("     Race into Space CD_ROM  (c)1993 Strategic Visions, Inc.");
+  //textbackground(BLUE);
+//  gotoxy(1,2);cprintf("Based on BARIS DOS v1.1\n");
+  //gotoxy(1,2);cprintf("CD-ROM Version 1.1\n");
+  //gotoxy(1,4);
+
+
+  memset(BUZZ_DIR,0x00,32);
+  getcwd(BUZZ_DIR,32);
+
+
+
+  //moved this higher MWR
+  cdROM=AquireDrive();
+  if (cdROM>30) {
+     //printf("CD-ROM Drive not found.\n");
+     return 1;
+  }
+
+
+//check for EMS_Status
+
+
+//  else cprintf("SUCCESS: EMS found.\n");
+//  EMS_PageAddr(&seg);
+//  ems=(BYTE far *) MK_FP(seg,0x0000);  // page 0 of EMS frame
+
+//  //check if enough available EMS
+//  if (EMS_Avail() < 160)
+//   {
+//    gotoxy(1,10);
+//    cprintf("You cannot execute BARIS because EMS (extended memory) is too low.");
+//    gotoxy(1,11);
+//    cprintf("Make sure there is at least 2.6MB of EMS memory available.");
+//    gotoxy(1,12);
+//    return 1;
+//   }
+
+
+//  fin=fopen("EMMXXXX0","rb");
+//  if (!fin) {
+//    gotoxy(1,10);
+//    cprintf("You cannot execute BARIS because you do not have any EMS.");
+//    gotoxy(1,11);
+//    cprintf("Make sure there is at least 2.6MB of EMS memory available.");
+//    gotoxy(1,12);
+//    return 1;
+//  }
+//  fclose(fin);
+
+
+//  gotoxy(1,5);cprintf("Total Pages: %d (%ld bytes)\n",EMS_Total(),(long)EMS_Total()*EMS_PAGE);
+//  gotoxy(1,6);cprintf("Free Pages : %d (%ld bytes)\n",EMS_Avail(),(long)EMS_Avail()*EMS_PAGE);
+  // get first CD-ROM drive in chain.
+//  cdt=0;
+
+  hDISK=getdisk();
+
+  //check  if enought available HARD DRIVE SPACE
+  //_dos_getdiskfree(hDISK+1,&dfg);
+  //remain=(unsigned long) dfg.avail_clusters * (unsigned long) dfg.bytes_per_sector * (unsigned long) dfg.sectors_per_cluster;
+  //if (remain>800000L)
+  // {
+  //  Idiot("i851");
+  //  return;
+  // }
+
+
+//  gotoxy(1,7);cprintf("CD-ROM drive status: %d.\n",cdROM);
+//  gotoxy(1,8);cprintf("Hard Disk=%c:   CD-ROM=%c:\n",hDISK+'A',cdROM+'A');
+
+//  if (cdROM==hDISK) {
+//    gotoxy(1,10);
+//    cprintf("You cannot execute BARIS from the CD-ROM please install it.");
+//    gotoxy(1,11);
+//    return 1;
+//  }
+
+//  if (argc!=3) {
+//     spawnl(P_WAIT,"SETUP.EXE\0",NULL);
+//     return 1;
+//  }
+
+  // Get Values from Command line
+//  Musics=(unsigned char) atoi(argv[1]);
+//  Sounds=(unsigned char)atoi(argv[2]);
+
+  Musics = mBLASTER;
+  Sounds = sBLASTER;
+
+  setcbrk(0);
+
+//  FadeVal=TimingThing()/100;  // Get Some Machine Specific Timing for Fades
+  FadeVal = 10;
+
+
+  gxSetUserMalloc(FMalloc,FFree,FCore);
+  strcpy(IDT,"i000\0");  strcpy(IKEY,"k000\0");
+
+  LOAD=QUIT=0;
+//  screen=MK_FP(0xa000,0);
+  if ((screen = malloc (128 * 1024)) == NULL) {
+	  fprintf (stderr, "can't alloc screen memory\n");
+	  exit (1);
+  }
+
+  xMODE=0;
+  // GetSoundDevice( (strchr(argv[1],'r')==NULL) ? 1 : 0);   // Get Sound Info
+
+if (farcoreleft()<324000L) {
+        printf("Race Into Space Requires At Least 560k of free\n");
+        printf("memory to execute properly.  You are %ld bytes short.\n",324000-farcoreleft());
+        //exit(0);
+      }
+
+//  if (strchr(argv[1],'n')!=0) KO=0;
+//  else KO=1;
+
+KO = 0;
+
+  xMODE|=0x0800;
+
+  InitSnd();
+
+  sbuf0=(char far *) farmalloc(SBUF);
+  if (sbuf0==NULL) {
+    printf("Out of Memory allocating Buffer structure.\n");
+    farfree(Data); farfree(buffer);
+    exit(0);
+  };
+
+//   if (Sounds==sGUS || Musics==mGUS) {
+//      UltraTimer1Handler(HandleTimer2);
+//      UltraTimer2Handler(HandleTimer1);
+//   }// else {
+//     //timer stuff
+//     server=AIL_register_timer(timer_callback);
+//     AIL_set_timer_period(server,5000L);
+//     AIL_start_timer(server);
+//   }
+
+
+// Init All Data Things
+  if (Sounds!=sGUS) {  // Not Needed for Ultrasound
+    sbuf1=(char far *) farmalloc(SBUF);
+    if (sbuf1==NULL) {
+      printf("Out of Memory allocating Buffer structure.\n");
+      farfree(sbuf0);farfree(Data); farfree(buffer);
+      exit(0);
+    };
+  } else sbuf1=NULL;
+
+  Data=(struct Players *)farmalloc(sizeof (struct Players) + 1);
+  if (Data==NULL) {
+    printf("Out of Memory allocating DATA struture.\n");
+	exit(0);
+  };
+
+  buffer=(char far *) farmalloc(BUFFER_SIZE);
+  if (buffer==NULL) {
+    printf("Out of Memory allocating Buffer structure.\n");
+    farfree(Data);exit(0);
+  };
+  printf ("main buffer %p (%d)\n", buffer, BUFFER_SIZE);
+
+  memset(buffer,0x00,BUFFER_SIZE);
+
+  OpenEmUp();                   // OPEN SCREEN AND SETUP GOODIES
+  Introd();
+  MouseOn();
+
+  ex=0;
+  while(ex==0) {
+
+    MakeRecords();
+    if (HIST) fin=sOpen("HIST.DAT","rb",0);
+    else fin=sOpen("RAST.DAT","rb",0);
+    i=(int) filelength(fileno(fin));  // get length
+    fread((char *)buffer,i,1,fin); fclose(fin);
+    printf ("reading Players: size = %d\n", sizeof (struct Players));
+    RLED(buffer,(char *)Data,i);
+    if (Data->Checksum!=(sizeof (struct Players))) {
+      printf("BARIS Note: Wrong version of Data File.\n");
+      CloseEmUp(0,0);
+    }
+
+    mikeCrearScreen();
+    //MouseOff();gxClearDisplay(0,0);MouseOn();
+    PortPal(0);
+    key=0;strcpy(IDT,"i000\0");strcpy(IKEY,"i000\0");
+    df=1;
+
+tommy:
+    i=99;
+    while (i == 99)
+     {
+      i=MChoice(6,(char *)AName);
+      if (i==98) goto tommy;
+      IDLE[0]=IDLE[1]=0;
+      if (i==99) {MouseOff();Introd();MouseOn();PortPal(0);}
+     }
+
+    if (i!=5) {  //except for credits
+     cdstat=CDAccess(cdROM,2,3);
+     if (cdstat&0x02) CDAccess(cdROM,2,2); // STOP CD track 2 Buzz Opening
+    }
+
+    switch(i) {
+      case 1:  // New Game
+         //KillMusic();
+	      LOAD=QUIT=0,BUTLOAD=0;
+	      HARD1=UNIT1=1;
+         MAIL=-1;Option=-1;
+         strcpy(IDT,"i013");
+	      Prefs(0);                     // GET INITIAL PREFS FROM PLAYER
+	      plr[0]=Data->Def.Plr1;         // SET GLOBAL PLAYER VALUES
+	      plr[1]=Data->Def.Plr2;
+	      Data->plr[0]=Data->Def.Plr1;    // SET STRUCTURE PLAYER VALUES
+	      Data->plr[1]=Data->Def.Plr2;
+	      if (plr[0]==2 || plr[0]==3) AI[0]=1;
+          else AI[0]=0;
+	      if (plr[1]==2 || plr[1]==3) AI[1]=1;
+          else AI[1]=0;
+	      InitData();                   // PICK EVENT CARDS N STUFF
+	      MainLoop();                   // PLAY GAME
+        mikeCrearScreen();
+
+//      MouseOff();memset(screen,0x00,64000);MouseOn();
+         //PreLoadMusic(M_LIFTOFF);
+         //PlayMusic(1);
+	      break;
+      case 2: // Play Old Game
+          //KillMusic();
+	       LOAD=QUIT=BUTLOAD=0;
+	       HARD1=UNIT1=1;
+          MAIL=-1;Option=-1;
+	       FileAccess(1);
+
+	       if (LOAD==1)
+          {
+           if (Option==-1 && MAIL==-1) MainLoop(); //Regular game
+            else { //Modem game
+             for (purp=0;purp<3;purp++)
+              memset(&MP[purp],0x00,sizeof(struct Prest_Upd));
+	           MMainLoop();
+           }
+          }
+         else if (QUIT!=1) FadeOut(2,pal,10,0,0);
+         QUIT=0;
+         mikeCrearScreen();
+         //MouseOff();memset(screen,0x00,64000);MouseOn();
+         //PreLoadMusic(M_LIFTOFF);
+         //PlayMusic(1);
+	      break;
+      case 3:
+         //
+         //Modem Play
+         //
+         //KillMusic();
+	      LOAD=QUIT=0,BUTLOAD=0;
+	      HARD1=UNIT1=1;
+         MAIL=-1;Option=-1;
+         strcpy(IDT,"i013");
+	      Option=MPrefs(0);
+        if (Option!=MODEM_ERROR)
+         {
+          switch(Option)
+           {
+            case 0:Option=0;side=HOST;break;
+            case 1:Option=1;side=HOST;break;
+            case 2:Option=0;side=SLAVE;break;
+            case 3:Option=1;side=SLAVE;break;
+            default:break;
+           }
+
+	        plr[0]=Data->Def.Plr1;
+	        plr[1]=Data->Def.Plr2;
+	        Data->plr[0]=Data->Def.Plr1;
+	        Data->plr[1]=Data->Def.Plr2;
+	        if (plr[0]==2 || plr[0]==3) AI[0]=1;
+           else AI[0]=0;
+	        if (plr[1]==2 || plr[1]==3) AI[1]=1;
+           else AI[1]=0;
+           AI[0]=0;AI[1]=0;
+          //Correct -> US/SOVIET && Roster/Model
+         #if 1
+          mikeCrearScreen();
+
+          //MouseOff();gxClearDisplay(0,0);MouseOn();
+          TrackPict(0);
+          FadeIn(2,pal,10,0,0);
+          if (side==SLAVE) SaveFirst(Option);
+          delay(2000);
+          Progress(2);
+          if (side==SLAVE) SendFirst();
+           else {
+            killgame("INIT.DAT");
+            RecvFirst();
+           }
+          if (side==HOST) CheckFirst(Option);
+          Progress(2);
+          if (side==HOST)
+           {
+            SaveFirst(other(Option));
+            delay(2000);
+            SendFirst();
+           }
+          else {
+           killgame("INIT.DAT");
+           RecvFirst();
+          }
+          if (side==SLAVE) UpdateFirst();
+          FadeOut(2,pal,10,0,0);
+          killgame("INIT.DAT");
+         #endif
+	        InitData();
+          for (purp=0;purp<3;purp++)
+           memset(&MP[purp],0x00,sizeof(struct Prest_Upd));
+	        MMainLoop();
+          mikeCrearScreen();
+	        //MouseOff();memset(screen,0x00,64000);MouseOn();
+          //PreLoadMusic(M_LIFTOFF);
+          //PlayMusic(1);
+         }
+         //Modem Play => klugge
+         if (Option==MODEM_ERROR) Option=-1;
+         break;
+      case 4:
+         //
+         // Play by Mail
+         //
+         //KillMusic();
+	      LOAD=QUIT=0,BUTLOAD=0;
+	      HARD1=UNIT1=1;
+         MAIL=-1;Option=-1;
+         strcpy(IDT,"i013");
+	      Prefs(3);
+	      plr[0]=Data->Def.Plr1;
+	      plr[1]=Data->Def.Plr2;
+	      Data->plr[0]=Data->Def.Plr1;
+	      Data->plr[1]=Data->Def.Plr2;
+	      if (plr[0]==2 || plr[0]==3) AI[0]=1;
+          else AI[0]=0;
+	      if (plr[1]==2 || plr[1]==3) AI[1]=1;
+          else AI[1]=0;
+	      InitData();
+         MAIL=0; //Starts U.S. side
+	      MMainLoop();
+         QUIT=0;
+        mikeCrearScreen();
+	      //MouseOff();memset(screen,0x00,64000);MouseOn();
+         //PreLoadMusic(M_LIFTOFF);
+         //PlayMusic(1);
+	      break;
+      case 5:
+         df=0;
+         Credits();
+         df=1;
+	      break;
+      case 6:
+         //KillMusic();
+         CloseNewsAnim();
+	      ex=1;
+         FadeOut(2,pal,10,0,0);
+         break;
+    }
+  }
+
+  CloseEmUp(0,0);  // Normal Exit
+  exit(1);
+}
+
+int TimingThing(void)
+{
+  long bt1,bt3,bt4;
+  int mmm;
+
+  bt1=biostime(0,0L);
+  bt3=bt1+3;bt4=0L;
+  while (biostime(0,0L)==bt1);
+  while (biostime(0,0L)<bt3) bt4++;
+  mmm=(int)bt4%10000000L;
+  return mmm;
+}
+
+char CheckScrub(char plr,char m)
+{
+  char k,RT_value,mcode;
+  struct MissionType *Mt;
+  struct Equipment *E;
+
+  RT_value=1;
+  mcode=Data->P[plr].Mission[m].MissionCode;
+  Mt=&Data->P[plr].Mission[m];
+  if (mcode==1 || mcode==3 || mcode==5 || (mcode>=7 && mcode<=13) || mcode==15)
+     return(RT_value);
+  for (k=0;k<5;k++) {
+     if (RT_value==1) {
+        switch(k) {
+          case 0:
+           E=&Data->P[plr].Manned[Mt->Hard[k]];
+           E->MisSaf=E->Safety;
+           break;
+          case 1:
+           E=&Data->P[plr].Misc[Mt->Hard[k]];
+           E->MisSaf=E->Safety;
+           break;
+          case 2:
+           E=&Data->P[plr].Manned[Mt->Hard[k]];
+           E->MisSaf=E->Safety;
+           break;
+          case 4:
+           E=&Data->P[plr].Manned[Mt->Hard[k%4]];
+           if (k>4)
+              E->MisSaf=(int)(E->Safety+Data->P[plr].Manned[Mt->Hard[4]].Safety) >> 1;
+           break;
+        }
+
+        if (k!=3 && Mt->Hard[k]>=0 && (E->MisSaf < E->MaxRD-15)) return 0;
+     }
+  }
+  return 1;
+}
+
+void oclose(int fil)
+{
+ close(fil);
+ return;
+}
+
+
+void InitData(void)
+{
+  int i,j;
+
+  SetEvents();                  // RESET EVENT CARDS
+  Data->Count=0;                 // SET EVENT COUNTER TO ZERO
+  for(j=0;j<2;j++)
+    for(i=0;i<5;i++)
+      Data->P[j].PresRev[i]=8;
+  return;
+}
+
+
+// FOR MODEM STUFF and PLAY_BY_MAIL
+// Doesn't work with normal play
+// use the original MainLoop Further down in the code
+void MMainLoop(void)
+{
+int gol,i,j,k,t1,t2,t3,prest,sign,val,fin,kik,purp;
+FILE *fout;
+char name[20],str[10],Done=0;
+long moo;
+  if (LOAD!=1) {
+    Data->P[0].Cash=Data->P[0].Budget;   // INCREMENT BY BUDGET
+    Data->P[1].Cash=Data->P[1].Budget;
+  }
+
+restart:                              // ON A LOAD PROG JUMPS TO HERE
+
+  LOAD=0;                             // CLEAR LOAD FLAG
+
+  while (Data->Year < 78)              // WHILE THE YEAR IS NOT 1977
+  {
+
+   fout=sOpen("ENDTURN.TMP","wb",1);     // MAKE BACKUP FOR SAVE GAME
+   i=RLEC((char *)Data,(char *)vhptr.vptr,sizeof (struct Players));
+   srand(i);
+   for(moo=0;moo<i;moo++) vhptr.vptr[moo]^=random(256);
+   srand(biostime(0,0L));
+
+   fwrite((char *)vhptr.vptr,i,1,fout);
+   fclose(fout);
+
+   if (MAIL==-1) {
+    Data->P[0].RDMods=0;
+    Data->P[1].RDMods=0;
+    Data->P[0].BudgetHistory[Data->Year-53]=Data->P[0].Budget;
+    Data->P[1].BudgetHistory[Data->Year-53]=Data->P[1].Budget;
+   }
+   else
+    {
+     Data->P[MAIL].RDMods=0;
+     Data->P[MAIL].BudgetHistory[Data->Year-53]=Data->P[MAIL].Budget;
+    }
+
+   Data->P[0].BudgetHistoryF[Data->Year-53]=
+     (Data->P[0].Budget*(random(40)+80))/100;
+   Data->P[1].BudgetHistoryF[Data->Year-53]=
+     (Data->P[1].Budget*(random(40)+80))/100;
+
+  for(t1=0;t1<2;t1++)                   // Move Expenditures down one
+   {
+    for(t2=4;t2>=0;t2--)
+     for(t3=0;t3<4;t3++)
+    	Data->P[t1].Spend[t2][t3]=Data->P[t1].Spend[t2-1][t3];
+    for(t3=0;t3<4;t3++)
+     Data->P[t1].Spend[0][t3]=0;
+   };
+
+  if (Data->Season==0) CalcPresRev();
+
+   if (Option!=-1) i=Option;
+    else i=MAIL;
+
+     xMODE&=0xefff;  // reset clouds for spaceport
+     if (Data->Season==1) {
+       IntelPhase(plr[i]-2*AI[i],0);
+      }
+   // computer vs. human
+
+   if ((IDLE[0]>12 || IDLE[1]>12) || ((AI[i] && plr[other(i)]<2 && ((Data->Def.Lev1!=0 && other(i)==0) || (Data->Def.Lev2!=0 && other(i)==1)))))
+    {
+     if (IDLE[0]>12 || IDLE[1]>12 || Data->P[abs(i-1)].PresRev[0]>=16)
+      {
+       strncpy(IDT,"i136",4);
+       Data->P[abs(i-1)].PresRev[0]=0x7F;
+       strncpy(IDT,"i000",4);
+       if (IDLE[0]>12 || IDLE[1]>12) {
+        SpecialEnd();
+        if (Option!=-1) DoModem(2);
+       }
+       else {
+        Review(abs(i-1));
+        FakeWin(plr[i]-2);
+       }
+       FadeOut(2,pal,10,0,0);
+       QUIT=1;
+       return;
+      }
+    };
+     if (!AI[i]) {
+       NextTurn(plr[i]);
+       VerifySF(plr[i]);
+       if (MAIL!=-1)
+        for (j=0;j<28;j++)
+         {
+          if (j!=4 && j!=5 && j!=6 && j!=22)
+           if (Data->Prestige[j].Place==other(MAIL) && Data->PD[other(MAIL)][j]!=1)
+            PlayFirst(other(MAIL),j);
+         };
+        if (MAIL!=-1 && Data->Prestige[22].Place==0 || Data->Prestige[22].Place==1)
+         {
+          if (Data->Prestige[22].Place==MAIL)
+           {
+            UpdateRecords(1);
+            //last parameter is part of special klugge
+            NewEnd(Data->Prestige[22].Place,0);
+            if (MAIL!=-1) SaveMail();
+           }
+          else NewEnd(Data->Prestige[22].Place,0);
+          FadeOut(2,pal,10,0,0);
+          return;
+         }
+       News(plr[i]);                  // EVENT FOR PLAYER
+       if ((Data->P[plr[i]].Mission[0].MissionCode>6 ||
+           Data->P[plr[i]].Mission[1].MissionCode>6 ||
+           Data->P[plr[i]].Mission[2].MissionCode>6) &&
+           (NOCOPRO && !(xMODE&0x0400) ))
+          xMODE&=(0xf7ff | (0<<11));
+       VerifyCrews(plr[i]);
+       VerifySF(plr[i]);
+       strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
+       FixPrograms(plr[i]);
+
+       //soften sound
+//       SetVoiceVolume(80);        // 80% seems good MWR
+       Master(plr[i]);            // PLAY TURN
+       //restore to volume
+//       SetVoiceVolume(115);
+
+       mikeCrearScreen();
+       //MouseOff();memset(screen,0x00,64000);MouseOn();
+       IDLE[plr[i]]++;
+       if (LOAD==1) goto restart;     // TEST FOR LOAD
+     } else {
+      AI_Begin(plr[i]-2);  // Turns off Mouse for AI
+      GetMouse();
+      VerifySF(plr[i]-2);
+	    AIEvent(plr[i]-2);VerifySF(plr[i]-2);
+	    AIMaster(plr[i]-2);
+      AI_Done(); // Fade Out AI Thinking Screen and Restores Mouse
+	 };
+
+    //Modem Play => event card hack
+    if (Option!=-1) Data->Count+=2;
+     else ++Data->Count;
+
+    if (QUIT==1) return;
+
+  //  }; //for i part of modem hack
+
+   DockingKludge();  // fixup for both sides
+
+   // Do Missions Here
+
+   //ultimate KLUGGE
+   if (MAIL==1)
+    {
+     Option=1;
+     for (purp=0;purp<3;purp++)
+      memset(&MP[purp],0x00,sizeof(struct Prest_Upd));
+    }
+
+   kik=OrderMissions();
+   for (i=0;i<kik;i++)
+    if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode!=0 )
+     {
+      if (AI[Order[i].plr]==1) {
+	     if (CheckScrub(Order[i].plr,Order[i].loc)==0)
+        {
+         ClrMiss(Order[i].plr,Order[i].loc);
+        }
+     }
+	  if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode!=0)
+		{
+       if (!AI[Order[i].plr]) IDLE[0]=IDLE[1]=0;
+        if (!(Data->P[Order[i].plr].Mission[Order[i].loc].part==1 ||  Data->P[Order[i].plr].Mission[Order[i].loc].Hard[4]==0))
+	      prest=Launch(Order[i].plr,Order[i].loc);
+       if (Data->Prestige[22].Place!=-1 && MAIL==-1 && Option==-1)
+        {
+         UpdateRecords(1);
+         NewEnd(Data->Prestige[22].Place,Order[i].loc);
+         FadeOut(2,pal,10,0,0);
+         return;
+        }
+      if (MAIL!=-1)
+       {
+        if (!AI[Order[i].plr] && prest!=-20 && Order[i].plr==MAIL)
+         MisRev(Order[i].plr,prest);
+       }
+      else if (Option!=-1) {
+       if (!AI[Order[i].plr] && prest!=-20 && Order[i].plr==Option)
+        MisRev(Order[i].plr,prest);
+      }
+	  }
+   }; // end for-k
+
+  //end ultimate KLUGGE
+  if (MAIL==1 && Option==1)
+   {
+    Option=-1;
+    for (purp=0;purp<3;purp++)
+     memcpy(&Data->P[1].Udp[purp],&MP[purp],sizeof(struct Prest_Upd));
+   }
+
+  if (MAIL==-1) Update();
+   else UpdAll(MAIL);
+
+   //Modem Play => swap turn Slave->Host Host->Slave
+    if (Option!=-1)
+     {
+      gxClearDisplay(0,0);
+      TrackPict(0);
+      FadeIn(2,pal,10,0,0);
+
+      //save out slave side
+      if (Option==1) SaveSide(1);
+      delay(2000);
+      Progress(0);
+      if (Option==1) Upload();
+       else if (Option==0) Dnload();
+      //Modem Play => Update Prestige
+      //Note => Host has master prestige
+      if (Option==0)
+       {
+        RecvSide(0);
+        //klugge (save game mismatch)
+        if (Option==99) {
+         Option=0;Done=1;
+        }
+        UpdPrestige();
+       }
+      //now save out host side
+      if (Option==0) SaveSide(0);
+      delay(2000);
+      Progress(1);
+      if (Option==0) Upload();
+       else if (Option==1) Dnload();
+      MouseOn();
+      FadeOut(2,pal,10,0,0);
+     }
+    if (Option==1) RecvSide(1);
+
+    if (Option==99) {
+     Option=1;
+     Done=1;
+    }
+
+    //--------------------------------------------
+    //Specs: save game mismatch done is set to 1 |
+    //--------------------------------------------
+    if (Done==1 && Option!=-1) {
+     FadeIn(2,pal,10,0,0);
+     Idiot("i806");
+     DoModem(2);
+     FadeOut(2,pal,10,0,0);
+     return;
+    }
+
+    //Modem Play => clear the buffer
+    memset(buffer,0x00,sizeof(BUFFER_SIZE));
+
+    //clear out temp prestige
+    if (Option!=-1)
+     for (purp=0;purp<3;purp++)
+       memset(&MP[purp],0x00,sizeof(struct Prest_Upd));
+
+    //  PLAY FIRST for Modem Opponent only
+    if ((Option!=-1) && Data->Prestige[22].Place==-1 && KO==1)
+     for (j=0;j<28;j++)
+      {
+       if (Option!=-1) {
+        if (j!=4 && j!=5 && j!=6)
+         if (Data->Prestige[j].Place==other(Option) && Data->PD[other(Option)][j]!=1)
+          PlayFirst(other(Option),j);
+        }
+      }
+
+    // Update M array to speed AI code
+    for (j=0;j<2;j++) {
+       for (i=0;i<Data->P[j].PastMis;i++) {
+	    if (Data->P[j].History[i].result>=100)
+	    Data->P[j].M[Data->P[j].History[i].MissionCode]=1;
+	   }
+    }
+
+    if (Data->Year==77 && Data->Season==1 && Data->Prestige[22].Place==-1)
+     {  // nobody wins .....
+      if (MAIL!=-1) SaveMail();
+      SpecialEnd();
+      if (Option!=-1) DoModem(2); //reset the modem
+      FadeOut(2,pal,10,0,0);
+      return;
+     }
+
+    //Important: play-by-mail prestige update
+    if (MAIL==1) UpdPrestige();
+
+    //Special Case Modem Win
+    if (Option!=-1 && Data->Prestige[22].Place==0 || Data->Prestige[22].Place==1)
+     {
+      //Specs: astro modem klugge (ai code)
+      Data->P[other(Option)].AstroLevel=0;SelectBest(other(Option),7);
+      Data->P[other(Option)].AstroLevel=1;SelectBest(other(Option),9);
+      Data->P[other(Option)].AstroLevel=2;SelectBest(other(Option),14);
+      Data->P[other(Option)].AstroLevel=3;SelectBest(other(Option),16);
+      Data->P[other(Option)].AstroLevel=4;SelectBest(other(Option),14);
+      if (Data->Prestige[22].Place==Option)
+       {
+        UpdateRecords(1);
+        //last parameter is part of special klugge
+        NewEnd(Data->Prestige[22].Place,0);
+       }
+      else NewEnd(Data->Prestige[22].Place,0);
+      DoModem(2); //reset the modem
+      FadeOut(2,pal,10,0,0);
+      return;
+     }
+
+    if (MAIL!=0) {
+     Data->P[0].Budget+=Data->P[0].Prestige;
+     Data->P[1].Budget+=Data->P[1].Prestige;
+     if (Data->P[0].Budget>180) Data->P[0].Budget=180;
+     if (Data->P[1].Budget>180) Data->P[1].Budget=180;
+    }
+
+    // move prestige history down one;
+    for(t3=0;t3<2;t3++) // t3 is the index to the real and random hists
+     {
+      for(t1=0;t1<2;t1++) // t1 is the player index
+       {
+        for(t2=4;t2>0;t2--) // t2 is the time index
+       	Data->P[t1].PrestHist[t2][t3]=Data->P[t1].PrestHist[t2-1][t3];
+         sign = (Data->P[t1].Prestige < 0) ? -1 : 1;
+         Data->P[t1].PrestHist[0][t3] = (t3 == 0) ? Data->P[t1].Prestige
+	       : (Data->P[t1].Prestige*4)/5+sign*random(Data->P[t1].Prestige*2/5)+1;
+         if (t3==0) Data->P[t1].tempPrestige[Data->Season] += Data->P[t1].Prestige;
+       }
+     };
+
+    if (MAIL!=0) Data->P[0].Prestige=Data->P[1].Prestige=0;
+
+    if (Option!=-1 || MAIL==1)
+     {
+      if (Data->Season==1)
+       {
+        for (i=0;i<2;i++)
+         {
+     	    Data->P[plr[i]-AI[i]*2].Cash+=Data->P[plr[i]-AI[i]*2].Budget;
+  	       if (Data->P[plr[i]-AI[i]*2].Cash > 999) Data->P[plr[i]-AI[i]*2].Cash=900;
+         }
+	     Data->Season=0;
+	     Data->Year++;
+       } else Data->Season++;
+     }
+
+   //for play-by-mail
+   if (MAIL!=-1)
+    {
+     if ((Data->Year==57 && Data->Season==0) && MAIL==0)
+      {
+       FileAccess(2);  //Special Case MAIL Save
+       FadeOut(2,pal,10,0,0);
+      }
+     else SaveMail();
+     return;
+    }
+};
+  FadeOut(2,pal,10,0,0);
+  mikeCrearScreen();
+
+  //MouseOff();memset(screen,0x00,64000);MouseOn();
+  Museum(0);
+  Museum(1);
+  return;
+}
+
+
+
+//Modem Play -> progress box setup
+void Progress(char mode)
+{
+ char str[20],name[20];
+
+ MouseOff();
+ if (mode==0 || mode==1 || mode==2) {
+  ShBox(50,70,260,121);
+  InBox(67,75,168,87);InBox(185,75,243,87);
+  RectFill(68,76,167,86,7);RectFill(186,76,242,86,7);
+  grSetColor(11);
+  switch(mode)
+   {
+    case 0:if (Option==1) PrintAt(79,83,"UPLOADING TURN");
+            else PrintAt(72,83,"DOWNLOADING TURN");
+           break;
+    case 1:if (Option==0) PrintAt(79,83,"UPLOADING TURN");
+            else PrintAt(72,83,"DOWNLOADING TURN");
+           break;
+    case 2:PrintAt(75,83,"INITIALIZE GAME");
+           break;
+    default:break;
+   }
+  RectFill(53,91,257,107,4);RectFill(54,92,256,106,0);
+  grSetColor(9);
+  if (Data->Season==0) strcpy(&name[0],"SPRING "); else strcpy(&name[0],"FALL ");
+  itoa(Data->Year,&str[0],10);
+  strcat(&name[0],&str[0]);
+  PrintAt(191+(5*Data->Season),83,&name[0]);
+  grSetColor(1);
+ }
+ RectFill(53,111,250,118,3);
+ grSetColor(1);PrintAt(54,116,"STATUS: ");
+ grSetColor(9);
+ switch(mode)
+  {
+   case 3:PrintAt(0,0,"ADMINISTRATION");break;
+   case 4:PrintAt(0,0,"MUSEUM");break;
+   case 5:PrintAt(0,0,"MISSIONS");break;
+   case 6:PrintAt(0,0,"VAB");break;
+   case 7:PrintAt(0,0,"RD");break;
+   default:PrintAt(0,0,"SPACEPORT");break;
+  }
+ MouseOn();
+ return;
+}
+
+
+
+void MainLoop(void)
+{
+int gol,i,j,k,t1,t2,t3,prest,sign,val,kik;
+FILE *fout;
+long moo;
+  if (LOAD!=1) {
+    Data->P[0].Cash=Data->P[0].Budget;   // INCREMENT BY BUDGET
+    Data->P[1].Cash=Data->P[1].Budget;
+  }
+
+restart:                              // ON A LOAD PROG JUMPS TO HERE
+
+  LOAD=0;                             // CLEAR LOAD FLAG
+
+  while (Data->Year < 78)              // WHILE THE YEAR IS NOT 1977
+  {
+   fout=sOpen("ENDTURN.TMP","wb",1);     // MAKE BACKUP FOR SAVE GAME
+   i=RLEC((char *)Data,(char *)vhptr.vptr,sizeof (struct Players));
+   srand(i);
+   for(moo=0;moo<i;moo++) vhptr.vptr[moo]^=random(256);
+   srand(biostime(0,0L));
+
+   fwrite((char *)vhptr.vptr,i,1,fout);
+   fclose(fout);
+
+   Data->P[0].RDMods=0;           // CLEAR ALL TURN RD MODS
+   Data->P[1].RDMods=0;
+
+   Data->P[0].BudgetHistory[Data->Year-53]=Data->P[0].Budget; // RECORD BUDGET
+   Data->P[1].BudgetHistory[Data->Year-53]=Data->P[1].Budget;
+
+   Data->P[0].BudgetHistoryF[Data->Year-53]=     // MAKE ESTIMATE OF BUDGETS
+      (Data->P[0].Budget*(random(40)+80))/100;
+   Data->P[1].BudgetHistoryF[Data->Year-53]=
+      (Data->P[1].Budget*(random(40)+80))/100;
+
+  for(t1=0;t1<2;t1++)                   // Move Expenditures down one
+  {
+    for(t2=4;t2>=0;t2--)
+     for(t3=0;t3<4;t3++)
+	Data->P[t1].Spend[t2][t3]=Data->P[t1].Spend[t2-1][t3];
+    for(t3=0;t3<4;t3++)
+     Data->P[t1].Spend[0][t3]=0;
+  };
+   if(Data->Season==0) CalcPresRev();
+
+   for (i=0;i<2;i++) {
+     xMODE&=0xefff;  // reset clouds for spaceport
+     if (Data->Season==1) {
+       IntelPhase(plr[i]-2*AI[i],0);
+      }
+   // computer vs. human
+
+   if ((IDLE[0]>12 || IDLE[1]>12) || ((AI[i] && plr[other(i)]<2 && ((Data->Def.Lev1!=0 && other(i)==0) || (Data->Def.Lev2!=0 && other(i)==1)))))
+    {
+     if (IDLE[0]>12 || IDLE[1]>12 || Data->P[abs(i-1)].PresRev[0]>=16)
+      {
+       strncpy(IDT,"i136",4);
+       Data->P[abs(i-1)].PresRev[0]=0x7F;
+       strncpy(IDT,"i000",4);
+       if (IDLE[0]>12 || IDLE[1]>12) SpecialEnd();
+       else {
+         Review(abs(i-1));
+         FakeWin(plr[i]-2);
+       }
+       FadeOut(2,pal,10,0,0);
+       QUIT=1;
+       return;
+      }
+    };
+     if (!AI[i]) {
+       NextTurn(plr[i]);
+       VerifySF(plr[i]);
+       News(plr[i]);                  // EVENT FOR PLAYER
+       if ((Data->P[plr[i]].Mission[0].MissionCode>6 ||
+           Data->P[plr[i]].Mission[1].MissionCode>6 ||
+           Data->P[plr[i]].Mission[2].MissionCode>6) &&
+           (NOCOPRO && !(xMODE&0x0400) ))
+          xMODE&=(0xf7ff | (0<<11));
+       VerifyCrews(plr[i]);
+       VerifySF(plr[i]);
+       strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
+       FixPrograms(plr[i]);
+
+       //soften sound
+//       SetVoiceVolume(80);            // 80% seems good MWR
+       Master(plr[i]);                // PLAY TURN
+       //restore sound
+//       SetVoiceVolume(115);
+       mikeCrearScreen();
+       //MouseOff();memset(screen,0x00,64000);MouseOn();
+       IDLE[plr[i]]++;
+       if (LOAD==1) goto restart;     // TEST FOR LOAD
+     } else {
+      AI_Begin(plr[i]-2);  // Turns off Mouse for AI
+      GetMouse();
+      VerifySF(plr[i]-2);
+	    AIEvent(plr[i]-2);VerifySF(plr[i]-2);
+	    AIMaster(plr[i]-2);
+      AI_Done(); // Fade Out AI Thinking Screen and Restores Mouse
+	 };
+     Data->Count++;
+     if (QUIT==1) return;
+   };
+
+   DockingKludge();  // fixup for both sides
+
+   // Do Missions Here
+   kik=OrderMissions();
+
+   for (i=0;i<kik;i++)
+    if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode!=0 )
+     {
+      if (AI[Order[i].plr]==1)
+       {
+	      if (CheckScrub(Order[i].plr,Order[i].loc)==0)
+         ClrMiss(Order[i].plr,Order[i].loc);
+       }
+	    if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode!=0)
+	     {
+        if (!AI[Order[i].plr]) IDLE[0]=IDLE[1]=0;
+		   if (!(Data->P[Order[i].plr].Mission[Order[i].loc].part==1 ||  Data->P[Order[i].plr].Mission[Order[i].loc].Hard[4]==0))
+		    {
+   	  	  prest=Launch(Order[i].plr,Order[i].loc);
+          // check for prestige firsts
+          if (AI[Order[i].plr]==1 && Data->Prestige[22].Place==-1 && KO==1)  // supposed to be 1
+          for (j=0;j<28;j++)
+           {
+            if (j!=4 && j!=5 && j!=6)
+             if (Data->Prestige[j].Place==Order[i].plr && Data->PD[Order[i].plr][j]!=1)
+              {
+               PlayFirst(Order[i].plr,j);
+              }
+           }
+          if (Data->Prestige[22].Place!=-1)
+           {
+            UpdateRecords(1);
+            NewEnd(Data->Prestige[22].Place,Order[i].loc);
+            FadeOut(2,pal,10,0,0);
+            return;
+           }
+		     if (!AI[Order[i].plr] && prest!=-20)  // -20 means scrubbed
+           MisRev(Order[i].plr,prest);
+		    }
+	     }
+
+   }; //for(i=0...
+
+   Update();  /* Moves Future launches to Missions + More */
+
+   // Update M array to speed AI code
+   for (j=0;j<2;j++) {
+      for (i=0;i<Data->P[j].PastMis;i++) {
+	 if (Data->P[j].History[i].result>=100)
+	    Data->P[j].M[Data->P[j].History[i].MissionCode]=1;
+	 }
+      }
+
+   if (Data->Year==77 && Data->Season==1 && Data->Prestige[22].Place==-1)
+     {  // nobody wins .....
+      SpecialEnd();
+      FadeOut(2,pal,10,0,0);
+      return;
+     }
+
+   Data->P[0].Budget+=Data->P[0].Prestige;
+   Data->P[1].Budget+=Data->P[1].Prestige;
+   if (Data->P[0].Budget>180) Data->P[0].Budget=180;
+   if (Data->P[1].Budget>180) Data->P[1].Budget=180;
+  // move prestige history down one;
+  for(t3=0;t3<2;t3++) // t3 is the index to the real and random hists
+  {
+    for(t1=0;t1<2;t1++) // t1 is the player index
+    {
+      for(t2=4;t2>0;t2--) // t2 is the time index
+	Data->P[t1].PrestHist[t2][t3]=Data->P[t1].PrestHist[t2-1][t3];
+      sign = (Data->P[t1].Prestige < 0) ? -1 : 1;
+
+      Data->P[t1].PrestHist[0][t3] = (t3 == 0) ? Data->P[t1].Prestige
+	  : (Data->P[t1].Prestige*4)/5+sign*random(Data->P[t1].Prestige*2/5)+1;
+      if(t3==0) Data->P[t1].tempPrestige[Data->Season] += Data->P[t1].Prestige;
+    }
+  };
+   Data->P[0].Prestige=Data->P[1].Prestige=0;
+
+    if (Data->Season==1) {
+      for (i=0;i<2;i++) {
+	Data->P[plr[i]-AI[i]*2].Cash+=Data->P[plr[i]-AI[i]*2].Budget;
+	if (Data->P[plr[i]-AI[i]*2].Cash > 999) Data->P[plr[i]-AI[i]*2].Cash=900;
+      }
+	Data->Season=0;
+	Data->Year++;
+    } else Data->Season++;
+  };
+  FadeOut(2,pal,10,0,0);
+    mikeCrearScreen();
+  //MouseOff();memset(screen,0x00,64000);MouseOn();
+  Museum(0);
+  Museum(1);
+  return;
+}
+
+void DockingKludge(void)
+{
+  int j;
+  for (j=0;j<2;j++) {
+    Data->P[j].Misc[4].MSF=
+       maxx( maxx(Data->P[j].Probe[0].Safety,Data->P[j].Probe[1].Safety),
+	    Data->P[j].Probe[2].Safety);
+  }
+  return;
+}
+
+#if 0
+void OpenEmUp(void)
+{
+  int i,retcode;
+  long vfree,vneed;
+  FILE *fin;
+  oldpal=(char far *) farmalloc(768);
+  VBlank();
+  asm les dx,oldpal;
+  asm mov ax,1017h;
+  asm mov bx,0;
+  asm mov cx,100h;
+  asm int 10h;
+  FadeOut(2,oldpal,40,0,0);
+
+  gxSetDisplay(gxVGA_13);
+  gxSetMode(gxGRAPHICS);
+  gxModeCheck(gxFALSE);
+  GV(&vhptr,320,200);     // Allocate only Virtual Buffer
+  retcode=grInitMouse();
+  if (retcode==gxSUCCESS) {
+   XMAS=1;
+    //grDisplayMouse(grSHOW);
+    grTrackMouse(grTRACK);
+    grSetMouseStyle(grCARROW,8);
+    grSetMousePos(319,199);
+    }
+  else XMAS=0;
+  srand(clock());   // randomize based on ticks
+
+  // Load Large Font into EMS
+  retcode=EMS_Alloc(&LetHand,2); // 2 Pages
+  if (retcode) { //error
+     CloseEmUp(3,100);
+  }
+
+  EMS_Map(LetHand,0,0);  // Map Page 1
+  EMS_Map(LetHand,1,1);  // Map Page 2
+  fin=sOpen("LETTER.DAT","rb",0);
+  fread(ems,20540L,1,fin);  // Load file
+  fclose(fin);
+}
+
+void CloseEmUp(unsigned char error,unsigned int value)
+{
+  char *bo;
+  struct ffblk ffblk;
+  long fsize;
+  int done;
+
+  // Remove Large Font from EMS
+  EMS_DeAlloc(LetHand);
+
+  memset(buffer,0x00,BUFFER_SIZE);
+  if (Option!=-1) DoModem(2);
+
+  AIL_release_timer_handle(server);
+  Buzz_SoundDestroy();
+
+  bo=&pal[0];
+  grStopMouse();
+  gxSetMode(gxTEXT);
+  VBlank();
+  asm les dx,oldpal;   // get oldpal information
+  asm mov ax,1017h;
+  asm mov bx,0;
+  asm mov cx,100h;
+  asm int 10h;
+
+  memset(&pal[0],0x00,768);
+  asm les dx,bo;
+  asm mov ax,1012h;
+  asm mov bx,0;
+  asm mov cx,100h;
+  asm int 10h;
+
+  DV(&vhptr);    // Free the only virtual buffer
+  remove_savedat("ENDTURN.TMP"); // delete any temp files
+  remove_savedat("REPLAY.DAT");
+  remove_savedat("EVENT.TMP");
+  remove_savedat("MEN.DAT");
+
+  if (cdt) {
+   CDAccess(cdROM,0,2);
+   destroyaudiotoc(cdROM);
+    //free(cdt);
+  }  // CDROM Stuff
+
+  if (buffer) farfree(buffer);
+  if (Data) farfree(Data);
+  if (sbuf1) farfree(sbuf1);
+  if (sbuf0) farfree(sbuf0);
+
+  switch(error) {
+//    case 0: printf("Normal Exit");break;
+    case 1: printf("Memory Allocation Error");break;
+    case 2: printf("Internal Error");break;
+    case 3: printf("Unable to allocate EMS memory.\n");
+  }
+  if (error!=0) printf(":%u\n",value);
+  FADE=0;
+  FadeIn(2,oldpal,10,0,0);
+  farfree(oldpal);
+  exit(0);
+  return;
+}
+#endif
+
+// Reset Crews on a particular Mission
+void FreePadMen(char plr,struct MissionType *XMis)
+{
+   int i,c;
+   if (XMis->PCrew>0) {    // Remove Primary Crew
+      for (i=0;i<Data->P[plr].Gcnt[XMis->Prog][XMis->PCrew-1];i++) {
+         c=Data->P[plr].Crew[XMis->Prog][XMis->PCrew-1][i]-1;
+         Data->P[plr].Pool[c].Prime=0;
+         }
+      }
+   if (XMis->BCrew>0) {    // Remove Backup Crew
+      for (i=0;i<Data->P[plr].Gcnt[XMis->Prog][XMis->BCrew-1];i++) {
+         c=Data->P[plr].Crew[XMis->Prog][XMis->BCrew-1][i]-1;
+         Data->P[plr].Pool[c].Prime=0;
+         }
+      }
+   return;
+}
+
+
+// Destroy Pad and Reset any Crews affected
+void DestroyPad(char plr,char pad,int cost,char mode)
+{
+   struct MissionType *BMis=NULL,*AMis=NULL;
+
+   Data->P[plr].LaunchFacility[pad]=cost;  // Destroys pad
+
+   AMis=(mode==0) ? &Data->P[plr].Future[pad] : &Data->P[plr].Mission[pad];
+   if (AMis->Joint==1) {
+      if (AMis->part==0) BMis=&AMis[1];
+      if (AMis->part==1) BMis=&AMis[-1];
+      }
+
+   if (AMis!=NULL) {
+      if (AMis->Men!=0) FreePadMen(plr,AMis);
+      memset(AMis,0x00,sizeof (struct MissionType));
+      }
+   if (BMis!=NULL) {
+      if (BMis->Men!=0) FreePadMen(plr,BMis);
+      memset(BMis,0x00,sizeof (struct MissionType));
+      }
+
+   return;
+}
+
+char FreeSpace(void)
+{
+  struct dfree free;
+  long avail;
+  int drive;
+
+  drive = getdisk();
+  getdfree(drive+1, &free);
+  if (free.df_sclus == 0xFFFF)
+  avail =  (long) free.df_avail * (long) free.df_bsec * (long) free.df_sclus;
+  if (avail>800000L) return 1;
+  else return 0;
+}
+
+void GV(GXHEADER *obj,int w,int h)
+{
+  int retcode;
+  unsigned int size=0;
+  size=gxVirtualSize(gxVGA_13,w,h);
+  if (gxVirtualFree(gxCMM) >= size) {
+    retcode=gxCreateVirtual(gxCMM,obj,gxVGA_13,w,h);
+    if (retcode==gxSUCCESS) return;
+  }
+  CloseEmUp(2,size);
+  return;
+}
+
+void DV(GXHEADER *obj)
+{
+  gxDestroyVirtual(obj);
+  return;
+}
+
+void GetMouse(void)
+{
+  char string[25],rbut=0;
+  long mems;
+  memset(string,0x00,25);
+  mousebuttons=0;
+  oldx=x;oldy=y;
+
+  gr_sync ();
+
+  if (XMAS!=0) {
+    if (grGetMouseButtons() & grLBUTTON) mousebuttons=1;
+    else mousebuttons=0;
+    rbut=grGetMouseButtons()&grRBUTTON;
+    grGetMousePos(&x,&y);
+    }
+  while (bioskey(1)) {
+    key=bioskey(0);
+    if((key&0x00ff)>0) key=toupper(key);
+    mousebuttons=0;
+    //grSetMousePos(319,199);
+    }
+
+   if (mousebuttons>0) rbut=key=0;
+
+  if (key>>8==15) CloseEmUp(0,0);
+  else if (XMAS && AL_CALL==0 && (rbut || (key>>8==0x3B))) {
+    if (mousebuttons!=1) Idiot(IDT);
+    }
+  else if (AL_CALL==0 && ((key>>8)==0x3C)) Idiot(IKEY);
+  else if (AL_CALL==0 && ((key>>8)==0x3D)) Idiot("i123");
+  //else if ((key>>8)>0) key=0;
+#if 1
+  else if (key==0x3D) {
+//   Data->P[0].Cash=Data->P[1].Cash=500;
+   gxSetDisplayPalette(pal);
+   ShBox(8,4,95,13);grSetColor(1);
+   mems=gxVirtualFree(gxCMM);
+   ltoa(mems,string,10);
+   PrintAt(10,10,"CORE: "); PrintAt(0,0,&string[0]);
+   key=0;
+   }
+#endif
+  return;
+}
+#if 1
+void MouseOff(void)
+{
+  if (XMAS==0) return;
+  grDisplayMouse(grHIDE);
+  return;
+}
+
+void MouseOn(void)
+{
+  if (XMAS==0) return;
+  grDisplayMouse(grSHOW);
+  return;
+}
+#endif
+
+void PauseMouse(void)
+{
+	double start;
+
+	gr_sync ();
+
+	while(1)  {
+		GetMouse();
+		if (mousebuttons==0) break;
+	}
+	start = get_time ();
+	while (mousebuttons==0 && key==0) {
+		if (get_time () - start > .1)
+			break;
+		GetMouse();
+	}
+	return;
+}
+
+void PrintAt(int x,int y,char *s)
+{
+  short i;
+  if (x!=0 && y!=0) grMoveTo(x,y);
+  if (strlen(s) > 100) return;
+  for(i=0;i<strlen(s);i++)
+    DispChr(s[i]);
+  return;
+}
+
+void PrintAtKey(int x,int y,char *s,char val)
+{
+  short i;
+  if (x!=0 && y!=0) grMoveTo(x,y);
+  for(i=0;i<strlen(s);i++)
+    DispChr(s[i]);
+  grMoveTo(x,y);grSetColor(9);
+  DispChr(s[val]);
+  return;
+}
+
+
+void DrawLED(int x,int y,char st)
+{
+  int i,j;
+  unsigned char Dots[2][5][5] ={
+   0,9,9,10,0,9,8,9,9,10,9,9,9,9,10,10,9,9,9,10,0,10,10,10,0, // Red
+   0,15,15,16,0,15,14,15,15,16,15,15,15,15,16,16,15,15,15,16,0,16,16,16,0}; // Grn
+
+  for (i=0;i<5;i++) for (j=0;j<5;j++) if (Dots[st][i][j]!=0)
+    grPutPixel(x+i,y+j,Dots[st][i][j]);
+  return;
+}
+
+void DispBig(int x,int y,char *txt,char mode,char te)
+{
+  int i,k,l,j,px;
+  FILE *fin;
+  WORD tHand;
+  struct LET {char width,img[15][21];} letter;
+  int c;
+
+  y--;
+  if(mode)EMPTY_BODY;
+
+  //fin=open("LETTER.DAT",O_RDONLY);
+  //if (!fin) return;
+
+
+  for (i=0;i<strlen(txt);i++) {
+    if (txt[i]==0x20) {x+=6;i++;};
+    c=toupper(txt[i]);
+    if (c>=0x30 && c<=0x39) px=c-32;
+    else px=c-33;
+    if (c=='-') px++;
+
+    //fseek(fin,(sizeof letter*px),SEEK_SET);
+    //fread(&letter,sizeof letter,1,fin);
+
+//    EMS_Map(LetHand,0,0);  // Map Page 1
+//    EMS_Map(LetHand,1,1);  // Map Page 2
+
+    memcpy(&letter,letter_dat + (sizeof letter*px),sizeof letter);  // copy letter over
+    for (k=0;k<15;k++)
+      for (l=0;l<letter.width;l++)
+  	    if (letter.img[k][l]!=0x03)
+	     if ((letter.img[k][l]==0x01 || letter.img[k][l]==0x02) && i==te)
+	      grPutPixel(x+l,y+k,letter.img[k][l]+7);
+	    else grPutPixel(x+l,y+k,letter.img[k][l]);
+    x+=letter.width-1;
+  };
+  //fclose(fin);
+
+  if (gr_slow)
+    gr_sync ();
+}
+
+void DispNum(int xx,int yy,int num)
+{
+  short n0,n1,n2,n3,t;
+  if (xx!=0 && yy!=0) grMoveTo(xx,yy);
+  t=num;
+  num=abs(t);
+  if (t<0) PrintAt(0,0,"-");
+  n0=num/1000;
+  n1=num/100-n0*10;
+  n2=num/10-n0*100-n1*10;
+  n3=num-n0*1000-n1*100-n2*10;
+  if (n0!=0) {
+    DispChr(n0+0x30);
+    DispChr(n1+0x30);
+    DispChr(n2+0x30);
+    DispChr(n3+0x30);
+  };
+  if (n0==0 && n1!=0) {
+    DispChr(n1+0x30);
+    DispChr(n2+0x30);
+    DispChr(n3+0x30);
+  };
+  if (n0==0 && n1==0 && n2!=0) {
+    DispChr(n2+0x30);
+    DispChr(n3+0x30);
+  };
+  if (n0==0 && n1==0 && n2==0)
+    DispChr(n3+0x30);
+  return;
+}
+
+
+void DispMB(int x,int y,int val)
+{
+  DispNum(x,y,val);
+  PrintAt(0,0," MB");
+  return;
+}
+
+// Place a glimmer on a box
+void Gl(int x1,int x2,int y,char t)
+{
+  int i,nx;
+  char Glim[13]={31,30,29,28,27,1,1,1,27,28,29,30,31};
+  if ((x2-x1)<30) return;
+  nx=(x2-x1)/2;
+  if (t==0) nx=nx-(nx/3);
+  else nx=nx+(nx/3);
+  for (i=0;i<13;i++) grPutPixel(x1+nx+i,y,Glim[i]);
+  return;
+}
+
+void ShBox(int x1,int y1,int x2,int y2)
+{
+  RectFill(x1,y1,x2,y2,3);
+  OutBox(x1,y1,x2,y2);
+  return;
+}
+
+void UPArrow(int x1,int y1)
+{
+  grSetColor(4);grDrawLine(x1,y1,x1,25+y1);grDrawLine(3+x1,11+y1,5+x1,11+y1);
+  grSetColor(2);grDrawLine(1+x1,y1,6+x1,11+y1);grDrawLine(3+x1,12+y1,3+x1,25+y1);
+  return;
+};
+
+void RTArrow(int x1,int y1)
+{
+ grSetColor(4);grDrawLine(x1,y1,x1+31,y1);grDrawLine(x1+20,y1+3,x1+20,y1+5);
+ grSetColor(2);grDrawLine(x1,y1+3,x1+19,y1+3);grDrawLine(x1+31,y1+1,x1+20,y1+6);
+ return;
+}
+
+void LTArrow(int x1,int y1)
+{
+ grSetColor(4);grDrawLine(x1,y1,x1+31,y1);grDrawLine(x1+11,y1+3,x1+11,y1+5);
+ grSetColor(2);grDrawLine(x1,y1+1,x1+11,y1+6);grDrawLine(x1+12,y1+3,x1+31,y1+3);
+ return;
+}
+
+void DNArrow(int x1,int y1)
+{
+  grSetColor(4);grDrawLine(x1,y1,x1,25+y1);grDrawLine(3+x1,14+y1,5+x1,14+y1);
+  grSetColor(2);grDrawLine(3+x1,y1,3+x1,13+y1);grDrawLine(6+x1,14+y1,1+x1,25+y1);
+  return;
+};
+
+void InBox(int x1,int y1,int x2,int y2)
+{
+  MouseOff();
+  grSetColor(2);  grMoveTo(x1,y2);  grLineTo(x2,y2);  grLineTo(x2,y1);
+  grSetColor(4);  grLineTo(x1,y1);  grLineTo(x1,y2);
+  MouseOn();
+}
+
+void OutBox(int x1,int y1,int x2,int y2)
+{
+  MouseOff();
+  grSetColor(4);  grMoveTo(x1,y2); grLineTo(x2,y2);  grLineTo(x2,y1);
+  grSetColor(2);  grMoveTo(x2-1,y1); grLineTo(x1,y1);  grLineTo(x1,y2-1);
+  MouseOn();
+}
+
+void IOBox(int x1, int y1, int x2, int y2)
+{
+  MouseOff();
+  InBox(x1,y1,x2,y2);
+  grSetColor(0);Box(x1+1,y1+1,x2-1,y2-1);
+  OutBox(x1+2,y1+2,x2-2,y2-2);
+  MouseOn();
+}
+
+void RectFill(int x1,int y1,int x2,int y2,char col)
+{
+  grSetBkColor(col);
+  grClearArea(x1,y1,x2,y2);
+  return;
+}
+
+void Box(int x1,int y1,int x2,int y2)
+{
+  grDrawRect(x1,y1,x2,y2,grOUTLINE);
+  return;
+}
+
+void GradRect(int x1,int y1,int x2,int y2,char plr)
+{
+  //register int i,j,val;
+  //val=3*plr+6;
+
+  RectFill(x1,y1,x2,y2,7+3*plr);
+  //for (j=x1;j<=x2;j+=4)
+  //  for (i=y1;i<=y2;i+=4)
+  //    screen[j+320*i]=val;
+   return;
+}
+
+void FlagSm(char plr,int xm,int ym)
+{
+  int i;
+  if (plr==0) {
+    RectFill(xm,ym,xm+25,ym+14,1);
+    grSetColor(8);
+    for (i=0;i<15;i++) {
+      grMoveTo(xm,ym+i);
+      grLineTo(xm+25,ym+i);
+      i++;
+    };
+    RectFill(xm,ym,xm+12,ym+7,5);
+    xm++;
+    for (i=0;i<11;i++) {
+      grPutPixel(xm+i,ym+1,2);
+      grPutPixel(xm+i,ym+3,2);
+      grPutPixel(xm+i,ym+5,2);
+       i++;
+    };
+    for (i=1;i<10;i++) {
+      grPutPixel(xm+i,ym+2,2);
+      grPutPixel(xm+i,ym+4,2);
+      grPutPixel(xm+i,ym+6,2);
+      i++;
+    };
+  } else {
+    RectFill(xm,ym,xm+25,ym+14,8);
+    grSetColor(11); grMoveTo(xm+2,ym+6); grLineTo(xm+4,ym+6); grLineTo(xm+4,ym+5);
+    grLineTo(xm+5,ym+5); grLineTo(xm+5,ym+3);
+    grPutPixel(xm+3,ym+4,11);grPutPixel(xm+4,ym+2,11);grPutPixel(xm+5,ym+1,11);
+    grPutPixel(xm+6,ym+2,11);
+  }
+  return;
+}
+
+void Flag(int x,int y,char plr)
+{
+  int i,j;
+  if (plr==0) {
+    for (i=0;i<7;i++) RectFill(x,y+i*6,x+69,y+2+i*6,8);
+    for (i=0;i<6;i++) RectFill(x,y+3+i*6,x+69,y+5+i*6,1);
+    RectFill(x,y,x+33,y+20,6);
+    RectFill(x,y,x+32,y+20,5);
+    for (j=0;j<5;j++) for (i=0;i<8;i++) PP(x+2+i*4,y+2+4*j,2);
+    for (j=0;j<4;j++) for (i=0;i<7;i++) PP(x+4+i*4,y+4+4*j,2);
+  } else {
+    RectFill(x,y,x+69,38+y,8);
+    PP(10+x,2+y,11);
+    PP(8+x,3+y,11); PP(9+x,3+y,11);PP(11+x,3+y,11); PP(12+x,3+y,11);
+    PP(9+x,5+y,11); PP(11+x,5+y,11);
+    PP(12+x,6+y,11);
+    PP(10+x,7+y,11);PP(13+x,7+y,11);
+    PP(9+x,8+y,11);PP(10+x,8+y,11);PP(11+x,8+y,11);PP(14+x,8+y,11);
+    PP(8+x,9+y,11);PP(9+x,9+y,11);PP(10+x,9+y,11);PP(14+x,9+y,11);PP(15+x,9+y,11);
+    PP(7+x,10+y,11);PP(8+x,10+y,11);PP(9+x,10+y,11);PP(10+x,10+y,11);PP(14+x,10+y,11);PP(15+x,10+y,11);
+    PP(11+x,11+y,11);PP(14+x,11+y,11);
+    PP(12+x,12+y,11);PP(13+x,12+y,11);PP(14+x,12+y,11);
+    PP(7+x,13+y,11);PP(8+x,13+y,11);PP(12+x,13+y,11);PP(13+x,13+y,11);
+    PP(6+x,14+y,11);PP(9+x,14+y,11);PP(10+x,14+y,11);PP(11+x,14+y,11);
+    PP(12+x,14+y,11);PP(13+x,14+y,11);PP(14+x,15+y,11);
+    PP(9+x,4+y,12);PP(10+x,4+y,12);PP(11+x,4+y,12);
+    PP(14+x,7+y,12); PP(8+x,11+y,12); PP(10+x,11+y,12); PP(15+x,11+y,12);
+    PP(11+x,12+y,12); PP(14+x,13+y,12); PP(7+x,14+y,12); PP(5+x,15+y,12);
+    PP(15+x,15+y,12);
+  };
+  return;
+}
+
+
+void DispChr(char chr)
+{
+  switch(chr)
+  {
+    case 'A': LR(0,-3);LR(1,-1);LR(2,0);LR(1,1);LR(0,3);LR(-1,-1);
+	      LR(-2,0);MR(5,1);break;
+    case 'B': LR(0,-4);LR(3,0);LR(1,1);LR(-1,1);LR(1,1);
+	      LR(-1,1);LR(-2,0);MR(0,-2);LR(1,0);MR(4,2);
+	      break;
+    case 'C': MR(4,-4);LR(-3,0);LR(-1,1);LR(0,2);LR(1,1);LR(3,0);MR(2,0);
+	      break;
+    case 'D': LR(0,-4);LR(3,0);LR(1,1);LR(0,2);LR(-1,1);LR(-2,0);MR(5,0);
+	      break;
+    case 'E': LR(0,-4);LR(4,0);MR(0,4);LR(-3,0);MR(0,-2);LR(1,0);MR(4,2);
+	      break;
+    case 'F': LR(0,-4);LR(4,0);MR(-2,2);LR(-1,0);MR(5,2);break;
+    case 'G': MR(4,-4);LR(-3,0);LR(-1,1);LR(0,2);LR(1,1);LR(3,0);
+	      LR(0,-2);LR(-1,0);MR(3,2);break;
+    case 'H': LR(0,-4);MR(1,2);LR(2,0);MR(1,-2);LR(0,4);MR(2,0);
+	      break;
+    case 'I': LR(2,0);LR(-1,-1);LR(0,-2);LR(-1,-1);LR(2,0);MR(2,4);break;
+    case 'J': MR(0,-1);LR(1,1);LR(2,0);LR(1,-1);LR(0,-3);MR(2,4);break;
+    case 'K': LR(0,-4);MR(4,0);LR(-2,2);LR(-1,0);MR(1,0);LR(2,2);MR(2,0);
+	      break;
+    case 'L': MR(0,-4);LR(0,4);LR(4,0);
+	      MR(2,0);break;
+    case 'M': LR(0,-4);LR(2,2);LR(2,-2);LR(0,4);MR(2,0);break;
+    case 'N': LR(0,-4);LR(4,4);LR(0,-4);MR(2,4);break;
+    case 'O': case '0': MR(0,-1);LR(0,-2);LR(1,-1);LR(2,0);LR(1,1);
+	      LR(0,2);LR(-1,1);LR(-2,0);MR(5,0);break;
+    case 'P': LR(0,-4);LR(3,0);LR(1,1);LR(-1,1);LR(-2,0);MR(5,2);break;
+    case 'Q': MR(0,-1);LR(0,-2);LR(1,-1);LR(2,0);LR(1,1);
+	      LR(0,2);LR(-1,1);LR(-2,0);MR(2,-1);LR(1,1);MR(2,0);break;
+    case 'R': LR(0,-4);LR(3,0);LR(1,1);LR(-1,1);LR(-2,0);MR(3,1);LR(0,1);
+	      MR(2,0);break;
+    case 'S': LR(3,0);LR(1,-1);LR(-1,-1);LR(-2,0);LR(-1,-1);
+	      LR(1,-1);LR(3,0);MR(2,4);break;
+    case 'T': MR(2,0);LR(0,-4);LR(-2,0);LR(4,0);MR(2,4);break;
+    case 'U': MR(0,-4);LR(0,3);LR(1,1);LR(2,0);LR(1,-1);LR(0,-3);MR(2,4);break;
+    case 'V': MR(0,-4);LR(0,2);LR(2,2);LR(2,-2);LR(0,-2);MR(2,4);break;
+    case 'W': MR(0,-4);LR(0,4);LR(2,-2);LR(2,2);LR(0,-4);MR(2,4);break;
+    case 'X': MR(0,-4);LR(4,4);MR(0,-4);LR(-4,4);MR(6,0);break;
+    case 'Y': MR(2,0);LR(0,-1);LR(-2,-2);LR(0,-1);MR(4,0);LR(0,1);
+	      LR(-2,2);MR(4,1);break;
+    case 'Z': MR(0,-4);LR(4,0);LR(-4,4);LR(4,0);MR(2,0);break;
+    case '1': LR(2,0);LR(-1,-1);LR(0,-3);LR(-1,1);MR(4,3);break;
+    case '2': MR(0,-4);LR(3,0);LR(1,1);LR(-1,1);LR(-1,0);LR(-2,2);
+	      LR(4,0);MR(2,0);break;
+    case '3': LR(3,0);LR(1,-1);LR(-1,-1);LR(-1,0);LR(1,0);LR(1,-1);
+	      LR(-1,-1);LR(-3,0);MR(6,4);break;
+    case '4': MR(4,-1);LR(-4,0);LR(0,-1);LR(2,-2);LR(1,0);LR(0,4);MR(3,0);
+	      break;
+    case '5': LR(3,0);LR(1,-1);LR(-1,-1);LR(-2,0);LR(-1,-1);LR(0,-1);
+	      LR(4,0);MR(2,4);break;
+    case '6': MR(1,-2);LR(2,0);LR(1,1);LR(-1,1);LR(-2,0);LR(-1,-1);
+	      LR(0,-2);LR(1,-1);LR(2,0);MR(3,4);break;
+    case '7': MR(0,-4);LR(4,0);LR(0,1);LR(-2,2);LR(0,1);MR(4,0);break;
+    case '8': MR(1,0);LR(2,0);LR(1,-1);LR(-1,-1);LR(-2,0);LR(-1,-1);
+	      LR(1,-1);LR(2,0);LR(1,1);MR(-4,2);LR(0,0);MR(6,1);break;
+    case '9': MR(1,0);LR(2,0);LR(1,-1);LR(0,-2);LR(-1,-1);LR(-2,0);
+	      LR(-1,1);LR(1,1);LR(2,0);MR(3,2);break;
+    case '-': MR(0,-2),LR(3,0);MR(2,2);break;
+    case '.': LR(0,0);MR(2,0);break;
+    case ',': MR(0,1);LR(1,-1);MR(2,0);break;
+    case ':': MR(0,-1);LR(0,0);MR(0,-2);LR(0,0);MR(2,3);break;
+    case '&': MR(0,-1);LR(1,1);LR(1,0);LR(1,-1);LR(1,1);LR(-2,-2);
+	      LR(-1,0);LR(0,-1);LR(1,-1);LR(1,1);MR(3,3);break;
+    case ' ': MR(3,0); break;
+    case '!': LR(0,0);MR(0,-2);LR(0,-2);MR(2,4);break;
+    case '@':
+    case '#': MR(1,0);LR(0,-4);MR(-1,1);LR(4,0);MR(-1,-1);LR(0,4);
+	      MR(1,-1);LR(-4,0);MR(6,1);break;
+    case '%': LR(4,-4);MR(-3,0);LR(-1,1);LR(0,-1);LR(4,4);LR(-1,0);LR(1,-1);
+	      MR(2,1);break;
+    case '(': MR(1,0);LR(-1,-1);LR(0,-2);LR(1,-1);MR(2,4);break;
+    case ')': LR(1,-1);LR(0,-2);LR(-1,-1);MR(3,4);break;
+    case '/': LR(4,-4);MR(2,4);break;
+    case '<': MR(4,-4);LR(-2,2);LR(2,2);MR(2,0);break;
+    case '>': MR(0,-4);LR(2,2);LR(-2,2);MR(4,0);break;
+    case 0x27: MR(0,-4);LR(0,1);MR(2,3);break;
+    case '*': MR(1,0);LR(0,-4);MR(-1,1);LR(4,0);MR(-1,-1);LR(0,4);
+	      MR(1,-1);LR(-4,0);MR(6,1);break;
+    case '^': MR(0,-3);LR(1,-1);LR(1,0);LR(1,1);MR(0,3);break;
+    case '?': MR(0,-3);LR(1,-1);LR(2,0);LR(1,1);LR(-1,1);
+         MR(0,2);LR(0,0);MR(3,0);break;
+    case 0x14: LR(0,-4);MR(2,4);
+	       break;
+    default:  break;
+  }
+  return;
+}
+
+void VerifySF(char plr)
+{
+  int i;
+  struct Equipment *px;
+
+  for (i=0;i<28;i++) {
+    px=(struct Equipment *) &Data->P[plr].Probe[i];
+    if (px->Safety>px->MaxSafety) px->Safety=px->MaxSafety;
+    if (px->Safety<px->Base) px->Safety=px->Base;
+  }
+}
+
+void VerifyCrews(char plr)
+{
+  int i,j,t,k,total;
+
+  for (i=0;i<3;i++) {
+     if (Data->P[plr].Mission[i].MissionCode==18 && Data->P[plr].Mission[i].part==0) {
+        Data->P[plr].Mission[i].Joint=1;
+        Data->P[plr].Mission[i+1].Joint=1;
+        Data->P[plr].Mission[i].part=0;
+        Data->P[plr].Mission[i+1].part=1;
+     }
+     if (Data->P[plr].Mission[i].PCrew>0) {  // primary verify
+        t=Data->P[plr].Mission[i].Prog;
+        k=Data->P[plr].Mission[i].PCrew-1;
+        if (Data->P[plr].Gcnt[t][k]==0) Data->P[plr].Mission[i].PCrew=0;
+
+        t=Data->P[plr].Mission[i].Prog;  // backup verify
+        k=Data->P[plr].Mission[i].BCrew-1;
+        if (Data->P[plr].Gcnt[t][k]==0) Data->P[plr].Mission[i].BCrew=0;
+
+     }
+  }
+}
+
+void GetMisType(char mcode)
+{
+  FILE *fin;
+
+  fin=sOpen("MISSION.DAT","rb",0);
+  fseek(fin,mcode*(sizeof Mis),SEEK_SET); // Find Mission Type
+  fread(&Mis,sizeof Mis,1,fin);            // Get new Mission Info
+  fclose(fin);
+}
+
+
+int MisRandom(void)
+{
+  int i,nval,ch;
+  do {
+    nval=107;
+    for (i=0;i<250;i++) nval+=(random(7)-3);
+  } while (nval<50 || nval>150);
+
+  return nval-50;
+}
+
+void Plop(char plr,char mode)
+{
+ int wlen,i,fres;
+ FILE *fin;
+ char sName[20];
+
+  memset(sName,0x00,sizeof sName);
+  randomize();
+  fres=random(10000);
+  if (mode==0) {
+   if (fres<2000) strcpy(sName,(plr==0) ? "us1.frm" : "sviet1.frm");
+    else if (fres<4000) strcpy(sName,(plr==0) ? "us2.frm" : "sviet2.frm");
+    else if (fres<6000) strcpy(sName,(plr==0) ? "us3.frm" : "sviet3.frm");
+    else if (fres<8000) strcpy(sName,(plr==0) ? "us4.frm" : "sviet4.frm");
+    else strcpy(sName,(plr==0) ? "us5.frm" : "sviet5.frm");
+   }
+  else if (mode==1) {
+   if (fres<900) strcpy(sName,"passt01.frm");
+    else if (fres<1800) strcpy(sName,"passt02.frm");
+    else if (fres<2700) strcpy(sName,"passt03.frm");
+    else if (fres<3600) strcpy(sName,"passt04.frm");
+    else if (fres<4500) strcpy(sName,"passt05.frm");
+    else if (fres<5400) strcpy(sName,"passt06.frm");
+    else if (fres<6300) strcpy(sName,"passt07.frm");
+    else if (fres<7200) strcpy(sName,"passt08.frm");
+    else if (fres<8100) strcpy(sName,"passt09.frm");
+    else if (fres<9000) strcpy(sName,"passt10.frm");
+    else strcpy(sName,"passt11.frm");
+  } else strcpy(sName,"static.frm");
+
+  fin=sOpen(sName,"rb",0);
+  wlen=8;
+  fread(&vhptr.vptr[40000],1,wlen*2048,fin);
+  vhptr.vptr[40000]=vhptr.vptr[40001]=vhptr.vptr[40002]=vhptr.vptr[40005];
+  vhptr.vptr[55999]=vhptr.vptr[55995];
+  vhptr.vptr[55998]=vhptr.vptr[55994];
+  memcpy(&pal[384],&vhptr.vptr[56000],384);
+  fres=i;SetPal(pal);i=fres;
+  if (BIG==0) SMove(&vhptr.vptr[40000],80,3+plr*10);
+  else LMove(&vhptr.vptr[40000]);
+  fclose(fin);
+  gr_sync ();
+  return;
+}
+
+
+// EOF
+
