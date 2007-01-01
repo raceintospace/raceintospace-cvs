@@ -518,11 +518,13 @@ long size;
 	      RectFill(7,35,82,41,0);
 	      grSetColor(1);PrintAt(8,40,&Data->P[0].Name[0]);
 	      DispChr(0x14);
+	      av_sync ();
 	   }
 	   Data->P[0].Name[num]=0x00;
 	   RectFill(7,35,82,41,0);
 	   grSetColor(1);PrintAt(8,40,&Data->P[0].Name[0]);
 	   MouseOn();
+	   av_sync ();
 	   /* P1: Director Name */
      }
      else
@@ -542,12 +544,14 @@ long size;
            Data->P[1].Name[num++]=ch;
 	      RectFill(237,35,312,41,0);
 	      grSetColor(1);PrintAt(238,40,&Data->P[1].Name[0]);
+	      av_sync ();
 	   }
 
 	  Data->P[1].Name[num]=0x00;
 	  RectFill(237,35,312,41,0);
 	  grSetColor(1);PrintAt(238,40,&Data->P[1].Name[0]);
 	  MouseOn();
+	  av_sync ();
 	  /* P2: Director Name */
     };
    }

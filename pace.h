@@ -211,5 +211,7 @@ void idle_loop_secs (double secs);
 void unimp (void);
 
 void env_setup (void);
+char *seq_filename (int seq, int mode);
+void play_audio (int sidx, int mode);
 
 #endif /* __PACE_H__ */

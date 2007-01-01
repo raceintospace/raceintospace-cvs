@@ -386,6 +386,9 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			sidx = cSeq.oLIST[i].sIdx;
 		}
 
+		if (sidx)
+			play_audio (sidx, mode);
+
 		if ((frm = frm_open_seq (aidx, mode)) == NULL) {
 			printf ("can't open frm seq %d,%d\n", aidx, mode);
 			break;

@@ -47,7 +47,6 @@ void AIL_set_timer_period (HTIMER t, long ticks){unimp();}
 void AIL_start_timer (HTIMER t){unimp();}
 void getdfree (int drdive, struct dfree *fp){unimp();}
 void absdiscread (int disk, long op, int offset, unsigned char *buf){unimp();}
-int getch (void){unimp(); return (0);}
 void BFill(void *buffer,char color){unimp();}
 void window (int x1, int y1, int x2, int y2){unimp();}
 
@@ -92,7 +91,6 @@ void RecvSide(char side){unimp();}
 void UpdPrestige(void){unimp();}
 void RLEE (void *dest, void *src, unsigned int src_size){unimp ();}
 int put_serial(unsigned char n) {unimp (); return 0;}
-void SetMusicVolume(int percent) {unimp ();}
 void RLEF(void *dest, void *src, unsigned int src_size) {unimp ();}
 
 
@@ -627,6 +625,22 @@ frm_init (void)
 	frm_read_tbl ("FSEQ.KEY", &frm_ftbl);
 }
 
+char *
+seq_filename (int seq, int mode)
+{
+	struct tblinfo *tp;
+
+	if (mode == 0)
+		tp = &frm_tbl;
+	else
+		tp = &frm_ftbl;
+
+	if (seq < 0 || seq >= tp->count)
+		return (NULL);
+
+	return (tp->strings[seq]);
+}
+
 struct frm *
 frm_open_seq (int seq, int mode)
 {
@@ -812,6 +826,19 @@ int soundbuf_size;
 int soundbuf_used;
 struct audio_chunk news_chunk;
 	
+void
+soundbuf_alloc (int size)
+{
+	if (size > soundbuf_size) {
+		if (soundbuf)
+			free (soundbuf);
+		soundbuf_size = size;
+		if ((soundbuf = malloc (soundbuf_size)) == NULL) {
+			fprintf (stderr, "out of memory\n");
+			exit (1);
+		}
+	}
+}
 
 void
 NGetVoice(char plr,char val)
@@ -842,15 +869,7 @@ NGetVoice(char plr,char val)
 
 	printf ("offset %ld; size %ld\n", ABSnd.offset, ABSnd.size);
 
-	if (ABSnd.size > soundbuf_size) {
-		if (soundbuf)
-			free (soundbuf);
-		soundbuf_size = ABSnd.size;
-		if ((soundbuf = malloc (soundbuf_size)) == NULL) {
-			fprintf (stderr, "out of memory\n");
-			exit (1);
-		}
-	}
+	soundbuf_alloc (ABSnd.size);
 
 	fseek (mvfile, ABSnd.offset, SEEK_SET);
 	fread (soundbuf, 1, ABSnd.size, mvfile);
@@ -880,3 +899,63 @@ StopVoice (void)
 	av_silence ();
 }
 
+void
+SetMusicVolume(int percent)
+{
+}
+
+int
+getch (void)
+{
+	int c;
+
+	while (1) {
+		av_step ();
+		if ((c = bioskey (0)) != 0)
+			return (c);
+		usleep (30 * 1000);
+	}
+}
+
+void
+play_audio (int sidx, int mode)
+{
+	char *raw_name;
+	char fullname[1000];
+	char *p;
+	FILE *f;
+	int size;
+
+	if ((raw_name = seq_filename (sidx, mode)) == NULL) {
+		printf ("can't find audio file for %d,%d\n",
+			sidx, mode);
+		return;
+	}
+
+	sprintf (fullname, "/l/baris/rom/audio/%s.raw", raw_name);
+	for (p = fullname; *p; p++) {
+		*p = tolower (*p);
+		if (*p == '#')
+			*p = '_';
+	}
+
+	printf ("play %s\n", fullname);
+
+	if ((f = fopen (fullname, "r")) == NULL) {
+		printf ("can't open sound %d,%d: %s\n", 
+			sidx, mode, fullname);
+		return;
+	}
+
+	size = filelength (fileno (f));
+
+	soundbuf_alloc (size);
+
+	fread (soundbuf, 1, size, f);
+
+	fclose (f);
+
+	soundbuf_used = size;
+
+	PlayVoice ();
+}
