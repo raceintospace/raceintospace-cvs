@@ -7,7 +7,7 @@ extern void unimp (void);
 int grGetPixel (int x, int y){unimp();return 0;}
 void grSetLineStyle (int style, int width){unimp();}
 
-extern char *screen;
+extern unsigned char *screen;
 extern char pal[];
 
 int
@@ -33,14 +33,14 @@ grSetMousePos (int x, int y)
 int
 grGetMouseButtons (void)
 {
-	return (gtk_mouse_pressed);
+	return (av_mouse_pressed);
 }
 
 int
 grGetMousePos (int *xp, int *yp)
 {
-	*xp = gtk_mouse_x / 2;
-	*yp = gtk_mouse_y / 2;
+	*xp = av_mouse_x / 2;
+	*yp = av_mouse_y / 2;
 	return (0);
 }
 
@@ -70,22 +70,7 @@ gr_set_color_map (unsigned char *map)
 void
 gr_sync (void)
 {
-	unsigned char rgb[320 * 200 * 3];
-	unsigned char *outp;
-	int in_idx;
-	int color_idx;
-	char *p;
-
-	outp = rgb;
-	for (in_idx = 0; in_idx < 320*200; in_idx++) {
-		color_idx = screen[in_idx] & 0xff;
-		p = pal + color_idx * 3;
-		*outp++ = *p++ * 4;
-		*outp++ = *p++ * 4;
-		*outp++ = *p++ * 4;
-	}
-
-	display_gtk_img (rgb);
+	av_sync ();
 }
 
 void

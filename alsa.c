@@ -187,54 +187,6 @@ sound_play (FILE *f, int offset, int size)
 }
 
 void
-NGetVoice(char plr,char val)
-{
-	struct TM {
-		long offset;
-		long size;
-	} ABSnd;
-
-	FILE *fin;
-
-	printf ("**** NGetVoice(%d,%d)\n", plr, val);
-
-	if (Sounds <= 0)
-		return;
-
-	if (VoiceOff!=-1) KillVoice();
-	VoiceOff=val;
-
-	mvfile = sOpen( (plr==0) ? "UNEWS.CDR" : "SNEWS.CDR" ,"rb",0);
-	if (mvfile==NULL) {Sounds=0;VoiceOff=-1;return;}  // file not here
-
-	fseek(mvfile,val*(sizeof ABSnd),SEEK_SET);
-	fread(&ABSnd,sizeof ABSnd,1,mvfile);
-
-	VoiceStart=ABSnd.offset;
-	fseek(mvfile,ABSnd.offset,SEEK_SET);
-
-	printf ("offset %ld; size %ld\n", ABSnd.offset, ABSnd.size);
-
-	if (ABSnd.size > soundbuf_size) {
-		if (soundbuf)
-			free (soundbuf);
-		soundbuf_size = ABSnd.size;
-		if ((soundbuf = malloc (soundbuf_size)) == NULL) {
-			fprintf (stderr, "out of memory\n");
-			exit (1);
-		}
-	}
-
-	fseek (mvfile, ABSnd.offset, SEEK_SET);
-	fread (soundbuf, 1, ABSnd.size, mvfile);
-
-	fclose (mvfile);
-
-	soundbuf_used = ABSnd.size;
-	soundbuf_off = 0;
-}
-
-void
 PlayVoice(void) 
 {
 	printf ("**** PlayVoice\n");

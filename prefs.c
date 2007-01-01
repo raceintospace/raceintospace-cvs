@@ -1075,7 +1075,9 @@ void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
    MouseOff();
    while(!(key==0x0d || key==0x1b))
 	 {
-	  key=toupper(bioskey(0));
+	  key = bioskey (0);
+	  if (key >= 'a' && key <= 'z')
+		  key = toupper (key);
 	  if (key&0x00ff)
 		{
 		 if ((i<13) && ((key==' ') || ((key>='A' && key<='Z')) ||

@@ -8,15 +8,9 @@
 #include <memory.h>
 #include "SDL.h"
 
-SDL_Surface *sur;
+#include "av.h"
 
-double
-get_time (void)
-{
-	struct timeval tv;
-	gettimeofday (&tv, NULL);
-	return (tv.tv_sec + tv.tv_usec / 1e6);
-}
+SDL_Surface *sur;
 
 void
 intr (int sig)
@@ -29,11 +23,6 @@ int have_audio;
 
 SDL_AudioSpec audio_desired, audio_obtained;
 
-struct audio_chunk {
-	struct audio_chunk *next;
-	unsigned char *data;
-	int size;
-};
 
 struct audio_chunk *cur_chunk, **cur_chunk_tailp = &cur_chunk;
 int cur_offset;
@@ -65,11 +54,38 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 	memset (stream, audio_obtained.silence, togo);
 }
 
+char
+AnimSoundCheck(void)
+{
+	if (cur_chunk)
+		return (0);
+	return (1);
+}
+
 void
 play (struct audio_chunk *new_chunk)
 {
+	struct audio_chunk *cp;
+
+	if (have_audio == 0)
+		return;
 	SDL_LockAudio ();
+	for (cp = cur_chunk; cp; cp = cp->next) {
+		if (cp == new_chunk) {
+			printf ("play: attempt to do duplicate chunk add\n");
+			return;
+		}
+	}
 	*cur_chunk_tailp = new_chunk;
+	SDL_UnlockAudio ();
+}
+
+void
+av_silence (void)
+{
+	SDL_LockAudio ();
+	cur_chunk = NULL;
+	cur_chunk_tailp = &cur_chunk;
 	SDL_UnlockAudio ();
 }
 
@@ -95,18 +111,14 @@ test_audio (void)
 }
 
 
-int
-main ()
+void
+av_setup (int *argcp, char ***argvp)
 {
-	SDL_Rect r;
-	SDL_Event ev;
-
 	if (SDL_Init (SDL_INIT_VIDEO) < 0) {
 		fprintf (stderr, "SDL_Init error\n");
 		exit (1);
 	}
 
-	signal (SIGINT, intr);
 
 	if (SDL_InitSubSystem (SDL_INIT_AUDIO < 0)) {
 		printf ("no audio\n");
@@ -115,56 +127,150 @@ main ()
 		have_audio = 1;
 	}
 
-	if ((sur = SDL_SetVideoMode (320, 200, 24, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
+	if ((sur = SDL_SetVideoMode (640, 400, 24,
+				     SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
 		fprintf (stderr, "error in SDL_SetVideoMode\n");
 		exit (1);
 	}
 
 	SDL_EnableUNICODE (1);
 
-	audio_desired.freq = 11025;
-	audio_desired.format = AUDIO_U8;
-	audio_desired.channels = 1;
-	audio_desired.samples = 8192;
-	audio_desired.callback = audio_callback;
-
-	if (SDL_OpenAudio (&audio_desired, &audio_obtained) < 0) {
-		fprintf (stderr, "error in SDL_OpenAudio\n");
-		exit (1);
-	}
-
-	test_audio ();
-	SDL_PauseAudio (0);
-
-	while (1) {
-		while (SDL_PollEvent (&ev)) {
-			switch (ev.type) {
-			case SDL_KEYDOWN:
-				printf ("got key %d\n", ev.key.keysym.unicode);
-				break;
-			case SDL_KEYUP:
-				break;
-			default:
-				printf ("got uknown event %d\n", ev.type);
-				break;
-			}
+	if (have_audio) {
+		audio_desired.freq = 11025;
+		audio_desired.format = AUDIO_U8;
+		audio_desired.channels = 1;
+		audio_desired.samples = 8192;
+		audio_desired.callback = audio_callback;
+		
+		if (SDL_OpenAudio (&audio_desired, &audio_obtained) < 0) {
+			fprintf (stderr, "error in SDL_OpenAudio\n");
+			exit (1);
 		}
 
-		r.x = 0; r.y = 0; r.w = 320; r.h = 200;
-		SDL_FillRect (sur, &r, 0);
+		SDL_PauseAudio (0);
+	}
+}
 
-		r.x = 160 + 120 * cos (get_time () * .5 * M_PI);
-		r.y = 100;
-		r.w = 20;
-		r.h = 20;
-		SDL_FillRect (sur, &r, 0xff0000);
+#define KEYBUF_SIZE 256
+int keybuf[KEYBUF_SIZE];
+int keybuf_in_idx, keybuf_out_idx;
+
+
+void
+av_step (void)
+{
+	SDL_Event ev;
+	int c;
 	
-		SDL_Flip (sur);
+	while (SDL_PollEvent (&ev)) {
+		switch (ev.type) {
+		case SDL_QUIT:
+			exit (0);
+			break;
 
-		usleep (33 * 1000);
+		case SDL_KEYDOWN:
+			c = ev.key.keysym.unicode;
+			if (c > 0 && c <= 0xff) {
+				keybuf[keybuf_in_idx] = c;
+				keybuf_in_idx = (keybuf_in_idx + 1)
+					% KEYBUF_SIZE;
+			}
+			break;
 
+		case SDL_MOUSEBUTTONDOWN:
+			av_mouse_pressed = 1;
+			av_mouse_x = ev.button.x;
+			av_mouse_y = ev.button.y;
+			break;
+
+		case SDL_MOUSEBUTTONUP:
+			av_mouse_pressed = 0;
+			break;
+
+			/* ignore these events */
+		case SDL_KEYUP:
+		case SDL_ACTIVEEVENT:
+		case SDL_MOUSEMOTION:
+			break;
+		default:
+			printf ("got uknown event %d\n", ev.type);
+			break;
+		}
+	}
+}
+
+int
+bioskey (int peek)
+{
+	int c;
+
+	av_step ();
+
+	if (peek) {
+		if (keybuf_in_idx != keybuf_out_idx)
+			return (1);
+		return (0);
 	}
 
-	return (0);
+	if (keybuf_in_idx == keybuf_out_idx)
+		return (0);
+
+	c = keybuf[keybuf_out_idx];
+	keybuf_out_idx = (keybuf_out_idx + 1) % KEYBUF_SIZE;
+
+	return (c);
+}
+
+void
+UpdateAudio(void)
+{
+	av_step ();
+}
+
+void
+NUpdateVoice(void) 
+{
+	av_step ();
+}
+
+void
+av_sync (void)
+{
+	int dest_row, dest_col, dest_idx;
+	int src_row, src_col, src_idx;
+	int pixel;
+	char *p;
+	char *outp;
+
+	SDL_LockSurface (sur);
+
+	for (dest_row = 0; dest_row < 400; dest_row++) {
+		src_row = dest_row / 2;
+		for (dest_col = 0; dest_col < 640; dest_col++) {
+			src_col = dest_col / 2;
+
+			src_idx = src_row * 320 + src_col;
+			dest_idx = (dest_row * 640 + dest_col) * 3;
+
+			pixel = screen[src_idx] & 0xff;
+			p = pal + pixel * 3;
+
+			outp = sur->pixels + dest_idx;
+
+			outp[0] = p[2] * 4;
+			outp[1] = p[1] * 4;
+			outp[2] = p[0] * 4;
+		}
+	}
+
+	SDL_UnlockSurface (sur);
+
+	SDL_Flip (sur);
+}
+
+void
+PlayAudio(char *name,char mode)
+{
+	printf ("PlayAudio(%s)\n", name);
 }
 

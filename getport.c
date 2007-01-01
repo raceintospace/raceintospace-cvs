@@ -47,10 +47,10 @@ MOBJ MObj[35];
 
 long table[S_QTY];
 
-unsigned char pal[256 * 3];
+char pal[256 * 3];
 
 char inbuf[1000 * 1000];
-char outbuf[1000 * 1000];
+unsigned char outbuf[1000 * 1000];
 
 int insize;
 int outsize;
@@ -110,10 +110,10 @@ int width, height;
 
 IMG Img;
 
-char screen[64*1024];
+unsigned char *screen;
 
 void
-write_ppm (char *filename, char *buf, int w, int h)
+write_ppm (char *filename, char unsigned *buf, int w, int h)
 {
 	FILE *outf;
 	int row, col;
@@ -131,7 +131,7 @@ write_ppm (char *filename, char *buf, int w, int h)
 		for (col = 0; col < w; col++) {
 			pixel = buf[row * w + col] & 0xff;
 
-			cp = &pal[pixel * 3];
+			cp = (unsigned char *)(&pal[pixel * 3]);
 			putc (*cp++ * 4, outf);
 			putc (*cp++ * 4, outf);
 			putc (*cp++ * 4, outf);
@@ -204,6 +204,7 @@ main (int argc, char **argv)
 	int idx;
 
 	filename = "/l/baris/gamedat/usa_port.dat";
+	screen = malloc (64 * 1024);
 
 	while ((c = getopt (argc, argv, "vw:h:")) != EOF) {
 		switch (c) {

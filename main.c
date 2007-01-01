@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
   char ex,side=0;
 
   env_setup ();
-  setup_gtk (&argc, &argv);
+  av_setup (&argc, &argv);
 
   while ((c = getopt (argc, argv, "i")) != EOF) {
 	  switch (c) {
@@ -1537,6 +1537,7 @@ void DV(GXHEADER *obj)
   return;
 }
 
+/* get mouse of keyboard input, non-blocking */
 void GetMouse(void)
 {
   char string[25],rbut=0;
@@ -1544,7 +1545,8 @@ void GetMouse(void)
   memset(string,0x00,25);
   mousebuttons=0;
   oldx=x;oldy=y;
-
+  
+  usleep (30 * 1000);
   gr_sync ();
 
   if (XMAS!=0) {
@@ -1555,7 +1557,7 @@ void GetMouse(void)
     }
   while (bioskey(1)) {
     key=bioskey(0);
-    if((key&0x00ff)>0) key=toupper(key);
+    if((key&0x00ff)>0) key=toupper(key & 0xff);
     mousebuttons=0;
     //grSetMousePos(319,199);
     }
@@ -1568,19 +1570,6 @@ void GetMouse(void)
     }
   else if (AL_CALL==0 && ((key>>8)==0x3C)) Idiot(IKEY);
   else if (AL_CALL==0 && ((key>>8)==0x3D)) Idiot("i123");
-  //else if ((key>>8)>0) key=0;
-#if 1
-  else if (key==0x3D) {
-//   Data->P[0].Cash=Data->P[1].Cash=500;
-   gxSetDisplayPalette(pal);
-   ShBox(8,4,95,13);grSetColor(1);
-   mems=gxVirtualFree(gxCMM);
-   ltoa(mems,string,10);
-   PrintAt(10,10,"CORE: "); PrintAt(0,0,&string[0]);
-   key=0;
-   }
-#endif
-  return;
 }
 #if 1
 void MouseOff(void)
@@ -1604,15 +1593,17 @@ void PauseMouse(void)
 
 	gr_sync ();
 
+	/* wait until mouse button is released */
 	while(1)  {
 		GetMouse();
 		if (mousebuttons==0) break;
+		usleep (30 * 1000);
 	}
-	start = get_time ();
-	while (mousebuttons==0 && key==0) {
-		if (get_time () - start > .1)
-			break;
-		GetMouse();
+
+	GetMouse ();
+	if (mousebuttons == 0 && key == 0) {
+		usleep (30 * 1000);
+		GetMouse ();
 	}
 	return;
 }
@@ -1668,7 +1659,7 @@ void DispBig(int x,int y,char *txt,char mode,char te)
 
   for (i=0;i<strlen(txt);i++) {
     if (txt[i]==0x20) {x+=6;i++;};
-    c=toupper(txt[i]);
+    c=toupper(txt[i] & 0xff);
     if (c>=0x30 && c<=0x39) px=c-32;
     else px=c-33;
     if (c=='-') px++;

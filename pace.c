@@ -90,7 +90,6 @@ void Toggle_Cfg(int opt,int old){unimp();}
 void Dnload(void) {unimp();}
 void RecvSide(char side){unimp();}
 void UpdPrestige(void){unimp();}
-void PlayAudio(char *name,char mode){unimp();}
 void RLEE (void *dest, void *src, unsigned int src_size){unimp ();}
 int put_serial(unsigned char n) {unimp (); return 0;}
 void SetMusicVolume(int percent) {unimp ();}
@@ -240,19 +239,9 @@ OpenEmUp(void)
 
 	GV(&vhptr,320,200);     // Allocate only Virtual Buffer
 
-	retcode=grInitMouse();
-	if (retcode==gxSUCCESS) {
-		XMAS=1;
-		//grDisplayMouse(grSHOW);
-		grTrackMouse(grTRACK);
-		grSetMouseStyle(grCARROW,8);
-		grSetMousePos(319,199);
-	}
-	else XMAS=0;
+	XMAS=1; /* we do have a mouse */
 
 	letter_dat = slurp_gamedat ("letter.dat");
-
-	sound_init ();
 }
 
 
@@ -527,11 +516,6 @@ ltoa (long val, char *buf, int len)
 }
 
 void
-UpdateAudio(void)
-{
-}
-
-void
 getcurdir (int drive, char *buf)
 {
 	getcwd (buf, 100);
@@ -794,5 +778,81 @@ idle_loop (int ticks)
 	start = get_time ();
 	while (get_time () - start < secs)
 		UpdateAudio ();
+}
+
+char Sounds;
+long VoiceOff, VoiceStart;
+
+char *soundbuf;
+int soundbuf_size;
+int soundbuf_used;
+struct audio_chunk news_chunk;
+	
+
+void
+NGetVoice(char plr,char val)
+{
+	struct TM {
+		long offset;
+		long size;
+	} ABSnd;
+
+	FILE *mvfile;
+
+	printf ("**** NGetVoice(%d,%d)\n", plr, val);
+
+	if (Sounds <= 0)
+		return;
+
+	if (VoiceOff!=-1) KillVoice();
+	VoiceOff=val;
+
+	mvfile = sOpen( (plr==0) ? "UNEWS.CDR" : "SNEWS.CDR" ,"rb",0);
+	if (mvfile==NULL) {Sounds=0;VoiceOff=-1;return;}  // file not here
+
+	fseek(mvfile,val*(sizeof ABSnd),SEEK_SET);
+	fread(&ABSnd,sizeof ABSnd,1,mvfile);
+
+	VoiceStart=ABSnd.offset;
+	fseek(mvfile,ABSnd.offset,SEEK_SET);
+
+	printf ("offset %ld; size %ld\n", ABSnd.offset, ABSnd.size);
+
+	if (ABSnd.size > soundbuf_size) {
+		if (soundbuf)
+			free (soundbuf);
+		soundbuf_size = ABSnd.size;
+		if ((soundbuf = malloc (soundbuf_size)) == NULL) {
+			fprintf (stderr, "out of memory\n");
+			exit (1);
+		}
+	}
+
+	fseek (mvfile, ABSnd.offset, SEEK_SET);
+	fread (soundbuf, 1, ABSnd.size, mvfile);
+
+	fclose (mvfile);
+
+	soundbuf_used = ABSnd.size;
+}
+
+void
+PlayVoice (void)
+{
+	news_chunk.data = soundbuf;
+	news_chunk.size = soundbuf_used;
+	play (&news_chunk);
+}
+
+void
+KillVoice (void)
+{
+	av_silence ();
+}
+
+void
+StopVoice (void)
+{
+	av_silence ();
 }
 

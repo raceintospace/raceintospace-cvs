@@ -6,7 +6,7 @@
 #include <dirent.h>
 #include <errno.h>
 
-#include "soundint.h"
+#include "av.h"
 
 #define stricmp strcasecmp
 #define strncmpi strncasecmp

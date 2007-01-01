@@ -238,7 +238,7 @@ void Introd(void)
 
     start = get_time ();
     while (get_time () - start < 3) {
-	    step_gtk ();
+	    av_step ();
 
 	    key = 0;
 	    PauseMouse();

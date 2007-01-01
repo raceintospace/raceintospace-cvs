@@ -821,7 +821,9 @@ char GetBlockName(char *Nam)
   gr_sync ();
   key=0;i=0;
   while(!(key==0x0d || key==0x1b)) {
-    key=toupper(bioskey(0));
+    key = bioskey (0);
+    if (key >= 'a' && key <= 'z')
+	    key = toupper (key);
     if (key&0x00ff) {
       if ((i<21) && ((key==' ') || ((key>='A' && key<='Z')) ||
 	 (key>='0' && key<='9'))) {  // valid key

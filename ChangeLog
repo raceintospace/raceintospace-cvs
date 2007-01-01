@@ -1,5 +1,11 @@
 2007-01-01  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V12
+
+	* switch from gtk to sdl; make use of toupper safe against
+	values outside of unsigned char range; put some sleeps
+	in when waiting for input
+
 	* V11
 	
 	* fix display in VAB; some other helper programs
