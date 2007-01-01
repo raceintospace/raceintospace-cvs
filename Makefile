@@ -9,7 +9,7 @@ CFLAGS = -g -Wall -Dfar= -Dpascal= -I. `pkg-config --cflags gtk+-2.0`
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
 
-PROGS = baris imgsplit vtest decode getport mkmovie
+PROGS = baris imgsplit vtest decode getport mkmovie getvab sdl mtest
 all: $(PROGS) 
 
 BARIS_HFILES = Buzz_inc.h cdmaster.h cdrom.h data.h externs.h mis.h mtype.h	\
@@ -44,6 +44,18 @@ getport: getport.o
 
 mkmovie: mkmovie.o
 	$(CC) $(CFLAGS) -o mkmovie mkmovie.o -lm
+
+getvab: getvab.o
+	$(CC) $(CFLAGS) -o getvab getvab.o -lm
+
+mtest: mtest.o
+	$(CC) $(CFLAGS) -o mtest mtest.o -lm
+
+sdl.o: sdl.c
+	$(CC) $(CFLAGS) `sdl-config --cflags` -c sdl.c
+
+sdl: sdl.o
+	$(CC) $(CFLAGS) -o sdl sdl.o `sdl-config --libs` -lm
 
 clean:
 	rm -f *.o *~

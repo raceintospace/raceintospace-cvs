@@ -6,3 +6,10 @@ imgsplit
 mkmovie
 savedat
 vtest
+*.ppm
+?
+*.img
+sdl
+mtest
+getvab
+*.cat

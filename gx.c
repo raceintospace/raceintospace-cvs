@@ -161,7 +161,7 @@ gxVirtualVirtual (GXHEADER *from,
 	gr_sync ();
 
 	w = from_x2 - from_x1 + 1;
-	h = from_y2 - from_x1 + 1;
+	h = from_y2 - from_y1 + 1;
 
 	for (row = 0; row < h; row++) {
 		for (col = 0; col < w; col++) {
