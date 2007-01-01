@@ -1,3 +1,5 @@
+#ifndef __PACE_H__
+#define __PACE_H__
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
@@ -173,6 +175,7 @@ double get_time (void);
 
 int show_intro_flag;
 
+FILE *open_gamedat (char *name);
 char *slurp_gamedat (char *name);
 
 char *letter_dat;
@@ -205,3 +208,7 @@ void remove_savedat (char *name);
 
 void idle_loop (int ticks);
 void unimp (void);
+
+void env_setup (void);
+
+#endif /* __PACE_H__ */

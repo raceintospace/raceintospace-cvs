@@ -156,11 +156,10 @@ FILE * sOpen(char *Name,char *mode,int loc)
    fName=(char *) malloc(128);
    memset(fName,0x00,128);
 
-   if (loc==1) {
-	   sprintf (fName, "%s/savedat/%s", BUZZ_DIR, Name);
-   } else {
-	   sprintf (fName, "/l/baris/gamedat/%s", Name);
-   }
+   if (loc==0) 
+	   return open_gamedat(Name);
+
+   sprintf (fName, "%s/savedat/%s", BUZZ_DIR, Name);
 
    for (p = fName; *p; p++)
 	   *p = tolower (*p);
@@ -251,6 +250,7 @@ int main(int argc, char *argv[])
   char AName[6][22]={"NEW GAME","OLD GAME","MODEM","PLAY BY MAIL","CREDITS","EXIT TO DOS"};
   char ex,side=0;
 
+  env_setup ();
   setup_gtk (&argc, &argv);
 
   while ((c = getopt (argc, argv, "i")) != EOF) {

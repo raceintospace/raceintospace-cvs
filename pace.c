@@ -5,6 +5,19 @@ extern GXHEADER vhptr;
 void frm_init (void);
 
 void
+env_setup (void)
+{
+	char *name;
+
+	if (getenv ("BARIS_PATH") == NULL) {
+		if ((name = getlogin ()) != NULL) {
+			if (strcmp (name, "pace") == 0)
+				putenv ("BARIS_PATH=/l/baris");
+		}
+	}
+}
+
+void
 unimp (void)
 {
 	fprintf (stderr, "unimplemented library function\n");
@@ -132,22 +145,43 @@ farfree (void *p)
 		free (p);
 }
 
-#define GAMEDAT "/l/baris/gamedat"
-
 FILE *
 open_gamedat (char *name)
 {
 	char fullname[1000];
+	char try_name[1000];
 	FILE *f;
-
-	sprintf (fullname, "%s/%s", GAMEDAT, name);
-	
-	if ((f = fopen (fullname, "r")) == NULL) {
-		fprintf (stderr, "can't open %s\n", fullname);
+	int i;
+	const char *barisDirectoryPath = getenv("BARIS_PATH");
+  
+	if (barisDirectoryPath == NULL)
+	{
+		fprintf (stderr, "BARIS_PATH not defined %s\n", fullname);
 		exit (1);
 	}
 
-	return (f);
+#if 0	
+	sprintf (fullname, "%s/GAMEDAT/%s", barisDirectoryPath, name);
+	if ((f = fopen (fullname, "r")) == NULL) {
+//		fprintf (stderr, "can't open %s\n", fullname);
+		//exit (1);
+	}
+#endif
+
+	for (i=0;i<strlen(name)+1;i++)
+		try_name[i] = toupper(name[i]);
+	sprintf (fullname, "%s/GAMEDAT/%s", barisDirectoryPath, try_name);
+	if ((f = fopen (fullname, "r")) != NULL)
+		return (f);
+
+	for (i=0;i<strlen(name)+1;i++)
+		try_name[i] = tolower(name[i]);
+	sprintf (fullname, "%s/gamedat/%s", barisDirectoryPath, try_name);
+	if ((f = fopen (fullname, "r")) != NULL)
+		return (f);
+
+	fprintf (stderr, "can't open %s\n", fullname);
+	exit (1);
 }
 
 char *
