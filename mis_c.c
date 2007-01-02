@@ -178,12 +178,13 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	};
 
 	if (Seq[0]=='Q') {
-		if (Mev[STEP-1].Name[0]!='S') 
+		if (Mev[STEP-1].Name[0]!='S') {
 			if (mode==0) Seq[0]='i';
 			else if (mode==1) {
 				Seq[0]='i';
 				strncpy(Mev[step].FName,"F034",4);
 			}
+		}
 		if ((Seq[1]=='U' || Seq[1]=='S') && Seq[2]=='C') {
 			if (Seq[3]=='5') Seq[3]='6';
 			else if (Seq[3]=='6') Seq[3]='5';

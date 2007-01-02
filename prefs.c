@@ -439,8 +439,8 @@ long size;
 	     /* P1: Game Level */
        }
       else
-      if ((x>=8 && y>=160 && x<=81 && y<=191 && ((where==0 || where==3) && mousebuttons>0) ||
-          ((where==3 || where==0) && ksel==0 && key=='L')))
+      if ((x>=8 && y>=160 && x<=81 && y<=191 && ((where==0 || where==3) && mousebuttons>0)) ||
+          ((where==3 || where==0) && ksel==0 && key=='L'))
        {
 	     MouseOff();InBox(8,160,81,191);MouseOn();
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
@@ -1137,15 +1137,15 @@ void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
     grSetColor(9);PrintAt(228,138,"SKILL CHANGE");
     tot=0;
     if (Cur!=1) 
-      if (Cnt==0) tot+=Men[mum].Cap; else tot+=Sov[mum].Cap;
+      {if (Cnt==0) tot+=Men[mum].Cap; else tot+=Sov[mum].Cap;}
     if (Cur!=2) 
-      if (Cnt==0) tot+=Men[mum].LM; else tot+=Sov[mum].LM;
+      {if (Cnt==0) tot+=Men[mum].LM; else tot+=Sov[mum].LM;}
     if (Cur!=3) 
-      if (Cnt==0) tot+=Men[mum].EVA; else tot+=Sov[mum].EVA;
+      {if (Cnt==0) tot+=Men[mum].EVA; else tot+=Sov[mum].EVA;}
     if (Cur!=4) 
-      if (Cnt==0) tot+=Men[mum].Docking; else tot+=Sov[mum].Docking;
+      {if (Cnt==0) tot+=Men[mum].Docking; else tot+=Sov[mum].Docking;}
     if (Cur!=5) 
-      if (Cnt==0) tot+=Men[mum].Endurance; else tot+=Sov[mum].Endurance;
+      {if (Cnt==0) tot+=Men[mum].Endurance; else tot+=Sov[mum].Endurance;}
     switch(Cur)
      {
       case 1:if (Cnt==0) srt=Men[mum].Cap;else srt=Sov[mum].Cap;break;

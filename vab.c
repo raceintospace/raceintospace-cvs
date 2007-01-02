@@ -225,12 +225,13 @@ int FillVab(char plr,char f,char mode)
           }
 	        break;
 	      case 1: 
-	        if ((Data->P[plr].Misc[VAS[f][i].dex].Num-Data->P[plr].Misc[VAS[f][i].dex].Spok)==0)
+	        if ((Data->P[plr].Misc[VAS[f][i].dex].Num-Data->P[plr].Misc[VAS[f][i].dex].Spok)==0) {
             if (mode==1) {
 	            Data->P[plr].Cash-=maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2);
 	            Data->P[plr].Misc[VAS[f][i].dex].Num++;
 	          }
             else cost+=maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2);
+			  }
 	        break;
     	   case 3:
 	        if (VAS[f][i].dex!=4) {
@@ -733,7 +734,7 @@ begvab:
       #define Misdef(a)     Data->P[plr].Mission[(a)].MissionCode 
       rk++;
       if (rk>6) rk=0;
-      if ((Misdef(mis)>=42 && Misdef(mis)<=57 || Misdef(mis)>=7 && Misdef(mis)<=13) && (rk==4 || rk==0))
+      if (((Misdef(mis)>=42 && Misdef(mis)<=57) || (Misdef(mis)>=7 && Misdef(mis)<=13)) && (rk==4 || rk==0))
         rk++;
       
 	   ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);

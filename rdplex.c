@@ -360,7 +360,7 @@ char RD(char plr)
 	else QUnit(hardware,unit,plr);
       }
      else
-      if ((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0) || key==0x0d)
+      if (((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0)) || key==0x0d)
       {
 	    MouseOff();InBox(245,5,314,17);MouseOn();
 	    for(i=0;i<4;i++) for(j=0;j<7;j++) Data->P[plr].Buy[i][j]=buy[i][j];
@@ -770,7 +770,7 @@ char HPurc(char plr)
         }
       }
       else
-      if ((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0) || key==K_ENTER)
+      if (((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0)) || key==K_ENTER)
        {
      	  MouseOff();InBox(245,5,314,17);MouseOn();
         KillMusic();
@@ -838,7 +838,7 @@ void BuyUnit(char hw2,char un2,char plr)
     Init_Cost/=2;Init_Cost=maxx(1,Init_Cost);
     Unit_Cost/=2;Unit_Cost=maxx(1,Unit_Cost);
    }           
-  if (hw2==1)
+  if (hw2==1) {
 	if (Data->P[plr].Probe[un2-1].Num==-1 &&
 	Data->P[plr].Cash>=Init_Cost) {
 	  Data->P[plr].Cash-=Init_Cost;
@@ -853,8 +853,8 @@ void BuyUnit(char hw2,char un2,char plr)
 		Data->P[plr].Probe[un2-1].Num+=1;
 		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
 	};
-
-  if (hw2==2)
+  }
+  if (hw2==2) {
 	if (Data->P[plr].Rocket[un2-1].Num==-1 &&
 	Data->P[plr].Cash>=Init_Cost) {
 	  Data->P[plr].Cash-=Init_Cost;
@@ -869,8 +869,8 @@ void BuyUnit(char hw2,char un2,char plr)
 		Data->P[plr].Rocket[un2-1].Num+=1;
 		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
 	 };
-
-  if (hw2==3)
+  }
+  if (hw2==3) {
 	 if (Data->P[plr].Manned[un2-1].Num==-1 &&
 	Data->P[plr].Cash>=Init_Cost) {
 		Data->P[plr].Cash-=Init_Cost;
@@ -885,8 +885,8 @@ void BuyUnit(char hw2,char un2,char plr)
 		Data->P[plr].Manned[un2-1].Num+=1;
 		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
 	 };
-
-  if (hw2==4)
+  }
+  if (hw2==4) {
 	 if (Data->P[plr].Misc[un2-1].Num==-1 &&
 	Data->P[plr].Cash>=Init_Cost) {
 		Data->P[plr].Cash-=Init_Cost;
@@ -901,7 +901,7 @@ void BuyUnit(char hw2,char un2,char plr)
 		Data->P[plr].Misc[un2-1].Num+=1;
 		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
     };
-
+  }
 /* Figure out any starting bonus for existing programs */
   if (hw2==1 && newf==1) {
     n1=Data->P[plr].Probe[0].Safety;

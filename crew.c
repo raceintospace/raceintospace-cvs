@@ -309,13 +309,14 @@ void FutSt(char plr,int pr,int p,int b)
   for (i=0;i<8;i++) {
     if (i==p) FutSt2(i,3);
     if (i==b) FutSt2(i,4);
-    if (i!=p && i!=b)
+    if (i!=p && i!=b) {
       if (Data->P[plr].Crew[pr][i][0]==0) FutSt2(i,2);
       else if (Data->P[plr].Pool[Data->P[plr].Crew[pr][i][0]-1].Moved==0)
 	 FutSt2(i,1);
       else if (Data->P[plr].Pool[Data->P[plr].Crew[pr][i][0]-1].Prime>0)
 	FutSt2(i,5);
       else FutSt2(i,0);
+    }
   };
   return;
 }

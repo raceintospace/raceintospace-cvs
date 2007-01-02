@@ -249,12 +249,14 @@ int Launch(char plr,char mis)
    MissionPast(plr,mis,total);
    // Update the Astro's
 
-   for (i=0;i<(1+JOINT);i++) 
-      for (j=0;j<(MANNED[i]+1);j++) 
-         if (MA[j][i].A!=NULL) 
+   for (i=0;i<(1+JOINT);i++) {
+      for (j=0;j<(MANNED[i]+1);j++) {
+         if (MA[j][i].A!=NULL) {
             if (FINAL>=100) MA[j][i].A->Mis=1;                  // Successful
             else if (Data->P[plr].Other & 4) MA[j][i].A->Mis=2; // Failure
-
+	 }
+      }
+   }
    BIG=0;
    return total;
 };

@@ -1,8 +1,8 @@
 EXTRA_WARNINGS = -Werror -Wextra -Wno-unused-parameter -Wno-sign-compare \
-	-Wno-char-subscripts -Wno-parentheses \
+	-Wno-char-subscripts \
 	-Wno-uninitialized -Wno-missing-braces
 
-CFLAGS = -g -Wall -Dfar= -Dpascal= -I. `sdl-config --cflags`
+CFLAGS = -Wall -Dfar= -Dpascal= -I. `sdl-config --cflags`
 
 LIBS = `sdl-config --libs` -lvorbisfile -lm
 

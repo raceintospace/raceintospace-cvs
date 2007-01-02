@@ -1,5 +1,15 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V29
+	
+	* add extra braces and parens so gcc's Wparentheses warning
+	will be useful.  I compiled the program before and after
+	these changes with no difference in the .o files, so the
+	explicit groups is now what the compiler has done all along.
+	there were two paces in future.c, marked with XXX, where
+	the indenting suggested that the other order was intended -
+	this is worth checking
+
 	* V28
 
 	* the ai was looping forever in RDafford because roll was

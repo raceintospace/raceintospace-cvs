@@ -128,7 +128,7 @@ void Stat(char Win)
    {
     if (AI[Win]==0)
      {
-      if ((x>=starty+(j*33) && y>=87 && x<=31+starty+(j*33) && y<=107 && mousebuttons>0) || (key>='1' && key<='4' || key=='0'))
+       if ((x>=starty+(j*33) && y>=87 && x<=31+starty+(j*33) && y<=107 && mousebuttons>0) || ((key>='1' && key<='4') || key=='0'))
        {
         if (key>0)
          {
@@ -401,10 +401,12 @@ void TransAstro(char plr,int inx)
     }
  if (count<max*2) {CheckAdv(plr);return;}
  found=0;flt1=-1;flt2=-1;
- for (i=0;i<8;i++)
-   if (Data->P[plr].Gcnt[inx][i]==0)
+ for (i=0;i<8;i++) {
+   if (Data->P[plr].Gcnt[inx][i]==0) {
 	 if (flt1==-1) flt1=i;
 	   else if (flt2==-1) flt2=i;
+   }
+ }
  if (flt1==-1 || flt2==-1) {CheckAdv(plr);return;}
  for (i=0;i<2;i++)
    {

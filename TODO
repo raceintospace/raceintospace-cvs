@@ -3,8 +3,7 @@ remove SetROMDir
 fades
 evaluate all remaining unimp's
 small screens in mission control during launch
-check out passing helicopters
-check out vab animations
+try to get vab animation
 enable all gcc warnings and fix up code
 check with valgrind
 compile with -O
@@ -18,6 +17,8 @@ clean up extra gr_sync's
 in RDafford, figure out how this came to be MaxRD = 80, but Safety = 90 once:
  if (class==2) roll+=Data->P[plr].Manned[index].MaxRD - Data->P[plr].Manned[index].Safety;
 
+
+check XXX in future.c regarding grouping of nested if statements
 
 enhancements:
 

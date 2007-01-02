@@ -225,7 +225,7 @@ env_setup (void)
 	add_gamedat_files (dirname);
 
 	// If BARIS_ROOT is an environment variable then use that to find game data
-	if (alt_location = getenv("BARIS_ROOT"))
+	if ((alt_location = getenv("BARIS_ROOT")) != NULL)
 	{
 		sprintf (dirname, "%s/GAMEDAT", alt_location);
 		add_gamedat_files (dirname);
@@ -698,7 +698,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
            if (Data->Prestige[j].Place==other(MAIL) && Data->PD[other(MAIL)][j]!=1)
             PlayFirst(other(MAIL),j);
          };
-        if (MAIL!=-1 && Data->Prestige[22].Place==0 || Data->Prestige[22].Place==1)
+        if ((MAIL!=-1 && Data->Prestige[22].Place==0) || Data->Prestige[22].Place==1)
          {
           if (Data->Prestige[22].Place==MAIL)
            {
@@ -897,7 +897,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
     if (MAIL==1) UpdPrestige();
 
     //Special Case Modem Win
-    if (Option!=-1 && Data->Prestige[22].Place==0 || Data->Prestige[22].Place==1)
+    if ((Option!=-1 && Data->Prestige[22].Place==0) || Data->Prestige[22].Place==1)
      {
       //Specs: astro modem klugge (ai code)
       Data->P[other(Option)].AstroLevel=0;SelectBest(other(Option),7);
@@ -1442,11 +1442,13 @@ void DispBig(int x,int y,char *txt,char mode,char te)
 
     memcpy(&letter,letter_dat + (sizeof letter*px),sizeof letter);  // copy letter over
     for (k=0;k<15;k++)
-      for (l=0;l<letter.width;l++)
-  	    if (letter.img[k][l]!=0x03)
+      for (l=0;l<letter.width;l++) {
+  	    if (letter.img[k][l]!=0x03) {
 	     if ((letter.img[k][l]==0x01 || letter.img[k][l]==0x02) && i==te)
 	      grPutPixel(x+l,y+k,letter.img[k][l]+7);
 	    else grPutPixel(x+l,y+k,letter.img[k][l]);
+	    }
+      }
     x+=letter.width-1;
   };
 

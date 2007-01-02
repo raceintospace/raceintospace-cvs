@@ -449,7 +449,7 @@ void ShowSpHist(char plr)
   FadeOut(2,pal,5,0,0);
   PatchMe(0,0,0,0,0,32);
   memset(screen,0x00,64000);
-  if (Data->Year == 57 && Data->Season == 0 || Data->P[plr].PastMis == 0)
+  if ((Data->Year == 57 && Data->Season == 0) || Data->P[plr].PastMis == 0)
      pos = (Data->Year-57)*2+Data->Season;
   else pos = (Data->P[plr].History[Data->P[plr].PastMis-1].MissionYear - 57)*2 +
              ((Data->P[plr].History[Data->P[plr].PastMis-1].Month <=5) ? 0 : 1);
@@ -879,8 +879,8 @@ void DisplAst(char plr, char *where, char *where2)
   RectFill(288,105,308,133,3);
   RectFill(239,83,306,97,3);
   grSetColor(1);
-  if (plr==0 && abuf[*where].Missions>=4 || abuf[*where].Hero==1) Display_ARROW(4,289,105);
-   else if (plr==1 && abuf[*where].Missions>=4 || abuf[*where].Hero==1) Display_ARROW(5,290,105);
+  if ((plr==0 && abuf[*where].Missions>=4) || abuf[*where].Hero==1) Display_ARROW(4,289,105);
+   else if ((plr==1 && abuf[*where].Missions>=4) || abuf[*where].Hero==1) Display_ARROW(5,290,105);
   if (abuf[*where].Missions>0) Display_ARROW(6,245,83);
   DispNum(213,78,abuf[*where].Missions);
   DispNum(216,89,abuf[*where].Prestige);

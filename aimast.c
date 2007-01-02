@@ -231,17 +231,19 @@ if (Data->Year>=62)
   if ((Data->P[plr].Probe[0].Safety>=Data->P[plr].Probe[0].MaxRD-20) || Data->P[plr].Probe[1].Num>=0)
    {
     Data->P[plr].Cash+=Data->P[plr].Probe[1].InitCost+30;
-    if (Data->P[plr].Probe[1].Num<=0)
+    if (Data->P[plr].Probe[1].Num<=0) {
 	  if (GenPur(plr,0,1)) RDafford(plr,0,1);
 	   else RDafford(plr,0,1);
+    }
     Data->P[plr].Buy[0][1]=0;RDafford(plr,0,1);
    }
   if ((Data->P[plr].Probe[1].Safety>=Data->P[plr].Probe[1].MaxRD-20) || Data->P[plr].Probe[2].Num>=0)
    {
     Data->P[plr].Cash+=Data->P[plr].Probe[2].InitCost+30;
-    if (Data->P[plr].Probe[2].Num<=0)
+    if (Data->P[plr].Probe[2].Num<=0) {
 	  if (GenPur(plr,0,2)) RDafford(plr,0,2);
 	    else RDafford(plr,0,2);
+    }
     Data->P[plr].Buy[0][2]=0;RDafford(plr,0,2);
    }
    if (GenPur(plr,1,1)) RDafford(plr,1,1);

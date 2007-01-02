@@ -236,10 +236,11 @@ void PInfo(char plr,char loc)
 	       Pt[3][Data->P[plr].History[i].Hard[j][1]]+=stge;
 	     if (Data->P[plr].History[i].Hard[j][2]>-1)
 	       Pt[2][Data->P[plr].History[i].Hard[j][2]]+=stge;
-	     if (Data->P[plr].History[i].Hard[j][3]>-1)
+	     if (Data->P[plr].History[i].Hard[j][3]>-1) {
 	       if (Data->P[plr].History[i].Hard[j][3]<4)
 	         Pt[0][Data->P[plr].History[i].Hard[j][3]]+=stge;
 		        else Pt[3][4]+=stge;
+	     }
 	     if (Data->P[plr].History[i].Hard[j][4]>0)
 	       {
 	        if (Data->P[plr].History[i].Hard[j][4]<5)

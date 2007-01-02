@@ -493,7 +493,7 @@ void NewAI(char plr,char frog)
 
  GetMisType(mis1);
  // deal with lunar modules
- if (Mis.LM==1)
+ if (Mis.LM==1) {
    if (Data->P[plr].Track[2]>0)
 	 {
 	  if (GenPur(plr,2,Data->P[plr].Track[2])) RDafford(plr,2,Data->P[plr].Track[2]);
@@ -504,8 +504,8 @@ void NewAI(char plr,char frog)
 	 if (GenPur(plr,2,Data->P[plr].Track[2])) RDafford(plr,2,Data->P[plr].Track[2]);
 		else RDafford(plr,2,Data->P[plr].Track[2]);
 	}
-
-  if (Mis.Jt==1)
+ }
+ if (Mis.Jt==1)
 	{ // JOINT LAUNCH
 	 P_pad=-1;
 	 if (Data->P[plr].Future[0].MissionCode==0 && Data->P[plr].LaunchFacility[0]==1 &&
@@ -553,14 +553,15 @@ void NewAI(char plr,char frog)
      }
 	  if (Data->P[plr].Future[2].MissionCode==0 && Data->P[plr].LaunchFacility[2]==1)
 		{
-       if (mis1==0 && frog==2 && (Data->P[plr].Manned[2].Safety>=Data->P[plr].Manned[2].MaxRD-10) ||
+       if ((mis1==0 && frog==2 && (Data->P[plr].Manned[2].Safety>=Data->P[plr].Manned[2].MaxRD-10)) ||
          (Data->P[plr].Manned[3].Safety>=Data->P[plr].Manned[3].MaxRD-10))
           {
            if (PreChe(plr,27)==0 && PreChe(other(plr),27)==0) mis3=2;
             else if (PreChe(plr,18)==0 && PreChe(other(plr),18)==0) mis3=4;
-           if (mis3==0)
+           if (mis3==0) {
             if (PreChe(plr,27)==0 && PreChe(other(plr),27)==1) mis3=2;
              else if (PreChe(plr,18)==0 && PreChe(other(plr),18)==1) mis3=4;
+	   }
            frog=prg[0]=Data->P[plr].AISec-6;
           }
          if (mis3==0)
@@ -840,9 +841,10 @@ void AILaunch(char plr)
 		  wgt=0;for (j=0;j<4;j++) wgt+=VAS[whe[0]][j].wt;
 		  rck[0]=-1;
 		  for (k=0;k<7;k++)
-		  if (boos[k]!=-1 && bwgt[k]>=wgt)
+		  if (boos[k]!=-1 && bwgt[k]>=wgt) {
 		   if (rck[0]==-1) rck[0]=bdex[k];
 			 else if (boos[k]>= boos[rck[0]]) rck[0]=bdex[k];
+		  }
 		  if (rck[0]==-1) ClrMiss(plr,i-Data->P[plr].Mission[i].part);
 		   else
 			{
@@ -867,9 +869,10 @@ void AILaunch(char plr)
 		 wgt=0;for (j=0;j<4;j++) wgt+=VAS[whe[1]][j].wt;
 		 rck[1]=-1;
 		 for (k=0;k<7;k++)
-		 if (boos[k]!=-1 && bwgt[k]>=wgt)
+		 if (boos[k]!=-1 && bwgt[k]>=wgt) {
 		   if (rck[1]==-1) rck[1]=bdex[k];
 			 else if (boos[k]>= boos[rck[1]]) rck[1]=bdex[k];
+		 }
 		 if (rck[1]==-1) rck[1]=Data->P[plr].Mission[i].Hard[4]-1;
 		 Data->P[plr].Mission[i+1].Hard[4]=rck[1]+1;
 		}
