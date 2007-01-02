@@ -102,28 +102,6 @@ av_silence (void)
 }
 
 void
-test_audio (void)
-{
-	struct audio_chunk *cp;
-	FILE *f;
-
-	cp = calloc (1, sizeof *cp);
-	cp->data = malloc (1000 * 1000);
-
-	if ((f = fopen ("/l/baris/gamedat/unews.cdr", "r")) == NULL) {
-		fprintf (stderr, "can't open unews.cdr\n");
-		exit (1);
-	}
-
-	cp->size = fread (cp->data, 1, 1000 * 1000, f);
-
-	fclose (f);
-
-	play (cp);
-}
-
-
-void
 av_setup (int *argcp, char ***argvp)
 {
 	if (SDL_Init (SDL_INIT_VIDEO) < 0) {
@@ -182,8 +160,16 @@ av_step (void)
 			break;
 
 		case SDL_KEYDOWN:
-			c = ev.key.keysym.unicode;
-			if (c > 0 && c <= 0xff) {
+			switch (ev.key.keysym.sym) {
+			case SDLK_UP: c = 0x4800; break;
+			case SDLK_DOWN: c = 0x5000; break;
+			case SDLK_RIGHT: c = 0x4D00; break;
+			case SDLK_LEFT: c = 0x4B00; break;
+			default:
+				c = ev.key.keysym.unicode;
+				break;
+			}
+			if (c) {
 				keybuf[keybuf_in_idx] = c;
 				keybuf_in_idx = (keybuf_in_idx + 1)
 					% KEYBUF_SIZE;

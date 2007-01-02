@@ -1,3 +1,10 @@
+2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V18
+	
+	* improve finding files on cdrom; move savedat to ~/.raceintospace;
+	put music files in /usr/share/raceintospace/music
+
 2007-01-01  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V17

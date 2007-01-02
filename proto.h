@@ -843,4 +843,10 @@ void exit_program(void);
 void hangup(void);
 void modem_control_string(char *s);
 
+FILE *open_savedat (char *name, char *mode);
+
+void *xmalloc (int);
+void *xcalloc (int, int);
+char *xstrdup (char const *);
+
 // EOF

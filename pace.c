@@ -4,18 +4,7 @@ extern GXHEADER vhptr;
 
 void frm_init (void);
 
-void
-env_setup (void)
-{
-	char *name;
 
-	if (getenv ("BARIS_PATH") == NULL) {
-		if ((name = getenv ("USER")) != NULL) {
-			if (strcmp (name, "pace") == 0)
-				putenv ("BARIS_PATH=/l/baris");
-		}
-	}
-}
 
 void
 unimp (void)
@@ -142,48 +131,6 @@ farfree (void *p)
 		free (p);
 }
 
-FILE *
-open_gamedat (char *name)
-{
-	char fullname[1000];
-	char try_name[1000];
-	FILE *f;
-	int i;
-	const char *barisDirectoryPath = getenv("BARIS_PATH");
-  
-	if (barisDirectoryPath == NULL)
-	{
-		fprintf (stderr, "BARIS_PATH not defined %s\n", fullname);
-		exit (1);
-	}
-
-	for (i=0;i<strlen(name)+1;i++)
-		try_name[i] = toupper(name[i]);
-	sprintf (fullname, "%s/GAMEDAT/%s", barisDirectoryPath, try_name);
-	if ((f = fopen (fullname, "r")) != NULL)
-		return (f);
-
-	for (i=0;i<strlen(name)+1;i++)
-		try_name[i] = tolower(name[i]);
-	sprintf (fullname, "%s/gamedat/%s", barisDirectoryPath, try_name);
-	if ((f = fopen (fullname, "r")) != NULL)
-		return (f);
-
-	for (i=0;i<strlen(name)+1;i++)
-		try_name[i] = toupper(name[i]);
-	sprintf (fullname, "%s/ROM/%s", barisDirectoryPath, try_name);
-	if ((f = fopen (fullname, "r")) != NULL)
-		return (f);
-
-	for (i=0;i<strlen(name)+1;i++)
-		try_name[i] = tolower(name[i]);
-	sprintf (fullname, "%s/rom/%s", barisDirectoryPath, try_name);
-	if ((f = fopen (fullname, "r")) != NULL)
-		return (f);
-
-	fprintf (stderr, "can't open %s\n", fullname);
-	exit (1);
-}
 
 char *
 slurp_gamedat (char *name)
@@ -231,9 +178,6 @@ OpenEmUp(void)
 	int retcode;
 
 	frm_init ();
-	strcpy (cdrom_dir, "/l/baris");
-
-	mkdir ("savedat", 0777);
 
 	GV(&vhptr,320,200);     // Allocate only Virtual Buffer
 
@@ -512,8 +456,25 @@ getcurdir (int drive, char *buf)
 
 static DIR *f_dir;
 
+
 int
-findnext (struct ffblk *ffblk)
+first_saved_game (struct ffblk *ffblk)
+{
+	char *p;
+
+	if (f_dir) {
+		closedir (f_dir);
+		f_dir = NULL;
+	}
+
+	if ((f_dir = opendir (savedat_dir)) == NULL)
+		return (1);
+
+	return (next_saved_game (ffblk));
+}
+
+int
+next_saved_game (struct ffblk *ffblk)
 {
 	struct dirent *dp;
 	int len;
@@ -539,26 +500,6 @@ findnext (struct ffblk *ffblk)
 	return (1);
 }
 
-int
-findfirst (char *pattern, struct ffblk *ffblk, int flag)
-{
-	char *p;
-
-	if (strcmp (pattern, "SAVEDAT\\*.SAV") != 0) {
-		fprintf (stderr, "bad arg to findfirst\n");
-		exit (1);
-	}
-
-	if (f_dir) {
-		closedir (f_dir);
-		f_dir = NULL;
-	}
-
-	if ((f_dir = opendir ("savedat")) == NULL)
-		return (1);
-
-	return (findnext (ffblk));
-}
 
 void
 CloseEmUp (unsigned char error,unsigned int value)
@@ -580,7 +521,9 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 	int idx;
 	char name[100];
 
-	fin = sOpen (keyname, "rb", 0);
+	if ((fin = sOpen (keyname, "rb", 0)) == NULL)
+		return;
+
 	lo = getc (fin);
 	hi = getc (fin);
 	tbl->count = (hi << 8) | lo;
@@ -907,7 +850,7 @@ void
 play_audio (int sidx, int mode)
 {
 	char *raw_name;
-	char fullname[1000];
+	char filename[1000];
 	char *p;
 	FILE *f;
 	int size;
@@ -918,18 +861,13 @@ play_audio (int sidx, int mode)
 		return;
 	}
 
-	sprintf (fullname, "/l/baris/rom/audio/%s.raw", raw_name);
-	for (p = fullname; *p; p++) {
-		*p = tolower (*p);
-		if (*p == '#')
-			*p = '_';
-	}
+	sprintf (filename, "%s.raw", raw_name);
 
-	printf ("play %s\n", fullname);
+	printf ("play %s\n", filename);
 
-	if ((f = fopen (fullname, "r")) == NULL) {
+	if ((f = open_gamedat (filename)) == NULL) {
 		printf ("can't open sound %d,%d: %s\n", 
-			sidx, mode, fullname);
+			sidx, mode, filename);
 		return;
 	}
 
@@ -944,4 +882,43 @@ play_audio (int sidx, int mode)
 	soundbuf_used = size;
 
 	PlayVoice ();
+}
+
+void *
+xmalloc (int n)
+{
+	void *p;
+
+	if ((p = malloc (n)) == NULL) {
+		fprintf (stderr, "out of memory\n");
+		exit (1);
+	}
+
+	return (p);
+}
+
+void *
+xcalloc (int a, int b)
+{
+	void *p;
+
+	if ((p = calloc (a, b)) == NULL) {
+		fprintf (stderr, "out of memory\n");
+		exit (1);
+	}
+
+	return (p);
+}
+
+char *
+xstrdup (char const *s)
+{
+	void *p;
+
+	if ((p = strdup (s)) == NULL) {
+		fprintf (stderr, "out of memory\n");
+		exit (1);
+	}
+
+	return (p);
 }

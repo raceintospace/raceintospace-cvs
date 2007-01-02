@@ -28,7 +28,7 @@ get_music_file (char *name)
 			return (mp);
 	}
 
-	sprintf (fullname, "/home/pace/ogg/%s.ogg", name);
+	sprintf (fullname, "%s/%s.ogg", music_dir, name);
 
 	if ((inf = fopen (fullname, "r")) == NULL) {
 		printf ("can't open music file %s\n", fullname);
@@ -89,10 +89,10 @@ bad:
 	return (mp);
 }
 
-struct music_dir {
+struct music_key {
 	int idx;
 	char *name;
-} music_dir[] = {
+} music_key[] = {
 	{ M_ASSEMBLY, "ASSEMBLY" },
 	{ M_ASTTRNG, "ASTTRNG" },
 	{ M_BADNEWS, "BADNEWS" },
@@ -133,9 +133,9 @@ struct music_file *cur_music;
 void
 PreLoadMusic(char val)
 {
-	struct music_dir *dp;
+	struct music_key *dp;
 
-	for (dp = music_dir; dp->name; dp++) {
+	for (dp = music_key; dp->name; dp++) {
 		if (dp->idx == val)
 			break;
 	}

@@ -130,6 +130,7 @@ void
 grPutPixel (int x, int y, int color)
 {
 	screen[y * 320 + x] = color;
+	screen_dirty = 1;
 }
 
 

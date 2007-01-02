@@ -29,8 +29,8 @@ struct ffblk {
 	int ff_fdate;
 };
 
-int findfirst (char *pattern, struct ffblk *ffblk, int flag);
-int findnext (struct ffblk *ffblk);
+int first_saved_game (struct ffblk *ffblk);
+int next_saved_game (struct ffblk *ffblk);
 
 #define grTRACK 1
 #define grCARROW 2
@@ -219,5 +219,8 @@ void play_audio (int sidx, int mode);
 void bzdelay (int ticks);
 int screen_dirty;
 void GetMouse_fast (void);
+
+char savedat_dir[1000];
+char music_dir[1000];
 
 #endif /* __PACE_H__ */

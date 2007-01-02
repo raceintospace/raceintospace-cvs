@@ -106,7 +106,6 @@ int far pascal FFree(void far *ptr) {farfree(ptr); return(0);}
 unsigned long far pascal FCore(void) {return(farcoreleft());}
 char far *sbuf0,far *sbuf1;
 void Plop(char plr,char mode);
-void killgame(char *fName);
 
 int TimingThing(void);
 
@@ -135,12 +134,173 @@ void mikeCrearScreen(void)
   MouseOn();
 }
 
+struct gamedat_file {
+	struct gamedat_file *next;
+	char *filename;
+	char *fullname;
+};
+
+struct gamedat_file *gamedat_files;
+
+void
+add_gamedat_files (char *dirname)
+{
+	DIR *dir;
+	struct dirent *dp;
+	char fullname[1000];
+	struct gamedat_file *gp;
+
+	if ((dir = opendir (dirname)) == NULL)
+		return;
+
+	while ((dp = readdir (dir)) != NULL) {
+		if (dp->d_name[0] == '.')
+			continue;
+
+		sprintf (fullname, "%s/%s", dirname, dp->d_name);
+
+		gp = xcalloc (1, sizeof *gp);
+
+		gp->filename = xstrdup (dp->d_name);
+		gp->fullname = xstrdup (fullname);
+
+		gp->next = gamedat_files;
+		gamedat_files = gp;
+	}
+
+	closedir (dir);
+}
+		
+
+void
+env_setup (void)
+{
+	char *name;
+	char *home;
+	FILE *f;
+	char buf[1000];
+	char keyword[1000], value[1000];
+	char dirname[1000];
+
+	if ((home = getenv ("HOME")) == NULL) {
+		printf ("you must set your $HOME environment variable\n");
+		exit (1);
+	}
+
+	sprintf (savedat_dir, "%s/.raceintospace", home);
+	mkdir (savedat_dir, 0777);
+
+	strcpy (cdrom_dir, "/mnt/cdrom");
+	strcpy (music_dir, "/usr/share/raceintospace/music");
+
+	if ((f = open_savedat ("CONFIG", "r")) != NULL) {
+		while (fgets (buf, sizeof buf, f) != NULL) {
+			if (sscanf (buf, "%s %s", keyword, value) != 2)
+				continue;
+			if (keyword[0] == '#')
+				continue;
+
+			if (strcasecmp (keyword, "cdrom") == 0) {
+				strcpy (cdrom_dir, value);
+			} else if (strcasecmp (keyword, "music") == 0) {
+				strcpy (music_dir, value);
+			} else {
+				printf ("unknown keyword \"%s\" in config file\n", keyword);
+			}
+		}
+		fclose (f);
+	}
+
+	sprintf (dirname, "%s/gamedat", cdrom_dir);
+	add_gamedat_files (dirname);
+
+	sprintf (dirname, "%s/GAMEDAT", cdrom_dir);
+	add_gamedat_files (dirname);
+
+	sprintf (dirname, "%s/rom", cdrom_dir);
+	add_gamedat_files (dirname);
+
+	sprintf (dirname, "%s/ROM", cdrom_dir);
+	add_gamedat_files (dirname);
+
+	sprintf (dirname, "%s/rom/audio", cdrom_dir);
+	add_gamedat_files (dirname);
+
+	sprintf (dirname, "%s/ROM/AUDIO", cdrom_dir);
+	add_gamedat_files (dirname);
+
+	if ((f = open_gamedat ("USA_PORT.DAT")) == NULL) {
+		fprintf (stderr, "can't open game data files... expected CDROM at \"%s\"\n",
+			 cdrom_dir);
+		exit (1);
+	}
+	fclose (f);
+}
+
+FILE *
+open_savedat (char *name, char *mode)
+{
+	char fullname[1000];
+	FILE *f;
+
+	sprintf (fullname, "%s/%s", savedat_dir, name);
+
+	f = fopen (fullname, mode);
+
+	printf ("open_savedat(\"%s\",\"%s\") => %s\n",
+		fullname, mode,
+		f ? "success" : "can't open");
+
+	return (f);
+}
+
+void
+remove_savedat(char *fName)
+{
+	char fullname[1000];
+
+	sprintf (fullname, "%s/%s", savedat_dir, fName);
+	remove (fullname);
+}
+
+
+FILE *
+open_gamedat (char *raw_name)
+{
+	char fullname[1000];
+	char cooked_name[1000];
+	FILE *f;
+	int i;
+	struct gamedat_file *gp;
+	char *p;
+
+	strcpy (cooked_name, raw_name);
+	for (p = cooked_name; *p; p++) {
+		if (*p == '#')
+			*p = '_';
+	}
+
+	for (gp = gamedat_files; gp; gp = gp->next) {
+		if (strcasecmp (gp->filename, cooked_name) == 0) {
+			f = fopen (gp->fullname, "r");
+
+			printf ("open_gamedat (\"%s\") => %s\n",
+				gp->fullname,
+				f ? "success" : "can't open");
+
+			return (f);
+		}
+	}
+
+	printf ("open_gamedat: can't find %s\n", raw_name);
+	return (NULL);
+}
+		
 /////////////////////////////////////////////////
 //
 //
 //  loc == 0 for FIND_FILE
 //         1 for SAVEDAT DIR
-//         2 for
 //
 FILE * sOpen(char *Name,char *mode,int loc)
 {
@@ -154,68 +314,7 @@ FILE * sOpen(char *Name,char *mode,int loc)
    if (loc==0) 
 	   return open_gamedat(Name);
 
-   sprintf (fName, "%s/savedat/%s", BUZZ_DIR, Name);
-
-   for (p = fName; *p; p++)
-	   *p = tolower (*p);
-		
-   file=fopen(fName,mode);
-
-   if (file == NULL) {
-	   strcpy (fName, Name);
-	   for (p = fName; *p; p++)
-		   *p = tolower (*p);
-	   file=fopen (fName, mode);
-   }
-
-   if (file == NULL) {
-	   sprintf (fName, "/l/baris/rom/%s", Name);
-	   for (p = fName; *p; p++)
-		   *p = tolower (*p);
-	   file = fopen (fName, mode);
-   }
-
-   printf ("open (\"%s\", \"%s\") = %p\n", fName, mode, file);
-
-   if (file == NULL && loc == 0) {
-	   extern void unimp (void);
-	   fprintf (stderr, "error in sOpen(\"%s\",\"%s\",%d) \"%s\"\n",
-		    Name, mode, loc, fName);
-	   unimp ();
-	   exit (1);
-   }
-
-#if 0
-   fout=fopen("C:\\USAGE.TXT","at+");
-   fprintf(fout,"Opening File: %s  Mode:%s  Result:%d\n",fName,mode,(file!=NULL));
-   fclose(fout);
-#endif
-
-   free(fName);
-   return file;
-}
-
-void killgame(char *fName)
-{
-	char fullname[1000];
-	char *p;
-
-	sprintf (fullname, "gamedat/%s", fName);
-	for (p = fullname; *p; p++)
-		*p = tolower (*p);
-	remove (fullname);
-}
-
-void remove_savedat(char *fName)
-{
-	char fullname[1000];
-	char *p;
-
-	sprintf (fullname, "savedat/%s", fName);
-	for (p = fullname; *p; p++)
-		*p = tolower (*p);
-
-	remove (fullname);
+   return open_savedat (Name,mode);
 }
 
 void
@@ -1883,7 +1982,6 @@ void DispChr(char chr)
 	       break;
     default:  break;
   }
-  return;
 }
 
 void VerifySF(char plr)

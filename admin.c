@@ -150,8 +150,8 @@ int GenerateTables(char md)
   FILE *fin;
   tFiles=0;
 
-  done=findfirst("SAVEDAT\\*.SAV",&ffblk,0);
-  while (!done && tFiles<100) {tFiles++;done = findnext(&ffblk);}  // Count Total Files
+  done=first_saved_game(&ffblk);
+  while (!done && tFiles<100) {tFiles++;done = next_saved_game(&ffblk);}  // Count Total Files
 
   memset(buffer,0x00,20480);
 
@@ -161,7 +161,7 @@ int GenerateTables(char md)
 
   if (tFiles>0) {
     tFiles=0;
-    done=findfirst("SAVEDAT\\*.SAV",&ffblk,0);
+    done=first_saved_game(&ffblk);
     while(!done && tFiles<100)  // Get All Files Names And save Dates.
     {
      if (strlen (ffblk.ff_name) > sizeof FList[tFiles].Name - 1)
@@ -196,7 +196,7 @@ int GenerateTables(char md)
         }
       }
     next:
-     done=findnext(&ffblk);
+     done=next_saved_game(&ffblk);
     }
     if (tFiles!=0) {
      {
@@ -821,6 +821,7 @@ char GetBlockName(char *Nam)
   gr_sync ();
   key=0;i=0;
   while(!(key==0x0d || key==0x1b)) {
+    gr_maybe_sync ();
     key = bioskey (0);
     if (key >= 'a' && key <= 'z')
 	    key = toupper (key);
