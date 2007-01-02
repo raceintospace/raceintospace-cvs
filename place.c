@@ -33,7 +33,7 @@ int MChoice(char qty,char *Name)
 {
  struct Patch {i16 w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  unsigned int starty,coff;
+  int starty,coff;
   int i,j;
   char poff;
   FILE *in;
@@ -276,7 +276,7 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
   char ch;
   GXHEADER local,local2;
   long size;
-  unsigned int j;
+  unsigned int j, n;
   FILE *in,*fin;
   struct TM {
       char ID[4];
@@ -299,7 +299,10 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       fread(local2.vptr,table.size,1,in);  // Get Image
       fclose(in);
       RLED_img(local2.vptr,local.vptr,table.size,local.w,local.h);
-      for (j=0;j<gxVirtualSize(gxVGA_13,104,77);j++) local.vptr[j]+=coff;
+
+      n = gxVirtualSize(gxVGA_13,104,77);
+      for (j=0;j<n;j++) local.vptr[j]+=coff;
+
       local.vptr[104*77]=0;
       if (FADE==0) gxSetDisplayPalette(pal);
       gxPutImage(&local,gxSET,x,y,0);
@@ -337,12 +340,13 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       fseek(fin,3*(AHead.cNum-64),SEEK_CUR);
       GV(&local,AHead.w,AHead.h);
 
-	   fread(&BHead,sizeof BHead,1,fin);
-	   fread(vhptr.vptr,BHead.fSize,1,fin);
-	   RLED_img(vhptr.vptr,local.vptr,BHead.fSize,local.w,local.h);
-      for (j=0;j<gxVirtualSize(gxVGA_13,AHead.w,AHead.h);j++) {
-	 if (local.vptr[j]!=0) local.vptr[j]-=(128-coff);
-	 }
+      fread(&BHead,sizeof BHead,1,fin);
+      fread(vhptr.vptr,BHead.fSize,1,fin);
+      RLED_img(vhptr.vptr,local.vptr,BHead.fSize,local.w,local.h);
+      n = gxVirtualSize(gxVGA_13,AHead.w,AHead.h);
+      for (j=0;j<n;j++) {
+	      if (local.vptr[j]!=0) local.vptr[j]-=(128-coff);
+      }
       local.vptr[0]=0x00;
 
 
@@ -387,7 +391,7 @@ int Idiot(char *FName)
   int i,j,line,top=0,bot=0,plc=0;
   char far *Idiot,far *NTxt,mode;
   int ox1,oy1,ox2,oy2;
-  unsigned int fsize;
+  int fsize;
   GXHEADER local;
   FILE *fin;
   long count;

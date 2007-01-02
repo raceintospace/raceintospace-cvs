@@ -83,7 +83,7 @@ void GoNews(char plr)
   j=0;
   memset(buffer+6000,0x00,8000);  //clear memory
   list=(struct rNews *) buffer+6000;
-  for(i=0;i<strlen(buffer);i++) {
+  for(i=0;i<(int)strlen(buffer);i++) {
     if (buffer[i]=='x') {list[i].chrs=j;list[i].offset=i;}
     else j++;
   }
@@ -217,7 +217,7 @@ void OpenNews(char plr,char *buf,int bud)
 void DispNews(char plr,char *src,char *dest)
 {
   int i=0,j=0,k=0;
-  for (i=0;i<strlen(src);i++) {
+  for (i=0;i<(int)strlen(src);i++) {
     dest[j]=src[i];
     switch(dest[j]) {
       case 'a': case 'd': case 'f': case 'j': case 'i':
@@ -432,7 +432,7 @@ void News(char plr)
     MouseOn();
    };
  #endif
-  for (i=0;i<strlen(buffer);i++) if (buffer[i]=='x') bline++;
+  for (i=0;i<(int)strlen(buffer);i++) if (buffer[i]=='x') bline++;
   bline-=8;
 
   // File Structure is 84 longs 42 per side 
@@ -908,7 +908,7 @@ void ShowEvt(char plr,char crd)
     fread(&pal[384],384,1,ffin);
     fread(vhptr.vptr,(size_t) MM.size,1,ffin);
 
-    for (i=0;i<MM.size;i++) {
+    for (i=0;i<(unsigned int)MM.size;i++) {
      if (screen[i]>=32) screen[i]=vhptr.vptr[i];
     }
   }

@@ -120,6 +120,7 @@ struct CREDIT {
   5, 0,  0,  0,"___DUMMY SPACE__",
   
 };
+int nCREDIT = sizeof CREDIT / sizeof CREDIT[0];
 
 void Credits(void)
 {
@@ -145,7 +146,7 @@ void Credits(void)
     PCX_D((char *)vhptr.vptr,screen,(unsigned) len[0]);
     memset(&pal[431],0x00,96);
     screen[63999]=0;
-    for (i = 0; i < sizeof CREDIT / sizeof CREDIT[0]; i++) {
+    for (i = 0; i < nCREDIT; i++) {
        if (CREDIT[i].page==k) {
          grSetColor(CREDIT[i].col);
          PrintAt(CREDIT[i].x,CREDIT[i].y,CREDIT[i].Txt);
@@ -174,35 +175,6 @@ void Credits(void)
 }
 
 
-void MScale(int ssx,int ssy,int ddx,int ddy,char *sbuf,char *dbuf)
-{
-  unsigned int sx,sy,dx,dy;
-  char *dest,*src;
-  dest=dbuf;
-
-  for (dy=0;dy<ddy;dy++) {
-    sy=(dy*ssy)/ddy;
-    for (dx=0;dx<ddx;dx++) {
-      sx=(dx*ssx)/ddx;
-      src=sbuf+sy*ssx+sx;
-      *dest=*src;
-      dest++;
-    }
-  }
-  return;
-}
-
-void DBlk(int x,int y)
-{
-  int i,j;
-
-  for (i=0;i<16;i++)
-     for (j=0;j<16;j++)
-       if (!( (i==0 && j==0) || (i==0 && j==15) || (i==15 && j==0) || (i==15 && j==15)))
-         if (ems[320*(y+j)+x+i] > screen[320*(y+j)+x+i]) screen[320*(y+j)+x+i]++;
-
-}
-
 #define INTRO_IMAGE_COUNT 15
 
 struct intro_image {
@@ -214,7 +186,7 @@ struct intro_image intro_images[INTRO_IMAGE_COUNT];
 int
 read_img_frame (FILE *inf, struct intro_image *ip)
 {
-	long len;
+	unsigned long len;
 	char compressed[64 * 1024];
 
 	len = fread (&ip->map, 1, sizeof ip->map, inf);

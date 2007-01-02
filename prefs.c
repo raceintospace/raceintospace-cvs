@@ -115,11 +115,9 @@ void DrawPrefs(int where,char a1,char a2)
   return;
 }
 
-void xRLED (void *src, void *dest, unsigned int src_size);
-
 void HModel(char mode,char tx)
 {
-  unsigned int j;
+  unsigned int j,n;
   struct GO {
    ui16 size;
    long offset;
@@ -137,7 +135,8 @@ void HModel(char mode,char tx)
   fread(buffer,table.size,1,in);  // Get Image
   fclose(in);
   RLED_img(buffer,local.vptr,table.size, local.w, local.h);
-  for (j=0;j<gxVirtualSize(gxVGA_13,127,80);j++) local.vptr[j]+=112;
+  n = gxVirtualSize(gxVGA_13,127,80);
+  for (j=0;j<n;j++) local.vptr[j]+=112;
   MouseOff();
   RectFill(96,114,223,194,0);
   if (tx==0) gxSetDisplayPalette(pal);

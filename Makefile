@@ -1,4 +1,4 @@
-EXTRA_WARNINGS = -Werror -Wextra -Wno-unused-parameter -Wno-sign-compare \
+EXTRA_WARNINGS = -Werror -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts \
 	 -Wno-missing-braces
 

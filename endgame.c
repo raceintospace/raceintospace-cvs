@@ -629,7 +629,7 @@ void PrintHist(char *buf)
  int i,k;
  grSetColor(8);
  k=121;grMoveTo(10,k);
-  for (i=0;i<strlen(buf);i++)
+  for (i=0;i<(int)strlen(buf);i++)
 	{
 	 if (buf[i]=='*') {k+=7;grMoveTo(10,k);}
 	   else DispChr(buf[i]);
@@ -643,7 +643,7 @@ void PrintOne(char *buf,char tken)
  k=0;
  if (tken==0)  k=127; else k=170;
  grMoveTo(18,k);
-  for (i=0;i<strlen(buf);i++)
+  for (i=0;i<(int)strlen(buf);i++)
 	{
 	 if (buf[i]=='*') {k+=7;grMoveTo(18,k);}
 	   else DispChr(buf[i]);

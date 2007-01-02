@@ -14,7 +14,8 @@ RLED (void *src_raw, void *dest_raw, unsigned int src_size)
 {
 	signed char *src = src_raw;
 	signed char *dest = dest_raw;
-	short used, count, val;
+	unsigned short used;
+	short count, val;
 	short i;
 
 	used = 0;
@@ -92,7 +93,7 @@ frm_get (struct frm *frm, unsigned char *rgb)
 {
 	unsigned char raw[64 * 1024];
 	unsigned char pbuf[64 * 1024];
-	int n;
+	unsigned int n;
 	int val0, val1;
 	unsigned char *pixels;
 	unsigned char *outp;
@@ -105,7 +106,7 @@ frm_get (struct frm *frm, unsigned char *rgb)
 	if (n == 0)
 		return (0);
 
-	if (n < 0 || n > sizeof raw)
+	if (n > sizeof raw)
 		return (-1);
 
 	fread (raw, 1, n, frm->fin);

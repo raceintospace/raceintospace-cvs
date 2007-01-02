@@ -376,7 +376,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	if (mode==0) max=aSeq.ID[1]-0x30;
 	else max=cSeq.ID[1]-0x30;
 
-	while (i<max) {
+	while (i<(int)max) {
 		int aidx, sidx;
 
 		if (i!=0) Plop(plr,2);   //Specs: static frame

@@ -55,7 +55,8 @@ RLED (void *src_raw, void *dest_raw, unsigned int src_size)
 {
 	signed char *src = src_raw;
 	signed char *dest = dest_raw;
-	short used, count, val;
+	unsigned short used;
+	short count, val;
 	short i;
 
 	used = 0;

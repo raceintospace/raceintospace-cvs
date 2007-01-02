@@ -467,7 +467,7 @@ int RetFile(char plr,int card)
   fread(buffer,oNews.size,1,fin);
   fclose(fin);
   bline=0;
-  for (i=0;i<strlen(buffer);i++) if (buffer[i]=='x') bline++;
+  for (i=0;i<(int)strlen(buffer);i++) if (buffer[i]=='x') bline++;
   bline-=8;
   MouseOff();
   RectFill(82,183,237,195,7);

@@ -403,8 +403,6 @@ void IInfo(char plr,char loc,char w);
 
 // INTRO.C
 void Credits(void);
-void MScale(int ssx,int ssy,int ddx,int ddy,char *sbuf,char *dbuf);
-void DBlk(int x,int y);
 void Introd(void);
 void NextTurn(char plr);
 

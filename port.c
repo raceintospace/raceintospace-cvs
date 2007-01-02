@@ -166,7 +166,7 @@ void SpotCrap(char loc,char mode)
 {
   GXHEADER SP1,SP2,SP3;
   int w,h,i;
-  unsigned int xx;
+  int xx;
   static char turnoff=0;
 
    if (SUSPEND==1) {
@@ -349,7 +349,7 @@ void PortPlace(FILE * fin,long table)
 {
   IMG Img;
   GXHEADER local,local2;
-  unsigned int ctr;
+  int ctr;
 
   fseek(fin,table,SEEK_SET);
   fread(&Img,sizeof Img,1,fin);
@@ -958,7 +958,7 @@ PreOut=(struct SXX *)&buffer[60000];
               }
           MouseOn();
           good=0;
-          for (k=0;k<strlen(MMMM);k++)
+          for (k=0;k<(int)strlen(MMMM);k++)
            if (MMMM[k]==((char)(0x00ff&key))) good=1;
 
           while (x>=MObj[i].Reg[Data->P[plr].Port[i]].CD[j].x1 &&

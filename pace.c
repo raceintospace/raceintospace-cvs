@@ -107,7 +107,7 @@ char *
 slurp_gamedat (char *name)
 {
 	FILE *f;
-	int len;
+	unsigned int len;
 	char *p;
 
 	f = open_gamedat (name);
@@ -190,7 +190,8 @@ RLED (void *src_raw, void *dest_raw, unsigned int src_size)
 {
 	signed char *src = src_raw;
 	signed char *dest = dest_raw;
-	int used, count, val;
+	unsigned int used;
+	int count, val;
 	int i;
 
 	used = 0;
@@ -220,7 +221,8 @@ RLED_img (void *src_raw, void *dest_raw, unsigned int src_size, int w, int h)
 {
 	signed char *src = src_raw;
 	signed char *dest;
-	int used, count, val;
+	unsigned int used;
+	int count, val;
 	int i;
 	int total;
 	signed char buf[128 * 1024];
@@ -261,41 +263,6 @@ RLED_img (void *src_raw, void *dest_raw, unsigned int src_size, int w, int h)
 	}
 
 	return (w * h);
-}
-
-void
-xRLED (void *src_raw, void *dest_raw, unsigned int src_size)
-{
-	signed char *src = src_raw;
-	signed char *dest = dest_raw;
-	int used, count, val;
-	int i;
-
-	used = 0;
-	while (used < src_size) {
-		count = src[used++];
-		
-		if (count < 0) {
-			count = -count + 1;
-			val = src[used++];
-			printf ("%6d: rep 0x%x for %d times\n",
-				(void*)dest - (void*)dest_raw, val, count);
-			for (i = 0; i < count; i++)
-				*dest++ = val;
-		} else {
-			count++;
-			printf ("%6d: data %d: ",
-				(void*)dest - (void*)dest_raw,
-				count);
-			for (i = 0; i < count; i++) {
-				printf ("%02x ", src[used] & 0xff);
-				*dest++ = src[used++];
-			}
-			printf ("\n");
-		}
-	}
-
-	printf ("total bytes %d\n", (void *)dest - (void *)dest_raw);
 }
 
 void
@@ -345,33 +312,33 @@ brandom (int limit)
 
 long RLEC (char *src, char *dest, unsigned int src_size)
 {
-   int src_i, dest_i,cpr;
+	unsigned int src_i;
+	int dest_i,cpr;
 
- for (src_i = dest_i=0; src_i< src_size; ) {
-   int k;  /* holds the number of characters to copy or repeat. */
-  k = 0;
-  cpr= ((src_size-src_i-1)<128) ? src_size-src_i-1 : 128;
-     while (k<cpr && src[src_i] != src[src_i+1]) {
-       k++;       /* increment the number of characters to copy */
-       src_i++;   /* move pointer to the next character */
-     }
-  if (k) {
-       dest[dest_i++] = (k-1);
-       memcpy (&dest[dest_i], &src[src_i-k], k);
-       dest_i += k;
-     }
-     else {
-       k = 2;   /* there are at least two characters to be repeated */
-       src_i++; /* advance pointer beyond the first match*/
-     while ( k<cpr && src[src_i] == src[src_i+1]) {
-       k++;       /* increment the number of characters to copy */
-       src_i++;   /* move pointer to the next character */
-     }  /* while */
-       dest[dest_i++] = (-k+1);
-       dest[dest_i++] = src[src_i++];
-     }
- } /* for */
- return (dest_i);
+	for (src_i = dest_i=0; src_i< src_size; ) {
+		int k;  /* holds the number of characters to copy or repeat. */
+		k = 0;
+		cpr= ((src_size-src_i-1)<128) ? src_size-src_i-1 : 128;
+		while (k<cpr && src[src_i] != src[src_i+1]) {
+			k++;       /* increment the number of characters to copy */
+			src_i++;   /* move pointer to the next character */
+		}
+		if (k) {
+			dest[dest_i++] = (k-1);
+			memcpy (&dest[dest_i], &src[src_i-k], k);
+			dest_i += k;
+		} else {
+			k = 2;   /* there are at least two characters to be repeated */
+			src_i++; /* advance pointer beyond the first match*/
+			while ( k<cpr && src[src_i] == src[src_i+1]) {
+				k++;       /* increment the number of characters to copy */
+				src_i++;   /* move pointer to the next character */
+			}  /* while */
+			dest[dest_i++] = (-k+1);
+			dest[dest_i++] = src[src_i++];
+		}
+	}
+	return (dest_i);
 }
 
 int
@@ -587,7 +554,7 @@ frm_get2 (struct frm *frm, void *pixels_arg, void *map)
 {
 	unsigned char raw[64 * 1024];
 	unsigned char pbuf[64 * 1024];
-	int n;
+	unsigned int n;
 	int val0, val1;
 	unsigned char *pixels;
 
@@ -596,7 +563,7 @@ frm_get2 (struct frm *frm, void *pixels_arg, void *map)
 	if (n == 0)
 		return (0);
 
-	if (n < 0 || n > sizeof raw)
+	if (n > sizeof raw)
 		return (-1);
 
 	fread (raw, 1, n, frm->fin);

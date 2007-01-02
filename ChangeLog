@@ -1,5 +1,9 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V31
+	
+	* enable gcc warning about comparing signed and unsigned values
+		
 	* V30
 	
 	* enable gcc check for use of uninitialized local

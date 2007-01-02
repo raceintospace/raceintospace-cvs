@@ -30,9 +30,8 @@ int
 read_img_frame (FILE *inf, char *rgb)
 {
 	unsigned char map[256 * 3];
-	int len;
+	unsigned int len;
 	char compressed[64 * 1024];
-	int ilen;
 	int idx;
 	unsigned char *up;
 	char ipix[320 * 200];
@@ -56,7 +55,7 @@ read_img_frame (FILE *inf, char *rgb)
 	if (fread (compressed, 1, len, inf) != len)
 		goto bad;
 		
-	ilen = PCX_D (compressed, ipix, len);
+	PCX_D (compressed, ipix, len);
 
 	for (idx = 0; idx < 320 * 200; idx++) {
 		up = map + (ipix[idx] & 0xff) * 3;

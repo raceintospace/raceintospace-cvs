@@ -1307,15 +1307,7 @@ char FreeSpace(void)
 
 void GV(GXHEADER *obj,int w,int h)
 {
-  int retcode;
-  unsigned int size=0;
-  size=gxVirtualSize(gxVGA_13,w,h);
-  if (gxVirtualFree(gxCMM) >= size) {
-    retcode=gxCreateVirtual(gxCMM,obj,gxVGA_13,w,h);
-    if (retcode==gxSUCCESS) return;
-  }
-  CloseEmUp(2,size);
-  return;
+  gxCreateVirtual(gxCMM,obj,gxVGA_13,w,h);
 }
 
 void DV(GXHEADER *obj)
@@ -1402,7 +1394,7 @@ void PrintAt(int x,int y,char *s)
   short i;
   if (x!=0 && y!=0) grMoveTo(x,y);
   if (strlen(s) > 100) return;
-  for(i=0;i<strlen(s);i++)
+  for(i=0;i<(int)strlen(s);i++)
     DispChr(s[i]);
   return;
 }
@@ -1411,7 +1403,7 @@ void PrintAtKey(int x,int y,char *s,char val)
 {
   short i;
   if (x!=0 && y!=0) grMoveTo(x,y);
-  for(i=0;i<strlen(s);i++)
+  for(i=0;i<(int)strlen(s);i++)
     DispChr(s[i]);
   grMoveTo(x,y);grSetColor(9);
   DispChr(s[val]);
@@ -1440,7 +1432,7 @@ void DispBig(int x,int y,char *txt,char mode,char te)
   y--;
   if(mode)EMPTY_BODY;
 
-  for (i=0;i<strlen(txt);i++) {
+  for (i=0;i<(int)strlen(txt);i++) {
     if (txt[i]==0x20) {x+=6;i++;};
     c=toupper(txt[i] & 0xff);
     if (c>=0x30 && c<=0x39) px=c-32;
