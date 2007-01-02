@@ -29,8 +29,6 @@
 #include "Buzz_inc.h"
   int cdROM,hDISK;
 
-void _ExceptInit(void) {}  // reduce EXE size
-
   char Name[20];
   struct Players far *Data;
   int x,y,mousebuttons,key,oldx,oldy;
@@ -174,6 +172,7 @@ env_setup (void)
 {
 	char *name;
 	char *home;
+	char *alt_location;
 	FILE *f;
 	char buf[1000];
 	char keyword[1000], value[1000];
@@ -225,6 +224,16 @@ env_setup (void)
 
 	sprintf (dirname, "%s/ROM/AUDIO", cdrom_dir);
 	add_gamedat_files (dirname);
+
+	if (alt_location = getenv("BARIS_ROOT"))
+	{
+		sprintf (dirname, "%s/GAMEDAT", alt_location);
+		add_gamedat_files (dirname);
+
+		sprintf (dirname, "%s/ROM", alt_location);
+		add_gamedat_files (dirname);
+
+	}
 
 	if ((f = open_gamedat ("USA_PORT.DAT")) == NULL) {
 		fprintf (stderr, "can't open game data files... expected CDROM at \"%s\"\n",

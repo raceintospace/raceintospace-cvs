@@ -1,3 +1,13 @@
+2007-01-02  Michael McCarty <mkmccarty@gmail.com>
+
+	* V23
+
+	* added BARIS_ROOT envorinment variable so GAMEDAT and ROM assets
+	can exist on a local disk
+
+	* Removed definition of _ExceptInit(void) which was originally used to 
+	trim unused Borland C exception code and reduce code size 
+
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V22
