@@ -87,6 +87,9 @@ void DispEight2(int nw,int lc,int cnt)
 void DrawAstCheck(char plr)
 {
   int i,pos,ad=0;
+
+  pos = 0; /* XXX check uninitialized */
+
   if (Data->P[plr].AstroDelay>0) ad=1;
   MouseOff();
   FadeOut(2,pal,10,0,0);

@@ -298,6 +298,9 @@ void PlanText(char plr,char plan)
 {
   char tx;
   int pUsed,pFails,Find,i;
+
+  Find = 0; /* XXX check uninitialized */
+
   tx=(Data->P[plr].Probe[1].Num>=0) ? 1 : 0;
   MouseOff();
   RectFill(164,75,78+160,89,3);

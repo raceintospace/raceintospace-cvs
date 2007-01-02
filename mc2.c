@@ -572,6 +572,8 @@ void MissionSetDown(char plr,char mis)
 void MisDur(char plr,char dur) {
   int i,j,diff;
 
+  i = 0; /* XXX check uninitialized */
+
   diff=dur-Data->P[plr].DurLevel;
   if (Data->P[plr].DurLevel==0) diff--;
   if (diff<=0) return;

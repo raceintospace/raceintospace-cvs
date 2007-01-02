@@ -27,6 +27,8 @@ void drawBspline(int segments,char color,...)
   int xpoint[20],ypoint[20],i=1,j,x,y,oldx,oldy,last,yx,yy,yyy=0;
   float u,nc1,nc2,nc3,nc4,SamCol;
 
+  yy = yx = 0; /* XXX check uninitialized */
+
   grSetColor(color);
   /* initialize the array  */
   for (j=1;j<=20;++j)

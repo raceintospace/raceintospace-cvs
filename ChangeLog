@@ -1,5 +1,19 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V30
+	
+	* enable gcc check for use of uninitialized local
+	variable - put in lots of comments like this:
+
+	 spc[0] = 0; /* XXX check uninitialized */
+
+	 Some of these are real bugs, where there was no way to initialize
+	the variable before it was used.  In other cases, the code path
+	that gcc found to an uninitialized use may be impossible to
+	traverse given other data constraints.  Future project:
+	look for all these comments and either fix any bugs present,
+	or remove the comment if the code is ok.
+	
 	* V29
 	
 	* add extra braces and parens so gcc's Wparentheses warning

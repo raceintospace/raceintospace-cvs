@@ -237,6 +237,9 @@ void Rush(char plr)
 {
 int i,R1,R2,R3,oR1,oR2,oR3,dgflag[3]={0,0,0};
 char pRush=0;
+
+  i = 0; /* XXX check uninitialized */
+
   R1=R2=R3=oR1=oR2=oR3=0;fCsh=0;
   PreLoadMusic((plr==1)?M_USMIL:M_USSRMIL);
   DrawRush(plr);

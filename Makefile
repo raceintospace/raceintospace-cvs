@@ -1,6 +1,6 @@
 EXTRA_WARNINGS = -Werror -Wextra -Wno-unused-parameter -Wno-sign-compare \
 	-Wno-char-subscripts \
-	-Wno-uninitialized -Wno-missing-braces
+	 -Wno-missing-braces
 
 CFLAGS = -Wall -Dfar= -Dpascal= -I. `sdl-config --cflags`
 

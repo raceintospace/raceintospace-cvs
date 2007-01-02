@@ -488,6 +488,9 @@ void HInfo(char plr,char loc,char w)
 {
   int i,sfu,sfs,tot; 
   float ov,un,Sc;
+
+  Sc = 0; /* XXX check uninitialized */
+
   MouseOff();
   if (w==0) {
     GradRect(4,23,315,159,0);
@@ -972,6 +975,9 @@ void DrawRank(char plr)
 {
  int i,MaxPz=0,MaxNg=0,Px,Py,t1,t2,Cur,OffSet,Year_Inc=12,score;
  char Digit[4];
+
+ Cur = 0; /* XXX check uninitialized */
+
  strcpy(IDT,"i030");strcpy(IKEY,"k030");
  MouseOff();
  //Win=Data->Prestige[22].Place;

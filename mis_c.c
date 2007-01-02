@@ -160,6 +160,11 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	struct frm *frm;
 	int hold_count;
 
+	F = NULL; /* XXX check uninitialized */
+	dSeq = NULL; /* XXX check uninitialized */
+	bSeq = NULL; /* XXX check uninitialized */
+	i = j = 0; /* XXX check uninitialized */
+
 	memset(buffer,0x00,sizeof BUFFER_SIZE);
 	SHTS[0]=random(10);SHTS[1]=random(10);SHTS[2]=random(10);SHTS[3]=random(10);
 
@@ -545,6 +550,8 @@ void Tick(char plr)
 void Clock(char plr,char clck,char mode,char tm)
 {
  unsigned sx,sy;
+
+ sx = 0; /* XXX check uninitialized */
 
  //: Specs: clock y value
  if (plr==0) sy=108;
@@ -960,6 +967,9 @@ int CloseAnim(FILE *fin)
 int StepAnim(int x,int y,FILE *fin)
 {
    int mode;
+
+   mode = 0; /* XXX check uninitialized */
+
    if (cFrame==tFrames) {
       fseek(fin,aLoc,SEEK_SET);
       cFrame=0;

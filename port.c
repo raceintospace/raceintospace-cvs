@@ -865,6 +865,9 @@ long stable[55];
 ui16 Count,*bone;
 
 char *MMMM="AIMRPVCQETB\0";
+
+i = 0; /* XXX check uninitialized */
+
 PreOut=(struct SXX *)&buffer[60000];
 
   strcpy(IDT,"i043");strcpy(IKEY,"k043");

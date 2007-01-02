@@ -76,6 +76,8 @@ void MisCheck(char plr,char mpad)
    struct XFails Now;
    unsigned char gork=0;
 
+   lc = 0; /* XXX check uninitialized */
+
    STEPnum=STEP;
    FINAL=STEP=MFlag=0; // Clear Everything
    Unm=MANNED[0]+MANNED[1];
@@ -539,6 +541,9 @@ void F_KillCrew(char mode,struct Astros *Victim)
 {
    int k=0;
    struct Astros *Guy;
+
+   Guy = NULL; /* XXX check uninitialized */
+
    // Reset Hardware
    if (PUSSY) Mev[STEP].E->Safety/=2;
    else Mev[STEP].E->Safety=Mev[STEP].E->Base;
@@ -561,7 +566,11 @@ void F_KillCrew(char mode,struct Astros *Victim)
       Victim->Status=1;
       Victim->Special=3;
       Victim->RetReas=8;
-      Victim->Assign=Victim->Moved=Victim->Crew=Victim->Task=Guy->Una=0;
+      Victim->Assign=Victim->Moved=Victim->Crew=Victim->Task=0;
+
+      /* XXX this code was here, but Guy wsa not initialized */
+      // Guy->Una=0;
+
       tMen++;
       //death=1;
       }
@@ -594,6 +603,8 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
    int FNote=0,temp,k,ctr;
    char PROBLEM=0;
    struct Astros *crw;
+
+   temp = 0; /* XXX check uninitialized */
 
    if (!(strncmp(Mev[STEP].E->Name,"DO",2)==0 && Mev[STEP].loc==0x02)) {
      Mev[STEP].E->MisFail++;  // set failure for all but docking power on

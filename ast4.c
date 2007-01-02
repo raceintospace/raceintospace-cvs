@@ -300,6 +300,9 @@ void DamProb(char plr,char prog,int chk)
 {
  int D_Cost,Saf_Loss;
  char Digit[4],Name[30];
+
+ Saf_Loss = D_Cost = 0; /* XXX check uninitialized */
+
  FadeOut(2,pal,10,0,0);
  MouseOff();
  gxClearDisplay(0,0);

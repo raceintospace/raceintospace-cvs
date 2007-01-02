@@ -222,6 +222,9 @@ int PrestCheck(char plr)  // Assumes that the Mis Structure is Loaded
 char Was_Goal(char total,char which)
 {
    char i,val,x=10;
+
+   val = 0; /* XXX check uninitialized */
+
    switch(which) {
       case -1: return -1;
       case MANSPACE:val=4; break; // RECOVERY
@@ -790,6 +793,9 @@ int U_AllotPrest(char plr,char mis)
    int i,total,other,negs,mcode,lun;
    extern struct mStr Mis;
    char PVal[28];
+
+   i = 0; /* XXX check uninitialized */
+
    memset(PVal,0x00,sizeof PVal);     // CLEAR TOTAL VALUE
    total=0, negs=0, lun=0;
    tMo=Data->P[plr].Mission[mis].Month;

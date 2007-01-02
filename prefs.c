@@ -1054,6 +1054,9 @@ void EditAst(void)
 void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
 {
  char tot,srt,max,i,mxc,Save_Name[14];
+
+ srt = 0; /* XXX check uninitialized */
+
  memset(Save_Name,0x00,sizeof Save_Name);
  RectFill(210,130,307,142,3);
  RectFill(205,151,316,196,3);

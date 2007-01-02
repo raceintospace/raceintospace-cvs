@@ -548,6 +548,8 @@ char CheckScrub(char plr,char m)
   struct MissionType *Mt;
   struct Equipment *E;
 
+  E = NULL; /* XXX check uninitialized */
+
   RT_value=1;
   mcode=Data->P[plr].Mission[m].MissionCode;
   Mt=&Data->P[plr].Mission[m];
@@ -575,7 +577,7 @@ char CheckScrub(char plr,char m)
            break;
         }
 
-        if (k!=3 && Mt->Hard[k]>=0 && (E->MisSaf < E->MaxRD-15)) return 0;
+        if (E && k!=3 && Mt->Hard[k]>=0 && (E->MisSaf < E->MaxRD-15)) return 0;
      }
   }
   return 1;
@@ -610,6 +612,9 @@ int i,j,t1,t2,t3,prest,sign,kik,purp;
 FILE *fout;
 char Done=0;
 long moo;
+
+  prest = 0; /* XXX check uninitialized */
+
   if (LOAD!=1) {
     Data->P[0].Cash=Data->P[0].Budget;   // INCREMENT BY BUDGET
     Data->P[1].Cash=Data->P[1].Budget;
@@ -1290,6 +1295,8 @@ char FreeSpace(void)
   long avail;
   int drive;
 
+  avail = 0; /* XXX check uninitialized */
+
   drive = getdisk();
   getdfree(drive+1, &free);
   if (free.df_sclus == 0xFFFF)
@@ -1813,7 +1820,7 @@ int MisRandom(void)
 
 void Plop(char plr,char mode)
 {
- int wlen,i,fres;
+ int wlen,fres;
  FILE *fin;
  char sName[20];
 
@@ -1848,7 +1855,7 @@ void Plop(char plr,char mode)
   vhptr.vptr[55999]=vhptr.vptr[55995];
   vhptr.vptr[55998]=vhptr.vptr[55994];
   memcpy(&pal[384],&vhptr.vptr[56000],384);
-  fres=i;SetPal(pal);i=fres;
+  SetPal(pal);
   if (BIG==0) SMove(&vhptr.vptr[40000],80,3+plr*10);
   else LMove(&vhptr.vptr[40000]);
   fclose(fin);

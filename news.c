@@ -615,6 +615,9 @@ void AIEvent(char plr)
 char ResolveEvent(char plr)
 {
   int bad,ctr;
+
+  ctr = 0; /* XXX check uninitialized */
+
   bad=REvent(plr);
   if (bad!=0) {
     while  (Data->P[plr].BadCard[bad]!=0) {

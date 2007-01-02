@@ -223,6 +223,9 @@ void Stat(char Win)
 void AIAstroPur(char plr)
 {
  int pos,cost;
+
+ pos = 0; /* XXX check uninitialized */
+
  if (Data->P[plr].AstroLevel==0) cost=20;
    else cost=15;
  if (cost>Data->P[plr].Cash) return;
@@ -244,6 +247,9 @@ void SelectBest(char plr,int pos)
  int count=0,now,MaxMen,Index,AIMaxSel,i,j,k;
  FILE *fin;
  char tot,done;
+
+ AIMaxSel = Index = MaxMen = 0; /* XXX check uninitialized */
+
  for (i=0;i<25;i++) AIsel[i]=0;
  memset(buffer,0x00,5000);
  Men=(struct ManPool *)buffer;
@@ -491,6 +497,9 @@ void CheckAdv(char plr)
 void RemoveUnhappy(char plr)
 {
  int i,j,k,l,pg,ft;
+
+ pg = ft = 0; /* XXX check uninitialized */
+
  for (i=0;i<Data->P[plr].AstroCount;i++)
    {
     if (Data->P[plr].Pool[i].Mood<40)

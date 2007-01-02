@@ -195,6 +195,9 @@ void RDButTxt(int v1,int val,char plr)
 char RD(char plr)
 {
   short hardware=1,roll=0,unit=1,buy[4][10],i,j,b;
+
+  b = 0; /* XXX check uninitialized */
+
   for(i=0;i<4;i++) for(j=0;j<7;j++) buy[i][j]=Data->P[plr].Buy[i][j];
   hardware=HARD1; unit=UNIT1;
   strcpy(IDT,"i009");strcpy(IKEY,"k009");
@@ -489,6 +492,9 @@ void ShowUnit(char hw,char un,char plr)
   struct Equipment *PL;
   char qty=1,SCol=0;
   int Unit_Cost,Init_Cost;
+
+  PL = NULL; /* XXX check uninitialized */
+
   switch(hw) {
    case 1: PL=(struct Equipment *)&Data->P[plr].Probe[un-1].Name[0];break;
    case 2: PL=(struct Equipment *)&Data->P[plr].Rocket[un-1].Name[0];break;
@@ -817,6 +823,9 @@ void BuyUnit(char hw2,char un2,char plr)
   short n1,n2,n3,n4,n5,n6,n7;
   char newf=0;
   int Init_Cost,Unit_Cost;
+
+  Unit_Cost = Init_Cost = 0; /* XXX check uninitialized */
+
   switch(hw2)
   {
    case 1:Init_Cost=Data->P[plr].Probe[un2-1].InitCost;

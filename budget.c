@@ -36,6 +36,9 @@ void DrawBudget(char player,char *pStatus)
 {
   int i,j,max,k,pscale;
   char name[20],str[10];
+
+  max = 0; /* XXX check uninitialized */
+
   MouseOff();
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);

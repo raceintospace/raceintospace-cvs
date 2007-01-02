@@ -320,6 +320,8 @@ void HarIntel(char p,char acc)
 {
  int mr,i,prg,ind,j=0,k=0,save[28],lo=0,hi=28,tot=0,nf=0,seg=0;
 
+ ind = 0; /* XXX check uninitialized */
+
  static char F[10][11] = {
   {7,0,7,8,11,14,15,12,12,12}, //58
   {4,3,5,17,12,12,12,12,12,12}, //59

@@ -398,6 +398,9 @@ void NewAI(char plr,char frog)
 {
  char i,spc[2],prg[2],P_pad,B_pad,hsf,Panic_Check=0;
  int mis1,mis2,mis3,val;
+
+ spc[0] = 0; /* XXX check uninitialized */
+
  prg[0]=frog;
  mis1=mis2=mis3=P_pad=B_pad=0;
  GenPur(plr,2,frog-1);
@@ -746,7 +749,7 @@ void GetHard(char plr)
 
 char BoostCheck(char plr)
 {
- char check;
+ char check = 0; /* XXX check unintialized */
  if (Data->P[plr].Rocket[4].Num>=2 && Data->P[plr].Rocket[4].Safety>75) check=1;
    else
 	{

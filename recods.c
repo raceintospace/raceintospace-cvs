@@ -435,6 +435,9 @@ void UpdateRecords(char Ty)
  struct mStr *Miss;
  char Rec_Change,hold,craft;
  FILE *file;
+
+ hold = 0; /* XXX check uninitialized */
+
  Miss=(struct mStr *)buffer;
 
  for(j=0;j<56;j++)

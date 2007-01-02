@@ -395,7 +395,10 @@ int Idiot(char *FName)
     char Code[6];
     long offset;
     i16 size;
-  } __attribute__((packed)) Pul;
+  } Pul;
+
+  mode = 0; /* XXX check uninitialized */
+  NTxt = NULL; /* XXX check uninitialized */
 
   if (strncmp(&FName[1],"000",3)==0) return 0;
 
