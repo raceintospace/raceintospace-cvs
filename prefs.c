@@ -155,7 +155,7 @@ void HModel(char mode,char tx)
 
 void Levels(char plr,char which,char x)
 {
- unsigned char v[2][2]={9,239, 161,108};
+ unsigned char v[2][2]={{9,239}, {161,108}};
  MouseOff();
  gxVirtualDisplay(&vhptr,0+which*72,30+x*30,v[0][plr],v[1][x],v[0][plr]+71,v[1][x]+29,0);
  MouseOn();
@@ -164,7 +164,7 @@ void Levels(char plr,char which,char x)
 
 void BinT(int x,int y,char st)
 {
-  char sta[2][2]={2,4,4,2};
+  char sta[2][2]={{2,4},{4,2}};
   MouseOff();
   grSetColor(sta[st][0]);
   grMoveTo(0+x,y+20);grLineTo(0+x,y+0);grLineTo(72+x,y+0);

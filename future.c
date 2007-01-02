@@ -254,7 +254,7 @@ void Toggle(int wh,int i) //wh - the button i = in or out
 
 void TogBox(int x,int y,int st)
  {
-  char sta[2][2]={2,4,4,2};
+  char sta[2][2]={{2,4},{4,2}};
   MouseOff();
   grSetColor(sta[st][0]);
   grMoveTo(0+x,y+32);grLineTo(0+x,y+0);grLineTo(34+x,y+0);
