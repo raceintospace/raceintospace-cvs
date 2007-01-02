@@ -57,7 +57,7 @@ char Burst(char win)
   } Bomb[NUM_LIGHTS];
  int  lp1,lp2,Region,xx,yy,cdstat;
  float Ang,Spd,InitSpd;
- char clr=1,c;
+ char clr=1;
  key=0;
  strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
  MouseOff();gxGetImage(&vhptr,0,0,319,199,0);MouseOn();
@@ -289,10 +289,8 @@ void Load_LenFlag(char win)
 {
  struct Patch {i16 w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
-  unsigned int starty,coff;
-  int i,j,Off_X,Off_Y;
+  unsigned int coff;
+  int j,Off_X,Off_Y;
   char poff;
   FILE *in;
  if (win==1) {in=sOpen("LENIN.BUT","rb",0);Off_X=224;Off_Y=26;}
@@ -316,10 +314,7 @@ void Load_LenFlag(char win)
 
 void Draw_NewEnd(char win)
 {
- int i,j;
- struct Patch {i16 w,h;ui16 size;long offset;} P;
  long size;
- unsigned char *buf;
  FILE *in;
  MouseOff();
  FadeOut(2,pal,10,0,0);
@@ -346,7 +341,7 @@ void Draw_NewEnd(char win)
 void NewEnd(char win,char loc)
 {
  GXHEADER local;
- int i,j,Re_Draw=0,cdstat;
+ int i,Re_Draw=0,cdstat;
  char R_V=0;
  
  CDAccess(cdROM,3,1); //PLAY CD victory
@@ -607,7 +602,6 @@ void FakeWin(char win)
 void FakeHistory(char plr,char Fyear)  // holds the winning player
 {
  char bud;
- int i,j,k;
  memset(buffer,0x00,20480);
  if (Fyear<=65) bud=0+plr;
    else if (Fyear<=67) bud=2+plr;
@@ -659,7 +653,6 @@ void PrintOne(char *buf,char tken)
 void AltHistory(char plr)  // holds the winning player
 {
  char bud;
- int i,j,k;
  memset(buffer,0x00,20480);
  if (Data->Year<=65) bud=0+plr;
    else if (Data->Year<=67) bud=2+plr;
@@ -718,9 +711,7 @@ void EndPict(int x,int y,char poff,unsigned char coff)
 {
   struct Patch {char w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
-  unsigned int i,j;
+  unsigned int j;
   FILE *in;
   in=sOpen("ENDGAME.BUT","rb",0);
   fread(&pal[coff*3],384,1,in);
@@ -742,9 +733,7 @@ void LoserPict(char poff,unsigned char coff)
 {
   struct Patch {i16 w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
-  unsigned int i,j;
+  unsigned int j;
   FILE *in;
   in=sOpen("LOSER.BUT","rb",0);
   fread(&pal[coff*3],384,1,in);

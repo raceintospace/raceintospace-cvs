@@ -42,7 +42,7 @@ extern char Option,MAIL;
 
 void DrawHardef(char plr)
 {
- int i,fin;
+ int i;
 	MouseOff();
 	FadeOut(2,pal,10,0,0);
 
@@ -192,7 +192,7 @@ void ShowHard(char plr)
 void HDispIt(int x1,int y1,int x2, int y2,int s,int t)
 {
   GXHEADER local,local2;
-  int retcode,i,w,h;
+  int i,w,h;
   unsigned char *src, *dest;
 
     w=x2-x1+1;h=y2-y1+1;
@@ -485,7 +485,7 @@ void PInfo(char plr,char loc)
 
 void HInfo(char plr,char loc,char w)
 {
-  int i,j,sfu,sfs,tot; 
+  int i,sfu,sfs,tot; 
   float ov,un,Sc;
   MouseOff();
   if (w==0) {
@@ -970,7 +970,7 @@ void RankMe(char plr)
 void DrawRank(char plr)
 {
  int i,MaxPz=0,MaxNg=0,Px,Py,t1,t2,Cur,OffSet,Year_Inc=12,score;
- char Year,Digit[4];
+ char Digit[4];
  strcpy(IDT,"i030");strcpy(IKEY,"k030");
  MouseOff();
  //Win=Data->Prestige[22].Place;

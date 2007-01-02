@@ -57,7 +57,7 @@ void Load_FUT_BUT(void)
 
 void DrawFuture(char plr,int mis,char pad)
 {
-  int i,j,ii,jj;
+  int i,j;
   FILE *fin;
   unsigned sz;
   strcpy(IKEY,"k011");strcpy(IDT,"i011");
@@ -229,7 +229,6 @@ void DrawLocks(void)
 
 void Toggle(int wh,int i) //wh - the button i = in or out
 {
- int t;
  switch(wh)
    {
     case 1:if (i==1) gxVirtualDisplay(&vh,1,21,55,49,89,81,0);else
@@ -268,7 +267,7 @@ void TogBox(int x,int y,int st)
 
 void PianoKey(int X)
 {
- int i,j,k,t;
+ int t;
  if (F1==0) {
    if (V[X].A==1) {Toggle(1,1);status[1]=1;}
      else {Toggle(1,0);PlaceRX(1);status[1]=0;}}
@@ -425,9 +424,8 @@ int DownSearchRout(int num,char plr)
 
 void Future(char plr)
 {
-  int MisNum=0,DuraType=0,MaxDur=6,i,j,ii,setting=0;
+  int MisNum=0,DuraType=0,MaxDur=6,i,ii,setting=0;
   int Ok,NewType;
-  char prg,prime,back;
   GXHEADER local,local2;
 begfut:
   MisNum=FutureCheck(plr,0);
@@ -792,7 +790,7 @@ void DurPri(int x)
 
 void MissionName(int val,int xx,int yy,int len)
 {
-  int i,j=0,fin;
+  int i,j=0;
 
   GetMisType(val);
 

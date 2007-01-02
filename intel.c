@@ -79,7 +79,7 @@ void Intel(char plr)
 
 void MisIntel(char plr,char acc)
 {
- int i=0,mr,prg,ind,j=0,k=0,save[20],lo=0,hi=28,tot=0,nf=0,seg=0;
+ int i=0,mr,j=0,k=0,save[20],lo=0,hi=28,tot=0,nf=0,seg=0;
  char mis,found;
  static char F[3][14] = {
   {6,1,2,3,4,5}, //58 & 59
@@ -219,9 +219,9 @@ void Special(char p,int ind)
 }
 void BackIntel(char p,char year)
 {
- int prg,ind,dur=0,xc,yc,rn;
+ int prg,ind,dur=0,xc,yc;
  FILE *fin;
- char code,ind1,w;
+ char code,w;
  MouseOff();
  grSetColor(6);
  prg=Data->P[p].PastIntel[year].prog;
@@ -320,7 +320,6 @@ void HarIntel(char p,char acc)
 {
  int mr,i,prg,ind,j=0,k=0,save[28],lo=0,hi=28,tot=0,nf=0,seg=0;
 
- char ky;
  static char F[10][11] = {
   {7,0,7,8,11,14,15,12,12,12}, //58
   {4,3,5,17,12,12,12,12,12,12}, //59
@@ -432,8 +431,7 @@ void HarIntel(char p,char acc)
 void TopSecret(char plr,char poff)
 {
   GXHEADER local,local2;
-  unsigned char *buf;
-  unsigned int p,i,j;
+  unsigned int j;
   struct FF {
     ui16 size;
     long offset;
@@ -605,7 +603,7 @@ void DrawBre(char plr)
 
 void Bre(char plr)
 {
- int i,year=Data->P[plr].PastIntel[0].cur-1;
+ int year=Data->P[plr].PastIntel[0].cur-1;
  DrawBre(plr);
  TopSecret(plr,100); // just the blue background
  BackIntel(plr,year);
@@ -753,7 +751,7 @@ void ReButs(char old,char nw)
 
 void IStat(char plr)
 {
-int i,place=-1;
+int place=-1;
 
   DrawIStat(plr);
   while(1)  { GetMouse();if (mousebuttons==0) break;}
@@ -817,7 +815,7 @@ int i,place=-1;
 void DispIt(int x1,int y1,int x2, int y2,int s,int t)
 {
   GXHEADER local,local2;
-  int retcode,i,w,h;
+  int i,w,h;
   unsigned char far *src,far *dest;
 
     w=x2-x1+1;h=y2-y1+1;

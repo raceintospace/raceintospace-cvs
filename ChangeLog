@@ -1,5 +1,9 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V25
+	
+	* remove more unused locals
+
 	* V24
 
 	* I messed up trying to apply tag V23 to Michael's changes.

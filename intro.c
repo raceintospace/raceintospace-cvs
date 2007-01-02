@@ -124,7 +124,7 @@ struct CREDIT {
 void Credits(void)
 {
   int k,i;
-  long len[2],length;
+  long len[2];
   strcpy(IKEY,"i999\0");
   FILE *fin;
 
@@ -216,9 +216,6 @@ read_img_frame (FILE *inf, struct intro_image *ip)
 {
 	long len;
 	char compressed[64 * 1024];
-	int ilen;
-	int idx;
-	unsigned char *up;
 
 	len = fread (&ip->map, 1, sizeof ip->map, inf);
 
@@ -268,11 +265,7 @@ read_intro_images (void)
 
 void Introd(void)
 {
-  int k,j,i;
-  FILE *fin;
-  extern int cdROM;
-  long len[2];
-  int cdstat;
+  int k;
   struct intro_image *ip;
   double start;
 
@@ -307,7 +300,7 @@ done:
 
 void NextTurn(char plr)
 {
-  int i,j;
+  int i;
   FILE *fin;
   long len[2];
 

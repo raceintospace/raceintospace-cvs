@@ -170,7 +170,6 @@ add_gamedat_files (char *dirname)
 void
 env_setup (void)
 {
-	char *name;
 	char *home;
 	char *alt_location;
 	FILE *f;
@@ -276,10 +275,8 @@ remove_savedat(char *fName)
 FILE *
 open_gamedat (char *raw_name)
 {
-	char fullname[1000];
 	char cooked_name[1000];
 	FILE *f;
-	int i;
 	struct gamedat_file *gp;
 	char *p;
 
@@ -313,9 +310,7 @@ open_gamedat (char *raw_name)
 //
 FILE * sOpen(char *Name,char *mode,int loc)
 {
-   FILE *file,*fout;
    char *fName;
-   char *p;
 
    fName=(char *) malloc(128);
    memset(fName,0x00,128);
@@ -335,17 +330,12 @@ usage (void)
 
 int main(int argc, char *argv[])
 {
-  int i,_,T,purp,cdstat;
-  FILE *fin,*fout;
-  char *plc;
-  WORD seg;
-  unsigned long remain;
-  struct diskfree_t dfg;
+  int i,purp,cdstat;
+  FILE *fin;
   int c;
 
-  unsigned int j;
   char AName[6][22]={"NEW GAME","OLD GAME","MODEM","PLAY BY MAIL","CREDITS","EXIT TO DOS"};
-  char ex,side=0;
+  char ex;
 
   env_setup ();
   av_setup (&argc, &argv);
@@ -616,9 +606,9 @@ void InitData(void)
 // use the original MainLoop Further down in the code
 void MMainLoop(void)
 {
-int gol,i,j,k,t1,t2,t3,prest,sign,val,fin,kik,purp;
+int i,j,t1,t2,t3,prest,sign,kik,purp;
 FILE *fout;
-char name[20],str[10],Done=0;
+char Done=0;
 long moo;
   if (LOAD!=1) {
     Data->P[0].Cash=Data->P[0].Budget;   // INCREMENT BY BUDGET
@@ -1038,7 +1028,7 @@ void Progress(char mode)
 
 void MainLoop(void)
 {
-int gol,i,j,k,t1,t2,t3,prest,sign,val,kik;
+int i,j,t1,t2,t3,prest,sign,kik;
 FILE *fout;
 long moo;
   if (LOAD!=1) {
@@ -1338,7 +1328,6 @@ GetMouse (void)
 void GetMouse_fast(void)
 {
   char string[25],rbut=0;
-  long mems;
   memset(string,0x00,25);
   mousebuttons=0;
   oldx=x;oldy=y;
@@ -1389,8 +1378,6 @@ void MouseOn(void)
 
 void PauseMouse(void)
 {
-	double start;
-
 	gr_sync ();
 
 	/* wait until mouse button is released */
@@ -1439,8 +1426,7 @@ void DrawLED(int x,int y,char st)
 
 void DispBig(int x,int y,char *txt,char mode,char te)
 {
-  int i,k,l,j,px;
-  WORD tHand;
+  int i,k,l,px;
   struct LET {char width,img[15][21];} letter;
   int c;
 
@@ -1779,7 +1765,7 @@ void VerifySF(char plr)
 
 void VerifyCrews(char plr)
 {
-  int i,j,t,k,total;
+  int i,t,k;
 
   for (i=0;i<3;i++) {
      if (Data->P[plr].Mission[i].MissionCode==18 && Data->P[plr].Mission[i].part==0) {
@@ -1814,7 +1800,7 @@ void GetMisType(char mcode)
 
 int MisRandom(void)
 {
-  int i,nval,ch;
+  int i,nval;
   do {
     nval=107;
     for (i=0;i<250;i++) nval+=(random(7)-3);
