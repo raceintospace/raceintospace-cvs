@@ -198,6 +198,16 @@ void SpotCrap(char loc,char mode)
       Seek_sOff(sPath.Image);          // point to next image
       fread(&sImg,sizeof sImg,1,sFin);    // get image header
 
+      {
+	      int expected_w = hSPOT.size / sImg.h;
+	      if (sImg.w != expected_w) {
+		      printf ("XXX fixing sImg.w %d->%d\n",
+			      sImg.w, expected_w);
+		      sImg.w = expected_w;
+	      }
+      }
+
+      sImg.w = hSPOT.size / sImg.h;
       GV(&SP1,sImg.w,sImg.h);          // create Virtual buffer
       fread(SP1.vptr,hSPOT.size,1,sFin);  // read image data
 

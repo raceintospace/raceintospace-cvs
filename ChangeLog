@@ -1,5 +1,10 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V34
+	
+	* hack around messed up crane image (search for fixing sImg) in
+	port.c
+
 	* V33
 	
 	* fix some NULL pointer problems in mc.c and prest.c
