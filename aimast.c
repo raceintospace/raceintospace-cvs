@@ -49,7 +49,7 @@ enum Opponent_Status Cur_Status;
 
 void AIMaster(char plr)
 {
- int val,check,i,k,P_total=0,O_total=0;
+ int val,i,P_total=0,O_total=0;
  char prg[2];
  if (plr==0) Level_Check=(Data->Def.Lev1==0) ? 0 : 1;
   else  if (plr==1) Level_Check=(Data->Def.Lev2==0) ? 0 : 1;
@@ -352,7 +352,7 @@ void RDPrograms(char plr)
 
 void CheckVoting(char plr)
 {
- int i,st,chk,val;
+ int st;
  if (Data->P[plr].AILunar==0) MoonVoting(plr);
    else
 	if (Data->P[plr].AILunar==4)
@@ -480,7 +480,6 @@ void KeepRD(char plr,int m)
 
 void PickModule(char plr)
 {
- int x;
  Data->P[plr].Track[2]=6; 
  if (GenPur(plr,2,6)) RDafford(plr,2,6);
    RDafford(plr,2,6);
@@ -499,7 +498,7 @@ int FindNext(int x)
                                
 void MoonVoting(char plr)
 {
- int high=-1,val,limit;
+ int high=-1,val;
 val=random(100)+1;
 if (val<70) high=0;
  else if (val<78) high=1;

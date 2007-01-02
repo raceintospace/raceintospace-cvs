@@ -376,7 +376,7 @@ char Skill(char plr,char type)
 void TransAstro(char plr,int inx)
                                     // indexed 1 thru 5
 {
- int diff,i,j,w,count=0,max,found,flt1,flt2,bug=1;
+ int i,j,w,count=0,max,found,flt1,flt2,bug=1;
  while (bug==1) { count=0;max=0;found=0;flt1=0;flt2=0;
  if (inx==5) max=4;
   else if (inx==4) max=3;
@@ -464,7 +464,7 @@ void TransAstro(char plr,int inx)
 
 void CheckAdv(char plr)
 {
- int i,count,diff;
+ int i,count;
  count=0;
  for (i=0;i<Data->P[plr].AstroCount;i++)
    if (Data->P[plr].Pool[i].Status==0 && Data->P[plr].Pool[i].Assign==0)
@@ -605,8 +605,6 @@ char SN(char plr,char m)
 
 void AIPur(char plr)
 {
- int i,val,val2,cl,check,done,tp,index,orb;
-
  if (Data->P[plr].AIStat==0) Data->P[plr].AIStat=1;
  if (Data->P[plr].Track[0]==0) Data->P[plr].Track[0]=1;
  if (Data->P[plr].Probe[0].Num<=Data->P[plr].Rocket[0].Num)

@@ -210,10 +210,8 @@ void DrawBudget(char player,char *pStatus)
 void BudPict(char poff)
 {
   struct Patch {char w,h;ui16 size;long offset;} P;
-  GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
-  unsigned int i,j,x,y;
+  GXHEADER local;
+  unsigned int i,x,y;
   FILE *in;
   in=sOpen("BUDD.BUT","rb",0);
   fseek(in,(poff)*(sizeof P),SEEK_CUR);
@@ -295,7 +293,6 @@ int pScale=25;
 
 void Budget(char player)
 {
- int i;
  char pStatus[]={1,1,1,1};
  DrawBudget(player,pStatus);
  strcpy(IDT,"i007\0");strcpy(IKEY,"k007\0");
@@ -359,8 +356,7 @@ void Budget(char player)
 
 void DrawViewing(char plr)
 {
-  int i,fin,misnum;
-  char cYr[5];
+  int i,misnum;
   extern char *Months[12];
 
   MouseOff();
@@ -417,7 +413,7 @@ void DrawViewing(char plr)
 
 void DrawVText(char got)
 {
-  int xx=10,yy=122,i,j;
+  int xx=10,yy=122,i;
   char *buf;
   buf=buffer;
   grSetColor(1);
@@ -482,7 +478,7 @@ int RetFile(char plr,int card)
 
 void Viewing(char plr)
 {
-  int i,ctop,bline=0,oset,maxcard;
+  int ctop,bline=0,oset,maxcard;
   PreLoadMusic(M_SOVTYP);
   DrawViewing(plr);
   maxcard=oset=Data->P[plr].eCount-1;

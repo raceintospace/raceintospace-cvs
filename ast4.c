@@ -42,7 +42,7 @@ int ALSpec(int att)
 void AstLevel(char plr,char prog,char crew,char ast)
 {
    GXHEADER local;
-   int i,j,k,man,over=0,temp,tot,val;
+   int i,k,man,over=0,temp,val;
    char Compat[5],cnt;
    i=man=Guy(plr,prog,crew,ast);
 
@@ -156,7 +156,7 @@ void AstLevel(char plr,char prog,char crew,char ast)
 
 void PlaceEquip(char plr,char prog)
 {
-  int i,j;
+  int i;
   FILE *fin;
   GXHEADER local,local2;
   struct FPF {
@@ -393,7 +393,6 @@ void DamProb(char plr,char prog,int chk)
 
 void CrewProb(char plr,char prog)
 {
- int i;
  if (prog)EMPTY_BODY;
  MouseOff();
  ShBox(75,43,244,173);IOBox(81,152,238,167); InBox(81,70,238,106);
@@ -455,7 +454,7 @@ void DrawPosition(char prog,int pos)
 
 void Programs(char plr,char prog)
 {
-  int now2,BarA,count,i,j,M[100],grp,Gcnt[8],max,dachk,chk,tst;
+  int now2,BarA,count,i,M[100],grp,Gcnt[8],max,chk,tst;
   char ksel=0;
   strcpy(IDT,"i036");strcpy(IKEY,"k036");
   MouseOff();
@@ -919,7 +918,7 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
 
 void AstStats(char plr,char man,char num)
 {
-  int x,y;
+  int y;
   grSetColor(1);
   y=91+man*9;
   PrintAt(113,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);

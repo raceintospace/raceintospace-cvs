@@ -157,7 +157,7 @@ void TrainText(char plr,int astro,int cnt)
 
 void Train(char plr,int level)
 {
-  int now2,BarA,count,i,j,M[100];
+  int now2,BarA,count,i,M[100];
   char temp,Train[10];
   static int m=1;
   if (level==0) PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);

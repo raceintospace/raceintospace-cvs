@@ -43,7 +43,6 @@ void Strategy_Thr(char plr,int *m_1,int *m_2,int *m_3);
 
 void AIVabCheck(char plr,char mis,char prog)
 {
-  int i,j,fin;
   VASqty=0;
   //prog=1; 0=UnM : 1=1Mn ...
   GetMisType(mis);
@@ -150,7 +149,7 @@ int ICost(char plr,char h,char i)
 
 void CalcSaf(char plr,char vs)
 {
-  int i,j,k,sum=0,co=0,t=0,size,boo;
+  int i,j,k,sum=0,co=0,t=0;
 
   for (i=0;i<14;i++) Mew[i].cost=Mew[i].sf=0; // Clear thing
 
@@ -398,7 +397,7 @@ void Strategy_Thr(char plr,int *m_1,int *m_2,int *m_3)
 void NewAI(char plr,char frog)
 {
  char i,spc[2],prg[2],P_pad,B_pad,hsf,Panic_Check=0;
- int fin,mis1,mis2,mis3,val;
+ int mis1,mis2,mis3,val;
  prg[0]=frog;
  mis1=mis2=mis3=P_pad=B_pad=0;
  GenPur(plr,2,frog-1);
@@ -610,7 +609,7 @@ void NewAI(char plr,char frog)
 
 void AIFuture(char plr,char mis,char pad,char *prog)
 {
-  int i,j,k,fin;
+  int i,j;
   char prime,back,max,men;
   char fake_prog[2];
 
@@ -760,7 +759,7 @@ char BoostCheck(char plr)
 
 void Scheduler(char plr)
 {
- char mis,fin,prim,z,i,tmoon[4][2];
+ char mis,prim,z,i,tmoon[4][2];
  mis=Data->P[plr].WList[0].Vle;
  GetMisType(mis);
   if (Mis.Jt==1)
@@ -804,7 +803,7 @@ void Scheduler(char plr)
 void AILaunch(char plr)
 {
   int i,j,k=0,l=0,JR=0,wgt,bwgt[7];
-  char boos[7],bdex[7],key;
+  char boos[7],bdex[7];
 
 
   for (i=0;i<7;i++) {

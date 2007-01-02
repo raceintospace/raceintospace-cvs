@@ -133,7 +133,7 @@ void ClrFut(char plr,char pad)
 
 int AsnCrew(char plr,char pad,char part)
 {
- int count=0,i,j,prg=0,grp=-1,prime=-1,men=0,back=-1,t=0,s=0,k=0,yes=0,stflag=0,bug;
+ int count=0,i,prg=0,grp=-1,prime=-1,men=0,back=-1,t=0,s=0,k=0,yes=0,stflag=0,bug;
  char temp;
  MouseOff();
  strcpy(IKEY,"k200");
@@ -389,7 +389,7 @@ void DrawHard(char mode,char pad,char mis,char plr)
 
 int HardRequest(char plr,char mode,char mis,char pad)
 {
-  int fin,i=0,pr[5],t=0;
+  int i=0,pr[5],t=0;
   for (i=0;i<5;i++)
 	if (Data->P[plr].Manned[i].Num>=0) {pr[i]=1;t++;}
 	  else pr[i]=0;
@@ -464,7 +464,7 @@ int HardRequest(char plr,char mode,char mis,char pad)
 int SecondHard(char plr,char mode,char mis,char pad)
 {
 
-  int fin,i=0,men=0,prg=0,prog[5],t=0;
+  int i=0,men=0,prg=0,prog[5],t=0;
   for (i=0;i<5;i++) if (Data->P[plr].Manned[i].Num>=0) men++;
   if (men==0) {Idiot("i126"); return 0;};
 

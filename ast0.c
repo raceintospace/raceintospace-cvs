@@ -30,7 +30,7 @@ char MCol[110],sel[25],MaxSel;
 
 void Moon(char plr)
 {
-  int i,val;
+  int val;
   struct GO {
    ui16 size;
    long offset;
@@ -128,7 +128,7 @@ void SatDraw(char plr)
   struct Patch {char w,h;ui16 size;long offset;} P;
   int i,loc[4];
   FILE *fin;
-  long size;
+
   GXHEADER local;
   FadeOut(2,pal,0,0,0);
   MouseOff();
@@ -206,7 +206,7 @@ void LMDraw(char plr)
 
 void SatText(char plr)
 {
-   int i,k;
+   int i;
    MouseOff();
    grSetColor(11);
    for (i=0;i<4;i++) {
@@ -364,8 +364,6 @@ void PlanText(char plr,char plan)
 void LMPict(char poff)
 {
   GXHEADER local,local2;
-  unsigned char *buf;
-  unsigned int p,i,j;
   struct FF {
 	ui16 size;
 	long offset;
@@ -439,7 +437,7 @@ void LMBld(char plr)
 
 void SatBld(char plr)
 {
-  int i,plan;
+  int plan;
   plan=0;
   PreLoadMusic(M_HISTORY);
   SatDraw(plr);

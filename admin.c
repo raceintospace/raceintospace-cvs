@@ -799,7 +799,7 @@ void FileAccess(char mode)
 
 char GetBlockName(char *Nam)
 {
-  int i,j,key;
+  int i,key;
   GXHEADER local;
   MouseOff();
   GV(&local,164,77);
@@ -853,8 +853,7 @@ char GetBlockName(char *Nam)
 
 void DrawFiles(char now,char loc,char tFiles)
 {
-  int i,j,start,end;
-  FILE *fin;
+  int i,j,start;
   start=now-loc;
   grSetColor(1);
   j=0;
@@ -870,9 +869,7 @@ void DrawFiles(char now,char loc,char tFiles)
 
 void BadFileType(void)
 {
-  int i,j,key;
   GXHEADER local;
-  long space;
   GV(&local,164,77);
   gxGetImage(&local,39,50,202,126,0);
   ShBox(39,50,202,126);
@@ -888,7 +885,6 @@ void BadFileType(void)
 
 void FileText(char *name)
 {
-  int col;
   FILE *fin;
 
   RectFill(38,133,279,155,3);
@@ -948,7 +944,6 @@ int FutureCheck(char plr,char type)
 {
   int i,pad,p[3],m[3],t=0,tx[3]={0,0,0};
   FILE *fin;
-  long len[2];
   MouseOff();
   for (i=0;i<3;i++) {
     p[i]=Data->P[plr].LaunchFacility[i];
@@ -1154,7 +1149,7 @@ void SaveMail(void)
 {
  char Temp[4];
  long size,moo;
- int tFiles,i,j,now,done=0,BarB,temp,left;
+ int tFiles,i,j,done=0,temp,left;
  FILE *fin,*fout;
  char Name[12];
  extern char plr[2],AI[2];
