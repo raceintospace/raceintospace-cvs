@@ -97,21 +97,6 @@ getdisk (void)
 	return ('C' - 'A');
 }
 
-void
-setcbrk (int val)
-{
-}
-
-long farcoreleft (void)
-{
-	return (100 * 1000 * 1000);
-}
-
-void
-InitSnd (void)
-{
-}
-
 void *
 farmalloc (int len)
 {
@@ -176,6 +161,9 @@ OpenEmUp(void)
 {
 	FILE *f;
 	int retcode;
+
+	srand(clock());
+	srandom (clock ());
 
 	frm_init ();
 

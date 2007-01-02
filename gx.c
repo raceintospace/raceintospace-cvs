@@ -3,12 +3,6 @@
 extern unsigned char *screen;
 extern GXHEADER vhptr;
 
-void gxSetUserMalloc (void *(*malloc)(unsigned long),
-		      int (*free)(void *),
-		      unsigned long (*avail)(void))
-{
-}
-
 int
 gxVirtualSize (int mode, int w, int h)
 {

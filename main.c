@@ -101,9 +101,6 @@ char AI[2]={0,0};
 static char BUZZ_DIR[32];
 
 
-void far * far pascal FMalloc(unsigned long bytes){return(farmalloc(bytes));};
-int far pascal FFree(void far *ptr) {farfree(ptr); return(0);}
-unsigned long far pascal FCore(void) {return(farcoreleft());}
 char far *sbuf0,far *sbuf1;
 void Plop(char plr,char mode);
 
@@ -351,135 +348,30 @@ int main(int argc, char *argv[])
 	  }
   }
 
-  // window(x1,y1,x2,y2);
-  //_setcursortype(_NOCURSOR);
-  //gotoxy(1,1);
-  //textbackground(BLUE);clrscr();
-  //textbackground(RED);clreol();
-  //textcolor(WHITE);
-  //cprintf("     Race into Space CD_ROM  (c)1993 Strategic Visions, Inc.");
-  //textbackground(BLUE);
-//  gotoxy(1,2);cprintf("Based on BARIS DOS v1.1\n");
-  //gotoxy(1,2);cprintf("CD-ROM Version 1.1\n");
-  //gotoxy(1,4);
-
-
   memset(BUZZ_DIR,0x00,32);
   getcwd(BUZZ_DIR,32);
 
-
-
-  //moved this higher MWR
-  cdROM=AquireDrive();
-  if (cdROM>30) {
-     //printf("CD-ROM Drive not found.\n");
-     return 1;
-  }
-
-
-//check for EMS_Status
-
-
-//  else cprintf("SUCCESS: EMS found.\n");
-//  EMS_PageAddr(&seg);
-//  ems=(BYTE far *) MK_FP(seg,0x0000);  // page 0 of EMS frame
-
-//  //check if enough available EMS
-//  if (EMS_Avail() < 160)
-//   {
-//    gotoxy(1,10);
-//    cprintf("You cannot execute BARIS because EMS (extended memory) is too low.");
-//    gotoxy(1,11);
-//    cprintf("Make sure there is at least 2.6MB of EMS memory available.");
-//    gotoxy(1,12);
-//    return 1;
-//   }
-
-
-//  fin=fopen("EMMXXXX0","rb");
-//  if (!fin) {
-//    gotoxy(1,10);
-//    cprintf("You cannot execute BARIS because you do not have any EMS.");
-//    gotoxy(1,11);
-//    cprintf("Make sure there is at least 2.6MB of EMS memory available.");
-//    gotoxy(1,12);
-//    return 1;
-//  }
-//  fclose(fin);
-
-
-//  gotoxy(1,5);cprintf("Total Pages: %d (%ld bytes)\n",EMS_Total(),(long)EMS_Total()*EMS_PAGE);
-//  gotoxy(1,6);cprintf("Free Pages : %d (%ld bytes)\n",EMS_Avail(),(long)EMS_Avail()*EMS_PAGE);
-  // get first CD-ROM drive in chain.
-//  cdt=0;
-
   hDISK=getdisk();
-
-  //check  if enought available HARD DRIVE SPACE
-  //_dos_getdiskfree(hDISK+1,&dfg);
-  //remain=(unsigned long) dfg.avail_clusters * (unsigned long) dfg.bytes_per_sector * (unsigned long) dfg.sectors_per_cluster;
-  //if (remain>800000L)
-  // {
-  //  Idiot("i851");
-  //  return;
-  // }
-
-
-//  gotoxy(1,7);cprintf("CD-ROM drive status: %d.\n",cdROM);
-//  gotoxy(1,8);cprintf("Hard Disk=%c:   CD-ROM=%c:\n",hDISK+'A',cdROM+'A');
-
-//  if (cdROM==hDISK) {
-//    gotoxy(1,10);
-//    cprintf("You cannot execute BARIS from the CD-ROM please install it.");
-//    gotoxy(1,11);
-//    return 1;
-//  }
-
-//  if (argc!=3) {
-//     spawnl(P_WAIT,"SETUP.EXE\0",NULL);
-//     return 1;
-//  }
-
-  // Get Values from Command line
-//  Musics=(unsigned char) atoi(argv[1]);
-//  Sounds=(unsigned char)atoi(argv[2]);
 
   Musics = mBLASTER;
   Sounds = sBLASTER;
 
-  setcbrk(0);
-
-//  FadeVal=TimingThing()/100;  // Get Some Machine Specific Timing for Fades
   FadeVal = 10;
 
-
-  gxSetUserMalloc(FMalloc,FFree,FCore);
   strcpy(IDT,"i000\0");  strcpy(IKEY,"k000\0");
 
   LOAD=QUIT=0;
-//  screen=MK_FP(0xa000,0);
+
   if ((screen = malloc (128 * 1024)) == NULL) {
 	  fprintf (stderr, "can't alloc screen memory\n");
 	  exit (1);
   }
 
   xMODE=0;
-  // GetSoundDevice( (strchr(argv[1],'r')==NULL) ? 1 : 0);   // Get Sound Info
 
-if (farcoreleft()<324000L) {
-        printf("Race Into Space Requires At Least 560k of free\n");
-        printf("memory to execute properly.  You are %ld bytes short.\n",324000-farcoreleft());
-        //exit(0);
-      }
-
-//  if (strchr(argv[1],'n')!=0) KO=0;
-//  else KO=1;
-
-KO = 0;
+  KO = 0;
 
   xMODE|=0x0800;
-
-  InitSnd();
 
   sbuf0=(char far *) farmalloc(SBUF);
   if (sbuf0==NULL) {
@@ -1343,114 +1235,6 @@ void DockingKludge(void)
   return;
 }
 
-#if 0
-void OpenEmUp(void)
-{
-  int i,retcode;
-  long vfree,vneed;
-  FILE *fin;
-  oldpal=(char far *) farmalloc(768);
-  VBlank();
-  asm les dx,oldpal;
-  asm mov ax,1017h;
-  asm mov bx,0;
-  asm mov cx,100h;
-  asm int 10h;
-  FadeOut(2,oldpal,40,0,0);
-
-  gxSetDisplay(gxVGA_13);
-  gxSetMode(gxGRAPHICS);
-  gxModeCheck(gxFALSE);
-  GV(&vhptr,320,200);     // Allocate only Virtual Buffer
-  retcode=grInitMouse();
-  if (retcode==gxSUCCESS) {
-   XMAS=1;
-    //grDisplayMouse(grSHOW);
-    grTrackMouse(grTRACK);
-    grSetMouseStyle(grCARROW,8);
-    grSetMousePos(319,199);
-    }
-  else XMAS=0;
-  srand(clock());   // randomize based on ticks
-
-  // Load Large Font into EMS
-  retcode=EMS_Alloc(&LetHand,2); // 2 Pages
-  if (retcode) { //error
-     CloseEmUp(3,100);
-  }
-
-  EMS_Map(LetHand,0,0);  // Map Page 1
-  EMS_Map(LetHand,1,1);  // Map Page 2
-  fin=sOpen("LETTER.DAT","rb",0);
-  fread(ems,20540L,1,fin);  // Load file
-  fclose(fin);
-}
-
-void CloseEmUp(unsigned char error,unsigned int value)
-{
-  char *bo;
-  struct ffblk ffblk;
-  long fsize;
-  int done;
-
-  // Remove Large Font from EMS
-  EMS_DeAlloc(LetHand);
-
-  memset(buffer,0x00,BUFFER_SIZE);
-  if (Option!=-1) DoModem(2);
-
-  AIL_release_timer_handle(server);
-  Buzz_SoundDestroy();
-
-  bo=&pal[0];
-  grStopMouse();
-  gxSetMode(gxTEXT);
-  VBlank();
-  asm les dx,oldpal;   // get oldpal information
-  asm mov ax,1017h;
-  asm mov bx,0;
-  asm mov cx,100h;
-  asm int 10h;
-
-  memset(&pal[0],0x00,768);
-  asm les dx,bo;
-  asm mov ax,1012h;
-  asm mov bx,0;
-  asm mov cx,100h;
-  asm int 10h;
-
-  DV(&vhptr);    // Free the only virtual buffer
-  remove_savedat("ENDTURN.TMP"); // delete any temp files
-  remove_savedat("REPLAY.DAT");
-  remove_savedat("EVENT.TMP");
-  remove_savedat("MEN.DAT");
-
-  if (cdt) {
-   CDAccess(cdROM,0,2);
-   destroyaudiotoc(cdROM);
-    //free(cdt);
-  }  // CDROM Stuff
-
-  if (buffer) farfree(buffer);
-  if (Data) farfree(Data);
-  if (sbuf1) farfree(sbuf1);
-  if (sbuf0) farfree(sbuf0);
-
-  switch(error) {
-//    case 0: printf("Normal Exit");break;
-    case 1: printf("Memory Allocation Error");break;
-    case 2: printf("Internal Error");break;
-    case 3: printf("Unable to allocate EMS memory.\n");
-  }
-  if (error!=0) printf(":%u\n",value);
-  FADE=0;
-  FadeIn(2,oldpal,10,0,0);
-  farfree(oldpal);
-  exit(0);
-  return;
-}
-#endif
-
 // Reset Crews on a particular Mission
 void FreePadMen(char plr,struct MissionType *XMis)
 {
@@ -1597,16 +1381,11 @@ void PauseMouse(void)
 
 	/* wait until mouse button is released */
 	while(1)  {
-		GetMouse();
+		GetMouse(); /* blocks briefly */
 		if (mousebuttons==0) break;
-		usleep (30 * 1000);
 	}
 
 	GetMouse ();
-	if (mousebuttons == 0 && key == 0) {
-		usleep (30 * 1000);
-		GetMouse ();
-	}
 	return;
 }
 
@@ -1647,7 +1426,6 @@ void DrawLED(int x,int y,char st)
 void DispBig(int x,int y,char *txt,char mode,char te)
 {
   int i,k,l,j,px;
-  FILE *fin;
   WORD tHand;
   struct LET {char width,img[15][21];} letter;
   int c;
@@ -1655,22 +1433,12 @@ void DispBig(int x,int y,char *txt,char mode,char te)
   y--;
   if(mode)EMPTY_BODY;
 
-  //fin=open("LETTER.DAT",O_RDONLY);
-  //if (!fin) return;
-
-
   for (i=0;i<strlen(txt);i++) {
     if (txt[i]==0x20) {x+=6;i++;};
     c=toupper(txt[i] & 0xff);
     if (c>=0x30 && c<=0x39) px=c-32;
     else px=c-33;
     if (c=='-') px++;
-
-    //fseek(fin,(sizeof letter*px),SEEK_SET);
-    //fread(&letter,sizeof letter,1,fin);
-
-//    EMS_Map(LetHand,0,0);  // Map Page 1
-//    EMS_Map(LetHand,1,1);  // Map Page 2
 
     memcpy(&letter,letter_dat + (sizeof letter*px),sizeof letter);  // copy letter over
     for (k=0;k<15;k++)
@@ -1681,7 +1449,6 @@ void DispBig(int x,int y,char *txt,char mode,char te)
 	    else grPutPixel(x+l,y+k,letter.img[k][l]);
     x+=letter.width-1;
   };
-  //fclose(fin);
 
   if (gr_slow)
     gr_sync ();

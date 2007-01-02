@@ -85,9 +85,6 @@ void gxVirtualVirtual (GXHEADER *hp, int a, int b, int c, int d,
 		       GXHEADER *hp2, int x, int y, int mode);
 #define gxVGA_13 1 /* 320x200 ... note: non-square pixels */
 int gxVirtualSize (int mode, int w, int h);
-void gxSetUserMalloc (void *(*malloc)(unsigned long),
-		      int (*free)(void *),
-		      unsigned long (*avail)(void));
 #define gxCMM 1
 int gxVirtualFree (int mode);
 int gxCreateVirtual (int mode, GXHEADER *hp, int gxVGA_mode, int w, int h);
@@ -115,7 +112,6 @@ typedef struct {
 
 void *farmalloc (int len);
 void farfree (void *p);
-long farcoreleft (void);
 int getdisk (void);
 void getcurdir (int drive, char *buf);
 
@@ -142,8 +138,6 @@ void cprintf (char *fmt, ...);
 void *MK_FP (int seg, int off);
 #define P_WAIT 1
 void spawnl (int mode, char *cmd, ...);
-
-void setcbrk (int val);
 
 HTIMER AIL_register_timer (void (*func)(void));
 void AIL_set_timer_period (HTIMER t, long ticks);

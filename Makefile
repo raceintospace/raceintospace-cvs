@@ -24,7 +24,7 @@ BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	mis_c.o mis_m.o museum.o name.o newmis.o news.o news_sup.o	    \
 	news_suq.o							    \
 	place.o port.o prefs.o prest.o radar.o rdplex.o recods.o \
-	replay.o review.o rush.o sel.o start.o   \
+	replay.o review.o rush.o start.o   \
 	vab.o pace.o gx.o gr.o sdl.o music.o
 baris: $(BARIS_OBJS)
 	$(CC) $(CFLAGS) -o baris $(BARIS_OBJS) $(LIBS)

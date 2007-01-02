@@ -719,9 +719,6 @@ void SetRush(int mode,int val);
 void DFrame(int x1, int y1, int x2, int y2);
 void SFrame(int x1, int y1, int x2, int y2);
 void SFWin(int x1, int y1, int x2, int y2,char *txt);
-void Print(int x, int y,int col,char *txt);
-void ScreenSetup(void);
-void GetSoundDevice(char cfg_set);
 
 // SOUND.C
 void GetVoice( char val);
@@ -747,7 +744,6 @@ void PlayMusic(char mode);
 void UpdateMusic(void);
 void StopMusic(void);
 int board_ID(drvr_desc *desc);
-void InitSnd(void);
 void PreLoadMusic(char val);
 void Buzz_SoundDestroy(void);
 unsigned int ABXframe(char far *scratch,char far *dest,int frameno,FILE *fhand);

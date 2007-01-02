@@ -10,5 +10,7 @@ small screens in mission control during launch
 check out passing helicopters
 check out vab animations
 enable all gcc warnings and fix up code
-
-
+check with valgrind
+compile with -O
+why am I not seeing any mission failures?
+optimize grPutPixel and grGetPixel
