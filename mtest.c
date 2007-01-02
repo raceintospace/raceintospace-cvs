@@ -3,6 +3,37 @@
 #include <stdlib.h>
 #include <string.h>
 
+void
+dump (void *buf, int n)
+{
+	int i;
+	int j;
+	int c;
+
+	for (i = 0; i < n; i += 16) {
+		printf ("%04x: ", i);
+		for (j = 0; j < 16; j++) {
+			if (i+j < n)
+				printf ("%02x ", ((unsigned char *)buf)[i+j]);
+			else
+				printf ("   ");
+		}
+		printf ("  ");
+		for (j = 0; j < 16; j++) {
+			c = ((unsigned char *)buf)[i+j] & 0x7f;
+			if (i+j >= n)
+				putchar (' ');
+			else if (c < ' ' || c == 0x7f)
+				putchar ('.');
+			else
+				putchar (c);
+		}
+		printf ("\n");
+
+	}
+}
+
+
 #pragma pack(1)
 struct TM {
 	char ID[6];
@@ -34,7 +65,10 @@ open_music_cat (char *filename)
 		fread (&dp->dir, 1, sizeof dp->dir, musicf);
 		
 	for (i = 0, dp = dirs; i < MDIRS; i++, dp++) {
-		dp->nfiles = dp->dir.size / sizeof (struct TM);
+		printf ("%6.6s 0x%08lx %8ld\n", dp->dir.ID,
+			dp->dir.offset, dp->dir.size);
+
+		dp->nfiles = 32;
 		dp->files = calloc (dp->nfiles, sizeof *dp->files);
 		fseek (musicf, dp->dir.offset, SEEK_SET);
 		fread (dp->files, dp->nfiles, sizeof *dp->files, musicf);
@@ -49,6 +83,7 @@ get_music (char *filetype, int idx, void *buf, int bufsize)
 	int len;
 	int i;
 	struct music_dir *dp;
+	int n;
 
 	len = strlen (filetype);
 
@@ -60,36 +95,36 @@ get_music (char *filetype, int idx, void *buf, int bufsize)
 	if (i == MDIRS)
 		return (-1);
 
-	return (-1);
-}
+	if (idx < 0 || idx >= dp->nfiles)
+		return (-1);
 
-	
-		
+	n = dp->files[idx].size;
+	if (n > bufsize)
+		n = bufsize;
+
+	fseek (musicf, dp->dir.offset + dp->files[idx].offset, SEEK_SET);
+	n = fread (buf, 1, n, musicf);
+	return (n);
+}
 
 void
 do_display_cat (void)
 {
-	FILE *f;
-	struct TM MusicIndex;
-	int i;
+	int i, j;
+	struct music_dir *dp;
+	struct TM *fp;
+	long base, offset;
 
-	if ((f = fopen ("/l/baris/gamedat/music.cat", "r")) == NULL) {
-		fprintf (stderr, "can't open music.cat\n");
-		exit (1);
-	}
+	base = 0;
+	for (i = 0, dp = dirs; i < MDIRS; i++, dp++) {
+		for (j = 0, fp = dp->files; j < dp->nfiles; j++, fp++) {
+			offset = dp->dir.offset + fp->offset;
 
-	for (i = 0; i < 36; i++) {
-		if (fread (&MusicIndex, 1, sizeof MusicIndex, f) == 0) {
-			printf ("unexpected EOF\n");
-			exit (1);
+			printf ("0x%08lx %8ld %.6s/%.6s\n",
+				offset, fp->size,
+				dp->dir.ID, fp->ID);
 		}
-		printf ("%6.6s 0x%08lx %8ld\n",
-			MusicIndex.ID,
-			MusicIndex.offset,
-			MusicIndex.size);
 	}
-
-	fclose (f);
 }
 
 int display_cat;
@@ -105,6 +140,10 @@ int
 main (int argc, char **argv)
 {
 	int c;
+	char *type = NULL;
+	int idx = 0;
+	int n;
+	char buf[1000 * 1000];
 
 	while ((c = getopt (argc, argv, "c")) != EOF) {
 		switch (c) {
@@ -116,12 +155,25 @@ main (int argc, char **argv)
 		}
 	}
 
+	if (optind < argc)
+		type = argv[optind++];
+
+	if (optind < argc)
+		idx = atoi (argv[optind++]);
+
 	if (optind != argc)
 		usage ();
+
+	open_music_cat ("/l/baris/gamedat/music.cat");
 
 	if (display_cat) {
 		do_display_cat ();
 		exit (0);
+	}
+
+	if (type) {
+		n = get_music (type, idx, buf, sizeof buf);
+		dump (buf, n);
 	}
 
 	return (0);

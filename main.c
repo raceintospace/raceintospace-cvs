@@ -220,13 +220,7 @@ void remove_savedat(char *fName)
 	for (p = fullname; *p; p++)
 		*p = tolower (*p);
 
-	printf ("remove_savedat(\"%s\")...", fullname);
-
-	if (remove (fullname) < 0)
-		printf ("error %s\n", strerror (errno));
-	else
-		printf ("ok\n");
-
+	remove (fullname);
 }
 
 void

@@ -36,6 +36,13 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 
 	while (togo && cur_chunk) {
 		thistime = cur_chunk->size - cur_offset;
+		if (thistime < 0) {
+			cur_chunk = NULL;
+			cur_chunk_tailp = &cur_chunk;
+			cur_offset = 0;
+			break;
+		}
+			
 		if (thistime > togo)
 			thistime = togo;
 		memcpy (stream, cur_chunk->data + cur_offset, thistime);
@@ -45,8 +52,10 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 		cur_offset += thistime;
 
 		if (cur_offset >= cur_chunk->size) {
-			if ((cur_chunk = cur_chunk->next) == NULL)
-				cur_chunk_tailp = &cur_chunk;
+			if (cur_chunk->loop == 0) {
+				if ((cur_chunk = cur_chunk->next) == NULL)
+					cur_chunk_tailp = &cur_chunk;
+			}
 			cur_offset = 0;
 		}
 	}
@@ -76,6 +85,7 @@ play (struct audio_chunk *new_chunk)
 			return;
 		}
 	}
+	new_chunk->next = NULL;
 	*cur_chunk_tailp = new_chunk;
 	SDL_UnlockAudio ();
 }
@@ -86,6 +96,7 @@ av_silence (void)
 	SDL_LockAudio ();
 	cur_chunk = NULL;
 	cur_chunk_tailp = &cur_chunk;
+	cur_offset = 0;
 	SDL_UnlockAudio ();
 }
 

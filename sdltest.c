@@ -8,7 +8,96 @@
 #include <memory.h>
 #include "SDL.h"
 
+#include <vorbis/vorbisfile.h>
+
+struct music_file {
+	struct music_file *next;
+	char *name;
+	char *buf;
+	int size;
+};
+struct music_file *music_files;
+
+struct music_file *
+get_music_file (char *name)
+{
+	struct music_file *mp;
+	FILE *inf;
+	int togo, offset;
+	OggVorbis_File vf;
+	int ret;
+	int bs;
+	char fullname[1000];
+	int chop;
+
+	for (mp = music_files; mp; mp = mp->next) {
+		if (strcasecmp (name, mp->name) == 0)
+			return (mp);
+	}
+
+	sprintf (fullname, "/home/pace/ogg/%s.ogg", name);
+
+	if ((inf = fopen (fullname, "r")) == NULL) {
+		printf ("can't open music file %s\n", fullname);
+		return (NULL);
+	}
+
+	if ((mp = calloc (1, sizeof *mp)) == NULL) {
+		fprintf (stderr, "out of memory\n");
+		exit (1);
+	}
+
+	if ((mp->name = strdup (name)) == NULL) {
+		fprintf (stderr, "out of memory\n");
+		exit (1);
+	}
+
+	mp->next = music_files;
+	music_files = mp;
+
+	if (ov_open (inf, &vf, NULL, 0) < 0) {
+		fprintf(stderr, "ERROR: Failed to open input as vorbis\n");
+		goto bad;
+	}
+
+	if (ov_info(&vf, 0)->channels != 1) {
+		fprintf (stderr, "ERROR: ogg file must be mono\n");
+		goto bad;
+	}
+
+        mp->size = ov_pcm_total(&vf, 0); /* output size in bytes */
+
+	if ((mp->buf = calloc (1, mp->size)) == NULL) {
+		fprintf (stderr, "out of memory\n");
+		exit (1);
+	}
+
+	togo = mp->size;
+	offset = 0;
+
+	while (togo > 0) {
+		if ((ret = ov_read (&vf, mp->buf + offset,
+				    togo, 0, 1, 0, &bs)) < 0)
+			break;
+
+		offset += ret;
+		togo -= ret;
+	}
+
+	ov_clear(&vf); /* closes inf */
+
+	chop = 2 * 11025;
+	if (mp->size > chop)
+		mp->size -= chop;
+
+	return (mp);
+bad:
+	fclose (inf);
+	return (mp);
+}
+
 SDL_Surface *sur;
+
 
 double
 get_time (void)
@@ -33,6 +122,7 @@ struct audio_chunk {
 	struct audio_chunk *next;
 	unsigned char *data;
 	int size;
+	int loop;
 };
 
 struct audio_chunk *cur_chunk, **cur_chunk_tailp = &cur_chunk;
@@ -56,9 +146,12 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 		cur_offset += thistime;
 
 		if (cur_offset >= cur_chunk->size) {
-			if ((cur_chunk = cur_chunk->next) == NULL)
-				cur_chunk_tailp = &cur_chunk;
+			if (cur_chunk->loop == 0) {
+				if ((cur_chunk = cur_chunk->next) == NULL)
+					cur_chunk_tailp = &cur_chunk;
+			}
 			cur_offset = 0;
+			printf ("next\n");
 		}
 	}
 
@@ -76,7 +169,7 @@ play (struct audio_chunk *new_chunk)
 }
 
 void
-test_audio (void)
+test_news (void)
 {
 	struct audio_chunk *cp;
 	FILE *f;
@@ -96,6 +189,28 @@ test_audio (void)
 	play (cp);
 }
 
+void
+test_music (void)
+{
+	struct music_file *mp;
+	struct audio_chunk *cp;
+
+	if ((mp = get_music_file ("SOVTYP")) == NULL) {
+		fprintf (stderr, "can't find music file\n");
+		exit (1);
+	}
+
+	if (mp->buf == NULL || mp->size == 0) {
+		fprintf (stderr, "can't get music\n");
+		exit (1);
+	}
+
+	cp = calloc (1, sizeof *cp);
+	cp->data = (void *)mp->buf;
+	cp->size = mp->size;
+	cp->loop = 1;
+	play (cp);
+}
 
 int
 main ()
@@ -134,7 +249,7 @@ main ()
 		exit (1);
 	}
 
-	test_audio ();
+	test_music ();
 	SDL_PauseAudio (0);
 
 	while (1) {

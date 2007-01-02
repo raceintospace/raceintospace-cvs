@@ -1,0 +1,15 @@
+#! /bin/sh
+
+# note: using timidity++-2.13.2 and GS.ARJ
+# makes an ogg file for each midi file
+
+
+cd /home/pace/ris.music
+
+for mid in *.MID
+do
+	echo $mid
+
+	ogg=`basename $mid .MID`.ogg
+	timidity -Ov --output-mono -s 11025 -o $ogg $mid
+done

@@ -10,6 +10,7 @@ struct audio_chunk {
 	struct audio_chunk *next;
 	void *data;
 	int size;
+	int loop;
 };
 void play (struct audio_chunk *cp);
 

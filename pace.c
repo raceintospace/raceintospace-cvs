@@ -426,21 +426,6 @@ CDAccess (int drive,int track,char op)
 	return (0);
 }
 
-void
-PreLoadMusic(char val)
-{
-	printf ("PreLoadMusic %d\n", val);
-}
-
-void
-PlayMusic(char mode) 
-{
-}
-
-void
-KillMusic(void)
-{
-}
 
 int
 brandom (int limit)
@@ -517,11 +502,6 @@ void
 getcurdir (int drive, char *buf)
 {
 	getcwd (buf, 100);
-}
-
-void
-UpdateMusic(void)
-{
 }
 
 static DIR *f_dir;
