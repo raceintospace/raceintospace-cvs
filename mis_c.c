@@ -145,19 +145,16 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		unsigned short size;
 	};
 
-	int wlen,i,j,bb,sc;
+	int wlen,i,j;
 	unsigned int fres,max;
-	char lnch=0,AEPT,BABY,fName[8],Tst2,Tst3;
+	char lnch=0,AEPT,BABY,Tst2,Tst3;
 	unsigned char sts=0,fem=0;
-	FILE *fin,*fout,*ffin,*nfin,*gork,*fsrc,*fdst;
-	long offset,aSize;
+	FILE *fin,*fout,*ffin,*nfin;
+	long offset;
 	struct oGROUP *bSeq,aSeq;
 	struct oFGROUP *dSeq,cSeq;
 	struct Table *F;
-	struct NTable NT;
 	char sName[20],ERROR=0;
-	unsigned short fr;
-	int *fsize;
 	char *SEQ_DAT="SEQ.DAT\0";
 	char *FSEQ_DAT="FSEQ.DAT\0";
 	struct frm *frm;
@@ -577,7 +574,7 @@ void Clock(char plr,char clck,char mode,char tm)
 
 void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
 {
- int i,x,y,try,which,who,mx2,mx1;
+ int i,x,y,try,which,mx2,mx1;
  GXHEADER boob;
  ui16 *bot,off=0;
  long locl;
@@ -739,8 +736,7 @@ void GuyDisp(int xa,int ya,struct Astros *Guy)
 
 char FailureMode(char plr,int prelim,char *text)
 {
-  char ch;
-  int i,j,k,l,rema;
+  int i,j,k;
   FILE *fin;
   double last_secs;
   char save_screen[64000], save_pal[768];

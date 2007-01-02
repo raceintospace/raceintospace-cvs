@@ -87,7 +87,7 @@ char OrderMissions(void)
 
 void MisOrd(char num)
 {
-  int i,j=0,mo;
+  int i,j=0;
   MouseOff();
   ShBox(63,19,257,173);
   InBox(74,36,246,163);
@@ -124,7 +124,7 @@ void MisAnn(char plr,char pad)
 {
   int i,j,bud;
   struct mStr Mis2;
-  char temp,k,hold,Digit[4],IdiotFlag=0;
+  char k,hold,Digit[4],IdiotFlag=0;
   MouseOff();
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
@@ -345,7 +345,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 
 void AI_Begin(char plr)
 {
-  int i,j;
+  int i;
   FILE *fin;
   long len[2];
 

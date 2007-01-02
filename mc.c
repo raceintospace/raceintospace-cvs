@@ -91,9 +91,8 @@ void SetW(char ch)
 
 int Launch(char plr,char mis)
 {
-   int i,j,t,k,fin,mcode,avg,temp=0;
-   FILE *fout;
-   char keep,total,mike;
+   int i,j,t,k,mcode,avg,temp=0;
+   char total;
    STEP=FINAL=JOINT=PastBANG=0;
    memset(pAry,0x00,sizeof pAry); pCnt=0;  // reset values
    MisStat=tMen=0x00;  // clear mission status flags
@@ -263,9 +262,9 @@ int Launch(char plr,char mis)
 
 void MissionPast(char plr,char pad,int prest)
 {
-  int loc,i,j,k,loop,out,mc;
+  int loc,i,j,loop,mc;
   FILE *fout,*fin;
-  unsigned int fsize,place,num;
+  unsigned int num;
   long size;
   char dys[7]={0,2,5,7,12,16,20};
 

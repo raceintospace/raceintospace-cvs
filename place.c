@@ -33,10 +33,8 @@ int MChoice(char qty,char *Name)
 {
  struct Patch {i16 w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
   unsigned int starty,coff;
-  int i,j,cdstat;
+  int i,j;
   char poff;
   FILE *in;
 
@@ -122,7 +120,7 @@ int MChoice(char qty,char *Name)
 
 int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 {
-  int i,j,starty=100,retcode;
+  int i,j,starty=100;
   GXHEADER local;
   FILE *fin;
   MouseOff();
@@ -178,9 +176,7 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
 {
   struct Patch {char w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
-  unsigned int i,j;
+  unsigned int j;
   FILE *in;
   in=sOpen("PATCHES.BUT","rb",0);
   fread(&pal[coff*3],96,1,in);
@@ -204,10 +200,8 @@ void AstFaces(char plr,int x,int y,char face)
 {
   long offset;
   GXHEADER local,local2,local3;
-  long size;
-  unsigned char *buf;
   char fx,fy;
-  unsigned int i,j;
+  unsigned int j;
   FILE *fin;
 
   memset(&pal[192],0x00,192);
@@ -249,9 +243,7 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
 {
   struct Patch {char w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
-  unsigned int i,j;
+  unsigned int j;
   FILE *in;
 
   in=sOpen("MHIST.BUT","rb",0);
@@ -282,10 +274,9 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
    long offset;
   } table;
   char ch;
-  int mode;
   GXHEADER local,local2;
   long size;
-  unsigned int i,j;
+  unsigned int j;
   FILE *in,*fin;
   struct TM {
       char ID[4];
@@ -539,7 +530,7 @@ int Idiot(char *FName)
 
 void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 {
-  int i,j,k,mcode;
+  int j,k,mcode;
   int let;
   MouseOff();
 

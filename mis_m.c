@@ -72,16 +72,8 @@ void GetFailStat(struct XFails *Now,char *FName,int rnum)
 void MisCheck(char plr,char mpad)
 {
    int tomflag=0; // toms checking flag
-   int val,safety,save,PROBLEM,PreFail,fin,i,temp,k,ctr,lc,durxx;
-   FILE *fout;
-   struct Mf { char dock:2,comm:2,powe:2;} MFail;
-   struct TM {
-      char ID[4];
-      long offset;
-      long size;
-      } FailIndex;
+   int val,safety,save,PROBLEM,i,lc,durxx;
    struct XFails Now;
-   char Text[60];
    unsigned char gork=0;
 
    STEPnum=STEP;
@@ -599,10 +591,9 @@ void F_IRCrew(char mode,struct Astros *Guy)
 
 int FailEval(char plr,int type,char *text,int val,int xtra)
 {
-   int FNote=0,temp,k,ctr,bdif;
+   int FNote=0,temp,k,ctr;
    char PROBLEM=0;
-   struct Astros *crw,*crw2;
-   FILE *fout;
+   struct Astros *crw;
 
    if (!(strncmp(Mev[STEP].E->Name,"DO",2)==0 && Mev[STEP].loc==0x02)) {
      Mev[STEP].E->MisFail++;  // set failure for all but docking power on

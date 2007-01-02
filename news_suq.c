@@ -27,7 +27,7 @@ extern struct mStr Mis;
 char CheckCrewOK(char plr,char pad)
 {
  char RT_value=0;
- int i,j,k,P_crew,B_crew,prog,mis;
+ int P_crew,B_crew,prog,mis;
  P_crew=Data->P[plr].Mission[pad].PCrew-1;
  B_crew=Data->P[plr].Mission[pad].BCrew-1;
  prog=Data->P[plr].Mission[pad].Prog;
@@ -94,7 +94,7 @@ void Replace_Snaut(char plr)
 char REvent(char plr)
 {
   FILE *fin;
-  int NoMods=1,i,j,k;
+  int NoMods=1,i,j;
   i16 m;
   i=0;
   if (NoMods==1)

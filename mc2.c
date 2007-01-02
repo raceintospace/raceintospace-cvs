@@ -45,7 +45,6 @@
 
 void MissionCodes(char plr,char val,char pad)
 {
-  int i,fin;
   GetMisType(val);
   MissionParse(plr,Mis.Code,Mis.Alt,pad);
   return;
@@ -107,8 +106,6 @@ char WhichPart(char plr,int which)
 
 void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 {
-  int i;
-
   switch(mcode) {
 	 // Booster Programs    :: VAB order for the class
     case 'A':
@@ -396,7 +393,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 
 void MisPrt(void)
 {
-  int i,j,sum;
+  int i;
   for (i=0;i<STEP-1;i++) { Mev[i].dice=100;
     Mev[0].E->MisSaf=5;
     Mev[0].rnum=9999;
@@ -407,7 +404,6 @@ void MisPrt(void)
 void MissionSetup(char plr,char mis)
 {
 char i,j,t;
-int fin;
   DMFake=0;
   GetMisType(Data->P[plr].Mission[mis].MissionCode);
 
@@ -596,7 +592,7 @@ void MisDur(char plr,char dur) {
 // Add SkipNegs to All Mission Steps
 void MisSkip(char plr,char ms)
 {
-  int i,j,diff,nv;
+  int i,j,diff;
 
   diff=PrestMin(plr);
 #if 0
@@ -626,7 +622,7 @@ void MisSkip(char plr,char ms)
 
 void MisRush(char ms)
 {
-  int i,j,diff,nv;
+  int i,j,diff;
 
   if (ms==0) return;
   else diff=3*ms;

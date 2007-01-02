@@ -92,11 +92,10 @@ void GoNews(char plr)
 // Open News Constructs a complete event array.
 void OpenNews(char plr,char *buf,int bud)
 {
-  int j,fout,size;
+  int j,size;
   FILE *fp,*gork;
   char old[120];
   long i,len[5];
-  ONEWS oNews;
   size=(plr==0) ? 232: 177;
   i=(long)500*bud+(long)plr*250;
   //if (plr==1 && bud==22) i=11250L;
@@ -217,7 +216,7 @@ void OpenNews(char plr,char *buf,int bud)
 
 void DispNews(char plr,char *src,char *dest)
 {
-  int i=0,j=0,k=0,l,fout;
+  int i=0,j=0,k=0;
   for (i=0;i<strlen(src);i++) {
     dest[j]=src[i];
     switch(dest[j]) {
@@ -317,9 +316,6 @@ void PreLoadAnim(char plr,char mode)
 
 void DrawNews(char plr)
 {
-  int i,fin;
-  long len[2];
-
   MouseOff();
   gxClearDisplay(0,0);
   memset(screen,0xff,320*113);
@@ -343,7 +339,7 @@ void DrawNews(char plr)
 
 void DrawNText(char plr,char got)
 {
-  int xx=12,yy=128,i,j;
+  int xx=12,yy=128,i;
   char *buf;
   buf=buffer;
   grSetColor(1);
@@ -386,12 +382,9 @@ void News(char plr)
   int bline=0,ctop=0,i;
   FILE *fout;
   char cYr[5];
-  struct rNews *list;
   ONEWS oNews;
-  long pl;
-  char loc=0,Index;
-  BYTE Status=0,BW=0,play_rate;
-  unsigned long tim;
+  char loc=0;
+  BYTE Status=0,BW=0;
 
   //: LOAD_US & LOAD_SV  0 None 1 B/W 2 Color
   if (Data->Year<=63)
@@ -616,15 +609,12 @@ void News(char plr)
 
 void AIEvent(char plr)
 {
-  int i,fin;
-  FILE *in;
-  char chai[23];
   ResolveEvent(plr);
 }             
 
 char ResolveEvent(char plr)
 {
-  int i,j,bad,ctr;
+  int bad,ctr;
   bad=REvent(plr);
   if (bad!=0) {
     while  (Data->P[plr].BadCard[bad]!=0) {
@@ -675,8 +665,6 @@ void Breakgrp(char plr)
 void PlayNewsAnim(BYTE Index)
 {
  GXHEADER local;
- unsigned i,j;
- int offset;
 
  GV(&local,Depth,Length);
 
@@ -713,12 +701,8 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
 {
  GXHEADER local;
 
- int i,j;
- long atotal;
- BYTE *pix,*temp;
- WORD seg,xf=0x00,aseg=0x00;
  int aframe;
- FILE *out,*gork;
+ FILE *out;
  unsigned MAX=0,TOT=0; 
 
  struct aCHART {

@@ -99,9 +99,6 @@ void Display_ARROW(char num,int x,int y)
 {
   struct Patch {char w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  long size;
-  unsigned char *buf;
-  unsigned int i,j;
   FILE *in;
   in=sOpen("ARROWS.BUT","rb",0);
   fseek(in,(num)*(sizeof P),SEEK_CUR);
@@ -121,7 +118,6 @@ void Display_ARROW(char num,int x,int y)
 void Museum(char plr)
 {
 	int i,tots=7,beg;
-   FILE *fin;
   char AName[7][22]={"DIRECTORS RANKING","SPACE HISTORY","MISSION RECORDS","PRESTIGE SUMMARY",
     "HARDWARE EFFICIENCY","ASTRONAUT HISTORY","EXIT THE MUSEUM"};
   char AImg[7]={8,9,10,11,13,14,0};
@@ -317,7 +313,7 @@ void ForOne(char plr, char *pos,char *pos2)
 
 void DPrest(char plr,char *pos,char *pos2)
 {
-   int i,j=0,tmp,delt,tt;
+   int i,j=0,tmp,tt;
 
    MouseOff();
    RectFill(12,129,295,190,0);
@@ -448,7 +444,7 @@ void DPrest(char plr,char *pos,char *pos2)
  
 void ShowSpHist(char plr)
 {
-  int i,pos;
+  int pos;
   MouseOff();
   FadeOut(2,pal,5,0,0);
   PatchMe(0,0,0,0,0,32);
@@ -980,7 +976,7 @@ void DispLoc(char plr,char *where)
 
 void DisplAstData(char plr, char *where,char *where2)
 {
-  int i,num=abuf[*where].MissionNum[*where2],num2;
+  int num=abuf[*where].MissionNum[*where2],num2;
   MouseOff();
   RectFill(1,40,157,182,3);
   if(abuf[*where].Missions == 0){
