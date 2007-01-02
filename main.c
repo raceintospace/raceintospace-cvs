@@ -225,6 +225,7 @@ env_setup (void)
 	sprintf (dirname, "%s/ROM/AUDIO", cdrom_dir);
 	add_gamedat_files (dirname);
 
+	// If BARIS_ROOT is an environment variable then use that to find game data
 	if (alt_location = getenv("BARIS_ROOT"))
 	{
 		sprintf (dirname, "%s/GAMEDAT", alt_location);
@@ -233,6 +234,8 @@ env_setup (void)
 		sprintf (dirname, "%s/ROM", alt_location);
 		add_gamedat_files (dirname);
 
+		sprintf (dirname, "%s/ROM/AUDIO", alt_location);
+		add_gamedat_files (dirname);
 	}
 
 	if ((f = open_gamedat ("USA_PORT.DAT")) == NULL) {
