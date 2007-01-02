@@ -742,16 +742,14 @@ char FailureMode(char plr,int prelim,char *text)
   char ch;
   int i,j,k,l,rema;
   FILE *fin;
-  WORD AHand;
   double last_secs;
+  char save_screen[64000], save_pal[768];
 
   FadeOut(2,pal,10,0,0);
  
   // this destroy's what's in the current page frames
-  EMS_Alloc(&AHand,4);  // Alloc Ext Mem for Image storage
-  for (i=0;i<4;i++) EMS_Map(AHand,i,i);
-  _fmemcpy(ems,screen,64000);
-  _fmemcpy(&ems[64000],pal,768);
+  memcpy (save_screen, screen, 64000);
+  memcpy (save_pal, pal, 768);
 
   gxClearDisplay(0,0);
   ShBox(0,0,319,22);IOBox(243,3,316,19);InBox(3,3,30,19);FlagSm(plr,4,4);
@@ -899,10 +897,11 @@ char FailureMode(char plr,int prelim,char *text)
        MouseOff();FadeOut(2,pal2,10,0,0);
      //  DrawControl(plr);
        CloseAnim(fin);
-       for (i=0;i<4;i++) EMS_Map(AHand,i,i);
-       _fmemcpy(screen,ems,64000);
-       _fmemcpy(pal,&ems[64000],768);
-       EMS_DeAlloc(AHand);
+
+       memcpy (screen, save_screen, 64000);
+       memcpy (pal, save_pal, 768);
+       screen_dirty = 1;
+
        FadeIn(2,pal,10,0,0);
        key=0;
        return 0;  /* Continue */
@@ -915,10 +914,10 @@ char FailureMode(char plr,int prelim,char *text)
        MouseOff();FadeOut(2,pal2,10,0,0);
     //   DrawControl(plr);
        CloseAnim(fin);
-       for (i=0;i<4;i++) EMS_Map(AHand,i,i);
-       _fmemcpy(screen,ems,64000);
-       _fmemcpy(pal,&ems[64000],768);
-       EMS_DeAlloc(AHand);
+
+       memcpy (screen, save_screen, 64000);
+       memcpy (pal, save_pal, 768);
+       screen_dirty = 1;
        FadeIn(2,pal,10,0,0); key=0;
        return 1;  /* Scrub */
     };

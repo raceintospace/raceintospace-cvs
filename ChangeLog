@@ -1,5 +1,12 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V21
+	
+	* enable mission failures (and make command line arg to force all
+	to succeed again); allow jumbled arg order in draw/clear rectangle;
+	give symbolic names to xMODE flags (for cloud testing); failure
+	animation; data type size problem reading NTABLE.DAT; 
+
 	* V20
 	
 	* remove deadwood

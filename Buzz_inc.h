@@ -57,6 +57,8 @@ typedef long	i32;
 
 #pragma pack(1)
 
+int never_fail;
+
 #include <data.h>     // main data structures
 #include <proto.h>    // prototypes and general defines
 #include <music.h>    // defines for music names

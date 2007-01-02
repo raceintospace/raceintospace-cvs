@@ -56,14 +56,23 @@
 #define EMS_DEALLOC_MEM   0x45
 #define EMS_GET_VERSION   0x46
 
-#define HIST    (xMODE&0x0001)
-#define CHEAT   (xMODE&0x0002)
-#define NOFAIL  (xMODE&0x0020) 
-#define TOM     (xMODE&0x0040)
-#define DOANIM  (xMODE&0x0080)
-#define NOCOPRO (xMODE&0x0800)
-#define COPRO   (xMODE&0xf7ff);
-#define PUSSY   (xMODE&0x0400)
+#define xMODE_HIST 0x0001
+#define xMODE_CHEAT 0x0002
+#define xMODE_NOFAIL 0x0020
+#define xMODE_TOM 0x0040
+#define xMODE_DOANIM 0x0080
+#define xMODE_NOCOPRO 0x00800
+#define xMODE_PUSSY 0x0400
+#define xMODE_CLOUDS 0x1000
+#define xMODE_SPOT_ANIM 0x2000
+
+#define HIST    (xMODE&xMODE_HIST)
+#define CHEAT   (xMODE&xMODE_CHEAT)
+#define NOFAIL  (xMODE&xMODE_NOFAIL) 
+#define TOM     (xMODE&xMODE_TOM)
+#define DOANIM  (xMODE&xMODE_DOANIM)
+#define NOCOPRO (xMODE&xMODE_NOCOPRO)
+#define PUSSY   (xMODE&xMODE_PUSSY)
 
 // SPOT ANIMS / CLOUDS RESERVE 0xf000  high nibble
 

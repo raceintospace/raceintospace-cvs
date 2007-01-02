@@ -1,3 +1,7 @@
+
+remove remaining EMS_Map's
+
+
 clean up extra gr_sync's
 remove uses of libopus
 make credits, copyright notices work

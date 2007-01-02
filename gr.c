@@ -106,6 +106,10 @@ grClearArea (int x1, int y1, int x2, int y2)
 {
 	int x, y;
 	int idx;
+	int t;
+
+	if (x1 > x2) { t = x1; x1 = x2; x2 = t;}
+	if (y1 > y2) { t = y1; y1 = y2; y2 = t;}
 
 	for (y = y1; y < y2; y++) {
 		for (x = x1; x < x2; x++) {
@@ -210,10 +214,15 @@ grMoveRel (int dx, int dy)
 void
 grDrawRect (int x1, int y1, int x2, int y2, int mode)
 {
+	int t;
+
 	if (mode != grOUTLINE) {
 		fprintf (stderr, "bad arg to grDrawRect\n");
 		exit (1);
 	}
+
+	if (x1 > x2) { t = x1; x1 = x2; x2 = t;}
+	if (y1 > y2) { t = y1; y1 = y2; y2 = t;}
 
 	grMoveTo (x1, y1);
 	grLineTo (x2, y1);

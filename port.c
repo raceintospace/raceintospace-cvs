@@ -405,7 +405,7 @@ void AdminPort(char plr)
 
   UpdatePort();
 
-  if (xMODE&0x1000) PortPlace(fin,table[1]); // Clouds
+  if (xMODE & xMODE_CLOUDS) PortPlace(fin,table[1]); // Clouds
 
   // Pads
    for (i=0;i<3;i++) {
@@ -507,7 +507,7 @@ void NPDraw(char plr)
 
   UpdatePort();
 
-  if (xMODE&0x1000) PortPlace(fin,table[1]); // Clouds
+  if (xMODE & xMODE_CLOUDS) PortPlace(fin,table[1]); // Clouds
 
   // Pads
    for (i=0;i<3;i++) {
@@ -690,16 +690,16 @@ void Master(char plr)
   for(i=0;i<Data->P[plr].AstroCount;i++)
     if (Data->P[plr].Pool[i].Status>=5) t_value=1;
   r_value=random(1000);
-  if (xMODE&0x1000)
+  if (xMODE & xMODE_CLOUDS)
    {
     if (plr==0 && Data->P[plr].Port[4]==0) SpotCrap(14,SPOT_LOAD);          //Usa Storm 
      else if (plr==1) SpotCrap(12,SPOT_LOAD);    //Sov Storm
    }
   else 
-   if (xMODE&0x2000 && g_value)
+    if ((xMODE & xMODE_SPOT_ANIM) && g_value)
     {
      SpotCrap(3+(5*plr),SPOT_LOAD);
-     xMODE&=0x1FFF;
+     xMODE &= ~xMODE_SPOT_ANIM;
     }
    else if (t_value && g_value) SpotCrap(0+(5*plr),SPOT_LOAD);  //Lem
     else if (r_value<150) {

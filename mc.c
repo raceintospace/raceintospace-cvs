@@ -229,14 +229,14 @@ int Launch(char plr,char mis)
 //   if (!AI[plr]) {PreLoadMusic(M_ELEPHANT); PlayMusic(0);}
 
    if ((Data->Def.Lev1 == 0 && Data->Def.Lev2 ==2) || (Data->Def.Lev2 == 0 && Data->Def.Lev1==2))
-     xMODE |= 0x0400; //set easy flag
+     xMODE |= PUSSY; //set easy flag
 
-   if (AI[plr]) xMODE&=0xFB00;  // map out computer from really easy level
+   if (AI[plr]) xMODE &= ~xMODE_PUSSY;  // map out computer from really easy level
 
 
    MisCheck(plr,mis);  // Mission Resolution
 
-   xMODE&=0xFB00;  // clear flag
+   xMODE &= ~xMODE_PUSSY;
 
 //   if (!AI[plr]) KillMusic();
 

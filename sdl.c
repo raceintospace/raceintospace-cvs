@@ -67,6 +67,7 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 char
 AnimSoundCheck(void)
 {
+	av_step ();
 	if (cur_chunk)
 		return (0);
 	return (1);
@@ -83,7 +84,8 @@ play (struct audio_chunk *new_chunk)
 	for (cp = cur_chunk; cp; cp = cp->next) {
 		if (cp == new_chunk) {
 			printf ("play: attempt to do duplicate chunk add\n");
-			return;
+			av_silence ();
+			break;
 		}
 	}
 	new_chunk->next = NULL;

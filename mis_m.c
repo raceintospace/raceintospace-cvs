@@ -248,12 +248,12 @@ void MisCheck(char plr,char mpad)
     if (safety>=100) safety=99;
     save=(Mev[STEP].E->SaveCard==1)? 1 : 0;
 
-   #if 0
     PROBLEM=(val>safety) ? 1: 0;
-   #endif
 
-    PROBLEM = 0;   //no-failure
+    if (never_fail)
+	    PROBLEM = 0;
 
+    printf ("SAFETY: %d %d %d\n", val, safety, PROBLEM);
 
     if (!AI[plr] && BIG==0) 
       if (!(fEarly && STEP!=0))

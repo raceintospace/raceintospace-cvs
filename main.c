@@ -338,8 +338,11 @@ int main(int argc, char *argv[])
   env_setup ();
   av_setup (&argc, &argv);
 
-  while ((c = getopt (argc, argv, "i")) != EOF) {
+  while ((c = getopt (argc, argv, "in")) != EOF) {
 	  switch (c) {
+	  case 'n':
+		  never_fail = 1;
+		  break;
 	  case 'i':
 		  show_intro_flag = 1;
 		  break;
@@ -371,7 +374,7 @@ int main(int argc, char *argv[])
 
   KO = 0;
 
-  xMODE|=0x0800;
+  xMODE|=xMODE_NOCOPRO;
 
   sbuf0=(char far *) farmalloc(SBUF);
   if (sbuf0==NULL) {
@@ -658,7 +661,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
    if (Option!=-1) i=Option;
     else i=MAIL;
 
-     xMODE&=0xefff;  // reset clouds for spaceport
+     xMODE&= ~xMODE_CLOUDS;  // reset clouds for spaceport
      if (Data->Season==1) {
        IntelPhase(plr[i]-2*AI[i],0);
       }
@@ -711,8 +714,8 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
        if ((Data->P[plr[i]].Mission[0].MissionCode>6 ||
            Data->P[plr[i]].Mission[1].MissionCode>6 ||
            Data->P[plr[i]].Mission[2].MissionCode>6) &&
-           (NOCOPRO && !(xMODE&0x0400) ))
-          xMODE&=(0xf7ff | (0<<11));
+           (NOCOPRO && !PUSSY ))
+	   xMODE &= ~xMODE_NOCOPRO;
        VerifyCrews(plr[i]);
        VerifySF(plr[i]);
        strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
@@ -1069,7 +1072,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
    if(Data->Season==0) CalcPresRev();
 
    for (i=0;i<2;i++) {
-     xMODE&=0xefff;  // reset clouds for spaceport
+     xMODE&= ~xMODE_CLOUDS;  // reset clouds for spaceport
      if (Data->Season==1) {
        IntelPhase(plr[i]-2*AI[i],0);
       }
@@ -1099,8 +1102,8 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
        if ((Data->P[plr[i]].Mission[0].MissionCode>6 ||
            Data->P[plr[i]].Mission[1].MissionCode>6 ||
            Data->P[plr[i]].Mission[2].MissionCode>6) &&
-           (NOCOPRO && !(xMODE&0x0400) ))
-          xMODE&=(0xf7ff | (0<<11));
+           (NOCOPRO && !PUSSY ))
+          xMODE &= ~xMODE_NOCOPRO;
        VerifyCrews(plr[i]);
        VerifySF(plr[i]);
        strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);

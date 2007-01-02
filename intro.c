@@ -165,7 +165,7 @@ struct intro_image intro_images[INTRO_IMAGE_COUNT];
 int
 read_img_frame (FILE *inf, struct intro_image *ip)
 {
-	int len;
+	long len;
 	char compressed[64 * 1024];
 	int ilen;
 	int idx;

@@ -94,7 +94,8 @@ void Replace_Snaut(char plr)
 char REvent(char plr)
 {
   FILE *fin;
-  int NoMods=1,i,j,k,m;
+  int NoMods=1,i,j,k;
+  i16 m;
   i=0;
   if (NoMods==1)
   {
@@ -108,8 +109,8 @@ char REvent(char plr)
     if (Data->P[plr].Budget>160) j=5;
 
     fin=sOpen("NTABLE.DAT","rb",0);
-    fseek(fin,(sizeof (int)) * ((plr*60) + (j*10) + random(10)) ,SEEK_SET);
-    fread(&m,sizeof (int),1,fin);
+    fseek(fin,(sizeof (i16)) * ((plr*60) + (j*10) + random(10)) ,SEEK_SET);
+    fread(&m,sizeof m,1,fin);
 //    m=BudgetMods[Data->P[plr].Level][(j*10)+random(10)];  // orig code
     fclose(fin);
 
@@ -274,7 +275,7 @@ char REvent(char plr)
 		    case 6: evflag=random(2);break;
 		    case 7: evflag=random(3);break;
          };
-         xMODE|=0x1000;
+         xMODE |= xMODE_CLOUDS;
          ClrMiss(plr,evflag+3);
 	      break;
 
@@ -503,7 +504,7 @@ char REvent(char plr)
 	      strcpy(&Name[0],&Data->P[plr].Pool[i].Name[0]);
 	      Data->P[plr].Pool[i].Status=1;
 	      Data->P[plr].Other=2;
-         xMODE|=0x2000; //trigger spot anim
+         xMODE |= xMODE_SPOT_ANIM; //trigger spot anim
          //cancel manned missions
         ClrMiss(plr,0+3);ClrMiss(plr,1+3);ClrMiss(plr,2+3);
 	      break;
