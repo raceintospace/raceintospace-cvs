@@ -1,0 +1,14 @@
+#! /bin/sh
+
+lasttag=`cvs log -h version.c |
+      sed '1,/symbolic names:/d' |
+      head -1 |
+      awk '{print $1}' |
+      sed 's/://'`
+
+set -x
+cvs -z9 diff -c -r$lasttag > diffs
+ls -l diffs
+    
+
+

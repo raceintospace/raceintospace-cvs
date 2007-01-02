@@ -1,0 +1,58 @@
+#! /bin/sh
+
+mode=cvs
+
+lasttag=`cvs log -h version.c |
+	sed '1,/symbolic names:/d' |
+	head -1 |
+	awk '{print $1}' |
+	sed 's/://'`
+
+version_line=`grep -i version version.c | head -1`
+if [ "$version_line" = "" ]
+then
+	version_line=`head -1 version.c`
+fi
+
+ver=`expr "$version_line" : '[^0-9]*\([0-9._]*\)' | sed 's/.*\.//'`
+
+newtag=V$ver
+
+if [ "$lasttag" = "$newtag" ]
+then
+	echo "error: need to update version.c"
+	echo "last tag $lasttag"
+	exit 1
+fi
+
+head -3 ChangeLog | tail -1 | grep $newtag > /dev/null 2>&1
+if [ $? != 0 ]
+then
+	echo "error: ChangeLog out of date: $newtag"
+	exit 1
+fi
+
+msg=`cat ChangeLog | sed -e "/\<$lasttag\>/,\\$d"`
+
+
+echo "prev tag $lasttag; new tag $newtag"
+echo "====== LOG MESSAGE ====="
+echo "$msg"
+echo "========================"
+
+echo -n "Ok? "
+
+read x
+
+if [ "$x" != "y" ]
+then
+	exit 1
+fi
+
+cvs -z9 commit -R -m "$msg"
+if [ $? != 0 ]
+then
+    echo "error during cvs commit"
+    exit 1
+fi
+cvs -z9 tag -R $newtag
