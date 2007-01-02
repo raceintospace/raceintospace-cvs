@@ -1,4 +1,3 @@
-#include <opus/opus.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -135,12 +134,12 @@ sound_step (void)
 			return (1);
 		}
 		
-		dbg ("sound write error: %s\n", 
-		     snd_strerror(n));
+		printf ("sound write error: %s\n", 
+			snd_strerror(n));
 		exit (1);
 	}
 
-//	dbg ("used %d (xrun %d)\n", n, xrun_count);
+//	printf ("used %d (xrun %d)\n", n, xrun_count);
 
 
 	soundbuf_off += n;
@@ -274,7 +273,7 @@ main (int argc, char **argv)
 
 	usleep (250 * 1000);
 
-	dbg ("total xruns %d\n", xrun_count);
+	printf ("total xruns %d\n", xrun_count);
 
 	return (0);
 }

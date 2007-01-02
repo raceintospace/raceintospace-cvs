@@ -517,7 +517,6 @@ tommy:
 	      break;
       case 6:
          //KillMusic();
-         CloseNewsAnim();
 	      ex=1;
          FadeOut(2,pal,10,0,0);
          break;

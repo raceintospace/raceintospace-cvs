@@ -36,13 +36,13 @@ imgsplit: imgsplit.o
 	$(CC) $(CFLAGS) -o imgsplit imgsplit.o -lm
 
 vtest: vtest.o
-	$(CC) $(CFLAGS) -o vtest vtest.o -lasound -lopus -lm
+	$(CC) $(CFLAGS) -o vtest vtest.o -lasound -lm
 
 decode: decode.o
-	$(CC) $(CFLAGS) -o decode decode.o -lopus -lm
+	$(CC) $(CFLAGS) -o decode decode.o -lm
 
 getport: getport.o
-	$(CC) $(CFLAGS) -o getport getport.o -lopus -lm
+	$(CC) $(CFLAGS) -o getport getport.o -lm
 
 mkmovie: mkmovie.o
 	$(CC) $(CFLAGS) -o mkmovie mkmovie.o -lm

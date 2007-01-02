@@ -1,4 +1,7 @@
-#include <opus/opus.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <memory.h>
 
 char inbuf[1000 * 1000];
 char outbuf[1000 * 1000];

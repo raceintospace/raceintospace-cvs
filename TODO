@@ -1,15 +1,7 @@
 
-remove remaining EMS_Map's
 
-
-clean up extra gr_sync's
-remove uses of libopus
-make credits, copyright notices work
 fades
 evaluate all remaining unimp's
-BzTimer
-water sparkling
-flag waving
 small screens in mission control during launch
 check out passing helicopters
 check out vab animations
@@ -18,3 +10,10 @@ check with valgrind
 compile with -O
 why am I not seeing any mission failures?
 optimize grPutPixel and grGetPixel
+
+clean up extra gr_sync's
+
+
+enhancements:
+
+water flows backwards in DoCycle

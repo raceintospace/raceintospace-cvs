@@ -46,16 +46,6 @@
 #define WORD unsigned int
 #endif
 
-#define EMS_PAGE          16384
-#define EMS_INT           0x67
-#define EMS_GET_STATUS    0x40
-#define EMS_GET_FRAME     0x41
-#define EMS_GET_PAGES     0x42
-#define EMS_ALLOC_MEM     0x43
-#define EMS_MAP_PAGES     0x44
-#define EMS_DEALLOC_MEM   0x45
-#define EMS_GET_VERSION   0x46
-
 #define xMODE_HIST 0x0001
 #define xMODE_CHEAT 0x0002
 #define xMODE_NOFAIL 0x0020

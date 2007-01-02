@@ -63,30 +63,6 @@
   int ReadPCX(char *Name,char *pal);
 
 
-///////////////////////////////////////////////////////////
-//
-//  EMS Code for using all that one can in upper memory
-//  Revision: 1.0
-//  06/07/93
-
-#define EMS_PAGE          16384
-
-BYTE EMS_Status(void);
-BYTE EMS_Version(void);
-BYTE EMS_PageAddr(WORD *seg);
-BYTE EMS_GetNum(WORD *ap,WORD *tp);
-WORD EMS_Avail(void);
-WORD EMS_Total(void);
-BYTE EMS_Alloc(WORD *Handle,WORD Pages);
-BYTE EMS_DeAlloc(WORD Handle);
-BYTE EMS_Map(WORD Handle,BYTE ppage,WORD lpage);
-BYTE EMS_SaveMapping(WORD Handle);
-BYTE EMS_RestoreMapping(WORD Handle);
-WORD EMS_GetUsedHandles(void);
-WORD EMS_HowManyPages(WORD Handle);
-BYTE EMS_GetAllPages(void far *ary);
-
-
 ////////////////////////////////////////////////////////
 //
 //  Prototypes for AMOVE.ASM file in Lib

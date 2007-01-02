@@ -44,19 +44,6 @@ char DoModem(int sel) {unimp ();return 0;}
 void DrawMPrefs(char mode,char a1) {unimp (); }
 char MPrefs(char mode) {unimp (); return 0;}
 
-BYTE EMS_Status(void){unimp();return 0;}
-BYTE EMS_Version(void){unimp();return 0;}
-BYTE EMS_PageAddr(WORD *seg){unimp();return 0;}
-BYTE EMS_GetNum(WORD *ap,WORD *tp){unimp();return 0;}
-WORD EMS_Avail(void){unimp();return 0;}
-WORD EMS_Total(void){unimp();return 0;}
-BYTE EMS_Map(WORD Handle,BYTE ppage,WORD lpage){unimp();return 0;}
-BYTE EMS_SaveMapping(WORD Handle){unimp();return 0;}
-BYTE EMS_RestoreMapping(WORD Handle){unimp();return 0;}
-WORD EMS_GetUsedHandles(void){unimp();return 0;}
-WORD EMS_HowManyPages(WORD Handle){unimp();return 0;}
-BYTE EMS_GetAllPages(void far *ary){unimp();return 0;}
-
 void spawnl (int mode, char *cmd, ...) {unimp();}
 
 struct Prest_Upd MP[3];
@@ -172,19 +159,6 @@ OpenEmUp(void)
 	XMAS=1; /* we do have a mouse */
 
 	letter_dat = slurp_gamedat ("letter.dat");
-}
-
-
-BYTE
-EMS_Alloc (WORD *Handle, WORD Pages)
-{
-	return 0;
-}
-
-BYTE
-EMS_DeAlloc(WORD Handle)
-{
-	return (0);
 }
 
 

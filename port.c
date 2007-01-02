@@ -727,6 +727,8 @@ void GetMse(char plr,char fon)
   if (now - last_wave_step > .120) {
 	  last_wave_step = now;
 
+	  DoCycle ();
+
 #if SPOT_ON
     SpotCrap(0,SPOT_STEP);
 #endif

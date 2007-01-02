@@ -315,23 +315,6 @@ void PreLoadAnim(char plr,char mode)
  return;
 }
 
-void CloseNewsAnim(void)
-{
- if (LOAD_US==1 || LOAD_US==2) {
-  DeAlloc(0);
-  DeAlloc(1);
-  DeAlloc(2);
-  LOAD_US=0;
- }
- if (LOAD_SV==1 || LOAD_SV==2) {
-  DeAlloc(3);
-  DeAlloc(4);
-  DeAlloc(5);
-  LOAD_SV=0;
- }
- return;
-}
-
 void DrawNews(char plr)
 {
   int i,fin;
@@ -415,11 +398,9 @@ void News(char plr)
    {
     BW=1;
     if (plr==0 && LOAD_US==2) {
-     DeAlloc(0);DeAlloc(1);DeAlloc(2);
      LOAD_US=0;
     };
     if (plr==1 && LOAD_SV==2) {
-     DeAlloc(3);DeAlloc(4);DeAlloc(5);
      LOAD_SV=0;
     };
    }
@@ -427,11 +408,9 @@ void News(char plr)
    {
     BW=0;
     if (plr==0 && LOAD_US==1) {
-      DeAlloc(0);DeAlloc(1);DeAlloc(2);
       LOAD_US=0;
      };
     if (plr==1 && LOAD_SV==1) {
-      DeAlloc(3);DeAlloc(4);DeAlloc(5);
       LOAD_SV=0;
     };
    };
@@ -634,18 +613,6 @@ void News(char plr)
   };
 }
 
-void DeAlloc(BYTE Page)
-{
-  switch(Page) {
-   case 0:EMS_DeAlloc(handle0);break;
-   case 1:EMS_DeAlloc(handle1);break;
-   case 2:EMS_DeAlloc(handle2);break;
-   case 3:EMS_DeAlloc(handle3);break;
-   case 4:EMS_DeAlloc(handle4);break;
-   case 5:EMS_DeAlloc(handle5);break;
-   default:break;
-  };
-}
 
 void AIEvent(char plr)
 {
@@ -810,19 +777,6 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
  //Specs: calculate frames for allocation
  aframe=god[Index].size/16384L;
  aframe+=2; //buffer between animations in EMS
- if (Mode==1)
-  {
-   switch(Index)
-    {
-     case 0:case 1:EMS_Alloc(&handle0,aframe);break;
-     case 2:case 3:EMS_Alloc(&handle1,aframe);break;
-     case 8:case 9:EMS_Alloc(&handle2,aframe);break;
-     case 4:case 5:EMS_Alloc(&handle3,aframe);break;
-     case 6:case 7:EMS_Alloc(&handle4,aframe);break;
-     case 10:case 11:EMS_Alloc(&handle5,aframe);break;
-     default:break;
-    }
-  }
 
  if (Mode==0) {
   MouseOff();
@@ -930,42 +884,6 @@ if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94
 
  }       // end TCS kludge ************************************
 
-
-
-//Specs: Map Into EMS
-#if 0 /* pace */
- if (Mode==1)
-  {
-   for (i=0;i<aChart.frames;i++)
-    {
-     fseek(out,table[i].offset+god[Index].offset,SEEK_SET);
-     fread(&vhptr.vptr[0],table[i].size,1,out);
-     if (i!=0)
-      {
-       //calcalate page into EMS put into xf
-       atotal=0L;
-       for (j=1;j<i;j++)
-        atotal+=table[j].size;
-       xf=atotal/16384L;aseg=atotal%16384L;
-       switch(Index)
-        {
-         case 0:case 1:EMS_Map(handle0,0,xf);EMS_Map(handle0,1,xf+1);break;
-         case 2:case 3:EMS_Map(handle1,0,xf);EMS_Map(handle1,1,xf+1);break;
-         case 8:case 9:EMS_Map(handle2,0,xf);EMS_Map(handle2,1,xf+1);break;
-         case 4:case 5:EMS_Map(handle3,0,xf);EMS_Map(handle3,1,xf+1);break;
-         case 6:case 7:EMS_Map(handle4,0,xf);EMS_Map(handle4,1,xf+1);break;
-         case 10:case 11:EMS_Map(handle5,0,xf);EMS_Map(handle5,1,xf+1);break;
-         default:break;
-        };
-      for (j=0;j<table[i].size;j++)
-       ems[aseg+j]=vhptr.vptr[j];
-      FillAnim((unsigned)i+TOT,MAX);
-     }
-    };
-   if (Index==0 || Index==1 || Index==4 || Index==5)
-    FillAnim((unsigned)aChart.frames,(unsigned)aChart.frames);
-  }  
-#endif
  fclose(out);
  return;
 }

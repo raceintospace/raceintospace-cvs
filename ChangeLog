@@ -1,5 +1,10 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V22
+	
+	* remove remaining ems stuff; remove libopus references; fix
+	credits; re-enable water flowing
+
 	* V21
 	
 	* enable mission failures (and make command line arg to force all

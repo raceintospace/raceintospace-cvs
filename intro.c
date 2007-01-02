@@ -27,18 +27,106 @@
 #include "externs.h"
 GXHEADER local2;
 
+struct CREDIT {
+  char page;
+  int col;
+  int x,y;
+  char Txt[35];
+} CREDIT[] ={
+  0,11,108, 12,"CREATION AND DESIGN",
+  0, 1,124, 20,"FRITZ BRONNER",
+  0,11,128, 34,"PROGRAMMING",
+  0, 1,116, 42,"MICHAEL K MCCARTY",
+  0,11, 83, 54,"A.I. AND ADDITIONAL PROGRAMMING",
+  0, 1,122, 62,"MORGAN ROARTY",
+  0,11,185, 74,"GRAPHIC MANAGEMENT",
+  0, 1,194, 82,"TOM CHAMBERLAIN",
+  0,11,190, 93,"COMPUTER ARTISTS",
+  0, 1,202,101,"DAVID MOSHER",
+  0, 1,198,108,"MARGIE BEESON",
+  0, 1,195,115,"TODD J CAMASTA",
+  0, 1,193,122,"TOM CHAMBERLAIN",
+  0, 1,199,129,"CHERYL AUSTIN",
+  0, 1,190,136,"CHARLES H WEIDMAN",
+  0, 1,206,143,"RONAN JOYCE",
+  0, 1,207,150,"STEVE STIPP",
+  0, 1,200,157,"FRITZ BRONNER",
+  0, 1,189,164,"MICHAEL K MCCARTY",
+  0,11,203,174,"SOUND EDITING",
+  0, 1,201,182,"FRITZ BRONNER",
+  0, 1,190,189,"MICHAEL K MCCARTY",
+  0,11, 33, 74,"VIDEO DIGITIZING",
+  0, 1, 33, 82,"TOM CHAMBERLAIN",
+  0, 1, 40, 89,"FRITZ BRONNER",
+  0, 1, 31, 96,"MICHAEL K MCCARTY",
+  0, 1, 42,103,"RONAN JOYCE",
+  0, 1, 37,110,"MORGAN ROARTY",
+  0,11,  9,121,"ORIGINAL MUSIC COMPOSITION",
+  0, 1, 35,129,"BRIAN LANGSBARD",
+  0, 1, 35,136,"MICHAEL MCNERNY",
+  0,11, 27,146,"MUSIC ADAPTATIONS",
+  0, 1, 32,154,"RICHARD JACKSON",
+  0,11, 34,165,"AUDIO DIGITIZING",
+  0, 1, 39,173,"FRITZ BRONNER",
+  0, 1, 30,180,"MICHAEL K MCCARTY",
+  0, 1, 35,187,"CHARLES DEENEN",
+  1,11,140, 10,"DIRECTOR",
+  1, 1,126, 18,"FRITZ BRONNER",
+  1,11,131, 28,"PRODUCED BY",
+  1, 1,127, 37,"FRITZ BRONNER",
+  1, 1,117, 44,"MICHAEL K MCCARTY",
+  1,11, 47, 62,"DATA ENTRY",
+  1, 1, 33, 70,"TOM CHAMBERLAIN",
+  1, 1, 42, 77,"ENDA MCCARTY",
+  1,11, 29, 88,"COSMONAUT VOICES",
+  1, 1, 33, 96,"GHERMAN TRIGUB",
+  1, 1, 37,103,"MARINA TRIGUB",
+  1,11, 40,114,"OTHER VOICES",
+  1, 1, 35,122,"GEORGE SPELVIN",
+  1, 1, 36,129,"GENNIE SPELVIN",
+  1, 1, 49,136,"JIM BROWN",
+  1,11, 34,149,"VECTOR GRAPHICS",
+  1, 1, 31,157,"J SCOTT MATTHEWS",
+  1, 1, 34,164,"MICHAEL PACKARD",
+  1,11, 34,179,"SPACE MINITURES",
+  1, 1, 33,187,"BRONNER STUDIOS",
+  1,11,178, 62,"INTERPLAY'S PRODUCER",
+  1, 1,183, 70,"JACOB R BUCHERT III",
+  1, 1,182, 78,"BRUCE SCHLICKBERND",
+  1,11,170, 88,"DIRECTOR OF PLAYTESTING",
+  1, 1,192, 96,"KERRY GARRISON",
+  1,11,186,110,"LEAD PLAY TESTERS",
+  1, 2,202,118,"JEREMY AIREY",
+  1, 2,193,125,"MICHAEL PACKARD",
+  1, 2,199,132,"MARK HARRISON",
+  1, 1,199,139,"ERIK ANDERSON",
+  1, 2,176,146,"JENNIFER SCHLICKBERND",
+  1,11,199,158,"COVER PAINTING",
+  1, 1,209,166,"KEN HODGES",
+
+  1,11,212,179,"SDL PORT",
+  1, 1,195,187,"PACE WILLISSON",
+
+//  5, 0,  0,  0,"INTERPLAY EDITION",
+//  5, 0,  0,  0,"PLAYTEST DEPT.",
+
+//  5, 0,  0,  0,"Sam Spero",
+//  5, 0,  0,  0,"Dept of Mathematics",
+//  5, 0,  0,  0,"Cuiahogo C.C.",
+//  5, 0,  0,  0,"2900 Community Coll",
+//  5, 0,  0,  0,"Cleveland  OH 44115",
+//  5, 0,  0,  0,"(216) 987-4561",
+  
+  5, 0,  0,  0,"___DUMMY SPACE__",
+  
+};
+
 void Credits(void)
 {
-  struct CREDIT {
-     char page;
-     i16 col;
-     i16 x,y;
-     char Txt[35];
-  } *XX;
   int k,i;
-  FILE *fin;
   long len[2],length;
   strcpy(IKEY,"i999\0");
+  FILE *fin;
 
   fin=sOpen("FIRST.IMG","rb",0);
   FadeOut(2,pal,30,0,0);
@@ -51,30 +139,17 @@ void Credits(void)
   fread(vhptr.vptr,len[0],1,fin);
   fclose(fin);
 
-  fin=sOpen("VISION.DAT","rb",0);
-  length=filelength(fileno(fin));
-  fread(buffer,length,1,fin);
-  fclose(fin);
-
-  srand(1);
-  XX=(struct CREDIT *) buffer;
-  for(i=0;i<length;i++) buffer[i]^=random(256);
-  srand(biostime(0,0L));
-  MouseOn();
-
-  for (k=0;k<5;k++) {
+  for (k=0;k<2;k++) {
     MouseOff();
     if (k!=0) FadeOut(2,pal,30,0,0);  // Screen #2
     PCX_D((char *)vhptr.vptr,screen,(unsigned) len[0]);
     memset(&pal[431],0x00,96);
     screen[63999]=0;
-    i=0;
-    while (XX[i].page<9) {
-       if (XX[i].page==k) {
-         grSetColor(XX[i].col);
-         PrintAt(XX[i].x,XX[i].y,XX[i].Txt);
+    for (i = 0; i < sizeof CREDIT / sizeof CREDIT[0]; i++) {
+       if (CREDIT[i].page==k) {
+         grSetColor(CREDIT[i].col);
+         PrintAt(CREDIT[i].x,CREDIT[i].y,CREDIT[i].Txt);
        }
-       i++;
     }
     
     FadeIn(2,pal,30,0,0);
@@ -91,32 +166,6 @@ void Credits(void)
     }
     key=0;
   }
-
-
-#if 0
-  MouseOff();
-  PCX_D((char *)vhptr.vptr,screen,(unsigned) len[0]);
-  memset(&pal[431],0x00,96);
-  screen[63999]=0;
-  for (i=0;i<35;i++) {
-     grSetColor(XX[i+37].col);
-     PrintAt(XX[i+37].x,XX[i+37].y,XX[i+37].Txt);
-  }
-  MouseOn();
-
-  FadeIn(2,pal,30,0,0);
-  while(1)  {
-    GetMouse();
-    if (mousebuttons==0) break;
-  }
-  key=0;
-  while (mousebuttons==0 && key==0) {
-    GetMouse();
-    UpdateMusic();
-  }
-  key=0;
-
-#endif
 
   FadeOut(2,pal,30,0,0);
   memset(screen,0x00,64000);
