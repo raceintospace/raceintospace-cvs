@@ -1,5 +1,9 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V19
+	
+	* a few notes in README
+
 	* V18
 	
 	* improve finding files on cdrom; move savedat to ~/.raceintospace;

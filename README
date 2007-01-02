@@ -1,5 +1,22 @@
 1/1/2007
 
-development system is Fedora core 5 with SDL 1.2.9
+extract music.tar.gz (a set of ogg files) into
+/usr/share/raceintospace/music default location for cdrom files is
+/l/cdrom
+
+you can override the directory locations in
+$HOME/.raceintospace/CONFIG like this
+
+================================================================
+cdrom /home/pace/race-cdrom
+music /home/pace/test-music
+================================================================
+
+development system is
+
+Fedora core 5
+SDL 1.2.9
+libvorbis-1.1.2
+
 
 Pace Willisson <pace@alum.mit.edu>
