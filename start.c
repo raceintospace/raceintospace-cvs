@@ -43,10 +43,8 @@ void SetEvents(void)
   char Per[6][5]={100,0,0,0,0,0,100,0,0,0,0,62,38,0,0,0,50,20,30,0,
 		  0,35,20,20,25,0,25,25,25,25};
   struct Q{char fir,qty,pic;} D[5]= {1,3,0,4,40,0,44,19,0,63,17,0,80,20,0};
-  char chai[23];
   RPLY Rep;
   ONEWS oNews;
-  FILE *in;
   memset(&Rep,0x00,sizeof Rep);
 
   for (i=0;i<100;i++) s[i]=Data->Events[i]=0;
@@ -104,7 +102,7 @@ void SetEvents(void)
 
 void AstroTurn(void)
 {
-  int i,j,k,l,m,num,temp,ActTotal[2],cnt,Compat[5];
+  int i,j,k,l,num,temp,ActTotal[2],cnt,Compat[5];
   ActTotal[0]=0;ActTotal[1]=0;cnt=0;
 
   for (j=0;j<2;j++)
@@ -644,7 +642,7 @@ void Update(void)
 
 void UpdAll(char side)
 {
-  int i,j,k;
+  int i,k;
   char p0,p1;
   char tName[20];
 

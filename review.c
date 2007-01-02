@@ -148,7 +148,6 @@ if (Data->P[plr].PresRev[0]!=0x7F) FadeOut(2,pal,10,0,0);
 
 void Review(char plr)
 {
-int i;
 PreLoadMusic((plr==0)?M_PRES:M_RD);
 DrawReview(plr);
 PlayMusic(0);
@@ -193,9 +192,7 @@ void MisRev(char plr,int pres)
 
 void PresPict(char poff)
 {
-  GXHEADER local,local2;
-  unsigned char *buf;
-  unsigned int p,i,j;
+  GXHEADER local;
   struct FF {
 	ui16 size;
 	long offset;
@@ -257,7 +254,6 @@ void DrawRevText(char plr, int val)
 {
   int index=0,length,line=0;
   FILE *fin;
-  char txt[52];  
   memset(buffer,0x00,10000);
   fin=sOpen("P_REV.DAT","rb",0);      // Read Mission Structure
   fseek(fin, 204*18*plr+204*val,SEEK_SET);

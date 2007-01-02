@@ -63,7 +63,6 @@ void MakeRecords(void)
 void Records(char plr)
 {
   FILE *file;
-  int i,j;
   char pos=0,pos2=0;
   file = sOpen("RECORDS.DAT","rb",1);
   fread(rec,sizeof rec,1,file);
@@ -184,7 +183,7 @@ void For1rec(char *pos,char *pos2)
 
 void Drec(char *pos,char *pos2,char mde)
 {
-   char i,j=0,tmp,Digit[10];
+   char i,j=0,Digit[10];
 
    MouseOff();
    memset(Digit,0x00,sizeof(Digit));
@@ -381,7 +380,7 @@ char CheckSucess(int i,int j)
 
 void SafetyRecords(char plr,int temp)
 {
- int i,j,k;
+ int j,k;
  FILE *fin,*bo;
  fin = sOpen("RECORDS.DAT","rb",1);
  fread(rec,sizeof rec,1,fin);

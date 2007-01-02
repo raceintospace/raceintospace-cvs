@@ -152,7 +152,7 @@ char PrestMin(char plr)      // Call only after a Mis Struct is filled
 // Returns the amount of prestige added
 int PrestCheck(char plr)  // Assumes that the Mis Structure is Loaded
 {
- int i,j,fin,total=0; char prg,tm;
+ int i,total=0; char prg,tm;
 
  prg=Mis.mEq;
 
@@ -221,7 +221,7 @@ int PrestCheck(char plr)  // Assumes that the Mis Structure is Loaded
 // Does not check if entire mission is a success
 char Was_Goal(char total,char which)
 {
-   char i,val,x=10,h;
+   char i,val,x=10;
    switch(which) {
       case -1: return -1;
       case MANSPACE:val=4; break; // RECOVERY
@@ -280,7 +280,7 @@ char HeroCheck(int which)
 // Requires MEV to be packed
 char Set_Goal(char plr,char which,char control)
 {
-  char i,sum,fail,pd,qt;
+  char sum,pd,qt;
 
   sum=0;
   if (control!=3) {
@@ -465,7 +465,7 @@ char Set_Goal(char plr,char which,char control)
 // checks if entire mission was a failure
 char Did_Fail(void)
 {
-   char i,val,bra;
+   char i,bra;
    unsigned int fail;
 
    fail=0;bra=0;i=0;
@@ -561,9 +561,8 @@ int PrestNeg(char plr,int i)
 
 int AllotPrest(char plr,char mis)
 {
-   int fin,i,total,other,negs,mcode,mike,P_Goal,N_Goal,S_Goal,ival,cval;
+   int i,total,other,negs,mcode,mike,P_Goal,N_Goal,S_Goal,ival,cval;
    extern struct mStr Mis;
-   FILE *fout;
    char PVal[28];
 
    hero=0;
@@ -771,7 +770,7 @@ char PosGoal_Check(char *PVal)
 
 int Find_MaxGoal(void)
 {
-   int fin,i,total,other,ival,cval;
+   int i,ival,cval;
    char PVal[28];
    memset(PVal,0x00,sizeof PVal);
    
@@ -788,9 +787,8 @@ int Find_MaxGoal(void)
 
 int U_AllotPrest(char plr,char mis)
 {
-   int fin,i,total,other,negs,mcode,mike,P_Goal,N_Goal,S_Goal,ival,cval,lun;
+   int i,total,other,negs,mcode,lun;
    extern struct mStr Mis;
-   FILE *fout;
    char PVal[28];
    memset(PVal,0x00,sizeof PVal);     // CLEAR TOTAL VALUE
    total=0, negs=0, lun=0;

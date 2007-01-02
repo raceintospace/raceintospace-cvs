@@ -93,12 +93,6 @@ bot:                          // bottom of routine
 
 void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 {
- struct romKEYS {
-  char Name[8];
-  long offset;
-  long size;
- } altKEY;  // for index based stuff
-
  struct oLIST {
    i16 aIdx; 
    i16 sIdx; 
@@ -124,21 +118,14 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
    unsigned short size;
  }; 
 
- int wlen,i,j,kk,fres,fres1,mode,max;
+ int i,j,kk,mode,max;
  FILE *fin,*kfin;
  long offset;
  struct oGROUP *bSeq,aSeq;
  struct oFGROUP *dSeq,cSeq;
- struct NTable NT;
  struct Table *F;
  char *SEQ_DAT="SEQ.DAT\0";
- char *SEQ_KEY="ALTSEQ.KEY\0";
  char *FSEQ_DAT="FSEQ.DAT\0";
- char *FSEQ_KEY="ALTFSEQ.KEY\0";
- unsigned long tim;
- unsigned short fr;
- int *fcount,*frate,count;
- int *fsize;
  RPLY Rep;
  GXHEADER dopy,snzy;
  struct frm *frm = NULL;
@@ -313,12 +300,6 @@ void DispBaby(int x, int y, int loc,char neww)
 
 void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,char mde)
 {
- struct romKEYS {
-  char Name[8];
-  long offset;
-  long size;
- } altKEY;  // for index based stuff
-
  struct oLIST {
    i16 aIdx; 
    i16 sIdx; 
@@ -333,17 +314,11 @@ void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,cha
    char ID[8];
  };
 
- int wlen,i,j;
+ int j;
  FILE *fin,*kfin;
  long offset;
  struct oGROUP *bSeq,aSeq;
- struct NTable NT;
  char *SEQ_DAT="SEQ.DAT\0";
- char *SEQ_KEY="ALTSEQ.KEY\0";
- unsigned long tim;
- unsigned short fr;
- int *fcount,*frate,count;
- int *fsize;
  RPLY Rep;
  GXHEADER dopy,snzy;
  struct frm *frm;

@@ -146,9 +146,6 @@ char *letter_dat;
 void
 OpenEmUp(void)
 {
-	FILE *f;
-	int retcode;
-
 	srand(clock());
 	srandom (clock ());
 
@@ -422,8 +419,6 @@ static DIR *f_dir;
 int
 first_saved_game (struct ffblk *ffblk)
 {
-	char *p;
-
 	if (f_dir) {
 		closedir (f_dir);
 		f_dir = NULL;
@@ -596,10 +591,6 @@ frm_get2 (struct frm *frm, void *pixels_arg, void *map)
 	int n;
 	int val0, val1;
 	unsigned char *pixels;
-	unsigned char *outp;
-	int idx;
-	int pixel;
-	unsigned char *up;
 
 	n = frm->next_frame_chunks * 2048;
 
@@ -813,7 +804,6 @@ play_audio (int sidx, int mode)
 {
 	char *raw_name;
 	char filename[1000];
-	char *p;
 	FILE *f;
 	int size;
 

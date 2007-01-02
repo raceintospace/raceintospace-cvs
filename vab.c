@@ -117,7 +117,6 @@ void GradRect2(int x1,int y1,int x2,int y2,char plr)
 
 void DispVAB(char plr,char pad)
 {
-  int i;
   FILE *fout;
   struct bImg {
     unsigned char pal[768];
@@ -211,7 +210,7 @@ void DispVAB(char plr,char pad)
 
 int FillVab(char plr,char f,char mode)
 {
-  int i,j,k,cost;
+  int i,cost;
   cost=0;
   for (i=0;i<4;i++) {
     if ((VAS[f][i].qty-VAS[f][i].ac)<=0 && strncmp(VAS[f][i].name,"NONE",4)!=0) {
@@ -263,7 +262,7 @@ int FillVab(char plr,char f,char mode)
 
 int ChkDelVab(char plr,char f)
 {
-  int i,j,k;
+  int i;
   for (i=0;i<4;i++) {
     if ((VAS[f][i].qty-VAS[f][i].ac)<=0 && strcmp(VAS[f][i].name,"NONE")!=0) {
       switch(i) {
@@ -363,7 +362,7 @@ void ShowRkt(char *Name,int sf,int qty,char mode)
 
 void DispVA(char plr,char f)
 {
-  int retcode,i,j,TotY,IncY;
+  int i,TotY,IncY;
   int w,h,x1,y1,x2,y2,w2,h2,cx,off=0;
   unsigned char *spix, *dpix, wh;
   GXHEADER local,local2;
@@ -480,7 +479,7 @@ void DispVA(char plr,char f)
 
 void DispRck(char plr,char wh)
 {
-  int retcode,i;
+  int i;
   int w,h,x1,y1,x2,y2;
   GXHEADER local,local2;
 
@@ -521,7 +520,7 @@ void DispWts(int two,int one)
 
 void VAB(char plr)
 {
-  int i,j,j2,v,val,mis,cnt,sf[8],qty[8],wt[8],wgt,pay[8],tmp,ccc,rk,cwt,ab,ac;
+  int i,j,j2,mis,sf[8],qty[8],wgt,pay[8],tmp,ccc,rk,cwt,ab,ac;
   char Name[8][12],ButOn,temp;
   PreLoadMusic(M_HARDWARE);
   PlayMusic(0);
@@ -767,7 +766,7 @@ begvab:
 
 void BuildVAB(char plr,char mis,char ty,char pa,char pr)
 {
-  char i,j,part,mcode,prog,ext=0,fin;
+  char i,j,part,mcode,prog,ext=0;
   unsigned char VX;
 
   memset(VAS,0x00,sizeof VAS);

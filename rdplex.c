@@ -195,7 +195,6 @@ void RDButTxt(int v1,int val,char plr)
 char RD(char plr)
 {
   short hardware=1,roll=0,unit=1,buy[4][10],i,j,b;
-  FILE *undo;
   for(i=0;i<4;i++) for(j=0;j<7;j++) buy[i][j]=Data->P[plr].Buy[i][j];
   hardware=HARD1; unit=UNIT1;
   strcpy(IDT,"i009");strcpy(IKEY,"k009");
@@ -648,7 +647,7 @@ void DrawHPurc(char plr)
 
 char HPurc(char plr)
 {
-  short hardware,unit,i,t;
+  short hardware,unit;
   FILE *undo;
 
   kill("UNDO.TMP");
@@ -815,7 +814,7 @@ char HPurc(char plr)
 
 void BuyUnit(char hw2,char un2,char plr)
 {
-  short temp,n1,n2,n3,n4,n5,n6,n7;
+  short n1,n2,n3,n4,n5,n6,n7;
   char newf=0;
   int Init_Cost,Unit_Cost;
   switch(hw2)

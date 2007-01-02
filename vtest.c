@@ -19,9 +19,8 @@ static int period_size;
 static void
 set_hwparams(snd_pcm_t *handle)
 {
-        unsigned int rrate;
         snd_pcm_uframes_t size;
-        int err, dir;
+        int dir;
         snd_pcm_hw_params_t *hwparams;
 	unsigned int uval;
 
@@ -56,7 +55,6 @@ set_hwparams(snd_pcm_t *handle)
 static void
 set_swparams(snd_pcm_t *handle)
 {
-        int err;
         snd_pcm_sw_params_t *swparams;
 
         snd_pcm_sw_params_malloc(&swparams);

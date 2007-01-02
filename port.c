@@ -386,7 +386,7 @@ void PortPal(char plr)
 void AdminPort(char plr)
 {
   long table[S_QTY];
-  int i,j,idx,fm;
+  int i,idx,fm;
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
@@ -486,7 +486,7 @@ void AdminPort(char plr)
 void NPDraw(char plr)
 {
   long table[S_QTY];
-  int i,j,idx,fm;
+  int i,idx,fm;
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
@@ -859,13 +859,12 @@ int MapKey(char plr,int key,int old)
 void Port(char plr)
 {
 double last_secs;
-char i,j,use_mouse,keyloc,kMode,kEnt,k;
+char i,j,kMode,kEnt,k;
 char olddir[120],good;
 int kPad,pKey,gork;
 FILE *fin;
 long stable[55];
 ui16 Count,*bone;
-unsigned long tim;
 
 char *MMMM="AIMRPVCQETB\0";
 PreOut=(struct SXX *)&buffer[60000];

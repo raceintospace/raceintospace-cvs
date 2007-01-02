@@ -106,7 +106,6 @@ void DrawRush(char plr)
 {
   int i,k=0,l=0,JR=0;
   FILE *fin;
-  long len[2];
   MouseOff();
   FadeOut(2,pal,10,0,0);
 

@@ -199,7 +199,6 @@ main (int argc, char **argv)
 {
 	int c;
 	char *filename;
-	FILE *outf;
 	int fm;
 	int idx;
 

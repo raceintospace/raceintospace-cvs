@@ -229,8 +229,6 @@ void ClrMiss(char plr,char pad)
 void PadPict(char poff)
 {
   GXHEADER local,local2;
-  unsigned char *buf;
-  unsigned int p,i,j;
   struct FF {
 	ui16 size;
 	long offset;
@@ -260,8 +258,7 @@ void PadPict(char poff)
 
 void ShowPad(char plr,char pad)
 {
-  int i;
-  char men,prime,back,prg,temp;
+  char temp;
   PreLoadMusic((plr==1)?M_USMIL:M_USSRMIL);
   PadDraw(plr,pad);
   PlayMusic(0);

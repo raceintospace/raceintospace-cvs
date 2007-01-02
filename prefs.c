@@ -33,7 +33,7 @@ extern char Musics,tMusics,Sounds,Option;
 
 void DrawPrefs(int where,char a1,char a2)
 {
-  int i,j,mode=0;
+  int i,mode=0;
   FILE *fin;
   MouseOff();
   FadeOut(2,pal,10,0,0);
@@ -119,14 +119,13 @@ void xRLED (void *src, void *dest, unsigned int src_size);
 
 void HModel(char mode,char tx)
 {
-  unsigned int i,j;
+  unsigned int j;
   struct GO {
    ui16 size;
    long offset;
   } table;
 
-  GXHEADER local,local2;
-  long size;
+  GXHEADER local;
   FILE *in;
 
   in=sOpen("PRFX.BUT","rb",0);
@@ -237,7 +236,7 @@ void CLevels(char side,char wh)
 
 void Prefs(int where)
 {
-int i,fout,num,hum1=0,hum2=0;
+int i,num,hum1=0,hum2=0;
 FILE *fin;
 char ch,Name[20],ksel=0;
 GXHEADER local2;
