@@ -1,5 +1,11 @@
 2007-01-01  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V17
+
+	* clean up timers and frame rate; improve mouse click handling;
+	remove play by mail and modem choices; make flag waving and
+	water flowing work;
+	
 	* V16
 	
 	* remove unused files

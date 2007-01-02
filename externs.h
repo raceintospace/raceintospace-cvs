@@ -25,7 +25,6 @@
   extern GXHEADER vhptr,vhptr2;
   extern char far * oldpal;
   extern long xMODE;
-  extern unsigned long BzTimer;
   extern char *S_Name[];
   extern int cdROM,hDISK;
   extern BYTE far *ems;

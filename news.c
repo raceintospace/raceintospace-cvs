@@ -37,7 +37,7 @@ int totnews_offset;
 
 int bufsize;
 int evflag,LOAD_US=0,LOAD_SV=0;
-BYTE Frame,X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex,SYNC;
+BYTE Frame,X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex;
 WORD handle0,handle1,handle2,handle3,handle4,handle5;
 extern char Option;
 extern char Musics,Sounds;
@@ -159,7 +159,7 @@ void OpenNews(char plr,char *buf,int bud)
  #if 1
   if (Option!=-1)
    {
-    if ((gork = sOpen((Option==0) ? "SENDR.MSG" : "SENDH.MSG", "r+b",0)) != NULL)
+    if ((gork = sOpen((Option==0) ? "SENDR.MSG" : "SENDH.MSG", "rb",0)) != NULL)
      {
       fread(&old,sizeof(old),1,gork);
       if (old[0]!=0x00)
@@ -399,6 +399,7 @@ void DrawNText(char plr,char got)
 
 void News(char plr)
 {
+  double last_secs;
   int bline=0,ctop=0,i;
   FILE *fout;
   char cYr[5];
@@ -485,8 +486,8 @@ void News(char plr)
   while (1)
   {
    key=0;
-   GetMouse();
-   BzTimer=0;
+   GetMouse_fast();
+   last_secs = get_time ();
    if (!(loc==0 && Status==1)) NUpdateVoice();
    i=AnimSoundCheck();
    if (Status==1 || (loc==3 && i==1))
@@ -544,7 +545,7 @@ void News(char plr)
              NGetVoice(plr,1);
              PlayVoice();
              if (plr==1) {
-              BzTimer=0;while(BzTimer<170);
+		     bzdelay (170);
              };
              loc++;
              break;
@@ -629,12 +630,7 @@ void News(char plr)
        DrawNText(plr,ctop);
        MouseOff();OutBox(303,158,313,194);MouseOn();
       }
-   if (SYNC==3) play_rate=10;
-    else if (SYNC==2) play_rate=7;
-     else play_rate=4;
-//   tim=BzTimer;while(BzTimer-tim<play_rate);
    gr_sync ();
-   usleep (play_rate * 1000);
   };
 }
 
@@ -715,7 +711,6 @@ void PlayNewsAnim(BYTE Index)
  unsigned i,j;
  int offset;
 
- if (Frame==1) BzTimer=0;
  GV(&local,Depth,Length);
 
  RLED_img (totnews_dat + totnews_offset + table[Frame].offset,
@@ -725,17 +720,12 @@ void PlayNewsAnim(BYTE Index)
  MouseOff();
  gxPutImage(&local,gxXOR,X_Offset,Y_Offset,0);
  MouseOn();
- if (Frame==1 && (Index>=8 && Index<=11))
-  {
-   if (BzTimer<5) SYNC=3;
-    else if (BzTimer<7) SYNC=2;
-     else SYNC=1;
-  }
  DV(&local);
  Frame+=1;
 
- if (gr_slow)
-	 gr_sync ();
+ gr_sync ();
+ idle_loop_secs (1 / 30.0);
+
  return;
 }
 

@@ -41,7 +41,6 @@ void _ExceptInit(void) {}  // reduce EXE size
   GXHEADER vhptr,vhptr2;
   char far * oldpal,pNeg[2][3];
   long xMODE;
-  unsigned long BzTimer,BzTimer2;
   HTIMER server;
   extern char Musics,Sounds;
   char Option=-1,MAIL=-1;
@@ -106,9 +105,6 @@ void far * far pascal FMalloc(unsigned long bytes){return(farmalloc(bytes));};
 int far pascal FFree(void far *ptr) {farfree(ptr); return(0);}
 unsigned long far pascal FCore(void) {return(farcoreleft());}
 char far *sbuf0,far *sbuf1;
-void timer_callback(void) {BzTimer++;}
-void HandleTimer1(void) {BzTimer++;}
-void HandleTimer2(void) {BzTimer2++;}
 void Plop(char plr,char mode);
 void killgame(char *fName);
 
@@ -517,104 +513,8 @@ tommy:
          //PlayMusic(1);
 	      break;
       case 3:
-         //
-         //Modem Play
-         //
-         //KillMusic();
-	      LOAD=QUIT=0,BUTLOAD=0;
-	      HARD1=UNIT1=1;
-         MAIL=-1;Option=-1;
-         strcpy(IDT,"i013");
-	      Option=MPrefs(0);
-        if (Option!=MODEM_ERROR)
-         {
-          switch(Option)
-           {
-            case 0:Option=0;side=HOST;break;
-            case 1:Option=1;side=HOST;break;
-            case 2:Option=0;side=SLAVE;break;
-            case 3:Option=1;side=SLAVE;break;
-            default:break;
-           }
-
-	        plr[0]=Data->Def.Plr1;
-	        plr[1]=Data->Def.Plr2;
-	        Data->plr[0]=Data->Def.Plr1;
-	        Data->plr[1]=Data->Def.Plr2;
-	        if (plr[0]==2 || plr[0]==3) AI[0]=1;
-           else AI[0]=0;
-	        if (plr[1]==2 || plr[1]==3) AI[1]=1;
-           else AI[1]=0;
-           AI[0]=0;AI[1]=0;
-          //Correct -> US/SOVIET && Roster/Model
-         #if 1
-          mikeCrearScreen();
-
-          //MouseOff();gxClearDisplay(0,0);MouseOn();
-          TrackPict(0);
-          FadeIn(2,pal,10,0,0);
-          if (side==SLAVE) SaveFirst(Option);
-          delay(2000);
-          Progress(2);
-          if (side==SLAVE) SendFirst();
-           else {
-            killgame("INIT.DAT");
-            RecvFirst();
-           }
-          if (side==HOST) CheckFirst(Option);
-          Progress(2);
-          if (side==HOST)
-           {
-            SaveFirst(other(Option));
-            delay(2000);
-            SendFirst();
-           }
-          else {
-           killgame("INIT.DAT");
-           RecvFirst();
-          }
-          if (side==SLAVE) UpdateFirst();
-          FadeOut(2,pal,10,0,0);
-          killgame("INIT.DAT");
-         #endif
-	        InitData();
-          for (purp=0;purp<3;purp++)
-           memset(&MP[purp],0x00,sizeof(struct Prest_Upd));
-	        MMainLoop();
-          mikeCrearScreen();
-	        //MouseOff();memset(screen,0x00,64000);MouseOn();
-          //PreLoadMusic(M_LIFTOFF);
-          //PlayMusic(1);
-         }
-         //Modem Play => klugge
-         if (Option==MODEM_ERROR) Option=-1;
          break;
       case 4:
-         //
-         // Play by Mail
-         //
-         //KillMusic();
-	      LOAD=QUIT=0,BUTLOAD=0;
-	      HARD1=UNIT1=1;
-         MAIL=-1;Option=-1;
-         strcpy(IDT,"i013");
-	      Prefs(3);
-	      plr[0]=Data->Def.Plr1;
-	      plr[1]=Data->Def.Plr2;
-	      Data->plr[0]=Data->Def.Plr1;
-	      Data->plr[1]=Data->Def.Plr2;
-	      if (plr[0]==2 || plr[0]==3) AI[0]=1;
-          else AI[0]=0;
-	      if (plr[1]==2 || plr[1]==3) AI[1]=1;
-          else AI[1]=0;
-	      InitData();
-         MAIL=0; //Starts U.S. side
-	      MMainLoop();
-         QUIT=0;
-        mikeCrearScreen();
-	      //MouseOff();memset(screen,0x00,64000);MouseOn();
-         //PreLoadMusic(M_LIFTOFF);
-         //PlayMusic(1);
 	      break;
       case 5:
          df=0;
@@ -1530,8 +1430,15 @@ void DV(GXHEADER *obj)
   return;
 }
 
+void
+GetMouse (void)
+{
+	idle_loop_secs (.030);
+	GetMouse_fast ();
+}
+
 /* get mouse of keyboard input, non-blocking */
-void GetMouse(void)
+void GetMouse_fast(void)
 {
   char string[25],rbut=0;
   long mems;
@@ -1539,15 +1446,18 @@ void GetMouse(void)
   mousebuttons=0;
   oldx=x;oldy=y;
   
-  usleep (30 * 1000);
-  gr_sync ();
+  gr_maybe_sync ();
 
   if (XMAS!=0) {
-    if (grGetMouseButtons() & grLBUTTON) mousebuttons=1;
-    else mousebuttons=0;
-    rbut=grGetMouseButtons()&grRBUTTON;
-    grGetMousePos(&x,&y);
-    }
+	  if (grGetMouseButtons()) {
+		  mousebuttons=1;
+		  grGetMousePressedPos(&x,&y);
+	  } else {
+		  mousebuttons=0;
+		  grGetMouseCurPos (&x, &y);
+	  }
+	  rbut=0;
+  }
   while (bioskey(1)) {
     key=bioskey(0);
     if((key&0x00ff)>0) key=toupper(key & 0xff);

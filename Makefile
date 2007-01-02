@@ -14,7 +14,7 @@ LIBS = `sdl-config --libs` -lvorbisfile -lm
 PROGS = baris imgsplit vtest decode getport mkmovie getvab mtest sdltest
 all: $(PROGS) 
 
-BARIS_HFILES = Buzz_inc.h cdmaster.h cdrom.h data.h externs.h mis.h mtype.h	\
+BARIS_HFILES = Buzz_inc.h data.h externs.h mis.h mtype.h	\
 	music.h nn.h pace.h pcx_hdr.h proto.h records.h replay.h soundfx.h	\
 	sv_lib.h uc.h soundint.h
 

@@ -101,7 +101,7 @@ MOBJ MObj[35];
 
 char MMMM[]="AIMRPVCQETB\0";
 
-int CYCLE,FWAVE,FCtr;
+int FCtr;
 GXHEADER flaggy;
 
 #define SPOTS 100
@@ -720,13 +720,13 @@ void GetMse(char plr,char fon)
 {
   int i;
   GXHEADER local,local2;
-  if (plr==0 && fon<10) {
-    CYCLE=CYCLE%1500;
-    if (CYCLE==0) DoCycle();
-    CYCLE++;
-  }               
-  FWAVE=FWAVE%1500;
-  if (FWAVE==0 && fon==1) {
+  static double last_wave_step;
+  double now;
+
+  now = get_time ();
+  if (now - last_wave_step > .120) {
+	  last_wave_step = now;
+
 #if SPOT_ON
     SpotCrap(0,SPOT_STEP);
 #endif
@@ -751,8 +751,7 @@ void GetMse(char plr,char fon)
     MouseOn();
     FCtr++;
   }
-  FWAVE++;
-  GetMouse();
+  GetMouse_fast();
   return;
 }
 
@@ -779,6 +778,7 @@ void DoCycle(void)  // Three ranges of color cycling
     pal[j+i*3+2]=pal[j+(i-1)*3+2];};
   pal[420]=tmp1;pal[421]=tmp2;pal[422]=tmp3;
   gxSetDisplayPalette(pal);
+  gr_sync ();
   return;
 }
 
@@ -856,6 +856,7 @@ int MapKey(char plr,int key,int old)
 
 void Port(char plr)
 {
+double last_secs;
 char i,j,use_mouse,keyloc,kMode,kEnt,k;
 char olddir[120],good;
 int kPad,pKey,gork;
@@ -882,11 +883,12 @@ PreOut=(struct SXX *)&buffer[60000];
   
   PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);PlayMusic(0);
   kMode=kPad=kEnt=0;
-  tim=BzTimer;
+  last_secs = get_time ();
   while (1)
    {
+	   idle_loop_secs (.030);
     #if 0
-     if (BzTimer-tim > 25000)   
+      if (get_time ()- last_time > 25)   
       {
        SpotCrap(0,SPOT_KILL);
        gork=random(100);
@@ -899,7 +901,7 @@ PreOut=(struct SXX *)&buffer[60000];
        else if (plr==1 && gork<90) SpotCrap(10,SPOT_LOAD);
         else if (plr==0 && gork<90) SpotCrap(2+(5*plr),SPOT_LOAD);
          else SpotCrap(1+(5*plr),SPOT_LOAD); //Specs: Default
-       tim=BzTimer;
+       last_secs = get_time ();
       }
     #endif
     if (kMode==0) i=0;
@@ -985,7 +987,6 @@ PreOut=(struct SXX *)&buffer[60000];
                if (good==1 || (kMode==0 && mousebuttons==1) || (kMode==1 && key==0x0d) 
                   || (kMode==0 && key==0x0d))
                 {
-                 tim=BzTimer;
                  MouseOff();PortRestore(Count);Count=0;MouseOn();
                   getcurdir(0,olddir);
 

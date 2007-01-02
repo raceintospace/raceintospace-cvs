@@ -27,7 +27,6 @@
 #include "externs.h"
 #include "replay.h"
 #include "mis.h"
-//#include "cdrom.h"
 
 #define FRM_Delay 22
 
@@ -123,6 +122,8 @@ bot:                          // bottom of routine
 
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
+	double last_secs;
+
 	struct oLIST {
 		i16 aIdx; 
 		i16 sIdx; 
@@ -155,7 +156,6 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	struct Table *F;
 	struct NTable NT;
 	char sName[20],ERROR=0;
-	unsigned long tim;
 	unsigned short fr;
 	int *fsize;
 	char *SEQ_DAT="SEQ.DAT\0";
@@ -462,25 +462,23 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	}
 	if (lnch==1 && Sounds>0) {
 		//Specs: launch sync 
-		tim=BzTimer;
+		last_secs = get_time ();
 		do {
 			if (Data->Def.Sound==1) UpdateAudio();
 			i=AnimSoundCheck();
-			if (BzTimer-tim > 25)
-			{
-				tim=BzTimer;
+			if (get_time () - last_secs > .25) {
+				last_secs = get_time ();
 				if (!BABY && BIG==0) Tick(plr);
 			}
 		} while (i==0);
 	} else if (Sounds>0) {
 		if (Data->Def.Sound==1) PlayAudio("WH.RAW",0);
-		tim=BzTimer;
+		last_secs = get_time ();
 		do {
 			if (Data->Def.Sound==1) UpdateAudio();
 			i=AnimSoundCheck();
-			if (BzTimer-tim > 25)
-			{
-				tim=BzTimer;
+			if (get_time () - last_secs > .25) {
+				last_secs = get_time ();
 				if (!BABY && BIG==0) Tick(plr);
 			}
 		} while (i==0);
@@ -744,8 +742,8 @@ char FailureMode(char plr,int prelim,char *text)
   char ch;
   int i,j,k,l,rema;
   FILE *fin;
-  unsigned long tim;
   WORD AHand;
+  double last_secs;
 
   FadeOut(2,pal,10,0,0);
  
@@ -876,7 +874,8 @@ char FailureMode(char plr,int prelim,char *text)
 
   fin=OpenAnim(Name);
   StepAnim(188,47,fin);
-  tim=BzTimer;
+
+  last_secs = get_time ();
 
   FadeIn(2,pal,10,0,0);
   MouseOn();
@@ -886,10 +885,10 @@ char FailureMode(char plr,int prelim,char *text)
 
   while (1)
   {
-    if ((BzTimer-tim) > 55) {
-      StepAnim(188,47,fin);
-      tim=BzTimer;
-      }
+    if (get_time () - last_secs > .55) {
+	    last_secs = get_time ();
+	    StepAnim(188,47,fin);
+    }
 
     GetMouse();
     if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d)

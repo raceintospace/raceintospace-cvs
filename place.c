@@ -39,7 +39,6 @@ int MChoice(char qty,char *Name)
   int i,j,cdstat;
   char poff;
   FILE *in;
-  unsigned long start;
 
  MouseOff();
  //FadeOut(2,pal,30,0,0);
@@ -91,7 +90,6 @@ int MChoice(char qty,char *Name)
  FadeIn(2,pal,30,0,0);
  while(1) {GetMouse();if (mousebuttons==0) break;}
  j=-1;starty=9;
- start  = BzTimer;
  while(j==-1)
   {
    GetMouse();
@@ -116,19 +114,6 @@ int MChoice(char qty,char *Name)
 	     j=i+1;
 	    }
     }
-   if ((BzTimer - start) > 5000) {
-    FadeOut(2,pal,10,0,0);
-    memset(pal,0x00,768);
-    memset(screen,0x00,64000);
-    FadeIn(2,pal,10,0,0);
-    CDAccess(cdROM,2,2);  //STOP CD if finished
-    return 99; //loop opening theme
-   }
-//   cdstat=CDAccess(cdROM,2,3);
-//   if (!(cdstat&0x02)) {
-//    CDAccess(cdROM,2,2);  //STOP CD if finished
-//    //CDAccess(cdROM,2,1);  //LOOP OPENING THEME
-//   }
   }   //while(j=...
 
  printf ("MChoice = %d\n", j);

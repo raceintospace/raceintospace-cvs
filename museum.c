@@ -40,7 +40,7 @@ struct Astros far *abuf;
                             { \
                             MouseOff();InBox((a),(b),(c),(d));MouseOn(); \
                             (e);\
-                            BzTimer=0;while(BzTimer<DELAYCNT);\
+			    bzdelay (DELAYCNT);\
                		    if((f)>0) delay(150); \
                             MouseOff();OutBox((a),(b),(c),(d));MouseOn(); \
                             };

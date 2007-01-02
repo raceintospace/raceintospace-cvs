@@ -30,14 +30,26 @@ grSetMousePos (int x, int y)
 int
 grGetMouseButtons (void)
 {
-	return (av_mouse_pressed);
+	int val;
+
+	val = av_mouse_pressed_latched;
+	av_mouse_pressed_latched = 0;
+	return (val);
 }
 
 int
-grGetMousePos (int *xp, int *yp)
+grGetMousePressedPos (int *xp, int *yp)
 {
-	*xp = av_mouse_x / 2;
-	*yp = av_mouse_y / 2;
+	*xp = av_mouse_pressed_x / 2;
+	*yp = av_mouse_pressed_y / 2;
+	return (0);
+}
+
+int
+grGetMouseCurPos (int *xp, int *yp)
+{
+	*xp = av_mouse_cur_x / 2;
+	*yp = av_mouse_cur_y / 2;
 	return (0);
 }
 
@@ -68,6 +80,13 @@ void
 gr_sync (void)
 {
 	av_sync ();
+}
+
+void
+gr_maybe_sync (void)
+{
+	if (screen_dirty)
+		av_sync ();
 }
 
 void

@@ -500,24 +500,24 @@ void Viewing(char plr)
        ctop-=9;
        if (ctop<0) ctop=0;
        DrawVText(ctop);
-       BzTimer=0;while(BzTimer<DELAYCNT);
+       bzdelay (DELAYCNT);
      }
      if (ctop<bline && key==0x5100) {  // Page Down Key
        ctop+=9;
        if (ctop>bline) ctop=bline;
        DrawVText(ctop);
-       BzTimer=0;while(BzTimer<DELAYCNT);
+       bzdelay (DELAYCNT);
      }
      if (ctop>0 && ((mousebuttons>0 && x>=302 && y>=116 && x<=312 && y<=145) || key==UP_ARROW)) {
 	     MouseOff();InBox(302,116,312,145);MouseOn();
        ctop--; DrawVText(ctop);
-       BzTimer=0;while(BzTimer<(DELAYCNT>>1));
+       bzdelay (DELAYCNT / 2);
        MouseOff();OutBox(302,116,312,145);MouseOn();
      } // UP
      else if (ctop<bline && ((mousebuttons>0 && x>=302 && y>147 && x<=312 && y<=176) || key==DN_ARROW)) {
        MouseOff();InBox(302,147,312,176);MouseOn();
        ctop++; DrawVText(ctop);
-       BzTimer=0;while(BzTimer<(DELAYCNT>>1));
+       bzdelay (DELAYCNT / 2);
        MouseOff();OutBox(302,147,312,176);MouseOn();
       }  // Down
      else if (oset>0 && ((mousebuttons>0 && x>=6 && y>=184 && x<=75 && y<=194) || key==LT_ARROW))
@@ -528,7 +528,7 @@ void Viewing(char plr)
       ctop=0; DrawVText(ctop);
       MouseOff();
 	    if (oset!=0) OutBox(6,184,75,194);
-      BzTimer=0;while(BzTimer<DELAYCNT);
+      bzdelay (DELAYCNT);
       OutBox(244,184,313,194);
       MouseOn();
 	    // Left Select
@@ -540,7 +540,7 @@ void Viewing(char plr)
       ctop=0; DrawVText(ctop);
       MouseOff();
 	    if (oset!=maxcard) OutBox(244,184,313,194);
-      BzTimer=0;while(BzTimer<DELAYCNT);
+      bzdelay (DELAYCNT);
       OutBox(6,184,75,194);
       MouseOn();
       // Right Select

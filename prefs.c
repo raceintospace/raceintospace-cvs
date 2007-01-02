@@ -630,7 +630,7 @@ void EditAst(void)
 	  temp=Idiot("i106");
 	  if (temp==1)
       {
-        fin=sOpen("USER.DAT","wb",0);
+        fin=sOpen("USER.DAT","wb",1);
 	     fwrite(Men,(sizeof (struct ManPool))*106,1,fin);   
 	     fwrite(Sov,(sizeof (struct ManPool))*106,1,fin); 
 	     fclose(fin);

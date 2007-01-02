@@ -63,6 +63,7 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 	memset (stream, audio_obtained.silence, togo);
 }
 
+/* 0 means busy playing audio; 1 means idle */
 char
 AnimSoundCheck(void)
 {
@@ -190,19 +191,27 @@ av_step (void)
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			av_mouse_pressed = 1;
-			av_mouse_x = ev.button.x;
-			av_mouse_y = ev.button.y;
+			av_mouse_pressed_cur = 1;
+			av_mouse_pressed_latched = 1;
+			av_mouse_pressed_x = ev.button.x;
+			av_mouse_pressed_y = ev.button.y;
+			printf ("mouseclick(%d,%d)\n", 
+				av_mouse_pressed_x,
+				av_mouse_pressed_y);
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			av_mouse_pressed = 0;
+			av_mouse_pressed_cur = 0;
+			break;
+
+		case SDL_MOUSEMOTION:
+			av_mouse_cur_x = ev.motion.x;
+			av_mouse_cur_y = ev.motion.y;
 			break;
 
 			/* ignore these events */
 		case SDL_KEYUP:
 		case SDL_ACTIVEEVENT:
-		case SDL_MOUSEMOTION:
 			break;
 		default:
 			printf ("got uknown event %d\n", ev.type);
@@ -278,6 +287,8 @@ av_sync (void)
 	SDL_UnlockSurface (sur);
 
 	SDL_Flip (sur);
+
+	screen_dirty = 0;
 }
 
 void

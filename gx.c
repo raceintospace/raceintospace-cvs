@@ -95,6 +95,8 @@ gxPutImage (GXHEADER *hp, int mode, int x, int y, int op2)
 		fprintf (stderr, "bad mode in gxPutImage\n");
 		exit (1);
 	}
+
+	screen_dirty = 1;
 }
 
 void
@@ -105,6 +107,7 @@ gxClearDisplay (int a, int b)
 		exit (1);
 	}
 	memset (screen, 0, 320 * 200);
+	screen_dirty = 1;
 }
 
 void
@@ -127,8 +130,11 @@ gxVirtualDisplay (GXHEADER *hp,
 			screen[to_idx] = hp->vptr[from_idx];
 		}
 	}
+	screen_dirty = 1;
+
 	if (gr_slow)
 		gr_sync ();
+
 }
 
 void

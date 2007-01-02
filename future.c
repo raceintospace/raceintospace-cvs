@@ -469,7 +469,7 @@ begfut:
 		MisStep(21,192,Mev[ii].loc);
 
 		//PrintAt(0,0,"  PAD:");DispNum(0,0,Mev[ii].pad);
-     grGetMousePos(&oldx,&oldy);
+     grGetMouseCurPos(&oldx,&oldy);
 		MouseOn();
 		while (((x>=StepBub[ii].x_cor && x<=StepBub[ii].x_cor+7 &&
 			 y>=StepBub[ii].y_cor && y<=StepBub[ii].y_cor+7)|| setting==key-65) && oldx==x && oldy==y) 

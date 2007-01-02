@@ -409,7 +409,13 @@ FadeOut(char wh,char *palx,int steps,int val,char mode)
 void
 delay (int millisecs)
 {
-	usleep (millisecs * 1000);
+	idle_loop_secs (millisecs / 1000.0);
+}
+
+void
+bzdelay (int ticks)
+{
+	idle_loop_secs (ticks / 100.0);
 }
 
 int

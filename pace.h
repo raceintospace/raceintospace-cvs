@@ -48,7 +48,8 @@ void grGetMouseBounds(int *x1p, int *y1p, int *x2p, int *y2p);
 void grSetMouseBounds (int x1, int y1, int x2, int y2);
 void grSetMousePos (int x, int y);
 int grGetPixel (int x, int y);
-int grGetMousePos (int *xp, int *yp);
+int grGetMouseCurPos (int *xp, int *yp);
+int grGetMousePressedPos (int *xp, int *yp);
 #define grLSOLID 1
 void grSetLineStyle (int style, int width);
 int grGetMouseButtons (void);
@@ -181,6 +182,7 @@ char *slurp_gamedat (char *name);
 char *letter_dat;
 
 void gr_sync (void);
+void gr_maybe_sync (void);
 
 void gr_set_color_map (unsigned char *map);
 int gr_slow;
@@ -213,5 +215,9 @@ void unimp (void);
 void env_setup (void);
 char *seq_filename (int seq, int mode);
 void play_audio (int sidx, int mode);
+
+void bzdelay (int ticks);
+int screen_dirty;
+void GetMouse_fast (void);
 
 #endif /* __PACE_H__ */

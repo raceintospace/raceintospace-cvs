@@ -4,6 +4,7 @@ void av_silence (void);
 void av_sync (void);
 
 unsigned char far *screen;
+int screen_dirty;
 char pal[768];
 
 struct audio_chunk {
@@ -23,5 +24,7 @@ void UpdateAudio (void);
 double get_time (void);
 int bioskey (int peek);
 
-int av_mouse_pressed;
-int av_mouse_x, av_mouse_y;
+int av_mouse_cur_x, av_mouse_cur_y;
+int av_mouse_pressed_x, av_mouse_pressed_y;
+int av_mouse_pressed_cur;
+int av_mouse_pressed_latched;
