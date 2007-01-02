@@ -2,7 +2,7 @@ EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts \
 	-Werror
 
-CFLAGS = -Wall -Dfar= -Dpascal= -I. `sdl-config --cflags`
+CFLAGS = -g -Wall -Dfar= -Dpascal= -I. `sdl-config --cflags`
 
 LIBS = `sdl-config --libs` -lvorbisfile -lm
 

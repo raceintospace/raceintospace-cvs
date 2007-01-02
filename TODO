@@ -3,7 +3,10 @@ remove SetROMDir
 fades
 evaluate all remaining unimp's
 small screens in mission control during launch
-try to get vab animation
+
+try to get vab animation - I saw it happen in 1960 - it had the RLE slanted bug
+
+
 enable all gcc warnings and fix up code
 check with valgrind
 compile with -O
@@ -19,6 +22,9 @@ in RDafford, figure out how this came to be MaxRD = 80, but Safety = 90 once:
 
 
 check XXX in future.c regarding grouping of nested if statements
+
+skipping mission steps in playback
+
 
 enhancements:
 

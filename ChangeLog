@@ -1,5 +1,9 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V33
+	
+	* fix some NULL pointer problems in mc.c and prest.c
+
 	* V32
 
 	* enable gcc warning related to structured initializers

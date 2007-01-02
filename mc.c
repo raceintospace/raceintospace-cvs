@@ -284,7 +284,8 @@ void MissionPast(char plr,char pad,int prest)
   Data->P[plr].History[loc].Event=Data->P[plr].History[loc].Saf=0; 
   Data->P[plr].History[loc].Event=(mc==10)?2:((mc==12)?7:((mc==13)?7:0));
   if ((mc==10 || mc==12 || mc==13) && prest!=0) Data->P[plr].History[loc].Event=0;
-  Data->P[plr].History[loc].Saf=MH[0][3]->MisSaf;
+  if (MH[0][3])
+	  Data->P[plr].History[loc].Saf=MH[0][3]->MisSaf;
   if (!(mc==10 || mc==12 || mc==13)) Data->P[plr].History[loc].Event=Data->P[plr].History[loc].Saf=0; 
 
   Data->P[plr].History[loc].MissionCode=Data->P[plr].Mission[pad].MissionCode;
