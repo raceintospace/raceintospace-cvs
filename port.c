@@ -32,7 +32,7 @@
 #define LET_V   0x0C
 #define LET_R   0x08
 
-#define SPOT_ON 0 /* turn off until everything else works - pace */
+#define SPOT_ON 1 /* turn off until everything else works - pace */
 #define BABYSND 1
 #define pNOREDRAW 0
 #define pREDRAW 1
@@ -132,7 +132,7 @@ struct headSPOT {
 };
 
 
-int sCount,Vab_Spot;        // sCount is the number of steps
+i16 sCount,Vab_Spot;        // sCount is the number of steps
 FILE *sFin;
 struct headSPOT hSPOT;  // Filled by Seek_sOff();
 struct sPATH sPath,sPathOld;
@@ -220,7 +220,6 @@ void SpotCrap(char loc,char mode)
         for (i=0;i<xx;i++) {
            if (SP2.vptr[i]==0) SP2.vptr[i]=SP3.vptr[i];
         }
-        while (!(inp(0x3da)&0x08));
         if (sPathOld.xPut!=-1) gxVirtualDisplay(&vhptr,sPathOld.xPut,sPathOld.yPut,sPathOld.xPut,sPathOld.yPut,sPathOld.xPut+sImgOld.w-1,sPathOld.yPut+sImgOld.h-1,0);
         gxPutImage(&SP2,gxSET,sPath.xPut,sPath.yPut,0);
       }
@@ -229,7 +228,6 @@ void SpotCrap(char loc,char mode)
         for (i=0;i<xx;i++) {
            if (SP1.vptr[i]==0) SP1.vptr[i]=SP3.vptr[i];
         }
-        while (!(inp(0x3da)&0x08));
         if (sPathOld.xPut!=-1) gxVirtualDisplay(&vhptr,sPathOld.xPut,sPathOld.yPut,sPathOld.xPut,sPathOld.yPut,sPathOld.xPut+sImgOld.w-1,sPathOld.yPut+sImgOld.h-1,0);
         gxPutImage(&SP1,gxSET,sPath.xPut,sPath.yPut,0);
       }

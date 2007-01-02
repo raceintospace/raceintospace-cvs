@@ -526,7 +526,7 @@ int AIQUnit(short hwx,short unx,char plr)
 
 void RDafford(char plr,int class,int index)
 {
- int b=0,roll=0,ok=0;
+ i16 b=0,roll=0,ok=0;
  if (class==0) b+=Data->P[plr].Probe[index].RDCost;
  if (class==1) b+=Data->P[plr].Rocket[index].RDCost;
  if (class==2) b+=Data->P[plr].Manned[index].RDCost;

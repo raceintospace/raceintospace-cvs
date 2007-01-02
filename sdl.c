@@ -283,5 +283,6 @@ void
 PlayAudio(char *name,char mode)
 {
 	printf ("PlayAudio(%s)\n", name);
+	/* need to sum this sound with the music */
 }
 

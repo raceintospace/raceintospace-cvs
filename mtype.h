@@ -19,6 +19,6 @@
 #define TRUE 1
 
 #define BYTE unsigned char
-#define WORD unsigned int
+#define WORD unsigned short
 #define LONG unsigned long
 

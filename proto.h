@@ -43,7 +43,7 @@
 #define BYTE unsigned char
 #endif
 #ifndef WORD
-#define WORD unsigned int
+#define WORD unsigned short
 #endif
 
 #define xMODE_HIST 0x0001

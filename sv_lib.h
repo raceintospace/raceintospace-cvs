@@ -27,7 +27,7 @@
 #define BYTE unsigned char
 #endif
 #ifndef WORD
-#define WORD unsigned int
+#define WORD unsigned short
 #endif
 #ifndef LONG
 #define LONG unsigned long

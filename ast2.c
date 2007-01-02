@@ -438,7 +438,6 @@ void LimboText(char plr,int astro)
    DispNum(125,100,Data->P[plr].Pool[astro].Endurance); 
    RectFill(127,113,141,120,3);grSetColor(11);
    DispNum(130,118,Data->P[plr].Pool[astro].Active);
-   while(inp(0x03DA)&8);
    AstFaces(plr,10,52,Data->P[plr].Pool[astro].Face);
    return;
 }

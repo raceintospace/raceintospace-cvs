@@ -1,4 +1,4 @@
-
+remove SetROMDir
 
 fades
 evaluate all remaining unimp's
@@ -10,8 +10,13 @@ check with valgrind
 compile with -O
 why am I not seeing any mission failures?
 optimize grPutPixel and grGetPixel
+implement PlayAudio ... summing sound effects with music
 
 clean up extra gr_sync's
+
+
+in RDafford, figure out how this came to be MaxRD = 80, but Safety = 90 once:
+ if (class==2) roll+=Data->P[plr].Manned[index].MaxRD - Data->P[plr].Manned[index].Safety;
 
 
 enhancements:

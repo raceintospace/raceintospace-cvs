@@ -21,7 +21,6 @@ unimp (void)
 
 void gxDisplayVirtual (int a, int b, int c, int d, int e,
 		       GXHEADER *hp, int f, int g){unimp();}
-int inp (int port){unimp();return 0;}
 void _fmemcpy (void *dest, void *src, int count){unimp();}
 void _setcursortype (int type){unimp();}
 void gotoxy (int x, int y){unimp();}

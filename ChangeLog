@@ -1,5 +1,22 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V28
+
+	* the ai was looping forever in RDafford because roll was
+	negative due to Manned Safety being more than MaxRD.  the
+	dos game survived this because roll was a 16 bit number,
+	so it didn't take to long to count it down until it wrapped
+	to 0.  but it was never going to finish with a 32 bit roll value
+
+	for now, delcare roll as i16 to make it behave a least as well as dos...
+
+	remove calls to inp() that checked for vblank
+
+	change WORD to i16 to make Spot data structures work
+
+	enable SPOT_ON visuals.  sound will come later; I've seen some
+	helicoptors, but no vehicle assembly yet
+
 	* V27
 
 	* remaining unsued locals
