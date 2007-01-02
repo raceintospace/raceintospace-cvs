@@ -27,7 +27,6 @@
 //藩様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様夕
 
 #include "Buzz_inc.h"
-//#include "cdmaster.h"
   int cdROM,hDISK;
 
 void _ExceptInit(void) {}  // reduce EXE size

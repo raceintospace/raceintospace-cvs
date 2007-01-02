@@ -42,47 +42,18 @@ typedef long	i32;
 
 #include "pace.h"
 
-//#include <process.h>
 #include <stdio.h>
 #include <string.h>
-//#include <dir.h>
 #include <ctype.h>
-//#include <mem.h>
 #include <stdlib.h>
 #include <stdarg.h>
-//#include <alloc.h>
-//#include <conio.h>
 #include <fcntl.h>
-//#include <dos.h>
-//#include <io.h>
 #include <time.h>
-//#include <bios.h>
 #include <math.h>
 #include <sys/stat.h>
 
-// AIL includes
-//#include <ail.h>
-//#include <gen.h>
-//#include <soundfx.h>
-
 // EMS Includes
 #include "sv_lib.h"
-
-// Gravis Ultrasound Includes  (removed from CD-ROM
-//#include "gus\forte.h"
-//#include "gus\extern.h"
-//#include "gus\gf1proto.h"
-//#include "gus\ultraerr.h"
-
-// CD-ROM Includes
-// #include "cdmaster.h"
-// #include "cdrom.h"
-
-// GENUS includes
-//#include <gxLib.h>
-//#include <grLib.h>
-
-//  my includes
 
 #pragma pack(1)
 

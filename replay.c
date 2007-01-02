@@ -25,7 +25,6 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "replay.h"
-//#include "cdrom.h"
 
 #define FRM_Delay     25
 
