@@ -1,4 +1,10 @@
-2007-01-02  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+
+	* V40
+
+	* Removed the macosx directory so there isn't false hope
+
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 	
 	* V39
 
