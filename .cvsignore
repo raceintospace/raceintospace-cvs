@@ -15,3 +15,6 @@ getvab
 *.cat
 sdltest
 *.hex
+TMP
+raceintospace
+raceintospace.tar.gz

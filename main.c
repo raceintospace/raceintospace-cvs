@@ -185,7 +185,7 @@ env_setup (void)
 	sprintf (savedat_dir, "%s/.raceintospace", home);
 	mkdir (savedat_dir, 0777);
 
-	strcpy (cdrom_dir, "/mnt/cdrom");
+	strcpy (cdrom_dir, "/usr/share/raceintospace/cdrom");
 	strcpy (music_dir, "/usr/share/raceintospace/music");
 
 	if ((f = open_savedat ("CONFIG", "r")) != NULL) {

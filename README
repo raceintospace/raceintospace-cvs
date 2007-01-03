@@ -1,22 +1,29 @@
 1/1/2007
 
-extract music.tar.gz (a set of ogg files) into
-/usr/share/raceintospace/music default location for cdrom files is
-/l/cdrom
+To run the game:
 
-you can override the directory locations in
-$HOME/.raceintospace/CONFIG like this
+Make a directory /usr/share/raceintospace/cdrom and put the files from
+the original cdrom there.  So, for example, you should have the file
+/usr/share/raceintospace/cdrom/gamedat/unews.cdr The program is
+tolerant of whether the file names are in upper or lower case.
 
-================================================================
-cdrom /home/pace/race-cdrom
-music /home/pace/test-music
-================================================================
+Put the music files in /usr/share/raceintospace/music This will be
+done automatically if you install the rpm file.  If not, you can get
+music.tar.gz from the Sourceforge project at
 
-development system is
+	http://sourceforge.net/project/showfiles.php?group_id=129186
+
+To compile, simply type "make".
+
+The executable program is "raceintospace" which doesn't require any
+arguments.
+
+Your saved games will be written to $HOME/.raceintospace
+
+The development system is
 
 Fedora core 5
 SDL 1.2.9
 libvorbis-1.1.2
-
 
 Pace Willisson <pace@alum.mit.edu>

@@ -1,0 +1,17 @@
+#! /bin/sh
+
+name=raceintospace
+ver=0.1
+
+name_ver=${name}-${ver}
+
+set -x
+make tar
+rm -rf TMP
+mkdir -p TMP/$name_ver
+cat $name.tar.gz | (cd TMP/$name_ver; tar -xzf -)
+(cd TMP; tar -czf ~/rpmbuild/SOURCES/${name_ver}.tar.gz ${name_ver})
+
+sed "s/@VER@/$ver/" < $name.spec > ~/rpmbuild/SPECS/$name.spec
+
+rpmbuild -ba ~/rpmbuild/SPECS/$name.spec

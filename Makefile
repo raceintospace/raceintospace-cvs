@@ -11,11 +11,38 @@ LIBS = `sdl-config --libs` -lvorbisfile -lm
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
 
-PROGS = baris imgsplit vtest decode getport mkmovie getvab mtest sdltest
+PROGS = raceintospace imgsplit vtest decode getport mkmovie getvab mtest sdltest
 all: $(PROGS) 
 
+EXTRA_SOURCES = README raceintospace.1
+
+rpm_all: raceintospace
+
+DESTDIR=/
+
+install: raceintospace
+	mkdir -p $(DESTDIR)/usr/bin
+	mkdir -p $(DESTDIR)/usr/share/man/man1
+	mkdir -p $(DESTDIR)/usr/share/doc/raceintospace
+	mkdir -p $(DESTDIR)/usr/share/raceintospace/music
+	install -c -m 755 raceintospace $(DESTDIR)/usr/bin/raceintospace
+	gzip < raceintospace.1 \
+	   > $(DESTDIR)/usr/share/man/man1/raceintospace.1.gz
+	install -c -m 644 README $(DESTDIR)/usr/share/doc/raceintospace/.
+
+rpm_install: install
+	cp -pr /usr/share/raceintospace/music/*.ogg \
+		$(DESTDIR)/usr/share/raceintospace/music/.
+
+uninstall:
+	rm -f $(DESTDIR)/usr/bin/raceintospace
+	rm -f $(DESTDIR)/usr/share/man/man1/raceintospace.1*
+	rm -rf $(DESTDIR)/usr/share/doc/raceintospace
+	rm -f $(DESTDIR)/usr/share/raceintospace/README
+
 BARIS_HFILES = Buzz_inc.h data.h externs.h mis.h mtype.h	\
-	music.h nn.h pace.h pcx_hdr.h proto.h records.h replay.h soundfx.h	\
+	music.h nn.h pace.h pcx_hdr.h proto.h records.h replay.h \
+	soundfx.h	\
 	sv_lib.h uc.h soundint.h
 
 BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
@@ -26,8 +53,8 @@ BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	place.o port.o prefs.o prest.o radar.o rdplex.o recods.o \
 	replay.o review.o rush.o start.o   \
 	vab.o pace.o gx.o gr.o sdl.o music.o
-baris: $(BARIS_OBJS)
-	$(CC) $(CFLAGS) -o baris $(BARIS_OBJS) $(LIBS)
+raceintospace: $(BARIS_OBJS)
+	$(CC) $(CFLAGS) -o raceintospace $(BARIS_OBJS) $(LIBS)
 
 # $(BARIS_OBJS): $(BARIS_HFILES)
 
@@ -63,8 +90,10 @@ clean:
 	rm -f *.o *~
 
 tar:
-	rm -f baris-pace.tar baris-pace.tar.gz
-	tar -cf baris-pace.tar Makefile ChangeLog *.[ch] domount .gdbinit
-	gzip baris-pace.tar
+	rm -f raceintospace.tar raceintospace.tar.gz
+	tar -czf raceintospace.tar.gz Makefile ChangeLog *.[ch] domount .gdbinit $(EXTRA_SOURCES)
+
+
+
 
 
