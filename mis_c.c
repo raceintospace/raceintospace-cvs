@@ -123,6 +123,7 @@ bot:                          // bottom of routine
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
 	double last_secs;
+	char *fName;
 
 	struct oLIST {
 		i16 aIdx; 
@@ -392,6 +393,9 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		if (sidx)
 			play_audio (sidx, mode);
 
+		if ((fName = seq_filename (aidx, mode)) == NULL)
+			fName = "(unknown)";
+
 		if ((frm = frm_open_seq (aidx, mode)) == NULL) {
 			printf ("can't open frm seq %d,%d\n", aidx, mode);
 			break;
@@ -439,8 +443,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				idle_loop_secs (1.0 / 8.0);
 
 			if (sts<23) {
-				// pace
-				// if (BABY==0 && BIG==0) DoPack(plr,ffin,(AEPT && !mode) ? 1 : 0,Seq,fName);
+				if (BABY==0 && BIG==0) DoPack(plr,ffin,(AEPT && !mode) ? 1 : 0,Seq,fName);
 				++sts;
 				if (sts==23) sts=0;
 				while (bioskey(1)) {

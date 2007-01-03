@@ -1,8 +1,8 @@
 remove SetROMDir
 
-fades
-evaluate all remaining unimp's
 small screens in mission control during launch
+
+fades
 
 implement PlayAudio ... summing sound effects with music
 

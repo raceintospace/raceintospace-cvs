@@ -484,7 +484,7 @@ void MisRush(char ms);
 // MIS_C.C
 void RLEE (void *dest, void *src, unsigned int src_size);
 void PlaySequence(char plr,int step,char *Seq,char mode);
-void DoPack(char plr,FILE *ffin,char mode,char *cde,char *Sname);
+void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName);
 void InRFBox(int a, int b, int c, int d, int col);
 void GuyDisp(int xa,int ya,struct Astros *Guy);
 char FailureMode(char plr,int prelim,char *text);

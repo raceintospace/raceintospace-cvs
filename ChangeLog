@@ -1,5 +1,9 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V36
+	
+	* make little screens work during launch
+
 	* V35
 	
 	* remove stubs that are no longer needed (now unimp() is gone);
