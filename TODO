@@ -1,15 +1,11 @@
 remove SetROMDir
 
-small screens in mission control during launch
-
 fades
+implement config opts for no sound, no anim
 
 implement PlayAudio ... summing sound effects with music
 
 clean up extra gr_sync's
-
-skipping mission steps in playback
-
 
 enhancements:
 

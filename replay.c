@@ -93,6 +93,7 @@ bot:                          // bottom of routine
 
 void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 {
+ int keep_going;
  struct oLIST {
    i16 aIdx; 
    i16 sIdx; 
@@ -201,8 +202,9 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 
   i=0;
 
+  keep_going = 1;
   update_map = 0;
-  while (i<max)
+  while (keep_going && i<max)
   {
    UpdateMusic();
 
@@ -211,7 +213,7 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 
    update_map = 1;
 
-   while (1) {
+   while (keep_going) {
 	   unsigned char map[384];
 
 	   UpdateMusic();
@@ -233,8 +235,7 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 	   if (bioskey(1)) {
 		   key=bioskey(0);
 		   if (key>0)
-			   goto done;
-		   goto skip_step;
+			   keep_going = 0;
 	   }
 
 	   if (frm->frame_rate)
@@ -249,9 +250,6 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 
    i++;
   }
-
-skip_step:;
-
  }
 done:
  DV(&dopy);DV(&snzy);

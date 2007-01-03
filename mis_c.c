@@ -124,6 +124,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 {
 	double last_secs;
 	char *fName;
+	int keep_going;
 
 	struct oLIST {
 		i16 aIdx; 
@@ -377,7 +378,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	if (mode==0) max=aSeq.ID[1]-0x30;
 	else max=cSeq.ID[1]-0x30;
 
-	while (i<(int)max) {
+	keep_going = 1;
+	while (keep_going && i<(int)max) {
 		int aidx, sidx;
 
 		if (i!=0) Plop(plr,2);   //Specs: static frame
@@ -403,7 +405,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		j=0;
 
 		hold_count = 0;
-		while (1) {
+		while (keep_going) {
 			av_step ();
 
 			if (BABY==0 && BIG==0) Tick(plr);
@@ -449,8 +451,9 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				while (bioskey(1)) {
 					key=bioskey(0);
 					if (key>0) {
-						i=max;
-					};
+						keep_going = 0;
+						av_silence ();
+					}
 				}
 				if (Data->Def.Anim) {
 					idle_loop (FRM_Delay * 3);
@@ -464,6 +467,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 		i++;
 	}
+
 	if (lnch==1 && Sounds>0) {
 		//Specs: launch sync 
 		last_secs = get_time ();
