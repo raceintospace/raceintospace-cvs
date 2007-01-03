@@ -194,7 +194,7 @@ void Museum(char plr)
 	   }
      strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
   } while (i!=beg);
-  kill("PORT.TMP"); // remove temp file
+  remove_savedat("PORT.TMP"); // remove temp file
   KillMusic();
 	return;
 }

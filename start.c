@@ -643,7 +643,7 @@ void Update(void)
 void UpdAll(char side)
 {
   int i,k;
-  char p0,p1;
+  char p0=0,p1=0;
   char tName[20];
 
   if (Data->P[side].DMod>0) Data->P[side].DMod--;

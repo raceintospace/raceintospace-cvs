@@ -318,7 +318,7 @@ void BackIntel(char p,char year)
 
 void HarIntel(char p,char acc)
 {
- int mr,i,prg,ind,j=0,k=0,save[28],lo=0,hi=28,tot=0,nf=0,seg=0;
+ int mr,i,prg=0,ind,j=0,k=0,save[28],lo=0,hi=28,tot=0,nf=0,seg=0;
 
  ind = 0; /* XXX check uninitialized */
 

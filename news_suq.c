@@ -94,9 +94,8 @@ void Replace_Snaut(char plr)
 char REvent(char plr)
 {
   FILE *fin;
-  int NoMods=1,i,j;
+  int NoMods=1,i=0,j=0;
   i16 m;
-  i=0;
   if (NoMods==1)
   {
     m=0;

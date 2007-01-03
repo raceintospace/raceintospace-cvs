@@ -656,7 +656,7 @@ char HPurc(char plr)
   short hardware,unit;
   FILE *undo;
 
-  kill("UNDO.TMP");
+  remove_savedat("UNDO.TMP");
   undo=sOpen("UNDO.TMP","wb",1);
   fwrite(Data,sizeof (struct Players),1,undo);
   fclose(undo);
@@ -782,7 +782,7 @@ char HPurc(char plr)
         KillMusic();
         Del_RD_BUT(); call=0;
         HARD1=1;UNIT1=1;
-        kill("UNDO.TMP");
+        remove_savedat("UNDO.TMP");
    	  return 0;   // Continue
        }
       else
@@ -791,7 +791,7 @@ char HPurc(char plr)
     	 MouseOff();InBox(5,73,152,83);MouseOn();
     	 HARD1=hardware; UNIT1=unit;
        KillMusic();
-       kill("UNDO.TMP");
+       remove_savedat("UNDO.TMP");
       if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
     	 if (call==1) return 1;
    	 call=1;

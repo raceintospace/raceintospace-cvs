@@ -159,7 +159,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	char sName[20],ERROR=0;
 	char *SEQ_DAT="SEQ.DAT\0";
 	char *FSEQ_DAT="FSEQ.DAT\0";
-	struct frm *frm;
+	struct frm *frm = NULL;
 	int hold_count;
 
 	F = NULL; /* XXX check uninitialized */

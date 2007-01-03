@@ -12,6 +12,9 @@
 		002F3A2E09D0888800EBEB88 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 002F3A2C09D0888800EBEB88 /* SDLMain.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		986F3D020B4C363A005E38A6 /* DEVELOPER in Resources */ = {isa = PBXBuildFile; fileRef = 986F3D010B4C363A005E38A6 /* DEVELOPER */; };
+		986F3D040B4C3644005E38A6 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 986F3D030B4C3644005E38A6 /* Makefile */; };
+		986F3D060B4C365B005E38A6 /* WHO_SPOT in Resources */ = {isa = PBXBuildFile; fileRef = 986F3D050B4C365B005E38A6 /* WHO_SPOT */; };
 		98D75F340B4A3D9100919DF1 /* admin.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F2B0B4A3D9100919DF1 /* admin.c */; };
 		98D75F350B4A3D9100919DF1 /* aimast.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F2C0B4A3D9100919DF1 /* aimast.c */; };
 		98D75F360B4A3D9100919DF1 /* aimis.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F2D0B4A3D9100919DF1 /* aimis.c */; };
@@ -71,7 +74,6 @@
 		98D75FA80B4A3E0300919DF1 /* review.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F800B4A3E0300919DF1 /* review.c */; };
 		98D75FA90B4A3E0300919DF1 /* rush.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F810B4A3E0300919DF1 /* rush.c */; };
 		98D75FAA0B4A3E0300919DF1 /* sdl.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F820B4A3E0300919DF1 /* sdl.c */; };
-		98D75FAC0B4A3E0300919DF1 /* sel.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F840B4A3E0300919DF1 /* sel.c */; };
 		98D75FAD0B4A3E0300919DF1 /* soundfx.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 98D75F850B4A3E0300919DF1 /* soundfx.h */; };
 		98D75FAE0B4A3E0300919DF1 /* soundint.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 98D75F860B4A3E0300919DF1 /* soundint.h */; };
 		98D75FAF0B4A3E0300919DF1 /* start.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D75F870B4A3E0300919DF1 /* start.c */; };
@@ -81,7 +83,6 @@
 		98D75FC80B4A3E2400919DF1 /* QUESTIONS in Resources */ = {isa = PBXBuildFile; fileRef = 98D75FC40B4A3E2400919DF1 /* QUESTIONS */; };
 		98D75FC90B4A3E2400919DF1 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 98D75FC50B4A3E2400919DF1 /* README */; };
 		98D75FCA0B4A3E2400919DF1 /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = 98D75FC60B4A3E2400919DF1 /* TODO */; };
-		98D75FE60B4A3E6900919DF1 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 98D75FE50B4A3E6900919DF1 /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -125,6 +126,9 @@
 		32CA4F630368D1EE00C91783 /* RaceIntoSpace_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RaceIntoSpace_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* RaceIntoSpace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RaceIntoSpace.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		986F3D010B4C363A005E38A6 /* DEVELOPER */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = DEVELOPER; sourceTree = "<group>"; };
+		986F3D030B4C3644005E38A6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		986F3D050B4C365B005E38A6 /* WHO_SPOT */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = WHO_SPOT; path = ../WHO_SPOT; sourceTree = SOURCE_ROOT; };
 		98D75F2B0B4A3D9100919DF1 /* admin.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = admin.c; path = ../admin.c; sourceTree = SOURCE_ROOT; };
 		98D75F2C0B4A3D9100919DF1 /* aimast.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = aimast.c; path = ../aimast.c; sourceTree = SOURCE_ROOT; };
 		98D75F2D0B4A3D9100919DF1 /* aimis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = aimis.c; path = ../aimis.c; sourceTree = SOURCE_ROOT; };
@@ -184,7 +188,6 @@
 		98D75F800B4A3E0300919DF1 /* review.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = review.c; path = ../review.c; sourceTree = SOURCE_ROOT; };
 		98D75F810B4A3E0300919DF1 /* rush.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = rush.c; path = ../rush.c; sourceTree = SOURCE_ROOT; };
 		98D75F820B4A3E0300919DF1 /* sdl.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sdl.c; path = ../sdl.c; sourceTree = SOURCE_ROOT; };
-		98D75F840B4A3E0300919DF1 /* sel.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sel.c; path = ../sel.c; sourceTree = SOURCE_ROOT; };
 		98D75F850B4A3E0300919DF1 /* soundfx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = soundfx.h; path = ../soundfx.h; sourceTree = SOURCE_ROOT; };
 		98D75F860B4A3E0300919DF1 /* soundint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = soundint.h; path = ../soundint.h; sourceTree = SOURCE_ROOT; };
 		98D75F870B4A3E0300919DF1 /* start.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = start.c; path = ../start.c; sourceTree = SOURCE_ROOT; };
@@ -194,7 +197,6 @@
 		98D75FC40B4A3E2400919DF1 /* QUESTIONS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = QUESTIONS; path = ../QUESTIONS; sourceTree = SOURCE_ROOT; };
 		98D75FC50B4A3E2400919DF1 /* README */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = README; path = ../README; sourceTree = SOURCE_ROOT; };
 		98D75FC60B4A3E2400919DF1 /* TODO */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = TODO; path = ../TODO; sourceTree = SOURCE_ROOT; };
-		98D75FE50B4A3E6900919DF1 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,7 +310,6 @@
 				98D75F800B4A3E0300919DF1 /* review.c */,
 				98D75F810B4A3E0300919DF1 /* rush.c */,
 				98D75F820B4A3E0300919DF1 /* sdl.c */,
-				98D75F840B4A3E0300919DF1 /* sel.c */,
 				98D75F870B4A3E0300919DF1 /* start.c */,
 				98D75F890B4A3E0300919DF1 /* vab.c */,
 			);
@@ -336,11 +337,13 @@
 		98D75FB40B4A3E0C00919DF1 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
-				98D75FE50B4A3E6900919DF1 /* Makefile */,
 				98D75FC30B4A3E2400919DF1 /* PLAN */,
+				986F3D010B4C363A005E38A6 /* DEVELOPER */,
 				98D75FC40B4A3E2400919DF1 /* QUESTIONS */,
 				98D75FC50B4A3E2400919DF1 /* README */,
 				98D75FC60B4A3E2400919DF1 /* TODO */,
+				986F3D050B4C365B005E38A6 /* WHO_SPOT */,
+				986F3D030B4C3644005E38A6 /* Makefile */,
 			);
 			name = Notes;
 			sourceTree = "<group>";
@@ -416,6 +419,8 @@
 				98D75FC80B4A3E2400919DF1 /* QUESTIONS in Resources */,
 				98D75FC90B4A3E2400919DF1 /* README in Resources */,
 				98D75FCA0B4A3E2400919DF1 /* TODO in Resources */,
+				986F3D020B4C363A005E38A6 /* DEVELOPER in Resources */,
+				986F3D060B4C365B005E38A6 /* WHO_SPOT in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,10 +478,9 @@
 				98D75FA80B4A3E0300919DF1 /* review.c in Sources */,
 				98D75FA90B4A3E0300919DF1 /* rush.c in Sources */,
 				98D75FAA0B4A3E0300919DF1 /* sdl.c in Sources */,
-				98D75FAC0B4A3E0300919DF1 /* sel.c in Sources */,
 				98D75FAF0B4A3E0300919DF1 /* start.c in Sources */,
 				98D75FB10B4A3E0300919DF1 /* vab.c in Sources */,
-				98D75FE60B4A3E6900919DF1 /* Makefile in Sources */,
+				986F3D040B4C3644005E38A6 /* Makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,7 +506,11 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_WARN_UNUSED_VARIABLE = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = RaceIntoSpace;
@@ -520,6 +528,11 @@
 				);
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = RaceIntoSpace;
@@ -536,14 +549,17 @@
 					"$(FRAMEWORK_SEARCH_PATHS)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
 					/Library/Frameworks/SDL.framework/Headers,
 					"$(HEADER_SEARCH_PATHS)",
 				);
+				OTHER_LDFLAGS = "-lvorbis";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = /opt/local/include;
 			};
 			name = Debug;
 		};
@@ -556,14 +572,17 @@
 					"$(FRAMEWORK_SEARCH_PATHS)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
 					/Library/Frameworks/SDL.framework/Headers,
 					"$(HEADER_SEARCH_PATHS)",
 				);
+				OTHER_LDFLAGS = "-lvorbis";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = /opt/local/include;
 			};
 			name = Release;
 		};

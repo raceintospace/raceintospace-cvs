@@ -934,7 +934,7 @@ void AstStats(char plr,char man,char num)
 
 void AstNames(int man,char *name,char att)
 {
-  char col;
+  char col = 0;
   switch(man) {
     case 0:RectFill(16,87,75,91,3);
 	   RectFill(5,87,11,91,3);

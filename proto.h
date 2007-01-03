@@ -409,7 +409,6 @@ void NextTurn(char plr);
 
 // MAIN.C
 FILE *sOpen(char *Name,char *mode,int loc);
-void kill(char *name);
 
 void Rout_Debug(int line, char *file);
 void SetROMDir(void);

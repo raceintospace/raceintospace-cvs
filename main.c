@@ -422,7 +422,7 @@ int main(int argc, char *argv[])
     else fin=sOpen("RAST.DAT","rb",0);
     i=(int) filelength(fileno(fin));  // get length
     fread((char *)buffer,i,1,fin); fclose(fin);
-    printf ("reading Players: size = %d\n", sizeof (struct Players));
+    printf ("reading Players: size = %d\n", (int)sizeof (struct Players));
     RLED(buffer,(char *)Data,i);
     if (Data->Checksum!=(sizeof (struct Players))) {
       printf("BARIS Note: Wrong version of Data File.\n");

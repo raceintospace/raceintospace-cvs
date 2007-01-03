@@ -1,3 +1,11 @@
+2007-01-02  Michael McCarty <mkmccarty@gmail.com>
+	
+	* V39
+
+	* fixed some unitialized values
+
+	* replaced calls to kill() with remove_savedat()
+
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V38

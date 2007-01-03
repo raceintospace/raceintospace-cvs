@@ -701,7 +701,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
            fclose(tin);
            FadeIn(2,pal,10,0,0);
            key=0;
-           kill("REPL.TMP");
+           remove_savedat("REPL.TMP");
            MouseOn();
         }
         else {
