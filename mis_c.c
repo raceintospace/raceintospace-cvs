@@ -413,8 +413,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 						frm->frame_rate);
 
 				if (frm->next_frame_chunks == 0 && j == 0) {
-					printf ("need fancy handling for hold\n");
-					unimp ();
+					printf ("*** need fancy handling for hold\n");
 					hold_count = 1;
 				}
 			} else if (hold_count < 8) {
@@ -428,8 +427,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				idle_loop (FRM_Delay);
 				hold_count++;
 			} else {
-				printf ("need to come out of hold\n");
-				unimp ();
+				printf ("**** need to come out of hold\n");
 			}
 
 			if (BIG==0)SMove(&vhptr.vptr[40000],80,3+plr*10);

@@ -62,7 +62,6 @@ void WriteMsg(void);
 void Write_Config(void);
 void DrawCenter();
 void MesCenter(void);
-void DrawMPrefs(char mode,char a1);
 char MPrefs(char mode);
 void Toggle_Cfg(int opt,int old);
 void TrackPict(char mode);

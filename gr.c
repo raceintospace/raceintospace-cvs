@@ -2,8 +2,6 @@
 
 extern int gtk_mouse_x, gtk_mouse_y, gtk_mouse_pressed;
 
-extern void unimp (void);
-
 extern unsigned char *screen;
 extern char pal[];
 

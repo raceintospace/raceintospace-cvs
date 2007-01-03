@@ -71,7 +71,6 @@
 #define TXT 0x03
 
 void SetMode(char mode);
-void BFill(void *buffer,char color);
 void BxFill(char far *buffer,char c1,char c2);
 void SMove(void *src,int x, int y);
 void LMove(void *src);

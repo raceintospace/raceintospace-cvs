@@ -1,5 +1,10 @@
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V35
+	
+	* remove stubs that are no longer needed (now unimp() is gone);
+	remove modem and play by mail stuff until everything else works
+
 	* V34
 	
 	* hack around messed up crane image (search for fixing sImg) in

@@ -4,69 +4,27 @@ extern GXHEADER vhptr;
 
 void frm_init (void);
 
+char Musics,tMusics,Sounds;
 
-
-void
-unimp (void)
+char
+DoModem(int sel)
 {
-	fprintf (stderr, "unimplemented library function\n");
-	gr_sync ();
-	sleep (3);
-	exit (1);
+	printf ("DoModem not implemented\n");
+	return (0);
 }
 
-
-
-
-
-void gxDisplayVirtual (int a, int b, int c, int d, int e,
-		       GXHEADER *hp, int f, int g){unimp();}
-void _fmemcpy (void *dest, void *src, int count){unimp();}
-void _setcursortype (int type){unimp();}
-void gotoxy (int x, int y){unimp();}
-void textbackground (int color){unimp();}
-void clrscr (void){unimp();}
-void clreol (void){unimp();}
-void textcolor (int color){unimp();}
-void cprintf (char *fmt, ...){unimp();}
-void *MK_FP (int seg, int off){unimp();return 0;}
-HTIMER AIL_register_timer (void (*func)(void)){unimp();return 0;}
-void AIL_set_timer_period (HTIMER t, long ticks){unimp();}
-void AIL_start_timer (HTIMER t){unimp();}
-void getdfree (int drdive, struct dfree *fp){unimp();}
-void absdiscread (int disk, long op, int offset, unsigned char *buf){unimp();}
-void BFill(void *buffer,char color){unimp();}
-void window (int x1, int y1, int x2, int y2){unimp();}
-
-char Musics,tMusics,Sounds;
-char DoModem(int sel) {unimp ();return 0;}
-void DrawMPrefs(char mode,char a1) {unimp (); }
-char MPrefs(char mode) {unimp (); return 0;}
-
-void spawnl (int mode, char *cmd, ...) {unimp();}
+char
+MPrefs(char mode) 
+{
+	return (0);
+}
 
 struct Prest_Upd MP[3];
-void TrackPict(char mode) {unimp ();}
-void SaveFirst(char a) {unimp ();}
-void CheckFirst(char a){unimp();}
-void UpdateFirst(void){unimp();}
-void SendFirst(void){unimp();}
-void RecvFirst(void){unimp();}
 
-void SaveSide(char side) {unimp ();}
-void Upload(void){unimp();}
-void ReadMsg(void){unimp();}
-void WriteMsg(void){unimp();}
-void Write_Config(void){unimp();}
-void DrawCenter(){unimp();}
-void MesCenter(void){unimp();}
-void Toggle_Cfg(int opt,int old){unimp();}
-void Dnload(void) {unimp();}
-void RecvSide(char side){unimp();}
-void UpdPrestige(void){unimp();}
-void RLEE (void *dest, void *src, unsigned int src_size){unimp ();}
-int put_serial(unsigned char n) {unimp (); return 0;}
-void RLEF(void *dest, void *src, unsigned int src_size) {unimp ();}
+
+int put_serial(unsigned char n) {return 0;}
+void MesCenter(void){}
+
 
 
 

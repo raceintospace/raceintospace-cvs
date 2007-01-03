@@ -638,6 +638,9 @@ void AIPur(char plr)
 int GenPur(char plr,int hwx,int unx)
 {
  char RT_value,newf,n1,n2,n3,n4,n5,n6,n7;
+
+ RT_value = 0; /* XXX check uninitialized */
+
  newf=0; // reinitialize
  //special case DM before Kickers
  if (hwx==3 && unx<=1 && Data->P[plr].Misc[4].Num==-1)
@@ -776,6 +779,7 @@ int GenPur(char plr,int hwx,int unx)
 	 break;
   default:break;
    } // end switch
+
   // starting bonuses and cost bonuses
   if (hwx==0 && newf==1) {
 	n1=Data->P[plr].Probe[0].Safety;

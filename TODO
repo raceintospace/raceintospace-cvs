@@ -4,28 +4,29 @@ fades
 evaluate all remaining unimp's
 small screens in mission control during launch
 
-try to get vab animation - I saw it happen in 1960 - it had the RLE slanted bug
-
-
-enable all gcc warnings and fix up code
-check with valgrind
-compile with -O
-why am I not seeing any mission failures?
-optimize grPutPixel and grGetPixel
 implement PlayAudio ... summing sound effects with music
 
 clean up extra gr_sync's
-
-
-in RDafford, figure out how this came to be MaxRD = 80, but Safety = 90 once:
- if (class==2) roll+=Data->P[plr].Manned[index].MaxRD - Data->P[plr].Manned[index].Safety;
-
-
-check XXX in future.c regarding grouping of nested if statements
 
 skipping mission steps in playback
 
 
 enhancements:
 
-water flows backwards in DoCycle
+water seems to flow backwards in DoCycle
+optimize grPutPixel and grGetPixel
+
+================================================================
+possible old bugs
+
+in RDafford, figure out how this came to be MaxRD = 80, but Safety = 90 once:
+ if (class==2) roll+=Data->P[plr].Manned[index].MaxRD - Data->P[plr].Manned[index].Safety;
+
+check XXX in future.c regarding grouping of nested if statements
+
+================================================================
+
+release checklist
+
+check with valgrind
+compile with -O

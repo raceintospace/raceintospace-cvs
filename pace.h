@@ -104,8 +104,6 @@ int inp (int port);
 
 #define EMPTY_BODY {}
 
-void _fmemcpy (void *dest, void *src, int count);
-
 typedef struct {
 	int dummy;
 } *HTIMER;
@@ -119,49 +117,17 @@ struct diskfree_t {
 	int dummy;
 };
 
-#define _NOCURSOR 1
-#define _NORMALCURSOR 2
-void _setcursortype (int type);
-
-void gotoxy (int x, int y);
-#define BLUE 1
-#define RED 2
-#define WHITE 3
-#define YELLOW 4
-#define BLACK 5
-void textbackground (int color);
-void clrscr (void);
-void clreol (void);
-void textcolor (int color);
-void cprintf (char *fmt, ...);
-
-void *MK_FP (int seg, int off);
-#define P_WAIT 1
-void spawnl (int mode, char *cmd, ...);
-
-HTIMER AIL_register_timer (void (*func)(void));
-void AIL_set_timer_period (HTIMER t, long ticks);
-void AIL_start_timer (HTIMER t);
-
-/* free disk space */
-struct dfree {
-	int df_sclus;
-	int df_avail;
-	int df_bsec;
-};
-void getdfree (int drdive, struct dfree *fp);
+//#define RED 2
+//#define WHITE 3
+//#define YELLOW 4
+//#define BLACK 5
 
 void randomize (void);
 
 void SMove (void *p, int x, int y);
 void LMove (void *p);
 
-void absdiscread (int disk, long op, int offset, unsigned char *buf);
 int getch (void);
-void BFill(void *buffer,char color);
-
-void window (int x1, int y1, int x2, int y2);
-int _wscroll;
 
 int setup_gtk (int *argcp, char ***argvp);
 void step_gtk (void);
@@ -204,7 +170,6 @@ void remove_savedat (char *name);
 
 void idle_loop (int ticks);
 void idle_loop_secs (double secs);
-void unimp (void);
 
 void env_setup (void);
 char *seq_filename (int seq, int mode);

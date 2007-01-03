@@ -132,6 +132,29 @@ gxVirtualDisplay (GXHEADER *hp,
 }
 
 void
+gxDisplayVirtual (int from_x0, int from_y0,
+		  int from_x1, int from_y1,
+		  int always_zero,
+		  GXHEADER *hp,
+		  int to_x, int to_y)
+{
+	int row, col, from_idx, to_idx;
+	int width, height;
+
+	width = from_x1 - from_x0 + 1;
+	height = from_y1 - from_y0 + 1;
+
+	for (row = 0; row < height; row++) {
+		for (col = 0; col < width; col++) {
+			from_idx = (from_y0 + 320) * hp->w + (from_x0 + col);
+			to_idx = (to_y + row) * hp->w + (to_x + col);
+			hp->vptr[to_idx] = screen[from_idx];
+		}
+	}
+}
+
+
+void
 gxSetDisplayPalette (char *pal)
 {
 }
