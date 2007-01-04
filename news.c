@@ -28,6 +28,9 @@
 #include "externs.h"
 #include "replay.h"
 
+double load_news_anim_start;
+
+
 char *totnews_dat;
 int totnews_offset;
 
@@ -37,7 +40,8 @@ int totnews_offset;
 
 int bufsize;
 int evflag,LOAD_US=0,LOAD_SV=0;
-BYTE Frame,X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex;
+int Frame;
+BYTE X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex;
 WORD handle0,handle1,handle2,handle3,handle4,handle5;
 extern char Option;
 extern char Musics,Sounds;
@@ -488,10 +492,10 @@ void News(char plr)
                RectFill(227,108,228,108,grGetPixel(227,108));
                MouseOn();
               }
-             PlayNewsAnim(AnimIndex);
-             PlayNewsAnim(AnimIndex);
-             PlayNewsAnim(AnimIndex);
-             PlayNewsAnim(AnimIndex);
+             PlayNewsAnim();
+             PlayNewsAnim();
+             PlayNewsAnim();
+             PlayNewsAnim();
              NGetVoice(plr,0);
              PlayVoice();
              loc++;
@@ -508,11 +512,11 @@ void News(char plr)
               else if (plr==0) LoadNewsAnim((BW==0) ? 3 : 2,FIRST_FRAME);
              Status=0;
              if (plr==0) {
-              PlayNewsAnim(AnimIndex);
-              PlayNewsAnim(AnimIndex);
-              PlayNewsAnim(AnimIndex);
-              PlayNewsAnim(AnimIndex);
-              PlayNewsAnim(AnimIndex);
+              PlayNewsAnim();
+              PlayNewsAnim();
+              PlayNewsAnim();
+              PlayNewsAnim();
+              PlayNewsAnim();
              }
              NGetVoice(plr,1);
              PlayVoice();
@@ -554,9 +558,9 @@ void News(char plr)
 
    if (Frame!=MaxFrame)
     { 
-     PlayNewsAnim(AnimIndex);
+     PlayNewsAnim();
      if (Frame==MaxFrame) Status=1;
-    };
+    } else { idle_loop_secs (.125); }
    
    //: Repeat News Sequence
     if (key=='R' && loc==6)
@@ -602,7 +606,7 @@ void News(char plr)
        DrawNText(plr,ctop);
        MouseOff();OutBox(303,158,313,194);MouseOn();
       }
-   gr_sync ();
+//   gr_sync ();
   };
 }
 
@@ -665,10 +669,19 @@ void Breakgrp(char plr)
   };                                /* for k */
 }
 
-void PlayNewsAnim(BYTE Index)
+void PlayNewsAnim(void)
 {
  GXHEADER local;
+ double delta;
+ int frames_realtime;
+ int skip_frame;
 
+ skip_frame = 0;
+ delta = get_time () - load_news_anim_start;
+ frames_realtime = delta * 15;
+ if (Frame < frames_realtime)
+	 skip_frame = 1;
+ 
  GV(&local,Depth,Length);
 
  RLED_img (totnews_dat + totnews_offset + table[Frame].offset,
@@ -681,24 +694,12 @@ void PlayNewsAnim(BYTE Index)
  DV(&local);
  Frame+=1;
 
- gr_sync ();
- idle_loop_secs (1 / 30.0);
+ if (skip_frame == 0)
+	 idle_loop_secs (1 / 16.0);
 
  return;
 }
 
-void FillAnim(unsigned index,unsigned maxf)
-{
- unsigned fill;
-
- MouseOff();
- fill=((float)index/(float)maxf)*203;
- if (index==maxf) fill=203;
- if (fill>0 && fill<=203)
-  RectFill(54,109,54+(unsigned int)fill,118,7);
- MouseOn();
- return;
-}
 
 void LoadNewsAnim(BYTE Index,BYTE Mode)
 {
@@ -720,6 +721,8 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
   long size;
   long offset;
  } god[12];
+
+  load_news_anim_start = get_time ();
 
  if (Mode==1) {
   switch(Index)
@@ -798,6 +801,7 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
   MouseOn();
   gxDestroyVirtual(&vhptr2);
   DV(&local);
+
  };
 
 if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94

@@ -43,9 +43,7 @@ int put_serial(unsigned char n);
 
 char RUSH,SUSPEND;
 extern int oldx,oldy;
-//extern char far *sbuf0;
 extern struct mStr Mis;
-extern char IDLE;
 extern char Option;
 extern char Sounds;
 
@@ -199,9 +197,11 @@ void SpotCrap(char loc,char mode)
       fread(&sImg,sizeof sImg,1,sFin);    // get image header
 
       {
+	      static int warned;
 	      int expected_w = hSPOT.size / sImg.h;
-	      if (sImg.w != expected_w) {
-		      printf ("XXX fixing sImg.w %d->%d\n",
+	      if (sImg.w != expected_w && warned == 0) {
+		      warned = 1;
+		      printf ("************ fixing sImg.w %d->%d\n",
 			      sImg.w, expected_w);
 		      sImg.w = expected_w;
 	      }
@@ -274,7 +274,6 @@ void SpotCrap(char loc,char mode)
    if ((loc>=0 && loc<=8) || (loc>=15 && loc<=19) || loc==12 || loc==14 || loc==11 || loc==10)
     if (mode==SPOT_LOAD && Sounds>0 && Data->Def.Sound==1)
      {
-      SetROMDir();
       switch(loc) {
        case 1:case 6:PlayAudio("JET.RAW",0);break;
        case 3:case 8:PlayAudio("VCRASH.RAW",0);break;
@@ -315,16 +314,12 @@ void WaveFlagDel(void)
   return;                       
 }
 
-void PadBub(int x,int y,int col)   // Used to Signal Mission
-{
-  RectFill(x,y+1,x+4,y+2,col);
-  RectFill(x+1,y,x+3,y+3,col);
-  return;
-}
-
-
 /* pace */
-/* pace */
+/*
+ * this isn't needed now that RLED automatically chops the right column
+ * when the data is bigger than needed.  there's still a bug somewhere,
+ * so this table is a useful list of funny images to check later
+ */
 long fix_width[] = {
 	// normal
 	80615, // 4/0 VAB in mode 0
@@ -376,7 +371,6 @@ void PortPlace(FILE * fin,long table)
     if (local2.vptr[ctr]!=0x00) local.vptr[ctr]=local2.vptr[ctr];
   gxPutImage(&local,gxSET,Img.PlaceX,Img.PlaceY,0);  // place image
   DV(&local2);DV(&local);
-  gr_sync ();
   return;
 }
 
@@ -732,7 +726,7 @@ void GetMse(char plr,char fon)
   double now;
 
   now = get_time ();
-  if (now - last_wave_step > .120) {
+  if (now - last_wave_step > .125) {
 	  last_wave_step = now;
 
 	  DoCycle ();
@@ -788,7 +782,6 @@ void DoCycle(void)  // Three ranges of color cycling
     pal[j+i*3+2]=pal[j+(i-1)*3+2];};
   pal[420]=tmp1;pal[421]=tmp2;pal[422]=tmp3;
   gxSetDisplayPalette(pal);
-  gr_sync ();
   return;
 }
 
@@ -868,7 +861,7 @@ void Port(char plr)
 {
 double last_secs;
 char i,j,kMode,kEnt,k;
-char olddir[120],good;
+char good;
 int kPad,pKey,gork;
 FILE *fin;
 long stable[55];
@@ -898,9 +891,9 @@ PreOut=(struct SXX *)&buffer[60000];
   last_secs = get_time ();
   while (1)
    {
-	   idle_loop_secs (.030);
+	   av_block ();
     #if 0
-      if (get_time ()- last_time > 25)   
+      if (get_time ()- last_secs > 25)   
       {
        SpotCrap(0,SPOT_KILL);
        gork=random(100);
@@ -976,6 +969,7 @@ PreOut=(struct SXX *)&buffer[60000];
              x<=MObj[i].Reg[Data->P[plr].Port[i]].CD[j].x2 &&
              y<=MObj[i].Reg[Data->P[plr].Port[i]].CD[j].y2)
             {
+		    av_block ();
           #if BABYSND
            UpdateAudio();
           #endif
@@ -1000,7 +994,6 @@ PreOut=(struct SXX *)&buffer[60000];
                   || (kMode==0 && key==0x0d))
                 {
                  MouseOff();PortRestore(Count);Count=0;MouseOn();
-                  getcurdir(0,olddir);
 
                   // || i==33
 

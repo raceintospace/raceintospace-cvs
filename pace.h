@@ -182,4 +182,7 @@ void GetMouse_fast (void);
 char savedat_dir[1000];
 char music_dir[1000];
 
+void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+
+
 #endif /* __PACE_H__ */

@@ -181,8 +181,6 @@ gxVirtualVirtual (GXHEADER *from,
 	int row, col;
 	int from_idx, to_idx;
 
-	gr_sync ();
-
 	w = from_x2 - from_x1 + 1;
 	h = from_y2 - from_y1 + 1;
 
@@ -195,8 +193,6 @@ gxVirtualVirtual (GXHEADER *from,
 			to->vptr[to_idx] = from->vptr[from_idx];
 		}
 	}
-
-	gr_sync ();
 }
 
 void

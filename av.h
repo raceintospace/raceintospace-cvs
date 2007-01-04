@@ -1,4 +1,5 @@
 void av_step (void);
+void av_block (void);
 void av_setup (int *argcp, char ***argvp);
 void av_silence (void);
 void av_sync (void);

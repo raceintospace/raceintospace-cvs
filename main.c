@@ -16,15 +16,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-//ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-//บInterplay's BUZZ ALDRIN's RACE into SPACE                     บ
-//บ                                                              บ
-//บFormerly -=> LiftOff : Race to the Moon :: IBM version MCGA   บ
-//บCopyright 1991 by Strategic Visions, Inc.                     บ
-//บDesigned by Fritz Bronner                                     บ
-//บProgrammed by Michael K McCarty                               บ
-//บ                                                              บ
-//ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+//****************************************************************
+//*Interplay's BUZZ ALDRIN's RACE into SPACE                     *
+//*                                                              *
+//*Formerly -=> LiftOff : Race to the Moon :: IBM version MCGA   *
+//*Copyright 1991 by Strategic Visions, Inc.                     *
+//*Designed by Fritz Bronner                                     *
+//*Programmed by Michael K McCarty                               *
+//*                                                              *
+//****************************************************************
 
 #include "Buzz_inc.h"
   int cdROM,hDISK;
@@ -103,24 +103,6 @@ char far *sbuf0,far *sbuf1;
 void Plop(char plr,char mode);
 
 int TimingThing(void);
-
-/////////////////////////////////////////////
-// Set the Directory to the current ROM Directory
-//
-int cDrive;
-
-void SetROMDir(void)
-{
-}
-
-////////////////////////////////////////////
-// Restore the Directory to the original directory
-// on the hard disk
-//
-void RestoreDir(void)
-{
-
-}
 
 void mikeCrearScreen(void)
 {
@@ -855,7 +837,7 @@ void DV(GXHEADER *obj)
 void
 GetMouse (void)
 {
-	idle_loop_secs (.030);
+	av_block ();
 	GetMouse_fast ();
 }
 
@@ -868,6 +850,7 @@ void GetMouse_fast(void)
   oldx=x;oldy=y;
   
   gr_maybe_sync ();
+  av_step ();
 
   if (XMAS!=0) {
 	  if (grGetMouseButtons()) {
@@ -913,8 +896,6 @@ void MouseOn(void)
 
 void PauseMouse(void)
 {
-	gr_sync ();
-
 	/* wait until mouse button is released */
 	while(1)  {
 		GetMouse(); /* blocks briefly */
@@ -1387,7 +1368,6 @@ void Plop(char plr,char mode)
   if (BIG==0) SMove(&vhptr.vptr[40000],80,3+plr*10);
   else LMove(&vhptr.vptr[40000]);
   fclose(fin);
-  gr_sync ();
   return;
 }
 

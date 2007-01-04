@@ -1,3 +1,16 @@
+rename UpdatePort
+
+when updating the x server, scan top and bottom of the previous
+and current image for identical parts, then send just the middle
+part that has changed
+
+wastes cpu time when showing the new image
+
+drop frames if getting behind on newscaster or movie playback
+
+look into "hold frame" stuff for aligning mission video and audio
+
+
 remove SetROMDir
 
 fades
@@ -7,10 +20,21 @@ implement PlayAudio ... summing sound effects with music
 
 clean up extra gr_sync's
 
+================================================================
 enhancements:
 
 water seems to flow backwards in DoCycle
 optimize grPutPixel and grGetPixel
+
+I started the game and it happend that a plane flew by on the first view
+of the space port.  I never typed anything, but later I noticed that there
+was a plane stuck to the left edge of the screen.  It disappeared after I
+switched to another screen (R&D), then back to the port.
+
+=> the probem is that the gx routines should clip - we're seeing the
+wrapped image
+
+try mpeg encoding the video
 
 ================================================================
 possible old bugs

@@ -412,7 +412,6 @@ void NextTurn(char plr);
 FILE *sOpen(char *Name,char *mode,int loc);
 
 void Rout_Debug(int line, char *file);
-void SetROMDir(void);
 void RestoreDir(void);
 int main(int argc, char *argv[]);
 int TimingThing(void);
@@ -544,7 +543,6 @@ void GoNews(char plr);
 void OpenNews(char plr,char *buf,int bud);
 void DispNews(char plr,char *src,char *dest);
 void PreLoadAnim(char plr,char mode);
-void FillAnim(unsigned index,unsigned maxf);
 void CloseNewsAnim(void);
 void DrawNews(char plr);
 void DrawNText(char plr,char got);
@@ -553,7 +551,7 @@ void DeAlloc(BYTE Page);
 void AIEvent(char plr);
 char ResolveEvent(char plr);
 void Breakgrp(char plr);
-void PlayNewsAnim(BYTE Page);
+void PlayNewsAnim(void);
 void LoadNewsAnim(BYTE Index,BYTE Mode);
 void ShowEvt(char plr,char crd);
 

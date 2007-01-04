@@ -1,3 +1,14 @@
+2007-01-03  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V44
+
+	* support blocking for X events or time going by, instead of
+	always running at about 30 frames per second; try to recognize
+	when we are falling behind on the newscaster animation and skip
+	frames to catch up; remove some dead code; add dbg() function
+	from libopus which prints nice timestamps on log messages; improve
+	animation handling in port.c so it doesn't waste so much cpu time; 
+
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 
 	* V43
@@ -15,7 +26,8 @@
 	* V41
 
 	* Encapsulated the creation of ENDGAME.TMP into a single function.
-	* Turned off save game encryption.  Move it into an #ifdef for historical purposes.
+	* Turned off save game encryption.  Move it into an #ifdef for
+	historical purposes.
 
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 

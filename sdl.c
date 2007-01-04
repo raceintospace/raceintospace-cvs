@@ -10,6 +10,8 @@
 
 #include "av.h"
 
+void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+
 SDL_Surface *sur;
 
 void
@@ -103,10 +105,21 @@ av_silence (void)
 	SDL_UnlockAudio ();
 }
 
+
+Uint32
+sdl_timer_callback (Uint32 interval, void *param)
+{
+	static SDL_Event tick;
+
+	tick.type = SDL_USEREVENT;
+	SDL_PushEvent (&tick);
+	return (interval);
+}
+
 void
 av_setup (int *argcp, char ***argvp)
 {
-	if (SDL_Init (SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
 		fprintf (stderr, "SDL_Init error\n");
 		exit (1);
 	}
@@ -141,6 +154,8 @@ av_setup (int *argcp, char ***argvp)
 
 		SDL_PauseAudio (0);
 	}
+
+	SDL_AddTimer (30, sdl_timer_callback, NULL);
 }
 
 #define KEYBUF_SIZE 256
@@ -148,65 +163,92 @@ int keybuf[KEYBUF_SIZE];
 int keybuf_in_idx, keybuf_out_idx;
 
 
+void
+av_process_event (SDL_Event *evp)
+{
+	int c;
+
+	switch (evp->type) {
+	case SDL_QUIT:
+		exit (0);
+		break;
+		
+	case SDL_USEREVENT:
+		break;
+
+	case SDL_KEYDOWN:
+		switch (evp->key.keysym.sym) {
+		case SDLK_UP: c = 0x4800; break;
+		case SDLK_DOWN: c = 0x5000; break;
+		case SDLK_RIGHT: c = 0x4D00; break;
+		case SDLK_LEFT: c = 0x4B00; break;
+		default:
+			c = evp->key.keysym.unicode;
+			break;
+		}
+		if (c) {
+			keybuf[keybuf_in_idx] = c;
+			keybuf_in_idx = (keybuf_in_idx + 1)
+				% KEYBUF_SIZE;
+		}
+		break;
+		
+	case SDL_MOUSEBUTTONDOWN:
+		av_mouse_pressed_cur = 1;
+		av_mouse_pressed_latched = 1;
+		av_mouse_pressed_x = evp->button.x;
+		av_mouse_pressed_y = evp->button.y;
+		printf ("mouseclick(%d,%d)\n", 
+			av_mouse_pressed_x,
+			av_mouse_pressed_y);
+		break;
+		
+	case SDL_MOUSEBUTTONUP:
+		av_mouse_pressed_cur = 0;
+		break;
+		
+	case SDL_MOUSEMOTION:
+		av_mouse_cur_x = evp->motion.x;
+		av_mouse_cur_y = evp->motion.y;
+		break;
+		
+		/* ignore these events */
+	case SDL_KEYUP:
+	case SDL_ACTIVEEVENT:
+		break;
+	default:
+		printf ("got uknown event %d\n", evp->type);
+		break;
+	}
+}
+
 /* non-blocking */
 void
 av_step (void)
 {
 	SDL_Event ev;
-	int c;
 	
-	while (SDL_PollEvent (&ev)) {
-		switch (ev.type) {
-		case SDL_QUIT:
-			exit (0);
-			break;
+	while (SDL_PollEvent (&ev))
+		av_process_event (&ev);
+}
 
-		case SDL_KEYDOWN:
-			switch (ev.key.keysym.sym) {
-			case SDLK_UP: c = 0x4800; break;
-			case SDLK_DOWN: c = 0x5000; break;
-			case SDLK_RIGHT: c = 0x4D00; break;
-			case SDLK_LEFT: c = 0x4B00; break;
-			default:
-				c = ev.key.keysym.unicode;
-				break;
-			}
-			if (c) {
-				keybuf[keybuf_in_idx] = c;
-				keybuf_in_idx = (keybuf_in_idx + 1)
-					% KEYBUF_SIZE;
-			}
-			break;
+void
+av_block (void)
+{
+	SDL_Event ev;
 
-		case SDL_MOUSEBUTTONDOWN:
-			av_mouse_pressed_cur = 1;
-			av_mouse_pressed_latched = 1;
-			av_mouse_pressed_x = ev.button.x;
-			av_mouse_pressed_y = ev.button.y;
-			printf ("mouseclick(%d,%d)\n", 
-				av_mouse_pressed_x,
-				av_mouse_pressed_y);
-			break;
-
-		case SDL_MOUSEBUTTONUP:
-			av_mouse_pressed_cur = 0;
-			break;
-
-		case SDL_MOUSEMOTION:
-			av_mouse_cur_x = ev.motion.x;
-			av_mouse_cur_y = ev.motion.y;
-			break;
-
-			/* ignore these events */
-		case SDL_KEYUP:
-		case SDL_ACTIVEEVENT:
-			break;
-		default:
-			printf ("got uknown event %d\n", ev.type);
-			break;
-		}
+	/* 
+	 * block until an event comes in
+	 *
+	 * we have a 30ms timer going, so that is the
+	 * maximum wait time
+	 */
+	if (SDL_WaitEvent (&ev)) {
+		av_process_event (&ev);
+		av_step (); /* soak up any other currently available events */
 	}
 }
+
 
 int
 bioskey (int peek)
@@ -233,7 +275,7 @@ bioskey (int peek)
 void
 UpdateAudio(void)
 {
-	av_step ();
+//	av_step ();
 }
 
 void
