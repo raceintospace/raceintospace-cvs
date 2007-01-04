@@ -217,37 +217,38 @@ void PresPict(char poff)
 void CalcPresRev(void)
 {
 	i16 *ip;
-int val,max,min,i,j;
-char plr;
+	int val,max,min,i,j;
+	char plr;
 
-  if(Data->Year==57 && Data->Season==0)return;
-  // Move PresRev down One
-  for(j=0;j<2;j++) 
-	for(i=4;i>0;i--)
-	   Data->P[j].PresRev[i] = Data->P[j].PresRev[i-1];
-  Data->P[0].Prestige=Data->P[1].Prestige=0; // Clear Prest when finished
-  for(plr=0;plr<2;plr++)
-     {
-	ip=&Data->P[plr].PresRev[0];
-	
-	max = maxx(Data->P[plr].tempPrestige[0],Data->P[plr].tempPrestige[1]);
-	min = minn(Data->P[plr].tempPrestige[0],Data->P[plr].tempPrestige[1]);
+	if(Data->Year==57 && Data->Season==0)return;
+	// Move PresRev down One
+	for(j=0;j<NUM_PLAYERS;j++) 
+		for(i=4;i>0;i--)
+			Data->P[j].PresRev[i] = Data->P[j].PresRev[i-1];
 
-	val = ((max >= 0 && min >= 0) || (max <= 0 && min <= 0 )) ? max + min : max/2+min;
+	Data->P[0].Prestige=Data->P[1].Prestige=0; // Clear Prest when finished
+	for(plr=0;plr<NUM_PLAYERS;plr++)
+	{
+		ip=&Data->P[plr].PresRev[0];
 
-	*ip = (val < 0 && (*ip<4)) ? *ip+1 : ((val>1 && val<=10) ? *ip-1 
-	      : ((val >= 11 && val <= 20) ? ((*ip<4) ? *ip-1 : *ip-2) 
-		 : ((val >= 21) ? ((*ip<4) ? *ip-1 : *ip-3)
-		   : ((val >= -9 && val <= 0) ? *ip+1 : ((val<=-10) ? 
-		     ((plr==0) ? *ip+Data->Def.Lev1+1: *ip+Data->Def.Lev2+1) : *ip)))));
-	
-	*ip = (*ip>16) ? 16 : ((*ip<1) ? 1 : *ip);
-	
-	Data->P[plr].tempPrestige[0] = 0;
-	Data->P[plr].tempPrestige[1] = 0;
- Data->P[plr].PresRev[0] += (Data->P[plr].PresRev[0] > Data->P[abs(plr-1)].PresRev[0]) ? 1 : 0;
-   }
-   
+		max = maxx(Data->P[plr].tempPrestige[0],Data->P[plr].tempPrestige[1]);
+		min = minn(Data->P[plr].tempPrestige[0],Data->P[plr].tempPrestige[1]);
+
+		val = ((max >= 0 && min >= 0) || (max <= 0 && min <= 0 )) ? max + min : max/2+min;
+
+		*ip = (val < 0 && (*ip<4)) ? *ip+1 : ((val>1 && val<=10) ? *ip-1 
+				: ((val >= 11 && val <= 20) ? ((*ip<4) ? *ip-1 : *ip-2) 
+					: ((val >= 21) ? ((*ip<4) ? *ip-1 : *ip-3)
+						: ((val >= -9 && val <= 0) ? *ip+1 : ((val<=-10) ? 
+								((plr==0) ? *ip+Data->Def.Lev1+1: *ip+Data->Def.Lev2+1) : *ip)))));
+
+		*ip = (*ip>16) ? 16 : ((*ip<1) ? 1 : *ip);
+
+		Data->P[plr].tempPrestige[0] = 0;
+		Data->P[plr].tempPrestige[1] = 0;
+		Data->P[plr].PresRev[0] += (Data->P[plr].PresRev[0] > Data->P[abs(plr-1)].PresRev[0]) ? 1 : 0;
+	}
+
 }
 
 void DrawRevText(char plr, int val)

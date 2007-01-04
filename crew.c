@@ -153,7 +153,7 @@ int AsnCrew(char plr,char pad,char part)
   Data->P[plr].Future[pad].BCrew=0;
   prime=-1;back=-1;
   bug=0;count=0;
-   for (i=0;i<8;i++)  // Flight Crew Settings
+   for (i=0;i<ASTRONAUT_CREW_MAX;i++)  // Flight Crew Settings
 	{
 	 stflag=0;
 	 if (Data->P[plr].Crew[prg][i][0]==0 || Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Moved==0
@@ -199,7 +199,7 @@ int AsnCrew(char plr,char pad,char part)
   while(1)
    {
     key=0;GetMouse();
-    for (i=0;i<8;i++)  // Flight Crew Settings
+    for (i=0;i<ASTRONAUT_CREW_MAX;i++)  // Flight Crew Settings
      {
       stflag=0;
       if (Data->P[plr].Crew[prg][i][0]==0 || Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Moved==0
@@ -306,7 +306,7 @@ void FutFltsTxt(char nw,char col)
 void FutSt(char plr,int pr,int p,int b)
 {
   int i;
-  for (i=0;i<8;i++) {
+  for (i=0;i<ASTRONAUT_CREW_MAX;i++) {
     if (i==p) FutSt2(i,3);
     if (i==b) FutSt2(i,4);
     if (i!=p && i!=b) {

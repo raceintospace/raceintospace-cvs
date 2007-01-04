@@ -566,7 +566,7 @@ void InitData(void)
 
   SetEvents();                  // RESET EVENT CARDS
   Data->Count=0;                 // SET EVENT COUNTER TO ZERO
-  for(j=0;j<2;j++)
+  for(j=0;j<NUM_PLAYERS;j++)
     for(i=0;i<5;i++)
       Data->P[j].PresRev[i]=8;
   return;
@@ -601,7 +601,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
    Data->P[1].BudgetHistoryF[Data->Year-53]=
       (Data->P[1].Budget*(random(40)+80))/100;
 
-  for(t1=0;t1<2;t1++)                   // Move Expenditures down one
+  for(t1=0;t1<NUM_PLAYERS;t1++)                   // Move Expenditures down one
   {
     for(t2=4;t2>=0;t2--)
      for(t3=0;t3<4;t3++)
@@ -611,14 +611,14 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
   };
    if(Data->Season==0) CalcPresRev();
 
-   for (i=0;i<2;i++) {
+   for (i=0;i<NUM_PLAYERS;i++) {
      xMODE&= ~xMODE_CLOUDS;  // reset clouds for spaceport
      if (Data->Season==1) {
        IntelPhase(plr[i]-2*AI[i],0);
       }
    // computer vs. human
 
-   if ((IDLE[0]>12 || IDLE[1]>12) || ((AI[i] && plr[other(i)]<2 && ((Data->Def.Lev1!=0 && other(i)==0) || (Data->Def.Lev2!=0 && other(i)==1)))))
+   if ((IDLE[0]>12 || IDLE[1]>12) || ((AI[i] && plr[other(i)]<NUM_PLAYERS && ((Data->Def.Lev1!=0 && other(i)==0) || (Data->Def.Lev2!=0 && other(i)==1)))))
     {
      if (IDLE[0]>12 || IDLE[1]>12 || Data->P[abs(i-1)].PresRev[0]>=16)
       {
@@ -716,7 +716,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
    Update();  /* Moves Future launches to Missions + More */
 
    // Update M array to speed AI code
-   for (j=0;j<2;j++) {
+   for (j=0;j<NUM_PLAYERS;j++) {
       for (i=0;i<Data->P[j].PastMis;i++) {
 	 if (Data->P[j].History[i].result>=100)
 	    Data->P[j].M[Data->P[j].History[i].MissionCode]=1;
@@ -737,7 +737,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
   // move prestige history down one;
   for(t3=0;t3<2;t3++) // t3 is the index to the real and random hists
   {
-    for(t1=0;t1<2;t1++) // t1 is the player index
+    for(t1=0;t1<NUM_PLAYERS;t1++) // t1 is the player index
     {
       for(t2=4;t2>0;t2--) // t2 is the time index
 	Data->P[t1].PrestHist[t2][t3]=Data->P[t1].PrestHist[t2-1][t3];
@@ -751,7 +751,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
    Data->P[0].Prestige=Data->P[1].Prestige=0;
 
     if (Data->Season==1) {
-      for (i=0;i<2;i++) {
+      for (i=0;i<NUM_PLAYERS;i++) {
 	Data->P[plr[i]-AI[i]*2].Cash+=Data->P[plr[i]-AI[i]*2].Budget;
 	if (Data->P[plr[i]-AI[i]*2].Cash > 999) Data->P[plr[i]-AI[i]*2].Cash=900;
       }
@@ -770,7 +770,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
 void DockingKludge(void)
 {
   int j;
-  for (j=0;j<2;j++) {
+  for (j=0;j<NUM_PLAYERS;j++) {
     Data->P[j].Misc[4].MSF=
        maxx( maxx(Data->P[j].Probe[0].Safety,Data->P[j].Probe[1].Safety),
 	    Data->P[j].Probe[2].Safety);

@@ -51,7 +51,7 @@
 void VerifyData(void)
 {
  int i,j;
- for (j=0;j<2;j++)
+ for (j=0;j<NUM_PLAYERS;j++)
    for (i=0;i<7;i++) {
       strncpy(Data->P[j].Probe[i].ID,Data->P[j].Probe[i].IDX,2);
       strncpy(Data->P[j].Rocket[i].ID,Data->P[j].Rocket[i].IDX,2);

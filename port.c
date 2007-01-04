@@ -609,7 +609,7 @@ void PortText(int x,int y,char *txt,char col)
 void UpdatePortOverlays(void)
 {
    char i,j;
-   for (i=0;i<2;i++) {   // Programs
+   for (i=0;i<NUM_PLAYERS;i++) {   // Programs
       for (j=0;j<5;j++) 
          Data->P[i].Port[21-j]=(Data->P[i].Manned[j].Num>=0)?1:0;
 

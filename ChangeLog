@@ -1,5 +1,11 @@
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 
+	* V48
+
+	* Replaced fixed value in for_each_player loops with NUM_PLAYERS define
+
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+
 	* V47
 
 	* Added data_defs.h to hold common program definitions like NUM_PLAYERS and MAX_MISSIONS

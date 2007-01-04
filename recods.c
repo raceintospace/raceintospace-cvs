@@ -451,7 +451,7 @@ void UpdateRecords(char Ty)
  file = sOpen("RECORDS.DAT","rb",1);
  fread(rec,sizeof rec,1,file);
  fclose(file);
- for(i=0;i<2;i++)
+ for(i=0;i<NUM_PLAYERS;i++)
  {
   if (!AI[i])
 	 for(j=0;j<Data->P[i].PastMis;j++)

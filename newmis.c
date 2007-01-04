@@ -35,8 +35,8 @@ char OrderMissions(void)
   memset(Order,0x00,sizeof Order);
    // Sort Missions for Proper Order
    k=0;
-   for (i=0;i<2;i++)
-     for (j=0;j<3;j++)
+   for (i=0;i<NUM_PLAYERS;i++)
+     for (j=0;j<MAX_MISSIONS;j++)
        if (Data->P[i].Mission[j].MissionCode>0 && Data->P[i].Mission[j].part!=1) {
 	 Order[k].plr=i;
 	 Order[k].loc=j;
