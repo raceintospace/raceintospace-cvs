@@ -595,7 +595,7 @@ void PortPal(char plr);
 void AdminPort(char plr);
 void NPDraw(char plr);
 void PortText(int x,int y,char *txt,char col);
-void UpdatePort(void);
+void UpdatePortOverlays(void);
 void Master(char plr);
 void GetMse(char plr,char fon);
 void DoCycle(void);

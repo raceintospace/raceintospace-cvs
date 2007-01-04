@@ -411,7 +411,7 @@ void AdminPort(char plr)
   fread(&Img,sizeof Img,1,fin);  // Read in main image Header
   fread((char *)screen,Img.Size,1,fin);  // Read in main image
 
-  UpdatePort();
+  UpdatePortOverlays();
 
   if (xMODE & xMODE_CLOUDS) PortPlace(fin,table[1]); // Clouds
 
@@ -513,7 +513,7 @@ void NPDraw(char plr)
   fread(&Img,sizeof Img,1,fin);  // Read in main image Header
   fread((char *)screen,Img.Size,1,fin);  // Read in main image
 
-  UpdatePort();
+  UpdatePortOverlays();
 
   if (xMODE & xMODE_CLOUDS) PortPlace(fin,table[1]); // Clouds
 
@@ -612,7 +612,7 @@ void PortText(int x,int y,char *txt,char col)
 }
 
 
-void UpdatePort(void)
+void UpdatePortOverlays(void)
 {
    char i,j;
    for (i=0;i<2;i++) {   // Programs
