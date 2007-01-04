@@ -10,7 +10,7 @@ directory
 
 create ~/.rpmmacros as:
 
-%_topdir /home/pace/rpmbuild
-%_tmppath /home/pace/rpmbuild/tmp
+%_topdir /home/race/rpmbuild
+%_tmppath /home/race/rpmbuild/tmp
 
 then, run the script "mkrpm"

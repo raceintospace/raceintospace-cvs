@@ -1,5 +1,11 @@
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 
+	* V43
+
+	* Changed DEVELOPER to reflect the repository name change
+
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+
 	* V42
 
 	* Renamed UpdatePort to UpdatePortOverlays to avoid a Macintosh name conflict
