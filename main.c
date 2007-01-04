@@ -594,8 +594,7 @@ void InitData(void)
 void MainLoop(void)
 {
 int i,j,t1,t2,t3,prest,sign,kik;
-FILE *fout;
-long moo;
+
   if (LOAD!=1) {
     Data->P[0].Cash=Data->P[0].Budget;   // INCREMENT BY BUDGET
     Data->P[1].Cash=Data->P[1].Budget;
@@ -607,14 +606,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
 
   while (Data->Year < 78)              // WHILE THE YEAR IS NOT 1977
   {
-   fout=sOpen("ENDTURN.TMP","wb",1);     // MAKE BACKUP FOR SAVE GAME
-   i=RLEC((char *)Data,(char *)vhptr.vptr,sizeof (struct Players));
-   srand(i);
-   for(moo=0;moo<i;moo++) vhptr.vptr[moo]^=random(256);
-   srand(biostime(0,0L));
-
-   fwrite((char *)vhptr.vptr,i,1,fout);
-   fclose(fout);
+		EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
    Data->P[0].RDMods=0;           // CLEAR ALL TURN RD MODS
    Data->P[1].RDMods=0;

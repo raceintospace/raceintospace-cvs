@@ -228,8 +228,8 @@ void FileAccess(char mode)
 // mode==0 if save allowed
 {
   char Temp[4],sc=0,md=0;
-  long size,moo;
-  int tFiles,i,j,now,done,BarB,temp,left;
+  long size;
+  int tFiles,i,now,done,BarB,temp,left;
   FILE *fin,*fout;
   char Name[12];
   extern char plr[2],AI[2];
@@ -329,15 +329,21 @@ void FileAccess(char mode)
 
 	 while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
     if (temp>=0) {
+			// Read in Saved game data
 
 	   fin=sOpen(FList[now].Name,"rb",1);
 	   fread(FDes,sizeof (struct SF),1,fin);
 	   fread(vhptr.vptr,FDes->fSize,1,fin);
 	   if (FDes->dSize==sizeof(struct Players))
        {
+#ifdef OLD_DOS_ENCRYPT_SAVEDATA
+				{
+				int moo = 0;
         srand(FDes->fSize);
         for(moo=0;moo<FDes->fSize;moo++) vhptr.vptr[moo]^=random(256);
         srand(biostime(0,0L));
+				}
+#endif
  	      RLED((char *) vhptr.vptr,(char *)Data,FDes->fSize);
         fread(vhptr.vptr,(sizeof Rep)*200,1,fin);
         fout=sOpen("REPLAY.DAT","wb",1);
@@ -582,16 +588,7 @@ void FileAccess(char mode)
 	     FDes->Year=Data->Year;
 	     FDes->dSize=sizeof(struct Players);
 
-       #if 1
-	remove_savedat("ENDTURN.TMP");
-        fout=sOpen("ENDTURN.TMP","wb",1);  
-        j=RLEC((char *)Data,(char *)vhptr.vptr,sizeof (struct Players));
-        srand(j);
-        for(moo=0;moo<j;moo++) vhptr.vptr[moo]^=random(256);
-        srand(biostime(0,0L));
-        fwrite((char *)vhptr.vptr,j,1,fout);
-        fclose(fout);
-       #endif
+		EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
         fin=sOpen("ENDTURN.TMP","rb",1);
 	     if (fin)
@@ -1148,8 +1145,8 @@ char RequestX(char *s,char md)
 void SaveMail(void)
 {
  char Temp[4];
- long size,moo;
- int tFiles,i,j,done=0,temp,left;
+ long size;
+ int tFiles,i,done=0,temp,left;
  FILE *fin,*fout;
  char Name[12];
  extern char plr[2],AI[2];
@@ -1194,16 +1191,7 @@ void SaveMail(void)
 	 FDes->Year=Data->Year;
 	 FDes->dSize=sizeof(struct Players);
 
-  #if 1
-    remove_savedat("ENDTURN.TMP");
-    fout=sOpen("ENDTURN.TMP","wb",1);  
-    j=RLEC((char *)Data,(char *)vhptr.vptr,sizeof (struct Players));
-    srand(j);
-    for(moo=0;moo<j;moo++) vhptr.vptr[moo]^=random(256);
-    srand(biostime(0,0L));
-    fwrite((char *)vhptr.vptr,j,1,fout);
-    fclose(fout);
-  #endif
+		EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
     MAIL=-1; //Reset Mail
 	 fin=sOpen("ENDTURN.TMP","rb",1);
@@ -1258,6 +1246,38 @@ void SaveMail(void)
 	  fclose(fin);
     }	 
  return;
+}
+
+// Save Game related functions
+void EndOfTurnSave(char *inData, int dataLen)
+{
+	FILE *fout = NULL;
+	int compressedLen = 0;
+	char * buffer = malloc(64 * 1024);		// 64k is enough
+
+	// Remove old save data
+	remove_savedat("ENDTURN.TMP");
+
+	// Create new save data
+	fout=sOpen("ENDTURN.TMP","wb",1);  
+	compressedLen = RLEC(inData, buffer, dataLen);
+#ifdef OLD_DOS_ENCRYPT_SAVEDATA
+	{
+		int moo = 0;
+		srand(compressedLen);		// Seed the random number generator with file length
+		for(moo=0;moo<j;moo++) 
+		{
+			buffer[moo]^=random(256);	//
+		}
+		// Reseed the random number generator 
+		// -- this may have been the source of created complaints about randomness
+		srand(biostime(0,0L));
+	}
+#endif
+
+	fwrite((char *)buffer, compressedLen, 1, fout);
+	fclose(fout);
+	free(buffer);
 }
 
 

@@ -167,6 +167,7 @@ void FileText(char *name);
 int FutureCheck(char plr,char type);
 char RequestX(char *s,char md);
 void SaveMail(void);
+void EndOfTurnSave(char *inData, int dataLen); 	// Create ENDTURN.TMP
 
 // AIMAST.C
 void AIMaster(char plr);

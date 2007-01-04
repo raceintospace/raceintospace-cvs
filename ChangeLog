@@ -1,5 +1,12 @@
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 
+	* V41
+
+	* Encapsulated the creation of ENDGAME.TMP into a single function.
+	* Turned off save game encryption.  Move it into an #ifdef for historical purposes.
+
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+
 	* V40
 
 	* Removed the macosx directory so there isn't false hope
