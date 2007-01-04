@@ -41,7 +41,7 @@
   char MANNED[2],CAP[2],LM[2],DOC[2],EVA[2],STEP,FINAL,JOINT,pal2[768],PastBANG,mcc;
   char fEarly,hero,DMFake;
   extern char STEPnum;
-  extern char pNeg[2][3];
+  extern char pNeg[NUM_PLAYERS][MAX_MISSIONS];
   extern char AI[2];
   WORD MisStat;
   /* STEP tracks mission step numbers             */

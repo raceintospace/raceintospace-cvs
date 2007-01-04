@@ -1,4 +1,13 @@
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+
+	* V47
+
+	* Added data_defs.h to hold common program definitions like NUM_PLAYERS and MAX_MISSIONS
+	to possibly make this easier to increase players and missions in the future.
+
+	* Checked uninits in aipur.c and formatted code
+
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 	
 	* V46
 

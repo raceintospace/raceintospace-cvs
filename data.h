@@ -56,6 +56,8 @@ Astronaut.TrainingLevel:    0 = None
 
 */
 
+#include "data_defs.h"
+
 
 #pragma pack (1)
 
@@ -126,6 +128,15 @@ struct MissionType {
 	char PCrew;             // Primary Crew
 	char BCrew;             // Backup Crew
 	char Crew;              // Actual Mission Crew
+};
+
+enum AstronautPoolClass
+{
+	ASTRO_POOL_LVL1	= 7,
+	ASTRO_POOL_LVL2 = 9,
+	ASTRO_POOL_LVL3 = 14,
+	ASTRO_POOL_LVL4 = 16,
+	ASTRO_POOL_LVL5 = 14
 };
 
 struct Astros {
@@ -239,7 +250,7 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char ZCost;                      // Cost for Zond upgrade 10-20
 	char ZFlag;                      // Flag for Zond program
 	char DMod;                       // Docking Module in Orbit
-	char LaunchFacility[3];          // Cost to repair (-1=none)
+	char LaunchFacility[MAX_LAUNCHPADS];          // Cost to repair (-1=none)
 	char AstroCount;                 // Current # in Program
 	char AstroLevel;                 // Level of selection
 	char AstroDelay;                 // Wait until next selection
@@ -253,15 +264,15 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char VList[5];
 	char VTop;
 	char Table[5][7];                // safety factor for intelligence
-	char Gcnt[6][8];                 // Count of num in groups
-	char Crew[6][8][5];              // Flt Crews
+	char Gcnt[ASTRONAUT_POOLS+1][ASTRONAUT_CREW_MAX+1];                 // Count of num in groups
+	char Crew[ASTRONAUT_POOLS+1][ASTRONAUT_CREW_MAX+1][ASTRONAUT_FLT_CREW_MAX+1];              // Flt Crews
 					 // [5] - Program #
 					 // [8] - Eight Crews Max
 					 // [4] - Four Max per Crew
 	char Female;                     // Females allowed in program
-	struct MissionType Mission[3];   // Current Mission Info
+	struct MissionType Mission[MAX_MISSIONS];   // Current Mission Info
 	char Block;                      // Blocked Mission Number
-	struct MissionType Future[3];    // Future Mission Info
+	struct MissionType Future[MAX_MISSIONS];    // Future Mission Info
 	struct PastInfo History[100];    // Past Mission History
 	short PastMis;                   // Number of Past Missions
 	char Other;                      // Catastrophic Fail on Turn
@@ -299,17 +310,17 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 struct Players {
 	char BUZZ[4];                    // Save Version Marker
 	ui32 Checksum;                   // Checksum of Data
-	char plr[2];                     // Order of Turns
+	char plr[NUM_PLAYERS];                     // Order of Turns
 	struct Defl Def;                 // Defaults
 	char Year;                       // Game Turn
 	char Season;                     // Season of Year
 	struct PrestType Prestige[28];   // Definitions of Prest Vals
-	struct BuzzData P[2];            // Player Game Data
+	struct BuzzData P[NUM_PLAYERS];            // Player Game Data
 	char EMark[4];                   // Event Marker
 	char Events[100];                // History of Event Cards
 	char Count;                      // Number of Events Picked
-   char PD[2][28];
-	char Mile[2][10];                // MileStone Calcs
+   char PD[NUM_PLAYERS][28];
+	char Mile[NUM_PLAYERS][10];                // MileStone Calcs
 };
 
 

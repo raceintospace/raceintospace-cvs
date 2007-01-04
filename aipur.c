@@ -220,37 +220,44 @@ void Stat(char Win)
  return;
 }
 
+// AI Wants to purchase Astronauts
 void AIAstroPur(char plr)
 {
- int pos,cost;
+	int cost;
+	int astrosInPool = 0;
 
- pos = 0; /* XXX check uninitialized */
+	if (Data->P[plr].AstroLevel==0) 
+		cost=20;
+	else 
+		cost=15;
 
- if (Data->P[plr].AstroLevel==0) cost=20;
-   else cost=15;
- if (cost>Data->P[plr].Cash) return;
- switch (Data->P[plr].AstroLevel) {
-	case 0:pos=7;break;
-	case 1:pos=9;break;
-	case 2:pos=14;break;
-	case 3:pos=16;break;
-	case 4:pos=14;break;
-	default:break;
-  };
- // Select best astronauts out of number of positions to fill
- SelectBest(plr,pos);
- return;
+	// Player has no cash, no astronauts
+	if (cost>Data->P[plr].Cash) 
+		return;
+
+	switch (Data->P[plr].AstroLevel) {
+		case 0:astrosInPool=ASTRO_POOL_LVL1;break;
+		case 1:astrosInPool=ASTRO_POOL_LVL2;break;
+		case 2:astrosInPool=ASTRO_POOL_LVL3;break;
+		case 3:astrosInPool=ASTRO_POOL_LVL4;break;
+		case 4:astrosInPool=ASTRO_POOL_LVL5;break;
+		default:break;
+	};
+	// Select best astronauts out of number of positions to fill
+	SelectBest(plr,astrosInPool);
+	return;
 }
 
+
+// Select the best crew for the mission
 void SelectBest(char plr,int pos)
 {
- int count=0,now,MaxMen,Index,AIMaxSel,i,j,k;
+ int count=0,now,MaxMen = 0,Index,AIMaxSel=0,i,j,k;
  FILE *fin;
  char tot,done;
 
- AIMaxSel = Index = MaxMen = 0; /* XXX check uninitialized */
-
  for (i=0;i<25;i++) AIsel[i]=0;
+
  memset(buffer,0x00,5000);
  Men=(struct ManPool *)buffer;
  fin = sOpen("CREW.DAT","rb",0);   
@@ -259,15 +266,15 @@ void SelectBest(char plr,int pos)
  fclose(fin);
  switch(Data->P[plr].AstroLevel)
   {
-	case 0:MaxMen=10;AIMaxSel=7;Index=0;
+	case 0:MaxMen=10;AIMaxSel=ASTRO_POOL_LVL1;Index=0;
 		    if (Data->P[plr].Female==1) MaxMen+=3;break;
-	case 1:MaxMen=17;AIMaxSel=9;Index=14;
+	case 1:MaxMen=17;AIMaxSel=ASTRO_POOL_LVL2;Index=14;
 		    if (Data->P[plr].Female==1) MaxMen+=3;break;
-	case 2:MaxMen=19;AIMaxSel=14;Index=35;
+	case 2:MaxMen=19;AIMaxSel=ASTRO_POOL_LVL3;Index=35;
 		    if (Data->P[plr].Female==1) MaxMen+=3;break;
-	case 3:MaxMen=27;AIMaxSel=16;Index=58;break;
-	case 4:MaxMen=19;AIMaxSel=14;Index=86;break;
-	default:break;
+	case 3:MaxMen=27;AIMaxSel=ASTRO_POOL_LVL4;Index=58;break;
+	case 4:MaxMen=19;AIMaxSel=ASTRO_POOL_LVL5;Index=86;break;
+	default: MaxMen = 0; AIMaxSel = 0; Index = 0;break;
   }; 
   now=Index;count=0;done=0;
   for (i=16;i>0;i--)
@@ -494,35 +501,42 @@ void CheckAdv(char plr)
  return;
 }
 
+
+
+// Remove unhappy astro's
 void RemoveUnhappy(char plr)
 {
- int i,j,k,l,pg,ft;
+	int i,l,astroClass=0,fltCrew=0;
 
- pg = ft = 0; /* XXX check uninitialized */
-
- for (i=0;i<Data->P[plr].AstroCount;i++)
-   {
-    if (Data->P[plr].Pool[i].Mood<40)
-      if (Data->P[plr].Pool[i].Assign!=0 && Data->P[plr].Pool[i].Status==0)
+	for (i=0;i<Data->P[plr].AstroCount;i++)
 	{
-	 Data->P[plr].Pool[i].Assign=0; // back to limbo
-	 Data->P[plr].Pool[i].Una=0;
-	 for (j=0;j<5;j++)
-	  for (k=0;k<8;k++)
-	    for (l=0;l<4;l++)
-	      if (Data->P[plr].Crew[j][k][l]==i)
-		{
-		 pg=j;ft=k;
-		}
-	 for (l=0;l<4;l++)
-	  {
-		Data->P[plr].Crew[pg][ft][l]=0;
-	   Data->P[plr].Pool[Data->P[plr].Crew[pg][ft][l]].Assign=0;
-	   Data->P[plr].Pool[Data->P[plr].Crew[pg][ft][l]].Una=0;
-	  }
-	 }
-   }
- return;
+		// Find an Astronaut with in a bad mood
+		if (Data->P[plr].Pool[i].Mood < ASTRONAUT_MOOD_THRESHOLD)
+			if (Data->P[plr].Pool[i].Assign!=0 && Data->P[plr].Pool[i].Status==0)
+			{
+				Data->P[plr].Pool[i].Assign=0; // back to limbo
+				Data->P[plr].Pool[i].Una=0;
+				for (astroClass=0; astroClass<ASTRONAUT_POOLS; astroClass++)
+				{
+					for (fltCrew=0; fltCrew<ASTRONAUT_CREW_MAX; fltCrew++)
+					{
+						for (l=0; l<ASTRONAUT_FLT_CREW_MAX; l++)
+						{
+							if (Data->P[plr].Crew[astroClass][fltCrew][l]==i)
+								break;
+						}
+					}
+				}
+
+				for (l=0; l<ASTRONAUT_FLT_CREW_MAX; l++)
+				{
+					Data->P[plr].Crew[astroClass][fltCrew][l]=0;
+					Data->P[plr].Pool[Data->P[plr].Crew[astroClass][fltCrew][l]].Assign=0;
+					Data->P[plr].Pool[Data->P[plr].Crew[astroClass][fltCrew][l]].Una=0;
+				}
+			}
+	}
+	return;
 }
 
 int AIQUnit(short hwx,short unx,char plr)
@@ -637,9 +651,7 @@ void AIPur(char plr)
 
 int GenPur(char plr,int hwx,int unx)
 {
- char RT_value,newf,n1,n2,n3,n4,n5,n6,n7;
-
- RT_value = 0; /* XXX check uninitialized */
+ char RT_value=0,newf,n1,n2,n3,n4,n5,n6,n7;
 
  newf=0; // reinitialize
  //special case DM before Kickers

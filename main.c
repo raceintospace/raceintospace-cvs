@@ -34,10 +34,10 @@
   int x,y,mousebuttons,key,oldx,oldy;
   unsigned char far *screen;
   unsigned char LOAD,QUIT,HARD1,UNIT1,BUTLOAD,FADE,AL_CALL,XMAS;
-  char pal[768],plr[2],IDT[5],IKEY[5],df,IDLE[2];
+  char pal[768],plr[NUM_PLAYERS],IDT[5],IKEY[5],df,IDLE[2];
   char far *buffer;
   GXHEADER vhptr,vhptr2;
-  char far * oldpal,pNeg[2][3];
+  char far * oldpal,pNeg[NUM_PLAYERS][MAX_MISSIONS];
   long xMODE;
   HTIMER server;
   extern char Musics,Sounds;

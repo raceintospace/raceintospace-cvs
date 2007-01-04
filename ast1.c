@@ -104,11 +104,11 @@ void DrawAstCheck(char plr)
   grSetColor(11);
   PrintAt(97,73,"GROUP ");
   switch (Data->P[plr].AstroLevel) {
-    case 0:PrintAt(0,0,"I");pos=7;break;
-    case 1:PrintAt(0,0,"II");pos=9;break;
-    case 2:PrintAt(0,0,"III");pos=14;break;
-    case 3:PrintAt(0,0,"IV");pos=16;break;
-    case 4:PrintAt(0,0,"V");pos=14;break;
+    case 0:PrintAt(0,0,"I");pos=ASTRO_POOL_LVL1;break;
+    case 1:PrintAt(0,0,"II");pos=ASTRO_POOL_LVL2;break;
+    case 2:PrintAt(0,0,"III");pos=ASTRO_POOL_LVL3;break;
+    case 3:PrintAt(0,0,"IV");pos=ASTRO_POOL_LVL4;break;
+    case 4:PrintAt(0,0,"V");pos=ASTRO_POOL_LVL5;break;
   };
   if (Data->Season==0) PrintAt(166,73,"SPRING 19"); else PrintAt(166,73,"FALL 19");
   DispNum(0,0,Data->Year);
@@ -272,20 +272,20 @@ DrawAstCheck(plr);
   fread(Men,(sizeof (struct ManPool))*106,1,fin);
   fclose(fin);
   switch(Data->P[plr].AstroLevel) {
-    case 0: MaxMen=10;  MaxSel=7;  Index=0;
+    case 0: MaxMen=10;  MaxSel=ASTRO_POOL_LVL1;  Index=0;
 	    if (Data->P[plr].Female==1) {MaxMen+=3;fem=1;}
 	    Data->P[plr].Cash-=5;
 	    Data->P[plr].Spend[0][2]+=5;
 	    break;
-    case 1: MaxMen=17;  MaxSel=9;  Index=14;
+    case 1: MaxMen=17;  MaxSel=ASTRO_POOL_LVL2;  Index=14;
 	    if (Data->P[plr].Female==1) {MaxMen+=3;fem=1;}
 	    break;
-    case 2: MaxMen=19;  MaxSel=14;  Index=35;
+    case 2: MaxMen=19;  MaxSel=ASTRO_POOL_LVL3;  Index=35;
 	    if (Data->P[plr].Female==1) {MaxMen+=3;fem=1;}
 	    break;
-    case 3: MaxMen=27;  MaxSel=16;  Index=58;
+    case 3: MaxMen=27;  MaxSel=ASTRO_POOL_LVL4;  Index=58;
 	    break;
-    case 4: MaxMen=19;  MaxSel=14;  Index=86;
+    case 4: MaxMen=19;  MaxSel=ASTRO_POOL_LVL5;  Index=86;
 	    break;
   }; /* End of switch */
   Data->P[plr].Cash-=15;
