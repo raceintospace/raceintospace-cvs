@@ -34,10 +34,8 @@ extern struct mStr Mis;
 
 void DrawBudget(char player,char *pStatus)
 {
-  int i,j,max,k,pscale;
+  int i,j,max = 0,k,pscale;
   char name[20],str[10];
-
-  max = 0; /* XXX check uninitialized */
 
   MouseOff();
   FadeOut(2,pal,10,0,0);
@@ -64,33 +62,44 @@ void DrawBudget(char player,char *pStatus)
   // Draw the Prestige Screen
   k = (player==0) ? 0 : 1;   //max only checks your prestige and guessed
   for(i=0;i<5;i++)           // value for other player
-	max = (max > abs(Data->P[player].PrestHist[i][k])) ? max
+	{
+		max = (max > abs(Data->P[player].PrestHist[i][k])) ? max
 		   : abs(Data->P[player].PrestHist[i][k]);
+	}
   if (player == 0 ) { j=1; k=1;}
   else {j=0;k=1;}
   for(i=0;i<5;i++)
+	{
  	  max = (max > abs(Data->P[j].PrestHist[i][k])) ? max
 		   : abs(Data->P[j].PrestHist[i][k]);
+	}
 
-  if(max<20){
-	 max=20;
-	 DispNum(6,114,-10);
-	 DispNum(6,122,-20);
-	 DispNum(11,96,10);
-	 DispNum(11,87,20);
-	 }
-  else {
-	 DispNum(6,122,-max);
-	 DispNum(6,114,-max/2);
-	 DispNum(11,96,max/2);
-	 DispNum(11,87,max);
-	 }
-  pscale=max>>1;
+	if(max<20)
+	{
+		max=20;
+		DispNum(6,114,-10);
+		DispNum(6,122,-20);
+		DispNum(11,96,10);
+		DispNum(11,87,20);
+	}
+	else 
+	{
+		DispNum(6,122,-max);
+		DispNum(6,114,-max/2);
+		DispNum(11,96,max/2);
+		DispNum(11,87,max);
+	}
+
+  pscale=max>>1;		// Half the estimated prestige
+
   BudPict(player);
-  if (player==0) {
-  i=0;j=1;grSetColor(5);}
-  else {
-   i=1;j=0;grSetColor(8);}
+
+	if (player==0) {
+		i=0;j=1;grSetColor(5);
+	}
+	else {
+		i=1;j=0;grSetColor(8);
+	}
 
   grMoveTo(30,103-Data->P[i].PrestHist[4][0]*8/pscale);
   grLineTo(57,103-Data->P[i].PrestHist[3][0]*8/pscale);

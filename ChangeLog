@@ -1,3 +1,9 @@
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+
+	* V45
+
+	* verified non initialized prestige estimator variable in budget.c
+
 2007-01-03  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V44
