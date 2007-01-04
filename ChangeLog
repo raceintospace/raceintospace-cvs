@@ -1,8 +1,16 @@
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+	
+	* V46
+
+	* verified XXX marked code in future.c
+
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 
 	* V45
 
 	* verified non initialized prestige estimator variable in budget.c
+
+	* Added to QUESTIONS and TODO
 
 2007-01-03  Pace Willisson  <pace@rhino.pacew.com>
 

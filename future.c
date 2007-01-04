@@ -371,14 +371,6 @@ int UpSearchRout(int num,char plr)
 
 	if (c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8)  found=1;
 	if (num==orig) return(0);
-/*
-  XXX here is the original indenting of the
-  following statement - which if get's the else?
-
-	if (found==0)
-	  if (num==56+plr) num=0;
-	else ++num;
-*/
 
 	if (found==0) {
 			  if (num==56+plr) num=0;
@@ -427,13 +419,6 @@ int DownSearchRout(int num,char plr)
 	if (c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8)  found=1;
 	if (num==orig) return(0);
 
-/*
-  XXX here is the original indenting of the
-  following statement - which if get's the else?
-	if (found==0)
-	  if (num==0) num=56+plr;
-	else --num;
-*/
 	if (found==0) {
 			  if (num==0) num=56+plr;
 			  else --num;

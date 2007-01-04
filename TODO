@@ -1,5 +1,3 @@
-rename UpdatePort
-
 when updating the x server, scan top and bottom of the previous
 and current image for identical parts, then send just the middle
 part that has changed
@@ -36,13 +34,13 @@ wrapped image
 
 try mpeg encoding the video
 
+Yank strings into a separate string table
+
 ================================================================
 possible old bugs
 
 in RDafford, figure out how this came to be MaxRD = 80, but Safety = 90 once:
  if (class==2) roll+=Data->P[plr].Manned[index].MaxRD - Data->P[plr].Manned[index].Safety;
-
-check XXX in future.c regarding grouping of nested if statements
 
 ================================================================
 
