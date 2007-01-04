@@ -1,5 +1,12 @@
 2007-01-03  Michael McCarty <mkmccarty@gmail.com>
 
+	* V49
+
+	* Fixed an off by one in the main data structure when replacing hard coded
+	values with definitions
+
+2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+
 	* V48
 
 	* Replaced fixed value in for_each_player loops with NUM_PLAYERS define
