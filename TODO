@@ -1,3 +1,18 @@
+autosave
+
+on a mission failure, replay mission doesn't show the explosion
+
+I think that drawing the bar graph also runs the cpu flat out
+
+I'm not seeing the prestige screen for Russian firsts
+
+In astronaut complex, if you visit Capsule training, you can't 
+get back by clicking Continue with the mouse.  You can get back
+by typing Enter.
+
+in the baby screens, don't down sample then up sample
+
+=======
 when updating the x server, scan top and bottom of the previous
 and current image for identical parts, then send just the middle
 part that has changed

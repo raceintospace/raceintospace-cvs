@@ -482,6 +482,8 @@ frm_open (char *filename)
 	struct frm *frm;
 	FILE *fin;
 
+	printf ("frm_open(\"%s\")\n", filename);
+
 	if ((fin = fopen (filename, "r")) == NULL)
 		return (NULL);
 

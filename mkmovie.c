@@ -88,23 +88,35 @@ frm_open (char *filename)
 	return (frm);
 }
 		
+void
+frm_close (struct frm *frm)
+{
+	if (frm) {
+		if (frm->fin)
+			fclose (frm->fin);
+		free (frm);
+	}
+}
+
 int
-frm_get (struct frm *frm, unsigned char *rgb)
+frm_get2 (struct frm *frm, void *pixels_arg, void *map)
 {
 	unsigned char raw[64 * 1024];
 	unsigned char pbuf[64 * 1024];
 	unsigned int n;
 	int val0, val1;
 	unsigned char *pixels;
-	unsigned char *outp;
-	int idx;
-	int pixel;
-	unsigned char *up;
 
 	n = frm->next_frame_chunks * 2048;
 
-	if (n == 0)
+	if (n == 0) {
+		int count;
+		count = 0;
+		while (getc (frm->fin) != EOF)
+			count++;
+		printf ("trailing bytes %d\n", count);
 		return (0);
+	}
 
 	if (n > sizeof raw)
 		return (-1);
@@ -126,21 +138,8 @@ frm_get (struct frm *frm, unsigned char *rgb)
 		pixels = pbuf;
 	}
 
-	outp = rgb;
-	for (idx = 0; idx < 160 * 100; idx++) {
-		int r, g, b;
-
-		pixel = pixels[idx];
-		up = frm->pal + pixel * 3;
-
-		r = up[0];
-		g = up[1];
-		b = up[2];
-
-		*outp++ = r;
-		*outp++ = g;
-		*outp++ = b;
-	}
+	memcpy (pixels_arg, pixels, 160 * 100);
+	memcpy (map, frm->pal + 384, 384);
 			
 	frm->next_frame_chunks = val1;
 	frm->frame_idx++;
@@ -157,7 +156,11 @@ main (int argc, char **argv)
 	char *filename;
 	struct frm *frm;
 	int rc;
-	unsigned char rgb[160 * 100 * 3];
+	unsigned char pixels[64*1000], map[768];
+	int i;
+	int pixel;
+	unsigned char *up;
+	int r, g, b;
 
 	while ((c = getopt (argc, argv, "")) != EOF) {
 		switch (c) {
@@ -184,8 +187,9 @@ main (int argc, char **argv)
 		exit (1);
 	}
 
+	memset (map, 0, sizeof map);
 	while (1) {
-		if ((rc = frm_get (frm, rgb)) < 0) {
+		if ((rc = frm_get2 (frm, pixels, &map[384])) < 0) {
 			printf ("error reading frame\n");
 			exit (1);
 		}
@@ -194,7 +198,19 @@ main (int argc, char **argv)
 			break;
 
 		fprintf (movief, "P6\n160 100\n255\n");
-		fwrite (rgb, 1, 160 * 100 * 3, movief);
+
+		for (i = 0; i < 160 * 100; i++) {
+			pixel = pixels[i];
+			up = &map[pixel * 3];
+
+			r = up[0] * 4;
+			g = up[1] * 4;
+			b = up[2] * 4;
+
+			putc (r, movief);
+			putc (g, movief);
+			putc (b, movief);
+		}
 	}
 
 	return (0);

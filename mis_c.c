@@ -122,7 +122,6 @@ bot:                          // bottom of routine
 
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
-	double last_secs;
 	char *fName;
 	int keep_going;
 
@@ -468,49 +467,31 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		i++;
 	}
 
-	if (lnch==1 && Sounds>0) {
-		//Specs: launch sync 
-		last_secs = get_time ();
-		do {
+	if (Sounds > 0) {
+		if (lnch == 0)
+			PlayAudio("WH.RAW",0);
+		keep_going = 1;
+		while (keep_going) {
+			if (AnimSoundCheck())
+				keep_going = 0;
+
+			while (bioskey(1)) {
+				key=bioskey(0);
+				if (key>0) {
+					av_silence ();
+					keep_going = 0;
+				}
+			}
+
+			av_block ();
 			if (Data->Def.Sound==1) UpdateAudio();
-			i=AnimSoundCheck();
-			if (get_time () - last_secs > .25) {
-				last_secs = get_time ();
-				if (!BABY && BIG==0) Tick(plr);
+			if (!BABY && BIG==0) {
+				Tick(plr);
+				gr_maybe_sync ();
 			}
-		} while (i==0);
-	} else if (Sounds>0) {
-		if (Data->Def.Sound==1) PlayAudio("WH.RAW",0);
-		last_secs = get_time ();
-		do {
-			if (Data->Def.Sound==1) UpdateAudio();
-			i=AnimSoundCheck();
-			if (get_time () - last_secs > .25) {
-				last_secs = get_time ();
-				if (!BABY && BIG==0) Tick(plr);
-			}
-		} while (i==0);
-	};
-#if 0
-	bb=0;
-	if (Sounds>0) {
-		while (bb<max) {
-			memset(sName,0x00,sizeof sName);
-			if (mode==0) {
-				fseek(kfin,2+aSeq.oLIST[bb].sIdx*(sizeof altKEYs),SEEK_SET);  // Audio
-				fread(&altKEYs,sizeof altKEYs,1,kfin);
-			}
-			else {
-				fseek(kfin,2+cSeq.oLIST[bb].sIdx*(sizeof altKEYs),SEEK_SET);  // Audio
-				fread(&altKEYs,sizeof altKEYs,1,kfin);
-			};
-			strcpy(sName,altKEYs.Name);
-			strcat(sName,".RAW\0");
-			if (sName[0]!=0x4E) kill(sName);
-			bb++;
-		};
+		}
 	}
-#endif
+
 	fclose(ffin);  // Specs: babypicx.cdr
 
 	if (frm)
@@ -521,6 +502,8 @@ void Tick(char plr)
 {
  static int Sec=1,Min=0,Hour=5,Day=5;
  int g,change=0;
+ double now;
+ static double last;
 
  //: Specs: reset clocks
  if (plr==2) {
@@ -530,6 +513,11 @@ void Tick(char plr)
   Day=5;
   return;
  }
+
+ now = get_time ();
+ if (now - last < .1)
+	 return;
+ last = now;
 
  for (g=3;g>-1;g--)
   {
