@@ -450,7 +450,7 @@ void FileAccess(char mode)
 	      MouseOff();InBox(209,64,278,72);MouseOn();
 	      delay(250);
 
-	      while(YES)  { GetSaveMouse();if (mousebuttons==NO) break;}
+	      while(YES)  { av_block (); GetSaveMouse();if (mousebuttons==NO) break;}
 
         memset(FDes->Name,0x00,23);
         done=GetBlockName(FDes->Name);  // Checks Free Space
@@ -818,6 +818,7 @@ char GetBlockName(char *Nam)
   gr_sync ();
   key=0;i=0;
   while(!(key==0x0d || key==0x1b)) {
+    av_block ();
     gr_maybe_sync ();
     key = bioskey (0);
     if (key >= 'a' && key <= 'z')

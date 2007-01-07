@@ -145,6 +145,7 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   while(1) {GetMouse();if (mousebuttons==0) break;}
   j=-1;
   while(j==-1) {
+	av_block ();
 	GetMse(plr,0);
 	for (i=0;i<qty;i++) // keyboard stuff
 	   if ((char)key==Name[i*22])

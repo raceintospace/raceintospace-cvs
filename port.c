@@ -729,8 +729,11 @@ void GetMse(char plr,char fon)
   if (now - last_wave_step > .125) {
 	  last_wave_step = now;
 
-	  DoCycle ();
+	  if (plr == 0)
+		  DoCycle ();
 
+	  if (fon != 1)
+		  goto done;
 #if SPOT_ON
     SpotCrap(0,SPOT_STEP);
 #endif
@@ -752,6 +755,8 @@ void GetMse(char plr,char fon)
     else gxPutImage(&local2,gxSET,220,141,0);
 
     DV(&local);DV(&local2);
+
+  done:
     MouseOn();
     FCtr++;
   }
