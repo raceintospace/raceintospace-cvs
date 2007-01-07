@@ -157,7 +157,7 @@ int Launch(char plr,char mis)
 	      case 2: CAP[i]=DOC[i]=0;LM[i]=EVA[i]=1; break;  // Last in LM
 	      case 3:
                 // LM is always on first mission part!!! :: makes things easier
-                if (MH[0][2]->ID[1]==0x35) {CAP[i]=0;LM[i]=1;DOC[i]=EVA[i]=2;}
+                if (MH[0][2] && MH[0][2]->ID[1]==0x35) {CAP[i]=0;LM[i]=1;DOC[i]=EVA[i]=2;}
 		           else {CAP[i]=0;LM[i]=EVA[i]=1;DOC[i]=2;};
 
               break;

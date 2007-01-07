@@ -1,5 +1,9 @@
 2007-01-06  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V53
+	
+	* protect against null pointer
+
 	* V52
 	
 	* automatically save game into "autosave.sav" every turn
