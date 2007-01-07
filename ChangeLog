@@ -1,5 +1,9 @@
 2007-01-06  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V52
+	
+	* automatically save game into "autosave.sav" every turn
+
 	* V51
 
 	* put some av_block() calls in to keep it from wasting the

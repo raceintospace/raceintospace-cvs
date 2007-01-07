@@ -1082,6 +1082,7 @@ PreOut=(struct SXX *)&buffer[60000];
                         #endif
                           SpotCrap(0,SPOT_KILL);  // remove spots
                           KillMusic();
+			  save_game ("AUTOSAVE.SAV");
                           return;
 	                  case pQUIT:
                			  FadeOut(2,pal,10,0,0);

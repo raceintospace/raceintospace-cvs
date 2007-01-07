@@ -793,6 +793,60 @@ void FileAccess(char mode)
 
 }
 
+void
+save_game (char *name)
+{
+	FILE *inf, *outf;
+	struct SF hdr;
+	int c;
+
+	EndOfTurnSave((char *) Data, sizeof ( struct Players));
+
+        if ((inf = sOpen("ENDTURN.TMP","rb",1)) == NULL) {
+		printf ("save_game: can't open ENDTURN.TMP\n");
+		return;
+	}
+
+	memset (&hdr, 0, sizeof hdr);
+
+	strcpy (hdr.ID, "ID:");
+	strcpy (hdr.Name, "AUTOSAVE");
+	hdr.Name[sizeof hdr.Name - 1] = 0x1a;
+
+	strcpy(hdr.PName[0], Data->P[plr[0]].Name);
+	strcpy(hdr.PName[1], Data->P[plr[1]].Name);
+	hdr.Country[0] = Data->plr[0];
+	hdr.Country[1] = Data->plr[1];
+	hdr.Season = Data->Season;
+	hdr.Year = Data->Year;
+	hdr.dSize = sizeof(struct Players);
+	hdr.fSize = filelength (fileno (inf));
+	   
+	if ((outf = sOpen (name, "wb", 1)) == NULL) {
+		printf ("save_game: can't create %s\n", name);
+		return;
+	}
+
+	fwrite(&hdr,sizeof hdr,1,outf);
+	
+	while ((c = getc (inf)) != EOF)
+		putc (c, outf);
+	fclose (inf);
+	
+	if ((inf = sOpen ("REPLAY.DAT", "rb", 1)) != NULL) {
+		while ((c = getc (inf)) != EOF)
+			putc (c, outf);
+		fclose (inf);
+	}
+	
+	if ((inf = sOpen ("EVENT.TMP", "rb", 1)) != NULL) {
+		while ((c = getc (inf)) != EOF)
+			putc (c, outf);
+		fclose (inf);
+	}
+
+	fclose (outf);
+}
 
 char GetBlockName(char *Nam)
 {

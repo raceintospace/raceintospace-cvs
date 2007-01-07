@@ -838,4 +838,6 @@ void *xmalloc (int);
 void *xcalloc (int, int);
 char *xstrdup (char const *);
 
+void save_game (char *filename);
+
 // EOF
