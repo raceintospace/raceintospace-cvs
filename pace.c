@@ -847,12 +847,12 @@ dbg (char const *fmt, ...)
 }
 
 #if defined(MACOSX) && defined(__POWERPC__)
-ui32 SwapLong(ui32 value)
+ui32 _SwapLong(ui32 value)
 {
       return (( value >> 24) | ((value >> 8) & 0x0000FF00) | ((value << 8) & 0x00FF0000) | (value << 24));
 }
 
-ui16 SwapWord(ui16 value)
+ui16 _SwapWord(ui16 value)
 {
       return ((value << 8) | (value >> 8));
 }
