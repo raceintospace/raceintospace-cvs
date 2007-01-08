@@ -69,10 +69,10 @@ void AIVabCheck(char plr,char mis,char prog)
 	  whe[1]=Best();
 	  if (Mew[whe[1]].i<60) whe[1]=0;  // Weed out low safety's
 	} else {
-	 // MouseOff();RectFill(100,100,200,190,5);
+	 // RectFill(100,100,200,190,5);
 	 // PrintAt(110,110,"MIS ");DispNum(0,0,mis);
 	 // PrintAt(110,120,"PRG ");DispNum(0,0,prog);
-	 // PauseMouse();MouseOn();
+	 // PauseMouse();
 
 	  BuildVAB(plr,mis,1,0,prog-1);
 //        PrintAt(110,130,"VAS ");DispNum(0,0,VASQTY);

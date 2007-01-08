@@ -85,7 +85,7 @@ void MisCheck(char plr,char mpad)
    MPad=mpad;
    SCRUBS=noDock=InSpace=0;
 
-   MouseOff();
+   
 
    if (!AI[plr] && BIG==0) {
       FadeOut(1,pal,100,128,1);
@@ -265,9 +265,9 @@ void MisCheck(char plr,char mpad)
      memset(Text,0x00,sizeof Text);
      strcpy(Text,"FAIL:\0");
      strcpy(&Text[5],S_Name[Mev[STEP].loc]);
-     MouseOn();
+     
      PROBLEM=Request(0,Text,6);
-     MouseOff();
+     
    }
 #endif
     
@@ -467,7 +467,7 @@ void MisCheck(char plr,char mpad)
   else {
    death=0;
   };
-  MouseOn();
+  
   return;
 }
 
@@ -1040,7 +1040,7 @@ void DebugSetFailure(char *Text)
  PrintAt(82,57,"ENTER THE NEW FAILURE NUMBER FOR");
  PrintAt(82,64,Text);
  memset(A,0x00,sizeof A);i=0; //reset i
- MouseOn();
+ 
  while(1)
   {
    key=0;
@@ -1049,9 +1049,9 @@ void DebugSetFailure(char *Text)
 
    if ((key==0x0d ) || (x>=187 && y>=95 && x<=245 && y<=103 && mousebuttons>0))
     { 
-     MouseOff();InBox(187,95,245,103);MouseOn(); 
+     InBox(187,95,245,103); 
      while(1) {GetMouse();if (mousebuttons==0) break;}
-     MouseOff();
+     
      if (i>0) {
        i=atoi(&A[0]);
        Mev[STEP].rnum=maxx(minn(9999,i),0);
@@ -1067,30 +1067,30 @@ void DebugSetFailure(char *Text)
       if (j<5) InBox(187+j*12,74,197+j*12,82);
        else InBox(187+(j-5)*12,84,197+(j-5)*12,92);
 		A[i++]=key;
-      MouseOff();
+      
       if (key>0) delay(150);
       RectFill(142,92,173,100,10);
 		grSetColor(1);PrintAt(144,98,&A[0]);
       if (j<5) OutBox(187+j*12,74,197+j*12,82);
        else OutBox(187+(j-5)*12,84,197+(j-5)*12,92); 
-      MouseOn();
+      
  	   key=0;
 	  }
 	 if (i>0 && key==0x08)
 	  {
-      MouseOff();
+      
 	   A[--i]=0x00;
 		grSetColor(1);
       RectFill(142,92,173,100,10);
       PrintAt(144,98,&A[0]);
-      MouseOn();
+      
 		key=0;
 	  }
     for(j=0;j<5;j++)
      {
       if (x>=187+j*12 && y>=74 && x<=197+j*12 && y<=82 && mousebuttons>0 && i<4)
        {
-        MouseOff();
+        
         InBox(187+j*12,74,197+j*12,82);
         key=j+0x30;
         A[i++]=key;
@@ -1100,14 +1100,14 @@ void DebugSetFailure(char *Text)
 	     grSetColor(1);PrintAt(150,98,&A[0]);
  	     key=0;
         OutBox(187+j*12,74,197+j*12,82);
-        MouseOn();
+        
        }    
      }
     for(j=0;j<5;j++)
      {
       if (x>=187+j*12 && y>=84 && x<=197+j*12 && y<=92 && mousebuttons>0 && i<4)
        {
-        MouseOff();
+        
         InBox(187+j*12,84,197+j*12,92);
         key=j+0x35;
         A[i++]=key;
@@ -1117,7 +1117,7 @@ void DebugSetFailure(char *Text)
         grSetColor(1);PrintAt(150,98,&A[0]);
  	     key=0;
         OutBox(187+j*12,84,197+j*12,92);
-        MouseOn();
+        
        }    
      }
   }  

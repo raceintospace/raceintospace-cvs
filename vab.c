@@ -131,7 +131,7 @@ void DispVAB(char plr,char pad)
   fclose(fout);
 
   strcpy(IDT,"i016");strcpy(IKEY,"k016");
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
 
   fout=sOpen("VAB.IMG","rb",0);
@@ -203,7 +203,7 @@ void DispVAB(char plr,char pad)
   PrintAt(5,52,Mis.Abbr);
 
   FlagSm(plr,4,4);
-  MouseOn();
+  
   return;
 }
 
@@ -324,7 +324,7 @@ int ChkVabRkt(char plr,int rk,int *q)
 void ShowVA(char f)
 {
   int i;
-  MouseOff();
+  
   RectFill(65,130,160,174,3);
   grSetColor(1);
   for (i=0;i<4;i++) {
@@ -339,14 +339,14 @@ void ShowVA(char f)
     };
     PrintAt(0,0,"%");
   };
-  MouseOn();
+  
  return;
 }
 
 
 void ShowRkt(char *Name,int sf,int qty,char mode)
 {
-  MouseOff();
+  
   RectFill(65,182,160,190,3);
   if (qty<0 || mode==1) grSetColor(9); else grSetColor(1);
   PrintAt(67,188,&Name[0]);
@@ -356,7 +356,7 @@ void ShowRkt(char *Name,int sf,int qty,char mode)
     DispNum(128,188,sf);
   };
   PrintAt(0,0,"%");
-  MouseOn();
+  
   return;
 }
 
@@ -388,10 +388,10 @@ void DispVA(char plr,char f)
     spix=local.vptr;
 
     GV(&local2,w,h);
-    MouseOff();
+    
     RectFill(178,29,243,179,3);
     gxGetImage(&local2,210-w/2,103-h/2,210-w/2+w,103-h/2+h,0);
-    MouseOn();
+    
 
     for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
       if (local.vptr[i]==0x00) local.vptr[i]=local2.vptr[i];
@@ -470,10 +470,10 @@ void DispVA(char plr,char f)
       spix++;dpix++;
     };
   }
-  MouseOff();
+  
   DV(&local2);
   gxPutImage(&local,gxSET,210-w/2,103-h/2,0);
-  MouseOn();
+  
   DV(&local);
   return;
 }
@@ -489,7 +489,7 @@ void DispRck(char plr,char wh)
     w=x2-x1+1;h=y2-y1+1;
     GV(&local,w,h); GV(&local2,w,h);
     gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local,0,0,gxSET);
-    MouseOff();
+    
     RectFill(247,29,313,179,3);
     gxGetImage(&local2,282-w/2,103-h/2,282-w/2+w,103-h/2+h,0);
 
@@ -498,14 +498,14 @@ void DispRck(char plr,char wh)
     };
 
     gxPutImage(&local,gxSET,282-w/2,103-h/2,0);
-    MouseOn();
+    
     DV(&local2);DV(&local);
   return;
 }
 
 void DispWts(int two,int one)
 {
-  MouseOff();
+  
   RectFill(5,65,140,83,3);
 
   grSetColor(1);
@@ -515,7 +515,7 @@ void DispWts(int two,int one)
   PrintAt(5,70,"CURRENT PAYLOAD: ");
   if (one<two) grSetColor(9);
   DispNum(0,0,two);
-  MouseOn();
+  
   return;
 }
 
@@ -595,7 +595,7 @@ begvab:
   DispVA(plr,ccc);
   cwt=0;for (i=0;i<4;i++) cwt+=VAS[ccc][i].wt;
   DispWts(cwt,pay[rk]);
-  MouseOn();
+  
   FadeIn(2,pal,10,0,0);
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
@@ -607,7 +607,7 @@ begvab:
       // AUTO PURCHASE
       if ((x>=6 && y>=86 && x<=163 && y<=94 && mousebuttons>0) || key=='A')
       {
-        MouseOff();InBox(6,86,163,94);MouseOn();
+        InBox(6,86,163,94);
         key=0;
         // NEED A DELAY CHECK
         ac=0;
@@ -643,25 +643,25 @@ begvab:
 	   else if (ac==0) Idiot("i135");  // delay on purchase
 	    else Idiot("i137");  //not enough money
      ShowVA(ccc);ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);
-     MouseOff();OutBox(6,86,163,94);MouseOn();
+     OutBox(6,86,163,94);
     }
 
      if ((x>=177 && y>=185 && x<=242 && y<=195 && mousebuttons>0) || (key==K_ESCAPE || key=='E'))
       {
-	      MouseOff();InBox(177,185,242,195);MouseOn();
+	      InBox(177,185,242,195);
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (key>0) delay(150);
-	      MouseOff();OutBox(177,185,242,195);MouseOn();
+	      OutBox(177,185,242,195);
 	      for (i=0;i<5;i++) Data->P[plr].Mission[mis].Hard[i]=0;
         goto begvab; /* CONTINUE/EXIT/DO NOTHING */
       }
       else
       if (((x>=249 && y>=185 && x<=314 && y<=195 && mousebuttons>0) || key=='S') && Data->P[plr].Mission[mis].MissionCode!=0)
 	    {
-  	     MouseOff();InBox(249,185,314,195);MouseOn();
+  	     InBox(249,185,314,195);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (key>0) delay(100);
-	     MouseOff();OutBox(249,185,314,195);MouseOn();
+	     OutBox(249,185,314,195);
        ClrMiss(plr,mis);
 	     if (Data->P[plr].Mission[mis].MissionCode==0) goto begvab;  // SCRUB The whole mission
 	   }
@@ -699,10 +699,10 @@ begvab:
       if (qty[rk]>0) j2++;
 
 	      if (j==j2) {
-	         MouseOff();InBox(245,5,314,17);MouseOn();
+	         InBox(245,5,314,17);
 	         while(1)  { GetMouse();if (mousebuttons==0) break;}
               if (key>0) delay(150);
-	         MouseOff();OutBox(245,5,314,17);MouseOn();
+	         OutBox(245,5,314,17);
 	         for (i=0;i<4;i++) {
 	            Data->P[plr].Mission[mis].Hard[i]=VAS[ccc][i].dex;
               if (VAS[ccc][i].dex>=0) {
@@ -730,7 +730,7 @@ begvab:
     else
     if ((x>=64 && y>=181 && x<=161 && y<=191 && mousebuttons>0) || key=='R')
      {
-    	MouseOff();InBox(64,181,161,191);MouseOn();
+    	InBox(64,181,161,191);
       #define Misdef(a)     Data->P[plr].Mission[(a)].MissionCode 
       rk++;
       if (rk>6) rk=0;
@@ -742,20 +742,20 @@ begvab:
 	   DispRck(plr,rk);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(100);
-	   MouseOff();OutBox(64,181,161,191);MouseOn();
+	   OutBox(64,181,161,191);
 	   /* Rocket Choose */
      }
     else
     if ((x>=64 && y>=129 && x<=161 && y<=175 && mousebuttons>0) || key=='P')
      {
-	   MouseOff();InBox(64,129,161,175);MouseOn();
+	   InBox(64,129,161,175);
 	   ccc++; if (ccc>VASqty) ccc=0;
 	   cwt=0;for (i=0;i<4;i++) cwt+=VAS[ccc][i].wt;
 	   ShowVA(ccc);DispWts(cwt,pay[rk]);
 	   DispVA(plr,ccc);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(100);
-	   MouseOff();OutBox(64,129,161,175);MouseOn();
+	   OutBox(64,129,161,175);
 	   /* RIGHT Choose */
      };
     }

@@ -43,7 +43,7 @@ void Moon(char plr)
   val=Data->P[plr].Misc[5].Safety;
   FadeOut(2,pal,0,0,0);
 
-  MouseOff();
+  
   gxClearDisplay(0,0);
   ShBox(109,24,222,167);
   InBox(113,27,218,39);RectFill(114,28,217,38,7+3*plr);
@@ -74,7 +74,7 @@ void Moon(char plr)
   DispNum(0,0,val);PrintAt(0,0,"%");
   grSetColor(1);PrintAt(144,159,"CONTINUE");
   FlagSm(plr,114,43);
-  MouseOn();
+  
   PlayMusic(0);
   FadeIn(2,pal,0,0,0);
   while(1)  { GetMouse();if (mousebuttons==0) break;}
@@ -82,7 +82,7 @@ void Moon(char plr)
   {
 	key=0;GetMouse();
 	 if ((x>=115 && y>=152 && x<=216 && y<=162 && mousebuttons>0) || key==0x000d) {
-	   MouseOff();InBox(115,152,216,162);MouseOn();
+	   InBox(115,152,216,162);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	   if (key>0) delay(150);
       KillMusic();
@@ -131,7 +131,7 @@ void SatDraw(char plr)
 
   GXHEADER local;
   FadeOut(2,pal,0,0,0);
-  MouseOff();
+  
   gxClearDisplay(0,0);
   ShBox(1,0,319,22);IOBox(243,3,316,19);InBox(4,3,31,19);
 
@@ -179,7 +179,7 @@ void SatDraw(char plr)
   DispBig(40,5,"SATELLITE BUILDING",0,-1);
   grSetColor(1);
   PrintAt(258,13,"CONTINUE");
-  MouseOn();
+  
   return;
 }
 
@@ -188,7 +188,7 @@ void LMDraw(char plr)
 {
   char ind=0;
   FadeOut(2,pal,0,0,0);
-  MouseOff();
+  
   gxClearDisplay(0,0);
   ShBox(1,0,319,22);IOBox(243,3,316,19);InBox(4,3,31,19);
   ShBox(1,24,319,118);InBox(4,26,316,116);RectFill(5,27,315,115,0); // middle screen
@@ -200,14 +200,14 @@ void LMDraw(char plr)
   FlagSm(plr,5,4);
   DispBig(40,5,"LUNAR MODULE",0,-1);
   grSetColor(1);PrintAt(258,13,"CONTINUE");
-  MouseOn();
+  
   return;
 }
 
 void SatText(char plr)
 {
    int i;
-   MouseOff();
+   
    grSetColor(11);
    for (i=0;i<4;i++) {
       if (i!=2) {
@@ -290,7 +290,7 @@ void SatText(char plr)
 
       }
 
-   MouseOn();
+   
    return;
 }
 
@@ -302,7 +302,7 @@ void PlanText(char plr,char plan)
   Find = 0; /* XXX check uninitialized */
 
   tx=(Data->P[plr].Probe[1].Num>=0) ? 1 : 0;
-  MouseOff();
+  
   RectFill(164,75,78+160,89,3);
   RectFill(162,105,218,113,3);RectFill(162,123,218,131,3);
   RectFill(162,157,218,165,3);
@@ -358,7 +358,7 @@ void PlanText(char plr,char plan)
    else PrintAt(5+160,178,"NONE");
    DispNum(5+160,195,Data->Prestige[1+plan].Points[plr]);
 
-   MouseOn();
+   
    return;
 }
 
@@ -385,11 +385,11 @@ void LMPict(char poff)
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   RLED_img(buffer,local2.vptr,table.size,local2.w,local2.h);
-  MouseOff();
+  
   if (poff==0 || poff==1 || poff==4 || poff==5)
 	gxPutImage(&local2,gxSET,5,27,0);
 	   else gxPutImage(&local2,gxSET,160,27,0);
-  MouseOn();
+  
   fclose(in);
   DV(&local); DV(&local2);
   return;
@@ -400,7 +400,7 @@ void LMBld(char plr)
  int i,m;
   PreLoadMusic(M_DRUMSM);
   LMDraw(plr);
-  MouseOff();
+  
   ShBox(1,120,157,168);InBox(4,122,154,166);
   ShBox(160,120,319,168);InBox(163,122,316,166);
   ShBox(1,170,319,194);InBox(41,172,279,192);
@@ -421,7 +421,7 @@ void LMBld(char plr)
 	 grSetColor(6);PrintAt(m,154,"NUMBER OF ATTEMPTS: ");grSetColor(1);DispNum(0,0,Data->P[plr].Manned[5+i].Steps);
    grSetColor(6);PrintAt(m,162,"SUCCESSFUL ATTEMPTS: ");grSetColor(1);DispNum(0,0,Data->P[plr].Manned[5+i].Steps-Data->P[plr].Manned[5+i].Failures);
 	}
-  MouseOn();
+  
   PlayMusic(0);
   FadeIn(2,pal,0,0,0);
   while(1)  { GetMouse();if (mousebuttons==0) break;}
@@ -429,7 +429,7 @@ void LMBld(char plr)
   {
 	key=0;GetMouse();
 	 if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x000d) {
-	   MouseOff();InBox(245,5,314,17);MouseOn();
+	   InBox(245,5,314,17);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	   if (key>0) delay(150);
      KillMusic();
@@ -456,28 +456,28 @@ void SatBld(char plr)
   {
 	GetMouse();
 	 if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x000d) {
-	   MouseOff();InBox(245,5,314,17);MouseOn();
+	   InBox(245,5,314,17);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	   if (key>0) delay(150);
-	  // MouseOff();OutBox(245,5,314,17);MouseOn();
+	  // OutBox(245,5,314,17);
       KillMusic();
 	   key=0;return; // Continue
 	  }
 	else if (Data->P[plr].Probe[1].Num>=0 && ((x>=166 && y>=60 && x<=199 && y<=66 && mousebuttons>0) || key==0x4B00)) {  // Right
-	   MouseOff();InBox(166,60,199,66);MouseOn();key=0;
+	   InBox(166,60,199,66);key=0;
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	  delay(10);key=0;
 	  if (plan==0) plan=5; else plan--;
 	  PlanText(plr,plan);
-	   MouseOff();OutBox(166,60,199,66);MouseOn();
+	   OutBox(166,60,199,66);
 	  }
 	else if (Data->P[plr].Probe[1].Num>=0 && ((x>=201 && y>=60 && x<=234 && y<=66 && mousebuttons>0) || key==0x4D00)) {   // Left
-	   MouseOff();InBox(201,60,234,66);MouseOn();key=0;
+	   InBox(201,60,234,66);key=0;
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	  delay(10);key=0;
 	  if (plan>4) plan=0; else plan++;
 	  PlanText(plr,plan);
-	   MouseOff();OutBox(201,60,234,66);MouseOn();
+	   OutBox(201,60,234,66);
 	  }
   }
 }

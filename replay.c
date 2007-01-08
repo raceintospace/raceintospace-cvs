@@ -227,9 +227,9 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
 	   }
 
 	   gxVirtualScale(&dopy,&snzy);
-	   MouseOff();VBlank();
+	   VBlank();
 	   gxPutImage(&snzy,gxSET,dx,dy,0);
-	   MouseOn();
+	   
 	   gr_sync ();
 
 	   if (bioskey(1)) {
@@ -365,10 +365,10 @@ void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,cha
 
  gxVirtualScale(&dopy,&snzy);
 
- MouseOff();VBlank();
+ VBlank();
  RectFill(dx,dy,dx+width,dy+height-1,0);
  gxPutImage(&snzy,gxSET,dx,dy,0);
- MouseOn();
+ 
 
 done:
  DV(&dopy);DV(&snzy);

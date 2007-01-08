@@ -67,7 +67,7 @@ void Admin(char plr)
      if (i!=6) PreLoadMusic(M_GOOD);
      if (beg) beg=0;
      else {
-        MouseOff();
+        
         FadeOut(2,pal,10,0,0);
 
         AdminPort(plr);
@@ -79,7 +79,7 @@ void Admin(char plr)
         else PrintAt(166,197,"FALL 19");DispNum(0,0,Data->Year);
         grSetColor(11);if (Data->Season==0) PrintAt(165,196,"SPRING 19");
         else PrintAt(165,196,"FALL 19");DispNum(0,0,Data->Year);
-        MouseOn();
+        
      }
 
      PlayMusic(0);
@@ -244,7 +244,7 @@ void FileAccess(char mode)
    sc=1; //only allow mail save
   }
 
-  MouseOff();
+  
   strcpy(IDT,"i128");strcpy(IKEY,"k128");
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
@@ -297,7 +297,7 @@ void FileAccess(char mode)
 	  FileText(&FList[now].Name[0]);
   FadeIn(2,pal,10,0,0);
   
-  MouseOn();
+  
   while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
   while(!done) {
     GetSaveMouse();
@@ -306,21 +306,21 @@ void FileAccess(char mode)
      {  // Right Select Box
       if (x>=40 && y>=(53+i*8) && x<=188 && y<=(59+i*8) && mousebuttons>0 && (now-BarB+i)<=(tFiles-1))
        {
-        MouseOff();
+        
 	      now-=BarB; now+=i; BarB=i;
         RectFill(38,49,190,127,0);
     	   ShBox(39,52+BarB*8,189,60+BarB*8);
         DrawFiles(now,BarB,tFiles);
 	      FileText(&FList[now].Name[0]);
         while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
-   	   MouseOn();
+   	   
        }
     }  
     
   if ((sc==0 || sc==2) && tFiles>0 && ((x>=209 && y>=50 && x<=278 && y<=58 && mousebuttons>0)
    || (key=='L')))
    {
-    MouseOff();InBox(209,50,278,58);MouseOn();
+    InBox(209,50,278,58);
 	  delay(250);
     if (mode==1) temp=1;
      else {
@@ -440,14 +440,14 @@ void FileAccess(char mode)
 	     }   
       else {fclose(fin);BadFileType();};
       } // temp
-	   MouseOff();OutBox(209,50,278,58);MouseOn();  // Button Out
+	   OutBox(209,50,278,58);  // Button Out
 	   key=0;
 
     } // LOAD
       else if ((sc==0 || sc==2) && mode==0 && ((x>=209 && y>=64 && x<=278 && y<=72 && mousebuttons>0)
 	         || (key=='S')))
       {
-	      MouseOff();InBox(209,64,278,72);MouseOn();
+	      InBox(209,64,278,72);
 	      delay(250);
 
 	      while(YES)  { av_block (); GetSaveMouse();if (mousebuttons==NO) break;}
@@ -548,13 +548,13 @@ void FileAccess(char mode)
         fclose(fout); // close EVENT.TMP
        fclose(fin);
 	   }  // end done if
-	   MouseOff();OutBox(209,64,278,72);MouseOn();
+	   OutBox(209,64,278,72);
 	   key=0;
   }
    else if (sc==1 && mode==0 && ((x>=209 && y>=78 && x<=278 && y<=86 && mousebuttons>0)
     || (key=='M')))  // PLAY-BY-MAIL SAVE GAME
     {
-     MouseOff();InBox(209,78,278,86);MouseOn();
+     InBox(209,78,278,86);
      delay(250);
      while(1) {GetSaveMouse();if (mousebuttons==0) break;}
      memset(FDes->Name,0x00,23);
@@ -642,20 +642,20 @@ void FileAccess(char mode)
       fclose(fout); // close EVENT.TMP
 	    fclose(fin);
 	   }  
-     MouseOff();OutBox(209,78,278,86);MouseOn();
+     OutBox(209,78,278,86);
      key=0;
     }
    else if (tFiles>0 && ((x>=209 && y>=92 && x<=278 && y<=100 && mousebuttons>0)
 	 || (key=='D')))
     {
-	 MouseOff();InBox(209,92,278,100);MouseOn();
+	 InBox(209,92,278,100);
 	 delay(250);
 	 while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
-	 MouseOff();OutBox(209,92,278,100);MouseOn();
+	 OutBox(209,92,278,100);
 	 // perform delete
 	 i=RequestX("DELETE FILE",1);
 	 if (i==1) {
-	   MouseOff();
+	   
 	   remove_savedat(FList[now].Name);
       memset(Name,0x00,sizeof Name);
 
@@ -675,24 +675,24 @@ void FileAccess(char mode)
 	     InBox(207,90,280,102);RectFill(208,91,279,101,3);
 	     grSetColor(1);PrintAtKey(226,98,"DELETE",0);
 	   }
-	   MouseOn();
+	   
 	 }
 	 key=0;
       }
       else if ((x>=209 && y>=106 && x<=278 && y<=114 && mousebuttons>0) || (key=='P'))
        {
-	      MouseOff();InBox(209,106,278,114);MouseOn();
+	      InBox(209,106,278,114);
 	      delay(250);
 	      while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
-	      MouseOff();OutBox(209,106,278,114);MouseOn();
+	      OutBox(209,106,278,114);
 	      key=0;done=1;
       }
       else if ((x>=209 && y>=120 && x<=278 && y<=128 && mousebuttons>0) || (key=='Q'))
       {
-	    MouseOff();InBox(209,120,278,128);MouseOn();
+	    InBox(209,120,278,128);
     	 delay(250);
     	 while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(209,120,278,128);MouseOn();
+	    OutBox(209,120,278,128);
  	    // perform quit
 	    i=RequestX("QUIT",1);
        //Modem Play => reset the modem
@@ -706,7 +706,7 @@ void FileAccess(char mode)
       }
       else if ((x>=191 && y>=50 && x<=202 && y<=87 && mousebuttons>0) || key==UP_ARROW)
       {
-	 MouseOff();InBox(191,50,202,87);
+	 InBox(191,50,202,87);
 	 if (BarB==0) {
 	   if (now > 0) {
 	     now--;
@@ -723,14 +723,14 @@ void FileAccess(char mode)
 	   DrawFiles(now,BarB,tFiles);
 	   FileText(&FList[now].Name[0]);
 	 };
-	 MouseOn();
+	 
 	 //while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
-	 MouseOff();OutBox(191,50,202,87);MouseOn();
+	 OutBox(191,50,202,87);
 	 // perform Up Button
 	 key=0;
     }
     else if (key==0x4900) {  // Page Up
-   	 MouseOff();
+   	 
    	 if (now>0) {
    	   RectFill(38,49,190,127,0);
    	   now-=9;
@@ -739,13 +739,13 @@ void FileAccess(char mode)
    	   DrawFiles(now,BarB,tFiles);
    	   FileText(&FList[now].Name[0]);
    	 };
-   	 MouseOn();
+   	 
    	 // perform Up Button
   	   key=0;
 
       }
     else if (key==0x5100) {  // Page Down
-   	 MouseOff();
+   	 
    	   if (now<(tFiles-9)) {
    	     now+=9;
            if (now>(tFiles-1)) {
@@ -757,12 +757,12 @@ void FileAccess(char mode)
    	     DrawFiles(now,BarB,tFiles);
    	     FileText(&FList[now].Name[0]);
    	   }
-   	 MouseOn();
+   	 
    	 key=0;
       }
       else if ((x>=191 && y>=89 && x<=202 && y<=126 && mousebuttons>0) || key==DN_ARROW)
       {
-	 MouseOff();InBox(191,89,202,126);
+	 InBox(191,89,202,126);
 	 if (BarB==8) {
 	   if (now<(tFiles-1)) {
 	     now++;
@@ -779,15 +779,15 @@ void FileAccess(char mode)
 	   DrawFiles(now,BarB,tFiles);
 	   FileText(&FList[now].Name[0]);
 	 };
-	 MouseOn();
+	 
    
 	 //while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
-	 MouseOff();OutBox(191,89,202,126);MouseOn();
+	 OutBox(191,89,202,126);
 	 // perform Down Button
 	 key=0;
       }; //
   } //while
-  if (LOAD==1) {MouseOff();OutBox(209,50,278,60);MouseOn();}  // Button Out
+  if (LOAD==1) {OutBox(209,50,278,60);}  // Button Out
   if (mode==1 && QUIT==1) FadeOut(2,pal,10,0,0);
   return;
 
@@ -852,7 +852,7 @@ char GetBlockName(char *Nam)
 {
   int i,key;
   GXHEADER local;
-  MouseOff();
+  
   GV(&local,164,77);
   gxGetImage(&local,39,50,202,126,0);
   ShBox(39,50,202,126);
@@ -865,10 +865,10 @@ char GetBlockName(char *Nam)
     InBox(43,67,197,77);RectFill(44,68,196,76,13);
     grSetColor(11);PrintAt(47,74,"NOT ENOUGHT DISK SPACE");
     delay(2000);gxPutImage(&local,gxSET,39,50,0);DV(&local);
-    MouseOn();
+    
     return 0;
   }
-  MouseOn();
+  
   gr_sync ();
   key=0;i=0;
   while(!(key==0x0d || key==0x1b)) {
@@ -881,23 +881,23 @@ char GetBlockName(char *Nam)
       if ((i<21) && ((key==' ') || ((key>='A' && key<='Z')) ||
 	 (key>='0' && key<='9'))) {  // valid key
 	Nam[i++]=key;
-	MouseOff();grSetColor(1);PrintAt(53,102,&Nam[0]);MouseOn();
+	grSetColor(1);PrintAt(53,102,&Nam[0]);
 	key=0;
       }
       if (i>0 && key==0x08) {
 	Nam[--i]=0x00;
-  MouseOff();
+  
 	RectFill(52,96,189,104,0);
 	grSetColor(1);PrintAt(53,102,&Nam[0]);
-  MouseOn();
+  
 	key=0;
       }
     }
   }
-  MouseOff();
+  
   gxPutImage(&local,gxSET,39,50,0);
   DV(&local);
-  MouseOn();
+  
   if(key==0x0d && i>=1) return 1; else return 0;
 }
 
@@ -996,7 +996,7 @@ int FutureCheck(char plr,char type)
 {
   int i,pad,p[3],m[3],t=0,tx[3]={0,0,0};
   FILE *fin;
-  MouseOff();
+  
   for (i=0;i<3;i++) {
     p[i]=Data->P[plr].LaunchFacility[i];
     if (type==0) m[i]=Data->P[plr].Future[i].MissionCode;
@@ -1088,32 +1088,32 @@ int FutureCheck(char plr,char type)
   }
 
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   pad=-1;x=y=mousebuttons=key=0;
   while(pad==-1) {
    key=0;GetMouse();
      if (x>=219 && y>=19 && x<=262 && y<=27 && mousebuttons>0) 
       {
-       MouseOff();InBox(219,19,262,27);MouseOn();
+       InBox(219,19,262,27);
        while(1)  { GetMouse();if (mousebuttons==0) break;}
        pad=5;key=0;
       }
      if (((!(x>=59 && y>=12 && x<=269 && y<=186))&&mousebuttons>0) || key==K_ESCAPE || key==K_ENTER || key=='E')
       {
-       MouseOff();InBox(219,19,262,27);MouseOn();
+       InBox(219,19,262,27);
        pad=5;key=0;
       };
      for (i=0;i<3;i++)
       {
        if ((x>=110 && y>=69+i*51 && x<=262 && y<=77+i*51 && tx[i]!=1 && mousebuttons>0) || (tx[i]!=1 && key=='A'+i)) {
-	     MouseOff();InBox(110,69+i*51,262,77+i*51);MouseOn();
+	     InBox(110,69+i*51,262,77+i*51);
 	 while(1)  { GetMouse();if (mousebuttons==0) break;}
 	 key=0;
 	 delay(300);
 	 if (p[i]==1) pad=i;
 	 if (p[i]==-1 && Data->P[plr].Cash>=20 && type==0) {
-     MouseOff();
+     
 	   gxVirtualDisplay(&vhptr,156*plr+39,i*30,65,36+i*51,103,65+i*51,0);
 	   Data->P[plr].Cash-=20;
 	   Data->P[plr].Spend[0][3]+=20;
@@ -1122,7 +1122,7 @@ int FutureCheck(char plr,char type)
 	   RectFill(109,36+51*i,263,63+51*i,3);
 	   grSetColor(5);Missions(plr,111,41+i*51,m[i],0);
 	   PrintAt(113,75+i*51,"ASSIGN FUTURE MISSION");
-     MouseOn();
+     
 	 }
    else if (p[i]==-1 && Data->P[plr].Cash<20 && type==0)
     {Idiot("i129");}
@@ -1130,7 +1130,7 @@ int FutureCheck(char plr,char type)
 
 	 if (p[i]>4 && Data->P[plr].Cash>=abs(Data->P[plr].LaunchFacility[i])
 	    && type==0) {
-     MouseOff();
+     
 	   gxVirtualDisplay(&vhptr,156*plr+39,i*30,65,36+i*51,103,65+i*51,0);
 	   Data->P[plr].Cash-=Data->P[plr].LaunchFacility[i];
 	   Data->P[plr].Spend[0][3]+=Data->P[plr].LaunchFacility[i];
@@ -1139,7 +1139,7 @@ int FutureCheck(char plr,char type)
 	   ShBox(110,69+i*51,262,77+i*51);
 	   grSetColor(5);Missions(plr,111,41+i*51,m[i],0);
 	   PrintAt(113,75+i*51,"ASSIGN FUTURE MISSION");
-     MouseOn();
+     
 	 }
 	 else if (p[i]>4 && Data->P[plr].Cash<abs(Data->P[plr].LaunchFacility[i])
 	    && type==0) {Idiot("i129");}
@@ -1154,7 +1154,7 @@ char RequestX(char *s,char md)
   char i;
   GXHEADER local;
 
-  MouseOff();
+  
   if (md==1) {  // Save Buffer
     GV(&local,196,84);
     gxGetImage(&local,85,52,280,135,0);
@@ -1171,26 +1171,26 @@ char RequestX(char *s,char md)
   grSetColor(11);
   DispBig(166-i*10,65,&s[0],0,-1);
   PrintAt(138,94,"ARE YOU SURE");
-  MouseOn();
+  
   while(mousebuttons!=0) GetMouse();
   i=2;
   while(i==2) {
     GetMouse();
      if ((x>=172 && y>=105 && x<=241 && y<=128 && mousebuttons!=0)||(key=='N')) {
-       MouseOff();InBox(172,105,241,128);i=0;MouseOn();
+       InBox(172,105,241,128);i=0;
        delay(50);key=0;
      };
      if ((x>93 && y>=105 && x<=162 && y<=128&& mousebuttons!=0)||(key=='Y')) {
-       MouseOff();InBox(93,105,162,128);i=1;MouseOn();
+       InBox(93,105,162,128);i=1;
        delay(50);key=0;
      };
   };
 
   if (md==1) {
-    MouseOff();
+    
     while(mousebuttons!=0) GetMouse();
     gxPutImage(&local,gxSET,85,52,0);
-    DV(&local);MouseOn();
+    DV(&local);
   }
   while(mousebuttons!=0) GetMouse();
   return i;

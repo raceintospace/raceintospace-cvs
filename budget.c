@@ -37,7 +37,7 @@ void DrawBudget(char player,char *pStatus)
   int i,j,max = 0,k,pscale;
   char name[20],str[10];
 
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   ShBox(0,0,319,47);ShBox(0,49,319,67);ShBox(0,69,158,199);
@@ -215,7 +215,7 @@ void DrawBudget(char player,char *pStatus)
   }
   DrawPastExp(player,pStatus);
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   return;
 }
 
@@ -316,49 +316,49 @@ void Budget(char player)
     {
      if ((x>=166 && y>=29 && x<=236 && y<=41 && mousebuttons>0) || key==K_ENTER)
       {
-	    MouseOff();InBox(167,29,236,41);MouseOn();
+	    InBox(167,29,236,41);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
-	    MouseOff();OutBox(167,29,236,41);MouseOn();
+	    OutBox(167,29,236,41);
 	    return;  /* Done */
 		};
 	  if ((x>=133 && y>=140 && x<=152 && y<152 && mousebuttons>0) || key=='U')
 		{
 		 pStatus[0] = (pStatus[0]==0) ? 1 : 0;
-		 MouseOff();
+		 
 		 if (pStatus[0]==1) InBox(133,140,152,152);
 		   else OutBox(133,140,152,152);
-		 MouseOn();
+		 
 		 while(1) {GetMouse();if (mousebuttons==0) break;}
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=154 && x<=152 && y<166 && mousebuttons>0) || key=='R')
 		{
 		 pStatus[1] = (pStatus[1]==0) ? 1 : 0;
-		 MouseOff();
+		 
 		 if (pStatus[1]==1) InBox(133,154,152,166);
 			else OutBox(133,154,152,166);
-		 MouseOn();
+		 
 		 while(1) {GetMouse();if (mousebuttons==0) break;}
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=168 && x<=152 && y<180 && mousebuttons>0) || key=='C')
 		{
 		 pStatus[2] = (pStatus[2]==0) ? 1 : 0;
-		 MouseOff();
+		 
 		 if (pStatus[2]==1) InBox(133,168,152,180);
 			else OutBox(133,168,152,180);
-		 MouseOn();
+		 
 		 while(1) {GetMouse();if (mousebuttons==0) break;}
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=182 && x<=152 && y<194 && mousebuttons>0) || key=='M')
 		{
 		 pStatus[3] = (pStatus[3]==0) ? 1 : 0;
-		 MouseOff();
+		 
 		 if (pStatus[3]==1) InBox(133,182,152,194);
 			else OutBox(133,182,152,194);
-		 MouseOn();
+		 
 		 while(1) {GetMouse();if (mousebuttons==0) break;}
 		 DrawPastExp(player,pStatus);
       }
@@ -371,7 +371,7 @@ void DrawViewing(char plr)
   int i,misnum;
   extern char *Months[12];
 
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   memset(buffer,0x00,BUFFER_SIZE);
@@ -419,7 +419,7 @@ void DrawViewing(char plr)
      PrintAt(9,49+16*misnum,"NO PAST MISSIONS REMAINING");
   }
 
-  MouseOn();
+  
   return;
 }
 
@@ -441,7 +441,7 @@ void DrawVText(char got)
     if (strncmp(&buf[0],"PLANETARY",9)==0) grSetColor(11);
     if (strncmp(&buf[0],"CHECK INTEL",11)==0) grSetColor(11);
   }
-  MouseOff();
+  
   for(i=0;i<8;i++) {
     RectFill(6,yy-4,300,yy+1,0);
     grMoveTo(xx,yy);
@@ -459,7 +459,7 @@ void DrawVText(char got)
     buf++;
     if (*buf==NULL) i=9;
   }
-  MouseOn();
+  
   return;
 }
 
@@ -478,13 +478,13 @@ int RetFile(char plr,int card)
   bline=0;
   for (i=0;i<(int)strlen(buffer);i++) if (buffer[i]=='x') bline++;
   bline-=8;
-  MouseOff();
+  
   RectFill(82,183,237,195,7);
   grSetColor(11);
   if ((card%2)==1) PrintAt(131,191,"FALL 19");
   else PrintAt(128,191,"SPRING 19");
   DispNum(0,0,(card>>1)+57);
-  MouseOn();
+  
   return bline;
 }
 
@@ -497,7 +497,7 @@ void Viewing(char plr)
   bline=RetFile(plr,oset);
   ctop=0;
   DrawVText(ctop);
-	MouseOff();InBox(244,184,313,194);MouseOn();
+	InBox(244,184,313,194);
   FadeIn(2,pal,10,0,0);
   PlayMusic(0);
   while(1)  {GetMouse();if (mousebuttons==0) break;}
@@ -517,46 +517,46 @@ void Viewing(char plr)
        bzdelay (DELAYCNT);
      }
      if (ctop>0 && ((mousebuttons>0 && x>=302 && y>=116 && x<=312 && y<=145) || key==UP_ARROW)) {
-	     MouseOff();InBox(302,116,312,145);MouseOn();
+	     InBox(302,116,312,145);
        ctop--; DrawVText(ctop);
        bzdelay (DELAYCNT / 2);
-       MouseOff();OutBox(302,116,312,145);MouseOn();
+       OutBox(302,116,312,145);
      } // UP
      else if (ctop<bline && ((mousebuttons>0 && x>=302 && y>147 && x<=312 && y<=176) || key==DN_ARROW)) {
-       MouseOff();InBox(302,147,312,176);MouseOn();
+       InBox(302,147,312,176);
        ctop++; DrawVText(ctop);
        bzdelay (DELAYCNT / 2);
-       MouseOff();OutBox(302,147,312,176);MouseOn();
+       OutBox(302,147,312,176);
       }  // Down
      else if (oset>0 && ((mousebuttons>0 && x>=6 && y>=184 && x<=75 && y<=194) || key==LT_ARROW))
       {
-	    MouseOff();InBox(6,184,75,194);MouseOn();
+	    InBox(6,184,75,194);
       oset--;
       bline=RetFile(plr,oset);
       ctop=0; DrawVText(ctop);
-      MouseOff();
+      
 	    if (oset!=0) OutBox(6,184,75,194);
       bzdelay (DELAYCNT);
       OutBox(244,184,313,194);
-      MouseOn();
+      
 	    // Left Select
       }
      else if (oset<maxcard && ((mousebuttons>0 && x>=244 && y>=184 && x<=313 && y<=194) || key==RT_ARROW)) {
-	    MouseOff();InBox(244,184,313,194);MouseOn();
+	    InBox(244,184,313,194);
       oset++;
       bline=RetFile(plr,oset);
       ctop=0; DrawVText(ctop);
-      MouseOff();
+      
 	    if (oset!=maxcard) OutBox(244,184,313,194);
       bzdelay (DELAYCNT);
       OutBox(6,184,75,194);
-      MouseOn();
+      
       // Right Select
       }
 		else if ((mousebuttons>0 && x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER || key==K_ESCAPE) {
-	     MouseOff();InBox(245,5,314,17);MouseOn();
+	     InBox(245,5,314,17);
         if (key>0) delay(150);
-	     //MouseOff();OutBox(245,5,314,17);MouseOn();
+	     //OutBox(245,5,314,17);
         KillMusic();
 	     return;  // Continue
        };

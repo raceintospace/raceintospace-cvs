@@ -111,9 +111,7 @@ void Plop(char plr,char mode);
 
 void mikeCrearScreen(void)
 {
-  MouseOff();
   memset(screen,0x00,64000);
-  MouseOn();
 }
 
 struct gamedat_file {
@@ -416,7 +414,6 @@ int main(int argc, char *argv[])
 
   OpenEmUp();                   // OPEN SCREEN AND SETUP GOODIES
   Introd();
-  MouseOn();
 
   ex=0;
   while(ex==0) {
@@ -438,7 +435,6 @@ int main(int argc, char *argv[])
     }
 
     mikeCrearScreen();
-    //MouseOff();gxClearDisplay(0,0);MouseOn();
     PortPal(0);
     key=0;strcpy(IDT,"i000\0");strcpy(IKEY,"i000\0");
     df=1;
@@ -450,7 +446,7 @@ tommy:
       i=MChoice(6,(char *)AName);
       if (i==98) goto tommy;
       IDLE[0]=IDLE[1]=0;
-      if (i==99) {MouseOff();Introd();MouseOn();PortPal(0);}
+      if (i==99) {Introd();PortPal(0);}
      }
 
     if (i!=5) {  //except for credits
@@ -478,7 +474,6 @@ tommy:
 	      MainLoop();                   // PLAY GAME
         mikeCrearScreen();
 
-//      MouseOff();memset(screen,0x00,64000);MouseOn();
          //PreLoadMusic(M_LIFTOFF);
          //PlayMusic(1);
 	      break;
@@ -500,7 +495,6 @@ tommy:
          else if (QUIT!=1) FadeOut(2,pal,10,0,0);
          QUIT=0;
          mikeCrearScreen();
-         //MouseOff();memset(screen,0x00,64000);MouseOn();
          //PreLoadMusic(M_LIFTOFF);
          //PlayMusic(1);
 	      break;
@@ -668,7 +662,6 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
        //restore sound
 //       SetVoiceVolume(115);
        mikeCrearScreen();
-       //MouseOff();memset(screen,0x00,64000);MouseOn();
        IDLE[plr[i]]++;
        if (LOAD==1) goto restart;     // TEST FOR LOAD
      } else {
@@ -774,7 +767,6 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
   };
   FadeOut(2,pal,10,0,0);
     mikeCrearScreen();
-  //MouseOff();memset(screen,0x00,64000);MouseOn();
   Museum(0);
   Museum(1);
   return;
@@ -891,21 +883,6 @@ void GetMouse_fast(void)
   else if (AL_CALL==0 && ((key>>8)==0x3C)) Idiot(IKEY);
   else if (AL_CALL==0 && ((key>>8)==0x3D)) Idiot("i123");
 }
-#if 1
-void MouseOff(void)
-{
-  if (XMAS==0) return;
-  grDisplayMouse(grHIDE);
-  return;
-}
-
-void MouseOn(void)
-{
-  if (XMAS==0) return;
-  grDisplayMouse(grSHOW);
-  return;
-}
-#endif
 
 void PauseMouse(void)
 {
@@ -1074,27 +1051,21 @@ void DNArrow(int x1,int y1)
 
 void InBox(int x1,int y1,int x2,int y2)
 {
-  MouseOff();
   grSetColor(2);  grMoveTo(x1,y2);  grLineTo(x2,y2);  grLineTo(x2,y1);
   grSetColor(4);  grLineTo(x1,y1);  grLineTo(x1,y2);
-  MouseOn();
 }
 
 void OutBox(int x1,int y1,int x2,int y2)
 {
-  MouseOff();
   grSetColor(4);  grMoveTo(x1,y2); grLineTo(x2,y2);  grLineTo(x2,y1);
   grSetColor(2);  grMoveTo(x2-1,y1); grLineTo(x1,y1);  grLineTo(x1,y2-1);
-  MouseOn();
 }
 
 void IOBox(int x1, int y1, int x2, int y2)
 {
-  MouseOff();
   InBox(x1,y1,x2,y2);
   grSetColor(0);Box(x1+1,y1+1,x2-1,y2-1);
   OutBox(x1+2,y1+2,x2-2,y2-2);
-  MouseOn();
 }
 
 void RectFill(int x1,int y1,int x2,int y2,char col)

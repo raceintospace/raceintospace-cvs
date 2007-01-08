@@ -34,7 +34,7 @@ void DrawReview(char plr)
 {
 int clr,i,cte,P_value;
 char Fired_Flag=0,Reset_Flag=0;
-  MouseOff();
+  
 if (Data->P[plr].PresRev[0]!=0x7F) FadeOut(2,pal,10,0,0);
   PortPal(plr);
   gxClearDisplay(0,0);
@@ -141,7 +141,7 @@ if (Data->P[plr].PresRev[0]!=0x7F) FadeOut(2,pal,10,0,0);
    }
   if (Reset_Flag==1) Data->P[plr].PresRev[0]=16;
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   return;
 }
 
@@ -159,7 +159,7 @@ while(1)  { GetMouse();if (mousebuttons==0) break;}
      {
       if ((x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER)
 	    {
-	     MouseOff();InBox(245,5,314,17);MouseOn();
+	     InBox(245,5,314,17);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
        KillMusic();
 	     //FadeOut(2,pal,10,0,0);
@@ -174,18 +174,18 @@ while(1)  { GetMouse();if (mousebuttons==0) break;}
 void MisRev(char plr,int pres)
 {
   if (!AI[plr]) PreLoadMusic( (pres>0) ? M_SUCCESS:M_UNSUCC);
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   ShBox(0,0,319,22);InBox(3,3,30,19);IOBox(243,3,316,19);
   DispBig(40,5,"MISSION REVIEW",0,-1);
   grSetColor(1);PrintAt(258,13,"CONTINUE");
   FlagSm(plr,4,4);
-  MouseOn();
+  
   key=0;
   Draw_Mis_Stats(plr,Data->P[plr].PastMis-1,0,1);
   key=0;
-  MouseOff();gxClearDisplay(0,0);MouseOn();
+  gxClearDisplay(0,0);
   return;
 }
 
@@ -207,9 +207,9 @@ void PresPict(char poff)
   fclose(in);
   GV(&local,126,84);
   RLED_img(buffer,local.vptr,table.size,local.w,local.h);
-  MouseOff();
+  
   gxPutImage(&local,gxSET,183,33,0);
-  MouseOn();
+  
   DV(&local);
   return;
 }

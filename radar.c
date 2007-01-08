@@ -31,7 +31,7 @@ extern char AI[2];
 void PadDraw(char plr,char pad)
 {
   int i,j,k,l;
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   ShBox(0,0,319,22); ShBox(0,24,319,198); InBox(3,3,30,19); IOBox(243,3,316,19);
@@ -135,7 +135,7 @@ void PadDraw(char plr,char pad)
 		PatchMe(plr,126,40,Data->P[plr].Mission[pad].Prog-1,
 			Data->P[plr].Mission[pad].Patch,32);
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   return;
 }
 
@@ -247,9 +247,9 @@ void PadPict(char poff)
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   RLED_img(buffer,local2.vptr,table.size,local2.w,local2.h);
-  MouseOff();
+  
   gxPutImage(&local2,gxSET,168,28,0);
-  MouseOn();
+  
   fclose(in);
   DV(&local); DV(&local2);
   return;
@@ -277,11 +277,11 @@ void ShowPad(char plr,char pad)
 	if ((Data->P[plr].LaunchFacility[pad]==1 && x>=169 && y>=181 && x<=314 && y<=193 && mousebuttons>0 && Data->P[plr].Mission[pad].MissionCode>0)
       || (Data->P[plr].LaunchFacility[pad]==1 && Data->P[plr].Mission[pad].MissionCode>0 && key=='S')) 
 	  {  // Scrub Mission
-	   MouseOff();InBox(169,181,314,193);MouseOn();
+	   InBox(169,181,314,193);
 	   key=0;
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
      ClrMiss(plr,pad);
-	   MouseOff();OutBox(169,181,314,193);MouseOn();
+	   OutBox(169,181,314,193);
 	   key=0; 
 	   if (Data->P[plr].Mission[pad].MissionCode==0) {KillMusic();return;};
 	  }
@@ -289,7 +289,7 @@ void ShowPad(char plr,char pad)
 	if ((Data->P[plr].LaunchFacility[pad]<=Data->P[plr].Cash && Data->P[plr].LaunchFacility[pad]>1 && x>=169 && y>=181 && x<=314 && y<=193 && mousebuttons>0)
     || (key=='F' && Data->P[plr].LaunchFacility[pad]>1 && Data->P[plr].LaunchFacility[pad]<=Data->P[plr].Cash)) 
 	  {  // Scrub Mission
-	   MouseOff();InBox(169,181,314,193);MouseOn();
+	   InBox(169,181,314,193);
 	   key=0;
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	   if (Data->P[plr].Cash>=Data->P[plr].LaunchFacility[pad]) 
@@ -308,16 +308,16 @@ void ShowPad(char plr,char pad)
 	     temp=Idiot("i116");
         temp=0;
 	    }
-	   MouseOff();OutBox(169,181,314,193);MouseOn();
+	   OutBox(169,181,314,193);
 	   key=0;
       if (temp==1) {KillMusic();return;};
 	  }
    else
 	if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d)
 	{
-	   MouseOff();InBox(245,5,314,17);MouseOn();key=0;
+	   InBox(245,5,314,17);key=0;
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();OutBox(245,5,314,17);MouseOn();
+	   OutBox(245,5,314,17);
       if (key>0) delay(150);
       KillMusic();
 	   key=0; return;  /* Done */

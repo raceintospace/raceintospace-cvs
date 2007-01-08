@@ -60,7 +60,7 @@ char Burst(char win)
  char clr=1;
  key=0;
  strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
- MouseOff();gxGetImage(&vhptr,0,0,319,199,0);MouseOn();
+ gxGetImage(&vhptr,0,0,319,199,0);
  while (1)
   {
    cdstat=CDAccess(cdROM,3,3);  // CD STATUS
@@ -106,10 +106,10 @@ char Burst(char win)
         if ((x>=254 && y>=182 && x<=305 && y<=190 && mousebuttons>0) || key==K_ENTER) R_value=5;
         if (R_value>0)
          {
-          MouseOff();
+          
           gxPutImage(&vhptr,gxSET,0,0,0);
           strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
-          MouseOn();
+          
           return(R_value);
          }
        } 
@@ -149,7 +149,7 @@ void EndGame(char win,char pad)
  int i=0,r,gork,cdstat;
  char miss,prog,man1,man2,man3,man4,bud;
 
- MouseOff();
+ 
  FadeOut(2,pal,10,0,0);
  strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
  gxClearDisplay(0,0);
@@ -262,7 +262,7 @@ void EndGame(char win,char pad)
  grSetColor(6);
  AltHistory(win);
  FadeIn(2,pal,10,0,0);
- MouseOn();
+ 
  while(1)  { GetMouse();if (mousebuttons==0) break;}
  i=0;key=0;
  while (i==0)
@@ -270,11 +270,11 @@ void EndGame(char win,char pad)
 	key=0;GetMouse();
 	if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
 	  {
-	   MouseOff();InBox(244,5,313,17);MouseOn();
+	   InBox(244,5,313,17);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(150);
 	   i=1;key=0;
-	   MouseOff();OutBox(244,5,313,17);MouseOn();
+	   OutBox(244,5,313,17);
 	  };
    cdstat=CDAccess(cdROM,3,3);  // CD STATUS
    if (!(cdstat&0x02)) {
@@ -316,7 +316,7 @@ void Draw_NewEnd(char win)
 {
  long size;
  FILE *in;
- MouseOff();
+ 
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
  in=sOpen("WINNER.BUT","rb",0);
@@ -334,7 +334,7 @@ void Draw_NewEnd(char win)
  FadeIn(0,pal,40,128,0);
  Load_LenFlag(win);
  FadeIn(1,pal,200,128,1);
- MouseOn();
+ 
  return;
 }
 
@@ -373,24 +373,24 @@ void NewEnd(char win,char loc)
       if ((x>=134 && y>=182 && x<=185 && y<=190 && mousebuttons>0) || key=='P') R_V=3;
       if ((x>=194 && y>=182 && x<=245 && y<=190 && mousebuttons>0) || key=='M') R_V=4;
       if ((x>=254 && y>=182 && x<=305 && y<=190 && mousebuttons>0) || key==K_ENTER) R_V=5;
-      MouseOff();
+      
       gxPutImage(&local,gxSET,149,9,0);
       memset(&pal[384],0,384);gxSetDisplayPalette(pal);
       gxClearVirtual(&local,0);
       Load_LenFlag(win);
       FadeIn(1,pal,80,128,1);
-      MouseOn();
+      
       if (R_V==0 || R_V==-1) R_V=Burst(win);
       Re_Draw=0;
       strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
      }
    if (((x>=14 && y>=182 && x<=65 && y<=190 && mousebuttons>0) || key=='H') || R_V==1)
     {
-     MouseOff();InBox(14,182,65,190);MouseOn();
+     InBox(14,182,65,190);
      while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0 || R_V>0) delay(150);
      i=0;key=0;
-     MouseOff();OutBox(14,182,65,190);MouseOn();
+     OutBox(14,182,65,190);
      grSetMouseBounds(0,0,319,199);
      EndGame(win,loc);Draw_NewEnd(win);
      grSetMouseBounds(0,173,319,199);
@@ -403,11 +403,11 @@ void NewEnd(char win,char loc)
     {
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
-     MouseOff();InBox(74,182,125,190);MouseOn();
+     InBox(74,182,125,190);
      while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0 || R_V>0) delay(150);
      i=0;key=0;
-     MouseOff();OutBox(74,182,125,190);MouseOn();
+     OutBox(74,182,125,190);
      grSetMouseBounds(0,0,319,199);
      PreLoadMusic(M_THEME);
      PlayMusic(1);
@@ -423,15 +423,15 @@ void NewEnd(char win,char loc)
     {
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
-     MouseOff();InBox(134,182,185,190);MouseOn();
+     InBox(134,182,185,190);
      while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0 || R_V>0) delay(150);
      if (R_V==3) R_V=-1;
      i=0;key=0;
-     MouseOff();Re_Draw=1;OutBox(134,182,185,190);
+     Re_Draw=1;OutBox(134,182,185,190);
      FadeOut(1,pal,100,128,1);RectFill(195,0,319,172,0);
      gxGetImage(&local,149,9,309,100,0);
-     ShBox(149,9,309,100);InBox(153,13,305,96);MouseOn();
+     ShBox(149,9,309,100);InBox(153,13,305,96);
      PreLoadMusic(M_PRGMTRG);
      PlayMusic(1);
      Replay(win,0,154,14,149,82,(win==0)?"UPAR":"SPAR");
@@ -442,15 +442,15 @@ void NewEnd(char win,char loc)
     {
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
-     MouseOff();InBox(194,182,245,190);MouseOn();
+     InBox(194,182,245,190);
      while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0 || R_V>0) delay(150);
      if (R_V==4) R_V=-1;
      i=0;key=0;
-     MouseOff();OutBox(194,182,245,190);Re_Draw=1;
+     OutBox(194,182,245,190);Re_Draw=1;
      FadeOut(1,pal,100,128,1);RectFill(195,0,319,172,0);
      gxGetImage(&local,149,9,309,100,0);
-     ShBox(149,9,309,100);InBox(153,13,305,96);MouseOn();
+     ShBox(149,9,309,100);InBox(153,13,305,96);
      PreLoadMusic(M_MISSPLAN);
      PlayMusic(1);
      Replay(win,0,154,14,149,82,(win==0) ? "PUM3C6":"PSM3C6");
@@ -462,11 +462,11 @@ void NewEnd(char win,char loc)
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
      KillMusic();
-     MouseOff();InBox(254,182,305,190);MouseOn();
+     InBox(254,182,305,190);
      while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0) delay(150);
      i=1;key=0;
-     MouseOff();OutBox(254,182,305,190);MouseOn();
+     OutBox(254,182,305,190);
     };
   }
  DV(&local);  //KillMusic();
@@ -478,7 +478,7 @@ void FakeWin(char win)
 {
  int i,r;
  char miss,prog,man1,man2,man3,man4,bud,yr;
- MouseOff();
+ 
  PreLoadMusic(M_INTERLUD);
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
@@ -580,7 +580,7 @@ void FakeWin(char win)
  FakeHistory(win,yr);
  PlayMusic(0);
  FadeIn(2,pal,10,0,0);
- MouseOn();
+ 
  while(1)  { GetMouse();if (mousebuttons==0) break;}
  i=0;key=0;
   while (i==0)
@@ -588,11 +588,11 @@ void FakeWin(char win)
 	key=0;GetMouse();
 	if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
 	  {
-	   MouseOff();InBox(244,5,313,17);MouseOn();
+	   InBox(244,5,313,17);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(150);
 	   i=1;key=0;
-	   MouseOff();OutBox(244,5,313,17);MouseOn();
+	   OutBox(244,5,313,17);
 	  };
   }
  KillMusic();
@@ -670,7 +670,7 @@ void SpecialEnd(void)
  char i;
  PreLoadMusic(M_BADNEWS);
  PlayMusic(1);
- MouseOff();
+ 
  gxClearDisplay(0,0);
  ShBox(0,0,319,24);DispBig(5,5,"FAILED OBJECTIVE",1,-1);
  ShBox(0,26,319,199);RectFill(1,27,318,198,7);InBox(5,31,314,194);
@@ -689,7 +689,7 @@ void SpecialEnd(void)
  HistFile(buffer+1000,11);
  PrintOne(buffer+1000,1);
  FadeIn(2,pal,10,0,0);
- MouseOn();
+ 
  while(1)  { GetMouse();if (mousebuttons==0) break;}
  i=0;key=0;
  while (i==0)
@@ -697,7 +697,7 @@ void SpecialEnd(void)
    key=0;GetMouse();
 	 if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
 	  {
-	   MouseOff();InBox(244,5,313,17);MouseOn();
+	   InBox(244,5,313,17);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(150);
 	   i=1;key=0;
@@ -757,7 +757,7 @@ void PlayFirst(char plr,char first)
  char i,w=0,index;
  int Check=0;
 
- MouseOff();
+ 
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
  PreLoadMusic(M_LIFTOFF);
@@ -802,10 +802,10 @@ void PlayFirst(char plr,char first)
  FadeIn(2,pal,10,0,0);
  if (Option==-1 && MAIL==-1) Replay(plr,Data->P[plr].PastMis-1,85,46,151,82,"OOOO");
   else Replay(index,Data->Prestige[first].Indec,85,46,151,82,"OOOO");
- MouseOn();
+ 
  PauseMouse();
  FadeOut(2,pal,10,0,0);
- MouseOff();gxClearDisplay(0,0);MouseOn();
+ gxClearDisplay(0,0);
  KillMusic();
  return;
 }

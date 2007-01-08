@@ -31,7 +31,7 @@ void DrawTrain(char plr,char lvl)
 {
  char TrnName[20];
  char *Trner="TRAINING\0";
-  MouseOff();
+  
   if (lvl==0) {
    strcpy(IDT,"i038");strcpy(IKEY,"k038");
    }
@@ -92,7 +92,7 @@ void DrawTrain(char plr,char lvl)
   grSetColor(1);PrintAt(0,0,"ITHDRAW FROM TRAINING");
   RectFill(203,29,282,78,7+(plr*3));
   FlagSm(plr,4,4);
-  MouseOn();
+  
   return;
 }
 
@@ -173,7 +173,7 @@ void Train(char plr,int level)
 	if (Data->P[plr].Pool[i].Status>=7 && Data->P[plr].Pool[i].Status<=10 &&
 	Data->P[plr].Pool[i].Focus==level )  M[count++]=i;
   };
-  MouseOff();
+  
   DispLeft(plr,BarA,count,now2,&M[0]);
   if (count>0) TrainText(plr,M[0],count);
   FadeIn(2,pal,10,0,0);
@@ -198,21 +198,21 @@ void Train(char plr,int level)
          Replay(plr,0,4,28,149,82,Train);break;
 	default:break;
   };
-  MouseOn();
+  
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
   {
 	key=0;GetMouse();
 	for (i=0;i<8;i++) {  // Right Select Box
 	  if (x>=27 && y>=(131+i*8) && x<=151 && y<=(137+i*8) && mousebuttons>0 && (now2-BarA+i)<=(count-1)) { // Left
-		 MouseOff();
+		 
 	 now2-=BarA; now2+=i; BarA=i;
 	 RectFill(26,129,153,195,0);
 	 ShBox(26,130+BarA*8,152,138+BarA*8);
 	 DispLeft(plr,BarA,count,now2,&M[0]);
 		 TrainText(plr,M[now2],count);
 	 while(1)  { GetMouse();if (mousebuttons==0) break;}
-	 MouseOn();
+	 
 	  }
 	}
 
@@ -220,14 +220,14 @@ void Train(char plr,int level)
 	{
 	 if (((x>=6 && y>=130 && x<=18 && y<=161 && mousebuttons>0) || key==UP_ARROW) && count>0)
      { /* Lft Up */
-	   MouseOff();InBox(6,130,18,161);MouseOn();
+	   InBox(6,130,18,161);
       for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-         MouseOff();
+         
   	      if (BarA==0)
 	       if (now2>0) {
 		     now2--;
@@ -243,14 +243,14 @@ void Train(char plr,int level)
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	      TrainText(plr,M[now2],count);
 	     };
-	     MouseOn();
+	     
         i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==UP_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	   if (BarA==0)
 	    if (now2>0) {
 		  now2--;
@@ -266,24 +266,24 @@ void Train(char plr,int level)
 	    DispLeft(plr,BarA,count,now2,&M[0]);
 	    TrainText(plr,M[now2],count);
 	   };
-	   MouseOn();
+	   
         key=0;
         GetMouse();
        }
 	   //while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();OutBox(6,130,18,161);MouseOn();delay(10);
+	   OutBox(6,130,18,161);delay(10);
      }
      else
      if (((x>=6 && y>=163 && x<=18 && y<=194 && mousebuttons>0) || key==DN_ARROW) && count>0)
       { /* Lft Dwn */
-	    MouseOff();InBox(6,163,18,194);MouseOn();
+	    InBox(6,163,18,194);
        for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-        MouseOff();
+        
 	    if (BarA==7)
 	     if (now2 < count-1) {
 		   now2++;
@@ -300,14 +300,14 @@ void Train(char plr,int level)
 		   DispLeft(plr,BarA,count,now2,&M[0]);
 		   TrainText(plr,M[now2],count);
 	     };
-	    MouseOn();
+	    
         i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==DN_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	    if (BarA==7)
 	     if (now2 < count-1) {
 		   now2++;
@@ -324,20 +324,20 @@ void Train(char plr,int level)
 		   DispLeft(plr,BarA,count,now2,&M[0]);
 		   TrainText(plr,M[now2],count);
 	     };
-	    MouseOn();
+	    
         key=0;
         GetMouse();
        }
 	    //while(1)  { GetMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(6,163,18,194);MouseOn();delay(10);
+	    OutBox(6,163,18,194);delay(10);
 	   }
      else
 	  if (((x>=168 && y>=181 && x<=314 && y<=193 && mousebuttons>0) || key=='W') && count>0)
       {
-	    MouseOff();InBox(168,181,314,193);MouseOn();
+	    InBox(168,181,314,193);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
-	    MouseOff();OutBox(168,181,314,193);MouseOn();
+	    OutBox(168,181,314,193);
        // idiot box are you sure
        temp=0;if (plr==0) temp=Idiot("i102"); else temp=Idiot("i109");
        if (temp==1)
@@ -352,7 +352,7 @@ void Train(char plr,int level)
 	      if (Data->P[plr].Pool[M[now2]].Endurance<0) Data->P[plr].Pool[M[now2]].Endurance=0;
 	      for (i=now2;i<count;i++) M[i]=M[i+1];
 	      M[i]=-1;count--;
-        MouseOff();
+        
 	      if (count==0) RectFill(203,29,282,78,7+(plr*3));
 	      if (now2==count)
           {
@@ -363,17 +363,17 @@ void Train(char plr,int level)
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	      TrainText(plr,M[now2],count);
-        MouseOn();
+        
         }
-	    MouseOn();
+	    
 	  } /* end x-y if */
      else
 	  if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
       {
-	    MouseOff();InBox(245,5,314,17);MouseOn();
+	    InBox(245,5,314,17);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
-	    MouseOff();OutBox(245,5,314,17);MouseOn();
+	    OutBox(245,5,314,17);
        KillMusic();
 	    return;  /* Done */
       }; /* end x-y if */
@@ -391,7 +391,7 @@ void Hospital(char plr,int sel)
     else {strcpy(IDT,"i020");strcpy(IKEY,"k020");}
   for (i=0;i<100;i++) M[i]=0;
   now2=0;BarA=count=0;
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
 
 // pal, len, image 
@@ -457,7 +457,7 @@ void Hospital(char plr,int sel)
   if (plr==0) PrintAt(27,118,"ASTRONAUT"); else PrintAt(27,118,"COSMONAUT");
   PrintAt(0,0," SELECTION");
   ShBox(26,130+BarA*8,152,138+BarA*8);
-  MouseOn();
+  
 
   j=(sel==0) ? 3 : 1;   /* Hosp or WormFood */
   for (i=0;i<Data->P[plr].AstroCount;i++)
@@ -475,18 +475,18 @@ void Hospital(char plr,int sel)
      { 
       if (x>=27 && y>=(131+i*8) && x<=151 && y<=(137+i*8) && mousebuttons>0 && (now2-BarA+i)<=(count-1))
        { 
-	     MouseOff();
+	     
 	     now2-=BarA; now2+=i; BarA=i;
 	     RectFill(26,129,153,195,0);
 	     ShBox(26,130+BarA*8,152,138+BarA*8);
 	     DispLeft(plr,BarA,count,now2,&M[0]);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
-	     MouseOn();
+	     
 	    }
      }  
       if (((x>=6 && y>=130 && x<=18 && y<=161 && mousebuttons>0) || key==UP_ARROW) && count>0)
        { // Up
-	     MouseOff();InBox(6,130,18,161);
+	     InBox(6,130,18,161);
 	     if (BarA==0)
 	      if (now2>0) {
 	       now2--;
@@ -500,14 +500,14 @@ void Hospital(char plr,int sel)
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	     };
-	    MouseOn();
+	    
 	   // while(1)  { GetMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(6,130,18,161);MouseOn();delay(10);
+	    OutBox(6,130,18,161);delay(10);
       }
     else 
     if (((mousebuttons>0 && x>=6 && y>=163 && x<=18 && y<=194) || key==DN_ARROW) && count>0)
      {  // Down 
-	   MouseOff();InBox(6,163,18,194);
+	   InBox(6,163,18,194);
 	   if (BarA==7)
 	    if (now2 < count-1) {
 	     now2++;
@@ -522,13 +522,13 @@ void Hospital(char plr,int sel)
 	     ShBox(26,130+BarA*8,152,138+BarA*8);
 		  DispLeft(plr,BarA,count,now2,&M[0]);
 	    };
-	   MouseOn();
+	   
 	  // while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();OutBox(6,163,18,194);MouseOn();delay(10);
+	   OutBox(6,163,18,194);delay(10);
      };
    if ((mousebuttons>0 && x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER)
     {
-	  MouseOff();InBox(245,5,314,17);MouseOn();
+	  InBox(245,5,314,17);
 	  while(1)  { GetMouse();if (mousebuttons==0) break;}
     KillMusic();
 	  return;  /* Done */

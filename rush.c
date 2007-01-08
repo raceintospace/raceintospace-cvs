@@ -106,7 +106,7 @@ void DrawRush(char plr)
 {
   int i,k=0,l=0,JR=0;
   FILE *fin;
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
 
  #if 0
@@ -229,7 +229,7 @@ void DrawRush(char plr)
       PrintAt(288,72+58*i,&Mon[Data->P[plr].Mission[i].Month-2][0]);
     }; /* End if */
   }; /* End for i */
-  MouseOn();
+  
   return;
 }
 
@@ -295,7 +295,7 @@ char pRush=0;
 	  if (key=='Q') i=0; else if (key=='R') i=1; else if (key=='U') i=2;
      if (Data->P[plr].Mission[i].MissionCode>0 && Data->P[plr].Mission[i].part!=1)    
 	   {
-	    MouseOff();
+	    
 	    InBox(91,41+i*58,264,59+i*58);
 	    RectFill(144,29+i*58,270,37+i*58,3);
 	    if (dg[Data->P[plr].Mission[i].MissionCode][dgflag[i]]!=0)
@@ -341,7 +341,7 @@ char pRush=0;
 	     }
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
 	    OutBox(91,41+i*58,264,59+i*58);
-	    MouseOn();
+	    
 	   }
     };
    for (i=0;i<3;i++)
@@ -350,7 +350,7 @@ char pRush=0;
 	   && Data->P[plr].Mission[i].MissionCode>0
 	   && Data->P[plr].Mission[i].part!=1)     // Downgrade
 	  {
-	   MouseOff();
+	   
 	   InBox(91,41+i*58,264,59+i*58);
 	   RectFill(144,29+i*58,270,37+i*58,3);
 	   if (dg[Data->P[plr].Mission[i].MissionCode][dgflag[i]]!=0)
@@ -395,15 +395,15 @@ char pRush=0;
 	    }
 	  while(1)  { GetMouse();if (mousebuttons==0) break;}
 	  OutBox(91,41+i*58,264,59+i*58);
-	  MouseOn();
+	  
 	 }
    };
   if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)     //  CONTINUE
    {
-	 MouseOff();InBox(245,5,314,17);MouseOn();
+	 InBox(245,5,314,17);
 	 while(1)  { GetMouse();if (mousebuttons==0) break;}
     if (key>0) delay(150);
-	 MouseOff();OutBox(245,5,314,17);MouseOn();delay(10);
+	 OutBox(245,5,314,17);delay(10);
 	 for (i=0;i<3;i++)
 	  if (Data->P[plr].Mission[i].MissionCode>0)
 	   {
@@ -442,22 +442,22 @@ char pRush=0;
 
 void ResetRush(int mode,int val)
 {
-  MouseOff();
+  
   OutBox(280,32+17*mode+val*58,312,40+17*mode+val*58);
   fCsh+=mode*3;
-  MouseOn();
+  
   return;
 }
 
 void SetRush(int mode,int val)
 {
-  MouseOff();
+  
   InBox(280,32+17*mode+val*58,312,40+17*mode+val*58);  
   RectFill(177,63+58*val,192,70+58*val,3);
   RectFill(225,62+58*val,270,70+58*val,3);
   grSetColor(11);DispNum(179,69+58*val,mode*3);DispChr('%');
   grSetColor(9);DispNum(230,69+58*val,mode*3);grSetColor(1);PrintAt(237,69+58*val,"MB");
   fCsh-=mode*3;
-  MouseOn();
+  
   return;
 }

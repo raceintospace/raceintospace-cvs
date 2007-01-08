@@ -873,7 +873,7 @@ char FailureMode(char plr,int prelim,char *text)
   last_secs = get_time ();
 
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
 
   while(mousebuttons!=0) GetMouse();key=0;
   while(bioskey(1)) bioskey(0);
@@ -888,10 +888,10 @@ char FailureMode(char plr,int prelim,char *text)
     GetMouse();
     if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d)
     {
-       MouseOff();InBox(245,5,314,17);MouseOn();
+       InBox(245,5,314,17);
        while(1)  { GetMouse();if (mousebuttons==0) break;}
-       MouseOff();OutBox(245,5,314,17);MouseOn();delay(10);
-       MouseOff();FadeOut(2,pal2,10,0,0);
+       OutBox(245,5,314,17);delay(10);
+       FadeOut(2,pal2,10,0,0);
      //  DrawControl(plr);
        CloseAnim(fin);
 
@@ -905,10 +905,10 @@ char FailureMode(char plr,int prelim,char *text)
     };
     if ((x>=6 && y>=114 && x<=151 && y<=126 && prelim==3 && mousebuttons>0) || (prelim==7 && key=='S'))
     {
-       MouseOff();InBox(6,114,151,126);MouseOn();
+       InBox(6,114,151,126);
        while(1)  { GetMouse();if (mousebuttons==0) break;}
-       MouseOff();OutBox(6,114,151,126);MouseOn();delay(10);
-       MouseOff();FadeOut(2,pal2,10,0,0);
+       OutBox(6,114,151,126);delay(10);
+       FadeOut(2,pal2,10,0,0);
     //   DrawControl(plr);
        CloseAnim(fin);
 
@@ -976,10 +976,10 @@ int StepAnim(int x,int y,FILE *fin)
 	   case 2: RLED_img(vhptr.vptr,dply.vptr,BHead.fSize,dply.w,dply.h); mode=gxXOR; break;
 		   default: break;
 		   }
-      MouseOff();
+      
       dply.vptr[AHead.w*AHead.h-1]=dply.vptr[AHead.w*AHead.h-2];
 	    gxPutImage(&dply,mode,x,y,0);
-      MouseOn();
+      
       cFrame++;
    }
    return (tFrames-cFrame);  //remaining frames

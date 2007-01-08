@@ -428,8 +428,6 @@ void DestroyPad(char plr,char pad,int cost,char mode);
 void GV(GXHEADER *obj,int w,int h);
 void DV(GXHEADER *obj);
 void GetMouse(void);
-void MouseOff(void);
-void MouseOn(void);
 void PauseMouse(void);
 void PrintAt(int x,int y,char *s);
 void PrintAtKey(int x,int y,char *s,char val);

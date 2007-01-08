@@ -45,7 +45,7 @@ void Intel(char plr)
   do {
      if (beg) beg=0;
      else {
-        MouseOff();
+        
         FadeOut(2,pal,10,0,0);
         AdminPort(plr);
         PortPal(plr);
@@ -56,7 +56,7 @@ void Intel(char plr)
         else PrintAt(166,197,"FALL 19");DispNum(0,0,Data->Year);
         grSetColor(11);if (Data->Season==0) PrintAt(165,196,"SPRING 19");
         else PrintAt(165,196,"FALL 19");DispNum(0,0,Data->Year);
-        MouseOn();
+        
      }
      strncpy(IDT,(plr==0) ?"i704":"i705",4);
      strncpy(IKEY,(plr==0) ? "k605":"k606",4);
@@ -181,7 +181,7 @@ void XSpec(char plr,char mis,char year)
 
 void Special(char p,int ind)
 {
- MouseOff();
+ 
  grSetColor(6);
  if (ind>=5) PrintAt(17,96,"GROUP: ");
    else PrintAt(17,96,"FACILITY: ");grSetColor(9);
@@ -214,7 +214,7 @@ void Special(char p,int ind)
  grSetColor(1);
  PrintAt(33,183,"FOR THEIR SPACE PROGRAM");
  TopSecret(p,ind);
- MouseOn();
+ 
  return;
 }
 void BackIntel(char p,char year)
@@ -222,7 +222,7 @@ void BackIntel(char p,char year)
  int prg,ind,dur=0,xc,yc;
  FILE *fin;
  char code,w;
- MouseOff();
+ 
  grSetColor(6);
  prg=Data->P[p].PastIntel[year].prog;
  ind=Data->P[p].PastIntel[year].index;
@@ -245,7 +245,7 @@ void BackIntel(char p,char year)
  fread(&Name,sizeof Name,1,fin);            // Get new Mission Info
  fclose(fin);
  PrintAt(xc,yc,&Name[0]); }
- if (prg==5) {XSpec(p,ind,year);MouseOn();return;}
+ if (prg==5) {XSpec(p,ind,year);return;}
  grSetColor(6);PrintAt(17,75,"CLASS: ");grSetColor(9);
  switch(prg)
   {
@@ -263,7 +263,7 @@ void BackIntel(char p,char year)
 	  break;
    default:break;
   }
- if (prg==0 && ind>=3) {Special(p,ind);MouseOn();return;}
+ if (prg==0 && ind>=3) {Special(p,ind);return;}
  
  grSetColor(6);PrintAt(17,96,"CREW: ");grSetColor(9);
  if (prg==2)
@@ -312,7 +312,7 @@ void BackIntel(char p,char year)
  PrintAt(33,183,"RELIABILITY AT ABOUT ");
  DispNum(0,0,Data->P[p].PastIntel[year].sf);PrintAt(0,0," PERCENT.");
  if (prg!=5) TopSecret(p,prg*7+ind);
- MouseOn();
+ 
  return;
 }
 
@@ -459,9 +459,9 @@ void TopSecret(char plr,char poff)
      for (j=0;j<15700;j++)
 	if(local2.vptr[j]!=0) local.vptr[j]=local2.vptr[j];
     }
-  MouseOff();
+  
   gxPutImage(&local,gxSET,153,32,0);
-  MouseOn();
+  
   fclose(in);
   DV(&local); DV(&local2);
   return;
@@ -494,7 +494,7 @@ void SaveIntel(char p,char prg,char ind)
 
 void Bad(char plr,char pt)
 {
- MouseOff();
+ 
  if (pt==1){
 	ShBox(6,29,130,133);
     InBox(8,31,128,131);
@@ -504,7 +504,7 @@ void Bad(char plr,char pt)
  PrintAt(17,65,"ACTIVITY AT ");
  if (plr==1) PrintAt(0,0,"THE CAPE"); else PrintAt(0,0,"BAIKONUR");}
  if (pt==0) Data->P[plr].PastIntel[Data->Year-58].prog=-1;
- MouseOn();
+ 
  return;
 }
 
@@ -577,7 +577,7 @@ void IntelPhase(char plr,char pt)
 
 void DrawBre(char plr)
 {
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   ShBox(0,0,319,22);InBox(3,3,30,19);
@@ -599,7 +599,7 @@ void DrawBre(char plr)
   FlagSm(plr,4,4);
   grSetColor(1);PrintAt(258,13,"CONTINUE");
   UPArrow(137,42);DNArrow(137,95);
-  MouseOn();
+  
   return;
 }
 
@@ -618,42 +618,42 @@ void Bre(char plr)
      {
       if ((x>=135 && y>32 && x<=145 && y<=77 && mousebuttons>0) || key==UP_ARROW)
        {
-        MouseOff();InBox(135,32,145,77);MouseOn();
+        InBox(135,32,145,77);
         while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (year>=0 && year+1<=Data->P[plr].PastIntel[0].cur-1)
 	      {
-	       MouseOff();
+	       
 	       RectFill(45,32,98,38,3);RectFill(38,54,127,60,3); 
 	       RectFill(38,76,127,82,3);RectFill(16,91,127,98,3);
 	       RectFill(16,107,127,113,3);RectFill(16,123,127,129,3);
 	       RectFill(30,148,300,186,7); 
-	       MouseOn();year++;BackIntel(plr,year);
+	       year++;BackIntel(plr,year);
 	      }
-	    MouseOff();OutBox(135,32,145,77);MouseOn();
+	    OutBox(135,32,145,77);
       }
      else
      if ((x>=135 && y>85 && x<=145 && y<=130 && mousebuttons>0) || key==DN_ARROW)
        {
-        MouseOff();InBox(135,85,145,130);MouseOn();
+        InBox(135,85,145,130);
         while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (year-1>=0) 
 	       {
-	        MouseOff();
+	        
 	        RectFill(45,32,98,38,3);RectFill(38,54,127,60,3); 
 	        RectFill(38,76,127,82,3);RectFill(9,90,127,98,3);
 	        RectFill(9,106,127,115,3);RectFill(9,123,127,130,3);
 	        RectFill(30,148,300,186,7);  
-	        MouseOn();year--;BackIntel(plr,year);
+	        year--;BackIntel(plr,year);
 	       }
-	     MouseOff();OutBox(135,85,145,130);MouseOn();
+	     OutBox(135,85,145,130);
         }
       else
       if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
       {
-	    MouseOff();InBox(244,5,313,17);MouseOn();
+	    InBox(244,5,313,17);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
-	    MouseOff();OutBox(244,5,313,17);MouseOn();
+	    OutBox(244,5,313,17);
 	    return;  /* Done */
 	   };
     }
@@ -677,7 +677,7 @@ void Load_CIA_BUT(void)
 void DrawIStat(char plr)
 {
  int i;
-	MouseOff();
+	
 	FadeOut(2,pal,10,0,0);
 
 	Load_CIA_BUT();
@@ -709,13 +709,13 @@ void DrawIStat(char plr)
 	FlagSm(plr,4,4);
 	grSetColor(1);PrintAt(258,13,"CONTINUE");
 	FadeIn(2,pal,10,0,0);
-	MouseOn();
+	
 	return;
 }
 
 void ReButs(char old,char nw)
 {
-  MouseOff();
+  
   switch(old) {
     case 0:OutBox(7,164,75,195);
 	   gxVirtualDisplay(&but,0,0,8,165,74,194,0);// UnManned
@@ -747,7 +747,7 @@ void ReButs(char old,char nw)
 	   gxVirtualDisplay(&but,214,31,246,165,312,194,0);// Misc
 	   break;
   }
-  MouseOn();
+  
   return;
 }
 
@@ -764,9 +764,9 @@ int place=-1;
     {
      if (((x>=7 && y>=164 && x<=75 && y<=195 && mousebuttons>0) || key=='U') && place!=0)
       {
-	    MouseOff();InBox(7,164,75,195);MouseOn();
+	    InBox(7,164,75,195);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(7,164,75,195);MouseOn();
+	    OutBox(7,164,75,195);
 	    ReButs(place,0);
 	    place=0;
 	    IInfo(plr,place,0);
@@ -774,9 +774,9 @@ int place=-1;
       };
       if (((x>=83 && y>=164 && x<=156 && y<=195 && mousebuttons>0) || key=='R') && place!=1)
        {
-	     MouseOff();InBox(83,164,156,195);MouseOn();
+	     InBox(83,164,156,195);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
-	     MouseOff();OutBox(83,164,156,195);MouseOn();
+	     OutBox(83,164,156,195);
 	     ReButs(place,1);
 	     place=1;
 	     IInfo(plr,place,0);
@@ -784,9 +784,9 @@ int place=-1;
        };
       if (((x>=164 && y>=164 && x<=237 && y<=195 && mousebuttons>0) || key=='C') && place!=2)
        {
-	     MouseOff();InBox(164,164,237,195);MouseOn();
+	     InBox(164,164,237,195);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
-	     MouseOff();OutBox(164,164,237,195);MouseOn();
+	     OutBox(164,164,237,195);
 	     /* MANNED */
 	     ReButs(place,2);
 	     place=2;
@@ -794,9 +794,9 @@ int place=-1;
        };
       if (((x>=245 && y>=164 && x<=313 && y<=195 && mousebuttons>0) || key=='M') && place!=3)
       {
-	    MouseOff();InBox(245,164,313,195);MouseOn();
+	    InBox(245,164,313,195);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(245,164,313,195);MouseOn();
+	    OutBox(245,164,313,195);
 	    ReButs(place,3);
 	    place=3;
 	    IInfo(plr,place,0);
@@ -804,10 +804,10 @@ int place=-1;
       };
 	  if ((x>=244 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
       {
-	    MouseOff();InBox(244,5,314,17);MouseOn();
+	    InBox(244,5,314,17);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
-	    MouseOff();OutBox(244,5,314,17);MouseOn();
+	    OutBox(244,5,314,17);
 	    Del_RD_BUT();
 	    return;  /* Done */
       };
@@ -830,9 +830,9 @@ void DispIt(int x1,int y1,int x2, int y2,int s,int t)
       if (*src!=0x00) *dest=*src;
 	dest++;src++;
     }
-	MouseOff();
+	
     gxPutImage(&local2,gxSET,s,t,0);
-    MouseOn();
+    
     DV(&local);DV(&local2);
   return;
 }
@@ -840,7 +840,7 @@ void DispIt(int x1,int y1,int x2, int y2,int s,int t)
 void IInfo(char plr,char loc,char w)
 {
   int i,sfu,sfs;
-  MouseOff();
+  
   if (w==0) {
     GradRect(4,23,315,159,0);
     for (i=4;i<316;i+=2) {
@@ -1110,7 +1110,7 @@ void IInfo(char plr,char loc,char w)
 	    break;
     default:break;
   };
-  MouseOn();
+  
   return;
 }
 

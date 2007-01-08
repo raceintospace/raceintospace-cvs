@@ -91,7 +91,7 @@ void DrawAstCheck(char plr)
   pos = 0; /* XXX check uninitialized */
 
   if (Data->P[plr].AstroDelay>0) ad=1;
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   ShBox(80,44,237,155);
@@ -153,13 +153,13 @@ void DrawAstCheck(char plr)
  };
   FlagSm(plr,4,4);
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   return;
 }
 
 void DrawAstSel(char plr)
 {
-  MouseOff();
+  
   strcpy(IDT,"i012");
   strcpy(IKEY,"k012");
   FadeOut(2,pal,10,0,0);
@@ -220,7 +220,7 @@ void DrawAstSel(char plr)
   grSetColor(6);
   PrintAt(38,119,"D");grSetColor(1);PrintAt(0,0,"ISMISS APPLICANT");
   grSetColor(6);PrintAt(197,119,"R");grSetColor(1);PrintAt(0,0,"ECRUIT APPLICANT");
-  MouseOn();
+  
   return;
 }
 
@@ -239,31 +239,31 @@ DrawAstCheck(plr);
     key=0;GetMouse();
     if ((x>=100 && y>=135 && x<=148 && y<=147 && mousebuttons>0) || key=='Y')
      {
-      MouseOff();
+      
       InBox(100,135,148,147);
       while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (Data->P[plr].AstroLevel==0) Index=20; else Index=15;
       if (Data->P[plr].Cash>=Index) i=1; else i=2;
       if (Data->P[plr].AstroDelay>0) i=2;
       if (key>0) delay(150);
-      OutBox(100,135,148,147); MouseOn();
+      OutBox(100,135,148,147); 
      }
     if ((x>=168 && y>=135 && x<=216 && y<=147 && mousebuttons>0)
       || key=='N' || key==K_ESCAPE || key==K_ENTER)
      {
-      MouseOff();
+      
       InBox(168,135,216,147);
       while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(150);
-      i=2;OutBox(168,135,216,147);MouseOn();
+      i=2;OutBox(168,135,216,147);
      }
   };
   if (i==2) {KillMusic();return;} /* too poor for astronauts or NO */
   BarA=0;BarB=0;
   DrawAstSel(plr);
-  MouseOff();
+  
   ShBox(26,130+BarA*8,152,138+BarA*8); ShBox(187,130+BarB*8,313,138+BarB*8);
-  MouseOn();
+  
   memset(sel,-1,sizeof(sel));
   memset(MCol,0x00,sizeof(MCol));
   Men=(struct ManPool far *) buffer;
@@ -292,11 +292,11 @@ DrawAstCheck(plr);
   Data->P[plr].Spend[0][2]+=15;
   now=Index;max=Index+MaxMen;min=Index;
   now2=0;count=0;  /* counter for # selected */
-  MouseOff();
+  
   DispEight(now,BarB);
   DispEight2(now2,BarA,count);
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
   {
@@ -306,39 +306,39 @@ DrawAstCheck(plr);
      if (((x>=188 && y>=(131+i*8) && x<=312 && y<=(137+i*8) && mousebuttons>0)
       || (key==RT_ARROW && ksel==1)) && (now-BarB+i)<=max)
       {
-	    MouseOff();
+	    
        if (ksel==1) ksel=0;
     	 RectFill(186,129,314,195,0);
     	 now-=BarB; now+=i;BarB=i;
 	    ShBox(187,130+BarB*8,313,138+BarB*8);
 	    DispEight(now,BarB);
     	 while(1)  { GetMouse();if (mousebuttons==0) break;}
-    	 MouseOn();
+    	 
       }
      if (((x>=27 && y>=(131+i*8) && x<=151 && y<=(137+i*8) && mousebuttons>0)
       || (key==LT_ARROW && ksel==0)) && (now2-BarA+i)<=(count-1))
       { // Left Select Box
-    	 MouseOff();
+    	 
        if (ksel==0) ksel=1;
 	    RectFill(26,129,153,195,0);
 	    now2-=BarA; now2+=i;BarA=i;
 	    ShBox(26,130+BarA*8,152,138+BarA*8);
 	    DispEight2(now2,BarA,count);
     	 while(1)  { GetMouse();if (mousebuttons==0) break;}
-    	 MouseOn();
+    	 
       }
     }
     //else
     if (((x>=6 && y>=130 && x<=18 && y<=161 && mousebuttons>0) || (key==UP_ARROW && ksel==1)) && count>0)
      { /* Lft Up */
-    	MouseOff();InBox(6,130,18,161);MouseOn();
+    	InBox(6,130,18,161);
       for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-        MouseOff();
+        
 	     if (BarA==0)
 	     if (now2>0) {
 	      now2--;
@@ -352,14 +352,14 @@ DrawAstCheck(plr);
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispEight2(now2,BarA,count);
 	     };
-    	  MouseOn();
+    	  
 		 i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==UP_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	     if (BarA==0)
 	     if (now2>0) {
 	      now2--;
@@ -373,24 +373,24 @@ DrawAstCheck(plr);
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispEight2(now2,BarA,count);
 	     };
-    	  MouseOn();
+    	  
         key=0;
         GetMouse();
        }
 	    //while(1)  { GetMouse();if (mousebuttons==0) break;}
-     	 MouseOff();OutBox(6,130,18,161);MouseOn();delay(10);
+     	 OutBox(6,130,18,161);delay(10);
      }
      else
      if (((x>=6 && y>=163 && x<=18 && y<=194 && mousebuttons>0) || (key==DN_ARROW && ksel==1)) && count>0)
       { /* Lft Dwn */
-	    MouseOff();InBox(6,163,18,194);MouseOn();
+	    InBox(6,163,18,194);
        for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-         MouseOff();
+         
 	    if (BarA==7)
 	     if (now2 < count-1) {
 	      now2++;
@@ -405,14 +405,14 @@ DrawAstCheck(plr);
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispEight2(now2,BarA,count);
 	     };
-         MouseOn();
+         
          i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==DN_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	    if (BarA==7)
 	     if (now2 < count-1) {
 	      now2++;
@@ -427,24 +427,24 @@ DrawAstCheck(plr);
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispEight2(now2,BarA,count);
 	     };
-        MouseOn();
+        
         key=0;
         GetMouse();
        }
         // while(1)  { GetMouse();if (mousebuttons==0) break;}
-	      MouseOff();OutBox(6,163,18,194);MouseOn();delay(10);
+	      OutBox(6,163,18,194);delay(10);
       }
       else
       if ((x>=167 && y>=130 && x<=179 && y<=161 && mousebuttons>0) || (key==UP_ARROW && ksel==0))
        { /* Rt Up */
-	     MouseOff();InBox(167,130,179,161);MouseOn();
+	     InBox(167,130,179,161);
         for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-         MouseOff();
+         
 	      if (BarB==0)
 	       if (now > min) {
 	        now--;
@@ -458,14 +458,14 @@ DrawAstCheck(plr);
 	      ShBox(187,130+BarB*8,313,138+BarB*8);
 	      DispEight(now,BarB);
 	     };
-        MouseOn();
+        
          i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==UP_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	      if (BarB==0)
 	       if (now > min) {
 	        now--;
@@ -479,24 +479,24 @@ DrawAstCheck(plr);
 	      ShBox(187,130+BarB*8,313,138+BarB*8);
 	      DispEight(now,BarB);
 	     };
-        MouseOn();
+        
         key=0;
         GetMouse();
        }
 	     // while(1)  { GetMouse();if (mousebuttons==0) break;}
-	      MouseOff();OutBox(167,130,179,161);MouseOn();delay(10);
+	      OutBox(167,130,179,161);delay(10);
         }
       else
       if ((x>=167 && y>=163 && x<=179 && y<=194 && mousebuttons>0) || (key==DN_ARROW && ksel==0))
        { /* Rt Dwn */
-     	  MouseOff();InBox(167,163,179,194);MouseOn();
+     	  InBox(167,163,179,194);
          for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-         MouseOff();
+         
 	      if (BarB==7)
 	       if (now <= max) {
 	       if (now<max) now++;
@@ -510,14 +510,14 @@ DrawAstCheck(plr);
 	      ShBox(187,130+BarB*8,313,138+BarB*8);
 	      DispEight(now,BarB);
 	     };
-         MouseOn();
+         
           i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==DN_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	      if (BarB==7)
 	       if (now <= max) {
 	       if (now<max) now++;
@@ -531,17 +531,17 @@ DrawAstCheck(plr);
 	      ShBox(187,130+BarB*8,313,138+BarB*8);
 	      DispEight(now,BarB);
 	     };
-        MouseOn();
+        
         key=0;
         GetMouse();
        }
 	    // while(1)  { GetMouse();if (mousebuttons==0) break;}
-	     MouseOff();OutBox(167,163,179,194);MouseOn();delay(10);
+	     OutBox(167,163,179,194);delay(10);
        }
       else
       if ((x>=7 && y>=111 && x<=151 && y<=123 && count>0 && mousebuttons>0) || (key=='D' && count>0))
        { /* Dismiss */
-	     MouseOff();InBox(7,111,151,123);
+	     InBox(7,111,151,123);
 	     count--;
     	  MCol[sel[now2]]=0;
     	  for (i=now2;i<count+1;i++)
@@ -555,15 +555,15 @@ DrawAstCheck(plr);
    	  ShBox(26,130+BarA*8,152,138+BarA*8);
    	  DispEight2(now2,BarA,count);
    	  DispEight(now,BarB);
-   	  MouseOn();
+   	  
    	  while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (key>0) delay(110);
-   	  MouseOff();OutBox(7,111,151,123);MouseOn();
+   	  OutBox(7,111,151,123);
        }
       else
       if ((x>=164 && y>=111 && x<=313 && y<=123 && MCol[now]==0 && mousebuttons>0) || (key=='R' && MCol[now]==0))
        { /* Recruit */
-	     MouseOff();InBox(168,111,313,123);
+	     InBox(168,111,313,123);
 	     if (count<MaxSel) {
 	       sel[count]=now; /* move astronaut into left */
 	       MCol[now]=1;
@@ -586,10 +586,10 @@ DrawAstCheck(plr);
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispEight2(now2,BarA,count);
 	   };
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(110);
-	   MouseOff();OutBox(168,111,313,123);MouseOn();
+	   OutBox(168,111,313,123);
      };
 
       if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) {   /* Exit - not til done */
@@ -600,7 +600,7 @@ DrawAstCheck(plr);
          else Idiot("i100");
          }
        if (fem==0 && count == MaxSel) {
-	 MouseOff();InBox(245,5,314,17);MouseOn();
+	 InBox(245,5,314,17);
 	 while(1)  { GetMouse();if (mousebuttons==0) break;}
     if (key>0) delay(150);
 	 for (i=0;i<count;i++) {
@@ -653,7 +653,7 @@ DrawAstCheck(plr);
 	     case 4: Data->P[plr].AstroDelay=8;break;
 	     case 5: Data->P[plr].AstroDelay=99;break;
 	  };
-	 MouseOff();OutBox(245,5,314,17);MouseOn();
+	 OutBox(245,5,314,17);
     KillMusic();
 	 return;  /* Done */
        };

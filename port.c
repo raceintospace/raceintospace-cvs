@@ -183,7 +183,7 @@ void SpotCrap(char loc,char mode)
       fread(&sCount,sizeof sCount,1,sFin);  // get number of paths parts
       pLoc=ftell(sFin);
       sPath.iHold=1;
-      MouseOff();memcpy(vhptr.vptr,screen,64000);MouseOn();
+      memcpy(vhptr.vptr,screen,64000);
       sPathOld.xPut=-1;
       SpotCrap(0,SPOT_STEP);
       // All opened up
@@ -222,7 +222,6 @@ void SpotCrap(char loc,char mode)
 
       GV(&SP3,sImg.w,sImg.h);  // background buffer
 
-      MouseOff();
       gxVirtualVirtual(&vhptr,sPath.xPut,sPath.yPut,sPath.xPut+sImg.w,sPath.yPut+sImg.h,&SP3,0,0,0);
 
       if (sPath.Scale!=1.0) {
@@ -244,7 +243,6 @@ void SpotCrap(char loc,char mode)
       sPathOld=sPath;
       sImgOld=sImg;
 
-      MouseOn();
       DV(&SP3);DV(&SP1);
       if (sPath.Scale!=1.0) DV(&SP2);
       sCount--;
@@ -392,7 +390,6 @@ void AdminPort(char plr)
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
-  MouseOff();
 
   fin=sOpen((plr==0)?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
   fread(&PHead,sizeof PHead,1,fin);
@@ -479,7 +476,6 @@ void AdminPort(char plr)
     else gxPutImage(&local2,gxSET,220,141,0);
 
     DV(&local);DV(&local2);
-    MouseOn();
 
   return;
 }
@@ -493,7 +489,6 @@ void NPDraw(char plr)
   GXHEADER local,local2;
   IMG Img;
   FadeOut(2,pal,10,0,0);
-  MouseOff();
 
   fin=sOpen((plr==0) ?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
 
@@ -572,7 +567,6 @@ void NPDraw(char plr)
 
    // FLAG DRAW
     FCtr=0;
-    MouseOff();
     GV(&local,22,22);GV(&local2,22,22);
 
     if (plr==0) gxGetImage(&local,49,121,70,142,0);
@@ -588,20 +582,16 @@ void NPDraw(char plr)
     else gxPutImage(&local2,gxSET,220,141,0);
 
     DV(&local);DV(&local2);
-    MouseOn();
 
   FadeIn(2,pal,10,0,0);
-  MouseOn();
   return;
 }
 
 void PortText(int x,int y,char *txt,char col)
 {
-	MouseOff();
    RectFill(1,192,160,198,3);
    grSetColor(0);PrintAt(x+1,y+1,txt);
    grSetColor(col);PrintAt(x,y,txt);
-   MouseOn();
    return;
 }
 
@@ -672,7 +662,6 @@ void Master(char plr)
 {
   int i,r_value,t_value=0,g_value=0;
   sFin=NULL;
-  for(i=0;i<10;i++) MouseOn();
   strcpy(IDT,"i000");strcpy(IKEY,"i000");
   WaveFlagSetup();
   sCount=-1;
@@ -684,7 +673,7 @@ void Master(char plr)
   }
 
   NPDraw(plr);
-  MouseOff();memcpy(vhptr.vptr,screen,64000);MouseOn();
+  memcpy(vhptr.vptr,screen,64000);
 
 #if SPOT_ON
   if ((Data->P[plr].Pool[0].Active|Data->P[plr].Pool[1].Active|Data->P[plr].Pool[2].Active)>=1)
@@ -738,7 +727,6 @@ void GetMse(char plr,char fon)
     SpotCrap(0,SPOT_STEP);
 #endif
     FCtr=FCtr%5;
-    MouseOff();
     GV(&local,22,22);GV(&local2,22,22);
 
     if (plr==0) gxGetImage(&local,49,121,70,142,0);
@@ -757,7 +745,6 @@ void GetMse(char plr,char fon)
     DV(&local);DV(&local2);
 
   done:
-    MouseOn();
     FCtr++;
   }
   GetMouse_fast();
@@ -954,7 +941,6 @@ PreOut=(struct SXX *)&buffer[60000];
           y<=MObj[(kMode==0) ? i : kEnt].Reg[Data->P[plr].Port[(kMode==0) ? i : kEnt]].CD[j].y2)
          {
           PortText(5,196,MObj[i].Name,11);
-          MouseOff();
           if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
                fread(&Count,sizeof (ui16),1,fin);
@@ -964,7 +950,6 @@ PreOut=(struct SXX *)&buffer[60000];
                PortOutLine(Count,bone,1);
                strncpy(&IDT[1],MObj[i].Idiot,3);
               }
-          MouseOn();
           good=0;
           for (k=0;k<(int)strlen(MMMM);k++)
            if (MMMM[k]==((char)(0x00ff&key))) good=1;
@@ -998,7 +983,7 @@ PreOut=(struct SXX *)&buffer[60000];
                if (good==1 || (kMode==0 && mousebuttons==1) || (kMode==1 && key==0x0d) 
                   || (kMode==0 && key==0x0d))
                 {
-                 MouseOff();PortRestore(Count);Count=0;MouseOn();
+                 PortRestore(Count);Count=0;
 
                   // || i==33
 
@@ -1019,7 +1004,7 @@ PreOut=(struct SXX *)&buffer[60000];
                             || (Data->Year==57 || (Data->Year==58 && Data->Season==0)))) {
                             PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
 #if SPOT_ON
-                          MouseOff();memcpy(screen,vhptr.vptr,64000);MouseOn();
+                          memcpy(screen,vhptr.vptr,64000);
 #endif
                           }
 
@@ -1032,10 +1017,9 @@ PreOut=(struct SXX *)&buffer[60000];
                           SpotCrap(0,SPOT_KILL);  // remove spots
                           PreOut=(struct SXX *)&buffer[60000];
                      	   NPDraw(plr);
-                          MouseOff();
 
 #if SPOT_ON
-                          MouseOff();memcpy(vhptr.vptr,screen,64000);MouseOn();
+                          memcpy(vhptr.vptr,screen,64000);
                           gork=random(100);
                           if (Vab_Spot==1 && Data->P[plr].Port[4]==2) 
                            {
@@ -1070,7 +1054,6 @@ PreOut=(struct SXX *)&buffer[60000];
                           Vab_Spot=0;
                           PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
                           if (PreOut!=NULL) PortOutLine(Count,bone,0);
-                          MouseOn();
                           PortText(5,196,MObj[i].Name,11);
                           PlayMusic(0);
                      	  break;
@@ -1095,7 +1078,6 @@ PreOut=(struct SXX *)&buffer[60000];
                			  return;
 	                  } // switch
                   kMode=good=SUSPEND=0;
-                  MouseOff();
                  if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                     fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
                     PreOut=(struct SXX *)&buffer[60000];
@@ -1104,14 +1086,13 @@ PreOut=(struct SXX *)&buffer[60000];
                     //malloc((sizeof (struct SXX))*Count);
                     PortOutLine(Count,bone,1);
                     }
-	               MouseOn();
 	               while(mousebuttons==1) GetMse(plr,1);
                   } // if
                 } //while
                if (plr==0 && Data->Year>65) PortText(5,196,"CAPE KENNEDY",12);
                else if (plr==0) PortText(5,196,"THE CAPE",12);
                else PortText(5,196,"BAIKONOUR",12);
-               MouseOff();PortRestore(Count);Count=0;MouseOn();
+               PortRestore(Count);Count=0;
                strcpy(IDT,"i043");strcpy(IKEY,"k043");
           } // if
       if (kMode==0 && XMAS==1) i++;if (kMode==1) kEnt++;
@@ -1232,7 +1213,6 @@ char Request(char plr,char *s,char md)
   char i;
   GXHEADER local;
 
-  MouseOff();
   if (md>0) {  // Save Buffer
     GV(&local,196,84);
     gxGetImage(&local,85,52,280,135,0);
@@ -1252,7 +1232,6 @@ char Request(char plr,char *s,char md)
   else DispBig(166-i*10,65,&s[0],0,-1);
   PrintAt(138,94,"ARE YOU SURE");
 
-  MouseOn();
   while(1){
      if (md!=6) GetMse(plr,1);
      else GetMouse();
@@ -1263,19 +1242,18 @@ char Request(char plr,char *s,char md)
     if (md!=6) GetMse(plr,1);
     else GetMouse();
      if ((x>=172 && y>=105 && x<=241 && y<=128 && mousebuttons!=0)||(key=='N')) {
-       MouseOff();InBox(172,105,241,128);i=0;MouseOn();
+       InBox(172,105,241,128);i=0;
        delay(50);key=0;
      };
      if ((x>93 && y>=105 && x<=162 && y<=128&& mousebuttons!=0)||(key=='Y')) {
-       MouseOff();InBox(93,105,162,128);i=1;MouseOn();
+       InBox(93,105,162,128);i=1;
        delay(50);key=0;
      };
   }; /* End while */
 
   if (md>0) {
-    MouseOff();
     gxPutImage(&local,gxSET,85,52,0);
-    DV(&local);MouseOn();
+    DV(&local);
   }
   return i;
 }
@@ -1285,14 +1263,12 @@ char MisReq(char plr)
   int i,num=0;
   GXHEADER local;
 
-  GV(&local,184,132);MouseOff();
+  GV(&local,184,132);
   gxGetImage(&local,53,29,236,160,0);
-  MouseOn();
 
   for (i=0;i<3;i++)
     if ((Data->P[plr].Mission[i].MissionCode>0)&&
 	(Data->P[plr].Mission[i].Hard[4]==0)) num++;
-  MouseOff();
   ShBox(53,29,236,160);
   ShBox(60,34,229,44);
   InBox(60,47,229,120);
@@ -1337,7 +1313,6 @@ char MisReq(char plr)
     }
   };
 
-  MouseOn();
   while(1)
     {if (plr==0) GetMse(plr,1);else GetMouse();if (mousebuttons==0) break;}
   i=2;
@@ -1345,22 +1320,22 @@ char MisReq(char plr)
    if (plr==0) GetMse(plr,1); else GetMouse();
      if ((x>=62 && y>=143 && x<=139 && y<=153 && mousebuttons!=0 && num==0)
 	|| (key=='C' && num==0)) {
-       MouseOff();InBox(62,143,139,153);i=1;MouseOn();
+       InBox(62,143,139,153);i=1;
        delay(50);key=0;
        Rush(plr);
      };
      if ((x>150 && y>=143 && x<=227 && y<=153 && mousebuttons!=0 && num==0)
        || (key=='R' && num==0)) {
-       MouseOff();InBox(150,143,227,153);i=0;MouseOn();
+       InBox(150,143,227,153);i=0;
        delay(50);key=0;
      };
      if ((x>62 && y>=143 && x<=227 && y<=153 &&mousebuttons!=0 && num>0)
        || (key=='R' && num>0)) {
-       MouseOff();InBox(62,143,227,153);i=0;MouseOn();
+       InBox(62,143,227,153);i=0;
        delay(50);key=0;
      };
   }; /* End while */
-  MouseOff();gxPutImage(&local,gxSET,53,29,0);MouseOn();
+  gxPutImage(&local,gxSET,53,29,0);
   DV(&local);
   return i;
 }

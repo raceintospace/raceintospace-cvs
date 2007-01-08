@@ -77,7 +77,7 @@ void DrawRD(char plr)
   int i;
   FILE *fin;
   strcpy(IDT,"i009");strcpy(IKEY,"k009");
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin); fclose(fin);
@@ -132,14 +132,14 @@ void DrawRD(char plr)
   FlagSm(plr,4,4);
   QUnit(1,1,plr);
   ShowUnit(1,1,plr);
-  MouseOn();
+  
   return;
 } // End of DrawRD
 
 
 void BButs(char old,char nw)
 {
-  MouseOff();
+  
   switch(old) {
     case 1:OutBox(7,29,75,60);
 	   gxVirtualDisplay(&but,0,0,8,30,74,59,0);  // Unmanned
@@ -169,13 +169,13 @@ void BButs(char old,char nw)
 	   break;
   }
 
-  MouseOn();
+  
   return;
 }
 
 void RDButTxt(int v1,int val,char plr)
 {
-  MouseOff();RectFill(166,185,314,193,3);
+  RectFill(166,185,314,193,3);
   grSetColor(1);
   if (val==0) {
     PrintAt(169,191,"RESEARCH PROGRAM FOR ");
@@ -187,7 +187,7 @@ void RDButTxt(int v1,int val,char plr)
     PrintAt(0,0,"% IMPROVEMENT");
     if (Data->P[plr].RDMods>0) PrintAt(0,0,"+");
   }
-  MouseOn();
+  
   return;
 }
 
@@ -207,7 +207,7 @@ char RD(char plr)
   ShowUnit(hardware,unit,plr);
   RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
   if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-  else {MouseOff();InBox(165,184,315,194);MouseOn();};
+  else {InBox(165,184,315,194);};
   strcpy(IDT,"i009");strcpy(IKEY,"k009");
   PreLoadMusic(M_HARDWARE);
   FadeIn(2,pal,10,0,0);
@@ -227,7 +227,7 @@ char RD(char plr)
 	      BButs(hardware,1);
 	      hardware=1;unit=1;
 	      if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-	       else {MouseOff();InBox(165,184,315,194);MouseOn();};
+	       else {InBox(165,184,315,194);};
 	      ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,plr);
 	      b=Data->P[plr].Probe[unit-1].RDCost;
 	      RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
@@ -239,7 +239,7 @@ char RD(char plr)
 	     BButs(hardware,2);
 	     hardware=2;unit=1;
 	     if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-	      else {MouseOff();InBox(165,184,315,194);MouseOn();};
+	      else {InBox(165,184,315,194);};
 	     ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,plr);
 	     b=Data->P[plr].Rocket[unit-1].RDCost;
 	     RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
@@ -251,7 +251,7 @@ char RD(char plr)
 	     BButs(hardware,3);
 	     hardware=3;unit=1;
 	     if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-	      else {MouseOff();InBox(165,184,315,194);MouseOn();};
+	      else {InBox(165,184,315,194);};
 	     ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,plr);
 	     b=Data->P[plr].Manned[unit-1].RDCost;
 	     RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
@@ -263,7 +263,7 @@ char RD(char plr)
 	      BButs(hardware,4);
 	      hardware=4;unit=1;
 	      if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-	        else {MouseOff();InBox(165,184,315,194);MouseOn();};
+	        else {InBox(165,184,315,194);};
 	      ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,plr);
 	      b=Data->P[plr].Misc[unit-1].RDCost;
 	      RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
@@ -290,7 +290,7 @@ char RD(char plr)
       if ((x>=5 && y>=184 && x<=74 && y<=194 && mousebuttons>0) || key==LT_ARROW)  /* LEFT ARROW */
       {
 	    roll=0;
-	    MouseOff();InBox(5,184,74,194);MouseOn();
+	    InBox(5,184,74,194);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
 	    switch(hardware)
 	     {
@@ -303,15 +303,15 @@ char RD(char plr)
 	    RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
 	    ManSel(buy[hardware-1][unit-1]);
 	    if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-	      else {MouseOff();InBox(165,184,315,194);MouseOn();};
+	      else {InBox(165,184,315,194);};
 	    ShowUnit(hardware,unit,plr);
-	    MouseOff();OutBox(5,184,74,194);MouseOn();
+	    OutBox(5,184,74,194);
       }
       else
       if ((x>=83 && y>=184 && x<=152 && y<=194 && mousebuttons>0) || key==RT_ARROW) /* RIGHT ARROW */
       {
 	    roll=0;
-	    MouseOff();InBox(83,184,152,194);MouseOn();
+	    InBox(83,184,152,194);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
 	    switch(hardware)
 	     {
@@ -324,10 +324,10 @@ char RD(char plr)
 	    RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
 	    ManSel(buy[hardware-1][unit-1]);
 	    if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-	      else {MouseOff();InBox(165,184,315,194);MouseOn();};
+	      else {InBox(165,184,315,194);};
 	    ShowUnit(hardware,unit,plr);
 	    RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
-	    MouseOff();OutBox(83,184,152,194);MouseOn();
+	    OutBox(83,184,152,194);
       }
       else
       if (((x>=165 && y>=184 && x<=315 && y<=194 && mousebuttons>0) || key=='S') && buy[hardware-1][unit-1]==0
@@ -348,7 +348,7 @@ char RD(char plr)
 	{
 	  buy[hardware-1][unit-1]=RDUnit(hardware,unit,roll,plr);
 	  if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-	  else {MouseOff();InBox(165,184,315,194);MouseOn();};
+	  else {InBox(165,184,315,194);};
 	  Data->P[plr].Cash-=b*roll;
 	  // add the amount to the expenditure budget
 	  switch(hardware) {
@@ -365,7 +365,7 @@ char RD(char plr)
      else
       if (((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0)) || key==0x0d)
       {
-	    MouseOff();InBox(245,5,314,17);MouseOn();
+	    InBox(245,5,314,17);
 	    for(i=0;i<4;i++) for(j=0;j<7;j++) Data->P[plr].Buy[i][j]=buy[i][j];
        KillMusic();
 	    Del_RD_BUT();
@@ -376,7 +376,7 @@ char RD(char plr)
       else
       if ((x>=5 && y>=73 && x<=152 && y<=83 && mousebuttons>0) || key=='V')
       {
-	    MouseOff();InBox(5,73,152,83);MouseOn();
+	    InBox(5,73,152,83);
 	    HARD1=hardware;UNIT1=unit;
 	    for(i=0;i<4;i++) for(j=0;j<7;j++)
          Data->P[plr].Buy[i][j]=buy[i][j];
@@ -395,7 +395,7 @@ char RD(char plr)
 	    ShowUnit(hardware,unit,plr);
 	    RDButTxt(0,buy[hardware-1][unit-1],plr);
        if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
-       else {MouseOff();InBox(165,184,315,194);MouseOn();};
+       else {InBox(165,184,315,194);};
        PreLoadMusic(M_HARDWARE);
 
 	    FadeIn(2,pal,10,0,0);
@@ -408,7 +408,7 @@ char RD(char plr)
 
 void ManSel(int mm)
 {
-  MouseOff();
+  
   switch(mm)
   {
    case 0: InBox(165,157,185,175);  OutBox(191,157,211,175);
@@ -430,7 +430,7 @@ void ManSel(int mm)
 	   OutBox(217,157,237,175); OutBox(243,157,263,175);
 	   OutBox(269,157,289,175); InBox(295,157,315,175);break;
   };
-  MouseOn();
+  
   return;
 }
 
@@ -441,10 +441,10 @@ char QUnit(char hwx,char unx,char plr)
   if (hwx==2) b=(Data->P[plr].Rocket[unx-1].Num==-1) ? 0:1;
   if (hwx==3) b=(Data->P[plr].Manned[unx-1].Num==-1) ? 0:1;
   if (hwx==4) b=(Data->P[plr].Misc[unx-1].Num==-1) ? 0:1;
-  MouseOff();
+  
   if (b==0) InBox(165,184,315,194);
   else OutBox(165,184,315,194);
-  MouseOn();
+  
   return(b);
 }
 
@@ -503,7 +503,7 @@ void ShowUnit(char hw,char un,char plr)
    }
   
   grSetColor(1);
-  MouseOff();
+  
   RectFill(162,69,318,154,3);RectFill(200,9,238,21,3);
   grSetColor(1);
   PrintAt(170,97,"INITIAL COST:");
@@ -582,7 +582,7 @@ void ShowUnit(char hw,char un,char plr)
     };
   RectFill(27,95,130,171,0);
   BigHardMe(plr,27,95,hw-1,un-1,qty,32);
-  MouseOn();
+  
   return;
 }
 
@@ -598,7 +598,7 @@ void OnHand(char qty)
 void DrawHPurc(char plr)
 {
   FILE *fin;
-  MouseOff();
+  
   FadeOut(2,pal,10,0,0);
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin);
@@ -647,7 +647,7 @@ void DrawHPurc(char plr)
   grSetColor(1);PrintAt(258,13,"CONTINUE");
   ShowUnit(1,1,plr);
   strcpy(IDT,"i008");strcpy(IKEY,"k008");
-  MouseOn();
+  
   return;
 }
 
@@ -680,14 +680,14 @@ char HPurc(char plr)
     UpdateMusic();
     key=0;GetMouse();
     if ((x>266 && y>164 && x<314 && y<174 && mousebuttons>0) || key=='Z') {
-      MouseOff();InBox(266,164,314,174);MouseOn();
+      InBox(266,164,314,174);
       while(mousebuttons!=0) GetMouse();
   //    memcpy(Data,vhptr.vptr,sizeof(struct Players));
       undo=sOpen("UNDO.TMP","rb",1);
       fread(Data,sizeof (struct Players),1,undo);
       fclose(undo);
       ShowUnit(hardware,unit,plr);
-      MouseOff();OutBox(266,164,314,174);MouseOn();
+      OutBox(266,164,314,174);
       key=0;
     }
      if ((y>=29 && y<=60 && mousebuttons>0) || (key=='U' || key=='R' || key=='M' || key=='C'))
@@ -723,10 +723,10 @@ char HPurc(char plr)
      else 
      if ((x>=5 && y>=184 && x<=74 && y<=194 && mousebuttons>0) || key==LT_ARROW) /* LEFT ARROW */
       {
-	    MouseOff();InBox(5,184,74,194);MouseOn();
+	    InBox(5,184,74,194);
 	    delay(5);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(5,184,74,194);MouseOn();
+	    OutBox(5,184,74,194);
 	    switch(hardware) {
 	     case 1: unit= (unit-1 == 0) ? 3 : unit-1;break;
 	     case 2: unit= (unit-1 == 0) ? 5 : unit-1;break;
@@ -739,9 +739,9 @@ char HPurc(char plr)
       else
       if ((x>=83 && y>=184 && x<=152 && y<=194 && mousebuttons>0) || key==RT_ARROW) /* RIGHT ARROW */
       {
-   	 MouseOff();InBox(83,184,152,194);MouseOn();
+   	 InBox(83,184,152,194);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
-   	 MouseOff();OutBox(83,184,152,194);MouseOn();
+   	 OutBox(83,184,152,194);
     	 switch(hardware) {
     	   case 1: unit = (unit+1 > 3 ) ? 1 : unit+1;break;
 	      case 2: unit = (unit+1 > 5 ) ? 1 : unit+1;break;
@@ -754,9 +754,9 @@ char HPurc(char plr)
       else
       if ((y>=182 && y<=195 && x>=166 && x<=314 && mousebuttons>0) || key=='P')  /* PURCHASE */
        {
-    	   MouseOff();InBox(165,182,315,195);MouseOn();
+    	   InBox(165,182,315,195);
    	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-   	   MouseOff();OutBox(165,182,315,195);MouseOn();
+   	   OutBox(165,182,315,195);
         // NEED DELAY CHECK
         switch(hardware)
          {
@@ -778,7 +778,7 @@ char HPurc(char plr)
       else
       if (((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0)) || key==K_ENTER)
        {
-     	  MouseOff();InBox(245,5,314,17);MouseOn();
+     	  InBox(245,5,314,17);
         KillMusic();
         Del_RD_BUT(); call=0;
         HARD1=1;UNIT1=1;
@@ -788,7 +788,7 @@ char HPurc(char plr)
       else
       if ((x>=5 && y>=73 && x<=152 && y<=83 && mousebuttons>0) || key=='V')         // Gateway to RD
        {
-    	 MouseOff();InBox(5,73,152,83);MouseOn();
+    	 InBox(5,73,152,83);
     	 HARD1=hardware; UNIT1=unit;
        KillMusic();
        remove_savedat("UNDO.TMP");

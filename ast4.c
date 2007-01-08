@@ -91,7 +91,7 @@ void AstLevel(char plr,char prog,char crew,char ast)
 	    };
 
    GV(&local,143,74);
-   MouseOff();
+   
    gxGetImage(&local,94,38,236,111,0);
    ShBox(94,38,236,95);
    InBox(98,41,232,61);RectFill(99,42,231,60,7+plr*3);
@@ -145,10 +145,10 @@ void AstLevel(char plr,char prog,char crew,char ast)
    // don't do this for level three
    PrintAt(0,0,"  M:");DispNum(0,0,Data->P[plr].Pool[man].Mood);
 
-   MouseOn();key=0;
+   key=0;
    if (mousebuttons>0) while (mousebuttons>0) GetMouse();
      else while (key==0) GetMouse();
-   MouseOff();gxPutImage(&local,gxSET,94,38,0);MouseOn();
+   gxPutImage(&local,gxSET,94,38,0);
    DV(&local);
    return;
 }
@@ -304,7 +304,7 @@ void DamProb(char plr,char prog,int chk)
  Saf_Loss = D_Cost = 0; /* XXX check uninitialized */
 
  FadeOut(2,pal,10,0,0);
- MouseOff();
+ 
  gxClearDisplay(0,0);
  switch(prog)
   {
@@ -350,7 +350,7 @@ void DamProb(char plr,char prog,int chk)
  itoa(Saf_Loss,&Digit[0],10);PrintAt(0,0,&Digit[0]);
  PrintAt(0,0,"%");
  FadeIn(2,pal,10,0,0);
- MouseOn();
+ 
  while(1)  { GetMouse();if (mousebuttons==0) break;}
  while(1)
   {
@@ -359,7 +359,7 @@ void DamProb(char plr,char prog,int chk)
      {
 	   if ((x>=118 && y>=132 && x<=187 && y<=153 && mousebuttons>0) || key=='Y')
        {
-	     MouseOff();InBox(118,132,187,153);MouseOn();
+	     InBox(118,132,187,153);
 	     while(1) { GetMouse();if (mousebuttons==0) break;}
         if (key>0) delay(150);
 	     Data->P[plr].Cash-=D_Cost;
@@ -384,7 +384,7 @@ void DamProb(char plr,char prog,int chk)
       else
 	   if ((x>=203 && y>=132 && x<=272 && y<=153 && mousebuttons>0) || key=='N')
        {
-	     MouseOff();InBox(203,132,272,153);MouseOn();
+	     InBox(203,132,272,153);
 	     while(1) { GetMouse();if (mousebuttons==0) break;}
          if (key>0) delay(150);
 	     return;
@@ -397,7 +397,7 @@ void DamProb(char plr,char prog,int chk)
 void CrewProb(char plr,char prog)
 {
  if (prog)EMPTY_BODY;
- MouseOff();
+ 
  ShBox(75,43,244,173);IOBox(81,152,238,167); InBox(81,70,238,106);
  RectFill(82,71,237,105,7+3*plr);
  grSetColor(11);
@@ -408,7 +408,7 @@ void CrewProb(char plr,char prog)
  if (plr==1) PrintAt(0,0,"COSM");
    else PrintAt(0,0,"ASTR"); PrintAt(0,0,"ONAUTS IN THE");
  PrintAt(90,96,"PROGRAM TO ASSIGN CREWS");
- MouseOn();
+ 
  while(1)  { GetMouse();if (mousebuttons==0) break;}
  while(1)
   {
@@ -417,7 +417,7 @@ void CrewProb(char plr,char prog)
      {
 	 if ((x>=83 && y>=154 && x<=236 && y<=165 && mousebuttons>0) || key==K_ENTER || key==K_ESCAPE)
       { 
-	    MouseOff();InBox(83,154,236,165);MouseOn();
+	    InBox(83,154,236,165);
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
 	    return;  // Abort - Redo Mission
@@ -428,7 +428,7 @@ void CrewProb(char plr,char prog)
 
 void DrawPosition(char prog,int pos)
 {
- MouseOff();
+ 
  grSetColor(5);
  switch(pos)
   {
@@ -450,7 +450,7 @@ void DrawPosition(char prog,int pos)
    default:break;
   }
  grSetColor(1);
- MouseOn();
+ 
  return;
 }
 
@@ -460,7 +460,7 @@ void Programs(char plr,char prog)
   int now2,BarA,count,i,M[100],grp,Gcnt[8],max,chk,tst;
   char ksel=0;
   strcpy(IDT,"i036");strcpy(IKEY,"k036");
-  MouseOff();
+  
   PreLoadMusic(M_PRGMTRG);
   for (i=0;i<100;i++) M[i]=-1;
   max=prog;
@@ -488,7 +488,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][3]);
   FadeIn(2,pal,10,0,0);
   chk=CheckProgram(plr,prog);
-  MouseOn();
+  
   if (chk==0) {if (plr==0) Idiot("i113");else Idiot("i114");KillMusic();return;}
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
@@ -496,7 +496,7 @@ void Programs(char plr,char prog)
     key=0;GetMouse();
     for (i=0;i<8;i++) {  // Right Select Box
       if (x>=27 && y>=(131+i*8) && x<=151 && y<=(137+i*8) && mousebuttons>0 && (now2-BarA+i)<=(count-1)) { // Left
-	 MouseOff();
+	 
 	 now2-=BarA; now2+=i; BarA=i;
 	 RectFill(26,129,153,195,0);
 	 DispLeft(plr,BarA,count,now2,&M[0]);
@@ -505,21 +505,21 @@ void Programs(char plr,char prog)
 	 while(1)  { GetMouse();if (mousebuttons==0) break;}
 	 ShBox(26,130+BarA*8,152,138+BarA*8);
 	 DispLeft(plr,BarA,count,now2,&M[0]);
-	 MouseOn();
+	 
       }
     }  
     if (mousebuttons > 0 || key>0)  /* Game Play */
     {
      if (((x>=6 && y>=130 && x<=18 && y<=161 && mousebuttons>0) || key==UP_ARROW) && count>0)
       { /* Lft Up */
-	    MouseOff();InBox(6,130,18,161);MouseOn();
+	    InBox(6,130,18,161);
        for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-        MouseOff();
+        
 	     if (BarA==0)
  	      if (now2>0) {
 	       now2--;
@@ -533,14 +533,14 @@ void Programs(char plr,char prog)
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	     };
-	     MouseOn();
+	     
         i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==UP_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	     if (BarA==0)
 	      if (now2>0) {
 	       now2--;
@@ -554,31 +554,31 @@ void Programs(char plr,char prog)
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	     };
- 	     MouseOn();
+ 	     
         key=0;
         GetMouse();
        }
-	   MouseOff();OutBox(6,130,18,161);MouseOn();delay(10);
+	   OutBox(6,130,18,161);delay(10);
      }
     else
     if (key=='S')
       { // Show Skill
-       MouseOff();
+       
        ShBox(26,130+BarA*8,152,138+BarA*8);
        BarSkill(plr,BarA,now2,&M[0]);
-       MouseOn();
+       
       }
     else
     if (((x>=6 && y>=163 && x<=18 && y<=194 && mousebuttons>0) || key==DN_ARROW) && count>0)
      { /* Lft Dwn */
-	   MouseOff();InBox(6,163,18,194);MouseOn();
+	   InBox(6,163,18,194);
       for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-        MouseOff();
+        
  	     if (BarA==7)
 	      if (now2 < count-1) {
 	       now2++;
@@ -593,14 +593,14 @@ void Programs(char plr,char prog)
 	       ShBox(26,130+BarA*8,152,138+BarA*8);
 	       DispLeft(plr,BarA,count,now2,&M[0]);
 	      };
-	     MouseOn();
+	     
         i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==DN_ARROW)
        {
         delay(100);
-        MouseOff();
+        
   	     if (BarA==7)
 	      if (now2 < count-1) {
 	       now2++;
@@ -615,40 +615,40 @@ void Programs(char plr,char prog)
 	       ShBox(26,130+BarA*8,152,138+BarA*8);
 	       DispLeft(plr,BarA,count,now2,&M[0]);
 	      };
-	     MouseOn();
+	     
         key=0;
         GetMouse();
        }
 	    //while(1)  { GetMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(6,163,18,194);MouseOn();
+	    OutBox(6,163,18,194);
       }
      else
      if (((x>=4 && y>=86 && x<=12 && y<=92 && mousebuttons>0) || key=='1') && Gcnt[grp]>=1)
       {  /* Display Man 1 */
-    	 MouseOff();InBox(4,86,12,92);MouseOn();
+    	 InBox(4,86,12,92);
        AstLevel(plr,prog,grp,0);
-   	 MouseOff();OutBox(4,86,12,92);MouseOn();
+   	 OutBox(4,86,12,92);
       }
      else
      if (((x>=4 && y>=95 && x<=12 && y<=101 && mousebuttons>0) || key=='2') && prog>=2 && Gcnt[grp]>=2)
       {  /* Display Man 2 */
-    	 MouseOff();InBox(4,95,12,101);MouseOn();
+    	 InBox(4,95,12,101);
        AstLevel(plr,prog,grp,1);
-    	 MouseOff();OutBox(4,95,12,101);MouseOn();
+    	 OutBox(4,95,12,101);
       }
      else
      if (((x>=4 && y>=104 && x<=12 && y<=110 && mousebuttons>0) || key=='3') && prog>=3 && Gcnt[grp]>=3)
       {  /* Display Man 3 */
-     	 MouseOff();InBox(4,104,12,110);MouseOn();
+     	 InBox(4,104,12,110);
        AstLevel(plr,prog,grp,2);
-	    MouseOff();OutBox(4,104,12,110);MouseOn();
+	    OutBox(4,104,12,110);
       }
      else
      if (((x>=4 && y>=113 && x<=12 && y<=119 && mousebuttons>0) || key=='4') && prog>=5 && Gcnt[grp]>=4)
       {  /* Display Man 4 */
-    	 MouseOff();InBox(4,113,12,119);MouseOn();
+    	 InBox(4,113,12,119);
        AstLevel(plr,prog,grp,3);
-	    MouseOff();OutBox(4,113,12,119);MouseOn();
+	    OutBox(4,113,12,119);
       }
      else
      if (key=='C')
@@ -756,9 +756,9 @@ void Programs(char plr,char prog)
       if (((x>=245 && y>=88 && x<=314 && y<=100 && mousebuttons>0) || key=='A') && Gcnt[grp]<max)
        {  /* Assign 'Naut */
    	if (Data->P[plr].Crew[prog][grp][Gcnt[grp]]==0 && count>0) {
-    	 MouseOff();InBox(245,88,314,100);MouseOn();
+    	 InBox(245,88,314,100);
     	 Data->P[plr].Crew[prog][grp][Gcnt[grp]]=M[now2]+1;
-      MouseOff();
+      
     	 AstNames(Gcnt[grp],&Data->P[plr].Pool[M[now2]].Name[0],Data->P[plr].Pool[M[now2]].Mood);
     	 Data->P[plr].Pool[M[now2]].Crew=grp+1;
     	 Data->P[plr].Pool[M[now2]].Task=Gcnt[grp];
@@ -772,7 +772,7 @@ void Programs(char plr,char prog)
    	 RectFill(26,129,153,195,0);
    	 ShBox(26,130+BarA*8,152,138+BarA*8);
    	 DispLeft(plr,BarA,count,now2,&M[0]);
-      MouseOn();
+      
    	 Gcnt[grp]++;
        Data->P[plr].Gcnt[prog][grp]=Gcnt[grp];
    	 if (Gcnt[grp]==max) FltsTxt(grp,1);
@@ -783,7 +783,7 @@ void Programs(char plr,char prog)
    		    Data->P[plr].Crew[prog][grp][3]);
    	 while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
-   	 MouseOff();OutBox(245,88,314,100);MouseOn();
+   	 OutBox(245,88,314,100);
 	   }; /* End outer if */
      }
      else
@@ -792,7 +792,7 @@ void Programs(char plr,char prog)
        tst=Data->P[plr].Crew[prog][grp][0]-1;
        if (Data->P[plr].Pool[tst].Prime>0)
 	     {
-	      MouseOff();OutBox(245,106,314,118);
+	      OutBox(245,106,314,118);
     	   gxDisplayVirtual(75,43,244,173,0,&vhptr,75,43);
 	      ShBox(75,43,244,173);IOBox(81,152,238,167);
 	      InBox(81,70,238,113);
@@ -805,7 +805,7 @@ void Programs(char plr,char prog)
     	      PrintAt(0,0,"PRIMARY"); else PrintAt(0,0,"BACKUP");
 	      PrintAt(88,96,"CREW OF A CURRENT MISSION,");
 	      PrintAt(88,104,"CANNOT BREAK THIS CREW.");
-	      MouseOn();
+	      
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
 	      i=1;
 	      while(i==1)
@@ -815,18 +815,18 @@ void Programs(char plr,char prog)
 		      {
 		       if ((x>=83 && y>=154 && x<=236 && y<=165 && mousebuttons!=0) || key==K_ENTER)
 		        {
-		         MouseOff();InBox(83,154,236,165);MouseOn();
+		         InBox(83,154,236,165);
 		         while(1)  { GetMouse();if (mousebuttons==0) break;}
-		         MouseOff();OutBox(83,154,236,165);
+		         OutBox(83,154,236,165);
 		         gxVirtualDisplay(&vhptr,75,43,75,43,244,173,0);
-		         MouseOn();i=2;
+		         i=2;
 		        }  
 	   	   }
 	       }
 	    }
 	    else if (Data->P[plr].Crew[prog][grp][0]!=0)
 	     {
-    	 MouseOff();InBox(245,106,314,118);
+    	 InBox(245,106,314,118);
     	 while (Gcnt[grp]>0) {
     	   M[count]=Data->P[plr].Crew[prog][grp][Gcnt[grp]-1]-1;
    	   Data->P[plr].Crew[prog][grp][Gcnt[grp]-1]=0;
@@ -843,18 +843,18 @@ void Programs(char plr,char prog)
     	 DispLeft(plr,BarA,count,now2,&M[0]);
     	 for (i=1;i<5;i++)
     	   DrawPosition(prog,i);
-       MouseOn();
+       
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
-	    MouseOff();OutBox(245,106,314,118);MouseOn();
+	    OutBox(245,106,314,118);
 	   };
     }
    else
    if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
     {     /* Exit */
-	  MouseOff();InBox(245,5,314,17);MouseOn();
+	  InBox(245,5,314,17);
 	  while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0) delay(150);
-	  MouseOff();OutBox(245,5,314,17);MouseOn();delay(10);
+	  OutBox(245,5,314,17);delay(10);
 	  for (i=0;i<8;i++) {
 	    if (Gcnt[i]<max)
 	      while (Gcnt[i]>0) {
@@ -879,19 +879,19 @@ void Programs(char plr,char prog)
 
 void ClearIt(void)
 { // clears the screen
- MouseOff();
+ 
  RectFill(16,87,75,91,3);RectFill(5,87,11,91,3);
  RectFill(16,96,75,100,3);RectFill(5,96,11,100,3);
  RectFill(16,105,75,109,3);RectFill(5,105,11,109,3);
  RectFill(16,114,75,118,3);RectFill(5,114,11,118,3);
  RectFill(16,87,238,121,3);
- MouseOn();
+ 
  return;
 }
 
 void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
 {
-  MouseOff();
+  
   RectFill(13,86,231,122,3);  /* Clear Astro Area */
   grSetColor(1);
   if (M1>0)
@@ -915,7 +915,7 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
     AstStats(plr,3,M4-1);
   }
   else DrawPosition(prog,4);
-  MouseOn();
+  
   return;
 }
 
@@ -975,7 +975,7 @@ void AstNames(int man,char *name,char att)
 
 void Flts(char old,char nw)
 {
- MouseOff();
+ 
   switch (old) {
     case 0: OutBox(164,139,238,151);break;
     case 1: OutBox(164,154,238,166);break;
@@ -996,14 +996,14 @@ void Flts(char old,char nw)
     case 6: InBox(241,169,315,181);break;
     case 7: InBox(241,184,315,196);break;
   };
-  MouseOn();
+  
   return;
 } /* End of Flts */
 
 void FltsTxt(char nw,char col)
 {
   grSetColor(col);
-  MouseOff();
+  
   switch(nw) {
     case 0:PrintAt(169,147,"FLT. CREW I");break;
     case 1:PrintAt(169,162,"FLT. CREW II");break;
@@ -1014,7 +1014,7 @@ void FltsTxt(char nw,char col)
     case 6:PrintAt(246,177,"FLT. CREW VII");break;
     case 7:PrintAt(246,192,"FLT. CREW VIII");break;
   };
-  MouseOn();
+  
   return;
 } /* End of FltsTxt */
 

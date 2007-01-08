@@ -65,7 +65,6 @@ void DrawControl(char plr)
 {
   FILE *fin;
   long len[2];
-  MouseOff();
   fin=sOpen("CONTROL.IMG","rb",0);
   fread(&pal[0],768,1,fin);
   fread(&len[0],4,1,fin);
@@ -76,7 +75,6 @@ void DrawControl(char plr)
   }
   fread(vhptr.vptr,len[0],1,fin);fclose(fin);
   PCX_D((char *)vhptr.vptr,(char *)screen,(unsigned) len[0]);
-  MouseOn();
   return;
 }
 
@@ -211,7 +209,8 @@ int Launch(char plr,char mis)
       DrawControl(plr);
       FadeIn(2,pal,10,0,0);
       }
-   else if (BIG==1) {MouseOff();memset(screen,0x00,64000);MouseOn();};
+   else 
+		if (BIG==1) memset(screen,0x00,64000);
 
 #define fpf(a,b) fprintf(a,#b ": %d\n",b)
 

@@ -38,11 +38,11 @@ struct Astros far *abuf;
 
 #define pButton(a,b,c,d,e,f,g) if ((x>=(a) && y>=(b) && x<=(c) && y<=(d) && mousebuttons==1) || ((f)==(g)))\
                             { \
-                            MouseOff();InBox((a),(b),(c),(d));MouseOn(); \
+                            InBox((a),(b),(c),(d)); \
                             (e);\
 			    bzdelay (DELAYCNT);\
                		    if((f)>0) delay(150); \
-                            MouseOff();OutBox((a),(b),(c),(d));MouseOn(); \
+                            OutBox((a),(b),(c),(d)); \
                             };
 
 #define Button2(a,b,c,d,e,f,g) if ((x>=(a) && y>=(b) && x<=(c) && y<=(d) && mousebuttons==1) || ((f)==(g)))\
@@ -138,7 +138,7 @@ void Museum(char plr)
   do {
      if (beg==0) beg=(Data->P[plr].AstroCount>0)? 7 : 6;  // mods for astros
      else {
-        MouseOff();
+        
         FadeOut(2,pal,10,0,0);
 
         AdminPort(plr);
@@ -150,26 +150,26 @@ void Museum(char plr)
         else PrintAt(166,197,"FALL 19");DispNum(0,0,Data->Year);
         grSetColor(11);if (Data->Season==0) PrintAt(165,196,"SPRING 19");
         else PrintAt(165,196,"FALL 19");DispNum(0,0,Data->Year);
-        MouseOn();
+        
      }
 
 #if 0
      if (beg==0) {
         beg=(Data->P[plr].AstroCount>0)? 7 : 6;  // mods for astros
-        MouseOff();
+        
         fin=sOpen("PORT.TMP","wb",1); // Create temp image file
         fwrite(screen,64000,1,fin);
         fclose(fin);
-        MouseOn();
+        
      }
      else {
-        MouseOff();
+        
         FadeOut(2,pal,10,0,0);
         fin=sOpen("PORT.TMP","rb",1);  // replad temp image file
         fread(screen,64000,fin);
         close(fin);
         PortPal(plr);
-        MouseOn();
+        
      }
 #endif
 
@@ -208,7 +208,7 @@ void ShowPrest(char plr)
       for(i=0;i<28;i++)
          TPoints[j]+=(int) Data->Prestige[i].Points[j];
       
-  MouseOff();
+  
   FadeOut(2,pal,5,0,0);
   PortPal(plr);
   gxClearDisplay(0,0);
@@ -250,17 +250,17 @@ void ShowPrest(char plr)
   UPArrow(299,131);DNArrow(299,162);
   DPrest(plr,&pos,&pos2);
   FadeIn(2,pal,5,0,0);
-  MouseOn();
+  
   while(1) {GetMouse();if (mousebuttons==0) break;}
   while(1)
   {
       GetMouse();
           // Parse Button actions, note that return is embedded in first pButton
           if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d) {
-            MouseOff();InBox(245,5,314,17);MouseOn();
+            InBox(245,5,314,17);
             if (key>0) {delay(300);key=0;};
             while(1)  { GetMouse();if (mousebuttons==0) break;}
-            MouseOff();OutBox(245,5,314,17);MouseOn(); key=0;
+            OutBox(245,5,314,17); key=0;
             strcpy(IDT,"i000");strcpy(IKEY,"k000");
             return;
 	  }
@@ -315,7 +315,7 @@ void DPrest(char plr,char *pos,char *pos2)
 {
    int i,j=0,tmp,tt;
 
-   MouseOff();
+   
    RectFill(12,129,295,190,0);
    RectFill(70,31,175,40,3);RectFill(183,31,300,40,3);
    if (*pos2==-1) {grSetColor(11);PrintAt(71,37,"SPACE FIRSTS:");PrintAt(187,37,"TOTAL POINTS:");}
@@ -422,7 +422,7 @@ void DPrest(char plr,char *pos,char *pos2)
          if (tmp!=0) DispNum(267,(tmp>0)?65:73,tmp);
       }
    }
-   MouseOn();
+   
    return;
 }
 
@@ -445,7 +445,7 @@ void DPrest(char plr,char *pos,char *pos2)
 void ShowSpHist(char plr)
 {
   int pos;
-  MouseOff();
+  
   FadeOut(2,pal,5,0,0);
   PatchMe(0,0,0,0,0,32);
   memset(screen,0x00,64000);
@@ -476,7 +476,7 @@ void ShowSpHist(char plr)
   Display_ARROW(3,285,178); //right arrow
   DrawMisHist(plr,&pos);
   FadeIn(2,pal,5,0,0);
-  MouseOn();
+  
   while(1) {GetMouse();if (mousebuttons==0) break;}
   while(1)
   {
@@ -485,10 +485,10 @@ void ShowSpHist(char plr)
       // Parse Button actions, note that return is embedded in first pButton
       if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d)
        {
-	     MouseOff();InBox(245,5,314,17);MouseOn();
+	     InBox(245,5,314,17);
         if (key>0) {delay(300);key=0;};
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
-	     MouseOff();OutBox(245,5,314,17);MouseOn();
+	     OutBox(245,5,314,17);
 	     return;
        }
       pButton(7,176,49,193,FullRewind(plr,&pos),key>>8,71); //FullRewind Button etc..
@@ -575,7 +575,7 @@ void DrawMisHist(char plr,int *where)
    char cYr[5],mtext[51];
    char yr,season,i,j,index=0,prog,planet,pmis,temp=0,temp2=11;
 
-   MouseOff();
+   
    //ai klugge
 
    for(i=0;i<Data->P[plr].PastMis;i++)
@@ -615,14 +615,14 @@ void DrawMisHist(char plr,int *where)
 
   while(yr > Data->P[plr].History[index].MissionYear) index++;
   if(Data->P[plr].History[index].MissionYear > yr) {
-	  MouseOn();
+	  
 	  return;
   }
 
   if (season == 1) {
      while(Data->P[plr].History[index].Month<6 && yr==Data->P[plr].History[index].MissionYear) index++;
      if(Data->P[plr].History[index].MissionYear > yr) {
-	      MouseOn();
+	      
 	      return;
      }
   }
@@ -706,7 +706,7 @@ void DrawMisHist(char plr,int *where)
    temp++;    
   index++;
  } while (Data->P[plr].History[index].MissionYear == yr);
- MouseOn();
+ 
  return;
 }
 
@@ -762,7 +762,7 @@ void ShowAstrosHist(char plr)
   if(Data->P[plr].AstroCount == 0 ) return;
   memcpy(abuf,Data->P[plr].Pool,sizeof(Data->P[plr].Pool));  
   qsort((void *)abuf,Data->P[plr].AstroCount,sizeof(struct Astros),astcomp);
-  MouseOff();
+  
   FadeOut(2,pal,5,0,0);
   RectFill(1,39,157,184,3);
   DispBig(67,71,"NO",0,-1);
@@ -824,7 +824,7 @@ void ShowAstrosHist(char plr)
   DisplAst(plr,&pos,&pos2);
   DisplAstData(plr,&pos,&pos2);  
   FadeIn(2,pal,5,0,0);
-  MouseOn();
+  
 
   while(1) {GetMouse();if (mousebuttons==0) break;}
   while(1)
@@ -832,10 +832,10 @@ void ShowAstrosHist(char plr)
       GetMouse();
           // Parse Button actions, note that continue button is not a macro
           if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons > 0) || key==0x0d) {
-            MouseOff();InBox(245,5,314,17);MouseOn();
+            InBox(245,5,314,17);
             if (key>0) {delay(300);key=0;};
             while(1)  { GetMouse();if (mousebuttons==0) break;}
-            MouseOff();OutBox(245,5,314,17);MouseOn();
+            OutBox(245,5,314,17);
 	    DV(&vhptr2);
 	    key=0;
             return;
@@ -862,7 +862,7 @@ void DisplAst(char plr, char *where, char *where2)
   char temp[11]="GROUP \0";
   char Ast_Name[11];
   if(Data->P[plr].AstroCount == 0) return;
-	MouseOff();
+	
   RectFill(165,39,230,35,3);
   RectFill(165,49,230,45,3);
   RectFill(172,68,230,63,3);
@@ -906,7 +906,7 @@ void DisplAst(char plr, char *where, char *where2)
   DisplAstData(plr,where,where2);  
   GradRect(234,30,313,79,plr);
   AstFaces(plr,234,30,abuf[*where].Face); //30
-  MouseOn();
+  
 }
 
 void ShowAstroUp(char plr,char *where,char *where2)
@@ -977,11 +977,11 @@ void DispLoc(char plr,char *where)
 void DisplAstData(char plr, char *where,char *where2)
 {
   int num=abuf[*where].MissionNum[*where2],num2;
-  MouseOff();
+  
   RectFill(1,40,157,182,3);
   if(abuf[*where].Missions == 0){
     gxPutImage(&vhptr2,gxSET,22,69,0);
-	 MouseOn();
+	 
     return;
   }
   grSetColor(2);
@@ -1018,7 +1018,7 @@ void DisplAstData(char plr, char *where,char *where2)
 
   if(*where2==abuf[*where].Missions-1){
     RectFill(1,114,157,184,3);
-	 MouseOn();
+	 
     return;
   }
   num2=abuf[*where].MissionNum[*where2+1];
@@ -1050,7 +1050,7 @@ void DisplAstData(char plr, char *where,char *where2)
    default:break;
   }
   PrintAt(10,158,"DESCRIPTION: ");
-  MouseOn();
+  
   return;
 }
 

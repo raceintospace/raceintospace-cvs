@@ -286,7 +286,7 @@ void DispNews(char plr,char *src,char *dest)
 
 void PreLoadAnim(char plr,char mode)
 {
- MouseOff();
+ 
  gxClearDisplay(0,0);
  ShBox(49,54,262,122);
  InBox(53,57,258,105);
@@ -314,13 +314,13 @@ void PreLoadAnim(char plr,char mode)
   LoadNewsAnim((mode==0) ? 1 : 0,BUFFR_FRAMES);  //Opening
  };
  FadeOut(2,pal,10,0,0);
- MouseOn();
+ 
  return;
 }
 
 void DrawNews(char plr)
 {
-  MouseOff();
+  
   gxClearDisplay(0,0);
   memset(screen,0xff,320*113);
   pal[767]=pal[766]=pal[765]=0x00;
@@ -338,7 +338,7 @@ void DrawNews(char plr)
   InBox(301,118,315,196); RectFill(302,119,314,195,0);
   ShBox(303,120,313,156); ShBox(303,158,313,194);
   UPArrow(305,126);DNArrow(305,163);
-  MouseOn();
+  
 }
 
 void DrawNText(char plr,char got)
@@ -358,7 +358,7 @@ void DrawNText(char plr,char got)
     if (strncmp(&buf[0],"CHECK INTEL",11)==0) grSetColor(11);
     if (strncmp(&buf[0],"CHECK THE TRACKING STATION",26)==0) grSetColor((plr==0) ? 9 : 7);
   }
-  MouseOff();
+  
   for(i=0;i<8;i++) {
     RectFill(5,yy-7,296,yy+1,7+3*plr);
     grMoveTo(xx,yy);
@@ -377,7 +377,7 @@ void DrawNText(char plr,char got)
     buf++;
     if (*buf==NULL) i=9;
   }
-  MouseOn();
+  
 }
 
 void News(char plr)
@@ -428,12 +428,12 @@ void News(char plr)
  #if 1
   if ((plr==0 && LOAD_US==0) || (plr==1 && LOAD_SV==0))
    {
-    MouseOff();
+    
     itoa(1900+Data->Year,cYr,10);
     if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
      else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
     DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
-    MouseOn();
+    
    };
  #endif
   for (i=0;i<(int)strlen(buffer);i++) if (buffer[i]=='x') bline++;
@@ -473,12 +473,12 @@ void News(char plr)
              if (plr==1) LoadNewsAnim((BW==0) ? 10 : 11,FIRST_FRAME);
               else if (plr==0) LoadNewsAnim((BW==0) ? 9 : 8,FIRST_FRAME);
            #if 1
-             MouseOff();
+             
              itoa(1900+Data->Year,cYr,10);
              if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
               else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
              DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
-             MouseOn();VBlank();
+             VBlank();
            #endif
              Status=0;
              loc++;
@@ -488,9 +488,9 @@ void News(char plr)
               else if (plr==0) LoadNewsAnim((BW==0) ? 1 : 0,FIRST_FRAME);
              Status=0;
              if (AnimIndex==5) {
-               MouseOff();
+               
                RectFill(227,108,228,108,grGetPixel(227,108));
-               MouseOn();
+               
               }
              PlayNewsAnim();
              PlayNewsAnim();
@@ -529,12 +529,12 @@ void News(char plr)
              if (plr==1) LoadNewsAnim((BW==0) ? 10 : 11,FIRST_FRAME);
               else if (plr==0) LoadNewsAnim((BW==0) ? 9 : 8,FIRST_FRAME);
             #if 1
-             MouseOff();
+             
              itoa(1900+Data->Year,cYr,10);
              if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
               else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
              DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
-             MouseOn();
+             
             #endif
              Status=0;
              loc++;
@@ -543,13 +543,13 @@ void News(char plr)
              Status=0;  
              loc++;
              if (AnimIndex==9) {
-              MouseOff();
+              
               ShBox(240,3,316,22);
               RectFill(315,20,317,21,3);
               RectFill(241,2,242,4,3);
               IOBox(243,3,316,19);
               grSetColor(1);PrintAt(258,13,"CONTINUE");
-              MouseOn();
+              
              };
              i=bline;ShowEvt(plr,Data->Events[Data->Count]);bline=i;
              break; 
@@ -584,15 +584,15 @@ void News(char plr)
      else
      if (ctop>0 && ((x>=303 && y>120 && x<=313 && y<=156 && mousebuttons>0) || (key>>8)==72 ))
       {  // Up Arrow
-       MouseOff();InBox(303,120,313,156);MouseOn();
+       InBox(303,120,313,156);
        ctop--;
        DrawNText(plr,ctop);
-       MouseOff();OutBox(303,120,313,156);MouseOn();
+       OutBox(303,120,313,156);
       }  
      else 
      if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || (key==0x0d))
       {  // Continue
-	    MouseOff();InBox(245,5,314,17);MouseOn();
+	    InBox(245,5,314,17);
 	    key=0;i=0;
        KillMusic();
        KillVoice();
@@ -601,10 +601,10 @@ void News(char plr)
      else
      if (ctop<bline && ((x>=303 && y>158 && x<=313 && y<=194 && mousebuttons>0) || (key>>8)==80 ))
       {  // Down Arrow
-       MouseOff();InBox(303,158,313,194);MouseOn();
+       InBox(303,158,313,194);
        ctop++;
        DrawNText(plr,ctop);
-       MouseOff();OutBox(303,158,313,194);MouseOn();
+       OutBox(303,158,313,194);
       }
 //   gr_sync ();
   };
@@ -688,9 +688,9 @@ void PlayNewsAnim(void)
 	   &local.vptr[0],
 	   table[Frame%MaxFrame].size,
 	   Depth,Length);
- MouseOff();
+ 
  gxPutImage(&local,gxXOR,X_Offset,Y_Offset,0);
- MouseOn();
+ 
  DV(&local);
  Frame+=1;
 
@@ -769,21 +769,21 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
  aframe+=2; //buffer between animations in EMS
 
  if (Mode==0) {
-  MouseOff();
+  
   RectFill(4,4,239,109,0);
   RectFill(240,23,315,109,0);
-  MouseOn();
+  
  };
  if (Mode==0)
   if (Index==9 || Index==1 || Index==3)
    {
-    MouseOff();
+    
     ShBox(240,3,316,22);
     RectFill(315,20,317,21,3);
     RectFill(241,2,242,4,3);
     IOBox(243,3,316,19);
     grSetColor(1);PrintAt(258,13,"CONTINUE");
-    MouseOn();
+    
    };
 //Specs: Display Single Frame
  if (Mode==0) {
@@ -793,12 +793,12 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
   gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
   RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
   GV(&local,79,23);
-  MouseOff();
+  
   gxGetImage(&local,240,0,319,23,0);
   gxPutImage(&vhptr2,gxSET,4,4,0);
   VBlank();
   gxPutImage(&local,gxSET,240,0,0);
-  MouseOn();
+  
   gxDestroyVirtual(&vhptr2);
   DV(&local);
 
@@ -814,7 +814,7 @@ if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94
   gxSetDisplayPalette(pal);
   FadeOut(2,pal,1,0,0);
 
-  MouseOff();                                               // DrawNews() conv
+                                                 // DrawNews() conv
   gxClearDisplay(0,0);                                      // DrawNews() conv
   memset(screen,0xff,320*113);                              // DrawNews() conv
   OutBox(0,0,319,113);                                      // DrawNews() conv
@@ -866,7 +866,7 @@ if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94
        grSetColor(1);PrintAt(258,13,"CONTINUE");
       }
 
-    MouseOn();
+    
 
   FadeIn(2,pal,50,0,0);
 
@@ -906,7 +906,7 @@ void ShowEvt(char plr,char crd)
   fseek(ffin,(plr*115+crd)*(sizeof MM),SEEK_SET);
   fread(&MM,sizeof MM,1,ffin);
 
-  MouseOff();
+  
   if (MM.off!=0) {
     fseek(ffin,MM.off,SEEK_SET);
     fread(&pal[384],384,1,ffin);
@@ -917,7 +917,7 @@ void ShowEvt(char plr,char crd)
     }
   }
   VBlank();SetPal(pal);
-  MouseOn();
+  
   fclose(ffin);
 }
 

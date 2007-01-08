@@ -38,7 +38,7 @@ int MChoice(char qty,char *Name)
   char poff;
   FILE *in;
 
- MouseOff();
+ 
  //FadeOut(2,pal,30,0,0);
 
  ShBox(21,9,180,34);
@@ -84,7 +84,7 @@ int MChoice(char qty,char *Name)
  DispBig(34,123,"CREDITS",1,0);
  DispBig(34,150,"EXIT",1,0);
 
- MouseOn();
+ 
  FadeIn(2,pal,30,0,0);
  while(1) {GetMouse();if (mousebuttons==0) break;}
  j=-1;starty=9;
@@ -94,9 +94,9 @@ int MChoice(char qty,char *Name)
    for (i=0;i<qty;i++) // keyboard stuff
     if ((char)key==Name[i*22])
      {
- 	   MouseOff();
+ 	   
 	   InBox(21,starty+27*i,180,starty+25+27*i);
-	   MouseOn();
+	   
 	   delay(50);
 	   j=i+1;key=0;
      }
@@ -105,9 +105,9 @@ int MChoice(char qty,char *Name)
      for (i=0;i<qty;i++)
 	   if (x>=21 && x<=180 && y>=starty+27*i && y<=starty+25+27*i)
 	    {
-	     MouseOff();
+	     
 	     InBox(21,starty+27*i,180,starty+25+27*i);
-	     MouseOn();
+	     
 	     delay(50);
 	     j=i+1;
 	    }
@@ -123,7 +123,7 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   int i,j,starty=100;
   GXHEADER local;
   FILE *fin;
-  MouseOff();
+  
   //FadeOut(2,pal,10,0,0);
 
   GV(&local,30,19);
@@ -140,7 +140,7 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   }
   DV(&local);
 
-  MouseOn();
+  
   FadeIn(2,pal,10,0,0);
   while(1) {GetMouse();if (mousebuttons==0) break;}
   j=-1;
@@ -150,9 +150,9 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 	for (i=0;i<qty;i++) // keyboard stuff
 	   if ((char)key==Name[i*22])
 	{
-	  MouseOff();
+	  
 	  InBox(23,starty+23*i,54,starty+20+23*i);
-	  MouseOn();
+	  
 	  delay(50);
 	  j=i+1;key=0;
 	}
@@ -161,9 +161,9 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 	if ((x>=23 && x<=54 && y>=starty+23*i && y<=starty+20+23*i) ||
 		(x>56 && y>starty+23*i && x<296 && y<starty+20+23*i))
 	{
-	  MouseOff();
+	  
 	  InBox(23,starty+23*i,54,starty+20+23*i);
-	  MouseOn();
+	  
 	  delay(50);
 	  j=i+1;
 	}
@@ -351,11 +351,11 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       local.vptr[0]=0x00;
 
 
-      MouseOff();
+      
       if (FADE==0) gxSetDisplayPalette(pal);
       gxVirtualDisplay(&local,0,0,x+1,y,x+102,y+76,0);
 	   //gxPutImage(&dply,mode,x,y,0);
-      MouseOn();
+      
 
       DV(&local);
       fclose(fin);
@@ -367,7 +367,7 @@ void DispIdiot(char top, char bot, char *txt)
 {
    int i,pl=0;
    i=0;
-   MouseOff();
+   
    while (i++<top) {
       if (txt[i*42]==(char) 0xcc) grSetColor(txt[i*42+1]);
       }
@@ -383,7 +383,7 @@ void DispIdiot(char top, char bot, char *txt)
 	 }
       pl++;i++;
       }
-   MouseOn();
+   
    return;
 }
 
@@ -454,7 +454,7 @@ int Idiot(char *FName)
    }
   farfree(Idiot);
 
-  MouseOff();key=0;
+  key=0;
   GV(&local,250,128);
   gxGetImage(&local,34,32,283,159,0);
 
@@ -485,52 +485,52 @@ int Idiot(char *FName)
   top=plc=1;
   DispIdiot(plc,bot-1,&NTxt[0]);
 
-  MouseOn();
+  
   while (mousebuttons==1) GetMouse();
   i=2;
   while(i==2) {
     GetMouse();
     if (mode==0 && ((x>85 && y>=133 && x<=239 && y<=154 && mousebuttons>0) || (key=='C' || key==0x0d))) {
-      MouseOff();InBox(85,133,239,154);i=0;MouseOn();
+      InBox(85,133,239,154);i=0;
       while(mousebuttons==1) GetMouse(); key=0;
       // Continue Response
     }
     if (mode==1 && ((x>=85 && y>=133 && x<=154 && y<=154 && mousebuttons>0) || key=='Y')) {
-      MouseOff();InBox(85,133,154,154);i=1;MouseOn();
+      InBox(85,133,154,154);i=1;
       while (mousebuttons==1) GetMouse();     key=0;
       // Yes Response
     }
     if (mode==1 && ((x>170 && y>=133 && x<=239 && y<=154 && mousebuttons>0) || key=='N')) {
-      MouseOff();InBox(170,133,239,154);i=-1;MouseOn();
+      InBox(170,133,239,154);i=-1;
       while(mousebuttons==1) GetMouse(); key=0;
       // No Response
     }
     if (plc>top && ((x>=266 && y>50 && x<=277 && y<=87 && mousebuttons>0) || (key>>8)==72 ))
       {
-       MouseOff();InBox(266,50,277,87);MouseOn();
+       InBox(266,50,277,87);
       // while(1)  { GetMouse();if (mousebuttons==0) break;}
        plc--;
        DispIdiot(plc,bot,&NTxt[0]);
-	   MouseOff();OutBox(266,50,277,87);MouseOn();
+	   OutBox(266,50,277,87);
        key=0;
       }  // Up
     if ((plc+11)<bot && ((x>=266 && y>89 && x<=277 && y<=126 && mousebuttons>0) || (key>>8)==80 ))
 	  {
-       MouseOff();InBox(266,89,277,126);MouseOn();
+       InBox(266,89,277,126);
       // while(1)  { GetMouse();if (mousebuttons==0) break;}
        plc++;
        DispIdiot(plc,bot,&NTxt[0]);
-       MouseOff();OutBox(266,89,277,126);MouseOn();
+       OutBox(266,89,277,126);
        key=0;
       }  // Down
 
   }
-  MouseOff();
+  
   gxPutImage(&local,gxSET,34,32,0);
   grSetMouseBounds(ox1,oy1,ox2,oy2);
   farfree(NTxt);
   DV(&local);
-  MouseOn();
+  
   AL_CALL=0;
   return i;
 }
@@ -540,7 +540,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 {
   int j,k,mcode;
   int let;
-  MouseOff();
+  
 
   if (mode==0) InBox(245,5,314,17);
 
@@ -631,7 +631,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
     }
 
   }  
-  MouseOn();
+  
 
   if (mode==1) {
      FadeIn(2,pal,10,0,0);
@@ -643,7 +643,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 	   GetMouse();
 	   if (mode==0 && ((x>=216 && y>=153 && x<=308 && y<=163 && mousebuttons==1) || (key==0x0d || key=='E')))
 	   { 
-	      MouseOff();InBox(216,153,308,153);OutBox(245,5,314,17);MouseOn(); 
+	      InBox(216,153,308,153);OutBox(245,5,314,17); 
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
         if(key>0) delay(150);
 	      DrawMisHist(plr,where);
@@ -652,10 +652,10 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 	   }
      else if (mode==1 && ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons==1) || key==K_ENTER))
      {
-        MouseOff();InBox(245,5,314,17);MouseOn();
+        InBox(245,5,314,17);
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (key>0) delay(150);
-	      MouseOff();OutBox(245,5,314,17);MouseOn();delay(10);
+	      OutBox(245,5,314,17);delay(10);
         if (!AI[plr]) KillMusic();
         FadeOut(2,pal,10,0,0);
         key=0;
@@ -663,16 +663,16 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
      }
 	   else if ((x>=216 && y>=136 && x<=308 && y<=146 && mousebuttons==1) || (key=='R'))
 	   {
-	      MouseOff();InBox(216,136,308,146);
+	      InBox(216,136,308,146);
         if (mode==0) InBox(216,153,309,163);
         grSetColor(11);PrintAt(225,125,"PLAYING...");
-        MouseOn(); 
+         
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
         grSetColor(1);
 
         if (x==0 && y==0) {
            FILE *tin;
-           MouseOff();
+           
            tin=sOpen("REPL.TMP","wb",1); // Create temp image file
            fwrite(pal,sizeof pal,1,tin);
            fwrite(screen,64000,1,tin);
@@ -703,7 +703,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
            FadeIn(2,pal,10,0,0);
            key=0;
            remove_savedat("REPL.TMP");
-           MouseOn();
+           
         }
         else {
           //Specs: Planetary Mission Klugge
@@ -726,11 +726,11 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
           else Replay(plr,index,215,56,94,60,"OOOO");
           AbzFrame(plr,index,215,56,94,60,"OOOO",mode);
          }
-          MouseOff();OutBox(216,136,308,146);
+          OutBox(216,136,308,146);
           if (mode==0) OutBox(216,153,309,163);
           RectFill(212,119,312,127,3);
           key=0;
-          MouseOn();
+          
 	   }; // if
 
   }; // while

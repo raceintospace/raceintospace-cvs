@@ -49,17 +49,17 @@ int HardCrewAssign(char plr,char Pad,int MisType,char NewType)
 	        if (M==0) return 0; else return 1;
    case 4: M= SecondHard(plr,0,MisType,Pad);
 	        GV(&local3,171,188);
-	        MouseOff();
+	        
 	        gxGetImage(&local3,74,3,244,190,0);
-	        MouseOn();
+	        
 	        if (M!=0) M=AsnCrew(plr,Pad,0);
 	         else {DV(&local3);return 0;};
 	        Data->P[plr].Future[Pad].part=0;
 	        Data->P[plr].Future[Pad].Joint=1;
 	        Data->P[plr].Future[Pad].MissionCode=MisType;
-	        MouseOff();
+	        
 	        gxPutImage(&local3,gxSET,74,3,0);
-	        MouseOn();
+	        
 	        DV(&local3);
 	        if (M!=0) M=SecondHard(plr,1,MisType,Pad);
 	         else return 0;
@@ -135,7 +135,7 @@ int AsnCrew(char plr,char pad,char part)
 {
  int count=0,i,prg=0,grp=-1,prime=-1,men=0,back=-1,t=0,s=0,k=0,yes=0,stflag=0,bug;
  char temp;
- MouseOff();
+ 
  strcpy(IKEY,"k200");
  men=Data->P[plr].Future[pad].Men;
  prg=Data->P[plr].Future[pad].Prog;
@@ -163,7 +163,7 @@ int AsnCrew(char plr,char pad,char part)
 	}
    if (count>=7) 
     { 
-     MouseOn();
+     
      if (temp)EMPTY_BODY;
      temp=Idiot("i107"); 
      bug=1;
@@ -194,7 +194,7 @@ int AsnCrew(char plr,char pad,char part)
     else PrintAt(100,31,"SELECT SECONDARY CREW");
   grSetColor(1); // reset the color
   count=0;
-  MouseOn();
+  
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while(1)
    {
@@ -216,7 +216,7 @@ int AsnCrew(char plr,char pad,char part)
           else if (grp!=i && stflag==1 && key=='1'+i) yes=1;
       if (yes==1 && bug==0)
        {
-        MouseOff();
+        
 	     if (grp!=-1)
          {
           if (grp<4) OutBox(80,123+grp*16,154,137+grp*16);
@@ -232,13 +232,13 @@ int AsnCrew(char plr,char pad,char part)
 		 Data->P[plr].Crew[prg][grp][1],
 		 Data->P[plr].Crew[prg][grp][2],
 		 Data->P[plr].Crew[prg][grp][3]);
-      MouseOn();
+      
       while(1)  { GetMouse();if (mousebuttons==0) break;}
      }
     }
    if (((x>=166 && y>=9 && x<=236 && y<=19 && mousebuttons>0) || key==K_ENTER || key=='A') && prime!=-1 && back!=-1 && bug==0)
 	 {   // Assign
-	  MouseOff();
+	  
 	  InBox(166,9,236,19);
 	  for (i=0;i<men;i++)
 	  	Data->P[plr].Pool[Data->P[plr].Crew[prg][prime][i]-1].Prime=4;
@@ -246,7 +246,7 @@ int AsnCrew(char plr,char pad,char part)
 	  Data->P[plr].Future[pad].BCrew=back+1;
 	  for (i=0;i<men;i++)
 	   Data->P[plr].Pool[Data->P[plr].Crew[prg][back][i]-1].Prime=2;
-	  MouseOn();
+	  
 	  while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0) delay(150);
 	  return 1;
@@ -254,7 +254,7 @@ int AsnCrew(char plr,char pad,char part)
    else
    if ((x>=82 && y>=9 && x<=152 && y<=19 && mousebuttons!=0) || key==K_ESCAPE)
 	 {
-	  MouseOff();InBox(82,9,152,19);MouseOn();
+	  InBox(82,9,152,19);
 	  while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0) delay(150);
 	  ClrFut(plr,pad);
@@ -263,19 +263,19 @@ int AsnCrew(char plr,char pad,char part)
    else
    if (((x>=82 && y>=104 && x<=155 && y<=114 && mousebuttons>0) || key=='P') && prime!=grp && back!=grp && grp!=-1 && bug==0)
 	 {
-	  MouseOff();InBox(82,104,155,114); prime=grp;MouseOn();
+	  InBox(82,104,155,114); prime=grp;
 	  FutSt(plr,prg,prime,back);
 	  while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0) delay(110);
-     MouseOff();OutBox(82,104,155,114);MouseOn();
+     OutBox(82,104,155,114);
     } // End Primary Set
    else
    if (((x>=163 && y>=104 && x<=236 && y<=114 && mousebuttons>0) || key=='B')  && prime!=grp && back!=grp && grp!=-1 && bug==0)
      {
-      MouseOff();InBox(163,104,236,114); back=grp;MouseOn();
+      InBox(163,104,236,114); back=grp;
       FutSt(plr,prg,prime,back);
       while(1)  { GetMouse();if (mousebuttons==0) break;}
-      MouseOff();OutBox(163,104,236,114);MouseOn();
+      OutBox(163,104,236,114);
       if (key>0) delay(110);
      }; // End Backup Set
  }; // end-while
@@ -284,7 +284,7 @@ int AsnCrew(char plr,char pad,char part)
 void FutFltsTxt(char nw,char col)
 {
   int temp=0;
-  MouseOff();
+  
   grSetColor(col);
   if (nw < 4) PrintAt(83,129+nw*16,"FLT. CREW ");
     else { temp=nw-4; PrintAt(167,129+temp*16,"FLT. CREW ");};
@@ -299,7 +299,7 @@ void FutFltsTxt(char nw,char col)
     case 7: PrintAt(0,0,"VIII");break;
     default: break;
   };
-  MouseOn();
+  
   return;
 }
 
@@ -411,7 +411,7 @@ int HardRequest(char plr,char mode,char mis,char pad)
    }
   if (Mis.Doc==1) pr[4]=0;
 //  if (t==0) {Idiot("i126"); return 0;};
-  MouseOff();
+  
 
   DrawHard(mode,pad,mis,plr);
    if (pr[0]==0) InBox(81,100,158,114); else IOBox(81,100,158,114);
@@ -419,39 +419,39 @@ int HardRequest(char plr,char mode,char mis,char pad)
   if (pr[2]==0) InBox(81,117,158,131); else IOBox(81,117,158,131);
   if (pr[3]==0) InBox(161,117,238,131); else IOBox(161,117,238,131);
   if (pr[4]==0) InBox(121,134,198,148); else IOBox(121,134,198,148);
-  MouseOn();
+  
   i=0;
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while(i==0) {
   key=0;GetMouse();
    if (mousebuttons!=0 || key>0) {
      if (((x>=83 && y>=102 && x<=156 && y<=112) || key=='1') && pr[0]) {
-       MouseOff();InBox(83,102,156,112);i=1;MouseOn();
+       InBox(83,102,156,112);i=1;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
      } // ONE
      else
        if (((x>=163 && y>=102 && x<=236 && y<=112) || key=='2') && pr[1]) {
-       MouseOff();InBox(163,102,236,112);i=2;MouseOn();
+       InBox(163,102,236,112);i=2;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
      } // TWO
      else
      if (((x>=83 && y>=119 && x<=156 && y<=129) || key=='3') && pr[2]) {
-       MouseOff();InBox(83,119,156,129);i=3;MouseOn();
+       InBox(83,119,156,129);i=3;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
      } // THREE
      else
      if (((x>=163 && y>=119 && x<=236 && y<=129) || key=='4') && pr[3]) {
-       MouseOff();InBox(163,119,236,129);i=4;MouseOn();
+       InBox(163,119,236,129);i=4;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
      } // FOUR
      else
      if (((x>=123 && y>=136 && x<=196 && y<=146) || key=='5') && pr[4]) {
-       MouseOff();InBox(123,136,196,146);i=5;MouseOn();
+       InBox(123,136,196,146);i=5;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
      } // FIVE
      else
      if ((x>=83 && y>=156 && x<=236 && y<=165 && mousebuttons!=0) || key==K_ENTER || key==K_ESCAPE) {
-     MouseOff();InBox(83,156,236,165);MouseOn();
+     InBox(83,156,236,165);
      while(1)  { GetMouse();if (mousebuttons==0) break;}
      if (key>0) delay(150);
      return 0;  // Abort - Redo Mission
@@ -488,14 +488,14 @@ int SecondHard(char plr,char mode,char mis,char pad)
   if (mis==57 && plr==1) {
     prog[0]=prog[1]=prog[3]=prog[4]=0;
    }
-  MouseOff();
+  
   DrawHard(mode,pad,mis,plr);
   if (prog[0]==0) InBox(81,100,158,114); else IOBox(81,100,158,114);
   if (prog[1]==0) InBox(161,100,238,114); else IOBox(161,100,238,114);
   if (prog[2]==0) InBox(81,117,158,131); else IOBox(81,117,158,131);
   if (prog[3]==0) InBox(161,117,238,131); else IOBox(161,117,238,131);
   if (prog[4]==0) InBox(121,134,198,148); else IOBox(121,134,198,148);
-  MouseOn();
+  
   i=0;
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while(i==0)
@@ -504,37 +504,37 @@ int SecondHard(char plr,char mode,char mis,char pad)
      if (mousebuttons>0 || key>0) {
      if (((x>=83 && y>=102 && x<=156 && y<=112 && mousebuttons!=0) || key=='1') && prog[0]!=0 && prg!=1)
       {
-       men=1; MouseOff();InBox(83,102,156,112); MouseOn(); i=1;
+       men=1; InBox(83,102,156,112);  i=1;
        while(1) {GetMouse();if (mousebuttons==0) break;}
       } // One Man Program
       else
      if (((x>=163 && y>=102 && x<=236 && y<=112 && mousebuttons!=0) || key=='2') && prog[1]!=0 && prg!=3)
       {
-       men=2; MouseOff();InBox(163,102,236,112); MouseOn();i=2;
+       men=2; InBox(163,102,236,112); i=2;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
       } // Two Man Program
      else
      if (((x>=83 && y>=119 && x<=156 && y<=129 && mousebuttons!=0) || key=='3') && prog[2]!=0 && prg!=2)
       {
-       men=3; MouseOff();InBox(83,119,156,129); MouseOn(); i=3;
+       men=3; InBox(83,119,156,129);  i=3;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
       } // Three Man Program
      else
      if (((x>=163 && y>=119 && x<=236 && y<=129 && mousebuttons!=0) || key=='4') && prog[3]!=0 && prg!=4)
       {
-       men=3; MouseOff();InBox(163,119,236,129); MouseOn(); i=4;
+       men=3; InBox(163,119,236,129);  i=4;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
       } // Minishuttle Man Program
      else
      if (((x>=123 && y>=136 && x<=196 && y<=146 && mousebuttons!=0) || key=='5') && prog[4]!=0 && prg!=5)
       {
-       men=4; MouseOff();InBox(123,136,196,146); MouseOn(); i=5;
+       men=4; InBox(123,136,196,146);  i=5;
        while(1)  { GetMouse();if (mousebuttons==0) break;}
       } // Four Man Program
      else
      if ((x>=83 && y>=156 && x<=236 && y<=165 && mousebuttons!=0) || key==K_ENTER)
       {
-       MouseOff();InBox(83,156,236,165);MouseOn();
+       InBox(83,156,236,165);
        while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
        return 0;  // Abort - Redo Mission

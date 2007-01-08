@@ -67,7 +67,7 @@ void Records(char plr)
   file = sOpen("RECORDS.DAT","rb",1);
   fread(rec,sizeof rec,1,file);
   fclose(file);
-  MouseOff();
+  
   FadeOut(2,pal,5,0,0);
   PortPal(plr);
   gxClearDisplay(0,0);
@@ -94,17 +94,17 @@ void Records(char plr)
   InBox(237,34,306,81);
   Drec(&pos,&pos2,0);
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   while(1) {GetMouse();if (mousebuttons==0) break;}
   while(1)
   {
       GetMouse();
           // Parse Button actions, note that return is embedded in first pButton
           if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d) {
-            MouseOff();InBox(245,5,314,17);MouseOn();
+            InBox(245,5,314,17);
             if (key>0) {delay(300);key=0;};
             while(1)  { GetMouse();if (mousebuttons==0) break;}
-            MouseOff();OutBox(245,5,314,17);MouseOn(); key=0;
+            OutBox(245,5,314,17); key=0;
             return;
 	  }
       pButton(297,129,307,158,Back1rec(&pos,&pos2),key>>8,72); 
@@ -146,7 +146,7 @@ void ClearRecord(char *pos2)
    rec[*pos2][j].tag=rec[*pos2][j].month=rec[*pos2][j].yr=rec[*pos2][j].program=0;
    rec[*pos2][j].place=0;
   }
- MouseOff();
+ 
  ShBox(23,29,228,52);
  ShBox(23,54,228,77);
  ShBox(23,79,228,102);
@@ -154,7 +154,7 @@ void ClearRecord(char *pos2)
  RectFill(24,55,227,76,3);
  RectFill(24,80,227,101,3);
  grSetColor(1);DispNum(12,42,1);DispNum(12,66,2);DispNum(12,90,3);
- MouseOn();
+ 
  file = sOpen("RECORDS.DAT","wb",1);
  fwrite(rec,sizeof rec,1,file);
  fclose(file);
@@ -185,7 +185,7 @@ void Drec(char *pos,char *pos2,char mde)
 {
    char i,j=0,Digit[10];
 
-   MouseOff();
+   
    memset(Digit,0x00,sizeof(Digit));
    grSetColor(1);DispNum(12,42,1);DispNum(12,66,2);DispNum(12,90,3);
    RectFill(238,35,305,80,0);
@@ -212,7 +212,7 @@ void Drec(char *pos,char *pos2,char mde)
    {
     if(rec[*pos2][i].country==NOT_SET)
      {
-      MouseOn();
+      
       return;
      }
     if (*pos2<52)
@@ -310,7 +310,7 @@ void Drec(char *pos,char *pos2,char mde)
      default:break;
     }
    }
-   MouseOn();
+   
    return;
 }
 

@@ -41,7 +41,7 @@ void DrawStatistics(char Win)
  strncpy(IDT,"i145",4);strncpy(IKEY,"k045",4);
  FadeOut(2,pal,10,0,0);
  PortPal(0);
- MouseOff();
+ 
  gxClearDisplay(0,0);
  ShBox(35,33,288,159);
  InBox(40,69,111,109);InBox(116,69,283,109);
@@ -93,7 +93,7 @@ void DrawStatistics(char Win)
  fclose(fin);
  DV(&local);
  FadeIn(2,pal,10,0,0);
- MouseOn();
+ 
  return;
 }
 
@@ -108,21 +108,21 @@ void Stat(char Win)
 	key=0;GetMouse();
 	if ((x>=193 && y>=42 && x<=278 && y<=60 && mousebuttons>0) || key==K_ENTER)
 	  {
-	   MouseOff();InBox(193,42,278,60);MouseOn();
+	   InBox(193,42,278,60);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(150);
 	   i=1;key=0;
-	   MouseOff();OutBox(193,42,278,60);MouseOn();
+	   OutBox(193,42,278,60);
 	  }
    else
    if ((x>=152 && y>=41 && x<=183 && y<=61 && mousebuttons>0) || key=='D')
 	  {
-	   MouseOff();InBox(152,41,183,61);MouseOn();
+	   InBox(152,41,183,61);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(150);
       RankMe(Win);DrawStatistics(Win);
 	   key=0;i=0;
-	   MouseOff();OutBox(152,41,183,61);MouseOn();
+	   OutBox(152,41,183,61);
 	  };
    for (j=0;j<5;j++)
    {
@@ -142,7 +142,7 @@ void Stat(char Win)
             default:break;
            }
          }
-        MouseOff();InBox(starty+(j*33),87,31+starty+(j*33),107);MouseOn();
+        InBox(starty+(j*33),87,31+starty+(j*33),107);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
         key=0;strncpy(IKEY,"k999",4);
         switch(j)
@@ -165,7 +165,7 @@ void Stat(char Win)
         strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
         DrawStatistics(Win);
 	     key=0;i=0;
-	     MouseOff();OutBox(starty+(j*33),87,31+starty+(j*33),107);MouseOn();
+	     OutBox(starty+(j*33),87,31+starty+(j*33),107);
        }
       } // matches AI[Win]==0
      }
@@ -187,7 +187,7 @@ void Stat(char Win)
              default:break;
             }
           }
-         MouseOff();InBox(starty+(j*33),132,31+starty+(j*33),152);MouseOn();
+         InBox(starty+(j*33),132,31+starty+(j*33),152);
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
          key=0;
          switch(j)
@@ -212,7 +212,7 @@ void Stat(char Win)
          strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
          DrawStatistics(Win);
 	      key=0;i=0;
-	      MouseOff();OutBox(starty+(j*33),132,31+starty+(j*33),152);MouseOn();
+	      OutBox(starty+(j*33),132,31+starty+(j*33),152);
         }
       }
     }

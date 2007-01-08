@@ -88,7 +88,7 @@ char OrderMissions(void)
 void MisOrd(char num)
 {
   int i,j=0;
-  MouseOff();
+  
   ShBox(63,19,257,173);
   InBox(74,36,246,163);
   grSetColor(36);PrintAt(77,30,"       LAUNCH ORDER");
@@ -108,7 +108,7 @@ void MisOrd(char num)
     j++;
   };
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
   {
@@ -125,7 +125,7 @@ void MisAnn(char plr,char pad)
   int i,j,bud;
   struct mStr Mis2;
   char k,hold,Digit[4],IdiotFlag=0;
-  MouseOff();
+  
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
   gxClearDisplay(0,0);
@@ -305,7 +305,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
    }
   }
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
 
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   if (IdiotFlag) Idiot("i156");  // Notification of being an idiot
@@ -315,25 +315,25 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 	key=0;GetMouse();
 	if ((x>=59 && y>=70 && x<=116 && y<=82 && mousebuttons > 0) || key==0x0d || key=='C')
 	  {
-	   MouseOff();InBox(59,70,116,82);MouseOn();
+	   InBox(59,70,116,82);
 	   while(1)  { GetMouse();if (mousebuttons==0)break;}
-	   MouseOff();OutBox(59,70,116,82);MouseOn();
+	   OutBox(59,70,116,82);
 	   FadeOut(2,pal,10,0,0);BIG=0;return;
 	  }
 	else if ((x>=133 && y>=70 && x<=195 && y<=82 && mousebuttons > 0) || key==0x0d || key=='P')
 	  {
-	   MouseOff();InBox(133,70,195,82);MouseOn();
+	   InBox(133,70,195,82);
 	   while(1)  { GetMouse();if (mousebuttons==0)break;}
-	   MouseOff();OutBox(133,70,195,82);MouseOn();
+	   OutBox(133,70,195,82);
 	   FadeOut(2,pal,10,0,0);BIG=1;return;
 	  }
 
 	 else
 	if ((x>=207 && y>=70 && x<=264 && y<=82 && mousebuttons > 0) || key=='S')
 	  {
-	   MouseOff();InBox(207,70,264,82);MouseOn();
+	   InBox(207,70,264,82);
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();OutBox(207,70,264,82);MouseOn();
+	   OutBox(207,70,264,82);
 		{
 		 ClrMiss(plr,pad);
 		}
@@ -349,7 +349,7 @@ void AI_Begin(char plr)
   FILE *fin;
   long len[2];
 
-  MouseOff();
+  
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
 
@@ -383,7 +383,7 @@ void AI_Done(void)
 {
   KillMusic();
   FadeOut(2,pal,10,0,0);
-  MouseOff();memset(screen,0x00,64000);MouseOn();
-  MouseOn();
+  memset(screen,0x00,64000);
+  
 }
 

@@ -30,7 +30,7 @@ void DrawLimbo(char plr)
 {
    int i;
    FadeOut(2,pal,10,0,0);
-   MouseOff();
+   
    strcpy(IDT,"i039");strcpy(IKEY,"k039");
    gxClearDisplay(0,0);
    ShBox(0,0,319,22);InBox(3,3,30,19);IOBox(243,3,316,19);
@@ -105,7 +105,7 @@ void DrawLimbo(char plr)
    PrintAt(102,92,"DOCK:");   
    PrintAt(102,100,"END:");   
    FlagSm(plr,4,4);
-   MouseOn();
+   
    return;
 }
 
@@ -116,7 +116,7 @@ void Limbo(char plr)
   PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);
   DrawLimbo(plr);
   PlayMusic(0);
-  MouseOff();
+  
   now2=BarA=count=0;
   ShBox(26,130+BarA*8,152,138+BarA*8);
   for (i=0;i<Data->P[plr].AstroCount;i++)
@@ -126,7 +126,7 @@ void Limbo(char plr)
   DispLeft(plr,BarA,count,now2,&M[0]);
   if (count>0) LimboText(plr,M[now2]);
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
   {
@@ -136,25 +136,25 @@ void Limbo(char plr)
    //Mouse ManSelect from being Clicked on
 	for (i=0;i<8;i++) {
 	   if (x>=27 && y>=(131+i*8) && x<=151 && y<=(137+i*8) && mousebuttons>0 && (now2-BarA+i)<=(count-1)) {
-	      MouseOff();now2-=BarA; now2+=i; BarA=i;
+	      now2-=BarA; now2+=i; BarA=i;
 	      RectFill(26,129,153,195,0);
 	      ShBox(26,130+BarA*8,152,138+BarA*8);
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	      LimboText(plr,M[now2]);
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
-	      MouseOn();
+	      
 	 }
    }
    // Left Arrow Up
 	if ((mousebuttons>0 && x>=6 && y>=130 && x<=18 && y<=161 && count>0)|| key==0x4800) {
-	   MouseOff();InBox(6,130,18,161);MouseOn();
+	   InBox(6,130,18,161);
       for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-         MouseOff();
+         
 	     if (BarA==0 && now2>0) {
 	      now2--;
 	      RectFill(26,129,153,195,0);
@@ -169,14 +169,14 @@ void Limbo(char plr)
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	      LimboText(plr,M[now2]);
 	      };
- 	     MouseOn();
+ 	     
          i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==UP_ARROW)
        {
         delay(100);
-        MouseOff();
+        
   	     if (BarA==0 && now2>0) {
 	      now2--;
 	      RectFill(26,129,153,195,0);
@@ -191,24 +191,24 @@ void Limbo(char plr)
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	      LimboText(plr,M[now2]);
 	      };
-	     MouseOn();
+	     
         key=0;
         GetMouse();
        }
       //while(mousebuttons!=0) GetMouse();key=0;
-	   MouseOff();OutBox(6,130,18,161);MouseOn();delay(10);
+	   OutBox(6,130,18,161);delay(10);
       };
 
    // Left Arrow Down
 	if ((mousebuttons>0 && x>=6 && y>=163 && x<=18 && y<=194 && count>0) || key==0x5000) {
-	   MouseOff();InBox(6,163,18,194);MouseOn();
+	   InBox(6,163,18,194);
       for (i=0;i<50;i++)
        {
 	     key=0;
 	     GetMouse();
 	     delay(10);
 	     if (mousebuttons==0) {
-         MouseOff();
+         
   	     if (BarA==7 && (now2 < count-1)) {
 	      now2++;
 		   RectFill(26,129,153,195,0);
@@ -223,14 +223,14 @@ void Limbo(char plr)
 		   DispLeft(plr,BarA,count,now2,&M[0]);
 		   LimboText(plr,M[now2]);
 	      };
-	     MouseOn();
+	     
         i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==DN_ARROW)
        {
         delay(100);
-        MouseOff();
+        
 	     if (BarA==7 && (now2 < count-1)) {
 	      now2++;
 		   RectFill(26,129,153,195,0);
@@ -245,40 +245,40 @@ void Limbo(char plr)
 		   DispLeft(plr,BarA,count,now2,&M[0]);
 		   LimboText(plr,M[now2]);
 	      };
-	     MouseOn();
+	     
         key=0;
         GetMouse();
        }
       //key=0;while(mousebuttons!=0) GetMouse();key=0;
-	   MouseOff();OutBox(6,163,18,194);MouseOn();delay(10);
+	   OutBox(6,163,18,194);delay(10);
 	   };
 
    // Continue
 	if ((mousebuttons>0 && x>=245 && y>=5 && x<=314 && y<=17) || key==0x0d ){
-      MouseOff();InBox(245,5,314,17);MouseOn();
+      InBox(245,5,314,17);
       while(1)  { GetMouse();if (mousebuttons==0) break;}
       if (key>0) delay(150);
-      MouseOff();OutBox(245,5,314,17);MouseOn();
+      OutBox(245,5,314,17);
       KillMusic();
 	   return; 
       };
 
    // Select Transfer Button
       if ((mousebuttons>0 && x>=167 && y>=48 && x<=239 && y<=65) || key==0x4B00) {
-	 MouseOff();tag=0;
+	 tag=0;
 	 InBox(167,48,239,65);OutBox(241,48,313,65);
 	 RectFill(166,78,314,88,10);
 	 grSetColor(11);PrintAt(185,85,"TRANSFER TO LOCATION");
-	 MouseOn();
+	 
 	 }
 
    // Select Visit to Button
       if ((mousebuttons>0 && x>=241 && y>=48 && x<=313 && y<=65) || key==0x4D00) {
-	 MouseOff();tag=1;
+	 tag=1;
 	 InBox(241,48,313,65);OutBox(167,48,239,65);
 	 RectFill(166,78,314,88,10);
 	 grSetColor(11);PrintAt(203,85,"VISIT LOCATION");
-	 MouseOn();
+	 
 	 }
 
    // Selection Loops
@@ -288,10 +288,10 @@ void Limbo(char plr)
      if ((tag==0 && Data->P[plr].Manned[i].Num>=0) &&
 	       ((mousebuttons>0 && x>=167 && y>=(95+21*i) && x<=236 && y<=(109+21*i))
 	        || key==0x0030+i)) {
-    	 MouseOff();InBox(167,95+21*i,236,109+21*i);MouseOn();
+    	 InBox(167,95+21*i,236,109+21*i);
       if (key>0) delay(140);
 	    while(mousebuttons!=0) GetMouse();key=0;
-	    MouseOff();OutBox(167,95+21*i,236,109+21*i);MouseOn();
+	    OutBox(167,95+21*i,236,109+21*i);
 		 Data->P[plr].Pool[M[now2]].Assign=i+1;
 		 Data->P[plr].Pool[M[now2]].Una=0;
 		 Data->P[plr].Pool[M[now2]].Moved=0;
@@ -302,11 +302,11 @@ void Limbo(char plr)
 		    if (now2>0) now2--;
 		    if (BarA>0) BarA--;
 	       };
-      MouseOff();
+      
 		 RectFill(26,129,153,195,0);
 		 ShBox(26,130+BarA*8,152,138+BarA*8);
 		 DispLeft(plr,BarA,count,now2,&M[0]);
-      MouseOn();
+      
 		 if (count>0) LimboText(plr,M[now2]);
 
 	  }
@@ -315,16 +315,16 @@ void Limbo(char plr)
       if ((tag==1 && Data->P[plr].Manned[i].Num>=0) &&
 	 ((mousebuttons>0 && x>=167 && y>=(95+21*i) && x<=236 && y<=(109+21*i))
 	 || key==0x0030+i)) {
-	 MouseOff();InBox(167,95+21*i,236,109+21*i);MouseOn();
+	 InBox(167,95+21*i,236,109+21*i);
     if (key>0) delay(140);
 	 while(mousebuttons!=0) GetMouse();key=0;
-	 MouseOff();OutBox(167,95+21*i,236,109+21*i);MouseOn();
+	 OutBox(167,95+21*i,236,109+21*i);
          KillMusic();
 	      Programs(plr,i+1);
          PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);
 	      DrawLimbo(plr);
          PlayMusic(0);
-	 MouseOff();
+	 
 	 InBox(241,48,313,65);OutBox(167,48,239,65);
 	 RectFill(166,78,314,88,10);
 	 grSetColor(11);PrintAt(203,85,"VISIT LOCATION");
@@ -340,16 +340,16 @@ void Limbo(char plr)
       //   DispLeft(plr,BarA,count,now2,&M[0]);
       //   LimboText(plr,M[now2]);
 	 FadeIn(2,pal,10,0,0);
-	 MouseOn();
+	 
 	 }
 
 
       // Training Transfer
       if ((tag==0 && count>0) && ((mousebuttons>0 && x>=244 && y>=(95+21*i) && x<=313 && y<=(109+21*i)) || key==0x0035+i)) {
-	 MouseOff();InBox(244,95+21*i,313,109+21*i);MouseOn();
+	 InBox(244,95+21*i,313,109+21*i);
     if (key>0) delay(140);
 	 while(mousebuttons!=0) GetMouse();key=0;
-	 MouseOff();OutBox(244,95+21*i,313,109+21*i);MouseOn();
+	 OutBox(244,95+21*i,313,109+21*i);
    if (Data->P[plr].Pool[M[now2]].TrainingLevel>6) Idiot("i120");
    else if (Data->P[plr].Cash<3) Idiot("i121");
    else {
@@ -376,16 +376,16 @@ void Limbo(char plr)
       // Training Visit
       if (tag==1 &&
 	 ((mousebuttons>0 && x>=244 && y>=(95+21*i) && x<=313 && y<=(109+21*i)) || key==0x0035+i)) {
-	 MouseOff();InBox(244,95+21*i,313,109+21*i);MouseOn();
+	 InBox(244,95+21*i,313,109+21*i);
     if (key>0) delay(140);
 	 while(mousebuttons!=0) GetMouse();key=0;
-	 MouseOff();OutBox(244,95+21*i,313,109+21*i);MouseOn();
+	 OutBox(244,95+21*i,313,109+21*i);
          KillMusic();
 	      Train(plr,i+1);
          PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);
 	      DrawLimbo(plr);
          PlayMusic(0);
-	 MouseOff();
+	 
 	 RectFill(166,78,314,88,10);
 	 grSetColor(11);PrintAt(203,85,"VISIT LOCATION");
 	 InBox(241,48,313,65);OutBox(167,48,239,65);
@@ -398,7 +398,7 @@ void Limbo(char plr)
 	 DispLeft(plr,BarA,count,now2,&M[0]);
 	 if (count>0) LimboText(plr,M[now2]);
 	 FadeIn(2,pal,10,0,0);
-	 MouseOn();
+	 
 	 }
       }
 

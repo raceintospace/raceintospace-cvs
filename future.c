@@ -61,7 +61,7 @@ void DrawFuture(char plr,int mis,char pad)
   FILE *fin;
   unsigned sz;
   strcpy(IKEY,"k011");strcpy(IDT,"i011");
-  MouseOff();
+  
   JointFlag=0; // initialize joint flag
   F1=F2=F3=F4=FMen=F5=0;
   for (i=0;i<5;i++) lck[i]=status[i]=0;
@@ -171,7 +171,7 @@ void DrawFuture(char plr,int mis,char pad)
   FlagSm(plr,4,4);
   DispBig(40,5,"FUTURE MISSIONS",0,-1);
   FadeIn(2,pal,10,0,0);
-  MouseOn();
+  
   return;
 }
 
@@ -255,13 +255,13 @@ void Toggle(int wh,int i) //wh - the button i = in or out
 void TogBox(int x,int y,int st)
  {
   char sta[2][2]={{2,4},{4,2}};
-  MouseOff();
+  
   grSetColor(sta[st][0]);
   grMoveTo(0+x,y+32);grLineTo(0+x,y+0);grLineTo(34+x,y+0);
   grSetColor(sta[st][1]);
   grMoveTo(x+0,y+33);grLineTo(23+x,y+33);grLineTo(23+x,y+23);
   grLineTo(x+35,y+23);grLineTo(x+35,y+0);
-  MouseOn();
+  
   return;
 }
 
@@ -464,7 +464,7 @@ begfut:
 
 	if (setting>=0) {
      int oldx,oldy;
-     MouseOff();
+     
 		ii=setting;
 		GV(&local,166,9);
 		gxGetImage(&local,18,186,183,194,0);
@@ -474,36 +474,36 @@ begfut:
 
 		//PrintAt(0,0,"  PAD:");DispNum(0,0,Mev[ii].pad);
      grGetMouseCurPos(&oldx,&oldy);
-		MouseOn();
+		
 		while (((x>=StepBub[ii].x_cor && x<=StepBub[ii].x_cor+7 &&
 			 y>=StepBub[ii].y_cor && y<=StepBub[ii].y_cor+7)|| setting==key-65) && oldx==x && oldy==y) 
        GetMouse();
-		MouseOff();
+		
 		if (!(key>=65 && key<65+Bub_Count)) key=0;
      if (oldx!=x || oldy!=y) key=0;
 		gxPutImage(&local,gxSET,18,186,0);
 		DV(&local);
 		//gxVirtualDisplay(&vhptr,18,186,18,186,183,194,0);
-		MouseOn();
+		
 		  }
 
 	  if (Mis.Dur<=V[MisType].E && ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER))
 	{
-	 MouseOff();InBox(244,5,313,17);MouseOn();
+	 InBox(244,5,313,17);
 	 while(1)  { GetMouse();if (mousebuttons==0) break;}
 	 if (key>0) delay(300);
 	 key=0;
-	 MouseOff();OutBox(244,5,313,17);MouseOn();
+	 OutBox(244,5,313,17);
 	 GV(&local2,177,197);
-	 MouseOff();gxGetImage(&local2,74,3,250,199,0);MouseOn();
+	 gxGetImage(&local2,74,3,250,199,0);
 	 NewType=V[MisType].X;
     Data->P[plr].Future[MisNum].Duration=DuraType;
 
 	 Ok = HardCrewAssign(plr,Pad,MisType,NewType);
 
-	 MouseOff();
+	 
 	 gxPutImage(&local2,gxSET,74,3,0);
-	 DV(&local2);MouseOn();
+	 DV(&local2);
 	 if (Ok==1)
      {
 	   DV(&vh);
@@ -524,41 +524,41 @@ begfut:
 
 	  if  ((((x>=5 && y>=49 && x<=53 && y<=72)||(x>=43 && y>=74 && x<=53 && y<=82)) && mousebuttons>0) || (key=='!' || key=='1')) {
 	 if ((x>=43 && y>=74 && x<=53 && y<=82) || key=='!'){
-	   MouseOff();
+	   
 	   lck[0]=abs(lck[0]-1);
 	   if (lck[0]==1) InBox(43,74,53,82); else OutBox(43,74,53,82);
 	   if (lck[0]==1) F5=(status[0]==0) ? -1 :status[0];
 	   if (lck[0]==1) PlaceRX(1);
 		 else ClearRX(1);
      if (lck[0]==0) {F5=0;status[0]=0;}
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	 }
 	 else if (lck[0]!=1) {
-	   MouseOff();InBox(5,49,53,72);MouseOn();
+	   InBox(5,49,53,72);
 
 	   if (DuraType==MaxDur) DuraType=0;
 	   else DuraType++;
 	   Data->P[plr].Future[MisNum].Duration=DuraType;
-	   MouseOff();
+	   
 	   if (DuraType==0) Toggle(5,0);
 	     else if (DuraType==1) Toggle(5,1);
 	   if (DuraType!=0) draw_Pie(DuraType);
-	   MouseOn();
+	   
 	   status[0] = DuraType;
 
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();grSetColor(34);
-	   OutBox(5,49,53,72);MouseOn();
+	   grSetColor(34);
+	   OutBox(5,49,53,72);
 	 };
 	 key=0;
 	   /* Duration */
       };
       if ((x>=5 && y>=74 && x<=41 && y<=82 && mousebuttons>0) || (key==K_ESCAPE))
       {
-	 MouseOff();InBox(5,74,41,82);MouseOn();
+	 InBox(5,74,41,82);
 	 while(1)  { GetMouse();if (mousebuttons==0) break;}
-	 MouseOff();MisType=0;
+	 MisType=0;
 	 if (DuraType!=0)
 	   Toggle(5,0);
 	 FMen=DuraType=F1=F2=F3=F4=F5=0;
@@ -576,14 +576,14 @@ begfut:
 	 Data->P[plr].Future[MisNum].Duration=0;
 	 Missions(plr,8,37,MisType,1);
     GetMinus(plr);
-	 OutBox(5,74,41,82);MouseOn();
+	 OutBox(5,74,41,82);
 	 key=0;
 	 /* Reset */
       };
       if ((x>=55 && y>=49 && x<=90 && y<=82 && mousebuttons>0) || (key=='2' || key=='@'))
       {
 	if ((x>=80 && y>=74 && x<=90 && y<=82)|| (key=='@')) {
-	   MouseOff();
+	   
 	   if (lck[1]==0) InBox(80,74,90,82); else OutBox(80,74,90,82);
 	   lck[1]=abs(lck[1]-1);
 	   if (lck[1]==1) PlaceRX(2);
@@ -591,17 +591,17 @@ begfut:
 	   if ((status[1]==0) && (lck[1]==1)) F1=2;
 	     else if ((status[1]==1) && (lck[1]==1)) F1=1;
 		else F1=0;
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	} else if (lck[1]!=1) {
-	   MouseOff();
+	   
 	   TogBox(55,49,1);
 	   if (status[1]==0) Toggle(1,1);
 	     else Toggle(1,0);
 	   status[1]=abs(status[1]-1);
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();TogBox(55,49,0);MouseOn();
+	   TogBox(55,49,0);
 	}; /* Docking */
 	key=0;
       };
@@ -609,7 +609,7 @@ begfut:
       if ((x>=92 && y>=49 && x<=127 && y<=82 && mousebuttons>0) || (key=='3' || key=='#'))
       {
 	if ((x>=117 && y>=74 && x<=127 && y<=82) || (key=='#')) {
-	   MouseOff();
+	   
 	   if (lck[2]==0) InBox(117,74,127,82); else OutBox(117,74,127,82);
 	   lck[2]=abs(lck[2]-1);
 	   if (lck[2]==1) PlaceRX(3);
@@ -617,17 +617,17 @@ begfut:
 	   if ((status[2]==0) && (lck[2]==1)) F2=2;
 	     else if ((status[2]==1) && (lck[2]==1)) F2=1;
 		else F2=0;
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	} else if (lck[2]!=1) {
-	   MouseOff();
+	   
 	   TogBox(92,49,1);
 	   if (status[2]==0) Toggle(2,1);
 	   else {Toggle(2,0);};
 	   status[2]=abs(status[2]-1);
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();TogBox(92,49,0);MouseOn();
+	   TogBox(92,49,0);
 	}; /* EVA */
 	key=0;
       };
@@ -635,7 +635,7 @@ begfut:
       if ((x>=129 && y>=49 && x<=164 && y<=82 && mousebuttons>0) || (key=='4' || key=='$'))
       {
 	if ((x>=154 && y>=74 && x<=164 && y<=82) || (key=='$')) {
-	   MouseOff();
+	   
 	   if (lck[3]==0) InBox(154,74,164,82); else OutBox(154,74,164,82);
 	   lck[3]=abs(lck[3]-1); // F3=lck[3];
 	   if (lck[3]==1) PlaceRX(4);
@@ -643,24 +643,24 @@ begfut:
 	   if ((status[3]==0) && (lck[3]==1)) F3=2;
 	     else if ((status[3]==1) && (lck[3]==1)) F3=1;
 		else F3=0;
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	} else if (lck[3]!=1) {
-	   MouseOff();
+	   
 	   TogBox(129,49,1);
 	   if (status[3]==0) Toggle(3,1);
 	   else {Toggle(3,0);};
 	   status[3]=abs(status[3]-1);
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();TogBox(129,49,0);MouseOn();
+	   TogBox(129,49,0);
 	}; /* LEM */
 	key=0;
       };
       if (((x>=166 && y>=49 && x<=201 && y<=82 && mousebuttons>0) || (key=='5' || key=='%')) && (JointFlag==1))
       {
 	if ((x>191 && y>=74 && x<=201 && y<=82) || (key=='%')) {
-	   MouseOff();
+	   
 	   if (lck[4]==0) InBox(191,74,201,82); else OutBox(191,74,201,82);
 	   lck[4]=abs(lck[4]-1);
 	   if (lck[4]==1) PlaceRX(5);
@@ -669,10 +669,10 @@ begfut:
 	   if ((status[4]==0) && (lck[4]==1)) F4=2;
 	     else if ((status[4]==1) && (lck[4]==1)) F4=1;
 		else F4=0;
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
 	} else if (lck[4]!=1) {
-	   MouseOff();
+	   
 	   TogBox(166,49,1);
 
 	   status[4]=abs(status[4]-1);
@@ -681,15 +681,15 @@ begfut:
 	   else {
 	     Toggle(4,0);
 	   }
-	   MouseOn();
+	   
 	   while(1)  { GetMouse();if (mousebuttons==0) break;}
-	   MouseOff();TogBox(166,49,0);MouseOn();
+	   TogBox(166,49,0);
 	}; /* Joint Launch */
 	key=0;
       };
       if ((x>=5 && y>=84 && x<=16 && y<=130 && mousebuttons>0) || (key==UP_ARROW))
       {
-	 MouseOff();InBox(5,84,16,130);MouseOn();
+	 InBox(5,84,16,130);
 	 for (i=0;i<50;i++) {
 	   key=0;
 	   GetMouse();
@@ -711,22 +711,22 @@ begfut:
 	 }
 	 Missions(plr,8,37,MisType,3);
     DuraType=status[0];
-	 MouseOff();OutBox(5,84,16,130);MouseOn();
+	 OutBox(5,84,16,130);
 	 key=0;
 	 /* Mission Type plus */
       };
       if ((x>=5 && y>=132 && x<16 && y<=146 && mousebuttons>0) || (key==K_SPACE))
 	{
-	 MouseOff();InBox(5,132,16,146);MouseOn();
+	 InBox(5,132,16,146);
 	 MisType=Data->P[plr].Future[MisNum].MissionCode;
 	 if (MisType!=0) Missions(plr,8,37,MisType,1);
 	 else Missions(plr,8,37,MisType,3);
-	 MouseOff();OutBox(5,132,16,146);MouseOn();
+	 OutBox(5,132,16,146);
 	 key=0;
 	}
       if ((x>=5 && y>=148 && x<=16 && y<=194 && mousebuttons>0) || (key==DN_ARROW))
       {
-	 MouseOff();InBox(5,148,16,194);MouseOn();
+	 InBox(5,148,16,194);
 	 for (i=0;i<50;i++) {
 	   key=0;
 	   GetMouse();
@@ -749,7 +749,7 @@ begfut:
 	 }
 	 Missions(plr,8,37,MisType,3);
     DuraType=status[0];
-	 MouseOff();OutBox(5,148,16,194);MouseOn();
+	 OutBox(5,148,16,194);
    key=0;
 	 /* Mission Type minus */
 
@@ -811,7 +811,7 @@ void MissionName(int val,int xx,int yy,int len)
 
 void Missions(char plr,int X,int Y,int val,char bub)
 {
-  MouseOff();
+  
   if (bub==1 || bub==3) {
     PianoKey(val);
     Bub_Count=0;   // set the initial bub_count
@@ -827,7 +827,7 @@ void Missions(char plr,int X,int Y,int val,char bub)
   } else grSetColor(1);
   MissionName(val,X,Y,24);
   if (bub==3) GetMinus(plr);
-  if (bub==0 || bub==3) {MouseOn();return;}
+  if (bub==0 || bub==3) {return;}
   switch(val)
   {
     case 0: break;
@@ -1011,7 +1011,7 @@ void Missions(char plr,int X,int Y,int val,char bub)
   }  // end switch
   gr_sync ();
   MissionCodes(plr,MisType,Pad);
-  MouseOn();
+  
   return;
 }  // end function missions
 
@@ -1019,7 +1019,7 @@ void Missions(char plr,int X,int Y,int val,char bub)
 char FutBad(void)
 {
   char i;
-  MouseOff();
+  
   grSetColor(0);
   ShBox(84,41,232,128);
   InBox(91,47,225,103);
@@ -1030,14 +1030,14 @@ char FutBad(void)
   PrintAt(96,60,"YOU HAVE SELECTED A");
   PrintAt(96,70,"PROGRAM WITH LESS THAN");
   PrintAt(96,80,"TWO GROUPS AVAILABLE.");
-  MouseOn();
+  
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   i=0;
   while(i==0) {
   GetMouse();
    if (mousebuttons!=0) {
      if (x>=93 && y>=109 && x<=223 && y<=121) {
-       MouseOff();InBox(93,109,223,123);i=3;MouseOn();
+       InBox(93,109,223,123);i=3;
        delay(50);
      };
    };

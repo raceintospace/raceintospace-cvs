@@ -118,7 +118,7 @@ void Credits(void)
 
   fin=sOpen("FIRST.IMG","rb",0);
   FadeOut(2,pal,30,0,0);
-  MouseOff();
+  
   fread(&pal[0],768,1,fin);
   fread(&len[0],4,1,fin);
   fseek(fin,len[0],SEEK_CUR);
@@ -128,7 +128,7 @@ void Credits(void)
   fclose(fin);
 
   for (k=0;k<2;k++) {
-    MouseOff();
+    
     if (k!=0) FadeOut(2,pal,30,0,0);  // Screen #2
     PCX_D((char *)vhptr.vptr,screen,(unsigned) len[0]);
     memset(&pal[431],0x00,96);
@@ -141,7 +141,7 @@ void Credits(void)
     }
     
     FadeIn(2,pal,30,0,0);
-    MouseOn();
+    
 
     while(1)  {
       GetMouse();
@@ -266,7 +266,7 @@ void NextTurn(char plr)
   FILE *fin;
   long len[2];
 
-   MouseOff();
+   
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
   strcpy(IDT,"i000");strcpy(IKEY,"k000");
@@ -296,7 +296,7 @@ void NextTurn(char plr)
   FadeIn(2,pal,10,0,0);
   PreLoadMusic( (plr==0) ? M_GOOD : M_FUTURE );
   PlayMusic(1);
-  MouseOn();
+  
 
   while(1)  {
       GetMouse();
@@ -307,7 +307,7 @@ void NextTurn(char plr)
 
   KillMusic();
   FadeOut(2,pal,10,0,0);
-  MouseOff();memset(screen,0x00,64000);MouseOn();
+  memset(screen,0x00,64000);
   return;
 }
 

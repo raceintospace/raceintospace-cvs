@@ -29,11 +29,11 @@
 
 #define pnButton(a,b,c,d,e,f,g) if ((x>=(a) && y>=(b) && x<=(c) && y<=(d) && mousebuttons==1) || ((f)!=(g)))\
 			    { \
-			    MouseOff();InBox((a),(b),(c),(d));MouseOn(); \
+			    InBox((a),(b),(c),(d)); \
 			    while(1)  { GetMouse();if (mousebuttons==0) break;} \
 			    (e); \
 				    if((f)>0) delay(150); \
-				MouseOff();OutBox((a),(b),(c),(d));MouseOn(); \
+				OutBox((a),(b),(c),(d)); \
 			    };
 #define poz(a) (((a)<0)?0:(a))
 
@@ -43,7 +43,7 @@ extern char Option,MAIL;
 void DrawHardef(char plr)
 {
  int i;
-	MouseOff();
+	
 	FadeOut(2,pal,10,0,0);
 
 	Load_CIA_BUT();
@@ -79,7 +79,7 @@ void DrawHardef(char plr)
 	RectFill(149,12,157,20,6);RectFill(149,12,156,19,5);
 	grSetColor(6);PrintAt(163,18,"SUCCESS");
 	FadeIn(2,pal,10,0,0);
-	MouseOn();
+	
 	return;
 }
 
@@ -97,9 +97,9 @@ void ShowHard(char plr)
 	  {
       if (((x>=7 && y>=164 && x<=75 && y<=195 && mousebuttons>0) || key=='U') && place!=0)
 		 {
-		  MouseOff();InBox(7,164,75,195);MouseOn();
+		  InBox(7,164,75,195);
 		  while(1)  { GetMouse();if (mousebuttons==0) break;}
-		  MouseOff();OutBox(7,164,75,195);MouseOn();     
+		  OutBox(7,164,75,195);     
 		  ReButs(place,0);
 		  place=0;
 		  if (Cnt==0) HInfo(plr,place,0); 
@@ -109,7 +109,7 @@ void ShowHard(char plr)
 	   else
 	  if ((x>=3 && y>=3 && x<=30 && y<=19 && mousebuttons>0) || key=='T')
 	   {
-	    MouseOff();
+	    
     	 FadeOut(2,pal,10,0,0);
    	 RectFill(33,1,239,21,3);
    	 RectFill(4,23,315,159,0);
@@ -138,14 +138,14 @@ void ShowHard(char plr)
 	      HInfo(plr,place,0);
 	     }
 	    FadeIn(2,pal,10,0,0);  
-	    MouseOn();
+	    
 	   }
       else
       if (((x>=83 && y>=164 && x<=156 && y<=195 && mousebuttons>0) || key=='R') && place!=1)
 	    {
-		  MouseOff();InBox(83,164,156,195);MouseOn();
+		  InBox(83,164,156,195);
 		  while(1)  { GetMouse();if (mousebuttons==0) break;}
-		  MouseOff();OutBox(83,164,156,195);MouseOn();
+		  OutBox(83,164,156,195);
 		  ReButs(place,1);
 		  place=1;
 		  if (Cnt==0) HInfo(plr,place,0);
@@ -155,9 +155,9 @@ void ShowHard(char plr)
 	   else
       if (((x>=164 && y>=164 && x<=237 && y<=195 && mousebuttons>0) || key=='C') && place!=2)
 	    {
-		  MouseOff();InBox(164,164,237,195);MouseOn();
+		  InBox(164,164,237,195);
 		  while(1)  { GetMouse();if (mousebuttons==0) break;}
-		  MouseOff();OutBox(164,164,237,195);MouseOn();
+		  OutBox(164,164,237,195);
 		  /* MANNED */
 		  ReButs(place,2);
 		  place=2;
@@ -167,9 +167,9 @@ void ShowHard(char plr)
 	   else
       if (((x>=245 && y>=164 && x<=313 && y<=195 && mousebuttons>0) || key=='M') && place!=3)
 	    {
-		  MouseOff();InBox(245,164,313,195);MouseOn();
+		  InBox(245,164,313,195);
 		  while(1)  { GetMouse();if (mousebuttons==0) break;}
-		  MouseOff();OutBox(245,164,313,195);MouseOn();
+		  OutBox(245,164,313,195);
 		  ReButs(place,3);
 		  place=3;
 		  if (Cnt==0) HInfo(plr,place,0);
@@ -179,9 +179,9 @@ void ShowHard(char plr)
 	   else
       if ((x>=244 && y>=5 && x<=314 && y<=17) || key==0x0d)
 	    {
-		  MouseOff();InBox(244,5,314,17);MouseOn();
+		  InBox(244,5,314,17);
 		  while(1)  { GetMouse();if (mousebuttons==0) break;}
-		  MouseOff();OutBox(244,5,314,17);MouseOn();
+		  OutBox(244,5,314,17);
 		  Del_RD_BUT();
 		  return;  /* Done */
 		 };
@@ -205,9 +205,9 @@ void HDispIt(int x1,int y1,int x2, int y2,int s,int t)
       if (*src!=0x00) *dest=*src;
 	dest++;src++;
 	}
-	MouseOff();
+	
     gxPutImage(&local2,gxSET,s,t,0);
-    MouseOn();
+    
     DV(&local);DV(&local2);
   return;
 }
@@ -219,7 +219,7 @@ void PInfo(char plr,char loc)
  char j,Pt[4][7],stge;
  int i,tot,sfu;
  float Sc;
- MouseOff();
+ 
  GradRect(4,23,315,159,0);
  for(i=4;i<316;i+=2) {grPutPixel(i,57,11);grPutPixel(i,91,11);grPutPixel(i,125,11);}
  for(i=0;i<4;i++)for(j=0;j<7;j++)Pt[i][j]=0;
@@ -480,7 +480,7 @@ void PInfo(char plr,char loc)
 	   break;
     default:break;
    }
- MouseOn();
+ 
  return;
 }
 
@@ -491,7 +491,7 @@ void HInfo(char plr,char loc,char w)
 
   Sc = 0; /* XXX check uninitialized */
 
-  MouseOff();
+  
   if (w==0) {
     GradRect(4,23,315,159,0);
     for (i=4;i<316;i+=2) {
@@ -919,14 +919,14 @@ void HInfo(char plr,char loc,char w)
 		  break;
     default:break;
   };
-  MouseOn();
+  
   return;
 }
 
 void RankMe(char plr)
 {
  int i;
- MouseOff();
+ 
  FadeOut(2,pal,5,0,0);
  PortPal(plr);
  gxClearDisplay(0,0);
@@ -956,7 +956,7 @@ void RankMe(char plr)
   PrintAt(56,82,"U.S.S.R.");
  }
  FadeIn(2,pal,5,0,0);
- MouseOn();
+ 
  while(1) {GetMouse();if (mousebuttons==0) break;}
  while(1)
 	{
@@ -979,7 +979,7 @@ void DrawRank(char plr)
  Cur = 0; /* XXX check uninitialized */
 
  strcpy(IDT,"i030");strcpy(IKEY,"k030");
- MouseOff();
+ 
  //Win=Data->Prestige[22].Place;
  InBox(12,4,39,20);InBox(281,4,308,20);
  FlagSm(0,13,5);FlagSm(1,282,5);
@@ -1093,7 +1093,7 @@ void DrawRank(char plr)
   itoa(score,&Digit[0],10);
   PrintAt(240,27,&Digit[0]);
  } 
- MouseOn();
+ 
 }
 
 int CalcScore(char plr,char lvA,char lvB)
