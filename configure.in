@@ -35,6 +35,7 @@ Linux)
 CYGWIN*)
 	dnl Cygwin
 	dnl CYGWIN already defines __CYGWIN__
+	;;
 *)
 	dnl unknown system
 	;;

@@ -13,6 +13,8 @@
 
 #define far
 
+#define ClearScreenMemory()  memcpy(vhptr.vptr,screen,64000L)
+
 typedef struct {
 	unsigned char *vptr;
 	int x1, y1, x2, y2;

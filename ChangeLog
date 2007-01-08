@@ -1,5 +1,11 @@
 2007-01-08  Michael McCarty <mkmccarty@gmail.com>
 
+	* V58
+
+	* Fixed a problem I introduced in configure.in
+
+2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+
 	* V57
 
 	* Added define to the autoconf for MACOSX when the host
