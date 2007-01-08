@@ -55,7 +55,7 @@ BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	futbub.o future.o hardef.o intel.o intro.o main.o mc2.o mc.o \
 	mis_c.o mis_m.o museum.o name.o newmis.o news.o news_sup.o	    \
 	news_suq.o							    \
-	place.o port.o prefs.o prest.o radar.o rdplex.o recods.o \
+	place.o port.o prefs.o prest.o radar.o rdplex.o records.o \
 	replay.o review.o rush.o start.o   \
 	vab.o pace.o gx.o gr.o sdl.o music.o
 $(PROG_NAME): $(BARIS_OBJS)

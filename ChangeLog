@@ -1,5 +1,11 @@
 2007-01-08  Michael McCarty <mkmccarty@gmail.com>
 
+	* V60
+
+	* Renamed recods.c to records.c
+
+2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+
 	* V59
 
 	* Work on the MacOSX builds:  Added SwapLong/SwapWord and a palette swap
