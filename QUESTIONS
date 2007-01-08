@@ -1,16 +1,3 @@
-Shall we rip out the calls to MouseOn and MouseOff?  The window system
-does all this work now, so these functions are no-ops.  It might be
-tempting to think that leaving them in could be useful if we wanted to
-run on bare hardware again, but since they aren't in use now, it would
-be pretty likely that bugs would be introduced before the unlikely
-time that they would be needed.  I think the simplification would
-be worthwhile.
-- Lets not hold on to the past too much, lets get rid of those calls.  
-- The GX library would capture mouse bits if we were attempting to
-- redraw the screen with it visible.  Doing this will make the code
-- easier to read in places.
-
-
 
 The frame rate in the FRM files seems to be 8, which means 8 frames
 per second, right?

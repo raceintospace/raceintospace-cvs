@@ -1,5 +1,11 @@
 2007-01-08  Michael McCarty <mkmccarty@gmail.com>
 
+	* V61
+
+	* Removed all MouseOn() and MouseOff() calls
+
+2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+
 	* V60
 
 	* Renamed recods.c to records.c
