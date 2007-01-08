@@ -1,3 +1,14 @@
+2007-01-07  Michael McCarty <mkmccarty@gmail.com>
+
+	* V56
+
+	* Modify configure.in and a few sources to check for __APPLE__
+	at compile time.  I'd like to work off a MACOSX define but couldn't
+	figure out how to get that defined from within the autoconf.  
+	__APPLE__ could theoretically include non OSX Mac's
+
+	* Modified configure.in to use sdl-config on mingw platform.
+
 2007-01-07  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V55

@@ -97,7 +97,7 @@ void delay (int millisecs);
 int brandom (int limit);
 int biostime (int, long);
 
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 int filelength (int fd);
 void itoa (int val, char *buf, int len);
 void ltoa (long val, char *buf, int len);

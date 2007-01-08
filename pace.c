@@ -86,7 +86,7 @@ slurp_gamedat (char *name)
 	return (p);
 }
 
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 int
 filelength (int fd)
 {
@@ -291,7 +291,7 @@ long RLEC (char *src, char *dest, unsigned int src_size)
 	return (dest_i);
 }
 
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 int
 biostime (int a, long b)
 {
@@ -312,7 +312,7 @@ SetPal (char *pal)
 {
 }
 
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 void
 itoa (int val, char *buf, int len)
 {
