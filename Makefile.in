@@ -52,6 +52,7 @@ BARIS_HFILES = Buzz_inc.h data.h externs.h mis.h mtype.h	\
 
 BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	ast2.o ast3.o ast4.o budget.o crew.o endgame.o	    \
+	endianness.o \
 	futbub.o future.o hardef.o intel.o intro.o main.o mc2.o mc.o \
 	mis_c.o mis_m.o museum.o name.o newmis.o news.o news_sup.o	    \
 	news_suq.o							    \

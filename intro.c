@@ -188,7 +188,7 @@ read_img_frame (FILE *inf, struct intro_image *ip)
 	if (fread (&len, 4, 1, inf) != 1)
 		goto bad;
 
-	len = SwapLong(len);
+	SwapLong(len);
 
 	if (len > sizeof compressed) {
 		fprintf (stderr, "frame too big\n");

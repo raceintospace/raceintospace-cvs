@@ -191,13 +191,15 @@ void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
 // Endian stuff
 #if defined(MACOSX) && defined(__POWERPC__)
-ui32 _SwapLong(ui32 value);
-ui16 _SwapWord(ui16 value);
 #define SwapLong(a)  (a) = _SwapLong((a))
 #define SwapWord(a)  (a) = _SwapWord((a))
+ui32 _SwapLong(ui32 value);
+ui16 _SwapWord(ui16 value);
+void SwapGameDat(void);
 #else
 #define SwapLong(a) (a)
 #define SwapWord(a) (a)
+#define SwapGameDat
 #endif
 
 

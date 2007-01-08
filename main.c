@@ -37,7 +37,7 @@
   int cdROM,hDISK;
 
   char Name[20];
-  struct Players far *Data;
+  struct Players *Data;
   int x,y,mousebuttons,key,oldx,oldy;
   unsigned char *screen;
   unsigned char LOAD,QUIT,HARD1,UNIT1,BUTLOAD,FADE,AL_CALL,XMAS;
@@ -429,6 +429,7 @@ int main(int argc, char *argv[])
 
     printf ("reading Players: size = %d\n", (int)sizeof (struct Players));
     RLED(buffer,(char *)Data,i);
+		SwapGameDat();	// Take care of endian read
     if (Data->Checksum!=(sizeof (struct Players))) {
       printf("BARIS Note: Wrong version of Data File.\n");
       CloseEmUp(0,0);

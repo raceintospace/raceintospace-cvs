@@ -1,5 +1,11 @@
 2007-01-08  Michael McCarty <mkmccarty@gmail.com>
 
+	* V63
+
+	* Finished SwapGameDat() for initial data load
+
+2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+
 	* V62
 
 	* Made earlier changes unbreak the linux compile.  I should really start checking
