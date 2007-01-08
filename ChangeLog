@@ -1,5 +1,13 @@
 2007-01-08  Michael McCarty <mkmccarty@gmail.com>
 
+	* V59
+
+	* Work on the MacOSX builds:  Added SwapLong/SwapWord and a palette swap
+
+	* Mac: Currently the intro images display with the proper colors.
+
+2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+
 	* V58
 
 	* Fixed a problem I introduced in configure.in

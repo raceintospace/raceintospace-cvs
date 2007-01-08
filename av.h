@@ -4,7 +4,7 @@ void av_setup (int *argcp, char ***argvp);
 void av_silence (void);
 void av_sync (void);
 
-unsigned char far *screen;
+unsigned char *screen;
 int screen_dirty;
 char pal[768];
 

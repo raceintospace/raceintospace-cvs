@@ -18,7 +18,7 @@
 // Key EXTERN Support File
   extern struct Players far *Data;
   extern int x,y,mousebuttons,key;
-  extern unsigned char far *screen;
+  extern unsigned char *screen;
   extern unsigned char LOAD,ZOND,QUIT,FADE,XMAS;
   extern char pal[768],plr[2],Name[20],IDT[5],IKEY[5];
   extern char far * buffer;

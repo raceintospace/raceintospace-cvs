@@ -27,12 +27,19 @@
 //****************************************************************
 
 #include "Buzz_inc.h"
+
+#ifdef MACOSX
+// SDL.h needs to be included here to replace the original main() with
+// what it needs for the Mac
+#include "SDL.h"
+#endif
+
   int cdROM,hDISK;
 
   char Name[20];
   struct Players far *Data;
   int x,y,mousebuttons,key,oldx,oldy;
-  unsigned char far *screen;
+  unsigned char *screen;
   unsigned char LOAD,QUIT,HARD1,UNIT1,BUTLOAD,FADE,AL_CALL,XMAS;
   char pal[768],plr[NUM_PLAYERS],IDT[5],IKEY[5],df,IDLE[2];
   char far *buffer;
@@ -415,10 +422,14 @@ int main(int argc, char *argv[])
   while(ex==0) {
 
     MakeRecords();
+
+		// ReadInitialGameData((HIST)?"HIST.DAT":"RAST.DAT");
     if (HIST) fin=sOpen("HIST.DAT","rb",0);
     else fin=sOpen("RAST.DAT","rb",0);
     i=(int) filelength(fileno(fin));  // get length
-    fread((char *)buffer,i,1,fin); fclose(fin);
+    fread((char *)buffer,i,1,fin); 
+		fclose(fin);
+
     printf ("reading Players: size = %d\n", (int)sizeof (struct Players));
     RLED(buffer,(char *)Data,i);
     if (Data->Checksum!=(sizeof (struct Players))) {

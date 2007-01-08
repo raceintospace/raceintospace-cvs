@@ -13,8 +13,6 @@
 
 #define far
 
-#define ClearScreenMemory()  memcpy(vhptr.vptr,screen,64000L)
-
 typedef struct {
 	unsigned char *vptr;
 	int x1, y1, x2, y2;
@@ -189,6 +187,16 @@ char savedat_dir[1000];
 char music_dir[1000];
 
 void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
+
+
+// Endian stuff
+#if defined(MACOSX) && defined(__POWERPC__)
+ui32 SwapLong(ui32 value);
+ui16 SwapWord(ui16 value);
+#else
+#define SwapUI32(a) (a)
+#endif
+
 
 #ifdef _WIN32
 struct timezone;
