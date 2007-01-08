@@ -42,6 +42,10 @@ typedef long	i32;
 
 #include "pace.h"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>

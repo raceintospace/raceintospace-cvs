@@ -97,7 +97,7 @@ main (int argc, char **argv)
 	if (optind != argc)
 		usage ();
 
-	if ((inf = fopen (inname, "r")) == NULL) {
+	if ((inf = fopen (inname, "rb")) == NULL) {
 		fprintf (stderr, "can't open %s\n", inname);
 		exit (1);
 	}
@@ -111,7 +111,7 @@ main (int argc, char **argv)
 			break;
 		
 		sprintf (outname, "c%02d.ppm", fnum);
-		if ((outf = fopen (outname, "w")) == NULL) {
+		if ((outf = fopen (outname, "wb")) == NULL) {
 			fprintf (stderr, "can't create %s\n", outname);
 			exit (1);
 		}

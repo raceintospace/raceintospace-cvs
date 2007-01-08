@@ -37,7 +37,7 @@ get_music_file (char *name)
 
 	sprintf (fullname, "/home/pace/ogg/%s.ogg", name);
 
-	if ((inf = fopen (fullname, "r")) == NULL) {
+	if ((inf = fopen (fullname, "rb")) == NULL) {
 		printf ("can't open music file %s\n", fullname);
 		return (NULL);
 	}
@@ -177,7 +177,7 @@ test_news (void)
 	cp = calloc (1, sizeof *cp);
 	cp->data = malloc (1000 * 1000);
 
-	if ((f = fopen ("/l/baris/gamedat/unews.cdr", "r")) == NULL) {
+	if ((f = fopen ("/l/baris/gamedat/unews.cdr", "rb")) == NULL) {
 		fprintf (stderr, "can't open unews.cdr\n");
 		exit (1);
 	}

@@ -131,7 +131,7 @@ void DrawFuture(char plr,int mis,char pad)
   UPArrow(8,95);DNArrow(8,157);
 
   gxVirtualDisplay(&vh,140,5,5,132,15,146,0);
-  Toggle(5,1);Pie(0);OutBox(5,49,53,72);
+  Toggle(5,1);draw_Pie(0);OutBox(5,49,53,72);
   Toggle(1,1);TogBox(55,49,0);
   Toggle(2,1);TogBox(92,49,0);
   Toggle(3,1);TogBox(129,49,0);
@@ -289,14 +289,14 @@ void PianoKey(int X)
  else
   {
    Toggle(5,1);
-   t=(F5==0) ? V[X].E : F5;Pie(t);
+   t=(F5==0) ? V[X].E : F5;draw_Pie(t);
    status[0]=t;
   }
  DrawLocks();
  return;
 }
 
-void Pie(int s)
+void draw_Pie(int s)
 {
  int off;
  if (s==0) off=1;
@@ -543,7 +543,7 @@ begfut:
 	   MouseOff();
 	   if (DuraType==0) Toggle(5,0);
 	     else if (DuraType==1) Toggle(5,1);
-	   if (DuraType!=0) Pie(DuraType);
+	   if (DuraType!=0) draw_Pie(DuraType);
 	   MouseOn();
 	   status[0] = DuraType;
 

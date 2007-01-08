@@ -1,0 +1,23 @@
+AC_INIT(raceintospace.spec)
+AC_PROG_CC
+
+AC_CHECK_LIB(vorbisfile,main)
+AC_CHECK_LIB(asound,main)
+AC_CHECK_LIB(m,main)
+AC_CHECK_LIB(SDL,main)
+
+case "$target" in
+i386-mingw32msvc)
+	LIBS="$LIBS -lSDL"
+	PROG_NAME=raceintospace.exe
+	;;
+*)
+	PROG_NAME=raceintospace
+	;;
+esac
+
+
+AC_SUBST(PROG_NAME)
+
+AC_CONFIG_HEADER(race.h)
+AC_OUTPUT(Makefile, chmod a-w Makefile race.h)

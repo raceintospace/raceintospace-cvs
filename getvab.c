@@ -65,7 +65,7 @@ main (int argc, char **argv)
 	if (optind != argc)
 		usage ();
 
-	if ((f = fopen (filename, "r")) == NULL) {
+	if ((f = fopen (filename, "rb")) == NULL) {
 		fprintf (stderr, "can't open %s\n", filename);
 		exit (1);
 	}
@@ -81,7 +81,7 @@ main (int argc, char **argv)
 		PCX_D (cbuf, pixels, M.fSize);
 
 		sprintf (outname, "vab%d.ppm", plr);
-		outf = fopen (outname, "w");
+		outf = fopen (outname, "wb");
 		fprintf (outf, "P6\n320 200\n255\n");
 		for (i = 0; i < 320*200; i++) {
 			pixel = pixels[i];

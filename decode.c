@@ -183,7 +183,7 @@ main (int argc, char **argv)
 	if (optind != argc)
 		usage ();
 
-	if ((f = fopen (filename, "r")) == NULL) {
+	if ((f = fopen (filename, "rb")) == NULL) {
 		fprintf (stderr, "can't open %s\n", filename);
 		exit (1);
 	}
@@ -198,7 +198,7 @@ main (int argc, char **argv)
 	printf ("output size %d\n", outsize);
 
 	if (width && height) {
-		if ((outf = fopen ("d.pgm", "w")) == NULL) {
+		if ((outf = fopen ("d.pgm", "wb")) == NULL) {
 			fprintf (stderr, "can't create d.pgm\n");
 			exit (1);
 		}

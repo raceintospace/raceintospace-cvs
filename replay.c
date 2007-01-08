@@ -122,8 +122,8 @@ void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
  int i,j,kk,mode,max;
  FILE *fin,*kfin;
  long offset;
- struct oGROUP *bSeq,aSeq;
- struct oFGROUP *dSeq,cSeq;
+ struct oGROUP *bSeq=NULL,aSeq;
+ struct oFGROUP *dSeq=NULL,cSeq;
  struct Table *F;
  char *SEQ_DAT="SEQ.DAT\0";
  char *FSEQ_DAT="FSEQ.DAT\0";

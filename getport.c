@@ -121,7 +121,7 @@ write_ppm (char *filename, char unsigned *buf, int w, int h)
 	int pixel;
 	unsigned char *cp;
 
-	if ((outf = fopen (filename, "w")) == NULL) {
+	if ((outf = fopen (filename, "wb")) == NULL) {
 		fprintf (stderr, "can't create %s\n", filename);
 		exit (1);
 	}
@@ -225,7 +225,7 @@ main (int argc, char **argv)
 	if (optind != argc)
 		usage ();
 
-	if ((fin = fopen (filename, "r")) == NULL) {
+	if ((fin = fopen (filename, "rb")) == NULL) {
 		fprintf (stderr, "can't open %s\n", filename);
 		exit (1);
 	}

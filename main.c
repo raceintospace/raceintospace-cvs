@@ -102,8 +102,6 @@ static char BUZZ_DIR[32];
 char far *sbuf0,far *sbuf1;
 void Plop(char plr,char mode);
 
-int TimingThing(void);
-
 void mikeCrearScreen(void)
 {
   MouseOff();
@@ -152,12 +150,14 @@ add_gamedat_files (char *dirname)
 void
 env_setup (void)
 {
-	char *home;
 	char *alt_location;
 	FILE *f;
 	char buf[1000];
 	char keyword[1000], value[1000];
 	char dirname[1000];
+
+#ifdef linux
+	char *home;
 
 	if ((home = getenv ("HOME")) == NULL) {
 		printf ("you must set your $HOME environment variable\n");
@@ -169,6 +169,21 @@ env_setup (void)
 
 	strcpy (cdrom_dir, "/usr/share/raceintospace/cdrom");
 	strcpy (music_dir, "/usr/share/raceintospace/music");
+
+#elif _WIN32
+	mkdir ("c:/raceintospace");
+	strcpy (savedat_dir, "c:/raceintospace/savedat");
+	if (mkdir (savedat_dir) < 0) {
+		printf ("mkdir %s => %s\n", savedat_dir,
+			strerror (errno));
+	}
+
+	strcpy (cdrom_dir, "c:/raceintospace/cdrom");
+	strcpy (music_dir, "c:/raceintospace/music");
+#elif
+#error "unknown os"
+#endif
+
 
 	if ((f = open_savedat ("CONFIG", "r")) != NULL) {
 		while (fgets (buf, sizeof buf, f) != NULL) {
@@ -270,7 +285,7 @@ open_gamedat (char *raw_name)
 
 	for (gp = gamedat_files; gp; gp = gp->next) {
 		if (strcasecmp (gp->filename, cooked_name) == 0) {
-			f = fopen (gp->fullname, "r");
+			f = fopen (gp->fullname, "rb");
 
 			printf ("open_gamedat (\"%s\") => %s\n",
 				gp->fullname,
@@ -497,19 +512,6 @@ tommy:
 
   CloseEmUp(0,0);  // Normal Exit
   exit(1);
-}
-
-int TimingThing(void)
-{
-  long bt1,bt3,bt4;
-  int mmm;
-
-  bt1=biostime(0,0L);
-  bt3=bt1+3;bt4=0L;
-  while (biostime(0,0L)==bt1);
-  while (biostime(0,0L)<bt3) bt4++;
-  mmm=(int)bt4%10000000L;
-  return mmm;
 }
 
 char CheckScrub(char plr,char m)

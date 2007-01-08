@@ -96,9 +96,13 @@ void gxVirtualScale (GXHEADER *a, GXHEADER *b);
 void delay (int millisecs);
 int brandom (int limit);
 int biostime (int, long);
+
+#ifdef linux
 int filelength (int fd);
 void itoa (int val, char *buf, int len);
 void ltoa (long val, char *buf, int len);
+#endif
+
 int bioskey (int wait);
 int inp (int port);
 
@@ -184,5 +188,9 @@ char music_dir[1000];
 
 void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
+#ifdef _WIN32
+struct timezone;
+int gettimeofday (struct timeval *tv, struct timezone *tz);
+#endif
 
 #endif /* __PACE_H__ */

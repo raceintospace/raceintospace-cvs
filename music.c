@@ -1,3 +1,7 @@
+#include "race.h"
+
+#if HAVE_LIBVORBISFILE
+
 #include <vorbis/vorbisfile.h>
 
 #include "Buzz_inc.h"
@@ -30,7 +34,7 @@ get_music_file (char *name)
 
 	sprintf (fullname, "%s/%s.ogg", music_dir, name);
 
-	if ((inf = fopen (fullname, "r")) == NULL) {
+	if ((inf = fopen (fullname, "rb")) == NULL) {
 		printf ("can't open music file %s\n", fullname);
 		return (NULL);
 	}
@@ -176,3 +180,13 @@ UpdateMusic (void)
 {
 	av_step ();
 }
+
+#else /* HAVE_LIBVORBISFILE */
+
+void PlayMusic(char mode) {}
+void KillMusic(void) {}
+void PreLoadMusic(char val) {}
+void UpdateMusic (void) {}
+
+
+#endif /* HAVE_LIBVORBISFILE */

@@ -1,18 +1,23 @@
+CC=@CC@
+LIBS=@LIBS@
+CPPFLAGS=@CPPFLAGS@
+PROG_NAME=@PROG_NAME@
+
 EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts \
 	-Werror
 
 CFLAGS = -g -Wall -Dfar= -Dpascal= -I. `sdl-config --cflags`
 
-LIBS = `sdl-config --libs` -lvorbisfile -lm
-
 .c.o:
 	@echo "$(CC) ...flags... -c $*.c"
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
 
-PROGS = raceintospace imgsplit vtest decode getport mkmovie getvab mtest sdltest
-all: $(PROGS) 
+PROGS = imgsplit vtest decode getport mkmovie getvab mtest sdltest
+all: $(PROG_NAME)
+
+extra: all $(PROGS)
 
 EXTRA_SOURCES = README raceintospace.1
 
@@ -53,8 +58,8 @@ BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	place.o port.o prefs.o prest.o radar.o rdplex.o recods.o \
 	replay.o review.o rush.o start.o   \
 	vab.o pace.o gx.o gr.o sdl.o music.o
-raceintospace: $(BARIS_OBJS)
-	$(CC) $(CFLAGS) -o raceintospace $(BARIS_OBJS) $(LIBS)
+$(PROG_NAME): $(BARIS_OBJS)
+	$(CC) $(CFLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
 
 # $(BARIS_OBJS): $(BARIS_HFILES)
 
@@ -88,6 +93,13 @@ sdltest: sdltest.o
 
 clean:
 	rm -f *.o *~
+	rm -f raceintospace imgsplit sdltest decode getport
+	rm -f getvab mkmovie mtest vtest
+
+distclean: clean
+	rm -f config.log config.status Makefile race.h
+	rm -f configure
+	rm -rf autom4te.cache
 
 tar:
 	rm -f raceintospace.tar raceintospace.tar.gz

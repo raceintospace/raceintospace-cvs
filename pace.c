@@ -86,6 +86,7 @@ slurp_gamedat (char *name)
 	return (p);
 }
 
+#ifdef linux
 int
 filelength (int fd)
 {
@@ -95,6 +96,7 @@ filelength (int fd)
 		return (0);
 	return (statb.st_size);
 }
+#endif
 
 char *letter_dat;
 
@@ -104,7 +106,6 @@ void
 OpenEmUp(void)
 {
 	srand(clock());
-	srandom (clock ());
 
 	frm_init ();
 
@@ -114,7 +115,6 @@ OpenEmUp(void)
 
 	letter_dat = slurp_gamedat ("letter.dat");
 }
-
 
 double
 get_time (void)
@@ -299,6 +299,7 @@ long RLEC (char *src, char *dest, unsigned int src_size)
 	return (dest_i);
 }
 
+#ifdef linux
 int
 biostime (int a, long b)
 {
@@ -307,6 +308,7 @@ biostime (int a, long b)
 	gettimeofday (&tv, NULL);
 	return (tv.tv_sec * 1000 * 1000 + tv.tv_usec);
 }
+#endif
 
 void
 StopAudio(char mode) 
@@ -318,6 +320,7 @@ SetPal (char *pal)
 {
 }
 
+#ifdef linux
 void
 itoa (int val, char *buf, int len)
 {
@@ -330,6 +333,7 @@ ltoa (long val, char *buf, int len)
 {
 	snprintf (buf, len, "%ld", val);
 }
+#endif
 
 void
 getcurdir (int drive, char *buf)
@@ -484,7 +488,7 @@ frm_open (char *filename)
 
 	printf ("frm_open(\"%s\")\n", filename);
 
-	if ((fin = fopen (filename, "r")) == NULL)
+	if ((fin = fopen (filename, "rb")) == NULL)
 		return (NULL);
 
 	if ((frm = calloc (1, sizeof *frm)) == NULL) {
@@ -581,42 +585,23 @@ LMove (void *p)
 void
 randomize (void)
 {
-	struct timeval tv;
-	gettimeofday (&tv, NULL);
-	srand (tv.tv_usec);
-	srandom (tv.tv_usec);
+	srand (clock ());
 }
 
 void
 idle_loop_secs (double secs)
 {
 	double start;
-	double delta;
-	double thistime;
-	struct timeval tv;
 
 	gr_sync ();
 
 	start = get_time ();
 
 	while (1) {
-		av_step ();
+		av_block ();
 
-		delta = get_time () - start;
-
-		if (delta >= secs)
+		if (get_time () - start >= secs)
 			break;
-
-		thistime = secs - delta;
-		if (thistime > .030)
-			thistime = .030;
-
-		tv.tv_sec = floor (thistime);
-		tv.tv_usec = (thistime - tv.tv_sec) * 1000000.0;
-		if (tv.tv_usec >= 1000000)
-			tv.tv_usec = 999999;
-
-		select (0, NULL, NULL, NULL, &tv);
 	}
 }
 
@@ -718,10 +703,9 @@ getch (void)
 	int c;
 
 	while (1) {
-		av_step ();
+		av_block ();
 		if ((c = bioskey (0)) != 0)
 			return (c);
-		usleep (30 * 1000);
 	}
 }
 
@@ -869,3 +853,17 @@ dbg (char const *fmt, ...)
 	vdbg (fmt, args);
 	va_end (args);
 }
+
+#ifdef _WIN32
+#include <sys/timeb.h>
+int
+gettimeofday (struct timeval *tv, struct timezone *tz)
+{
+	struct _timeb t;
+
+	_ftime (&t);
+	tv->tv_sec = t.time;
+	tv->tv_usec = t.millitm * 1000;
+	return (0);
+}
+#endif

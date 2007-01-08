@@ -18,3 +18,8 @@ sdltest
 TMP
 raceintospace
 raceintospace.tar.gz
+autom4te.cache
+config.log
+config.status
+configure
+race.h

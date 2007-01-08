@@ -73,7 +73,7 @@ frm_open (char *filename)
 	struct frm *frm;
 	FILE *fin;
 
-	if ((fin = fopen (filename, "r")) == NULL)
+	if ((fin = fopen (filename, "rb")) == NULL)
 		return (NULL);
 
 	if ((frm = calloc (1, sizeof *frm)) == NULL) {
@@ -182,7 +182,7 @@ main (int argc, char **argv)
 		exit (1);
 	}
 
-	if ((movief = fopen ("m.ppm", "w")) == NULL) {
+	if ((movief = fopen ("m.ppm", "wb")) == NULL) {
 		fprintf (stderr, "can't create m.ppm\n");
 		exit (1);
 	}

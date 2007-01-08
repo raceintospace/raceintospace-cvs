@@ -58,7 +58,7 @@ open_music_cat (char *filename)
 	int i;
 	struct music_dir *dp;
 
-	if ((musicf = fopen (filename, "r")) == NULL)
+	if ((musicf = fopen (filename, "rb")) == NULL)
 		return (-1);
 
 	for (i = 0, dp = dirs; i < MDIRS; i++, dp++)

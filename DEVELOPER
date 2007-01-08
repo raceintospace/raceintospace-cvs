@@ -1,3 +1,58 @@
+compiling on linux:
+
+$ autoconf
+$ configure
+$ make
+
+================================================================
+
+cross compiling linux -> windows:
+
+1. install the cross compiler as described at:
+
+http://www.libsdl.org/extras/win32/cross/README.txt
+
+2. download SDL:
+
+http://www.libsdl.org/release/SDL-devel-1.2.11-mingw32.tar.gz
+
+copy SDL-1.2.11/lib/* from this tar file into 
+/usr/local/cross/i386-mingw32msvc/lib
+
+(the SDL include files apparantly come from the host environment - 
+dangerous, but it works)
+
+3. download SDL runtime:
+
+http://www.libsdl.org/release/SDL-1.2.11-win32.zip
+
+extract SDL.dll from this and put it in raceintospace source directory
+
+4. compile
+
+run "autoconf" as a normal linux program
+run "cross-configure.sh"
+run "cross-make.sh"
+
+5. run (I'm using wine-0.9.27 on Fedora core 5)
+
+get the wine environment initialized with "wine notepad", then
+
+mkdir ~/.wine/drive_c/raceintospace
+
+copy all of the cdrom data to ~/.wine/drive_c/raceintospace/cdrom
+
+music isn't supported yet, but when it is, copy all of the ogg
+compressed music files to
+
+~/.wine/drive_c/raceintospace/music
+
+run
+
+wine ./raceintospace.exe
+
+
+================================================================
 for making rpm's
 
 useful instructions:

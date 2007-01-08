@@ -155,7 +155,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	struct oGROUP *bSeq,aSeq;
 	struct oFGROUP *dSeq,cSeq;
 	struct Table *F;
-	char sName[20],ERROR=0;
+	char sName[20],err=0;
 	char *SEQ_DAT="SEQ.DAT\0";
 	char *FSEQ_DAT="FSEQ.DAT\0";
 	struct frm *frm = NULL;
@@ -244,16 +244,16 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		fseek(fin,0,SEEK_SET);
 		fread(&vhptr.vptr[0],700,1,fin);
 
-		ERROR=0;  //Specs: reset error
+		err=0;  //Specs: reset error
 
 		for (i=0;i<49;i++) {
 			if (strncmp(F[i].fname,Mev[step].FName,4)==0)
 				break;
 		}
 
-		if (i==49) ERROR=1;
+		if (i==49) err=1;
 
-		if (ERROR==0) {
+		if (err==0) {
 			offset=F[i].foffset; 
 			fseek(fin,offset,SEEK_SET);
 			fread(&vhptr.vptr[35000],F[i].size,1,fin);
@@ -269,7 +269,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 		if (bSeq[j].ID[2]-0x30 == 1)
 			if (fem==0) j++; 
-	} else if (ERROR==0) {
+	} else if (err==0) {
 		j=0;
 		memset(sName,0x00,sizeof sName);
 		strncpy(sName,&dSeq[j].ID[3+strlen(&dSeq[j].ID[3])-2],2);
@@ -278,11 +278,11 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		while(strncmp(sName,&Seq[strlen(Seq)-2],2) !=0) {
 			j++;
 			strncpy(sName,&dSeq[j].ID[3+strlen(&dSeq[j].ID[3])-2],2);
-			if (j>=F[i].size) {ERROR=1;break;} 
+			if (j>=F[i].size) {err=1;break;} 
 		}
 	};
 
-	if ((strncmp((mode==0) ? bSeq[j].ID : dSeq[j].ID,"XXXX",4)==0) || (mode==1 && ERROR==1)) {
+	if ((strncmp((mode==0) ? bSeq[j].ID : dSeq[j].ID,"XXXX",4)==0) || (mode==1 && err==1)) {
 		//Specs: Search Error Play Static
 		if (mode==0) {
 			j=0;
@@ -294,7 +294,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			fclose(fin);
 		}
 	}
-	if (mode==1 && ERROR==1) j=0;
+	if (mode==1 && err==1) j=0;
 
 	//::::::::::::::::::::::::::::::::::::
 	// Specs  Success Sequence Variation :

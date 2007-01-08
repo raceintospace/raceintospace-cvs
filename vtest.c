@@ -234,7 +234,7 @@ main (int argc, char **argv)
 	if (optind != argc)
 		usage ();
 
-	if ((f = fopen (filename, "r")) == NULL) {
+	if ((f = fopen (filename, "rb")) == NULL) {
 		fprintf (stderr, "can't open %s\n", filename);
 		exit (1);
 	}
@@ -252,11 +252,11 @@ main (int argc, char **argv)
 	fseek (f, ABSnd.offset, SEEK_SET);
 	fread (rawbuf, 1, ABSnd.size, f);
 
-	outf = fopen ("x", "w");
+	outf = fopen ("x", "wb");
 	fwrite (rawbuf, 1, ABSnd.size, outf);
 	fclose (outf);
 
-	outf = fopen ("y", "w");
+	outf = fopen ("y", "wb");
 	for (i = 0; i < ABSnd.size; i++)
 		fprintf (outf, "%d\n", rawbuf[i] & 0xff);
 	fclose (outf);
