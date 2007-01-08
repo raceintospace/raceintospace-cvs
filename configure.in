@@ -1,7 +1,7 @@
 AC_INIT(raceintospace.spec)
 
 dnl Get the operating system and version number...
-dnl uname=`uname`
+uname=`uname`
 
 AC_PROG_CC
 
@@ -10,23 +10,33 @@ AC_CHECK_LIB(asound,main)
 AC_CHECK_LIB(m,main)
 AC_CHECK_LIB(SDL,main)
 
-dnl OS-specific configuration
+dnl cross-compile specific configuration
 case "$target" in
 i386-mingw32msvc)
 	dnl Windows/CygWin configuration
 	LIBS="$LIBS `sdl-config --libs`"
 	PROG_NAME=raceintospace.exe
 	;;
-*-apple-darwin*)
-	dnl Mac OS X configuration
-	CFLAGS="$CFLAGS -DMACOSX"
-	LIBS="$LIBS `sdl-config --libs`"
-	PROG_NAME=raceintospace
-	;;
 *)
-	dnl Unix OSS configuration
-	LIBS="$LIBS `sdl-config --libs`"
+	dnl Everyone else
 	PROG_NAME=raceintospace
+	LIBS="$LIBS `sdl-config --libs`"
+	;;
+esac
+
+case "$uname" in
+Darwin)
+	dnl Darwin/Mac OS X configuration
+	AC_DEFINE(MACOSX)dnl
+	;;
+Linux)
+	dnl Linux OS
+	;;
+CYGWIN*)
+	dnl Cygwin
+	dnl CYGWIN already defines __CYGWIN__
+*)
+	dnl unknown system
 	;;
 esac
 

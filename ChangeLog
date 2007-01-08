@@ -1,3 +1,11 @@
+2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+
+	* V57
+
+	* Added define to the autoconf for MACOSX when the host
+	OS is Darwin.  Also added "race.h" as a general include for
+	everything so these defines can be used globally
+
 2007-01-07  Michael McCarty <mkmccarty@gmail.com>
 
 	* V56

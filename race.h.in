@@ -1,1 +1,3 @@
 #define HAVE_LIBVORBISFILE 0
+#define MACOSX 0
+

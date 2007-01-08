@@ -156,7 +156,7 @@ env_setup (void)
 	char keyword[1000], value[1000];
 	char dirname[1000];
 
-#if defined(linux) || defined(__APPLE__)
+#if defined(linux) || defined(MACOSX)
 	char *home;
 
 	if ((home = getenv ("HOME")) == NULL) {
