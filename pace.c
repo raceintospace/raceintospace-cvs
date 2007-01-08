@@ -248,14 +248,6 @@ bzdelay (int ticks)
 int
 CDAccess (int drive,int track,char op)
 {
-	switch (op) {
-	case 3:
-		break;
-	default:
-		printf ("unknown CDAccess op %d\n", op);
-		exit (1);
-	}
-
 	return (0);
 }
 
