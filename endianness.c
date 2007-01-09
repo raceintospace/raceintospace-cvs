@@ -29,7 +29,8 @@ void SwapPal(char *pal)
 #endif
 }
 
-	// This is only for loading the unmodified original data
+// This is only for loading the unmodified original data
+#if defined(MACOSX) && defined(__POWERPC__)
 void SwapGameDat(void)
 {
 	i16 i,j;
@@ -73,4 +74,5 @@ void SwapGameDat(void)
 
   printf("SwapGameDat: Checksum Data = %ld\n",Data->Checksum);
 }
+#endif
 

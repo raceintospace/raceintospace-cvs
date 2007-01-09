@@ -1,5 +1,11 @@
 2007-01-08  Michael McCarty <mkmccarty@gmail.com>
 
+	* V64
+
+	* Fixed up endian changes on the linux build
+
+2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+
 	* V63
 
 	* Finished SwapGameDat() for initial data load
