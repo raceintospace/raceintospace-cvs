@@ -30,7 +30,7 @@ grGetMouseButtons (void)
 {
 	int val;
 
-	val = av_mouse_pressed_latched;
+	val = av_mouse_pressed_latched || av_mouse_pressed_cur;
 	av_mouse_pressed_latched = 0;
 	return (val);
 }

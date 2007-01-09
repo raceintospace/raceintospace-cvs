@@ -418,6 +418,15 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 			exit (1);
 		}
 	}
+
+	/* now idx is number of read strings */
+	if (tbl->count != idx) {
+		tbl->count = idx;
+		if ((tbl->strings = realloc(tbl->strings, sizeof *tbl->strings)) == NULL) {
+			fprintf(stderr, "out of memory\n");
+			exit(1);
+		}
+	}
 		
 	fclose (fin);
 }

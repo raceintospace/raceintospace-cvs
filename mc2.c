@@ -578,6 +578,7 @@ void MisDur(char plr,char dur) {
   if (Data->P[plr].DurLevel==0) diff--;
   if (diff<=0) return;
   diff=5*diff;
+	/* XXX MH[0][0] is NULL sometimes! (apollo EOR titan landing) */
   if (MH[i][0]->ID[0]!='C') return;  // Don't give negs to unmanned
   if (Mis.Dur==0) {
    for (i=0;i<2;i++)

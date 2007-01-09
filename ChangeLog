@@ -1,3 +1,14 @@
+2007-01-09  Krzysztof Kosciuszkiewicz <k.kosciuszkiewicz@gmail.com>  -- via Michael McCarty
+
+	* V66
+
+	* eliminates SIGSEGV in frm_open_seq by initializing frm_tbl safely
+
+	* V65
+
+	* Added a patch to allow the press and hold of the mouse button to
+	see astronaut stats
+
 2007-01-08  Michael McCarty <mkmccarty@gmail.com>
 
 	* V64
