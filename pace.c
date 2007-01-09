@@ -657,6 +657,9 @@ NGetVoice(char plr,char val)
 
 	fseek(mvfile,val*(sizeof ABSnd),SEEK_SET);
 	fread(&ABSnd,sizeof ABSnd,1,mvfile);
+	
+	SwapLong(ABSnd.offset);
+	SwapLong(ABSnd.size);
 
 	VoiceStart=ABSnd.offset;
 	fseek(mvfile,ABSnd.offset,SEEK_SET);

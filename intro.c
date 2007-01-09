@@ -177,6 +177,7 @@ read_img_frame (FILE *inf, struct intro_image *ip)
 	char compressed[64 * 1024];
 
 	len = fread (&ip->map, 1, sizeof ip->map, inf);
+	SwapPal((char *)ip->map);
 
 	if (len == 0)
 		return (-1);

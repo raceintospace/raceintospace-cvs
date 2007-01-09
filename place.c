@@ -31,91 +31,99 @@ void BCDraw(int y)
 
 int MChoice(char qty,char *Name)
 {
- struct Patch {i16 w,h;ui16 size;long offset;} P;
-  GXHEADER local,local2;
-  int starty,coff;
-  int i,j;
-  char poff;
-  FILE *in;
+	struct Patch {i16 w,h;ui16 size;ui32 offset;} P;
+	GXHEADER local,local2;
+	int starty,coff;
+	int i,j;
+	char poff;
+	FILE *in;
 
- 
- //FadeOut(2,pal,30,0,0);
 
- ShBox(21,9,180,34);
- ShBox(21,36,180,61);
- ShBox(21,63,180,88);
- ShBox(21,90,180,115);
- ShBox(21,117,180,142);
- ShBox(21,144,180,169);
+	//FadeOut(2,pal,30,0,0);
 
- DispBig(34,15,"NEW GAME",1,0);
- DispBig(34,42,"OLD GAME",1,0);
- DispBig(34,69,"MODEM",1,0);
- DispBig(34,96,"PLAY BY MAIL",1,0);
- DispBig(34,123,"CREDITS",1,0);
- DispBig(34,150,"EXIT",1,0);
+	ShBox(21,9,180,34);
+	ShBox(21,36,180,61);
+	ShBox(21,63,180,88);
+	ShBox(21,90,180,115);
+	ShBox(21,117,180,142);
+	ShBox(21,144,180,169);
 
- in=sOpen("BEGGAM.BUT","rb",0);
- poff=0;coff=128;
- fread(&pal[coff*3],384,1,in);
- fseek(in,(poff)*(sizeof P),SEEK_CUR);
- fread(&P,sizeof P,1,in);
- fseek(in,P.offset,SEEK_SET);
- GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
- gxGetImage(&local2,0,0,P.w,P.h,0);
- fread(local.vptr,P.size,1,in);
- fclose(in);
- for (j=0;j<P.size;j++)
-	if(local.vptr[j]!=0) local2.vptr[j]=local.vptr[j]+coff;
- gxPutImage(&local2,gxSET,0,0,0);
- DV(&local); DV(&local2);
+	DispBig(34,15,"NEW GAME",1,0);
+	DispBig(34,42,"OLD GAME",1,0);
+	DispBig(34,69,"MODEM",1,0);
+	DispBig(34,96,"PLAY BY MAIL",1,0);
+	DispBig(34,123,"CREDITS",1,0);
+	DispBig(34,150,"EXIT",1,0);
 
- ShBox(21,9,180,34);
- ShBox(21,36,180,61);
- ShBox(21,63,180,88);
- ShBox(21,90,180,115);
- ShBox(21,117,180,142);
- ShBox(21,144,180,169);
+	in=sOpen("BEGGAM.BUT","rb",0);
+	poff=0;coff=128;
+	fread(&pal[coff*3],384,1,in);
+	fseek(in,(poff)*(sizeof P),SEEK_CUR);
+	fread(&P,sizeof P,1,in);
 
- DispBig(34,15,"NEW GAME",1,0);
- DispBig(34,42,"OLD GAME",1,0);
- DispBig(34,69,"MODEM",1,0);
- DispBig(34,96,"PLAY BY MAIL",1,0);
- DispBig(34,123,"CREDITS",1,0);
- DispBig(34,150,"EXIT",1,0);
+	SwapPal(pal);
+	SwapWord(P.w);
+	SwapWord(P.h);
+	SwapWord(P.size);
+	SwapLong(P.offset);
 
- 
- FadeIn(2,pal,30,0,0);
- while(1) {GetMouse();if (mousebuttons==0) break;}
- j=-1;starty=9;
- while(j==-1)
-  {
-   GetMouse();
-   for (i=0;i<qty;i++) // keyboard stuff
-    if ((char)key==Name[i*22])
-     {
- 	   
-	   InBox(21,starty+27*i,180,starty+25+27*i);
-	   
-	   delay(50);
-	   j=i+1;key=0;
-     }
-   if (mousebuttons!=0)
-    {
-     for (i=0;i<qty;i++)
-	   if (x>=21 && x<=180 && y>=starty+27*i && y<=starty+25+27*i)
-	    {
-	     
-	     InBox(21,starty+27*i,180,starty+25+27*i);
-	     
-	     delay(50);
-	     j=i+1;
-	    }
-    }
-  }   //while(j=...
+	fseek(in,P.offset,SEEK_SET);
+	GV(&local,P.w,P.h); 
+	GV(&local2,P.w,P.h);
+	gxGetImage(&local2,0,0,P.w,P.h,0);
+	fread(local.vptr,P.size,1,in);
+	fclose(in);
 
- printf ("MChoice = %d\n", j);
- return j;
+	for (j=0;j<P.size;j++)
+		if(local.vptr[j]!=0) local2.vptr[j]=local.vptr[j]+coff;
+	gxPutImage(&local2,gxSET,0,0,0);
+	DV(&local); DV(&local2);
+
+	ShBox(21,9,180,34);
+	ShBox(21,36,180,61);
+	ShBox(21,63,180,88);
+	ShBox(21,90,180,115);
+	ShBox(21,117,180,142);
+	ShBox(21,144,180,169);
+
+	DispBig(34,15,"NEW GAME",1,0);
+	DispBig(34,42,"OLD GAME",1,0);
+	DispBig(34,69,"MODEM",1,0);
+	DispBig(34,96,"PLAY BY MAIL",1,0);
+	DispBig(34,123,"CREDITS",1,0);
+	DispBig(34,150,"EXIT",1,0);
+
+	FadeIn(2,pal,30,0,0);
+	while(1) {GetMouse();if (mousebuttons==0) break;}
+	j=-1;starty=9;
+	while(j==-1)
+	{
+		GetMouse();
+		for (i=0;i<qty;i++) // keyboard stuff
+			if ((char)key==Name[i*22])
+			{
+
+				InBox(21,starty+27*i,180,starty+25+27*i);
+
+				delay(50);
+				j=i+1;key=0;
+			}
+		if (mousebuttons!=0)
+		{
+			for (i=0;i<qty;i++)
+				if (x>=21 && x<=180 && y>=starty+27*i && y<=starty+25+27*i)
+				{
+
+					InBox(21,starty+27*i,180,starty+25+27*i);
+
+					delay(50);
+					j=i+1;
+				}
+		}
+	}   //while(j=...
+
+	printf ("MChoice = %d\n", j);
+	return j;
 }
 
 int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]

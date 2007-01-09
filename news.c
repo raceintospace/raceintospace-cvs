@@ -99,7 +99,7 @@ void OpenNews(char plr,char *buf,int bud)
   int j,size;
   FILE *fp,*gork;
   char old[120];
-  long i,len[5];
+  int i,len[5];
   size=(plr==0) ? 232: 177;
   i=(long)500*bud+(long)plr*250;
   //if (plr==1 && bud==22) i=11250L;
@@ -118,6 +118,11 @@ void OpenNews(char plr,char *buf,int bud)
 
   fp=sOpen("NEWS.DAT","rb",0);
   fread(&len[0],sizeof (len),1,fp);
+
+	for (i = 0; i< 5; i++)
+	{
+		SwapLong(len[i]);
+	}
 
   i=0;
 
@@ -703,180 +708,195 @@ void PlayNewsAnim(void)
 
 void LoadNewsAnim(BYTE Index,BYTE Mode)
 {
- GXHEADER local;
+	GXHEADER local;
+	int i;
+	int aframe;
+	FILE *out;
+	unsigned MAX=0,TOT=0; 
 
- int aframe;
- FILE *out;
- unsigned MAX=0,TOT=0; 
+	struct aCHART {
+		BYTE frames;
+		BYTE x_off;
+		BYTE y_off;
+		BYTE width;
+		BYTE height;
+	} aChart;
 
- struct aCHART {
-  BYTE frames;
-  BYTE x_off;
-  BYTE y_off;
-  BYTE width;
-  BYTE height;
- } aChart;
+	struct GOD {
+		long size;
+		long offset;
+	} god[12];
 
- struct GOD {
-  long size;
-  long offset;
- } god[12];
+	load_news_anim_start = get_time ();
 
-  load_news_anim_start = get_time ();
+	if (Mode==1) {
+		switch(Index)
+		{
+			case 0:TOT=118;MAX=170;break;
+			case 1:TOT=135;MAX=181;break;
+			case 2:TOT=58;MAX=170;break;
+			case 3:TOT=75;MAX=181;break;
+			case 4:TOT=151;MAX=211;break;
+			case 5:TOT=167;MAX=227;break;
+			case 6:TOT=66;MAX=211;break;
+			case 7:TOT=68;MAX=227;break;
+			case 8:TOT=0;MAX=170;break;
+			case 9:TOT=0;MAX=181;break;
+			case 10:TOT=0;MAX=211;break;
+			case 11:TOT=0;MAX=227;break;
+			default:break;
+		}
+	};
 
- if (Mode==1) {
-  switch(Index)
-   {
-    case 0:TOT=118;MAX=170;break;
-    case 1:TOT=135;MAX=181;break;
-    case 2:TOT=58;MAX=170;break;
-    case 3:TOT=75;MAX=181;break;
-    case 4:TOT=151;MAX=211;break;
-    case 5:TOT=167;MAX=227;break;
-    case 6:TOT=66;MAX=211;break;
-    case 7:TOT=68;MAX=227;break;
-    case 8:TOT=0;MAX=170;break;
-    case 9:TOT=0;MAX=181;break;
-    case 10:TOT=0;MAX=211;break;
-    case 11:TOT=0;MAX=227;break;
-    default:break;
-   }
- };
+	totnews_dat = slurp_gamedat ("totnews.cdr");
 
- totnews_dat = slurp_gamedat ("totnews.cdr");
+	out=sOpen("TOTNEWS.CDR","rb",0);
+	fseek(out,0x00,SEEK_SET);
+	fread(&god,sizeof god,1,out);
 
- out=sOpen("TOTNEWS.CDR","rb",0);
- fseek(out,0x00,SEEK_SET);
- fread(&god,sizeof god,1,out);
+	for (i = 0; i< 12; i++)
+	{
+		SwapLong(god[i].size);
+		SwapLong(god[i].offset);
+	}
 
- totnews_offset = god[Index].offset;
+	totnews_offset = god[Index].offset;
 
- fseek(out,god[Index].offset,SEEK_SET);
- fread(&aChart,sizeof aChart,1,out);
- fread(table,sizeof(struct MTAB),aChart.frames,out);
- fread(&pal[96],1,672,out);
+	fseek(out,god[Index].offset,SEEK_SET);
+	fread(&aChart,sizeof aChart,1,out);
+	fread(table,sizeof(struct MTAB),aChart.frames,out);
 
- Frame=1;
- AnimIndex=Index;
- MaxFrame=aChart.frames;
- X_Offset=aChart.x_off;
- Y_Offset=aChart.y_off;
- Depth=aChart.width;
- Length=aChart.height;
+	for (i=0; i< aChart.frames; i++)
+	{
+		SwapWord(table[i].size);
+		SwapLong(table[i].offset);
+	}
 
- //Specs: calculate frames for allocation
- aframe=god[Index].size/16384L;
- aframe+=2; //buffer between animations in EMS
+	SwapPal(pal);
+	fread(&pal[96],1,672,out);
+	SwapPal(pal);
 
- if (Mode==0) {
-  
-  RectFill(4,4,239,109,0);
-  RectFill(240,23,315,109,0);
-  
- };
- if (Mode==0)
-  if (Index==9 || Index==1 || Index==3)
-   {
-    
-    ShBox(240,3,316,22);
-    RectFill(315,20,317,21,3);
-    RectFill(241,2,242,4,3);
-    IOBox(243,3,316,19);
-    grSetColor(1);PrintAt(258,13,"CONTINUE");
-    
-   };
-//Specs: Display Single Frame
- if (Mode==0) {
-  gxSetDisplayPalette(pal);VBlank();
-  fseek(out,table[0].offset+god[Index].offset,SEEK_SET);
-  fread(vhptr.vptr,table[0].size,1,out);
-  gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
-  RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
-  GV(&local,79,23);
-  
-  gxGetImage(&local,240,0,319,23,0);
-  gxPutImage(&vhptr2,gxSET,4,4,0);
-  VBlank();
-  gxPutImage(&local,gxSET,240,0,0);
-  
-  gxDestroyVirtual(&vhptr2);
-  DV(&local);
+	Frame=1;
+	AnimIndex=Index;
+	MaxFrame=aChart.frames;
+	X_Offset=aChart.x_off;
+	Y_Offset=aChart.y_off;
+	Depth=aChart.width;
+	Length=aChart.height;
 
- };
+	//Specs: calculate frames for allocation
+	aframe=god[Index].size/16384L;
+	aframe+=2; //buffer between animations in EMS
 
-if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94
+	if (Mode==0) {
 
-      RectFill(0,0,319,239,0);   // clears screen
+		RectFill(4,4,239,109,0);
+		RectFill(240,23,315,109,0);
 
-//  RectFill(4,4,239,109,0);    //clears news anim space
-//  RectFill(240,23,315,109,0);
+	};
+	if (Mode==0)
+		if (Index==9 || Index==1 || Index==3)
+		{
 
-  gxSetDisplayPalette(pal);
-  FadeOut(2,pal,1,0,0);
+			ShBox(240,3,316,22);
+			RectFill(315,20,317,21,3);
+			RectFill(241,2,242,4,3);
+			IOBox(243,3,316,19);
+			grSetColor(1);PrintAt(258,13,"CONTINUE");
 
-                                                 // DrawNews() conv
-  gxClearDisplay(0,0);                                      // DrawNews() conv
-  memset(screen,0xff,320*113);                              // DrawNews() conv
-  OutBox(0,0,319,113);                                      // DrawNews() conv
-  grSetColor(3);                                            // DrawNews() conv
-  Box(1,1,318,112);Box(2,2,317,111);                        // DrawNews() conv
-  InBox(3,3,316,110);                                       // DrawNews() conv
-  ShBox(240,3,316,22);                                      // DrawNews() conv
-  RectFill(315,20,317,21,3);                                // DrawNews() conv
-  RectFill(241,2,242,4,3);                                  // DrawNews() conv
-  IOBox(243,3,316,19);                                      // DrawNews() conv
-  grSetColor(1);PrintAt(258,13,"CONTINUE");                 // DrawNews() conv
-  ShBox(0,115,319,199);                                     // DrawNews() conv
-  InBox(4,118,297,196);                                     // DrawNews() conv
-  if (Index ==  9 || Index == 8) RectFill(5,119,296,195,7); // If US
-  else RectFill(5,119,296,195,10);                          // else USSR
+		};
+	//Specs: Display Single Frame
+	if (Mode==0) {
+		gxSetDisplayPalette(pal);VBlank();
+		fseek(out,table[0].offset+god[Index].offset,SEEK_SET);
+		fread(vhptr.vptr,table[0].size,1,out);
+		gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
+		RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
+		GV(&local,79,23);
 
-  InBox(301,118,315,196); RectFill(302,119,314,195,0);      // DrawNews() conv
-  ShBox(303,120,313,156); ShBox(303,158,313,194);           // DrawNews() conv
-  UPArrow(305,126);DNArrow(305,163);                        // DrawNews() conv
+		gxGetImage(&local,240,0,319,23,0);
+		gxPutImage(&vhptr2,gxSET,4,4,0);
+		VBlank();
+		gxPutImage(&local,gxSET,240,0,0);
 
- if (Index == 9 || Index ==8) DrawNText(0,0);         // if US
-   else  DrawNText(1,0);         // else USSR      DRAWS THE TEXT
+		gxDestroyVirtual(&vhptr2);
+		DV(&local);
 
-  fseek(out,table[0].offset+god[Index].offset,SEEK_SET);
-  fread(vhptr.vptr,table[0].size,1,out);
-  gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
-  RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
-  GV(&local,79,23);
-  gxGetImage(&local,240,0,319,23,0);
-  gxPutImage(&local,gxSET,240,0,0);
-  gxPutImage(&vhptr2,gxSET,4,4,0);        // put under setpal
-   VBlank();
-  
-  if (Index==10 || Index==11 )        // Russian Whitespace in corner kludge
-   {
-    RectFill(240,4,315,22,0);    //clears news anim space
-    ShBox(240,3,316,22);
-    RectFill(315,20,317,21,3);
-    RectFill(241,2,242,4,3);
-    IOBox(243,3,316,19);
-    grSetColor(1);PrintAt(258,13,"CONTINUE");
-   }
-   else
-      {
-       ShBox(240,3,316,22);
-       RectFill(315,20,317,21,3);
-       RectFill(241,2,242,4,3);
-       IOBox(243,3,316,19);
-       grSetColor(1);PrintAt(258,13,"CONTINUE");
-      }
+	};
 
-    
+	if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94
 
-  FadeIn(2,pal,50,0,0);
+		RectFill(0,0,319,239,0);   // clears screen
 
-  gxDestroyVirtual(&vhptr2);
-  DV(&local);
+		//  RectFill(4,4,239,109,0);    //clears news anim space
+		//  RectFill(240,23,315,109,0);
 
- }       // end TCS kludge ************************************
+		gxSetDisplayPalette(pal);
+		FadeOut(2,pal,1,0,0);
 
- fclose(out);
- return;
+		// DrawNews() conv
+		gxClearDisplay(0,0);                                      // DrawNews() conv
+		memset(screen,0xff,320*113);                              // DrawNews() conv
+		OutBox(0,0,319,113);                                      // DrawNews() conv
+		grSetColor(3);                                            // DrawNews() conv
+		Box(1,1,318,112);Box(2,2,317,111);                        // DrawNews() conv
+		InBox(3,3,316,110);                                       // DrawNews() conv
+		ShBox(240,3,316,22);                                      // DrawNews() conv
+		RectFill(315,20,317,21,3);                                // DrawNews() conv
+		RectFill(241,2,242,4,3);                                  // DrawNews() conv
+		IOBox(243,3,316,19);                                      // DrawNews() conv
+		grSetColor(1);PrintAt(258,13,"CONTINUE");                 // DrawNews() conv
+		ShBox(0,115,319,199);                                     // DrawNews() conv
+		InBox(4,118,297,196);                                     // DrawNews() conv
+		if (Index ==  9 || Index == 8) RectFill(5,119,296,195,7); // If US
+		else RectFill(5,119,296,195,10);                          // else USSR
+
+		InBox(301,118,315,196); RectFill(302,119,314,195,0);      // DrawNews() conv
+		ShBox(303,120,313,156); ShBox(303,158,313,194);           // DrawNews() conv
+		UPArrow(305,126);DNArrow(305,163);                        // DrawNews() conv
+
+		if (Index == 9 || Index ==8) DrawNText(0,0);         // if US
+		else  DrawNText(1,0);         // else USSR      DRAWS THE TEXT
+
+		fseek(out,table[0].offset+god[Index].offset,SEEK_SET);
+		fread(vhptr.vptr,table[0].size,1,out);
+		gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
+		RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
+		GV(&local,79,23);
+		gxGetImage(&local,240,0,319,23,0);
+		gxPutImage(&local,gxSET,240,0,0);
+		gxPutImage(&vhptr2,gxSET,4,4,0);        // put under setpal
+		VBlank();
+
+		if (Index==10 || Index==11 )        // Russian Whitespace in corner kludge
+		{
+			RectFill(240,4,315,22,0);    //clears news anim space
+			ShBox(240,3,316,22);
+			RectFill(315,20,317,21,3);
+			RectFill(241,2,242,4,3);
+			IOBox(243,3,316,19);
+			grSetColor(1);PrintAt(258,13,"CONTINUE");
+		}
+		else
+		{
+			ShBox(240,3,316,22);
+			RectFill(315,20,317,21,3);
+			RectFill(241,2,242,4,3);
+			IOBox(243,3,316,19);
+			grSetColor(1);PrintAt(258,13,"CONTINUE");
+		}
+
+
+
+		FadeIn(2,pal,50,0,0);
+
+		gxDestroyVirtual(&vhptr2);
+		DV(&local);
+
+	}       // end TCS kludge ************************************
+
+	fclose(out);
+	return;
 }
 
 void ShowEvt(char plr,char crd)
@@ -906,10 +926,14 @@ void ShowEvt(char plr,char crd)
   fseek(ffin,(plr*115+crd)*(sizeof MM),SEEK_SET);
   fread(&MM,sizeof MM,1,ffin);
 
+	SwapLong(MM.off);	
+	SwapLong(MM.size);
   
   if (MM.off!=0) {
     fseek(ffin,MM.off,SEEK_SET);
+		SwapPal(pal);
     fread(&pal[384],384,1,ffin);
+		SwapPal(pal);
     fread(vhptr.vptr,(size_t) MM.size,1,ffin);
 
     for (i=0;i<(unsigned int)MM.size;i++) {
