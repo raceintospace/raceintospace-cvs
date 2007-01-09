@@ -1,4 +1,4 @@
-2007-01-09  Krzysztof Kosciuszkiewicz <k.kosciuszkiewicz@gmail.com>  -- via Michael McCarty
+2007-01-09  Krzysztof Kosciuszkiewicz  -- via Michael McCarty
 
 	* V66
 
@@ -9,38 +9,38 @@
 	* Added a patch to allow the press and hold of the mouse button to
 	see astronaut stats
 
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V64
 
 	* Fixed up endian changes on the linux build
 
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V63
 
 	* Finished SwapGameDat() for initial data load
 
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V62
 
 	* Made earlier changes unbreak the linux compile.  I should really start checking
 	this before I check things in.
 		
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V61
 
 	* Removed all MouseOn() and MouseOff() calls
 
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V60
 
 	* Renamed recods.c to records.c
 
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V59
 
@@ -48,13 +48,13 @@
 
 	* Mac: Currently the intro images display with the proper colors.
 
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V58
 
 	* Fixed a problem I introduced in configure.in
 
-2007-01-08  Michael McCarty <mkmccarty@gmail.com>
+2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V57
 
@@ -62,7 +62,7 @@
 	OS is Darwin.  Also added "race.h" as a general include for
 	everything so these defines can be used globally
 
-2007-01-07  Michael McCarty <mkmccarty@gmail.com>
+2007-01-07  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V56
 
@@ -105,20 +105,20 @@
 	* handle the situation where the video runs out before the
 	audio a little better
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V49
 
 	* Fixed an off by one in the main data structure when replacing hard coded
 	values with definitions
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V48
 
 	* Replaced fixed value in for_each_player loops with NUM_PLAYERS define
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V47
 
@@ -127,13 +127,13 @@
 
 	* Checked uninits in aipur.c and formatted code
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 	
 	* V46
 
 	* verified XXX marked code in future.c
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V45
 
@@ -152,19 +152,19 @@
 	from libopus which prints nice timestamps on log messages; improve
 	animation handling in port.c so it doesn't waste so much cpu time; 
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V43
 
 	* Changed DEVELOPER to reflect the repository name change
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V42
 
 	* Renamed UpdatePort to UpdatePortOverlays to avoid a Macintosh name conflict
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V41
 
@@ -172,13 +172,13 @@
 	* Turned off save game encryption.  Move it into an #ifdef for
 	historical purposes.
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V40
 
 	* Removed the macosx directory so there isn't false hope
 
-2007-01-03  Michael McCarty <mkmccarty@gmail.com>
+2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 	
 	* V39
 
@@ -280,7 +280,7 @@
 	* I messed up trying to apply tag V23 to Michael's changes.
 	This check just puts V24 on the current files.
 
-2007-01-02  Michael McCarty <mkmccarty@gmail.com>
+2007-01-02  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V23
 
