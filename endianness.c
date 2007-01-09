@@ -15,9 +15,9 @@ ui16 _SwapWord(ui16 value)
 }
 #endif
 
+#if defined(MACOSX) && defined(__POWERPC__)
 void SwapPal(char *pal)
 {
-#if defined(MACOSX) && defined(__POWERPC__)
 	int i = 0;
 	char temp;
 	for (i = 0; i< 256; i++)
@@ -26,8 +26,8 @@ void SwapPal(char *pal)
 		pal[(i*3)+0] = pal[(i*3)+2];
 		pal[(i*3)+2] = temp;
 	}
-#endif
 }
+#endif
 
 // This is only for loading the unmodified original data
 #if defined(MACOSX) && defined(__POWERPC__)
