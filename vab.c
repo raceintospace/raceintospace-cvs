@@ -33,7 +33,6 @@ extern char AI[2];
   char VASqty,CV;
   extern struct mStr Mis;
   extern char Vab_Spot;
-  extern char far *sbuf0,far *sbuf1;
 
 // CAP,LM,SDM,DMO,EVA,PRO,INT,KIC
 
@@ -123,13 +122,6 @@ void DispVAB(char plr,char pad)
     ui16 fSize;
   } M;
 
-
-  // these were 4 lines added 5/1/93 for data reduction purposes
-  MI=(struct MDA far *) sbuf0;
-  fout=sOpen("VTABLE.DAT","rb",0);
-  fread(MI,(sizeof (struct MDA))*56,1,fout);
-  fclose(fout);
-
   strcpy(IDT,"i016");strcpy(IKEY,"k016");
   
   FadeOut(2,pal,10,0,0);
@@ -203,7 +195,7 @@ void DispVAB(char plr,char pad)
   PrintAt(5,52,Mis.Abbr);
 
   FlagSm(plr,4,4);
-  
+
   return;
 }
 
@@ -523,6 +515,14 @@ void VAB(char plr)
 {
   int i,j,j2,mis,sf[8],qty[8],wgt,pay[8],tmp,ccc,rk,cwt,ab,ac;
   char Name[8][12],ButOn,temp;
+  FILE* file;
+  int MI_size = sizeof (struct MDA) * 28 * 2;
+
+  MI = farmalloc(MI_size);
+  file = sOpen("VTABLE.DAT", "rb", 0);
+  fread(MI, MI_size, 1, file);
+  fclose(file);
+
   PreLoadMusic(M_HARDWARE);
   PlayMusic(0);
   CV=0;
@@ -531,7 +531,9 @@ begvab:
   if (mis==5)
   {
      Vab_Spot=(Data->P[plr].Mission[0].Hard[4] > 0) ? 1 : 0;
-     KillMusic();return;
+     KillMusic();
+     farfree(MI); 
+     return;
   };
 
   temp=CheckCrewOK(plr,mis);

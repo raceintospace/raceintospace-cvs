@@ -139,6 +139,7 @@ av_setup (int *argcp, char ***argvp)
 	}
 
 	SDL_EnableUNICODE (1);
+	SDL_WM_SetCaption("Race Into Space", NULL);
 
 	if (have_audio) {
 		audio_desired.freq = 11025;

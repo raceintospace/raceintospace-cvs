@@ -1,10 +1,16 @@
+2007-01-09  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V68
+
+	* Removed globals sbuf0, sbuf1, cosmetic changes in main.c
+
 2007-01-09  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V67
 
 	* More endian changes to move the Mac PPC port along
 
-2007-01-09  Krzysztof Kosciuszkiewicz  -- via Michael McCarty
+2007-01-09  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net> -- via Michael McCarty
 
 	* V66
 

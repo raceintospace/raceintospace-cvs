@@ -20,7 +20,6 @@
 
 extern char IDT[5],IKEY[5],AL_CALL,AI[2];
 extern struct mStr Mis;
-extern char far *sbuf0;
 extern char Option,MAIL;
 
 void BCDraw(int y)
@@ -425,7 +424,7 @@ int Idiot(char *FName)
   }
   if (i==count) {fclose(fin);return 0;}
   AL_CALL=1;
-  Idiot=(char far *) farmalloc(Pul.size); //sbuf0;
+  Idiot=(char far *) farmalloc(Pul.size);
   fseek(fin,Pul.offset,SEEK_SET);
   fread(Idiot,Pul.size,1,fin);
   fclose(fin);

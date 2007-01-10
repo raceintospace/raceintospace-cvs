@@ -106,7 +106,6 @@ char AI[2]={0,0};
 static char BUZZ_DIR[32];
 
 
-char far *sbuf0,far *sbuf1;
 void Plop(char plr,char mode);
 
 void mikeCrearScreen(void)
@@ -326,7 +325,7 @@ FILE * sOpen(char *Name,char *mode,int loc)
 void
 usage (void)
 {
-	fprintf (stderr, "usage: baris\n");
+	fprintf (stderr, "usage: raceintospace [-i]\n");
 	exit (1);
 }
 
@@ -379,23 +378,6 @@ int main(int argc, char *argv[])
   KO = 0;
 
   xMODE|=xMODE_NOCOPRO;
-
-  sbuf0=(char far *) farmalloc(SBUF);
-  if (sbuf0==NULL) {
-    printf("Out of Memory allocating Buffer structure.\n");
-    farfree(Data); farfree(buffer);
-    exit(0);
-  };
-
-// Init All Data Things
-  if (Sounds!=sGUS) {  // Not Needed for Ultrasound
-    sbuf1=(char far *) farmalloc(SBUF);
-    if (sbuf1==NULL) {
-      printf("Out of Memory allocating Buffer structure.\n");
-      farfree(sbuf0);farfree(Data); farfree(buffer);
-      exit(0);
-    };
-  } else sbuf1=NULL;
 
   Data=(struct Players *)farmalloc(sizeof (struct Players) + 1);
   if (Data==NULL) {
