@@ -414,7 +414,7 @@ FILE *sOpen(char *Name,char *mode,int loc);
 void Rout_Debug(int line, char *file);
 void RestoreDir(void);
 int main(int argc, char *argv[]);
-char CheckScrub(char plr,char m);
+int CheckIfMissionGo(char plr,char launchIdx);
 void oclose(int fil);
 void InitData(void);
 void MMainLoop(void);

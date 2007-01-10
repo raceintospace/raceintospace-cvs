@@ -410,28 +410,28 @@ char i,j,t;
   for(j=0;j<(1+Data->P[plr].Mission[mis].Joint);j++) {
 
     if ((Mis.mVab[j] & 0x10)>0 && Data->P[plr].DMod>0) { // DMO
-      Data->P[plr].Mission[mis+j].Hard[3]=4;
+      Data->P[plr].Mission[mis+j].Hard[Mission_Probe_DM]=4;
       DMFake=1;
       }
     if (j==0) {   // Apollo (1)  + LM (1)
-      if (Data->P[plr].Mission[mis].Hard[0]==2 && Data->P[plr].Mission[mis].Hard[2]>=0) {
-         Data->P[plr].Mission[mis].Hard[3]=4;
+      if (Data->P[plr].Mission[mis].Hard[Mission_Capsule]==2 && Data->P[plr].Mission[mis].Hard[Mission_LM]>=0) {
+         Data->P[plr].Mission[mis].Hard[Mission_Probe_DM]=4;
          DMFake=1;
          }
       }
     if (j==1) {   // Apollo (2)  + LM (1)
-      if (Data->P[plr].Mission[mis+j].Hard[0]==2 && Data->P[plr].Mission[mis].Hard[2]>=0) {
-         Data->P[plr].Mission[mis].Hard[3]=4;
+      if (Data->P[plr].Mission[mis+j].Hard[Mission_Capsule]==2 && Data->P[plr].Mission[mis].Hard[Mission_LM]>=0) {
+         Data->P[plr].Mission[mis].Hard[Mission_Probe_DM]=4;
          DMFake=1;
          }
       }
     if (Data->P[plr].Mission[mis].MissionCode==57) { // Soyuz Kicker C
-      Data->P[plr].Mission[mis].Hard[3]=4;
+      Data->P[plr].Mission[mis].Hard[Mission_Probe_DM]=4;
       DMFake=1;
       }
 
-    if (Data->P[plr].Mission[mis].Hard[0]==2) {  // Apollo #1
-         Data->P[plr].Mission[mis].Hard[3]=4;
+    if (Data->P[plr].Mission[mis].Hard[Mission_Capsule]==2) {  // Apollo #1
+         Data->P[plr].Mission[mis].Hard[Mission_Probe_DM]=4;
          DMFake=1;
     }
 
@@ -440,30 +440,30 @@ char i,j,t;
     // all the checks to this point without having a docking module assigned
 #if 0
     if ((Mis.mVab[j] & 0x10)>0 && Data->P[plr].DMod==0) { // DMO Patch
-      Data->P[plr].Mission[mis+j].Hard[3]=4;
+      Data->P[plr].Mission[mis+j].Hard[Mission_Probe_DM]=4;
       DMFake=1;
       }
 #endif
 
-    for (i=0;i<7;i++) {
-      t=Data->P[plr].Mission[mis+j].Hard[i];
+    for (i=Mission_Capsule; i <= Mission_PhotoRecon; i++) {
+      t = Data->P[plr].Mission[mis+j].Hard[i];
       MH[j][i]=NULL;  // Clear Pointers
       if (t>=0) {
 	      switch(i) {
-	         case 0: case 2:   // Cap - LM
+	         case Mission_Capsule: 
+					 case Mission_LM:   // Cap - LM
 	            MH[j][i]=&Data->P[plr].Manned[t];
                if (MH[j][i]->Num && t!=3) MH[j][i]->Num--;
 	            MH[j][i]->Used++;
 	            break;
 
-            case 1:           // Kicker
+            case Mission_Kicker:           // Kicker
                MH[j][i]=&Data->P[plr].Misc[t];
                if (MH[j][i]->Num) MH[j][i]->Num--;
                MH[j][i]->Used++;
                break;
 
-
-            case 3:           // Secondary Equipment
+            case Mission_Probe_DM:           // Secondary Equipment
                if (t!=4) {
                   MH[j][i]=&Data->P[plr].Probe[t];
                   MH[j][i]->Used++;
@@ -478,7 +478,7 @@ char i,j,t;
                   };
                break;
 
-            case 4:            // Rocket XX
+            case Mission_PrimaryBooster:            // Rocket XX
                t--;
                if (t<4) {
                   MH[j][i]=&Data->P[plr].Rocket[t];
@@ -495,12 +495,12 @@ char i,j,t;
                   };
                break;
 
-            case 5:  // EVA
-               MH[j][i]=&Data->P[plr].Misc[3];
+            case Mission_EVA:  // EVA
+               MH[j][i] = &Data->P[plr].Misc[3];
                break;
 
-            case 6:  // Photo Recon
-               MH[j][i]=&Data->P[plr].Misc[5];
+            case Mission_PhotoRecon:  // Photo Recon
+               MH[j][i] = &Data->P[plr].Misc[5];
                break;
 
             default: break;
@@ -519,7 +519,7 @@ char i,j,t;
       }; // for (0<7)
    }; // for (0<2)
 
-  if (DMFake==1) Data->P[plr].Mission[mis].Hard[3]=-1;
+  if (DMFake==1) Data->P[plr].Mission[mis].Hard[Mission_Probe_DM]=-1;
  
   return;
 }

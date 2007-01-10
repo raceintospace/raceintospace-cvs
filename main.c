@@ -475,7 +475,7 @@ tommy:
 		    break;
 	    }
           }
-         else if (QUIT!=1) FadeOut(2,pal,10,0,0);
+         else if (!QUIT) FadeOut(2,pal,10,0,0);
          QUIT=0;
          mikeCrearScreen();
          //PreLoadMusic(M_LIFTOFF);
@@ -502,45 +502,53 @@ tommy:
   exit(1);
 }
 
-char CheckScrub(char plr,char m)
+// utility fn for AI to see if it should scrub the mission
+int CheckIfMissionGo(char plr,char launchIdx)
 {
-  char k,RT_value,mcode;
-  struct MissionType *Mt;
-  struct Equipment *E;
+  char idx,mcode;
+  struct MissionType *pMission;
+  struct Equipment *E = NULL;	// Pointer to Equipment we're looking at
 
-  E = NULL; /* XXX check uninitialized */
+	// Grab the Mission Code from the current Launch Index
+  mcode=Data->P[plr].Mission[launchIdx].MissionCode;
+  pMission=&Data->P[plr].Mission[launchIdx];
 
-  RT_value=1;
-  mcode=Data->P[plr].Mission[m].MissionCode;
-  Mt=&Data->P[plr].Mission[m];
+	// Always a go for Unmanned missions
   if (mcode==1 || mcode==3 || mcode==5 || (mcode>=7 && mcode<=13) || mcode==15)
-     return(RT_value);
-  for (k=0;k<5;k++) {
-     if (RT_value==1) {
-        switch(k) {
-          case 0:
-           E=&Data->P[plr].Manned[Mt->Hard[k]];
-           E->MisSaf=E->Safety;
-           break;
-          case 1:
-           E=&Data->P[plr].Misc[Mt->Hard[k]];
-           E->MisSaf=E->Safety;
-           break;
-          case 2:
-           E=&Data->P[plr].Manned[Mt->Hard[k]];
-           E->MisSaf=E->Safety;
-           break;
-          case 4:
-           E=&Data->P[plr].Manned[Mt->Hard[k%4]];
-           if (k>4)
-              E->MisSaf=(int)(E->Safety+Data->P[plr].Manned[Mt->Hard[4]].Safety) >> 1;
-           break;
-        }
+     return TRUE;
 
-        if (E && k!=3 && Mt->Hard[k]>=0 && (E->MisSaf < E->MaxRD-15)) return 0;
-     }
-  }
-  return 1;
+	// Spin through mission hardware checking safety
+	for (idx = Mission_Capsule; idx <= Mission_PrimaryBooster; idx++) {
+		switch(idx) {
+			case Mission_Capsule:
+				E=&Data->P[plr].Manned[pMission->Hard[idx]];
+				E->MisSaf=E->Safety;
+				break;
+			case Mission_Kicker:
+				E=&Data->P[plr].Misc[pMission->Hard[idx]];
+				E->MisSaf=E->Safety;
+				break;
+			case Mission_LM:
+				E=&Data->P[plr].Manned[pMission->Hard[idx]];
+				E->MisSaf=E->Safety;
+				break;
+			case Mission_PrimaryBooster:
+				E=&Data->P[plr].Manned[pMission->Hard[idx%4]];	// YYY No idea why this is using this value
+
+				// YYY  Safety check for this is never reached
+				if (idx>Mission_PrimaryBooster)		// implies
+					E->MisSaf = (int) (E->Safety+Data->P[plr].Manned[pMission->Hard[Mission_PrimaryBooster]].Safety) >> 1;
+				break;
+		}
+
+		if (E && idx != Mission_Probe_DM && pMission->Hard[idx]>=0)
+		{
+			// If mission Safety is not within 15 points of the MaxRD then NO Go
+			if (E->MisSaf < (E->MaxRD-15))
+				return FALSE;
+		}
+	}
+  return TRUE;
 }
 
 void oclose(int fil)
@@ -656,7 +664,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
       AI_Done(); // Fade Out AI Thinking Screen and Restores Mouse
 	 };
      Data->Count++;
-     if (QUIT==1) return;
+     if (QUIT) return;
    };
 
    DockingKludge();  // fixup for both sides
@@ -669,7 +677,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
      {
       if (AI[Order[i].plr]==1)
        {
-	      if (CheckScrub(Order[i].plr,Order[i].loc)==0)
+	      if (!CheckIfMissionGo(Order[i].plr,Order[i].loc))
          ClrMiss(Order[i].plr,Order[i].loc);
        }
 	    if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode!=0)

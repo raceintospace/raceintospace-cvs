@@ -20,5 +20,5 @@
 
 #define BYTE unsigned char
 #define WORD unsigned short
-#define LONG unsigned long
+#define LONG unsigned int
 

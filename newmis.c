@@ -208,9 +208,9 @@ void MisAnn(char plr,char pad)
 for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
   {
   k=0;if (i==0) bud=49; else bud=160;
-  for(j=0;j<5;j++)
+  for(j=Mission_Capsule; j <= Mission_PrimaryBooster; j++)
    {
-    hold=Data->P[plr].Mission[pad+i].Hard[j];
+    hold = Data->P[plr].Mission[pad+i].Hard[j];
     switch(j)
      {
       case 0:if (hold>-1) 

@@ -81,6 +81,13 @@ struct PrestType {
   char Month,Year; // Date of the First
 };
 
+enum EquipmentIndex {
+	EQUIP_PROBE = 0,
+	EQUIP_ROCKET = 1,
+	EQUIP_MANNED = 2,
+	EQUIP_TECH = 3,
+};
+
 struct Equipment {
   char Name[20];     // Name of Hardware
   char ID[2];        // EquipID "C0 C1 C2 C3 : Acts as Index
@@ -226,6 +233,9 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char FuturePlans;                // Special future mission
 	char DurLevel;			            // Current Duration Level
 	char LMpts;                      // Accumulation of any LM Test points
+	#if 0
+	struct Equipment Hardware[4][7];
+	#else
 	struct Equipment Probe[7];       // 0 = Orbital
 					                     // 1 = Inter Planetary
 					                     // 2 = Lunar Probe
@@ -247,6 +257,7 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 					                     // 3 = EVA Suits
 					                     // 4 = Docking Modules
 					                     // 5 = Photo Recon
+#endif
 	char ZCost;                      // Cost for Zond upgrade 10-20
 	char ZFlag;                      // Flag for Zond program
 	char DMod;                       // Docking Module in Orbit
@@ -335,6 +346,18 @@ struct Players {
    6=Photo Recon
    7=Secondary Booster
 */
+
+enum MissionHardwareType
+{
+	Mission_Capsule = 0,			// 0
+	Mission_Kicker,						// 1
+	Mission_LM,								// 2
+	Mission_Probe_DM,					// 3
+	Mission_PrimaryBooster,		// 4
+	Mission_EVA,							// 5
+	Mission_PhotoRecon,				// 6
+	Mission_SecondaryBooster	// 7
+};
 
 struct MisAst {  // This struct will be -1's if empty 
   struct Astros *A;

@@ -1,3 +1,11 @@
+2007-01-09 PST  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V70
+
+	* Renamed CheckScrub() to CheckIfMissionGo() and added comments
+
+	* Added enumerators for Mission Launch hardware to help read the code
+
 2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V69

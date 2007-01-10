@@ -530,7 +530,7 @@ begvab:
   mis=FutureCheck(plr,1);
   if (mis==5)
   {
-     Vab_Spot=(Data->P[plr].Mission[0].Hard[4] > 0) ? 1 : 0;
+     Vab_Spot = (Data->P[plr].Mission[0].Hard[Mission_PrimaryBooster] > 0) ? 1 : 0;
      KillMusic();
      farfree(MI); 
      return;
@@ -544,24 +544,25 @@ begvab:
    }
 
   strcpy(IDT,"i016");
-  if (Data->P[plr].Mission[mis].Hard[4]>0) {
-	 for (i=0;i<4;i++) {
+  if (Data->P[plr].Mission[mis].Hard[Mission_PrimaryBooster] > 0) {
+	 for (i=Mission_Capsule; i<=Mission_Probe_DM; i++) {
 	   switch(i) {
-	     case 0: case 2:  // Manned+LM
+	     case Mission_Capsule: 
+			 case Mission_LM:  // Manned+LM
 	       Data->P[plr].Manned[Data->P[plr].Mission[mis].Hard[i] ].Spok--;
 	       break;
-	     case 1:  // Kicker
+	     case Mission_Kicker:  // Kicker
 	       Data->P[plr].Misc[Data->P[plr].Mission[mis].Hard[i]].Spok--;
 	       break;
-	     case 3:  // DM+Probes
+	     case Mission_Probe_DM:  // DM+Probes
 	       if (Data->P[plr].Mission[mis].Hard[i]==4) Data->P[plr].Misc[4].Spok--;
 	       else Data->P[plr].Probe[ Data->P[plr].Mission[mis].Hard[i]].Spok--;
 	       break;
 	   }
 	 }
 
-	 Data->P[plr].Rocket[(Data->P[plr].Mission[mis].Hard[4]-1)%4].Spok--;
-	 if (Data->P[plr].Mission[mis].Hard[4]>3) Data->P[plr].Rocket[4].Spok--;
+	 Data->P[plr].Rocket[(Data->P[plr].Mission[mis].Hard[Mission_PrimaryBooster]-1)%4].Spok--;
+	 if (Data->P[plr].Mission[mis].Hard[Mission_PrimaryBooster]>3) Data->P[plr].Rocket[4].Spok--;
      
   };
   BuildVAB(plr,mis,0,0,0);  // now holds the mission info
@@ -654,7 +655,9 @@ begvab:
 	      while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (key>0) delay(150);
 	      OutBox(177,185,242,195);
-	      for (i=0;i<5;i++) Data->P[plr].Mission[mis].Hard[i]=0;
+				// Clear mission hardware
+	      for (i=Mission_Capsule; i<=Mission_PrimaryBooster; i++) 
+					Data->P[plr].Mission[mis].Hard[i]=0;
         goto begvab; /* CONTINUE/EXIT/DO NOTHING */
       }
       else
@@ -705,24 +708,25 @@ begvab:
 	         while(1)  { GetMouse();if (mousebuttons==0) break;}
               if (key>0) delay(150);
 	         OutBox(245,5,314,17);
-	         for (i=0;i<4;i++) {
+	         for (i=Mission_Capsule; i<=Mission_Probe_DM; i++) {
 	            Data->P[plr].Mission[mis].Hard[i]=VAS[ccc][i].dex;
               if (VAS[ccc][i].dex>=0) {
 	              switch(i) {
-		             case 0: case 2:  // Manned+LM
+		             case Mission_Capsule: 
+								 case Mission_LM:  // Manned+LM
 		               Data->P[plr].Manned[VAS[ccc][i].dex].Spok++;
 	                  break;
-	                case 1:  // Kicker
+	                case Mission_Kicker:  // Kicker
 	                  Data->P[plr].Misc[VAS[ccc][i].dex].Spok++;
 	                  break;
-	                case 3:  // DM+Probes
-	                  if (VAS[ccc][i].dex==4) Data->P[plr].Misc[4].Spok++;
+	                case Mission_Probe_DM:  // DM+Probes
+	                  if (VAS[ccc][i].dex==4) Data->P[plr].Misc[Mission_PrimaryBooster].Spok++;
 	                  else Data->P[plr].Probe[VAS[ccc][i].dex].Spok++;
 	                  break;
                  }
 	            }
 	         }
-	         Data->P[plr].Mission[mis].Hard[4]=rk+1;
+	         Data->P[plr].Mission[mis].Hard[Mission_PrimaryBooster]=rk+1;
 	         Data->P[plr].Rocket[rk%4].Spok++;
 	         if (rk>3) Data->P[plr].Rocket[4].Spok++;
            goto begvab;

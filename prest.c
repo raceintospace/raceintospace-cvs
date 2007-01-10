@@ -715,10 +715,10 @@ int AllotPrest(char plr,char mis)
       //else if (PVal[i]==4) negs+=Set_Goal(plr,i,0);
 
    // CAPSULE FIRSTS   need to check for failure on capsule
-   if ((P_Goal!=-1 || S_Goal!=-1) && other<3000 && MANNED[0]>0 && Data->P[plr].Mission[mis].Hard[0]!=-1) {  // Hardware on first part
+   if ((P_Goal!=-1 || S_Goal!=-1) && other<3000 && MANNED[0]>0 && Data->P[plr].Mission[mis].Hard[Mission_Capsule]!=-1) {  // Hardware on first part
      total+=Set_Goal(plr,12+Data->P[plr].Mission[mis].Prog,0);
       }
-   if ((P_Goal!=-1 || S_Goal!=-1) && other<3000 && MANNED[1]>0 && Data->P[plr].Mission[mis+1].Hard[0]!=-1 &&
+   if ((P_Goal!=-1 || S_Goal!=-1) && other<3000 && MANNED[1]>0 && Data->P[plr].Mission[mis+1].Hard[Mission_Capsule]!=-1 &&
      Data->P[plr].Mission[mis+1].part==1) {
      total+=Set_Goal(plr,12+Data->P[plr].Mission[mis+1].Prog,0);
      }

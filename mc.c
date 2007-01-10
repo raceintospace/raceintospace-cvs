@@ -170,8 +170,8 @@ int Launch(char plr,char mis)
   mcc=mcode=Data->P[plr].Mission[mis].MissionCode;
 
   // Fixup for Mercury Duration C stuff
-  if (Data->P[plr].Mission[mis].Hard[0]==0) Data->P[plr].Mission[mis].Duration=
-     minn(2,Data->P[plr].Mission[mis].Duration);
+  if (Data->P[plr].Mission[mis].Hard[Mission_Capsule]==0) 
+		Data->P[plr].Mission[mis].Duration = minn(2,Data->P[plr].Mission[mis].Duration);
 
   MissionCodes(plr,mcode,mis);
 
@@ -319,7 +319,7 @@ void MissionPast(char plr,char pad,int prest)
       }
   };
 
-  for (i=0;i<5;i++) {
+  for (i=Mission_Capsule; i <= Mission_PrimaryBooster; i++) {
       Data->P[plr].History[loc].Hard[0][i]=Data->P[plr].Mission[pad].Hard[i];
       if (Data->P[plr].Mission[pad].Joint==1) {
           Data->P[plr].History[loc].Hard[1][i]=Data->P[plr].Mission[pad+1].Hard[i];

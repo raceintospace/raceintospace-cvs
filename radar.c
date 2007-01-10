@@ -178,7 +178,7 @@ void ClrMiss(char plr,char pad)
  if (temp==-1) return;
 
  prg=Data->P[plr].Mission[padd].Prog;
- Data->P[plr].Mission[padd].Hard[4]=0;
+ Data->P[plr].Mission[padd].Hard[Mission_PrimaryBooster] = 0;
  if (Data->P[plr].Mission[padd].PCrew!=0)
    prime=Data->P[plr].Mission[padd].PCrew-1; else prime=-1;
    if (Data->P[plr].Mission[padd].BCrew!=0)

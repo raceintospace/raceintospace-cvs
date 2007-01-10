@@ -1151,8 +1151,9 @@ char PortSel(char plr,char loc)
     case 26: strcpy(IDT,"i018");strcpy(IKEY,"k018");
              MisOK=0;
              for (i=0;i<3;i++) {
-               if (Data->P[plr].Mission[i].MissionCode>0 &&
-                  Data->P[plr].Mission[i].Hard[4]==0) MisOK=10;
+               if (Data->P[plr].Mission[i].MissionCode>0 && 
+							 		 Data->P[plr].Mission[i].Hard[Mission_PrimaryBooster]==0) 
+								 MisOK=10;
                if (Data->P[plr].Mission[i].MissionCode>0) MisOK++;
                }
              if (MisOK>=10) Idiot("i005");
@@ -1166,9 +1167,11 @@ char PortSel(char plr,char loc)
     case 27: strcpy(IDT,"i017");strcpy(IKEY,"k017");Viewing(plr);return pREDRAW;
     case 28: // Flag Pole : End turn
              MisOK=0;
+						// Check to see if missions are good to go
              for (i=0;i<3;i++) {
                if (Data->P[plr].Mission[i].MissionCode>0 &&
-                  Data->P[plr].Mission[i].Hard[4]==0) MisOK=10;
+                   Data->P[plr].Mission[i].Hard[Mission_PrimaryBooster]==0) 
+									MisOK=10;
                if (Data->P[plr].Mission[i].MissionCode>0) MisOK++;
               }    
 
@@ -1268,7 +1271,7 @@ char MisReq(char plr)
 
   for (i=0;i<3;i++)
     if ((Data->P[plr].Mission[i].MissionCode>0)&&
-	(Data->P[plr].Mission[i].Hard[4]==0)) num++;
+	(Data->P[plr].Mission[i].Hard[Mission_PrimaryBooster]==0)) num++;
   ShBox(53,29,236,160);
   ShBox(60,34,229,44);
   InBox(60,47,229,120);
@@ -1303,7 +1306,7 @@ char MisReq(char plr)
 	PrintAt(86,65+20*i,"UNMANNED MISSION");
       };
 
-      if (Data->P[plr].Mission[i].Hard[4]==0) {
+      if (Data->P[plr].Mission[i].Hard[Mission_PrimaryBooster]==0) {
 	grSetColor(9);
 	PrintAt(86,71+20*i,"HARDWARE UNASSIGNED");
       } else {

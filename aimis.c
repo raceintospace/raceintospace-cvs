@@ -840,7 +840,9 @@ void AILaunch(char plr)
 		 {
 		  if (Data->P[plr].Mission[i].Prog==0) BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,0,Data->P[plr].Mission[i].Prog);
 		   else BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,0,Data->P[plr].Mission[i].Prog-1);
-		  for (j=0;j<4;j++) Data->P[plr].Mission[i].Hard[j]=VAS[whe[0]][j].dex;
+		  for (j=Mission_Capsule; j <= Mission_Probe_DM; j++) 
+				Data->P[plr].Mission[i].Hard[j] = VAS[whe[0]][j].dex;
+
 		  wgt=0;for (j=0;j<4;j++) wgt+=VAS[whe[0]][j].wt;
 		  rck[0]=-1;
 		  for (k=0;k<7;k++)
@@ -856,7 +858,7 @@ void AILaunch(char plr)
               Data->P[plr].Mission[i].MissionCode<=13) rck[0]=1;
           if (Data->P[plr].Mission[i].MissionCode==3) rck[0]=1;
           if (Data->P[plr].Mission[i].MissionCode==15) rck[0]=1;
-			 Data->P[plr].Mission[i].Hard[4]=rck[0]+1;
+			 Data->P[plr].Mission[i].Hard[Mission_PrimaryBooster] = rck[0]+1;
 			}
 		 }
 	   else
@@ -868,7 +870,8 @@ void AILaunch(char plr)
 		{
 		 if (Data->P[plr].Mission[i].Prog==0) BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,1,Data->P[plr].Mission[i].Prog);
 		   else BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,1,Data->P[plr].Mission[i].Prog-1);
-		 for (j=0;j<4;j++) Data->P[plr].Mission[i+1].Hard[j]=VAS[whe[1]][j].dex;
+		 for (j=Mission_Capsule ; j <= Mission_Probe_DM; j++) 
+		 	Data->P[plr].Mission[i+1].Hard[j] = VAS[whe[1]][j].dex;
 		 wgt=0;for (j=0;j<4;j++) wgt+=VAS[whe[1]][j].wt;
 		 rck[1]=-1;
 		 for (k=0;k<7;k++)
@@ -876,8 +879,8 @@ void AILaunch(char plr)
 		   if (rck[1]==-1) rck[1]=bdex[k];
 			 else if (boos[k]>= boos[rck[1]]) rck[1]=bdex[k];
 		 }
-		 if (rck[1]==-1) rck[1]=Data->P[plr].Mission[i].Hard[4]-1;
-		 Data->P[plr].Mission[i+1].Hard[4]=rck[1]+1;
+		 if (rck[1]==-1) rck[1]=Data->P[plr].Mission[i].Hard[Mission_PrimaryBooster]-1;
+		 Data->P[plr].Mission[i+1].Hard[Mission_PrimaryBooster]=rck[1]+1;
 		}
 	 }
  }
@@ -885,27 +888,28 @@ void AILaunch(char plr)
 // JOINT MISSION KLUGGE MISSION 55 & 56
 if (Data->P[plr].Mission[0].MissionCode==55)
  {
-  Data->P[plr].Mission[1].Hard[0]=Data->P[plr].Mission[1].Prog-1;
-  Data->P[plr].Mission[0].Hard[2]=6; // LM
-  Data->P[plr].Mission[0].Hard[3]=4; // DM
+  Data->P[plr].Mission[1].Hard[Mission_Capsule]=Data->P[plr].Mission[1].Prog-1;
+  Data->P[plr].Mission[0].Hard[Mission_LM]=6; // LM
+  Data->P[plr].Mission[0].Hard[Mission_Probe_DM]=4; // DM
   Data->P[plr].Misc[1].Safety=maxx(Data->P[plr].Misc[1].Safety,Data->P[plr].Misc[1].MaxRD);
-  Data->P[plr].Mission[1].Hard[1]=1; // kicker second part
+  Data->P[plr].Mission[1].Hard[Mission_Kicker]=1; // kicker second part
  };
 
 if (Data->P[plr].Mission[0].MissionCode==56)
  {
-  Data->P[plr].Mission[1].Hard[0]=Data->P[plr].Mission[1].Prog-1;
-  Data->P[plr].Mission[0].Hard[2]=6; // LM
-  Data->P[plr].Mission[0].Hard[3]=4; // DM
+  Data->P[plr].Mission[1].Hard[Mission_Capsule]=Data->P[plr].Mission[1].Prog-1;
+  Data->P[plr].Mission[0].Hard[Mission_LM]=6; // LM
+  Data->P[plr].Mission[0].Hard[Mission_Probe_DM]=4; // DM
   Data->P[plr].Misc[1].Safety=maxx(Data->P[plr].Misc[1].Safety,Data->P[plr].Misc[1].MaxRD);
-  Data->P[plr].Mission[0].Hard[1]=1;Data->P[plr].Mission[1].Hard[1]=1;
+  Data->P[plr].Mission[0].Hard[Mission_Kicker]=1;
+	Data->P[plr].Mission[1].Hard[Mission_Kicker]=1;
  };
 
   // lunar module klugge
   for (i=0;i<3;i++)
-   if (Data->P[plr].Mission[i].Hard[2]>=5)
+   if (Data->P[plr].Mission[i].Hard[Mission_LM]>=5)
      {
-      Data->P[plr].Mission[i].Hard[2]= Data->P[plr].Manned[5].Safety>=Data->P[plr].Manned[6].Safety ? 5 : 6;
+      Data->P[plr].Mission[i].Hard[Mission_LM]= Data->P[plr].Manned[5].Safety>=Data->P[plr].Manned[6].Safety ? 5 : 6;
      }
   JR=0;k=0;
   for (l=0;l<3;l++) {
