@@ -681,19 +681,19 @@ PlayVoice (void)
 {
 	news_chunk.data = soundbuf;
 	news_chunk.size = soundbuf_used;
-	play (&news_chunk);
+	play (&news_chunk, AV_SOUND_CHANNEL);
 }
 
 void
 KillVoice (void)
 {
-	av_silence ();
+	av_silence(AV_SOUND_CHANNEL);
 }
 
 void
 StopVoice (void)
 {
-	av_silence ();
+	av_silence(AV_SOUND_CHANNEL);
 }
 
 void

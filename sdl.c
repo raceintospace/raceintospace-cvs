@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -14,6 +15,8 @@ void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
 SDL_Surface *sur;
 
+static struct audio_channel Channels[AV_NUM_CHANNELS];
+
 void
 intr (int sig)
 {
@@ -21,87 +24,153 @@ intr (int sig)
 	exit (0);
 }
 
-int have_audio;
+static int have_audio;
 
-SDL_AudioSpec audio_desired, audio_obtained;
+static SDL_AudioSpec audio_desired, audio_obtained;
 
-
-struct audio_chunk *cur_chunk, **cur_chunk_tailp = &cur_chunk;
-int cur_offset;
-
-void
+static void
 audio_callback (void *userdata, Uint8 *stream, int len)
 {
-	int togo, thistime;
+	int togo, thistime, i, left;
+	Uint8 silence = audio_obtained.silence;
+	int num_active = AV_NUM_CHANNELS;
+	unsigned  sample, sum;
+	struct audio_channel* chp;
+
+	struct {
+		Uint8* data;
+		unsigned coeff;
+	} arr[AV_NUM_CHANNELS];
 
 	togo = len;
 
-	while (togo && cur_chunk) {
-		thistime = cur_chunk->size - cur_offset;
-		if (thistime < 0) {
-			cur_chunk = NULL;
-			cur_chunk_tailp = &cur_chunk;
-			cur_offset = 0;
-			break;
+	while (togo > 0 && num_active > 0) {
+		thistime = togo;
+		sum = 0;
+		num_active = AV_NUM_CHANNELS;
+
+		/* init mixer data */
+		for (i=0; i<AV_NUM_CHANNELS; ++i) {
+			arr[i].data = NULL;
+			arr[i].coeff = 0;
+			chp = &Channels[i];
+			sum += chp->volume;
+			if (chp->chunk) {
+				left = chp->chunk->size - chp->offset;
+				if (left < 0) {
+					chp->chunk = NULL;
+					chp->chunk_tailp = &chp->chunk;
+					chp->offset = 0;
+					num_active--;
+					continue;
+				}
+				if (left < thistime)
+					thistime = left;
+				arr[i].data = chp->chunk->data + chp->offset;
+				if (!chp->mute)
+					arr[i].coeff = chp->volume;
+			} else
+				num_active--;
 		}
-			
-		if (thistime > togo)
-			thistime = togo;
-		memcpy (stream, cur_chunk->data + cur_offset, thistime);
 
-		stream += thistime;
+		if (!num_active)
+			break;
+
+		left = thistime;
+
+		while (left--) {
+			sample = 0;
+			/* Make this outer loop? */
+			for (i=0; i<AV_NUM_CHANNELS; ++i)
+				sample += arr[i].coeff * (
+						arr[i].data ? *(arr[i].data++) : silence);
+			sample /= sum;
+			if (sample > 255)
+				sample = 255;
+			*(stream++) = (Uint8) sample;
+		}
+
 		togo -= thistime;
-		cur_offset += thistime;
+		assert(togo >= 0);
 
-		if (cur_offset >= cur_chunk->size) {
-			if (cur_chunk->loop == 0) {
-				if ((cur_chunk = cur_chunk->next) == NULL)
-					cur_chunk_tailp = &cur_chunk;
+		for (i=0; i<AV_NUM_CHANNELS; ++i) {
+			chp = &Channels[i];
+			if (chp->chunk) {
+				chp->offset += thistime;
+				if (chp->offset >= chp->chunk->size) {
+					chp->offset = 0;		
+					if (!chp->chunk->loop) {
+						chp->chunk = chp->chunk->next;
+						if (chp->chunk == NULL)
+							chp->chunk_tailp = &chp->chunk;
+							/* why this lastp?? */
+					}
+				}
 			}
-			cur_offset = 0;
 		}
 	}
 
-	memset (stream, audio_obtained.silence, togo);
+	memset (stream, silence, togo);
 }
 
 /* 0 means busy playing audio; 1 means idle */
 char
 AnimSoundCheck(void)
 {
+	/* assume sound channel */
 	av_step ();
-	if (cur_chunk)
+	if (Channels[AV_SOUND_CHANNEL].chunk)
 		return (0);
 	return (1);
 }
 
 void
-play (struct audio_chunk *new_chunk)
+play (struct audio_chunk *new_chunk, int channel)
 {
 	struct audio_chunk *cp;
+	struct audio_channel *chp;
+
+	assert(channel >= 0 && channel < AV_NUM_CHANNELS);
+
+	chp = &Channels[channel];
 
 	if (have_audio == 0)
 		return;
+
 	SDL_LockAudio ();
-	for (cp = cur_chunk; cp; cp = cp->next) {
+	for (cp = chp->chunk; cp; cp = cp->next) {
 		if (cp == new_chunk) {
 			printf ("play: attempt to do duplicate chunk add\n");
-			av_silence ();
+			av_silence (channel);
 			break;
 		}
 	}
+
 	new_chunk->next = NULL;
-	*cur_chunk_tailp = new_chunk;
+	*chp->chunk_tailp = new_chunk;
 	SDL_UnlockAudio ();
 }
 
 void
-av_silence (void)
+av_silence(int channel)
 {
+	int i, m, n;
+
+	if (channel == AV_ALL_CHANNELS) {
+		m = 0;
+		n = AV_NUM_CHANNELS;
+	} else {
+		assert(channel >= 0 && channel < AV_NUM_CHANNELS);
+		m = channel;
+		n = channel+1;
+	}
+
 	SDL_LockAudio ();
-	cur_chunk = NULL;
-	cur_chunk_tailp = &cur_chunk;
-	cur_offset = 0;
+	for (i=m; i<n; ++i) {
+		Channels[i].chunk = NULL;
+		Channels[i].chunk_tailp = &Channels[i].chunk;
+		Channels[i].offset = 0;
+	}
 	SDL_UnlockAudio ();
 }
 
@@ -124,7 +193,6 @@ av_setup (int *argcp, char ***argvp)
 		exit (1);
 	}
 
-
 	if (SDL_InitSubSystem (SDL_INIT_AUDIO < 0)) {
 		printf ("no audio\n");
 	} else {
@@ -133,7 +201,7 @@ av_setup (int *argcp, char ***argvp)
 	}
 
 	if ((sur = SDL_SetVideoMode (640, 400, 24,
-				     SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
+					 SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
 		fprintf (stderr, "error in SDL_SetVideoMode\n");
 		exit (1);
 	}
@@ -142,11 +210,22 @@ av_setup (int *argcp, char ***argvp)
 	SDL_WM_SetCaption("Race Into Space", NULL);
 
 	if (have_audio) {
+		int i = 0;
+
 		audio_desired.freq = 11025;
 		audio_desired.format = AUDIO_U8;
 		audio_desired.channels = 1;
 		audio_desired.samples = 8192;
 		audio_desired.callback = audio_callback;
+
+		/* initialize audio channels */
+		for (i=0; i<AV_NUM_CHANNELS; ++i) {
+			Channels[i].volume = AV_MAX_VOLUME;
+			Channels[i].mute = 0;
+			Channels[i].chunk = NULL;
+			Channels[i].chunk_tailp = &Channels[i].chunk; 
+			Channels[i].offset = 0;
+		}
 		
 		if (SDL_OpenAudio (&audio_desired, &audio_obtained) < 0) {
 			fprintf (stderr, "error in SDL_OpenAudio\n");
@@ -162,7 +241,6 @@ av_setup (int *argcp, char ***argvp)
 #define KEYBUF_SIZE 256
 int keybuf[KEYBUF_SIZE];
 int keybuf_in_idx, keybuf_out_idx;
-
 
 void
 av_process_event (SDL_Event *evp)

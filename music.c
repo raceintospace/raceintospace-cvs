@@ -166,13 +166,13 @@ PlayMusic(char mode)
 	music_chunk.data = cur_music->buf;
 	music_chunk.size = cur_music->size;
 	music_chunk.loop = 1;
-	play (&music_chunk);
+	play (&music_chunk, AV_MUSIC_CHANNEL);
 }
 
 void
 KillMusic(void)
 {
-	av_silence ();
+	av_silence (AV_MUSIC_CHANNEL);
 }
 
 void
