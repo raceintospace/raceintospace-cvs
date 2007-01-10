@@ -26,8 +26,8 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 
-extern struct ManPool far *Men;
-struct ManPool far *Sov;
+extern struct ManPool *Men;
+struct ManPool *Sov;
 char M_Us[106],M_Sv[106];
 extern char Option;
 
@@ -598,8 +598,8 @@ void EditAst(void)
  now=now2=BarA=BarB=0;
  Cnt=Cur=0; // holds current change
  ShBox(27,49+BarA*8,153,57+BarA*8); ShBox(187,49+BarB*8,313,57+BarB*8);
- Men=(struct ManPool far *) buffer;
- Sov=(struct ManPool far *) buffer+10000;
+ Men=(struct ManPool *) buffer;
+ Sov=(struct ManPool *) buffer+10000;
  FadeIn(2,pal,10,0,0);  
  
  temp=Idiot("i105");

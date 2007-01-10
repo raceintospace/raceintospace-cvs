@@ -31,7 +31,7 @@ extern char Nums[30][7],AI[2];
 extern struct mStr Mis;
 #define DELAYCNT 50
 
-struct Astros far *abuf;
+struct Astros *abuf;
 
 #define IRBox(a,b,c,d,e)           {InBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}
 #define ORBox(a,b,c,d,e)           {OutBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}
@@ -758,7 +758,7 @@ void ShowAstrosHist(char plr)
 {
   char pos=0,pos2=0,glorf=0;
   GV(&vhptr2,112,55);
-  abuf=(struct Astros far *) buffer;
+  abuf=(struct Astros *) buffer;
   if(Data->P[plr].AstroCount == 0 ) return;
   memcpy(abuf,Data->P[plr].Pool,sizeof(Data->P[plr].Pool));  
   qsort((void *)abuf,Data->P[plr].AstroCount,sizeof(struct Astros),astcomp);

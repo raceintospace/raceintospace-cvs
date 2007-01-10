@@ -17,7 +17,7 @@
 */
 
 // SERIAL_F.C
-void (_interrupt _far *oldvect)();
+void (_interrupt  *oldvect)();
 void SaveFirst(char);
 void CheckFirst(char);
 void UpdateFirst(void);

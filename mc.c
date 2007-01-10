@@ -29,9 +29,9 @@
 
   struct Equipment *MH[2][8];   // Pointer to the hardware
   struct MisAst MA[2][4];  //[2][4]
-  struct MisEval Mev[60];  // was far *Mev;
+  struct MisEval Mev[60];  // was *Mev;
   struct mStr Mis;
-  struct MXM far *AList;
+  struct MXM *AList;
   RPLY Rep;
   extern char BIG;
 

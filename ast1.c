@@ -27,7 +27,7 @@
 #include "externs.h"
 
 extern char MCol[110],sel[30],MaxSel;
-extern struct ManPool far *Men;
+extern struct ManPool *Men;
 
 void DispEight(char now,char loc)
 {
@@ -266,7 +266,7 @@ DrawAstCheck(plr);
   
   memset(sel,-1,sizeof(sel));
   memset(MCol,0x00,sizeof(MCol));
-  Men=(struct ManPool far *) buffer;
+  Men=(struct ManPool *) buffer;
   fin = sOpen("MEN.DAT","rb",1);   /* Open Astronaut Data File  */
   fseek(fin,((sizeof (struct ManPool))*106)*plr,SEEK_SET);
   fread(Men,(sizeof (struct ManPool))*106,1,fin);

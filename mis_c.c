@@ -49,8 +49,8 @@
   i16 idx;
  };
 
-struct Infin far *Mob;
-struct OF far *Mob2;
+struct Infin *Mob;
+struct OF *Mob2;
 int tFrames,cFrame;
 char SHTS[4];
 long aLoc;

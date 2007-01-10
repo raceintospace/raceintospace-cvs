@@ -71,12 +71,12 @@
 #define TXT 0x03
 
 void SetMode(char mode);
-void BxFill(char far *buffer,char c1,char c2);
+void BxFill(char *buffer,char c1,char c2);
 void SMove(void *src,int x, int y);
 void LMove(void *src);
-void SMove2(char far *src,int x, int y);
-void AMove(char far *, char far *,char mode);
-void MemCopy(char far *,char far *);
+void SMove2(char *src,int x, int y);
+void AMove(char *, char *,char mode);
+void MemCopy(char *,char *);
 void HLine(int X1,int Y1,int X2,char Col);
 void VLine(int X1,int Y1,int Y2,char Col);
 void oBox(int X1,int Y1,int X2,int Y2,char Col);

@@ -38,7 +38,7 @@ extern char AI[2];
 
 struct MDA {
   i16 x1,y1,x2,y2,o;
-} far *MI; //  MI[2][28] = {
+} *MI; //  MI[2][28] = {
 #if 0
   104,1,119,55,0,   // Atlas  0
   143,1,153,67,0,   // Titan  1

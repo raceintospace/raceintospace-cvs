@@ -18,11 +18,11 @@ typedef struct
   ui16 usize;		  // uncompressed file size.
 } ABH;
 
-unsigned int	far UnCompressAudio(unsigned char far *source,unsigned char far *dest);
+unsigned int	UnCompressAudio(unsigned char *source,unsigned char *dest);
 // UnCompressAudio will decompress data which was compressed using ACOMP
 // into the destination address provided.  UnCompressAudio returns the
 // total size, in bytes, of the uncompressed audio data.
 
-unsigned int	far GetFreq(unsigned char far *sound);
+unsigned int	GetFreq(unsigned char *sound);
 // GetFreq will report the playback frequency of a particular ACOMP data
 // file.

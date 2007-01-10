@@ -818,7 +818,7 @@ void DispIt(int x1,int y1,int x2, int y2,int s,int t)
 {
   GXHEADER local,local2;
   int i,w,h;
-  unsigned char far *src,far *dest;
+  unsigned char *src,*dest;
 
     w=x2-x1+1;h=y2-y1+1;
     GV(&local,w,h); GV(&local2,w,h);

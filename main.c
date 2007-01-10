@@ -42,9 +42,9 @@
   unsigned char *screen;
   unsigned char LOAD,QUIT,HARD1,UNIT1,BUTLOAD,FADE,AL_CALL,XMAS;
   char pal[768],plr[NUM_PLAYERS],IDT[5],IKEY[5],df,IDLE[2];
-  char far *buffer;
+  char *buffer;
   GXHEADER vhptr,vhptr2;
-  char far * oldpal,pNeg[NUM_PLAYERS][MAX_MISSIONS];
+  char * oldpal,pNeg[NUM_PLAYERS][MAX_MISSIONS];
   long xMODE;
   HTIMER server;
   char Option=-1,MAIL=-1;
@@ -52,7 +52,6 @@
   extern struct mStr Mis;
   extern struct Prest_Upd MP[3];
   struct cdtable *cdt;
-  BYTE far *ems;
   long PalOff;
   WORD LetHand;
   char BIG;
@@ -99,7 +98,7 @@ char *S_Name[] = {
 #define MODEM_ERROR 4
 
 extern struct order Order[7];
-extern struct ManPool far *Men;
+extern struct ManPool *Men;
 char AI[2]={0,0};
 
 static char BUZZ_DIR[32];
@@ -381,7 +380,7 @@ int main(int argc, char *argv[])
 	exit(0);
   };
 
-  buffer=(char far *) farmalloc(BUFFER_SIZE);
+  buffer=(char *) farmalloc(BUFFER_SIZE);
   if (buffer==NULL) {
     printf("Out of Memory allocating Buffer structure.\n");
     farfree(Data);exit(0);

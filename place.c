@@ -397,7 +397,7 @@ void DispIdiot(char top, char bot, char *txt)
 int Idiot(char *FName)
 {
   int i,j,line,top=0,bot=0,plc=0;
-  char far *Idiot,far *NTxt,mode;
+  char *Idiot,*NTxt,mode;
   int ox1,oy1,ox2,oy2;
   int fsize;
   GXHEADER local;
@@ -424,7 +424,7 @@ int Idiot(char *FName)
   }
   if (i==count) {fclose(fin);return 0;}
   AL_CALL=1;
-  Idiot=(char far *) farmalloc(Pul.size);
+  Idiot=(char *) farmalloc(Pul.size);
   fseek(fin,Pul.offset,SEEK_SET);
   fread(Idiot,Pul.size,1,fin);
   fclose(fin);
@@ -439,7 +439,7 @@ int Idiot(char *FName)
       fsize=10*(Idiot[i]-0x30)+(Idiot[i+1]-0x30)+1;
       bot=fsize;
 
-      NTxt=(char far *)farmalloc((unsigned int) (42*fsize));
+      NTxt=(char *)farmalloc((unsigned int) (42*fsize));
       if (NTxt==NULL) CloseEmUp(0,112);  // locks on this line
       memset(NTxt,0x00,(unsigned int)(42*fsize));
       j=line*42;  // should be 0

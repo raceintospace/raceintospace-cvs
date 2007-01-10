@@ -11,8 +11,6 @@
 #define stricmp strcasecmp
 #define strncmpi strncasecmp
 
-#define far
-
 typedef struct {
 	unsigned char *vptr;
 	int x1, y1, x2, y2;

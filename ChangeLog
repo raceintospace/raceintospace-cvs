@@ -1,3 +1,9 @@
+2007-01-10  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V74
+
+	* Removed all references to 'far', yanked that and 'pascal' from the Makefile
+
 2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V73

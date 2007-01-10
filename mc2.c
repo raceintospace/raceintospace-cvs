@@ -28,11 +28,11 @@
 #include "replay.h"
 
   extern struct Equipment *MH[2][8];   // Pointer to the main
-  //struct MisHard far *MH; //[2][7]
+  //struct MisHard *MH; //[2][7]
   extern struct MisAst MA[2][4];  //[2][4]
-  extern struct MisEval Mev[60];  // was far *Mev;
+  extern struct MisEval Mev[60];  // was *Mev;
   extern struct mStr Mis;
-  extern struct MXM far *AList;
+  extern struct MXM *AList;
   extern RPLY Rep;
   extern char MANNED[2],CAP[2],LM[2],DOC[2],EVA[2],STEP,FINAL,JOINT,pal2[768],PastBANG;
   extern char STEPnum,AI[2];

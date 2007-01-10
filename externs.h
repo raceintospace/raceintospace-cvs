@@ -16,15 +16,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 // Key EXTERN Support File
-  extern struct Players far *Data;
+  extern struct Players *Data;
   extern int x,y,mousebuttons,key;
   extern unsigned char *screen;
   extern unsigned char LOAD,ZOND,QUIT,FADE,XMAS;
   extern char pal[768],plr[2],Name[20],IDT[5],IKEY[5];
-  extern char far * buffer;
+  extern char * buffer;
   extern GXHEADER vhptr,vhptr2;
-  extern char far * oldpal;
+  extern char * oldpal;
   extern long xMODE;
   extern char *S_Name[];
   extern int cdROM,hDISK;
-  extern BYTE far *ems;
+  extern BYTE *ems;

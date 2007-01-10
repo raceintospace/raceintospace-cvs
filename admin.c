@@ -41,12 +41,12 @@ extern int fOFF;
   struct SF {
     char ID[4],Name[23],PName[2][20],Country[2],Season,Year;
     ui16 dSize,fSize;
-  } far *FDes,FD;
+  } *FDes,FD;
 
   struct SFinfo {
     char Name[15],Title[23];
     ui16 time,date;
-  } far *FList;
+  } *FList;
 
 extern struct mStr Mis;
 
