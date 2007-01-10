@@ -753,25 +753,32 @@ void GetMse(char plr,char fon)
 void DoCycle(void)  // Three ranges of color cycling
 {
   int i,tmp1,tmp2,tmp3,j;
-  j=384;
-  tmp1=pal[393];tmp2=pal[394];tmp3=pal[395];
-  for (i=3;i>0;i--) {
-    pal[j+i*3]=pal[j+(i-1)*3];
-    pal[j+i*3+1]=pal[j+(i-1)*3+1];
-    pal[j+i*3+2]=pal[j+(i-1)*3+2];};
-  pal[384]=tmp1;pal[385]=tmp2;pal[386]=tmp3;
-  tmp1=pal[417];tmp2=pal[418];tmp3=pal[419];
-  for (i=11;i>4;i--) {
-    pal[j+i*3+0]=pal[j+(i-1)*3+0];
-    pal[j+i*3+1]=pal[j+(i-1)*3+1];
-    pal[j+i*3+2]=pal[j+(i-1)*3+2];};
-  pal[396]=tmp1;pal[397]=tmp2;pal[398]=tmp3;
-  tmp1=pal[429];tmp2=pal[430];tmp3=pal[431];
-  for (i=15;i>12;i--) {
-    pal[j+i*3+0]=pal[j+(i-1)*3+0];
-    pal[j+i*3+1]=pal[j+(i-1)*3+1];
-    pal[j+i*3+2]=pal[j+(i-1)*3+2];};
-  pal[420]=tmp1;pal[421]=tmp2;pal[422]=tmp3;
+  j = 384;
+
+  i = 0;
+  tmp1=pal[j+3*i+0];tmp2=pal[j+3*i+1];tmp3=pal[j+3*i+2];
+  for ( ;i<3;i++) {
+    pal[j+i*3+0]=pal[j+(i+1)*3+0];
+    pal[j+i*3+1]=pal[j+(i+1)*3+1];
+    pal[j+i*3+2]=pal[j+(i+1)*3+2];};
+  pal[j+3*i]=tmp1;pal[j+3*i+1]=tmp2;pal[j+3*i+2]=tmp3;
+
+  i = 4;
+  tmp1=pal[j+3*i+0];tmp2=pal[j+3*i+1];tmp3=pal[j+3*i+2];
+  for ( ;i<11;i++) {
+    pal[j+i*3+0]=pal[j+(i+1)*3+0];
+    pal[j+i*3+1]=pal[j+(i+1)*3+1];
+    pal[j+i*3+2]=pal[j+(i+1)*3+2];};
+  pal[j+3*i]=tmp1;pal[j+3*i+1]=tmp2;pal[j+3*i+2]=tmp3;
+
+  i = 12;
+  tmp1=pal[j+3*i+0];tmp2=pal[j+3*i+1];tmp3=pal[j+3*i+2];
+  for ( ;i<15;i++) {
+    pal[j+i*3+0]=pal[j+(i+1)*3+0];
+    pal[j+i*3+1]=pal[j+(i+1)*3+1];
+    pal[j+i*3+2]=pal[j+(i+1)*3+2];};
+  pal[j+3*i]=tmp1;pal[j+3*i+1]=tmp2;pal[j+3*i+2]=tmp3;
+
   gxSetDisplayPalette(pal);
   return;
 }

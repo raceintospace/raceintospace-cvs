@@ -1,9 +1,15 @@
 2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V73
+
+	* Fixed DoCycle(), water now flows in the right direction
+
+2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V72
 
 	* Fixed audio mixer, eliminated glitches
-	
+
 2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V71
