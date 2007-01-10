@@ -62,7 +62,7 @@ char STEPnum,loc[4];
 extern struct MisAst MA[2][4];
 extern struct MisEval Mev[60];
 extern char MANNED[2],STEP,pal2[768],AI[2],fEarly,LM[2],EVA[2];
-extern char Musics,Sounds,BIG;
+extern char BIG;
 
 void Tick(char plr);
 void Clock(char plr,char clck,char mode,char tm);
@@ -451,7 +451,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 					key=bioskey(0);
 					if (key>0) {
 						keep_going = 0;
-						av_silence ();
+						av_silence (AV_SOUND_CHANNEL);
 					}
 				}
 				if (Data->Def.Anim) {
@@ -467,7 +467,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		i++;
 	}
 
-	if (Sounds > 0) {
+	if (!IsChannelMute(AV_SOUND_CHANNEL)) {
 		if (lnch == 0)
 			PlayAudio("WH.RAW",0);
 		keep_going = 1;
@@ -478,7 +478,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			while (bioskey(1)) {
 				key=bioskey(0);
 				if (key>0) {
-					av_silence ();
+					av_silence (AV_SOUND_CHANNEL);
 					keep_going = 0;
 				}
 			}

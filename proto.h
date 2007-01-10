@@ -121,36 +121,6 @@
 #define EWALK 26
 #define LWALK 40
 
-#define SBUF 16384L
-
-// Music Defines
-#define mNONE    0
-#define mSPEAKER 1
-#define mBLASTER 2
-#define mMT32    3
-#define mSCC1    4
-#define mPAS     5
-#define mSBP1    6
-#define mADGOLD  7
-#define mADLIB   8
-#define mSBP2    9
-#define mGUS     10
-#define mSBP     11
-#define mSB16    12
-#define mWAVE    13
-
-// Sound Defines 
-#define sNONE    0
-#define sSPEAKER 1
-#define sBLASTER 2
-#define sROLAND  3
-#define sPAS     4
-#define sSBP     5
-#define sADGOLD  6
-#define sGUS     7
-#define sSB16    8
-
-
 // ***************************
 //   PROTOTYPES FOR ROUTINES
 // ***************************
@@ -728,9 +698,8 @@ void StopVoice(void);
 void far *load_global_timbre( FILE *GTL, unsigned bank, unsigned patch);
 void GetMusic(FILE *fin,long size)  ;
 void KillMusic(void);
-void FadeMusicIn( int maxvolume, unsigned rate);
+void FadeMusicIn(int maxvolume, unsigned rate);
 void FadeMusicOut(unsigned rate);
-void SetMusicVolume(int percent);
 void PlayMusic(char mode);
 void UpdateMusic(void);
 void StopMusic(void);
@@ -742,6 +711,8 @@ int GetBuzzEnv(drvr_desc *desc,char *envs);
 void PlayAudio(char *name,char mode);
 void UpdateAudio(void);
 void StopAudio(char mode);
+void MuteChannel(int channel, int mute);
+int IsChannelMute(int channel);
 
 
 // START.C

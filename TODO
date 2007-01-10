@@ -27,9 +27,7 @@ look into "hold frame" stuff for aligning mission video and audio
 remove SetROMDir
 
 fades
-implement config opts for no sound, no anim
-
-implement PlayAudio ... summing sound effects with music
+implement config opts for no anim
 
 clean up extra gr_sync's
 
@@ -50,6 +48,9 @@ wrapped image
 try mpeg encoding the video
 
 Yank strings into a separate string table
+
+Changes in audio (mute, music file change, load next audio etc) should be
+faded to silence and back.
 
 ================================================================
 possible old bugs

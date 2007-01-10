@@ -1,3 +1,15 @@
+2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V71
+
+	* Implemented PlayAudio() and moved it to pace.c
+
+	* Implemented ChannelMute(), IsChannelMute()
+
+	* Removed references to Musics, tMusics and Sounds
+
+	* Fixed setting audio preferences
+
 2007-01-09 PST  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V70

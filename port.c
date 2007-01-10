@@ -45,7 +45,6 @@ char RUSH,SUSPEND;
 extern int oldx,oldy;
 extern struct mStr Mis;
 extern char Option;
-extern char Sounds;
 
 struct SXX {
    ui16 loc;
@@ -270,7 +269,7 @@ void SpotCrap(char loc,char mode)
     }
   #if BABYSND
    if ((loc>=0 && loc<=8) || (loc>=15 && loc<=19) || loc==12 || loc==14 || loc==11 || loc==10)
-    if (mode==SPOT_LOAD && Sounds>0 && Data->Def.Sound==1)
+    if (mode==SPOT_LOAD && Data->Def.Sound)
      {
       switch(loc) {
        case 1:case 6:PlayAudio("JET.RAW",0);break;

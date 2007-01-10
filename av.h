@@ -39,7 +39,7 @@ int av_dirty;
 
 char AnimSoundCheck(void);
 void UpdateAudio (void);
-
+void MuteChannel(int channel, int mute);
 
 double get_time (void);
 int bioskey (int peek);

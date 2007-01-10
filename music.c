@@ -159,10 +159,14 @@ struct audio_chunk music_chunk;
 void
 PlayMusic(char mode) 
 {
-	KillMusic ();
-
 	if (cur_music == NULL)
 		return;
+
+    if (IsChannelMute(AV_MUSIC_CHANNEL))
+        return;
+
+	KillMusic ();
+
 	music_chunk.data = cur_music->buf;
 	music_chunk.size = cur_music->size;
 	music_chunk.loop = 1;

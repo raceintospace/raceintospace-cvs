@@ -44,7 +44,6 @@ int Frame;
 BYTE X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex;
 WORD handle0,handle1,handle2,handle3,handle4,handle5;
 extern char Option;
-extern char Musics,Sounds;
 
 struct MTAB {
  ui16 size;
@@ -509,7 +508,8 @@ void News(char plr)
              NGetVoice(plr,Data->Events[Data->Count]+2);PlayVoice();
              Status=0;
              loc++;
-             if (Sounds==0) Status=1;  //no sound klugge(skip over event picture)
+             if (IsChannelMute(AV_SOUND_CHANNEL))
+				 Status = 1;  //no sound klugge(skip over event picture)
              i=bline;ShowEvt(plr,Data->Events[Data->Count]);bline=i;
              break;
       case 3://: Close

@@ -29,7 +29,7 @@
 extern struct ManPool far *Men;
 struct ManPool far *Sov;
 char M_Us[106],M_Sv[106];
-extern char Musics,tMusics,Sounds,Option;
+extern char Option;
 
 void DrawPrefs(int where,char a1,char a2)
 {
@@ -260,12 +260,13 @@ long size;
      Data->Def.Lev2=2;  //start computer level 3
      Data->Def.Input=0;
      Data->Def.Sound=Data->Def.Music=1;
+	 MuteChannel(AV_ALL_CHANNELS, 0);
     }
    if (Data->Def.Plr1>1) {Data->Def.Plr1-=2;hum1=1;}
    if (Data->Def.Plr2>1) {Data->Def.Plr2-=2;hum2=1;}
   }
 
-  Data->Def.Sound=Data->Def.Music=1;
+  /* Data->Def.Sound=Data->Def.Music=1; */
   DrawPrefs(where,hum1,hum2);
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
@@ -317,10 +318,6 @@ long size;
 	         fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
 	        }
          KillMusic();
-         if (Data->Def.Music==0 && Musics!=0) 
-          {i=tMusics;tMusics=Musics;Musics=i;}
-         if (Data->Def.Music==1 && Musics==0) 
-          {i=tMusics;tMusics=Musics;Musics=i;}
 	       return;
 	     };
       }
@@ -389,9 +386,9 @@ long size;
        {
 	     InBox(100,30,135,61);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
-        Data->Def.Music=abs(Data->Def.Music-1);
-        SetMusicVolume((Data->Def.Music==1)?100:0);
-//        i=tMusics;tMusics=Musics;Musics=i;
+        Data->Def.Music = !Data->Def.Music;
+        // SetMusicVolume((Data->Def.Music==1)?100:0);
+		MuteChannel(AV_MUSIC_CHANNEL, !Data->Def.Music);
         gxVirtualDisplay(&vhptr,153+34*(Data->Def.Music),0,101,31,134,60,0);
 	     OutBox(100,30,135,61);
 	     /* Music Level */
@@ -401,7 +398,8 @@ long size;
        {
 	     InBox(100,70,135,101);
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
-        Data->Def.Sound=abs(Data->Def.Sound-1);
+        Data->Def.Sound = !Data->Def.Sound;
+		MuteChannel(AV_SOUND_CHANNEL, !Data->Def.Sound);
         gxVirtualDisplay(&vhptr,221+34*(Data->Def.Sound),0,101,71,134,100,0);
 	     OutBox(100,70,135,101);
 	     /* Sound Level */

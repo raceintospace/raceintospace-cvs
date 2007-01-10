@@ -46,7 +46,8 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 
 	while (togo > 0 && num_active > 0) {
 		thistime = togo;
-		sum = 0;
+		// sum = 0;
+		sum = AV_NUM_CHANNELS * AV_MAX_VOLUME;
 		num_active = AV_NUM_CHANNELS;
 
 		/* init mixer data */
@@ -54,7 +55,7 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 			arr[i].data = NULL;
 			arr[i].coeff = 0;
 			chp = &Channels[i];
-			sum += chp->volume;
+			// sum += chp->volume;
 			if (chp->chunk) {
 				left = chp->chunk->size - chp->offset;
 				if (left < 0) {
@@ -124,6 +125,13 @@ AnimSoundCheck(void)
 	return (1);
 }
 
+int
+IsChannelMute(int channel)
+{
+	assert(channel >= 0 && channel < AV_NUM_CHANNELS);
+	return Channels[channel].mute;
+}
+
 void
 play (struct audio_chunk *new_chunk, int channel)
 {
@@ -154,24 +162,21 @@ play (struct audio_chunk *new_chunk, int channel)
 void
 av_silence(int channel)
 {
-	int i, m, n;
+	int i = channel;
 
 	if (channel == AV_ALL_CHANNELS) {
-		m = 0;
-		n = AV_NUM_CHANNELS;
+		for (i=0; i<AV_NUM_CHANNELS; ++i)
+			av_silence(i);
 	} else {
 		assert(channel >= 0 && channel < AV_NUM_CHANNELS);
-		m = channel;
-		n = channel+1;
+		if (Channels[channel].chunk) {
+			SDL_LockAudio ();
+			Channels[channel].chunk = NULL;
+			Channels[channel].chunk_tailp = &Channels[channel].chunk;
+			Channels[channel].offset = 0;
+			SDL_UnlockAudio ();
+		}
 	}
-
-	SDL_LockAudio ();
-	for (i=m; i<n; ++i) {
-		Channels[i].chunk = NULL;
-		Channels[i].chunk_tailp = &Channels[i].chunk;
-		Channels[i].offset = 0;
-	}
-	SDL_UnlockAudio ();
 }
 
 
@@ -328,7 +333,6 @@ av_block (void)
 	}
 }
 
-
 int
 bioskey (int peek)
 {
@@ -401,9 +405,15 @@ av_sync (void)
 }
 
 void
-PlayAudio(char *name,char mode)
+MuteChannel(int channel, int mute)
 {
-	printf ("PlayAudio(%s)\n", name);
-	/* need to sum this sound with the music */
-}
+	int i;
 
+	if (channel == AV_ALL_CHANNELS) {
+		for (i=0; i<AV_NUM_CHANNELS; ++i)
+			MuteChannel(i, mute);
+	} else {
+		assert(channel >= 0 && channel < AV_NUM_CHANNELS);
+		Channels[channel].mute = mute;
+	}
+}

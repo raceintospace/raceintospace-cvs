@@ -35,7 +35,7 @@
 #define YES 1
 #define NO 0
 
-extern char Musics,tMusics,Sounds,Option,MAIL;
+extern char Sounds,Option,MAIL;
 extern int fOFF;
 
   struct SF {
@@ -398,10 +398,6 @@ void FileAccess(char mode)
             fread(buffer,size,1,fin);fclose(fin);
             fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
 	        }
-           if (Data->Def.Music==0 && Musics!=0) 
-            {i=tMusics;tMusics=Musics;Musics=i;}
-           if (Data->Def.Music==1 && Musics==0) 
-            {i=tMusics;tMusics=Musics;Musics=i;}
          } 
         else
          //Modem save game LOAd
@@ -430,10 +426,6 @@ void FileAccess(char mode)
            fread(buffer,size,1,fin);fclose(fin);
            fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
 	        }
-          if (Data->Def.Music==0 && Musics!=0) 
-           {i=tMusics;tMusics=Musics;Musics=i;}
-          if (Data->Def.Music==1 && Musics==0) 
-           {i=tMusics;tMusics=Musics;Musics=i;}
         }  
 	      if (Option!=MODEM_ERROR) LOAD=done=1;
          else {Option=-1;LOAD=done=0;return;}

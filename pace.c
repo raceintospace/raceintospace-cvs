@@ -4,8 +4,6 @@ extern GXHEADER vhptr;
 
 void frm_init (void);
 
-char Musics,tMusics,Sounds;
-
 char
 DoModem(int sel)
 {
@@ -612,25 +610,22 @@ idle_loop (int ticks)
 	idle_loop_secs (ticks / 2000.0);
 }
 
-char Sounds;
-long VoiceOff, VoiceStart;
+long VoiceOff;
 
 char *soundbuf;
-int soundbuf_size;
-int soundbuf_used;
+int soundbuf_size = 0;
+int soundbuf_used = 0;
 struct audio_chunk news_chunk;
 	
 void
 soundbuf_alloc (int size)
 {
 	if (size > soundbuf_size) {
-		if (soundbuf)
-			free (soundbuf);
-		soundbuf_size = size;
-		if ((soundbuf = malloc (soundbuf_size)) == NULL) {
+		if ((soundbuf = realloc (soundbuf, size)) == NULL) {
 			fprintf (stderr, "out of memory\n");
 			exit (1);
 		}
+		soundbuf_size = size;
 	}
 }
 
@@ -646,14 +641,11 @@ NGetVoice(char plr,char val)
 
 	printf ("**** NGetVoice(%d,%d)\n", plr, val);
 
-	if (Sounds <= 0)
-		return;
-
 	if (VoiceOff!=-1) KillVoice();
 	VoiceOff=val;
 
 	mvfile = sOpen( (plr==0) ? "UNEWS.CDR" : "SNEWS.CDR" ,"rb",0);
-	if (mvfile==NULL) {Sounds=0;VoiceOff=-1;return;}  // file not here
+	if (mvfile==NULL) {VoiceOff=-1;return;}  // file not here
 
 	fseek(mvfile,val*(sizeof ABSnd),SEEK_SET);
 	fread(&ABSnd,sizeof ABSnd,1,mvfile);
@@ -661,7 +653,6 @@ NGetVoice(char plr,char val)
 	SwapLong(ABSnd.offset);
 	SwapLong(ABSnd.size);
 
-	VoiceStart=ABSnd.offset;
 	fseek(mvfile,ABSnd.offset,SEEK_SET);
 
 	printf ("offset %ld; size %ld\n", ABSnd.offset, ABSnd.size);
@@ -697,8 +688,31 @@ StopVoice (void)
 }
 
 void
-SetMusicVolume(int percent)
+PlayAudio(char *name, char mode)
 {
+	FILE* file;
+    int size = 16 * 1024;
+    int total = 0;
+    int bytes = 0;
+
+	printf ("PlayAudio(%s)\n", name);
+	file = open_gamedat(name);
+	if (!file)
+		return;
+
+    av_silence(AV_SOUND_CHANNEL);
+
+    do {
+        soundbuf_alloc (size+total);
+        bytes = fread(soundbuf+total, 1, size, file);
+        total += bytes;
+    } while (bytes);
+
+	fclose (file);
+
+	soundbuf_used = total;
+
+	PlayVoice();
 }
 
 int

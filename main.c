@@ -47,7 +47,6 @@
   char far * oldpal,pNeg[NUM_PLAYERS][MAX_MISSIONS];
   long xMODE;
   HTIMER server;
-  extern char Musics,Sounds;
   char Option=-1,MAIL=-1;
   int KO,SEG=15,FadeVal,fOFF=-1;
   extern struct mStr Mis;
@@ -358,9 +357,6 @@ int main(int argc, char *argv[])
   getcwd(BUZZ_DIR,32);
 
   hDISK=getdisk();
-
-  Musics = mBLASTER;
-  Sounds = sBLASTER;
 
   FadeVal = 10;
 
