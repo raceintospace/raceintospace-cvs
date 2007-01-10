@@ -162,8 +162,10 @@ PlayMusic(char mode)
 	if (cur_music == NULL)
 		return;
 
+    /*
     if (IsChannelMute(AV_MUSIC_CHANNEL))
         return;
+    */
 
 	KillMusic ();
 

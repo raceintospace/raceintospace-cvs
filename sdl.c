@@ -83,8 +83,9 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 			sample = 0;
 			/* Make this outer loop? */
 			for (i=0; i<AV_NUM_CHANNELS; ++i)
-				sample += arr[i].coeff * (
-						arr[i].data ? *(arr[i].data++) : silence);
+				sample +=
+					arr[i].coeff*(arr[i].data ? *(arr[i].data++) : silence)
+					+ (AV_MAX_VOLUME-arr[i].coeff) * silence;
 			sample /= sum;
 			if (sample > 255)
 				sample = 255;

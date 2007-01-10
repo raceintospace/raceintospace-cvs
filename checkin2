@@ -32,8 +32,8 @@ then
 	exit 1
 fi
 
-msg=`cat ChangeLog | sed -e "/\<$lasttag\>/,\\$d"`
-
+msg=`cat ChangeLog | 
+	sed -n -e "1{h;n}; /^[0-9]/{x;p}; /\<$lasttag\>/Q; /^[0-9]/!H"`
 
 echo "prev tag $lasttag; new tag $newtag"
 echo "====== LOG MESSAGE ====="

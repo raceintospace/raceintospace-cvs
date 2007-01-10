@@ -49,9 +49,6 @@ try mpeg encoding the video
 
 Yank strings into a separate string table
 
-Changes in audio (mute, music file change, load next audio etc) should be
-faded to silence and back.
-
 ================================================================
 possible old bugs
 

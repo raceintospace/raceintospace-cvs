@@ -30,6 +30,10 @@ void play (struct audio_chunk *cp, int channel);
 struct audio_channel {
     unsigned                volume;
     unsigned                mute;
+#if 0
+    unsigned                fade;            /* actual fade value */
+    int                     fade_inc;        /* fade inc or dec */
+#endif
     struct audio_chunk*     chunk;           /* played chunk */
     struct audio_chunk**    chunk_tailp;     /* tail of chunk list? */
     unsigned                offset;          /* data offset in chunk */

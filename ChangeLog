@@ -1,5 +1,11 @@
 2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V72
+
+	* Fixed audio mixer, eliminated glitches
+	
+2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V71
 
 	* Implemented PlayAudio() and moved it to pace.c
