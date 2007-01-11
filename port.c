@@ -96,7 +96,8 @@ typedef struct mobj
 
 MOBJ MObj[35];
 
-char MMMM[]="AIMRPVCQETB\0";
+// These are the valid hotkeys
+char *HotKeyList="AIMRPVCQETB\0";
 
 int FCtr;
 GXHEADER flaggy;
@@ -418,23 +419,27 @@ void AdminPort(char plr)
 
   // Pads
    for (i=0;i<3;i++) {
-      Data->P[plr].Port[23+i]=1;
-      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[23+i]=2;
-      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[23+i]=3;
-      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[23+i]=0;
+      Data->P[plr].Port[OVL_LaunchPad_A+i]=1;
+      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[OVL_LaunchPad_A+i]=2;
+      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[OVL_LaunchPad_A+i]=3;
+      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[OVL_LaunchPad_A+i]=0;
       }
 
-  if (Data->P[plr].AstroCount>0) {
-      PortPlace(fin,table[16-plr*4]); // Draw CPX
-      MMMM[9]='T';
-      MMMM[10]='B';
-  } else {MMMM[9]='\0';MMMM[10]='\0';}
+	 if (Data->P[plr].AstroCount>0) {
+		 PortPlace(fin,table[16-plr*4]); // Draw CPX
+		 HotKeyList[9]='T';		// Enable Manned hot keys
+		 HotKeyList[10]='B';
+	 } 
+	 else {		// No manned program hotkeys
+		 HotKeyList[9]='\0';
+		 HotKeyList[10]='\0';
+	 }
   if ((Data->P[plr].Pool[0].Active|Data->P[plr].Pool[1].Active|Data->P[plr].Pool[2].Active) >=1) 
       PortPlace(fin,table[17-plr*4]); // Draw TRN
 
-  if (Data->P[plr].Port[22]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
-  if (Data->P[plr].Port[22]>2) PortPlace(fin,table[14+15*plr]);
-  if (Data->P[plr].Port[22]==3) PortPlace(fin,table[15+15*plr]);
+  if (Data->P[plr].Port[OVL_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
+  if (Data->P[plr].Port[OVL_Research]>2) PortPlace(fin,table[14+15*plr]);
+  if (Data->P[plr].Port[OVL_Research]==3) PortPlace(fin,table[15+15*plr]);
 
   for (fm=0;fm<35;fm++) {
     i=fm;
@@ -518,29 +523,32 @@ void NPDraw(char plr)
 
   // Pads
    for (i=0;i<3;i++) {
-      Data->P[plr].Port[23+i]=1;
-      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[23+i]=2;
-      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[23+i]=3;
-      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[23+i]=0;
+      Data->P[plr].Port[OVL_LaunchPad_A+i]=1;
+      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[OVL_LaunchPad_A+i]=2;
+      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[OVL_LaunchPad_A+i]=3;
+      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[OVL_LaunchPad_A+i]=0;
       }
 
-  if (Vab_Spot==1 && Data->P[plr].Port[4]==2)
+  if (Vab_Spot==1 && Data->P[plr].Port[OVL_VAB]==2)
    {
-    Data->P[plr].Port[23]=plr;
+    Data->P[plr].Port[OVL_LaunchPad_A]=plr;
    }
   
 
   if (Data->P[plr].AstroCount>0) {
       PortPlace(fin,table[16-plr*4]); // Draw CPX
-      MMMM[9]='T';
-      MMMM[10]='B';
-  } else {MMMM[9]='\0';MMMM[10]='\0';}
+      HotKeyList[9]='T';
+      HotKeyList[10]='B';
+	} else {	// No manned program hotkeys
+		HotKeyList[9]='\0';
+		HotKeyList[10]='\0';
+	}
   if (Data->P[plr].Pool[0].Active>=1) 
       PortPlace(fin,table[17-plr*4]); // Draw TRN
 
-  if (Data->P[plr].Port[22]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
-  if (Data->P[plr].Port[22]>2) PortPlace(fin,table[14+15*plr]);
-  if (Data->P[plr].Port[22]==3) PortPlace(fin,table[15+15*plr]);
+  if (Data->P[plr].Port[OVL_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
+  if (Data->P[plr].Port[OVL_Research]>2) PortPlace(fin,table[14+15*plr]);
+  if (Data->P[plr].Port[OVL_Research]==3) PortPlace(fin,table[15+15*plr]);
 
   for (fm=0;fm<35;fm++) {
     i=fm;
@@ -611,58 +619,60 @@ void UpdatePortOverlays(void)
    char i,j;
    for (i=0;i<NUM_PLAYERS;i++) {   // Programs
       for (j=0;j<5;j++) 
-         Data->P[i].Port[21-j]=(Data->P[i].Manned[j].Num>=0)?1:0;
+         Data->P[i].Port[OVL_Mercury-j]=(Data->P[i].Manned[j].Num>=0)?1:0;
 
-      // Zond thingy
-      //if (i==1 && Data->P[i].Manned[2].Seas>6) Data->P[i].Port[32]=1;
+#ifdef DEADCODE
+      // Zond thingy -- this was never implemented and available after 6 manned seasons
+      //if (i==1 && Data->P[i].Manned[2].Seas>6) Data->P[i].Port[OVL_Zond]=1;
+#endif
 
       if(Data->P[i].Probe[0].Num>=0 || Data->P[i].Probe[1].Num>=0 ||
-          Data->P[i].Probe[2].Num>=0 ) Data->P[i].Port[15]=1;
+          Data->P[i].Probe[2].Num>=0 ) Data->P[i].Port[OVL_Satellite]=1;
 
       if (Data->P[i].Manned[5].Num>=0 || Data->P[i].Manned[6].Num>=0)
-         Data->P[i].Port[16]=1;
+         Data->P[i].Port[OVL_LM]=1;
 
       // Museum
       if (Data->Prestige[18].Goal[i]>0)
-         Data->P[i].Port[5]=maxx(Data->P[i].Port[5],1);   // Mus:1
+         Data->P[i].Port[OVL_Museum]=maxx(Data->P[i].Port[OVL_Museum],1);   // Mus:1
       if (Data->Prestige[1].Goal[i]>0) 
-         Data->P[i].Port[5]=maxx(Data->P[i].Port[5],2);   // Mus:2
+         Data->P[i].Port[OVL_Museum]=maxx(Data->P[i].Port[OVL_Museum],2);   // Mus:2
       if (Data->Prestige[20].Goal[i]>0) 
-         Data->P[i].Port[5]=maxx(Data->P[i].Port[5],3);   // Mus:3
+         Data->P[i].Port[OVL_Museum]=maxx(Data->P[i].Port[OVL_Museum],3);   // Mus:3
 
       // R&D
       if (Data->P[i].Budget>=85)
-         Data->P[i].Port[22]=maxx(Data->P[i].Port[22],1); // RD:1
+         Data->P[i].Port[OVL_Research]=maxx(Data->P[i].Port[OVL_Research],1); // RD:1
       if (Data->P[i].Budget>=112)
-         Data->P[i].Port[22]=maxx(Data->P[i].Port[22],2); // RD:2
+         Data->P[i].Port[OVL_Research]=maxx(Data->P[i].Port[OVL_Research],2); // RD:2
       if (Data->P[i].Budget>=150)
-         Data->P[i].Port[22]=maxx(Data->P[i].Port[22],3); // RD:3
+         Data->P[i].Port[OVL_Research]=maxx(Data->P[i].Port[OVL_Research],3); // RD:3
 
       // VAB
 
       if (Data->Prestige[12].Goal[i]>0)
-         Data->P[i].Port[4]=maxx(Data->P[i].Port[4],1);   // VAB:1
+         Data->P[i].Port[OVL_VAB]=maxx(Data->P[i].Port[OVL_VAB],1);   // VAB:1
 
        if (Data->P[i].Budget>115)
-         Data->P[i].Port[4]=maxx(Data->P[i].Port[4],2);   // VAB:2
+         Data->P[i].Port[OVL_VAB]=maxx(Data->P[i].Port[OVL_VAB],2);   // VAB:2
 
       // Admin
       if (Data->P[i].AstroLevel>=2)
-         Data->P[i].Port[6]=maxx(Data->P[i].Port[6],1);   // Adm:1
+         Data->P[i].Port[OVL_Admin]=maxx(Data->P[i].Port[OVL_Admin],1);   // Adm:1
       if (Data->P[i].AstroLevel>=4)
-         Data->P[i].Port[6]=maxx(Data->P[i].Port[6],2);   // Adm:2
+         Data->P[i].Port[OVL_Admin]=maxx(Data->P[i].Port[OVL_Admin],2);   // Adm:2
 
       if (Data->Prestige[13].Goal[i]>0)
-         Data->P[i].Port[33]=maxx(Data->P[i].Port[33],1); // Trk:1
+         Data->P[i].Port[OVL_Tracking]=maxx(Data->P[i].Port[OVL_Tracking],1); // Trk:1
       if (Data->Prestige[19].Goal[i]>0)
-         Data->P[i].Port[26]=maxx(Data->P[i].Port[26],1); // MC:1
+         Data->P[i].Port[OVL_MissionControl]=maxx(Data->P[i].Port[OVL_MissionControl],1); // MC:1
 
       if (Data->P[i].AstroCount>0)
-         Data->P[i].Port[7]=Data->P[i].Port[9]=1;
+         Data->P[i].Port[OVL_AstroComplex]=Data->P[i].Port[OVL_BasicTraining]=1;
 
       if (Data->P[i].Pool[0].Active>0) {  // Astros
-         Data->P[i].Port[10]=Data->P[i].Port[11]=Data->P[i].Port[12]=1;
-         Data->P[i].Port[13]=Data->P[i].Port[8]=Data->P[i].Port[14]=1;
+         Data->P[i].Port[OVL_Helipad]=Data->P[i].Port[OVL_Pool]=Data->P[i].Port[OVL_Planetarium]=1;
+         Data->P[i].Port[OVL_Centrifuge]=Data->P[i].Port[OVL_MedicalCtr]=Data->P[i].Port[OVL_Airfield]=1;
          }
       }
   return;
@@ -693,7 +703,7 @@ void Master(char plr)
   r_value=random(1000);
   if (xMODE & xMODE_CLOUDS)
    {
-    if (plr==0 && Data->P[plr].Port[4]==0) SpotCrap(14,SPOT_LOAD);          //Usa Storm 
+    if (plr==0 && Data->P[plr].Port[OVL_VAB]==0) SpotCrap(14,SPOT_LOAD);          //Usa Storm 
      else if (plr==1) SpotCrap(12,SPOT_LOAD);    //Sov Storm
    }
   else 
@@ -704,7 +714,7 @@ void Master(char plr)
     }
    else if (t_value && g_value) SpotCrap(0+(5*plr),SPOT_LOAD);  //Lem
     else if (r_value<150) {
-     if (plr==1 && Data->P[plr].Port[8]==1) SpotCrap(18,SPOT_LOAD);   
+     if (plr==1 && Data->P[plr].Port[OVL_MedicalCtr]==1) SpotCrap(18,SPOT_LOAD);   
       else SpotCrap(1+(5*plr),SPOT_LOAD);
     }
     else if (r_value>850) SpotCrap(2+(5*plr),SPOT_LOAD);       //Heli
@@ -814,6 +824,8 @@ void PortRestore(unsigned int Count)
   return;
 }
 
+
+// Map a keypress to a spaceport building selection
 int MapKey(char plr,int key,int old) 
 {
   int val,j,found=0;
@@ -829,24 +841,25 @@ int MapKey(char plr,int key,int old)
 
   val=old;
   switch(key) {
-    case 'A': if (MObj[6].Reg[Data->P[plr].Port[6]].sNum>0) val=6;mousebuttons=1; break;
-    case 'I': if (MObj[1].Reg[Data->P[plr].Port[1]].sNum>0) val=1;mousebuttons=1; break;
-    case 'M': if (MObj[5].Reg[Data->P[plr].Port[5]].sNum>0) val=5;mousebuttons=1; break;
-    case 'R': if (MObj[22].Reg[Data->P[plr].Port[22]].sNum>0) val=22;mousebuttons=1; break;
-    case 'P': if (MObj[2].Reg[Data->P[plr].Port[2]].sNum>0) val=2;mousebuttons=1; break;
-    case 'V': if (MObj[4].Reg[Data->P[plr].Port[4]].sNum>0) val=4;mousebuttons=1; break;
-    case 'C': if (MObj[26].Reg[Data->P[plr].Port[26]].sNum>0) val=26;mousebuttons=1; break;
-    case 'Q': if (MObj[29].Reg[Data->P[plr].Port[29]].sNum>0) val=29;mousebuttons=1; break;
-    case 'E': if (MObj[28].Reg[Data->P[plr].Port[28]].sNum>0) val=28;mousebuttons=1; break;
-    case 'T': if (MObj[7].Reg[Data->P[plr].Port[7]].sNum>0) val=7;mousebuttons=1; break;
-    case 'B': if (MObj[9].Reg[Data->P[plr].Port[9]].sNum>0) val=9;mousebuttons=1; break;
+    case 'A': if (MObj[6].Reg[Data->P[plr].Port[OVL_Admin]].sNum>0) val=6;mousebuttons=1; break;
+    case 'I': if (MObj[1].Reg[Data->P[plr].Port[OVL_Pentagon]].sNum>0) val=1;mousebuttons=1; break;
+    case 'M': if (MObj[5].Reg[Data->P[plr].Port[OVL_Museum]].sNum>0) val=5;mousebuttons=1; break;
+    case 'R': if (MObj[22].Reg[Data->P[plr].Port[OVL_Research]].sNum>0) val=22;mousebuttons=1; break;
+    case 'P': if (MObj[2].Reg[Data->P[plr].Port[OVL_Capitol]].sNum>0) val=2;mousebuttons=1; break;
+    case 'V': if (MObj[4].Reg[Data->P[plr].Port[OVL_VAB]].sNum>0) val=4;mousebuttons=1; break;
+    case 'C': if (MObj[26].Reg[Data->P[plr].Port[OVL_MissionControl]].sNum>0) val=26;mousebuttons=1; break;
+    case 'Q': if (MObj[29].Reg[Data->P[plr].Port[OVL_Gate]].sNum>0) val=29;mousebuttons=1; break;
+    case 'E': if (MObj[28].Reg[Data->P[plr].Port[OVL_FlagPole]].sNum>0) val=28;mousebuttons=1; break;
+    case 'T': if (MObj[7].Reg[Data->P[plr].Port[OVL_AstroComplex]].sNum>0) val=7;mousebuttons=1; break;
+    case 'B': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
 
 #if 0
-    case '1': if (MObj[9].Reg[Data->P[plr].Port[9]].sNum>0) val=9;mousebuttons=1; break;
-    case '2': if (MObj[9].Reg[Data->P[plr].Port[9]].sNum>0) val=9;mousebuttons=1; break;
-    case '3': if (MObj[9].Reg[Data->P[plr].Port[9]].sNum>0) val=9;mousebuttons=1; break;
-    case '4': if (MObj[9].Reg[Data->P[plr].Port[9]].sNum>0) val=9;mousebuttons=1; break;
-    case 'S': if (MObj[9].Reg[Data->P[plr].Port[9]].sNum>0) val=9;mousebuttons=1; break;
+		// Possibly hotkeys for astronaut training buildings
+    case '1': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case '2': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case '3': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case '4': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case 'S': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
 #endif
     case UP_ARROW:if (old==high) old=0; else old=old+1;
                   found=0;for (j=old;j<high+1;j++)
@@ -875,8 +888,6 @@ int kPad,pKey,gork;
 FILE *fin;
 long stable[55];
 ui16 Count,*bone;
-
-char *MMMM="AIMRPVCQETB\0";
 
 i = 0; /* XXX check uninitialized */
 
@@ -908,7 +919,7 @@ PreOut=(struct SXX *)&buffer[60000];
        gork=random(100);
        if (gork<50)
         {
-         if (plr==1 && Data->P[plr].Port[8]==1)
+         if (plr==1 && Data->P[plr].Port[OVL_MedicalCtr]==1)
           SpotCrap(18,SPOT_LOAD);
            else SpotCrap(1+(5*plr),SPOT_LOAD);
         }
@@ -931,7 +942,7 @@ PreOut=(struct SXX *)&buffer[60000];
       if (kMode==1 && !(x==319 && y==199)) kMode=0;
       if (key>0) // this was only looking for the low byte
        {
-        i=MapKey(plr,key,i);
+        i=MapKey(plr,key,i);	// Get Port offset for keyboard input
         grSetMousePos(319,199);x=319;y=199;
         if (key==K_ESCAPE) {kMode=0;i=0;}
          else {kMode=1;}
@@ -968,8 +979,9 @@ PreOut=(struct SXX *)&buffer[60000];
                strncpy(&IDT[1],MObj[i].Help,3);
               }
           good=0;
-          for (k=0;k<(int)strlen(MMMM);k++)
-           if (MMMM[k]==((char)(0x00ff&key))) good=1;
+					// Search hotkey string for valid selection
+          for (k=0;k<(int)strlen(HotKeyList);k++)
+           if (HotKeyList[k]==((char)(0x00ff&key))) good=1;
 
           while (x>=MObj[i].Reg[Data->P[plr].Port[i]].CD[j].x1 &&
              y>=MObj[i].Reg[Data->P[plr].Port[i]].CD[j].y1 &&
@@ -1038,16 +1050,16 @@ PreOut=(struct SXX *)&buffer[60000];
 #if SPOT_ON
                           memcpy(vhptr.vptr,screen,64000);
                           gork=random(100);
-                          if (Vab_Spot==1 && Data->P[plr].Port[4]==2) 
+                          if (Vab_Spot==1 && Data->P[plr].Port[OVL_VAB]==2) 
                            {
-                            Data->P[plr].Port[23]=1;
+                            Data->P[plr].Port[OVL_LaunchPad_A]=1;
                             if (plr==0) {
                                if (gork<=60) SpotCrap(4,SPOT_LOAD); //Rocket to Pad
                                 else SpotCrap(15,SPOT_LOAD); //Rocket&Truck/Door
                               }
                              else if (plr==1) SpotCrap(16,SPOT_LOAD);
                            }
-                           else if (Vab_Spot==4 && plr==0 && Data->P[plr].Port[4]==0)
+                           else if (Vab_Spot==4 && plr==0 && Data->P[plr].Port[OVL_VAB]==0)
                             {
                              SpotCrap(19,SPOT_LOAD);
                             }
@@ -1061,7 +1073,7 @@ PreOut=(struct SXX *)&buffer[60000];
                               else if (plr==0) SpotCrap(11,SPOT_LOAD);
                             }
                            else if (gork<30) {
-                            if (plr==1 && Data->P[plr].Port[8]==1)
+                            if (plr==1 && Data->P[plr].Port[OVL_MedicalCtr]==1)
                              SpotCrap(18,SPOT_LOAD);
                               else SpotCrap(1+(5*plr),SPOT_LOAD);
                             }
@@ -1360,7 +1372,11 @@ char MisReq(char plr)
   return i;
 }
 
-// EOF
+// Editor settings {{{
+// ex: ts=4 noet sw=2 
+// ex: foldmethod=marker
+// }}}
+
 
 
 

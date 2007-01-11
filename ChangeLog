@@ -1,5 +1,11 @@
 2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V79
+
+	* Added enums for the Spaceport improvements
+
+2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V78
 
 	* Removed name.o from Makefile.in

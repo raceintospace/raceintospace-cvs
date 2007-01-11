@@ -448,4 +448,50 @@ struct mfab {
   i16 idx[4];
 };
 
-// EOF
+
+
+// Space port overlays
+enum SpacePortOverlays
+{
+  OVL_Monument = 0,     // 00 Washington's Monument
+  OVL_Pentagon,			// 01 The Pentagon
+  OVL_Capitol,			// 02 Capitol Building
+  OVL_Cemetery,			// 03 Arlington Cemetery
+  OVL_VAB,				// 04 Vehicle Assembly
+  OVL_Museum, 			// 05 Museum of Space History
+  OVL_Admin,			// 06 Administration
+  OVL_AstroComplex,		// 07 Astronaut Complex
+  OVL_MedicalCtr,		// 08 Medical Center
+  OVL_BasicTraining,	// 09 Basic Training
+  OVL_Helipad,			// 10 Helipad: Adv LM
+  OVL_Pool,				// 11 Pool: Adv EVA
+  OVL_Planetarium,		// 12 Planetarium: Adv Docking
+  OVL_Centrifuge,		// 13 Centrifuge: Adv Endurance
+  OVL_Airfield,			// 14 Airfield: Adv Capsule
+  OVL_Satellite,		// 15 Satellite Programs
+  OVL_LM,				// 16 LM Program
+  OVL_Jupiter,			// 17 Jupiter Program
+  OVL_XMS,				// 18 XMS Program
+  OVL_Apollo,			// 19 Apollo Program
+  OVL_Gemini,			// 20 Gemini Program
+  OVL_Mercury,			// 21 Mercury Program
+  OVL_Research,			// 22 Research & Development
+  OVL_LaunchPad_A,		// 23 Launch Facility A
+  OVL_LaunchPad_B,		// 24 Launch Facility B
+  OVL_LaunchPad_C,		// 25 Launch Facility C
+  OVL_MissionControl,	// 26 Mission Control
+  OVL_ViewingStand,		// 27 Viewing Stand
+  OVL_FlagPole,			// 28 Flag Pole: End Turn
+  OVL_Gate,				// 29 Security Gate: Quit
+  OVL_Moon,				// 30 Moon
+  OVL_SovMonumentAlt,	// 31 Soviet Monument #2 - unused
+  OVL_Zond,				// 32 Zond - unused
+  OVL_Tracking,			// 33 Tracking Station
+  OVL_SVHQ,				// 34 Strategic Visions H.Q.
+};
+
+// Editor settings {{{
+// ex: ts=4 noet sw=2 
+// ex: foldmethod=marker
+// }}}
+
