@@ -88,7 +88,7 @@ typedef struct mobj
    {
    char Name[30];       // Name of region
    char qty;            // Nunber of regions
-   char Idiot[3];       // Idiot Box Stuff
+   char Help[3];       // Help Box Stuff
    REGION Reg[4];       // At Max 4 regions
    } MOBJ;
 
@@ -965,7 +965,7 @@ PreOut=(struct SXX *)&buffer[60000];
                fread(bone,Count*sizeof (ui16),1,fin);
                //   malloc((sizeof (struct SXX))*Count);
                PortOutLine(Count,bone,1);
-               strncpy(&IDT[1],MObj[i].Idiot,3);
+               strncpy(&IDT[1],MObj[i].Help,3);
               }
           good=0;
           for (k=0;k<(int)strlen(MMMM);k++)
@@ -1123,12 +1123,12 @@ char PortSel(char plr,char loc)
   Vab_Spot=0;  // clear the damn thing.
 
   switch(loc) {
-   case 0:  Idiot((plr==0)?"i023":"i022");
+   case 0:  Help((plr==0)?"i023":"i022");
             strcpy(IKEY,"k022");
             return pNOREDRAW;// Monuments
     case 1: 
         if (Data->Year==57 || (Data->Year==58 && Data->Season==0)) {
-           Idiot("i108");
+           Help("i108");
            return pNOREDRAW;
         }
         strcpy(IDT,"i027\0");
@@ -1173,12 +1173,12 @@ char PortSel(char plr,char loc)
 								 MisOK=10;
                if (Data->P[plr].Mission[i].MissionCode>0) MisOK++;
                }
-             if (MisOK>=10) Idiot("i005");
+             if (MisOK>=10) Help("i005");
              else if (MisOK>0) {
                Rush(plr);RUSH=1;
                return pREDRAW;
                }
-             else Idiot("i104");
+             else Help("i104");
              return pREDRAW;
 
     case 27: strcpy(IDT,"i017");strcpy(IKEY,"k017");Viewing(plr);return pREDRAW;
@@ -1192,21 +1192,21 @@ char PortSel(char plr,char loc)
                if (Data->P[plr].Mission[i].MissionCode>0) MisOK++;
               }    
 
-            if (MisOK>=10) {Idiot("i005");return pNOREDRAW;}
+            if (MisOK>=10) {Help("i005");return pNOREDRAW;}
              else if (MisOK==0) {
 		         MisOK=0;
 		         i=Request(plr,"END TURN",1);
                if (i) return pEXIT;
 		         }
              else if (RUSH==1 && MisOK>0 && MisOK<10) {
-               MisOK=Idiot("i004");             // Mission Control
+               MisOK=Help("i004");             // Mission Control
 	             if (MisOK>=0) {
                 if (Option!=-1) {put_serial(LET_O);put_serial(LET_O);put_serial(LET_O);}
                 RUSH=0;return pEXIT;
                };
               }
              else if (RUSH==0) {
-               Idiot("i103");
+               Help("i103");
               }
             return pNOREDRAW;
     case 29: // Secutity Gate : Quit
@@ -1218,10 +1218,10 @@ char PortSel(char plr,char loc)
              }
 	          return pNOREDRAW; 
     case 30: strcpy(IDT,"i029");Moon(plr);return pREDRAW; // Moon
-    case 31: Idiot("i025");return pNOREDRAW; // Sov Mon #2
+    case 31: Help("i025");return pNOREDRAW; // Sov Mon #2
     case 32: strcpy(IDT,"i036");Programs(plr,3);return pREDRAW; // Zond
     case 33: if (Option!=-1) {MesCenter();Vab_Spot=3;return pREDRAW;} // Tracking
-              else {Idiot("i042");Vab_Spot=3;return pREDRAW;}
+              else {Help("i042");Vab_Spot=3;return pREDRAW;}
     case 34: return pNOREDRAW; // SV
     default: return pNOREDRAW;
   }

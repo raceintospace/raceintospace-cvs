@@ -338,8 +338,8 @@ void Train(char plr,int level)
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
 	    OutBox(168,181,314,193);
-       // idiot box are you sure
-       temp=0;if (plr==0) temp=Idiot("i102"); else temp=Idiot("i109");
+       // Help box are you sure
+       temp=0;if (plr==0) temp=Help("i102"); else temp=Help("i109");
        if (temp==1)
         {
 	      Data->P[plr].Pool[M[now2]].TrainingLevel=Data->P[plr].Pool[M[now2]].Status;

@@ -110,13 +110,13 @@ int Steal(int p,int prog,int type) // type= 1:postive -1:negative search
 int NMod(int p,int prog,int type,int per) // type= 1:postive -1:negative search
 {
   int i=0,j=0,save[28],lo=0,hi=28;
-  struct Equipment *Eptr[28];
+  Equipment *Eptr[28];
   
   lo=(prog>0) ? (prog-1)*7 : 0;   hi=(prog>0) ? lo+7 : 28;
   if (prog==1) hi=lo+3;
   for (i=0;i<25;i++)
    {
-    Eptr[i]=(struct Equipment *) &Data->P[p].Probe[i];
+    Eptr[i]=(Equipment *) &Data->P[p].Probe[i];
     save[i]= ((Eptr[i]->Safety+per*type)<=(Eptr[i]->MaxSafety)&& Eptr[i]->Num>=0) ? Eptr[i]->Safety+per*type : 0;
     if (Eptr[i]->Num<0) save[i]=0;
    };
@@ -137,14 +137,14 @@ int DamMod(int p,int prog,int dam,int cost)
 {
   int i=0,j=0,lo=0,hi=28;
   int save[28];
-  struct Equipment *Eptr[28];
+  Equipment *Eptr[28];
   
   memset(save,0x00,sizeof save);
   lo=(prog>0) ? (prog-1)*7 : 0;
   hi=(prog>0) ? lo+7 : 28;
   for (i=0;i<25;i++)
    {
-    Eptr[i]=(struct Equipment *) &Data->P[p].Probe[i];
+    Eptr[i]=(Equipment *) &Data->P[p].Probe[i];
     save[i]= ((Eptr[i]->Safety > Eptr[i]->Base)&& Eptr[i]->Num>=0) ? Eptr[i]->Safety : 0;
    };
   for (i=0;i<25;i++) if ( save[i] <dam ) save[i]=0;
@@ -163,14 +163,14 @@ int DamMod(int p,int prog,int dam,int cost)
 int RDMods(int p,int prog,int type,int val)
 {
   int i=0,j=0,save[28],lo=0,hi=28;
-  struct Equipment *Eptr[28];
+  Equipment *Eptr[28];
   
   memset(save,0x00,sizeof save);
   lo=(prog>0) ? (prog-1)*7 : 0;
   hi=(prog>0) ? lo+7 : 28;
   for (i=0;i<25;i++)
    {
-    Eptr[i]=(struct Equipment *) &Data->P[p].Probe[i];
+    Eptr[i]=(Equipment *) &Data->P[p].Probe[i];
     save[i]= ((Eptr[i]->Safety > Eptr[i]->Base)&& Eptr[i]->Num>=0) ? Eptr[i]->Safety : 0;
    };
   save[11]=save[25]=save[26]=save[27]=save[12]=save[13]=save[3]=save[4]=save[5]=save[6]=0;

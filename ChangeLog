@@ -1,3 +1,15 @@
+2007-01-10  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V76
+
+	* Changed "struct Equipment" into a typedef
+
+	* Renamed the Help dialog functions and structures
+
+	* Added support for a personal Makefile.<username> (ie Makefile.mkmccarty)
+
+	* Removed name.c
+
 2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V75

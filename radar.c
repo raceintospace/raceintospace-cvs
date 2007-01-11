@@ -152,26 +152,26 @@ void ClrMiss(char plr,char pad)
  //pad joint first part/second part/single 
  if (Data->P[plr].Mission[padd].Joint==0)
   {
-   if (!AI[plr] && pad<3) temp=Idiot("i111");
+   if (!AI[plr] && pad<3) temp=Help("i111");
   }
   else 
    switch(padd)
     {
-     case 0:if (!AI[plr] && pad<3) temp=Idiot("i110");break;
+     case 0:if (!AI[plr] && pad<3) temp=Help("i110");break;
      case 1:if (Data->P[plr].Mission[1].Joint==1)
              {
               if (Data->P[plr].Mission[0].Joint==1)
                {
-                if (!AI[plr] && pad<3) temp=Idiot("i112");
+                if (!AI[plr] && pad<3) temp=Help("i112");
                 padd=0;
                }
               else
                {
-                if (!AI[plr] && pad<3) temp=Idiot("i110");
+                if (!AI[plr] && pad<3) temp=Help("i110");
                }
              }
             break;
-     case 2:padd=1;if (!AI[plr] && pad<3) temp=Idiot("i112");break;
+     case 2:padd=1;if (!AI[plr] && pad<3) temp=Help("i112");break;
      default:temp=0;break;
     }
  if (AI[plr]) temp=1;
@@ -295,7 +295,7 @@ void ShowPad(char plr,char pad)
 	   if (Data->P[plr].Cash>=Data->P[plr].LaunchFacility[pad]) 
 	     { 
 		   temp=0;
-		   temp=Idiot("i115");
+		   temp=Help("i115");
 		   if (temp==1)
           {
            Data->P[plr].Cash=Data->P[plr].Cash-Data->P[plr].LaunchFacility[pad];
@@ -305,7 +305,7 @@ void ShowPad(char plr,char pad)
 	   else 
 	    {
 	     temp=0;
-	     temp=Idiot("i116");
+	     temp=Help("i116");
         temp=0;
 	    }
 	   OutBox(169,181,314,193);

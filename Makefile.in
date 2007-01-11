@@ -9,6 +9,9 @@ EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 
 CFLAGS = -g -Wall -I. `sdl-config --cflags`
 
+# Personal Makefile
+-include Makefile.$(LOGNAME)
+
 .c.o:
 	@echo "$(CC) ...flags... -c $*.c"
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c

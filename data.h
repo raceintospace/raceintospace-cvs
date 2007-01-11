@@ -88,7 +88,7 @@ enum EquipmentIndex {
 	EQUIP_TECH = 3,
 };
 
-struct Equipment {
+typedef struct _Equipment {
   char Name[20];     // Name of Hardware
   char ID[2];        // EquipID "C0 C1 C2 C3 : Acts as Index
 	i16  Safety;        // current safety factor
@@ -118,7 +118,7 @@ struct Equipment {
 	char DCost;        // Cost to repair damage
   char MisSucc;      // Mission Successes
   char MisFail;      // Mission Failures
-};
+} Equipment;
 
 struct MissionType {
 	char Name[25];          // name of mission
@@ -234,24 +234,24 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char DurLevel;			            // Current Duration Level
 	char LMpts;                      // Accumulation of any LM Test points
 	#if 0
-	struct Equipment Hardware[4][7];
+	Equipment Hardware[4][7];
 	#else
-	struct Equipment Probe[7];       // 0 = Orbital
+	Equipment Probe[7];       // 0 = Orbital
 					                     // 1 = Inter Planetary
 					                     // 2 = Lunar Probe
-	struct Equipment Rocket[7];      // 0 = One Stage
+	Equipment Rocket[7];      // 0 = One Stage
 					                     // 1 = Two Stage
 					                     // 2 = Three Stage
 					                     // 3 = Mega Stage
 					                     // 4 = Strap On Boosters
-	struct Equipment Manned[7];      // 0 = One Man Capsule
+	Equipment Manned[7];      // 0 = One Man Capsule
 					                     // 1 = Two Man Capsule
 					                     // 2 = Three Man Capsule
 					                     // 3 = Minishuttle
 					                     // 4 = Four Man Cap/Mod
 					                     // 5 = Two Man Module
 					                     // 6 = One Man Module
-	struct Equipment Misc[7];        // 0 = Kicker Level A
+	Equipment Misc[7];        // 0 = Kicker Level A
 					                     // 1 = Kicker Level B
 					                     // 2 = Kicker Level C
 					                     // 3 = EVA Suits
@@ -368,7 +368,7 @@ struct MisEval {
   char step;             // actual step id number
   char loc;              // Mission Step Name Index
   ui16 StepInfo; // ID of step success  1=succ   !1=fail
-  struct Equipment *E;   // Pointer into equipment`
+  Equipment *E;   // Pointer into equipment`
   char Prest;            // Prestige Step #  (-1 for none)
   char PComp;            // PComp will be set to amt of prest to be awarded.
   char pad;              // pad location  (Index into First Part of MH[x][]

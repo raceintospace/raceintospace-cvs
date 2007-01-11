@@ -828,10 +828,10 @@ void TestFMis(int j,int i)
 void UpdateHardTurn(char plr)
 {
   int i;
-  struct Equipment *px;
+  Equipment *px;
 
   for (i=0;i<28;i++) {
-    px=(struct Equipment *) &Data->P[plr].Probe[i];
+    px=(Equipment *) &Data->P[plr].Probe[i];
     if (px->Delay>0) px->Delay--;
     if (px->Num>=0) px->Seas++;
     px->Spok=0;

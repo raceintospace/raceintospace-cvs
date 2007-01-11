@@ -502,7 +502,7 @@ int CheckIfMissionGo(char plr,char launchIdx)
 {
   char idx,mcode;
   struct MissionType *pMission;
-  struct Equipment *E = NULL;	// Pointer to Equipment we're looking at
+  Equipment *E = NULL;	// Pointer to Equipment we're looking at
 
 	// Grab the Mission Code from the current Launch Index
   mcode=Data->P[plr].Mission[launchIdx].MissionCode;
@@ -864,10 +864,10 @@ void GetMouse_fast(void)
 
   if (key>>8==15) CloseEmUp(0,0);
   else if (XMAS && AL_CALL==0 && (rbut || (key>>8==0x3B))) {
-    if (mousebuttons!=1) Idiot(IDT);
+    if (mousebuttons!=1) Help(IDT);
     }
-  else if (AL_CALL==0 && ((key>>8)==0x3C)) Idiot(IKEY);
-  else if (AL_CALL==0 && ((key>>8)==0x3D)) Idiot("i123");
+  else if (AL_CALL==0 && ((key>>8)==0x3C)) Help(IKEY);
+  else if (AL_CALL==0 && ((key>>8)==0x3D)) Help("i123");
 }
 
 void PauseMouse(void)
@@ -1242,10 +1242,10 @@ void DispChr(char chr)
 void VerifySF(char plr)
 {
   int i;
-  struct Equipment *px;
+  Equipment *px;
 
   for (i=0;i<28;i++) {
-    px=(struct Equipment *) &Data->P[plr].Probe[i];
+    px=(Equipment *) &Data->P[plr].Probe[i];
     if (px->Safety>px->MaxSafety) px->Safety=px->MaxSafety;
     if (px->Safety<px->Base) px->Safety=px->Base;
   }

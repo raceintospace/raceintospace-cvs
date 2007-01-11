@@ -350,8 +350,8 @@ void Limbo(char plr)
     if (key>0) delay(140);
 	 while(mousebuttons!=0) GetMouse();key=0;
 	 OutBox(244,95+21*i,313,109+21*i);
-   if (Data->P[plr].Pool[M[now2]].TrainingLevel>6) Idiot("i120");
-   else if (Data->P[plr].Cash<3) Idiot("i121");
+   if (Data->P[plr].Pool[M[now2]].TrainingLevel>6) Help("i120");
+   else if (Data->P[plr].Cash<3) Help("i121");
    else {
 		 Data->P[plr].Pool[M[now2]].Status=7;
 	    Data->P[plr].Cash-=3;

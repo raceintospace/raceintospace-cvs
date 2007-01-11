@@ -324,7 +324,7 @@ void FileAccess(char mode)
 	  delay(250);
     if (mode==1) temp=1;
      else {
-	    temp=Idiot("i101");
+	    temp=Help("i101");
      }    
 
 	 while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
@@ -1117,7 +1117,7 @@ int FutureCheck(char plr,char type)
      
 	 }
    else if (p[i]==-1 && Data->P[plr].Cash<20 && type==0)
-    {Idiot("i129");}
+    {Help("i129");}
 
 
 	 if (p[i]>4 && Data->P[plr].Cash>=abs(Data->P[plr].LaunchFacility[i])
@@ -1134,7 +1134,7 @@ int FutureCheck(char plr,char type)
      
 	 }
 	 else if (p[i]>4 && Data->P[plr].Cash<abs(Data->P[plr].LaunchFacility[i])
-	    && type==0) {Idiot("i129");}
+	    && type==0) {Help("i129");}
        };
      };
    };

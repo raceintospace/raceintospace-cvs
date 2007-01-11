@@ -188,12 +188,15 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
   FILE *in;
   in=sOpen("PATCHES.BUT","rb",0);
   fread(&pal[coff*3],96,1,in);
+	SwapPal(pal);
   fseek(in,(50*plr+prog*10+poff)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
+	SwapWord(P.size);
+	SwapLong(P.offset);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
   gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
-  if (P.w * P.h != P.size) {
+  if (((int)P.w * (int)P.h) != P.size) {
       fprintf(stderr, "PatchMe(): Patch h*w != size!\n");
       P.size = P.w * P.h;
   }
@@ -378,7 +381,7 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
   return;
 }
 
-void DispIdiot(char top, char bot, char *txt)
+void DispHelp(char top, char bot, char *txt)
 {
    int i,pl=0;
    i=0;
@@ -402,16 +405,16 @@ void DispIdiot(char top, char bot, char *txt)
    return;
 }
 
-int Idiot(char *FName)
+int Help(char *FName)
 {
   int i,j,line,top=0,bot=0,plc=0;
-  char *Idiot,*NTxt,mode;
+  char *Help,*NTxt,mode;
   int ox1,oy1,ox2,oy2;
   int fsize;
   GXHEADER local;
   FILE *fin;
   long count;
-  struct Idiot {
+  struct Help {
     char Code[6];
     long offset;
     i16 size;
@@ -432,42 +435,42 @@ int Idiot(char *FName)
   }
   if (i==count) {fclose(fin);return 0;}
   AL_CALL=1;
-  Idiot=(char *) farmalloc(Pul.size);
+  Help=(char *) farmalloc(Pul.size);
   fseek(fin,Pul.offset,SEEK_SET);
-  fread(Idiot,Pul.size,1,fin);
+  fread(Help,Pul.size,1,fin);
   fclose(fin);
 
   // Process File
   i=0;j=0;line=0;fsize=1;
   
   while(line<fsize) {
-   if (Idiot[i]==0x3B) while(Idiot[i++]!=0x0a);  // Remove Comments
-   else if (Idiot[i]==0x25) {  // Percent for line qty
+   if (Help[i]==0x3B) while(Help[i++]!=0x0a);  // Remove Comments
+   else if (Help[i]==0x25) {  // Percent for line qty
       i++;
-      fsize=10*(Idiot[i]-0x30)+(Idiot[i+1]-0x30)+1;
+      fsize=10*(Help[i]-0x30)+(Help[i+1]-0x30)+1;
       bot=fsize;
 
       NTxt=(char *)farmalloc((unsigned int) (42*fsize));
       if (NTxt==NULL) CloseEmUp(0,112);  // locks on this line
       memset(NTxt,0x00,(unsigned int)(42*fsize));
       j=line*42;  // should be 0
-      mode=Idiot[i+3]-0x30;
+      mode=Help[i+3]-0x30;
       i+=6;
       }
-   else if (Idiot[i]==0x2e) {  // Period
+   else if (Help[i]==0x2e) {  // Period
       i++;
       NTxt[j++]=0xcc;
-      NTxt[j++]=(Idiot[i]-0x30)*100+(Idiot[i+1]-0x30)*10+(Idiot[i+2]-0x30);
+      NTxt[j++]=(Help[i]-0x30)*100+(Help[i+1]-0x30)*10+(Help[i+2]-0x30);
       i+=5;
       }
    else {   // Text of Line
-      while (Idiot[i]!=0x0D) NTxt[j++]=Idiot[i++];
+      while (Help[i]!=0x0D) NTxt[j++]=Help[i++];
       NTxt[j]=0x00;
       i+=2;line++;
       j=line*42;
       }
    }
-  farfree(Idiot);
+  farfree(Help);
 
   key=0;
   GV(&local,250,128);
@@ -498,7 +501,7 @@ int Idiot(char *FName)
   fsize=strlen(&NTxt[2]);
   PrintAt(157-fsize*3,42,&NTxt[2]);
   top=plc=1;
-  DispIdiot(plc,bot-1,&NTxt[0]);
+  DispHelp(plc,bot-1,&NTxt[0]);
 
   
   while (mousebuttons==1) GetMouse();
@@ -525,7 +528,7 @@ int Idiot(char *FName)
        InBox(266,50,277,87);
       // while(1)  { GetMouse();if (mousebuttons==0) break;}
        plc--;
-       DispIdiot(plc,bot,&NTxt[0]);
+       DispHelp(plc,bot,&NTxt[0]);
 	   OutBox(266,50,277,87);
        key=0;
       }  // Up
@@ -534,7 +537,7 @@ int Idiot(char *FName)
        InBox(266,89,277,126);
       // while(1)  { GetMouse();if (mousebuttons==0) break;}
        plc++;
-       DispIdiot(plc,bot,&NTxt[0]);
+       DispHelp(plc,bot,&NTxt[0]);
        OutBox(266,89,277,126);
        key=0;
       }  // Down

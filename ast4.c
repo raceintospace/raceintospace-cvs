@@ -489,7 +489,7 @@ void Programs(char plr,char prog)
   FadeIn(2,pal,10,0,0);
   chk=CheckProgram(plr,prog);
   
-  if (chk==0) {if (plr==0) Idiot("i113");else Idiot("i114");KillMusic();return;}
+  if (chk==0) {if (plr==0) Help("i113");else Help("i114");KillMusic();return;}
   while(1)  { GetMouse();if (mousebuttons==0) break;}
   while (1)
   {

@@ -39,9 +39,9 @@ char CheckCrewOK(char plr,char pad)
     {
      switch(pad)
       {
-       case 0:Idiot("i138.idt");break;
-       case 1:Idiot("i139.idt");break;
-       case 2:Idiot("i140.idt");break;
+       case 0:Help("i138.idt");break;
+       case 1:Help("i139.idt");break;
+       case 2:Help("i140.idt");break;
        default:break;
       };
      RT_value=1;

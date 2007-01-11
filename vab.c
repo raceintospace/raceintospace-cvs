@@ -643,8 +643,8 @@ begvab:
 	     }
 	    }
 	   }
-	   else if (ac==0) Idiot("i135");  // delay on purchase
-	    else Idiot("i137");  //not enough money
+	   else if (ac==0) Help("i135");  // delay on purchase
+	    else Help("i137");  //not enough money
      ShowVA(ccc);ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);
      OutBox(6,86,163,94);
     }
@@ -674,12 +674,12 @@ begvab:
 	  if (((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) && ccc!=0 && ButOn==1 && cwt<=pay[rk])
 	   {
 	    j=0;
-      if (Mis.EVA==1 && Data->P[plr].Misc[3].Num==-1) Idiot("i118");
-      else if (Mis.Doc==1 && Data->P[plr].Misc[4].Num==-1) Idiot("i119");
+      if (Mis.EVA==1 && Data->P[plr].Misc[3].Num==-1) Help("i118");
+      else if (Mis.Doc==1 && Data->P[plr].Misc[4].Num==-1) Help("i119");
       else
       {
       if ((Mis.mVab[0]&0x10)==0x10 && Data->P[plr].DMod<=0)
-        Idiot("i155");  // No docking module in orbit
+        Help("i155");  // No docking module in orbit
 
       j=j2=0;
       if (strncmp((char *)VAS[ccc][0].name,"NONE",4)!=0) {
@@ -952,7 +952,7 @@ void LMAdd(char plr,char prog,char kic,char part)
   return;
 }
 
-void VVals(char plr,char tx,struct Equipment *EQ,char v4,char v5)
+void VVals(char plr,char tx,Equipment *EQ,char v4,char v5)
 {
   strcpy(&VAS[VASqty][tx].name[0],&EQ->Name[0]); 
   VAS[VASqty][tx].qty=EQ->Num;

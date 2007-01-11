@@ -124,7 +124,7 @@ void MisAnn(char plr,char pad)
 {
   int i,j,bud;
   struct mStr Mis2;
-  char k,hold,Digit[4],IdiotFlag=0;
+  char k,hold,Digit[4],HelpFlag=0;
   
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
@@ -166,7 +166,7 @@ void MisAnn(char plr,char pad)
      if (dg[Mis2.Index][i]==0) Data->P[plr].Mission[pad].MissionCode=4;  // new mission
      else Data->P[plr].Mission[pad].MissionCode=Mis.Index;  // new mission
      GetMisType(Data->P[plr].Mission[pad].MissionCode);
-     IdiotFlag=1;
+     HelpFlag=1;
   }
 
   PrintAt(127,54,Mis.Abbr);
@@ -308,7 +308,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
   
 
   while(1)  { GetMouse();if (mousebuttons==0) break;}
-  if (IdiotFlag) Idiot("i156");  // Notification of being an idiot
+  if (HelpFlag) Help("i156");  // Notification of being an Help
 
   while (1)
   {

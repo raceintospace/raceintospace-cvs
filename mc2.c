@@ -27,7 +27,7 @@
 #include "externs.h"
 #include "replay.h"
 
-  extern struct Equipment *MH[2][8];   // Pointer to the main
+  extern Equipment *MH[2][8];   // Pointer to the main
   //struct MisHard *MH; //[2][7]
   extern struct MisAst MA[2][4];  //[2][4]
   extern struct MisEval Mev[60];  // was *Mev;

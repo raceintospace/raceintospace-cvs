@@ -165,7 +165,7 @@ int AsnCrew(char plr,char pad,char part)
     { 
      
      if (temp)EMPTY_BODY;
-     temp=Idiot("i107"); 
+     temp=Help("i107"); 
      bug=1;
      return 0; 
      } 
@@ -410,7 +410,7 @@ int HardRequest(char plr,char mode,char mis,char pad)
     pr[0]=pr[1]=pr[3]=pr[4]=0;
    }
   if (Mis.Doc==1) pr[4]=0;
-//  if (t==0) {Idiot("i126"); return 0;};
+//  if (t==0) {Help("i126"); return 0;};
   
 
   DrawHard(mode,pad,mis,plr);
@@ -467,7 +467,7 @@ int SecondHard(char plr,char mode,char mis,char pad)
 
   int i=0,men=0,prg=0,prog[5],t=0;
   for (i=0;i<5;i++) if (Data->P[plr].Manned[i].Num>=0) men++;
-  if (men==0) {Idiot("i126"); return 0;};
+  if (men==0) {Help("i126"); return 0;};
 
   if (mode==1) pad++; // if second part of Joint mission
   for (i=0;i<5;i++)

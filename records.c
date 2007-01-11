@@ -133,7 +133,7 @@ void ClearRecord(char *pos2)
 {
  int j;
  FILE *file;
- j=Idiot("i125");
+ j=Help("i125");
  if (j==-1) return;
  file = sOpen("RECORDS.DAT","rb",1);
  fread(rec,sizeof rec,1,file);

@@ -37,7 +37,7 @@ typedef struct mobj
    {
    char Name[30];       // Name of region
    char qty;            // Nunber of regions
-   char Idiot[3];       // Idiot Box Stuff
+   char Help[3];       // Help Box Stuff
    REGION Reg[4];       // At Max 4 regions
    } MOBJ;
 

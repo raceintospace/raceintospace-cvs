@@ -597,7 +597,7 @@ DrawAstCheck(plr);
          j=0;
          for (i=0;i<count;i++) if (Men[sel[i]].Sex==1) j++;
          if (j>0) fem=0;
-         else Idiot("i100");
+         else Help("i100");
          }
        if (fem==0 && count == MaxSel) {
 	 InBox(245,5,314,17);

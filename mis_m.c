@@ -14,7 +14,7 @@
 #define MIS_SET 0             // FAILURES ON
 
 extern struct MisAst MA[2][4];
-extern struct Equipment *MH[2][8];
+extern Equipment *MH[2][8];
 extern struct MisEval Mev[60]; 
 extern char MANNED[2],STEP,pal2[768],STEPnum,FINAL,AI[2],CAP[2],LM[2],DOC[2],EVA[2],fEarly,mcc,JOINT;
 extern char DMFake;

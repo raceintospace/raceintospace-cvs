@@ -297,8 +297,8 @@ long size;
           if ((where==0 || where==3) && (Data->Def.Input==2 || Data->Def.Input==3))
             {
 	          fin=sOpen("HIST.DAT","rb",0);
-	          fread(&Data->P[0].Probe[0],28*(sizeof (struct Equipment)),1,fin);
-	          fread(&Data->P[1].Probe[0],28*(sizeof (struct Equipment)),1,fin);
+	          fread(&Data->P[0].Probe[0],28*(sizeof (Equipment)),1,fin);
+	          fread(&Data->P[1].Probe[0],28*(sizeof (Equipment)),1,fin);
 	          fclose(fin);
 	         }
 	       if (Data->Def.Input==0 || Data->Def.Input==2)
@@ -602,7 +602,7 @@ void EditAst(void)
  Sov=(struct ManPool *) buffer+10000;
  FadeIn(2,pal,10,0,0);  
  
- temp=Idiot("i105");
+ temp=Help("i105");
  
  if (temp==1) fin = sOpen("CREW.DAT","rb",0);   /* Open Astronaut Data File  */
    else fin=sOpen("USER.DAT","rb",0);
@@ -630,7 +630,7 @@ void EditAst(void)
 	  InBox(245,5,314,17);
 	  while(1)  { GetMouse();if (mousebuttons==0) break;}
 	  temp=0;
-	  temp=Idiot("i106");
+	  temp=Help("i106");
 	  if (temp==1)
       {
         fin=sOpen("USER.DAT","wb",1);

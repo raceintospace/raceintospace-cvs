@@ -489,17 +489,17 @@ char RDUnit(char rhard,char runit,char r,char plr)
 
 void ShowUnit(char hw,char un,char plr)
 {
-  struct Equipment *PL;
+  Equipment *PL;
   char qty=1,SCol=0;
   int Unit_Cost,Init_Cost;
 
   PL = NULL; /* XXX check uninitialized */
 
   switch(hw) {
-   case 1: PL=(struct Equipment *)&Data->P[plr].Probe[un-1].Name[0];break;
-   case 2: PL=(struct Equipment *)&Data->P[plr].Rocket[un-1].Name[0];break;
-   case 3: PL=(struct Equipment *)&Data->P[plr].Manned[un-1].Name[0];break;
-   case 4: PL=(struct Equipment *)&Data->P[plr].Misc[un-1].Name[0];break;
+   case 1: PL=(Equipment *)&Data->P[plr].Probe[un-1].Name[0];break;
+   case 2: PL=(Equipment *)&Data->P[plr].Rocket[un-1].Name[0];break;
+   case 3: PL=(Equipment *)&Data->P[plr].Manned[un-1].Name[0];break;
+   case 4: PL=(Equipment *)&Data->P[plr].Misc[un-1].Name[0];break;
    }
   
   grSetColor(1);
@@ -761,16 +761,16 @@ char HPurc(char plr)
         switch(hardware)
          {
           case 1:if (Data->P[plr].Probe[unit-1].Delay==0) BuyUnit(hardware,unit,plr);
-                  else Idiot("i135");
+                  else Help("i135");
                 break;
           case 2:if (Data->P[plr].Rocket[unit-1].Delay==0) BuyUnit(hardware,unit,plr);
-                  else Idiot("i135");
+                  else Help("i135");
                 break;
           case 3:if (Data->P[plr].Manned[unit-1].Delay==0) BuyUnit(hardware,unit,plr);
-                  else Idiot("i135");
+                  else Help("i135");
                 break;
           case 4:if (Data->P[plr].Misc[unit-1].Delay==0) BuyUnit(hardware,unit,plr);
-                  else Idiot("i135");
+                  else Help("i135");
                 break;
          default:break;
         }

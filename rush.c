@@ -258,9 +258,9 @@ char pRush=0;
       && pRush && Data->P[plr].Mission[0].MissionCode>0 && Data->P[plr].Mission[0].part!=1)  /* L1: Row One */
       {
       // R1=oR1;
-       if (((y>=49 && y<=57 && mousebuttons>0) || key=='2') && oR1!=1 && fCsh<3) Idiot("i117");
+       if (((y>=49 && y<=57 && mousebuttons>0) || key=='2') && oR1!=1 && fCsh<3) Help("i117");
        R1=(((y>=49 && y<=57 && mousebuttons>0) || key=='2') && fCsh>=3) ? 1 : R1;
-	    if (((y>=66 && y<=74 && mousebuttons>0) || key=='3') && oR1!=2 && fCsh<6) Idiot("i117");
+	    if (((y>=66 && y<=74 && mousebuttons>0) || key=='3') && oR1!=2 && fCsh<6) Help("i117");
        R1=(((y>=66 && y<=74 && mousebuttons>0) || key=='3') && fCsh>=6) ? 2 : R1;
 	    R1=((y>=32 && y<=40 && mousebuttons>0) || key=='1') ? 0 : R1;
 	    if (oR1!=R1) {ResetRush(oR1,0);SetRush(R1,0);oR1=R1;}
@@ -270,9 +270,9 @@ char pRush=0;
       && pRush && Data->P[plr].Mission[1].MissionCode>0 && Data->P[plr].Mission[1].part!=1)  /* L2: Row One */
      {
       // R2=oR2;
-      if (((y>=107 && y<=115 && mousebuttons>0) || key=='5') && oR2!=1 && fCsh<3) Idiot("i117");
+      if (((y>=107 && y<=115 && mousebuttons>0) || key=='5') && oR2!=1 && fCsh<3) Help("i117");
       R2=(((y>=107 && y<=115 && mousebuttons>0) || key=='5') && fCsh>=3) ? 1 : R2;
-   	if (((y>=124 && y<=132 && mousebuttons>0) || key=='6') && oR2!=2 && fCsh<6) Idiot("i117");
+   	if (((y>=124 && y<=132 && mousebuttons>0) || key=='6') && oR2!=2 && fCsh<6) Help("i117");
       R2=(((y>=124 && y<=132 && mousebuttons>0) || key=='6') && fCsh>=6) ? 2 : R2;
 	   R2=((y>=90 && y<=98 && mousebuttons>0) || key=='4') ? 0 : R2;
    	if (oR2!=R2) {ResetRush(oR2,1);SetRush(R2,1);oR2=R2;}
@@ -282,9 +282,9 @@ char pRush=0;
      && pRush && Data->P[plr].Mission[2].MissionCode>0 && Data->P[plr].Mission[2].part!=1)  /* L3: Row One */
     {
      // R3=oR3;
-     if (((y>=165 && y<=173 && mousebuttons>0) || key=='8') && oR3!=1 && fCsh<3) Idiot("i117");
+     if (((y>=165 && y<=173 && mousebuttons>0) || key=='8') && oR3!=1 && fCsh<3) Help("i117");
      R3=(((y>=165 && y<=173 && mousebuttons>0) || key=='8') && fCsh>=3) ? 1 : R3;
-     if (((y>=182 && y<=190 && mousebuttons>0) || key=='9') && oR3!=2 && fCsh<6) Idiot("i117");
+     if (((y>=182 && y<=190 && mousebuttons>0) || key=='9') && oR3!=2 && fCsh<6) Help("i117");
      R3=(((y>=182 && y<=190 && mousebuttons>0) || key=='9') && fCsh>=6) ? 2 : R3;
      R3=((y>=148 && y<=156 && mousebuttons>0) || key=='7') ? 0 : R3;
      if (oR3!=R3) {ResetRush(oR3,2);SetRush(R3,2);oR3=R3;}

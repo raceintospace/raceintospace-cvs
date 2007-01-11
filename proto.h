@@ -544,8 +544,8 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff);
 void AstFaces(char plr,int x,int y,char face);
 void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff);
 void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff);
-void DispIdiot(char top, char bot, char *txt);
-int Idiot(char *FName);
+void DispHelp(char top, char bot, char *txt);
+int Help(char *FName);
 void Draw_Mis_Stats(char plr, char index, int *where,char mode);
 
 // PORT.C
@@ -738,7 +738,7 @@ void DispWts(int two,int one);
 void VAB(char plr);
 void BuildVAB(char plr,char mis,char ty,char pa,char pr);
 void LMAdd(char plr,char prog,char kic,char part);
-void VVals(char plr,char tx,struct Equipment *EQ,char v4,char v5);
+void VVals(char plr,char tx,Equipment *EQ,char v4,char v5);
 
 
 // SERIAL_F.C
