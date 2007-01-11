@@ -823,13 +823,14 @@ void DispIt(int x1,int y1,int x2, int y2,int s,int t)
     w=x2-x1+1;h=y2-y1+1;
     GV(&local,w,h); GV(&local2,w,h);
     gxClearVirtual(&local,0);gxClearVirtual(&local2,0);
-    gxGetImage(&local2,s,t,s+w,t+h,0);
+    gxGetImage(&local2,s,t,s+w-1,t+h-1,0);
     gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local,0,0,gxSET);
     src=local.vptr;dest=local2.vptr;
-    for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
-      if (*src!=0x00) *dest=*src;
-	dest++;src++;
-    }
+	for (i=0;i<w*h;i++) {
+		if (*src)
+			*dest = *src;
+		dest++; src++;
+	}
 	
     gxPutImage(&local2,gxSET,s,t,0);
     

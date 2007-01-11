@@ -105,7 +105,11 @@ void Display_ARROW(char num,int x,int y)
   fread(&P,sizeof P,1,in);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w,y+P.h,0);
+  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
+  if (P.w * P.h != P.size) {
+      fprintf(stderr, "Display_ARROW(): Patch h*w != size!\n");
+      P.size = P.w * P.h;
+  }
   fread(local.vptr,P.size,1,in);
   fclose(in);
  // for (j=0;j<P.size;j++) 
@@ -770,7 +774,7 @@ void ShowAstrosHist(char plr)
   DispBig(27,109,"EXPERIENCE",0,-1);
   gxGetImage(&vhptr2,22,69,133,123,0);
   PatchMe(0,0,0,0,0,32);
-  memset(screen,0x00,64000);
+  gxClearDisplay(0,0);
   
   ORBox(0,0,319,22,3); // Draw Inbox around top 
   if(plr==0) DispBig(45,4,"ASTRONAUT HISTORY",0,-1); 

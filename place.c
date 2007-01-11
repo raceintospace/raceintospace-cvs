@@ -69,7 +69,7 @@ int MChoice(char qty,char *Name)
 	fseek(in,P.offset,SEEK_SET);
 	GV(&local,P.w,P.h); 
 	GV(&local2,P.w,P.h);
-	gxGetImage(&local2,0,0,P.w,P.h,0);
+	gxGetImage(&local2,0,0,P.w-1,P.h-1,0);
 	fread(local.vptr,P.size,1,in);
 	fclose(in);
 
@@ -192,8 +192,12 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
   fread(&P,sizeof P,1,in);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w,y+P.h,0);
-  fread(local.vptr,P.size,1,in);
+  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
+  if (P.w * P.h != P.size) {
+      fprintf(stderr, "PatchMe(): Patch h*w != size!\n");
+      P.size = P.w * P.h;
+  }
+  fread(local.vptr, P.size, 1, in);
   fclose(in);
   //RLED(buffer+20000,local.vptr,P.size);
   for (j=0;j<P.size;j++) 
@@ -261,7 +265,11 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
   fread(&P,sizeof P,1,in);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w,y+P.h,0);
+  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
+  if (P.w * P.h != P.size) {
+      fprintf(stderr, "SmHardMe(): Patch h*w != size!\n");
+      P.size = P.w * P.h;
+  }
   fread(local.vptr,P.size,1,in);
   fclose(in);
   //RLED(buffer+20000,local.vptr,P.size);

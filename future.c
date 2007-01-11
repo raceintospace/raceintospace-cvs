@@ -51,7 +51,7 @@ void Load_FUT_BUT(void)
   i=filelength(fileno(fin));
   fread((char *)screen,i,1,fin);
   fclose(fin);
-  RLED_img((char *)screen,(char *)vh.vptr,(unsigned)i,vh.w,vh.w);
+  RLED_img((char *)screen,(char *)vh.vptr,(unsigned)i,vh.w,vh.h);
   return;
 }
 

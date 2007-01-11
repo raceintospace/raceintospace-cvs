@@ -84,7 +84,6 @@ void gxVirtualVirtual (GXHEADER *hp, int a, int b, int c, int d,
 #define gxVGA_13 1 /* 320x200 ... note: non-square pixels */
 int gxVirtualSize (int mode, int w, int h);
 #define gxCMM 1
-int gxVirtualFree (int mode);
 int gxCreateVirtual (int mode, GXHEADER *hp, int gxVGA_mode, int w, int h);
 void gxDestroyVirtual (GXHEADER *hp);
 void gxVirtualScale (GXHEADER *a, GXHEADER *b);

@@ -221,7 +221,12 @@ void SpotCrap(char loc,char mode)
 
       GV(&SP3,sImg.w,sImg.h);  // background buffer
 
-      gxVirtualVirtual(&vhptr,sPath.xPut,sPath.yPut,sPath.xPut+sImg.w,sPath.yPut+sImg.h,&SP3,0,0,0);
+      gxVirtualVirtual(&vhptr,
+              minn(sPath.xPut, 319),
+              minn(sPath.yPut, 199),
+              minn(sPath.xPut+sImg.w-1, 319),
+              minn(sPath.yPut+sImg.h-1, 199),
+              &SP3,0,0,0);
 
       if (sPath.Scale!=1.0) {
         xx=hSPOT.size;
@@ -236,8 +241,14 @@ void SpotCrap(char loc,char mode)
         for (i=0;i<xx;i++) {
            if (SP1.vptr[i]==0) SP1.vptr[i]=SP3.vptr[i];
         }
-        if (sPathOld.xPut!=-1) gxVirtualDisplay(&vhptr,sPathOld.xPut,sPathOld.yPut,sPathOld.xPut,sPathOld.yPut,sPathOld.xPut+sImgOld.w-1,sPathOld.yPut+sImgOld.h-1,0);
-        gxPutImage(&SP1,gxSET,sPath.xPut,sPath.yPut,0);
+        if (sPathOld.xPut!=-1)
+            gxVirtualDisplay(&vhptr, sPathOld.xPut, sPathOld.yPut, sPathOld.xPut, sPathOld.yPut,
+                    minn(sPathOld.xPut+sImgOld.w-1, 319),
+                    minn(sPathOld.yPut+sImgOld.h-1, 199),
+                    0);
+        gxPutImage(&SP1,gxSET,
+                minn(sPath.xPut, 319),
+                minn(sPath.yPut, 199), 0);
       }
       sPathOld=sPath;
       sImgOld=sImg;

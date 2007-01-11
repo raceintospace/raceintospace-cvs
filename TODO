@@ -23,9 +23,6 @@ drop frames if getting behind on newscaster or movie playback
 
 look into "hold frame" stuff for aligning mission video and audio
 
-
-remove SetROMDir
-
 fades
 implement config opts for no anim
 
@@ -34,16 +31,16 @@ clean up extra gr_sync's
 ================================================================
 enhancements:
 
-water seems to flow backwards in DoCycle
 optimize grPutPixel and grGetPixel
 
-I started the game and it happend that a plane flew by on the first view
-of the space port.  I never typed anything, but later I noticed that there
-was a plane stuck to the left edge of the screen.  It disappeared after I
-switched to another screen (R&D), then back to the port.
+the gx routines should clip - thats easy, but right now they
+make assertions about arguments. Problem fixed in port.c
 
-=> the probem is that the gx routines should clip - we're seeing the
-wrapped image
+astronauts faces and patches are not displayed properly
+
+screen clearing is not perfect while overwriting existing strings,
+this can be seen in news (comma char), astronauts screens, future
+missions, intelligence etc.
 
 try mpeg encoding the video
 
@@ -61,3 +58,4 @@ release checklist
 
 check with valgrind
 compile with -O
+compile with -DNDEBUG

@@ -1,3 +1,16 @@
+2007-01-10  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V75
+
+	* minn() and maxx() macros fixed (!!!)
+
+	* Functions in gx.c are now optimized and detect bad arguments
+
+	* Memory overrun fixes in main.c, prefs.c, news.c, port.c, vab.c,
+	place.c, museum.c, hardef.c, intel.c
+
+	* "Patches" do not work properly right now, why?
+
 2007-01-10  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V74

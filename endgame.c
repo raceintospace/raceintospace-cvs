@@ -757,7 +757,6 @@ void PlayFirst(char plr,char first)
  char i,w=0,index;
  int Check=0;
 
- 
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
  PreLoadMusic(M_LIFTOFF);

@@ -1,4 +1,9 @@
 #include "Buzz_inc.h"
+#include <limits.h>
+#include <assert.h>
+
+#define MAX_X	320
+#define MAX_Y	200
 
 extern unsigned char *screen;
 extern GXHEADER vhptr;
@@ -10,48 +15,50 @@ gxVirtualSize (int mode, int w, int h)
 }
 
 int
-gxVirtualFree (int mode)
-{
-	return 65535;
-}
-
-int
 gxCreateVirtual (int mode, GXHEADER *hp,
 		 int gxVGA_mode, int w, int h)
 {
+	assert(hp);
 	memset (hp, 0, sizeof *hp);
 	hp->w = w;
 	hp->h = h;
-	hp->vptr = malloc (w * h + 60000);
+	hp->vptr = malloc (w * h);	// TODO use guarded malloc
+	assert(hp->vptr);
 	return gxSUCCESS;
 }
 
 void
 gxDestroyVirtual (GXHEADER *hp)
 {
+	assert(hp);
+	assert(hp->vptr);
 	free (hp->vptr);
 }
 
 void
 gxGetImage (GXHEADER *hp, int x0, int y0, int x1, int y1, int op)
 {
-	int w, h, from_idx, to_idx, row, col;
+	int w, h, from_idx, to_idx, row;
 
-	if (op != 0) {
-		fprintf (stderr, "unknown last arg to gxGetImage\n");
-		exit (1);
-	}
+	assert(op == 0);
+	assert(hp);
+	assert(0 <= x0 && x0 < MAX_X);
+	assert(0 <= x1 && x1 < MAX_X);
+	assert(0 <= y0 && y0 < MAX_Y);
+	assert(0 <= y1 && y1 < MAX_Y);
+	assert(x0 <= x1);
+	assert(y0 <= y0);
 
 	w = x1 - x0 + 1;
 	h = y1 - y0 + 1;
 
-	for (row = 0; row < h; row++) {
-		for (col = 0; col < w; col++) {
-			from_idx = (y0 + row) * 320 + (x0 + col);
-			to_idx = row * hp->w + col;
+	assert(w <= hp->w);
+	assert(h <= hp->h);
 
-			hp->vptr[to_idx] = screen[from_idx];
-		}
+	for (row = 0; row < h; row++) {
+		from_idx = (y0 + row) * MAX_X + x0;
+		to_idx = row * hp->w;
+		memcpy(&hp->vptr[to_idx], &screen[from_idx], w);
 	}
 }
 
@@ -59,35 +66,34 @@ void
 gxPutImage (GXHEADER *hp, int mode, int x, int y, int op2)
 {
 	int row, col, from_idx, to_idx;
+	int clip_x, clip_y;
 
-	if (op2 != 0) {
-		fprintf (stderr, "bad mode in gxPutImage\n");
-		exit (1);
-	}
+	assert(op2 == 0);
+	assert(hp);
+	assert(mode == gxSET || mode == gxXOR);
+	assert(0 <= x && x < MAX_X);
+	assert(0 <= y && y < MAX_Y);
+
+	clip_y = minn(hp->h + y, MAX_Y) - y;
+	clip_x = minn(hp->w + x, MAX_X) - x;
 
 	switch (mode) {
 	case gxSET:
-		for (row = 0; row < hp->h; row++) {
-			for (col = 0; col < hp->w; col++) {
-				from_idx = row * hp->w + col;
-				to_idx = (y + row) * 320 + (x + col);
-				screen[to_idx] = hp->vptr[from_idx];
-			}
+		for (row = 0; row < clip_y; row++) {
+			from_idx = row * hp->w;
+			to_idx = (y + row) * MAX_X + x;
+			memcpy(&screen[to_idx], &hp->vptr[from_idx], clip_x);
 		}
 		break;
 	case gxXOR:
-		for (row = 0; row < hp->h; row++) {
-			for (col = 0; col < hp->w; col++) {
-				from_idx = row * hp->w + col;
-				to_idx = (y + row) * 320 + (x + col);
-				screen[to_idx] ^= hp->vptr[from_idx];
+		for (row = 0; row < clip_y; row++) {
+			from_idx = row * hp->w;
+			to_idx = (y + row) * MAX_X + x;
+			for (col = 0; col < clip_x; col++) {
+				screen[to_idx+col] ^= hp->vptr[from_idx+col];
 			}
 		}
 		break;
-
-	default:
-		fprintf (stderr, "bad mode in gxPutImage\n");
-		exit (1);
 	}
 
 	screen_dirty = 1;
@@ -96,11 +102,9 @@ gxPutImage (GXHEADER *hp, int mode, int x, int y, int op2)
 void
 gxClearDisplay (int a, int b)
 {
-	if (a != 0 || b != 0) {
-		fprintf (stderr, "unknown args to gxClearDisplay\n");
-		exit (1);
-	}
-	memset (screen, 0, 320 * 200);
+	assert(a == 0 && b == 0);
+
+	memset (screen, 0, MAX_X * MAX_Y);
 	screen_dirty = 1;
 }
 
@@ -111,18 +115,31 @@ gxVirtualDisplay (GXHEADER *hp,
 		  int to_x1, int to_y1,
 		  int always_zero)
 {
-	int row, col, from_idx, to_idx;
+	int row, from_idx, to_idx;
 	int width, height;
+	int clip_x, clip_y;
 
-	width = to_x1 - to_x0 + 1;
+	assert(hp);
+	assert(always_zero == 0);
+	assert(0 <= from_x && from_x < hp->w);
+	assert(0 <= from_y && from_y < hp->h);
+	assert(to_x0 <= to_x1);
+	assert(to_y0 <= to_y1);
+	assert(0 <= to_x0 && to_x0 < MAX_X);
+	assert(0 <= to_x1 && to_x1 < MAX_X);
+	assert(0 <= to_y0 && to_y0 < MAX_Y);
+	assert(0 <= to_y1 && to_y1 < MAX_Y);
+
+	width  = to_x1 - to_x0 + 1;
 	height = to_y1 - to_y0 + 1;
 
-	for (row = 0; row < height; row++) {
-		for (col = 0; col < width; col++) {
-			from_idx = (from_y + row) * hp->w + (from_x + col);
-			to_idx = (to_y0 + row) * 320 + (to_x0 + col);
-			screen[to_idx] = hp->vptr[from_idx];
-		}
+	clip_y = minn(height + to_y0, MAX_Y) - to_y0;
+	clip_x = minn(width  + to_x0, MAX_X) - to_x0;
+
+	for (row = 0; row < clip_y; row++) {
+		from_idx = (from_y + row) * hp->w + from_x;
+		to_idx = (to_y0 + row) * MAX_X + to_x0;
+		memcpy(&screen[to_idx], &hp->vptr[from_idx], clip_x);
 	}
 	screen_dirty = 1;
 
@@ -138,36 +155,34 @@ gxDisplayVirtual (int from_x0, int from_y0,
 		  GXHEADER *hp,
 		  int to_x, int to_y)
 {
-	int row, col, from_idx, to_idx;
+	int row, from_idx, to_idx;
 	int width, height;
 
-	width = from_x1 - from_x0 + 1;
+	assert(hp);
+	assert(0 <= from_x0 && from_x0 < MAX_X);
+	assert(0 <= from_x1 && from_x1 < MAX_X);
+	assert(0 <= from_y0 && from_y0 < MAX_Y);
+	assert(0 <= from_y1 && from_y1 < MAX_Y);
+	assert(from_x0 <= from_x1);
+	assert(from_y0 <= from_y0);
+
+	width  = from_x1 - from_x0 + 1;
 	height = from_y1 - from_y0 + 1;
 
+	assert(width  <= hp->w);
+	assert(height <= hp->w);
+
 	for (row = 0; row < height; row++) {
-		for (col = 0; col < width; col++) {
-			from_idx = (from_y0 + 320) * hp->w + (from_x0 + col);
-			to_idx = (to_y + row) * hp->w + (to_x + col);
-			hp->vptr[to_idx] = screen[from_idx];
-		}
+		from_idx = (from_y0 + MAX_X) * hp->w + from_x0;
+		to_idx = (to_y + row) * hp->w + to_x;
+		memcpy(&hp->vptr[to_idx], &screen[from_idx], width);
 	}
 }
-
 
 void
 gxSetDisplayPalette (char *pal)
 {
 }
-
-/*
-  gxVirtualVirtual(
-   &flaggy,
-    FCtr*23,       0,
-    FCtr*23+21   ,21,
-   &local2,
-    0,0,
-    gxSET);
-*/
 
 void
 gxVirtualVirtual (GXHEADER *from,
@@ -178,31 +193,34 @@ gxVirtualVirtual (GXHEADER *from,
 		  int mode)
 {
 	int w, h;
-	int row, col;
+	int row;
 	int from_idx, to_idx;
+
+	assert(from);
+	assert(to);
+	assert(0 <= from_x1 && from_x1 < from->w);
+	assert(0 <= from_y1 && from_y1 < from->h);
+	assert(0 <= from_x2 && from_x2 < from->w);
+	assert(0 <= from_y2 && from_y2 < from->h);
 
 	w = from_x2 - from_x1 + 1;
 	h = from_y2 - from_y1 + 1;
 
+	assert(w <= to->w);
+	assert(h <= to->h);
+
 	for (row = 0; row < h; row++) {
-		for (col = 0; col < w; col++) {
-			from_idx = (from_y1 + row) * from->w
-				+ (from_x1 + col);
-			to_idx = (to_y + row) * to->w
-				+ (to_x + col);
-			to->vptr[to_idx] = from->vptr[from_idx];
-		}
+		from_idx = (from_y1 + row) * from->w + from_x1;
+		to_idx = (to_y + row) * to->w + to_x;
+		memcpy(&to->vptr[to_idx], &from->vptr[from_idx], w);
 	}
 }
 
 void
 gxClearVirtual (GXHEADER *hp, int a)
 {
-	if (a != 0) {
-		fprintf (stderr, "bad arg to gxClearVirtual\n");
-		exit (1);
-	}
-
+	assert(hp);
+	assert(a == 0);
 	memset (hp->vptr, 0, hp->w * hp->h);
 }
 
@@ -213,12 +231,12 @@ gxVirtualScale (GXHEADER *src, GXHEADER *dest)
 	int src_row, src_col, src_idx;
 
 	for (dest_row = 0; dest_row < dest->h; dest_row++) {
-		src_row = dest_row * src->h / dest->h;
+		src_row = (dest_row * src->h) / dest->h;
 
 		for (dest_col = 0; dest_col < dest->w; dest_col++) {
-			src_col = dest_col * src->w / dest->w;
+			src_col  = (dest_col * src->w) / dest->w;
 
-			src_idx = src_row * src->w + src_col;
+			src_idx  = src_row	* src->w  + src_col;
 			dest_idx = dest_row * dest->w + dest_col;
 
 			dest->vptr[dest_idx] = src->vptr[src_idx];

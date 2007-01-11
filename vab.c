@@ -382,7 +382,7 @@ void DispVA(char plr,char f)
     GV(&local2,w,h);
     
     RectFill(178,29,243,179,3);
-    gxGetImage(&local2,210-w/2,103-h/2,210-w/2+w,103-h/2+h,0);
+    gxGetImage(&local2,210-w/2,103-h/2,210-w/2+w-1,103-h/2+h-1,0);
     
 
     for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
@@ -483,7 +483,7 @@ void DispRck(char plr,char wh)
     gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local,0,0,gxSET);
     
     RectFill(247,29,313,179,3);
-    gxGetImage(&local2,282-w/2,103-h/2,282-w/2+w,103-h/2+h,0);
+    gxGetImage(&local2,282-w/2,103-h/2,282-w/2+w-1,103-h/2+h-1,0);
 
     for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
       if (local.vptr[i]==0x00) local.vptr[i]=local2.vptr[i];

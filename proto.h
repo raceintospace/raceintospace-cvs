@@ -31,8 +31,8 @@
 #define MAXBUB 30             // Maximum Bubbles
 #define pline(a,b,c,d)        {grMoveTo(a,b) ; grLineTo(c,d);}
 #define other(a)	      abs( (a)-1 )
-#define maxx(a,b)	      ( (a) > (b) ) ? (a) : (b)
-#define minn(a,b)	      ( (a) < (b) ) ? (a) : (b) 
+#define maxx(a,b)	      (((a) > (b)) ? (a) : (b))
+#define minn(a,b)	      (((a) < (b)) ? (a) : (b))
 #define MisStep(a,b,c) PrintAt((a),(b),S_Name[(c)])
 //#define VBlank() while(!(inp(0x3da)&0x08))  // the all important VBlank
 #define VBlank() do{}while(0)

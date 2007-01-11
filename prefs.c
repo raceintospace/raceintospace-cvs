@@ -345,7 +345,7 @@ long size;
 	     while(1)  { GetMouse();if (mousebuttons==0) break;}
         if (key>0) delay(150);
 	     OutBox(146,30,219,61);
-	     GV(&local2,319,199);
+	     GV(&local2,320,200);
 	     
 	     gxGetImage(&local2,0,0,319,199,0);
 	     

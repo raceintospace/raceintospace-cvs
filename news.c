@@ -812,7 +812,7 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
 		fread(vhptr.vptr,table[0].size,1,out);
 		gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
 		RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
-		GV(&local,79,23);
+		GV(&local,80,24);
 
 		gxGetImage(&local,240,0,319,23,0);
 		gxPutImage(&vhptr2,gxSET,4,4,0);
@@ -862,7 +862,7 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
 		fread(vhptr.vptr,table[0].size,1,out);
 		gxCreateVirtual(gxCMM,&vhptr2,gxVGA_13,312,106);
 		RLED_img(vhptr.vptr,vhptr2.vptr,table[0].size,vhptr2.w,vhptr2.h);
-		GV(&local,79,23);
+		GV(&local,80,24);
 		gxGetImage(&local,240,0,319,23,0);
 		gxPutImage(&local,gxSET,240,0,0);
 		gxPutImage(&vhptr2,gxSET,4,4,0);        // put under setpal
