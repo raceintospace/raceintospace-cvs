@@ -1,5 +1,13 @@
 2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V78
+
+	* Removed name.o from Makefile.in
+
+	* Removed a couple unnecessary endian swaps of HIST/RAST structure headers
+
+2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V77
 
 	* Added Mac Xcode project

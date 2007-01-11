@@ -35,10 +35,7 @@ void SwapGameDat(void)
 {
 	i16 i,j;
 
-	SwapLong(*((ui32*)&Data->BUZZ));
 	SwapLong(*((ui32*)&Data->EMark));
-	SwapLong(*((ui32*)&Data->P[0].Header));
-	SwapLong(*((ui32*)&Data->P[1].Header));
 	SwapLong(Data->Checksum);
 	SwapWord(Data->P[0].Budget);
 	SwapWord(Data->P[1].Budget);
