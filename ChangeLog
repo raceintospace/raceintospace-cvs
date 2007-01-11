@@ -1,5 +1,16 @@
 2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V80
+
+	* Renamed the Spaceport enums since I found an area where the
+	OVL_ scheme didn't make sense, changed to PORT_, it's a little
+	more understandable now.
+
+	* Added a comment to fn PortSel() mentioning basically that it's the
+	jumping off point for each module.
+
+2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V79
 
 	* Added enums for the Spaceport improvements

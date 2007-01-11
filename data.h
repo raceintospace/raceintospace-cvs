@@ -453,41 +453,41 @@ struct mfab {
 // Space port overlays
 enum SpacePortOverlays
 {
-  OVL_Monument = 0,     // 00 Washington's Monument
-  OVL_Pentagon,			// 01 The Pentagon
-  OVL_Capitol,			// 02 Capitol Building
-  OVL_Cemetery,			// 03 Arlington Cemetery
-  OVL_VAB,				// 04 Vehicle Assembly
-  OVL_Museum, 			// 05 Museum of Space History
-  OVL_Admin,			// 06 Administration
-  OVL_AstroComplex,		// 07 Astronaut Complex
-  OVL_MedicalCtr,		// 08 Medical Center
-  OVL_BasicTraining,	// 09 Basic Training
-  OVL_Helipad,			// 10 Helipad: Adv LM
-  OVL_Pool,				// 11 Pool: Adv EVA
-  OVL_Planetarium,		// 12 Planetarium: Adv Docking
-  OVL_Centrifuge,		// 13 Centrifuge: Adv Endurance
-  OVL_Airfield,			// 14 Airfield: Adv Capsule
-  OVL_Satellite,		// 15 Satellite Programs
-  OVL_LM,				// 16 LM Program
-  OVL_Jupiter,			// 17 Jupiter Program
-  OVL_XMS,				// 18 XMS Program
-  OVL_Apollo,			// 19 Apollo Program
-  OVL_Gemini,			// 20 Gemini Program
-  OVL_Mercury,			// 21 Mercury Program
-  OVL_Research,			// 22 Research & Development
-  OVL_LaunchPad_A,		// 23 Launch Facility A
-  OVL_LaunchPad_B,		// 24 Launch Facility B
-  OVL_LaunchPad_C,		// 25 Launch Facility C
-  OVL_MissionControl,	// 26 Mission Control
-  OVL_ViewingStand,		// 27 Viewing Stand
-  OVL_FlagPole,			// 28 Flag Pole: End Turn
-  OVL_Gate,				// 29 Security Gate: Quit
-  OVL_Moon,				// 30 Moon
-  OVL_SovMonumentAlt,	// 31 Soviet Monument #2 - unused
-  OVL_Zond,				// 32 Zond - unused
-  OVL_Tracking,			// 33 Tracking Station
-  OVL_SVHQ,				// 34 Strategic Visions H.Q.
+  PORT_Monument = 0,   		// 00 Washington's Monument
+  PORT_Pentagon,			// 01 The Pentagon
+  PORT_Capitol,				// 02 Capitol Building
+  PORT_Cemetery,			// 03 Arlington Cemetery
+  PORT_VAB,					// 04 Vehicle Assembly
+  PORT_Museum, 				// 05 Museum of Space History
+  PORT_Admin,				// 06 Administration
+  PORT_AstroComplex,		// 07 Astronaut Complex
+  PORT_MedicalCtr,			// 08 Medical Center
+  PORT_BasicTraining,		// 09 Basic Training
+  PORT_Helipad,				// 10 Helipad: Adv LM
+  PORT_Pool,				// 11 Pool: Adv EVA
+  PORT_Planetarium,			// 12 Planetarium: Adv Docking
+  PORT_Centrifuge,			// 13 Centrifuge: Adv Endurance
+  PORT_Airfield,			// 14 Airfield: Adv Capsule
+  PORT_Satellite,			// 15 Satellite Programs
+  PORT_LM,					// 16 LM Program
+  PORT_Jupiter,				// 17 Jupiter Program
+  PORT_XMS,					// 18 XMS Program
+  PORT_Apollo,				// 19 Apollo Program
+  PORT_Gemini,				// 20 Gemini Program
+  PORT_Mercury,				// 21 Mercury Program
+  PORT_Research,			// 22 Research & Development
+  PORT_LaunchPad_A,			// 23 Launch Facility A
+  PORT_LaunchPad_B,			// 24 Launch Facility B
+  PORT_LaunchPad_C,			// 25 Launch Facility C
+  PORT_MissionControl,		// 26 Mission Control
+  PORT_ViewingStand,		// 27 Viewing Stand
+  PORT_FlagPole,			// 28 Flag Pole: End Turn
+  PORT_Gate,				// 29 Security Gate: Quit
+  PORT_Moon,				// 30 Moon
+  PORT_SovMonumentAlt,		// 31 Soviet Monument #2
+  PORT_Zond,				// 32 Zond - unused
+  PORT_Tracking,			// 33 Tracking Station
+  PORT_SVHQ,				// 34 Strategic Visions H.Q.
 };
 
 // Editor settings {{{

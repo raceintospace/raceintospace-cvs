@@ -394,6 +394,7 @@ void PortPal(char plr)
   return;
 }
 
+// I think this is used to simply draw the spaceport for use behind Admin related overlays
 void AdminPort(char plr)
 {
   long table[S_QTY];
@@ -419,10 +420,10 @@ void AdminPort(char plr)
 
   // Pads
    for (i=0;i<3;i++) {
-      Data->P[plr].Port[OVL_LaunchPad_A+i]=1;
-      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[OVL_LaunchPad_A+i]=2;
-      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[OVL_LaunchPad_A+i]=3;
-      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[OVL_LaunchPad_A+i]=0;
+      Data->P[plr].Port[PORT_LaunchPad_A+i]=1;
+      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[PORT_LaunchPad_A+i]=2;
+      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[PORT_LaunchPad_A+i]=3;
+      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[PORT_LaunchPad_A+i]=0;
       }
 
 	 if (Data->P[plr].AstroCount>0) {
@@ -437,9 +438,9 @@ void AdminPort(char plr)
   if ((Data->P[plr].Pool[0].Active|Data->P[plr].Pool[1].Active|Data->P[plr].Pool[2].Active) >=1) 
       PortPlace(fin,table[17-plr*4]); // Draw TRN
 
-  if (Data->P[plr].Port[OVL_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
-  if (Data->P[plr].Port[OVL_Research]>2) PortPlace(fin,table[14+15*plr]);
-  if (Data->P[plr].Port[OVL_Research]==3) PortPlace(fin,table[15+15*plr]);
+  if (Data->P[plr].Port[PORT_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
+  if (Data->P[plr].Port[PORT_Research]>2) PortPlace(fin,table[14+15*plr]);
+  if (Data->P[plr].Port[PORT_Research]==3) PortPlace(fin,table[15+15*plr]);
 
   for (fm=0;fm<35;fm++) {
     i=fm;
@@ -523,15 +524,15 @@ void NPDraw(char plr)
 
   // Pads
    for (i=0;i<3;i++) {
-      Data->P[plr].Port[OVL_LaunchPad_A+i]=1;
-      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[OVL_LaunchPad_A+i]=2;
-      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[OVL_LaunchPad_A+i]=3;
-      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[OVL_LaunchPad_A+i]=0;
+      Data->P[plr].Port[PORT_LaunchPad_A+i]=1;
+      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[PORT_LaunchPad_A+i]=2;
+      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[PORT_LaunchPad_A+i]=3;
+      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[PORT_LaunchPad_A+i]=0;
       }
 
-  if (Vab_Spot==1 && Data->P[plr].Port[OVL_VAB]==2)
+  if (Vab_Spot==1 && Data->P[plr].Port[PORT_VAB]==2)
    {
-    Data->P[plr].Port[OVL_LaunchPad_A]=plr;
+    Data->P[plr].Port[PORT_LaunchPad_A]=plr;
    }
   
 
@@ -546,9 +547,9 @@ void NPDraw(char plr)
   if (Data->P[plr].Pool[0].Active>=1) 
       PortPlace(fin,table[17-plr*4]); // Draw TRN
 
-  if (Data->P[plr].Port[OVL_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
-  if (Data->P[plr].Port[OVL_Research]>2) PortPlace(fin,table[14+15*plr]);
-  if (Data->P[plr].Port[OVL_Research]==3) PortPlace(fin,table[15+15*plr]);
+  if (Data->P[plr].Port[PORT_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
+  if (Data->P[plr].Port[PORT_Research]>2) PortPlace(fin,table[14+15*plr]);
+  if (Data->P[plr].Port[PORT_Research]==3) PortPlace(fin,table[15+15*plr]);
 
   for (fm=0;fm<35;fm++) {
     i=fm;
@@ -619,60 +620,60 @@ void UpdatePortOverlays(void)
    char i,j;
    for (i=0;i<NUM_PLAYERS;i++) {   // Programs
       for (j=0;j<5;j++) 
-         Data->P[i].Port[OVL_Mercury-j]=(Data->P[i].Manned[j].Num>=0)?1:0;
+         Data->P[i].Port[PORT_Mercury-j]=(Data->P[i].Manned[j].Num>=0)?1:0;
 
 #ifdef DEADCODE
       // Zond thingy -- this was never implemented and available after 6 manned seasons
-      //if (i==1 && Data->P[i].Manned[2].Seas>6) Data->P[i].Port[OVL_Zond]=1;
+      //if (i==1 && Data->P[i].Manned[2].Seas>6) Data->P[i].Port[PORT_Zond]=1;
 #endif
 
       if(Data->P[i].Probe[0].Num>=0 || Data->P[i].Probe[1].Num>=0 ||
-          Data->P[i].Probe[2].Num>=0 ) Data->P[i].Port[OVL_Satellite]=1;
+          Data->P[i].Probe[2].Num>=0 ) Data->P[i].Port[PORT_Satellite]=1;
 
       if (Data->P[i].Manned[5].Num>=0 || Data->P[i].Manned[6].Num>=0)
-         Data->P[i].Port[OVL_LM]=1;
+         Data->P[i].Port[PORT_LM]=1;
 
       // Museum
       if (Data->Prestige[18].Goal[i]>0)
-         Data->P[i].Port[OVL_Museum]=maxx(Data->P[i].Port[OVL_Museum],1);   // Mus:1
+         Data->P[i].Port[PORT_Museum]=maxx(Data->P[i].Port[PORT_Museum],1);   // Mus:1
       if (Data->Prestige[1].Goal[i]>0) 
-         Data->P[i].Port[OVL_Museum]=maxx(Data->P[i].Port[OVL_Museum],2);   // Mus:2
+         Data->P[i].Port[PORT_Museum]=maxx(Data->P[i].Port[PORT_Museum],2);   // Mus:2
       if (Data->Prestige[20].Goal[i]>0) 
-         Data->P[i].Port[OVL_Museum]=maxx(Data->P[i].Port[OVL_Museum],3);   // Mus:3
+         Data->P[i].Port[PORT_Museum]=maxx(Data->P[i].Port[PORT_Museum],3);   // Mus:3
 
       // R&D
       if (Data->P[i].Budget>=85)
-         Data->P[i].Port[OVL_Research]=maxx(Data->P[i].Port[OVL_Research],1); // RD:1
+         Data->P[i].Port[PORT_Research]=maxx(Data->P[i].Port[PORT_Research],1); // RD:1
       if (Data->P[i].Budget>=112)
-         Data->P[i].Port[OVL_Research]=maxx(Data->P[i].Port[OVL_Research],2); // RD:2
+         Data->P[i].Port[PORT_Research]=maxx(Data->P[i].Port[PORT_Research],2); // RD:2
       if (Data->P[i].Budget>=150)
-         Data->P[i].Port[OVL_Research]=maxx(Data->P[i].Port[OVL_Research],3); // RD:3
+         Data->P[i].Port[PORT_Research]=maxx(Data->P[i].Port[PORT_Research],3); // RD:3
 
       // VAB
 
       if (Data->Prestige[12].Goal[i]>0)
-         Data->P[i].Port[OVL_VAB]=maxx(Data->P[i].Port[OVL_VAB],1);   // VAB:1
+         Data->P[i].Port[PORT_VAB]=maxx(Data->P[i].Port[PORT_VAB],1);   // VAB:1
 
        if (Data->P[i].Budget>115)
-         Data->P[i].Port[OVL_VAB]=maxx(Data->P[i].Port[OVL_VAB],2);   // VAB:2
+         Data->P[i].Port[PORT_VAB]=maxx(Data->P[i].Port[PORT_VAB],2);   // VAB:2
 
       // Admin
       if (Data->P[i].AstroLevel>=2)
-         Data->P[i].Port[OVL_Admin]=maxx(Data->P[i].Port[OVL_Admin],1);   // Adm:1
+         Data->P[i].Port[PORT_Admin]=maxx(Data->P[i].Port[PORT_Admin],1);   // Adm:1
       if (Data->P[i].AstroLevel>=4)
-         Data->P[i].Port[OVL_Admin]=maxx(Data->P[i].Port[OVL_Admin],2);   // Adm:2
+         Data->P[i].Port[PORT_Admin]=maxx(Data->P[i].Port[PORT_Admin],2);   // Adm:2
 
       if (Data->Prestige[13].Goal[i]>0)
-         Data->P[i].Port[OVL_Tracking]=maxx(Data->P[i].Port[OVL_Tracking],1); // Trk:1
+         Data->P[i].Port[PORT_Tracking]=maxx(Data->P[i].Port[PORT_Tracking],1); // Trk:1
       if (Data->Prestige[19].Goal[i]>0)
-         Data->P[i].Port[OVL_MissionControl]=maxx(Data->P[i].Port[OVL_MissionControl],1); // MC:1
+         Data->P[i].Port[PORT_MissionControl]=maxx(Data->P[i].Port[PORT_MissionControl],1); // MC:1
 
       if (Data->P[i].AstroCount>0)
-         Data->P[i].Port[OVL_AstroComplex]=Data->P[i].Port[OVL_BasicTraining]=1;
+         Data->P[i].Port[PORT_AstroComplex]=Data->P[i].Port[PORT_BasicTraining]=1;
 
       if (Data->P[i].Pool[0].Active>0) {  // Astros
-         Data->P[i].Port[OVL_Helipad]=Data->P[i].Port[OVL_Pool]=Data->P[i].Port[OVL_Planetarium]=1;
-         Data->P[i].Port[OVL_Centrifuge]=Data->P[i].Port[OVL_MedicalCtr]=Data->P[i].Port[OVL_Airfield]=1;
+         Data->P[i].Port[PORT_Helipad]=Data->P[i].Port[PORT_Pool]=Data->P[i].Port[PORT_Planetarium]=1;
+         Data->P[i].Port[PORT_Centrifuge]=Data->P[i].Port[PORT_MedicalCtr]=Data->P[i].Port[PORT_Airfield]=1;
          }
       }
   return;
@@ -703,7 +704,7 @@ void Master(char plr)
   r_value=random(1000);
   if (xMODE & xMODE_CLOUDS)
    {
-    if (plr==0 && Data->P[plr].Port[OVL_VAB]==0) SpotCrap(14,SPOT_LOAD);          //Usa Storm 
+    if (plr==0 && Data->P[plr].Port[PORT_VAB]==0) SpotCrap(14,SPOT_LOAD);          //Usa Storm 
      else if (plr==1) SpotCrap(12,SPOT_LOAD);    //Sov Storm
    }
   else 
@@ -714,7 +715,7 @@ void Master(char plr)
     }
    else if (t_value && g_value) SpotCrap(0+(5*plr),SPOT_LOAD);  //Lem
     else if (r_value<150) {
-     if (plr==1 && Data->P[plr].Port[OVL_MedicalCtr]==1) SpotCrap(18,SPOT_LOAD);   
+     if (plr==1 && Data->P[plr].Port[PORT_MedicalCtr]==1) SpotCrap(18,SPOT_LOAD);   
       else SpotCrap(1+(5*plr),SPOT_LOAD);
     }
     else if (r_value>850) SpotCrap(2+(5*plr),SPOT_LOAD);       //Heli
@@ -841,25 +842,25 @@ int MapKey(char plr,int key,int old)
 
   val=old;
   switch(key) {
-    case 'A': if (MObj[6].Reg[Data->P[plr].Port[OVL_Admin]].sNum>0) val=6;mousebuttons=1; break;
-    case 'I': if (MObj[1].Reg[Data->P[plr].Port[OVL_Pentagon]].sNum>0) val=1;mousebuttons=1; break;
-    case 'M': if (MObj[5].Reg[Data->P[plr].Port[OVL_Museum]].sNum>0) val=5;mousebuttons=1; break;
-    case 'R': if (MObj[22].Reg[Data->P[plr].Port[OVL_Research]].sNum>0) val=22;mousebuttons=1; break;
-    case 'P': if (MObj[2].Reg[Data->P[plr].Port[OVL_Capitol]].sNum>0) val=2;mousebuttons=1; break;
-    case 'V': if (MObj[4].Reg[Data->P[plr].Port[OVL_VAB]].sNum>0) val=4;mousebuttons=1; break;
-    case 'C': if (MObj[26].Reg[Data->P[plr].Port[OVL_MissionControl]].sNum>0) val=26;mousebuttons=1; break;
-    case 'Q': if (MObj[29].Reg[Data->P[plr].Port[OVL_Gate]].sNum>0) val=29;mousebuttons=1; break;
-    case 'E': if (MObj[28].Reg[Data->P[plr].Port[OVL_FlagPole]].sNum>0) val=28;mousebuttons=1; break;
-    case 'T': if (MObj[7].Reg[Data->P[plr].Port[OVL_AstroComplex]].sNum>0) val=7;mousebuttons=1; break;
-    case 'B': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case 'A': if (MObj[6].Reg[Data->P[plr].Port[PORT_Admin]].sNum>0) val=6;mousebuttons=1; break;
+    case 'I': if (MObj[1].Reg[Data->P[plr].Port[PORT_Pentagon]].sNum>0) val=1;mousebuttons=1; break;
+    case 'M': if (MObj[5].Reg[Data->P[plr].Port[PORT_Museum]].sNum>0) val=5;mousebuttons=1; break;
+    case 'R': if (MObj[22].Reg[Data->P[plr].Port[PORT_Research]].sNum>0) val=22;mousebuttons=1; break;
+    case 'P': if (MObj[2].Reg[Data->P[plr].Port[PORT_Capitol]].sNum>0) val=2;mousebuttons=1; break;
+    case 'V': if (MObj[4].Reg[Data->P[plr].Port[PORT_VAB]].sNum>0) val=4;mousebuttons=1; break;
+    case 'C': if (MObj[26].Reg[Data->P[plr].Port[PORT_MissionControl]].sNum>0) val=26;mousebuttons=1; break;
+    case 'Q': if (MObj[29].Reg[Data->P[plr].Port[PORT_Gate]].sNum>0) val=29;mousebuttons=1; break;
+    case 'E': if (MObj[28].Reg[Data->P[plr].Port[PORT_FlagPole]].sNum>0) val=28;mousebuttons=1; break;
+    case 'T': if (MObj[7].Reg[Data->P[plr].Port[PORT_AstroComplex]].sNum>0) val=7;mousebuttons=1; break;
+    case 'B': if (MObj[9].Reg[Data->P[plr].Port[PORT_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
 
 #if 0
 		// Possibly hotkeys for astronaut training buildings
-    case '1': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
-    case '2': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
-    case '3': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
-    case '4': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
-    case 'S': if (MObj[9].Reg[Data->P[plr].Port[OVL_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case '1': if (MObj[9].Reg[Data->P[plr].Port[PORT_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case '2': if (MObj[9].Reg[Data->P[plr].Port[PORT_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case '3': if (MObj[9].Reg[Data->P[plr].Port[PORT_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case '4': if (MObj[9].Reg[Data->P[plr].Port[PORT_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
+    case 'S': if (MObj[9].Reg[Data->P[plr].Port[PORT_BasicTraining]].sNum>0) val=9;mousebuttons=1; break;
 #endif
     case UP_ARROW:if (old==high) old=0; else old=old+1;
                   found=0;for (j=old;j<high+1;j++)
@@ -919,7 +920,7 @@ PreOut=(struct SXX *)&buffer[60000];
        gork=random(100);
        if (gork<50)
         {
-         if (plr==1 && Data->P[plr].Port[OVL_MedicalCtr]==1)
+         if (plr==1 && Data->P[plr].Port[PORT_MedicalCtr]==1)
           SpotCrap(18,SPOT_LOAD);
            else SpotCrap(1+(5*plr),SPOT_LOAD);
         }
@@ -1050,16 +1051,16 @@ PreOut=(struct SXX *)&buffer[60000];
 #if SPOT_ON
                           memcpy(vhptr.vptr,screen,64000);
                           gork=random(100);
-                          if (Vab_Spot==1 && Data->P[plr].Port[OVL_VAB]==2) 
+                          if (Vab_Spot==1 && Data->P[plr].Port[PORT_VAB]==2) 
                            {
-                            Data->P[plr].Port[OVL_LaunchPad_A]=1;
+                            Data->P[plr].Port[PORT_LaunchPad_A]=1;
                             if (plr==0) {
                                if (gork<=60) SpotCrap(4,SPOT_LOAD); //Rocket to Pad
                                 else SpotCrap(15,SPOT_LOAD); //Rocket&Truck/Door
                               }
                              else if (plr==1) SpotCrap(16,SPOT_LOAD);
                            }
-                           else if (Vab_Spot==4 && plr==0 && Data->P[plr].Port[OVL_VAB]==0)
+                           else if (Vab_Spot==4 && plr==0 && Data->P[plr].Port[PORT_VAB]==0)
                             {
                              SpotCrap(19,SPOT_LOAD);
                             }
@@ -1073,7 +1074,7 @@ PreOut=(struct SXX *)&buffer[60000];
                               else if (plr==0) SpotCrap(11,SPOT_LOAD);
                             }
                            else if (gork<30) {
-                            if (plr==1 && Data->P[plr].Port[OVL_MedicalCtr]==1)
+                            if (plr==1 && Data->P[plr].Port[PORT_MedicalCtr]==1)
                              SpotCrap(18,SPOT_LOAD);
                               else SpotCrap(1+(5*plr),SPOT_LOAD);
                             }
@@ -1129,55 +1130,59 @@ PreOut=(struct SXX *)&buffer[60000];
   } // while
 }
 
+
+// This is the code that controls the jump off point from the Space Ports to the
+// various areas.  It basically assigns a help message then makes a call into
+// the module which would have it's own event loop
 char PortSel(char plr,char loc)
 {
   int i,MisOK=0;
   Vab_Spot=0;  // clear the damn thing.
 
   switch(loc) {
-   case 0:  Help((plr==0)?"i023":"i022");
+   case PORT_Monument:  Help((plr==0)?"i023":"i022");
             strcpy(IKEY,"k022");
             return pNOREDRAW;// Monuments
-    case 1: 
+    case PORT_Pentagon: 
         if (Data->Year==57 || (Data->Year==58 && Data->Season==0)) {
            Help("i108");
            return pNOREDRAW;
         }
         strcpy(IDT,"i027\0");
         Intel(plr); return pREDRAW;
-    case 2: strcpy(IDT,(plr==0)?"i021":"i532");strcpy(IKEY,(plr==0)?"k021":"k532");
+    case PORT_Capitol: strcpy(IDT,(plr==0)?"i021":"i532");strcpy(IKEY,(plr==0)?"k021":"k532");
             Review(plr); return pREDRAW;
-    case 3: strcpy(IDT,"i020");Hospital(plr,1); return pREDRAW;
-    case 4: if (Option!=-1) {put_serial(LET_V);put_serial(LET_V);put_serial(LET_V);}
+    case PORT_Cemetery: strcpy(IDT,"i020");Hospital(plr,1); return pREDRAW;
+    case PORT_VAB: if (Option!=-1) {put_serial(LET_V);put_serial(LET_V);put_serial(LET_V);}
             strcpy(IDT,"i015");MisOK=0;VAB(plr); return pREDRAW;
-    case 5: if (Option!=-1) {put_serial(LET_M);put_serial(LET_M);put_serial(LET_M);}
+    case PORT_Museum: if (Option!=-1) {put_serial(LET_M);put_serial(LET_M);put_serial(LET_M);}
             strcpy(IDT,"i027");Museum(plr); return pREDRAW;
-    case 6: if (Option!=-1) {put_serial(LET_A);put_serial(LET_A);put_serial(LET_A);}
+    case PORT_Admin: if (Option!=-1) {put_serial(LET_A);put_serial(LET_A);put_serial(LET_A);}
             strcpy(IDT,"i027");Admin(plr);
             if (LOAD==1) return pEXIT;
             else if (QUIT==1) return pQUIT;
             else {if (plr==0) Vab_Spot=4;return pREDRAW;}
-    case 7: strcpy(IDT,"i039");Limbo(plr);return pREDRAW;// Astro Complex
-    case 8: strcpy(IDT,"i041");Hospital(plr,0); return pREDRAW;
-    case 9: strcpy(IDT,"i038");Train(plr,0);return pREDRAW;
-    case 10: strcpy(IDT,"i037");Train(plr,2);return pREDRAW;
-    case 11: strcpy(IDT,"i037");Train(plr,3);return pREDRAW;
-    case 12: strcpy(IDT,"i037");Train(plr,4);return pREDRAW;
-    case 13: strcpy(IDT,"i037");Train(plr,5);return pREDRAW;
-    case 14: strcpy(IDT,"i037");Train(plr,1);return pREDRAW;
-    case 15: strcpy(IDT,"i019");SatBld(plr);return pREDRAW;
-    case 16: strcpy(IDT,"i044");strcpy(IKEY,"k209");LMBld(plr);return pREDRAW;// LM Program
-    case 17: strcpy(IDT,"i036");Programs(plr,5);return pREDRAW;
-    case 18: strcpy(IDT,"i036");Programs(plr,4);return pREDRAW;
-    case 19: strcpy(IDT,"i036");Programs(plr,3);return pREDRAW;
-    case 20: strcpy(IDT,"i036");Programs(plr,2);return pREDRAW;
-    case 21: strcpy(IDT,"i036");Programs(plr,1);return pREDRAW;
-    case 22: if (Option!=-1) {put_serial(LET_R);put_serial(LET_R);put_serial(LET_R);}
+    case PORT_AstroComplex: strcpy(IDT,"i039");Limbo(plr);return pREDRAW;// Astro Complex
+    case PORT_MedicalCtr: strcpy(IDT,"i041");Hospital(plr,0); return pREDRAW;
+    case PORT_BasicTraining: strcpy(IDT,"i038");Train(plr,0);return pREDRAW;
+    case PORT_Helipad: strcpy(IDT,"i037");Train(plr,2);return pREDRAW;
+    case PORT_Pool: strcpy(IDT,"i037");Train(plr,3);return pREDRAW;
+    case PORT_Planetarium: strcpy(IDT,"i037");Train(plr,4);return pREDRAW;
+    case PORT_Centrifuge: strcpy(IDT,"i037");Train(plr,5);return pREDRAW;
+    case PORT_Airfield: strcpy(IDT,"i037");Train(plr,1);return pREDRAW;
+    case PORT_Satellite: strcpy(IDT,"i019");SatBld(plr);return pREDRAW;
+    case PORT_LM: strcpy(IDT,"i044");strcpy(IKEY,"k209");LMBld(plr);return pREDRAW;// LM Program
+    case PORT_Jupiter: strcpy(IDT,"i036");Programs(plr,5);return pREDRAW;
+    case PORT_XMS: strcpy(IDT,"i036");Programs(plr,4);return pREDRAW;
+    case PORT_Apollo: strcpy(IDT,"i036");Programs(plr,3);return pREDRAW;
+    case PORT_Gemini: strcpy(IDT,"i036");Programs(plr,2);return pREDRAW;
+    case PORT_Mercury: strcpy(IDT,"i036");Programs(plr,1);return pREDRAW;
+    case PORT_Research: if (Option!=-1) {put_serial(LET_R);put_serial(LET_R);put_serial(LET_R);}
              strcpy(IDT,"i009");RD(plr);if (plr==1) Vab_Spot=2;return pREDRAW;
-    case 23:
-    case 24:
-    case 25: strcpy(IDT,"i028");ShowPad(plr,loc-23);return pREDRAW;
-    case 26: strcpy(IDT,"i018");strcpy(IKEY,"k018");
+    case PORT_LaunchPad_A:
+    case PORT_LaunchPad_B:
+    case PORT_LaunchPad_C: strcpy(IDT,"i028");ShowPad(plr,loc-23);return pREDRAW;
+    case PORT_MissionControl: strcpy(IDT,"i018");strcpy(IKEY,"k018");
              MisOK=0;
              for (i=0;i<3;i++) {
                if (Data->P[plr].Mission[i].MissionCode>0 && 
@@ -1193,8 +1198,8 @@ char PortSel(char plr,char loc)
              else Help("i104");
              return pREDRAW;
 
-    case 27: strcpy(IDT,"i017");strcpy(IKEY,"k017");Viewing(plr);return pREDRAW;
-    case 28: // Flag Pole : End turn
+    case PORT_ViewingStand: strcpy(IDT,"i017");strcpy(IKEY,"k017");Viewing(plr);return pREDRAW;
+    case PORT_FlagPole: // Flag Pole : End turn
              MisOK=0;
 						// Check to see if missions are good to go
              for (i=0;i<3;i++) {
@@ -1221,7 +1226,7 @@ char PortSel(char plr,char loc)
                Help("i103");
               }
             return pNOREDRAW;
-    case 29: // Secutity Gate : Quit
+    case PORT_Gate: // Secutity Gate : Quit
             QUIT=Request(plr,"QUIT",1);
 	          if(QUIT)
              {
@@ -1229,12 +1234,12 @@ char PortSel(char plr,char loc)
               return pQUIT;
              }
 	          return pNOREDRAW; 
-    case 30: strcpy(IDT,"i029");Moon(plr);return pREDRAW; // Moon
-    case 31: Help("i025");return pNOREDRAW; // Sov Mon #2
-    case 32: strcpy(IDT,"i036");Programs(plr,3);return pREDRAW; // Zond
-    case 33: if (Option!=-1) {MesCenter();Vab_Spot=3;return pREDRAW;} // Tracking
+    case PORT_Moon: strcpy(IDT,"i029");Moon(plr);return pREDRAW; // Moon
+    case PORT_SovMonumentAlt: Help("i025");return pNOREDRAW; // Sov Mon #2
+    case PORT_Zond: strcpy(IDT,"i036");Programs(plr,3);return pREDRAW; // Zond
+    case PORT_Tracking: if (Option!=-1) {MesCenter();Vab_Spot=3;return pREDRAW;} // Tracking
               else {Help("i042");Vab_Spot=3;return pREDRAW;}
-    case 34: return pNOREDRAW; // SV
+    case PORT_SVHQ: return pNOREDRAW; // SV
     default: return pNOREDRAW;
   }
 }
