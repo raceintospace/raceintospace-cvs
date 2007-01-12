@@ -70,7 +70,7 @@ void Admin(char plr)
         
         FadeOut(2,pal,10,0,0);
 
-        AdminPort(plr);
+        DrawSpaceport(plr);
         PortPal(plr);
         RectFill(166,191,318,198,3);
         grSetColor(0);PrintAt(257,197,"CASH:");DispMB(285,197,Data->P[plr].Cash);
@@ -781,8 +781,6 @@ void FileAccess(char mode)
   } //while
   if (LOAD==1) {OutBox(209,50,278,60);}  // Button Out
   if (mode==1 && QUIT==1) FadeOut(2,pal,10,0,0);
-  return;
-
 }
 
 void
@@ -923,7 +921,6 @@ void BadFileType(void)
   PauseMouse();
   gxPutImage(&local,gxSET,39,50,0);
   DV(&local);
-  return;
 }
 
 
@@ -980,7 +977,6 @@ void FileText(char *name)
       else PrintAt(0,0,"THE FALL OF ");
    }   
   DispNum(0,0,19);DispNum(0,0,FDes->Year);PrintAt(0,0,".");
-  return;
 }
 
 
@@ -1292,7 +1288,6 @@ void SaveMail(void)
      fclose(fout); // close EVENT.TMP
 	  fclose(fin);
     }	 
- return;
 }
 
 // Save Game related functions

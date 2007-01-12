@@ -155,7 +155,7 @@ void Museum(char plr)
         
         FadeOut(2,pal,10,0,0);
 
-        AdminPort(plr);
+        DrawSpaceport(plr);
         PortPal(plr);
         RectFill(166,191,318,198,3);
         grSetColor(0);PrintAt(257,197,"CASH:");DispMB(285,197,Data->P[plr].Cash);

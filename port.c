@@ -302,7 +302,6 @@ void SpotCrap(char loc,char mode)
       turnoff=1;
      };
   #endif
- return;
 }
    
 void WaveFlagSetup(void)
@@ -320,7 +319,6 @@ void WaveFlagSetup(void)
 void WaveFlagDel(void)
 {
   DV(&flaggy);
-  return;                       
 }
 
 /* pace */
@@ -380,7 +378,6 @@ void PortPlace(FILE * fin,long table)
     if (local2.vptr[ctr]!=0x00) local.vptr[ctr]=local2.vptr[ctr];
   gxPutImage(&local,gxSET,Img.PlaceX,Img.PlaceY,0);  // place image
   DV(&local2);DV(&local);
-  return;
 }
 
 void PortPal(char plr)
@@ -391,120 +388,16 @@ void PortPal(char plr)
   fseek(fin,PHead.oPal,SEEK_SET);
   fread(&pal[0],768,1,fin);
   fclose(fin);
-  return;
 }
 
-// I think this is used to simply draw the spaceport for use behind Admin related overlays
-void AdminPort(char plr)
+
+void DrawSpaceport(char plr)
 {
   long table[S_QTY];
   int i,idx,fm;
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
-
-  fin=sOpen((plr==0)?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
-  fread(&PHead,sizeof PHead,1,fin);
-  fread(&MObj[0],sizeof MObj,1,fin);
-  fread(&table[0],sizeof table,1,fin);
-  fseek(fin,PHead.oPal,SEEK_SET);
-  fread(&pal[0],768,1,fin);
-
-  fseek(fin,table[0],SEEK_SET);
-  fread(&Img,sizeof Img,1,fin);  // Read in main image Header
-  fread((char *)screen,Img.Size,1,fin);  // Read in main image
-
-  UpdatePortOverlays();
-
-  if (xMODE & xMODE_CLOUDS) PortPlace(fin,table[1]); // Clouds
-
-  // Pads
-   for (i=0;i<3;i++) {
-      Data->P[plr].Port[PORT_LaunchPad_A+i]=1;
-      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[PORT_LaunchPad_A+i]=2;
-      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[PORT_LaunchPad_A+i]=3;
-      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[PORT_LaunchPad_A+i]=0;
-      }
-
-	 if (Data->P[plr].AstroCount>0) {
-		 PortPlace(fin,table[16-plr*4]); // Draw CPX
-		 HotKeyList[9]='T';		// Enable Manned hot keys
-		 HotKeyList[10]='B';
-	 } 
-	 else {		// No manned program hotkeys
-		 HotKeyList[9]='\0';
-		 HotKeyList[10]='\0';
-	 }
-  if ((Data->P[plr].Pool[0].Active|Data->P[plr].Pool[1].Active|Data->P[plr].Pool[2].Active) >=1) 
-      PortPlace(fin,table[17-plr*4]); // Draw TRN
-
-  if (Data->P[plr].Port[PORT_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
-  if (Data->P[plr].Port[PORT_Research]>2) PortPlace(fin,table[14+15*plr]);
-  if (Data->P[plr].Port[PORT_Research]==3) PortPlace(fin,table[15+15*plr]);
-
-  for (fm=0;fm<35;fm++) {
-    i=fm;
-    idx=Data->P[plr].Port[fm];  // Current Port Level for MObj
-
-    if (MObj[fm].Reg[idx].PreDraw>0)   // PreDrawn Shape
-      PortPlace(fin,table[MObj[fm].Reg[idx].PreDraw]);
-
-    if (MObj[fm].Reg[idx].iNum>0)   // Actual Shape
-      PortPlace(fin,table[MObj[fm].Reg[idx].iNum]);
-
-    fm=i;
-    }
-
-  fclose(fin);
-
-  ShBox(0,190,319,199);               // Base Box :: larger
-
-  grSetColor(0);PrintAt(257,197,"CASH:");
-  DispMB(285,197,Data->P[plr].Cash);
-  grSetColor(11);PrintAt(256,196,"CASH:");
-  DispMB(284,196,Data->P[plr].Cash);
- 
-  grSetColor(0);
-  if (Data->Season==0) PrintAt(166,197,"SPRING 19");
-  else PrintAt(166,197,"FALL 19");
-  DispNum(0,0,Data->Year);
-
-  grSetColor(11);
-  if (Data->Season==0) PrintAt(165,196,"SPRING 19");
-  else PrintAt(165,196,"FALL 19");
-  DispNum(0,0,Data->Year);
-
-
-   // FLAG DRAW
-    FCtr=0;
-    GV(&local,22,22);GV(&local2,22,22);
-
-    if (plr==0) gxGetImage(&local,49,121,70,142,0);
-    else gxGetImage(&local,220,141,241,162,0);
-
-    if (plr==0) gxVirtualVirtual(&flaggy,FCtr*23,0,FCtr*23+21,21,&local2,0,0,gxSET);
-    else gxVirtualVirtual(&flaggy,115+FCtr*23,0,115+FCtr*23+21,21,&local2,0,0,gxSET);
-    for(i=0;i<(22*22);i++)
-      if (local2.vptr[i]==0)
-         local2.vptr[i]=local.vptr[i];
-
-    if (plr==0) gxPutImage(&local2,gxSET,49,121,0);
-    else gxPutImage(&local2,gxSET,220,141,0);
-
-    DV(&local);DV(&local2);
-
-  return;
-}
-
-
-void NPDraw(char plr)
-{
-  long table[S_QTY];
-  int i,idx,fm;
-  FILE *fin;
-  GXHEADER local,local2;
-  IMG Img;
-  FadeOut(2,pal,10,0,0);
 
   fin=sOpen((plr==0) ?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
 
@@ -602,8 +495,6 @@ void NPDraw(char plr)
 
     DV(&local);DV(&local2);
 
-  FadeIn(2,pal,10,0,0);
-  return;
 }
 
 void PortText(int x,int y,char *txt,char col)
@@ -611,7 +502,6 @@ void PortText(int x,int y,char *txt,char col)
    RectFill(1,192,160,198,3);
    grSetColor(0);PrintAt(x+1,y+1,txt);
    grSetColor(col);PrintAt(x,y,txt);
-   return;
 }
 
 
@@ -676,7 +566,6 @@ void UpdatePortOverlays(void)
          Data->P[i].Port[PORT_Centrifuge]=Data->P[i].Port[PORT_MedicalCtr]=Data->P[i].Port[PORT_Airfield]=1;
          }
       }
-  return;
 }
 
 void Master(char plr)
@@ -693,7 +582,11 @@ void Master(char plr)
      Data->P[plr].Mission[i].Joint=Mis.Jt;
   }
 
-  NPDraw(plr);
+	// Entering screen for the first time so fade out and in.
+  FadeOut(2,pal,10,0,0);
+	DrawSpaceport(plr);
+  FadeIn(2,pal,10,0,0);
+
   memcpy(vhptr.vptr,screen,64000);
 
 #if SPOT_ON
@@ -725,7 +618,6 @@ void Master(char plr)
   strcpy(IDT,"i000");strcpy(IKEY,"i000");
   WaveFlagDel();
   if (sFin) {fclose(sFin);sFin=NULL;}
-  return;
 }
 
 void GetMse(char plr,char fon)
@@ -769,7 +661,6 @@ void GetMse(char plr,char fon)
     FCtr++;
   }
   GetMouse_fast();
-  return;
 }
 
 void DoCycle(void)  // Three ranges of color cycling
@@ -802,7 +693,6 @@ void DoCycle(void)  // Three ranges of color cycling
   pal[j+3*i]=tmp1;pal[j+3*i+1]=tmp2;pal[j+3*i+2]=tmp3;
 
   gxSetDisplayPalette(pal);
-  return;
 }
 
 void PortOutLine(unsigned int Count,ui16 *buf,char mode)
@@ -813,7 +703,6 @@ void PortOutLine(unsigned int Count,ui16 *buf,char mode)
    else buf[i]=PreOut[i].loc;
    screen[buf[i]]=11;
    }
-  return;
 }
 
 void PortRestore(unsigned int Count)
@@ -822,7 +711,6 @@ void PortRestore(unsigned int Count)
   for (i=0;i<Count;i++) screen[PreOut[i].loc]=PreOut[i].val;
   //free(PreOut);
   PreOut=NULL;
-  return;
 }
 
 
@@ -1046,7 +934,10 @@ PreOut=(struct SXX *)&buffer[60000];
 	                  case pREDRAW:
                           SpotCrap(0,SPOT_KILL);  // remove spots
                           PreOut=(struct SXX *)&buffer[60000];
-                     	   NPDraw(plr);
+													// Returning to spaceport so fade between redraws
+													FadeOut(2,pal,10,0,0);
+													DrawSpaceport(plr);
+													FadeIn(2,pal,10,0,0);
 
 #if SPOT_ON
                           memcpy(vhptr.vptr,screen,64000);

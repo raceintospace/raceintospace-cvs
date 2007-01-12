@@ -1,3 +1,16 @@
+2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V82
+
+	* AdminPort and NPPort where almost the same.  I removed AdminPort() 
+	since it was used to paint the Spaceport under the Admin screen text
+	and kept NPPort (removing the fades) figuring it's the more accurate as 
+	it's the one that's actually used for the spaceport.  So renamed 
+	NPPort() to DrawSpaceport() and added fades around a call to 
+	DrawSpaceport() where calls to NPPort used to be.
+
+	* Removed a few 'return;' statements from the end of void functions.
+
 2007-01-12  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V81

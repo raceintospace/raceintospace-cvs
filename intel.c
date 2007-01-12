@@ -47,7 +47,7 @@ void Intel(char plr)
      else {
         
         FadeOut(2,pal,10,0,0);
-        AdminPort(plr);
+        DrawSpaceport(plr);
         PortPal(plr);
         RectFill(166,191,318,198,3);
         grSetColor(0);PrintAt(257,197,"CASH:");DispMB(285,197,Data->P[plr].Cash);
@@ -73,7 +73,6 @@ void Intel(char plr)
 
   remove_savedat("PORT.TMP"); // remove temp file
   KillMusic();
-	return;
 }
 
 
@@ -154,7 +153,6 @@ void MisIntel(char plr,char acc)
 	 nf=1;
  if (nf==1 || mis>56+plr || mis<0) {HarIntel(plr,0);return;}
  SaveIntel(plr,5,(unsigned char) mis);
- return;
 }
 
 void XSpec(char plr,char mis,char year)
@@ -176,7 +174,6 @@ void XSpec(char plr,char mis,char year)
  grSetColor(9);MissionName(mis,93,169,30);grSetColor(1);
  PrintAt(33,183,"SOMETIME IN THE NEXT YEAR.");
  TopSecret(plr,37+Data->P[plr].PastIntel[year].sf);
- return;
 }
 
 void Special(char p,int ind)
@@ -214,9 +211,9 @@ void Special(char p,int ind)
  grSetColor(1);
  PrintAt(33,183,"FOR THEIR SPACE PROGRAM");
  TopSecret(p,ind);
- 
- return;
 }
+
+
 void BackIntel(char p,char year)
 {
  int prg,ind,dur=0,xc,yc;
@@ -312,8 +309,6 @@ void BackIntel(char p,char year)
  PrintAt(33,183,"RELIABILITY AT ABOUT ");
  DispNum(0,0,Data->P[p].PastIntel[year].sf);PrintAt(0,0," PERCENT.");
  if (prg!=5) TopSecret(p,prg*7+ind);
- 
- return;
 }
 
 void HarIntel(char p,char acc)
@@ -426,7 +421,6 @@ void HarIntel(char p,char acc)
  if (nf==1 || (prg==1 && ind==5) || (prg==1 && ind==6) || 
    (prg==3 && ind==5) || (prg==3 && ind==6)) {MisIntel(p,0);return;}
  SaveIntel(p,prg,ind);
- return;
 }
 
 
@@ -464,7 +458,6 @@ void TopSecret(char plr,char poff)
   
   fclose(in);
   DV(&local); DV(&local2);
-  return;
 }
 
 void SaveIntel(char p,char prg,char ind)
@@ -505,7 +498,6 @@ void Bad(char plr,char pt)
  if (plr==1) PrintAt(0,0,"THE CAPE"); else PrintAt(0,0,"BAIKONUR");}
  if (pt==0) Data->P[plr].PastIntel[Data->Year-58].prog=-1;
  
- return;
 }
 
 void ImpHard(char plr,char hd,char dx)
@@ -518,7 +510,6 @@ void ImpHard(char plr,char hd,char dx)
    case 3:Data->P[plr].Table[3][dx]=Data->P[plr].Misc[dx].MaxRD- random(Data->P[plr].Misc[dx].MaxSafety-Data->P[plr].Misc[dx].MaxRD);break;
    default:break;
   }
- return;
 }
 
 void UpDateTable(char plr)
@@ -551,7 +542,6 @@ void UpDateTable(char plr)
 	 } // switch
 	}  // if
    } // for 
- return;
 }
 
 void IntelPhase(char plr,char pt)
@@ -571,7 +561,6 @@ void IntelPhase(char plr,char pt)
    else MisIntel(plr,acc);
  Data->P[plr].PastIntel[0].cur++;
  UpDateTable(plr);
- return;
 }
 
 
@@ -600,7 +589,6 @@ void DrawBre(char plr)
   grSetColor(1);PrintAt(258,13,"CONTINUE");
   UPArrow(137,42);DNArrow(137,95);
   
-  return;
 }
 
 void Bre(char plr)
@@ -654,7 +642,7 @@ void Bre(char plr)
 	    while(1)  { GetMouse();if (mousebuttons==0) break;}
        if (key>0) delay(150);
 	    OutBox(244,5,313,17);
-	    return;  /* Done */
+	    break;  /* Done */
 	   };
     }
   };
@@ -710,7 +698,6 @@ void DrawIStat(char plr)
 	grSetColor(1);PrintAt(258,13,"CONTINUE");
 	FadeIn(2,pal,10,0,0);
 	
-	return;
 }
 
 void ReButs(char old,char nw)
@@ -748,7 +735,6 @@ void ReButs(char old,char nw)
 	   break;
   }
   
-  return;
 }
 
 void IStat(char plr)
@@ -809,7 +795,7 @@ int place=-1;
        if (key>0) delay(150);
 	    OutBox(244,5,314,17);
 	    Del_RD_BUT();
-	    return;  /* Done */
+	    break;  /* Done */
       };
     }
   };
@@ -835,7 +821,6 @@ void DispIt(int x1,int y1,int x2, int y2,int s,int t)
     gxPutImage(&local2,gxSET,s,t,0);
     
     DV(&local);DV(&local2);
-  return;
 }
 
 void IInfo(char plr,char loc,char w)
@@ -1112,7 +1097,6 @@ void IInfo(char plr,char loc,char w)
     default:break;
   };
   
-  return;
 }
 
 /* EOF */
