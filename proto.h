@@ -121,6 +121,9 @@
 #define EWALK 26
 #define LWALK 40
 
+#define MAX_X	320
+#define MAX_Y	200
+
 // ***************************
 //   PROTOTYPES FOR ROUTINES
 // ***************************

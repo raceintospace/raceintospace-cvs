@@ -97,7 +97,7 @@ typedef struct mobj
 MOBJ MObj[35];
 
 // These are the valid hotkeys
-char *HotKeyList="AIMRPVCQETB\0";
+char HotKeyList[]="AIMRPVCQETB\0";
 
 int FCtr;
 GXHEADER flaggy;

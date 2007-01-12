@@ -1046,7 +1046,6 @@ void DrawRank(char plr)
     default:break;
    }
   }
- grSetLineStyle(grLSOLID,2);
  //Win=Data->Prestige[22].Place;
  i=0;t1=152;t2=0;
  grSetColor(5);
@@ -1076,7 +1075,6 @@ void DrawRank(char plr)
 	  Data->P[1].History[i].Month,t1);
 	  i++;
    }
- grSetLineStyle(grLSOLID,1);
  grSetColor(1);PrintAt(6,27,"LEVEL:");PrintAt(275,27,"LEVEL:");
  grSetColor(0);DispNum(41,27,Data->Def.Lev1+1);
  grSetColor(0);DispNum(310,27,Data->Def.Lev2+1);

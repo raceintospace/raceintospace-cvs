@@ -1,23 +1,11 @@
 #include "Buzz_inc.h"
-
-extern int gtk_mouse_x, gtk_mouse_y, gtk_mouse_pressed;
-
-extern unsigned char *screen;
-extern char pal[];
+#include "externs.h"
+#include <assert.h>
 
 int
 grInitMouse (void)
 {
 	return gxSUCCESS;
-}
-
-void
-grTrackMouse (int how)
-{
-	if (how != grTRACK) {
-		fprintf (stderr, "bad arg to grTrackMouse\n");
-		exit (1);
-	}
 }
 
 void
@@ -49,20 +37,6 @@ grGetMouseCurPos (int *xp, int *yp)
 	*xp = av_mouse_cur_x / 2;
 	*yp = av_mouse_cur_y / 2;
 	return (0);
-}
-
-void
-grSetMouseStyle (int style, int size)
-{
-	if (style != grCARROW || size != 8) {
-		fprintf (stderr, "bad arg to grSetMouseStyle\n");
-		exit (1);
-	}
-}
-
-void
-grDisplayMouse (int mode)
-{
 }
 
 static int gr_fg_color;
@@ -112,21 +86,19 @@ grSetBkColor (int color)
 void
 grClearArea (int x1, int y1, int x2, int y2)
 {
-	int x, y;
-	int idx;
-	int t;
+	int y, t;
 
-	if (x1 > x2) { t = x1; x1 = x2; x2 = t;}
-	if (y1 > y2) { t = y1; y1 = y2; y2 = t;}
+	assert(0 <= x1 && x1 < MAX_X);
+	assert(0 <= x2 && x2 < MAX_X);
+	assert(0 <= y1 && y1 < MAX_Y);
+	assert(0 <= y2 && y2 < MAX_Y);
 
-	for (y = y1; y < y2; y++) {
-		for (x = x1; x < x2; x++) {
-			idx = y * 320 + x;
-			screen[idx] = gr_bg_color;
-		}
+	if (x1 > x2) { t = x1; x1 = x2; x2 = t; }
+	if (y1 > y2) { t = y1; y1 = y2; y2 = t; }
+
+	for (y = y1; y < y2; ++y) {
+		memset(&screen[y * MAX_X + x1], gr_bg_color, x2-x1+1);
 	}
-	if (gr_slow)
-		gr_sync ();
 }
 
 static int gr_cur_x, gr_cur_y;
@@ -138,10 +110,10 @@ grMoveTo (int x, int y)
 	gr_cur_y = y;
 }
 
-void
+inline void
 grPutPixel (int x, int y, int color)
 {
-	screen[y * 320 + x] = color;
+	screen[y * MAX_X + x] = color;
 	screen_dirty = 1;
 }
 
@@ -201,9 +173,6 @@ grLineTo (int x_arg, int y_arg)
 
 	gr_cur_x = x_arg;
 	gr_cur_y = y_arg;
-
-	if (gr_slow)
-		gr_sync ();
 }
 
 void
@@ -224,10 +193,7 @@ grDrawRect (int x1, int y1, int x2, int y2, int mode)
 {
 	int t;
 
-	if (mode != grOUTLINE) {
-		fprintf (stderr, "bad arg to grDrawRect\n");
-		exit (1);
-	}
+	assert (mode == grOUTLINE);
 
 	if (x1 > x2) { t = x1; x1 = x2; x2 = t;}
 	if (y1 > y2) { t = y1; y1 = y2; y2 = t;}
@@ -246,32 +212,11 @@ grDrawLine (int x1, int y1, int x2, int y2)
 	grLineTo (x2, y2);
 }
 
-void
-grGetMouseBounds(int *x1p, int *y1p, int *x2p, int *y2p)
-{
-	*x1p = 0;
-	*x2p = 319;
-	*y1p = 0;
-	*y2p = 199;
-}
-
-void
-grSetMouseBounds (int x1, int y1, int x2, int y2)
-{
-}
-
-int
+inline int
 grGetPixel (int x, int y)
 {
-	if (x >= 0 && x < 320
-	    && y >= 0 && y < 200)
-		return (screen[y * 320 + x]);
-	return (0);
+	assert(x <= 0 && x < MAX_X);
+	assert(y <= 0 && y < MAX_Y);
+
+	return screen[y * MAX_X + x];
 }
-
-void
-grSetLineStyle (int style, int width)
-{
-}
-
-

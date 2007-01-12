@@ -30,7 +30,6 @@
 
 double load_news_anim_start;
 
-
 char *totnews_dat;
 int totnews_offset;
 
@@ -826,7 +825,7 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
 
 	if (Mode == 69) {       // *************** TCS001 my kludge (tom) 3/15/94
 
-		RectFill(0,0,319,239,0);   // clears screen
+		RectFill(0,0,MAX_X-1,MAX_Y-1,0);   // clears screen
 
 		//  RectFill(4,4,239,109,0);    //clears news anim space
 		//  RectFill(240,23,315,109,0);

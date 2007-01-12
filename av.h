@@ -15,10 +15,6 @@ void av_setup (int *argcp, char ***argvp);
 void av_silence (int channel);
 void av_sync (void);
 
-unsigned char *screen;
-int screen_dirty;
-char pal[768];
-
 struct audio_chunk {
 	struct audio_chunk *next;
 	void *data;
@@ -38,8 +34,6 @@ struct audio_channel {
     struct audio_chunk**    chunk_tailp;     /* tail of chunk list? */
     unsigned                offset;          /* data offset in chunk */
 };
-
-int av_dirty;
 
 char AnimSoundCheck(void);
 void UpdateAudio (void);

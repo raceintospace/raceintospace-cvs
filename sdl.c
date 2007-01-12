@@ -8,14 +8,24 @@
 #include <signal.h>
 #include <memory.h>
 #include "SDL.h"
+#include "Buzz_inc.h"
 
 #include "av.h"
+#define MAX_X	320
+#define MAX_Y	200
 
 void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
 SDL_Surface *sur;
 
 static struct audio_channel Channels[AV_NUM_CHANNELS];
+
+unsigned char* screen;
+unsigned char* screen_2;
+
+char pal[3*256];
+
+int screen_dirty;
 
 void
 intr (int sig)
@@ -199,6 +209,11 @@ av_setup (int *argcp, char ***argvp)
 		exit (1);
 	}
 
+	atexit(SDL_Quit);
+
+	screen	 = calloc(MAX_X*MAX_Y, 1);
+	screen_2 = calloc(MAX_X*MAX_Y, 1);
+
 	if (SDL_InitSubSystem (SDL_INIT_AUDIO < 0)) {
 		printf ("no audio\n");
 	} else {
@@ -371,21 +386,84 @@ NUpdateVoice(void)
 void
 av_sync (void)
 {
-	int dest_row, dest_col, dest_idx;
+	int row, col;
+	int i = 0;
+
+	/*
 	int src_row, src_col, src_idx;
-	int pixel;
+	int dest_row, dest_col, dest_idx;
+	unsigned char pixel;
+	*/
+
+	int min_x = MAX_X-1, min_y = MAX_Y-1;
+	int max_x = 0, max_y = 0;
+	int tmp;
 	char *p;
 	char *outp;
 
-	SDL_LockSurface (sur);
+#ifdef PROFILE_GRAPHICS
+	Uint32 ticks = SDL_GetTicks();
+#endif
 
-	for (dest_row = 0; dest_row < 400; dest_row++) {
+	if (SDL_MUSTLOCK(sur))
+		SDL_LockSurface (sur);
+
+	outp = sur->pixels;
+
+#if 1
+	for (row = 0; row < MAX_Y; ++row) {
+		for (col = 0; col < MAX_X; ++col) {
+			i = row * MAX_X + col;
+			p  = &pal  [screen  [i] * 3];
+			if (screen_2[i] != screen[i])
+			{
+				screen_2[i]  = screen[i];
+				min_x = minn(min_x, col);
+				max_x = maxx(max_x, col);
+				min_y = minn(min_y, row);
+				max_y = maxx(max_y, row);
+			}
+
+			i = 4*row*MAX_X + 2*col;
+			outp[3*i]	= p[2] * 4;
+			outp[3*i+1] = p[1] * 4;
+			outp[3*i+2] = p[0] * 4;
+
+			i = 4*row*MAX_X + 2*col + 1;
+			outp[3*i]	= p[2] * 4;
+			outp[3*i+1] = p[1] * 4;
+			outp[3*i+2] = p[0] * 4;
+
+			i = 4*row*MAX_X + 2*col + 2*MAX_X;
+			outp[3*i  ] = p[2] * 4;
+			outp[3*i+1] = p[1] * 4;
+			outp[3*i+2] = p[0] * 4;
+
+			i = 4*row*MAX_X + 2*col + 2*MAX_X + 1;
+			outp[3*i]	= p[2] * 4;
+			outp[3*i+1] = p[1] * 4;
+			outp[3*i+2] = p[0] * 4;
+		}
+	}
+#endif
+
+#if 0
+	for (dest_row = 0; dest_row < 2*MAX_Y; dest_row++) {
 		src_row = dest_row / 2;
-		for (dest_col = 0; dest_col < 640; dest_col++) {
+		for (dest_col = 0; dest_col < 2*MAX_X; dest_col++) {
 			src_col = dest_col / 2;
 
-			src_idx = src_row * 320 + src_col;
-			dest_idx = (dest_row * 640 + dest_col) * 3;
+			src_idx = src_row * MAX_X + src_col;
+			dest_idx = (dest_row * 2*MAX_X + dest_col) * 3;
+
+			if (screen_2[src_idx] != screen[src_idx])
+			{
+				screen_2[src_idx]  = screen[src_idx];
+				min_x = minn(min_x, src_col);
+				max_x = maxx(max_x, src_col);
+				min_y = minn(min_y, src_row);
+				max_y = maxx(max_y, src_row);
+			}
 
 			pixel = screen[src_idx] & 0xff;
 			p = pal + pixel * 3;
@@ -397,10 +475,28 @@ av_sync (void)
 			outp[2] = p[0] * 4;
 		}
 	}
+#endif
 
-	SDL_UnlockSurface (sur);
+	if (SDL_MUSTLOCK(sur))
+		SDL_UnlockSurface (sur);
 
-	SDL_Flip (sur);
+	if (max_x < min_x) { tmp = min_x; min_x = max_x; max_x = tmp; }
+	if (max_y < min_y) { tmp = min_y; min_y = max_y; max_y = tmp; }
+
+	SDL_UpdateRect (sur, min_x*2, min_y*2,
+			2*(max_x - min_x + 1),
+			2*(max_y - min_y + 1));
+
+#ifdef PROFILE_GRAPHICS
+	fprintf(stderr, "av_sync: ~%3d%% in ~%3ums.\n",
+			/* min_x, min_y, max_x, max_y, */
+			100*(max_x - min_x + 1)*(max_y - min_y + 1)/(MAX_X*MAX_Y),
+			SDL_GetTicks() - ticks);
+#endif
+
+	/*
+	SDL_Flip(sur);
+	*/
 
 	screen_dirty = 0;
 }

@@ -1,9 +1,7 @@
 #include "Buzz_inc.h"
 #include <limits.h>
 #include <assert.h>
-
-#define MAX_X	320
-#define MAX_Y	200
+#include "externs.h"
 
 extern unsigned char *screen;
 extern GXHEADER vhptr;
@@ -142,10 +140,6 @@ gxVirtualDisplay (GXHEADER *hp,
 		memcpy(&screen[to_idx], &hp->vptr[from_idx], clip_x);
 	}
 	screen_dirty = 1;
-
-	if (gr_slow)
-		gr_sync ();
-
 }
 
 void

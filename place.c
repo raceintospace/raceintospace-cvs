@@ -182,9 +182,17 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 
 void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff) 
 {
+    /* 
+     * XXX: HACK WARNING.  In my datafiles some Patch entries have
+     * errors in widths. That causes malformed images, though the data
+     * is there.  I corrected the problem here (look for do_fix).
+     * Someone else might also run into this problem, but maybe only
+     * my data files are corrupted. For correct data behavior is not
+     * changed.
+     */
   struct Patch {char w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
-  unsigned int j;
+  unsigned int j, do_fix = 0;
   FILE *in;
   in=sOpen("PATCHES.BUT","rb",0);
   fread(&pal[coff*3],96,1,in);
@@ -194,17 +202,30 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
 	SwapWord(P.size);
 	SwapLong(P.offset);
   fseek(in,P.offset,SEEK_SET);
-  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
-  if (((int)P.w * (int)P.h) != P.size) {
-      fprintf(stderr, "PatchMe(): Patch h*w != size!\n");
+  if (P.w * P.h != P.size)
+  {
+      fprintf(stderr, "PatchMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
+              P.w, P.h, P.w*P.h, P.size);
+      if ((P.w+1) * P.h == P.size) {
+          fprintf(stderr, "PatchMe(): P.w++ saves the day!\n");
+          P.w++;
+          do_fix = 1;
+      }
       P.size = P.w * P.h;
   }
+  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
+  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
+
   fread(local.vptr, P.size, 1, in);
   fclose(in);
   //RLED(buffer+20000,local.vptr,P.size);
-  for (j=0;j<P.size;j++) 
-    if(local.vptr[j]!=0) local2.vptr[j]=local.vptr[j]+coff;
+    for (j = 0; j < P.size; j++)
+        if (local.vptr[j] != 0) 
+        {
+            if (do_fix && ((j % P.w) + 1 == (unsigned char)P.w))
+                continue;
+            local2.vptr[j] = local.vptr[j] + coff;
+        }
   
   gxPutImage(&local2,gxSET,x,y,0);
   DV(&local); DV(&local2);
@@ -259,6 +280,7 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
   struct Patch {char w,h;ui16 size;long offset;} P;
   GXHEADER local,local2;
   unsigned int j;
+  int do_fix = 0;
   FILE *in;
 
   in=sOpen("MHIST.BUT","rb",0);
@@ -267,18 +289,28 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
   else fseek(in,(7+plr*8+prog)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
   fseek(in,P.offset,SEEK_SET);
-  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
   if (P.w * P.h != P.size) {
-      fprintf(stderr, "SmHardMe(): Patch h*w != size!\n");
+      fprintf(stderr, "SmHardMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
+              P.w, P.h, P.w*P.h, P.size);
+      if ((P.w+1) * P.h == P.size) {
+          fprintf(stderr, "SmHardMe(): P.w++ saves the day!\n");
+          P.w++;
+          do_fix = 1;
+      }
       P.size = P.w * P.h;
   }
+  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
+  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
   fread(local.vptr,P.size,1,in);
   fclose(in);
   //RLED(buffer+20000,local.vptr,P.size);
-  for (j=0;j<P.size;j++)
-	if(local.vptr[j]!=0) local2.vptr[j]=local.vptr[j]+coff;
-
+    for (j = 0; j < P.size; j++)
+        if (local.vptr[j] != 0) 
+        {
+            if (do_fix && ((j % P.w) + 1 == (unsigned char)P.w))
+                continue;
+            local2.vptr[j] = local.vptr[j] + coff;
+        }
   gxPutImage(&local2,gxSET,x,y,0);
   DV(&local); DV(&local2);
   if (planet>0 && prog==6) SmHardMe(plr,x+planet*2,y+5,prog,0,coff);
@@ -409,7 +441,6 @@ int Help(char *FName)
 {
   int i,j,line,top=0,bot=0,plc=0;
   char *Help,*NTxt,mode;
-  int ox1,oy1,ox2,oy2;
   int fsize;
   GXHEADER local;
   FILE *fin;
@@ -475,9 +506,6 @@ int Help(char *FName)
   key=0;
   GV(&local,250,128);
   gxGetImage(&local,34,32,283,159,0);
-
-  grGetMouseBounds(&ox1,&oy1,&ox2,&oy2);
-  grSetMouseBounds(34,32,283,159);
 
   ShBox(34,32,283,159);
   InBox(37,35,279,45); InBox(37,48,261,128);
@@ -545,7 +573,6 @@ int Help(char *FName)
   }
   
   gxPutImage(&local,gxSET,34,32,0);
-  grSetMouseBounds(ox1,oy1,ox2,oy2);
   farfree(NTxt);
   DV(&local);
   

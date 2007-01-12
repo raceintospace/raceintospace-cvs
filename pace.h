@@ -34,26 +34,17 @@ int next_saved_game (struct ffblk *ffblk);
 #define grCARROW 2
 
 unsigned char XMAS;
-void grTrackMouse(int how);
-void grSetMouseStyle (int style, int size);
 
 int grInitMouse (void);
 void grSetColor (int);
 void grMoveTo (int x, int y);
 void grLineTo (int x, int y);
 void grPutPixel (int x, int y, int val);
-void grGetMouseBounds(int *x1p, int *y1p, int *x2p, int *y2p);
-void grSetMouseBounds (int x1, int y1, int x2, int y2);
 void grSetMousePos (int x, int y);
 int grGetPixel (int x, int y);
 int grGetMouseCurPos (int *xp, int *yp);
 int grGetMousePressedPos (int *xp, int *yp);
-#define grLSOLID 1
-void grSetLineStyle (int style, int width);
 int grGetMouseButtons (void);
-#define grHIDE 1
-#define grSHOW 1
-void grDisplayMouse (int mode);
 void grDrawLine (int x1, int y1, int x2, int y2);
 void grSetBkColor (int col);
 void grClearArea (int x1, int y1, int x2, int y2);
@@ -146,7 +137,6 @@ void gr_sync (void);
 void gr_maybe_sync (void);
 
 void gr_set_color_map (unsigned char *map);
-int gr_slow;
 
 int RLED_img (void *src, void *dest, unsigned int src_size, int w, int h);
 
@@ -177,7 +167,6 @@ char *seq_filename (int seq, int mode);
 void play_audio (int sidx, int mode);
 
 void bzdelay (int ticks);
-int screen_dirty;
 void GetMouse_fast (void);
 
 char savedat_dir[1000];

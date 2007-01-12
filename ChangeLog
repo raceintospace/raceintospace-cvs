@@ -1,3 +1,19 @@
+2007-01-12  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V81
+
+	* Changed & optimized av_sync to keep track of changed pixels.
+	Now only parts of the screen are updated during redraw (if possible).
+	This can get further iff drawing code will use gr & gx routines instead
+	of direct memory access.
+
+	* Fixed issues with off-by-one errors in data files. Is it just my copy
+	that is broken?
+
+	* Added .indent.pro file with options for indent(1).
+
+	* Added rules to build tags and TAGS files.
+
 2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V80

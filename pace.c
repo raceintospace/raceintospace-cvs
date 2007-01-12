@@ -1,4 +1,5 @@
 #include "Buzz_inc.h"
+#include "externs.h"
 
 extern GXHEADER vhptr;
 
@@ -565,8 +566,6 @@ SMove (void *p, int x, int y)
 	gxPutImage (&local, gxSET, x, y, 0);
 	DV (&local);
 }
-
-extern unsigned char *screen;
 
 void
 LMove (void *p)

@@ -347,7 +347,6 @@ void NewEnd(char win,char loc)
  CDAccess(cdROM,3,1); //PLAY CD victory
  EndGame(win,loc);
  Draw_NewEnd(win);
- grSetMouseBounds(0,173,319,199);
  grSetMousePos(159,181);
  R_V=Burst(win);
  while(1)  { GetMouse();if (mousebuttons==0) break;}
@@ -391,9 +390,7 @@ void NewEnd(char win,char loc)
      if (key>0 || R_V>0) delay(150);
      i=0;key=0;
      OutBox(14,182,65,190);
-     grSetMouseBounds(0,0,319,199);
      EndGame(win,loc);Draw_NewEnd(win);
-     grSetMouseBounds(0,173,319,199);
      grSetMousePos(159,181);
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
      R_V=0;
@@ -408,12 +405,10 @@ void NewEnd(char win,char loc)
      if (key>0 || R_V>0) delay(150);
      i=0;key=0;
      OutBox(74,182,125,190);
-     grSetMouseBounds(0,0,319,199);
      PreLoadMusic(M_THEME);
      PlayMusic(1);
      Stat(win);Draw_NewEnd(win);
      KillMusic(); 
-     grSetMouseBounds(0,173,319,199);
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
      grSetMousePos(159,181);
      R_V=0;
@@ -470,7 +465,6 @@ void NewEnd(char win,char loc)
     };
   }
  DV(&local);  //KillMusic();
- grSetMouseBounds(0,0,319,199);
  return;
 }
 

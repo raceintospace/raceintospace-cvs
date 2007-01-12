@@ -95,6 +95,14 @@ sdl.o: sdl.c
 sdltest: sdltest.o
 	$(CC) $(CFLAGS) -o sdltest sdltest.o `sdl-config --libs` -lvorbisfile -lm
 
+FORCE:
+
+tags: FORCE
+	ctags *.[ch]
+
+TAGS: FORCE
+	etags *.[ch]
+
 clean:
 	rm -f *.o *~
 	rm -f raceintospace imgsplit sdltest decode getport

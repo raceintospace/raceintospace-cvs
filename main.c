@@ -943,9 +943,6 @@ void DispBig(int x,int y,char *txt,char mode,char te)
       }
     x+=letter.width-1;
   };
-
-  if (gr_slow)
-    gr_sync ();
 }
 
 void DispNum(int xx,int yy,int num)

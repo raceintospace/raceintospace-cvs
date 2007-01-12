@@ -97,19 +97,29 @@ void Display_ARROW(char,int,int);
 
 void Display_ARROW(char num,int x,int y) 
 {
+    /* Look for explanations in place.c:PatchMe() */
   struct Patch {char w,h;ui16 size;long offset;} P;
+  int do_fix = 0;
   GXHEADER local,local2;
   FILE *in;
   in=sOpen("ARROWS.BUT","rb",0);
   fseek(in,(num)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
   fseek(in,P.offset,SEEK_SET);
-  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
-  if (P.w * P.h != P.size) {
-      fprintf(stderr, "Display_ARROW(): Patch h*w != size!\n");
+  if (P.w * P.h != P.size)
+  {
+      fprintf(stderr,
+              "Display_ARROW(): w*h != size (%hhd*%hhd == %d != %hd)\n",
+              P.w, P.h, P.w*P.h, P.size);
+      if ((P.w+1) * P.h == P.size) {
+          fprintf(stderr, "Display_ARROW(): P.w++ saves the day!\n");
+          P.w++;
+          do_fix = 1;
+      }
       P.size = P.w * P.h;
   }
+  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
+  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
   fread(local.vptr,P.size,1,in);
   fclose(in);
  // for (j=0;j<P.size;j++) 

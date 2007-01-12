@@ -66,9 +66,9 @@ typedef long	i32;
 
 int never_fail;
 
-#include <data.h>     // main data structures
-#include <proto.h>    // prototypes and general defines
-#include <music.h>    // defines for music names
+#include "data.h"     // main data structures
+#include "proto.h"    // prototypes and general defines
+#include "music.h"    // defines for music names
 
 #define random brandom
 #undef NULL
