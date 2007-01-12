@@ -128,8 +128,11 @@ void DispVAB(char plr,char pad)
 
   fout=sOpen("VAB.IMG","rb",0);
   fread(&M,sizeof M,1,fout);
+	SwapWord(M.fSize);
   if (plr==1) {fseek(fout,M.fSize,SEEK_CUR);fread(&M,sizeof M,1,fout);}
-  memcpy(&pal[0],&M.pal[0],768);
+	SwapWord(M.fSize);
+  memcpy(pal,M.pal,768);
+	SwapPal(pal);
   fread((char *)screen,(long)M.fSize,1,fout);
   fclose(fout);
   PCX_D((char *)screen,vhptr.vptr,M.fSize);
@@ -522,6 +525,17 @@ void VAB(char plr)
   file = sOpen("VTABLE.DAT", "rb", 0);
   fread(MI, MI_size, 1, file);
   fclose(file);
+
+#ifdef __BIG_ENDIAN__
+	for (i = 0; i< 2*28; i++)
+{
+		SwapWord(MI[i].x1);
+		SwapWord(MI[i].y1);
+		SwapWord(MI[i].x2);
+		SwapWord(MI[i].y2);
+		SwapWord(MI[i].o);
+}
+#endif
 
   PreLoadMusic(M_HARDWARE);
   PlayMusic(0);

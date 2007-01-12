@@ -1,5 +1,16 @@
 2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V87
+
+	* MAC: Lots of stuff working now, right up to the launch of the missions
+
+	* Commented out a few assertions in gx.c, the params were valid and I'll 
+	have to recheck the assertion later
+	
+	* Modified checkin2 to show diffstat only and not include it in the checking comments
+
+2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V86
 
 	* Fixed an assertion in grGetPixel()

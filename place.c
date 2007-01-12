@@ -196,6 +196,7 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
   unsigned int j, do_fix = 0;
   FILE *in;
   in=sOpen("PATCHES.BUT","rb",0);
+	SwapPal(pal);
   fread(&pal[coff*3],96,1,in);
 	SwapPal(pal);
   fseek(in,(50*plr+prog*10+poff)*(sizeof P),SEEK_CUR);
@@ -244,9 +245,12 @@ void AstFaces(char plr,int x,int y,char face)
   memset(&pal[192],0x00,192);
   fin=sOpen("FACES.BUT","rb",0);
   fseek(fin,87*sizeof(long),SEEK_SET);
+	SwapPal(pal);
   fread(&pal[192],96,1,fin);
+	SwapPal(pal);
   fseek(fin,face*(sizeof (long)),SEEK_SET);  // Get Face
   fread(&offset,sizeof(long),1,fin);
+	SwapLong(offset);
   fseek(fin,offset,SEEK_SET);
   GV(&local,18,15);
   fread(local.vptr,18*15,1,fin);
@@ -254,6 +258,7 @@ void AstFaces(char plr,int x,int y,char face)
   fseek(fin,(85+plr)*(sizeof (long)),SEEK_SET);  // Get Helmet
   fread(&offset,sizeof (long),1,fin);
   fseek(fin,offset,SEEK_SET);
+	SwapLong(offset);
   GV(&local2,80,50); GV(&local3,80,50);  
   fread(local2.vptr,80*50,1,fin);
   fclose(fin);
@@ -285,10 +290,14 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
   FILE *in;
 
   in=sOpen("MHIST.BUT","rb",0);
+	SwapPal(pal);
   fread(&pal[coff*3],64*3,1,in);
+	SwapPal(pal);
   if (planet>0) fseek(in,(planet-1)*(sizeof P),SEEK_CUR);
   else fseek(in,(7+plr*8+prog)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
+	SwapWord(P.size);
+	SwapLong(P.offset);
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size) {
       fprintf(stderr, "SmHardMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
@@ -345,9 +354,13 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       in=sOpen("RDFULL.BUT","rb",0);
       fseek(in,size*(sizeof table),SEEK_CUR);
       fread(&table,sizeof table,1,in);
+			SwapWord(table.size);
+			SwapLong(table.offset);
       fseek(in,table.offset,SEEK_SET);
       GV(&local,104,77);GV(&local2,104,77);
+			SwapPal(pal);
       fread(&pal[coff*3],96*3,1,in);  // Individual Palette
+			SwapPal(pal);
       fread(local2.vptr,table.size,1,in);  // Get Image
       fclose(in);
       RLED_img(local2.vptr,local.vptr,table.size,local.w,local.h);
@@ -385,14 +398,21 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       while (strncmp(AIndex.ID,Name,4)!=0) {
        fread(&AIndex,sizeof AIndex,1,fin);
       }
+			SwapLong(AIndex.offset);
+			SwapLong(AIndex.size);
       fseek(fin,AIndex.offset,SEEK_SET);
 
       fread(&AHead,sizeof AHead,1,fin);
+			SwapWord(AHead.w);
+			SwapWord(AHead.h);
+			SwapPal(pal);
       fread(&pal[coff*3],64*3,1,fin);
+			SwapPal(pal);
       fseek(fin,3*(AHead.cNum-64),SEEK_CUR);
       GV(&local,AHead.w,AHead.h);
 
       fread(&BHead,sizeof BHead,1,fin);
+			SwapLong(BHead.fSize);
       fread(vhptr.vptr,BHead.fSize,1,fin);
       RLED_img(vhptr.vptr,local.vptr,BHead.fSize,local.w,local.h);
       n = gxVirtualSize(gxVGA_13,AHead.w,AHead.h);
@@ -400,8 +420,6 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
 	      if (local.vptr[j]!=0) local.vptr[j]-=(128-coff);
       }
       local.vptr[0]=0x00;
-
-
       
       if (FADE==0) gxSetDisplayPalette(pal);
       gxVirtualDisplay(&local,0,0,x+1,y,x+102,y+76,0);

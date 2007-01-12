@@ -49,15 +49,18 @@ void Load_RD_BUT(char plr)
 
   fin=sOpen("RDBOX.BUT","rb",0);
   fread(&Boo,sizeof Boo,1,fin);
+	SwapLong(Boo.size);
 
   if (plr==1)
     while( strncmp("SBUT",&Boo.na[0],4)!=0) {
       fseek(fin,Boo.size,SEEK_CUR);
       fread(&Boo,sizeof Boo,1,fin);
+			SwapLong(Boo.size);
     }
   fread((char *)buffer,Boo.size,1,fin);
   RLED_img((char *)buffer,(char *)but.vptr,Boo.size,but.w,but.h);
   fread(&Boo,sizeof Boo,1,fin);
+	SwapLong(Boo.size);
   fread((char *)buffer,Boo.size,1,fin); fclose(fin);
   RLED_img((char *)buffer,mans.vptr,Boo.size,mans.w,mans.h);
   BUTLOAD=1;
@@ -81,6 +84,7 @@ void DrawRD(char plr)
   FadeOut(2,pal,10,0,0);
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin); fclose(fin);
+	SwapPal(pal);
 
   gxClearDisplay(0,0);
   Load_RD_BUT(plr);
@@ -603,6 +607,7 @@ void DrawHPurc(char plr)
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin);
   fclose(fin);
+	SwapPal(pal);
 
   Load_RD_BUT(plr);
   gxClearDisplay(0,0);

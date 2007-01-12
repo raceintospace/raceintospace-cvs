@@ -74,6 +74,7 @@ void DrawFuture(char plr,int mis,char pad)
   fclose(fin);
   RLED_img((char *)screen,(char *)vhptr.vptr,sz,vhptr.w,vhptr.h);
   gxClearDisplay(0,0);
+	SwapPal(pal);
 
   gr_sync ();
 
@@ -1011,9 +1012,7 @@ void Missions(char plr,int X,int Y,int val,char bub)
   }  // end switch
   gr_sync ();
   MissionCodes(plr,MisType,Pad);
-  
-  return;
-}  // end function missions
+  }  // end function missions
 
 
 char FutBad(void)

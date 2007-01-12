@@ -58,7 +58,7 @@ then
 	exit 1
 fi
 
-cvs -z9 commit -R -m "$msg$sep$msgstat"
+cvs -z9 commit -R -m "$msg"
 if [ $? != 0 ]
 then
     echo "error during cvs commit"

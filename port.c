@@ -429,6 +429,9 @@ void DrawSpaceport(char plr)
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
+#ifdef __BIG_ENDIAN__
+	int k,j;
+#endif
 
   fin=sOpen((plr==0) ?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
 
@@ -860,6 +863,10 @@ FILE *fin;
 long stable[55];
 ui16 Count,*bone;
 
+#ifdef __BIG_ENDIAN__
+int idx = 0; 
+#endif
+
   strcpy(IDT,"i043");strcpy(IKEY,"k043");
   bone=(ui16 *) buffer;
 
@@ -957,7 +964,7 @@ ui16 Count,*bone;
 								SwapWord(Count);
                fread(bone,Count*sizeof (ui16),1,fin);
 #ifdef __BIG_ENDIAN__
-							 for (idx = 0; idx < Count; idx++)
+								for (idx = 0; idx < Count; idx++)
 								 SwapWord(bone[idx]);
 #endif
                PortOutLine(Count,bone,1);

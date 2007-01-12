@@ -64,18 +64,20 @@ void VerifyData(void)
 void DrawControl(char plr)
 {
   FILE *fin;
-  long len[2];
+  i32 len;
   fin=sOpen("CONTROL.IMG","rb",0);
-  fread(&pal[0],768,1,fin);
-  fread(&len[0],4,1,fin);
+  fread(pal,768,1,fin);
+  fread(&len,4,1,fin);
+	SwapLong(len);
   if (plr==1) {
-    fseek(fin,len[0],SEEK_CUR);
-    fread(&pal[0],768,1,fin);
-    fread(&len[0],4,1,fin);
+    fseek(fin,len,SEEK_CUR);
+    fread(pal,768,1,fin);
+    fread(&len,4,1,fin);
+		SwapLong(len);
   }
-  fread(vhptr.vptr,len[0],1,fin);fclose(fin);
-  PCX_D((char *)vhptr.vptr,(char *)screen,(unsigned) len[0]);
-  return;
+  fread(vhptr.vptr,len,1,fin);fclose(fin);
+  PCX_D((char *)vhptr.vptr,(char *)screen,(unsigned) len);
+	SwapPal(pal);
 }
 
 void SetW(char ch)

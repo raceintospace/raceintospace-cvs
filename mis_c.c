@@ -146,7 +146,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		unsigned short size;
 	};
 
-	int wlen,i,j;
+	int wlen,i,ii,j;
 	unsigned int fres,max;
 	char lnch=0,AEPT,BABY,Tst2,Tst3;
 	unsigned char sts=0,fem=0;
@@ -254,6 +254,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		if (i==49) err=1;
 
 		if (err==0) {
+			SwapLong(F[i].foffset);
+			SwapWord(F[i].size);
 			offset=F[i].foffset; 
 			fseek(fin,offset,SEEK_SET);
 			fread(&vhptr.vptr[35000],F[i].size,1,fin);
@@ -288,6 +290,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			j=0;
 		} else {
 			fin=sOpen(FSEQ_DAT,"rb",0);
+			SwapLong(F[0].foffset);
+			SwapWord(F[0].size);
 			offset=F[0].foffset; 
 			fseek(fin,offset,SEEK_SET);
 			fread(&vhptr.vptr[35000],F[0].size,1,fin);
@@ -358,16 +362,30 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	if (AEPT && !mode) {
 		if ((nfin=sOpen("BABYCLIF.CDR","rb",0))==NULL) return;
 		fread(Mob,CLIF_TABLE*(sizeof (struct Infin)),1,nfin); //Specs: First Table
+
+#ifdef __BIG_ENDIAN__
+		for (i=0;i<CLIF_TABLE;i++)	{
+			for (ii=0;ii<10;ii++)
+				SwapWord(Mob[i].List[ii]);
+		}
+#endif
 		Mob2=(struct OF *)&buffer[15000];
 		fseek(nfin,7200,SEEK_SET);
 		fread(Mob2,SCND_TABLE*(sizeof (struct OF)),1,nfin);   //Specs: Second Table
 		fclose(nfin);
+
+#ifdef __BIG_ENDIAN__
+		for (i=0;i<SCND_TABLE;i++) 
+			SwapWord(Mob2[i].idx);
+#endif
 
 		for (i=0;i<SCND_TABLE;i++) Mob2[i].Name[strlen(Mob2[i].Name)-3]='_'; // patch
 	} else {
 		nfin=sOpen("BABYNORM.CDR","rb",0);
 		fread(Mob,NORM_TABLE*(sizeof (struct Infin)),1,nfin);
 		fclose(nfin);
+#ifdef __BIG_ENDIAN__
+#endif
 	}
 
 	Plop(plr,1); //Specs: random single frame for sound buffering
@@ -695,7 +713,9 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
   if (which<580) memset(&pal[off*3],0x00,48);
   if(loc!=0 && which<580) {VBlank();gxSetDisplayPalette(pal);}
   fseek(ffin,(long)locl,SEEK_SET);
+	SwapPal(pal);
   fread(&pal[off*3],48,1,ffin);
+	SwapPal(pal);
   fread(boob.vptr,1564,1,ffin);
   for (i=0;i<782;i++) {
    bot[i+782]=((bot[i]&0xF0F0)>>4);
@@ -710,7 +730,6 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
   VBlank();
   gxSetDisplayPalette(pal);
   DV(&boob);
- return;
 }
 
 
@@ -936,10 +955,16 @@ FILE *OpenAnim(char *fname)
    while (strncmp(AIndex.ID,fname,4)!=0) {
       fread(&AIndex,sizeof AIndex,1,fin);
       }
+			SwapLong(AIndex.offset);
+			SwapLong(AIndex.size);
    fseek(fin,AIndex.offset,SEEK_SET);
 
       fread(&AHead,sizeof AHead,1,fin);
+			SwapWord(AHead.w);
+			SwapWord(AHead.h);
+			SwapPal(pal);
       fread(&pal[AHead.cOff*3],AHead.cNum*3,1,fin);
+			SwapPal(pal);
       aLoc=ftell(fin);
       tFrames=AHead.fNum;
       cFrame=0;
@@ -970,6 +995,7 @@ int StepAnim(int x,int y,FILE *fin)
    if (cFrame<tFrames) {
 	   fread(&BHead,sizeof BHead,1,fin);
 	   fread(vhptr.vptr,BHead.fSize,1,fin);
+		 SwapLong(BHead.fSize);
 	   switch(BHead.cType) {
 		   case 0: memcpy(dply.vptr,vhptr.vptr,BHead.fSize); mode=gxSET;break;
 	   case 1: RLED_img(vhptr.vptr,dply.vptr,BHead.fSize,dply.w,dply.h); mode=gxSET; break;

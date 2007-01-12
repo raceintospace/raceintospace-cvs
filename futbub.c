@@ -25,14 +25,16 @@ void drawBspline(int segments,char color,...)
 {
   va_list coord;
   int xpoint[20],ypoint[20],i=1,j,x,y,oldx,oldy,last,yx,yy,yyy=0;
-  float u,nc1,nc2,nc3,nc4,SamCol;
+  float u,nc1,nc2,nc3,nc4;
+	int SamCol;
 
   yy = yx = 0; /* XXX check uninitialized */
 
   grSetColor(color);
   /* initialize the array  */
-  for (j=1;j<=20;++j)
-     { xpoint[j]=0; ypoint[j]=0; };
+	memset(xpoint,0,sizeof(xpoint));
+	memset(ypoint,0,sizeof(ypoint));
+	
   va_start(coord,color);
   for (i=1; i<=Bub_Num; i++)
     {
