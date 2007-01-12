@@ -56,6 +56,7 @@ int MChoice(char qty,char *Name)
 
 	in=sOpen("BEGGAM.BUT","rb",0);
 	poff=0;coff=128;
+	SwapPal(pal);
 	fread(&pal[coff*3],384,1,in);
 	fseek(in,(poff)*(sizeof P),SEEK_CUR);
 	fread(&P,sizeof P,1,in);
@@ -444,10 +445,10 @@ int Help(char *FName)
   int fsize;
   GXHEADER local;
   FILE *fin;
-  long count;
+  i32 count;
   struct Help {
     char Code[6];
-    long offset;
+    i32 offset;
     i16 size;
   } Pul;
 
@@ -459,12 +460,17 @@ int Help(char *FName)
   fin=sOpen("HELP.CDR","rb",0);
   fread(&count,sizeof count,1,fin);
   fread(&Pul,sizeof Pul,1,fin);
+	SwapLong(count);
+	
   i=0;
   while (strncmpi(Pul.Code,FName,4)!=0 && i<count) {
      fread(&Pul,sizeof Pul,1,fin);
      i++;
   }
   if (i==count) {fclose(fin);return 0;}
+	SwapLong(Pul.offset);
+	SwapWord(Pul.size);
+
   AL_CALL=1;
   Help=(char *) farmalloc(Pul.size);
   fseek(fin,Pul.offset,SEEK_SET);

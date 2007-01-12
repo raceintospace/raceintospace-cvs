@@ -46,10 +46,12 @@ extern int oldx,oldy;
 extern struct mStr Mis;
 extern char Option;
 
-struct SXX {
+typedef struct portoutlinerestore {
    ui16 loc;
    char val;
-   } *PreOut;
+} PORTOUTLINE;
+
+PORTOUTLINE *pPortOutlineRestore;
 
 struct FHead {
    char Text[28];  // File Copyright Notice
@@ -142,6 +144,8 @@ void Seek_sOff(int where)
 {
   fseek(sFin,where*(sizeof hSPOT)+(MSPOT.sOff),SEEK_SET);
   fread(&hSPOT,sizeof hSPOT,1,sFin);
+	SwapWord(hSPOT.size);
+	SwapLong(hSPOT.offset);
   fseek(sFin,hSPOT.offset,SEEK_SET);
 }
 
@@ -149,6 +153,7 @@ void Seek_pOff(int where)
 {
   fseek(sFin,where*(sizeof pTable)+(MSPOT.pOff),SEEK_SET);
   fread(&pTable,sizeof pTable,1,sFin);
+	SwapLong(pTable);
   fseek(sFin,pTable,SEEK_SET);
 }
 
@@ -177,10 +182,13 @@ void SpotCrap(char loc,char mode)
    if (mode==SPOT_LOAD) {   // Open File
       sFin=sOpen("SPOTS.CDR","rb",0);
       fread(&MSPOT,sizeof MSPOT,1,sFin);    // Read Header
+			SwapLong(MSPOT.sOff);
+			SwapLong(MSPOT.pOff);
 
       Seek_pOff(loc);  // go to correct path
       fread(&PName,sizeof PName,1,sFin);
       fread(&sCount,sizeof sCount,1,sFin);  // get number of paths parts
+			SwapWord(sCount);
       pLoc=ftell(sFin);
       sPath.iHold=1;
       memcpy(vhptr.vptr,screen,64000);
@@ -190,7 +198,19 @@ void SpotCrap(char loc,char mode)
    }
    else if (mode==SPOT_STEP && sPath.iHold==1 && sCount>0) {  // Play Next Seq
       fseek(sFin,pLoc,SEEK_SET);       // position at next path
-      fread(&sPath,sizeof sPath,1,sFin);  // get the next sPath struct
+      fread(&sPath,sizeof(sPath),1,sFin);  // get the next sPath struct
+			
+			SwapWord(sPath.Image);
+			SwapWord(sPath.xPut);
+			SwapWord(sPath.yPut);
+			SwapWord(sPath.iHold);
+			
+#ifdef __BIG_ENDIAN__
+			xx = *(ui32*)(&sPath.Scale);	
+			SwapLong(xx);
+			*((ui32*) &sPath.Scale) = xx;
+#endif
+
       pLoc=ftell(sFin);                 // Path Update Locations
 
       Seek_sOff(sPath.Image);          // point to next image
@@ -302,6 +322,7 @@ void SpotCrap(char loc,char mode)
       turnoff=1;
      };
   #endif
+ return;
 }
    
 void WaveFlagSetup(void)
@@ -319,6 +340,7 @@ void WaveFlagSetup(void)
 void WaveFlagDel(void)
 {
   DV(&flaggy);
+  return;                       
 }
 
 /* pace */
@@ -365,6 +387,11 @@ void PortPlace(FILE * fin,long table)
 
   fseek(fin,table,SEEK_SET);
   fread(&Img,sizeof Img,1,fin);
+	SwapLong(Img.Size);
+	SwapWord(Img.Width);
+	SwapWord(Img.Height);
+	SwapWord(Img.PlaceX);
+	SwapWord(Img.PlaceY);
 
 //  if (need_to_fix_width (table))
 //	  Img.Width++;
@@ -378,6 +405,7 @@ void PortPlace(FILE * fin,long table)
     if (local2.vptr[ctr]!=0x00) local.vptr[ctr]=local2.vptr[ctr];
   gxPutImage(&local,gxSET,Img.PlaceX,Img.PlaceY,0);  // place image
   DV(&local2);DV(&local);
+  return;
 }
 
 void PortPal(char plr)
@@ -385,16 +413,19 @@ void PortPal(char plr)
   FILE *fin;
   fin=sOpen((plr==0)?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
   fread(&PHead,sizeof PHead,1,fin);
+	SwapLong(PHead.oPal);
   fseek(fin,PHead.oPal,SEEK_SET);
   fread(&pal[0],768,1,fin);
   fclose(fin);
+	SwapPal(pal);
+  return;
 }
 
 
 void DrawSpaceport(char plr)
 {
   long table[S_QTY];
-  int i,idx,fm;
+  int i,j,k,idx,fm;
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
@@ -402,25 +433,64 @@ void DrawSpaceport(char plr)
   fin=sOpen((plr==0) ?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
 
   fread(&PHead,sizeof PHead,1,fin);
+	SwapLong(PHead.oMObj);
+	SwapLong(PHead.oTab);
+	SwapLong(PHead.oPal);
+	SwapLong(PHead.oPort);
+	SwapLong(PHead.oMse);
+	SwapLong(PHead.oOut);
+	SwapLong(PHead.oAnim);
+
   fread(&MObj[0],sizeof MObj,1,fin);
+#ifdef __BIG_ENDIAN__
+	for (i = 0; i < sizeof(MObj)/sizeof(MOBJ); i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			for (k = 0; k < 4; k++)
+			{
+				SwapWord(MObj[i].Reg[j].CD[k].x1);
+				SwapWord(MObj[i].Reg[j].CD[k].x2);
+				SwapWord(MObj[i].Reg[j].CD[k].y1);
+				SwapWord(MObj[i].Reg[j].CD[k].y2);
+			}
+		}
+	}
+#endif
+	
   fread(&table[0],sizeof table,1,fin);
+#ifdef __BIG_ENDIAN__
+	for (i = 0; i< S_QTY; i++)
+		SwapLong(table[i]);
+#endif
+
   fseek(fin,PHead.oPal,SEEK_SET);
   fread(&pal[0],768,1,fin);
+	SwapPal(pal);
 
   fseek(fin,table[0],SEEK_SET);
   fread(&Img,sizeof Img,1,fin);  // Read in main image Header
+	SwapLong(Img.Size);
+	SwapWord(Img.Width);
+	SwapWord(Img.Height);
+	SwapWord(Img.PlaceX);
+	SwapWord(Img.PlaceY);
   fread((char *)screen,Img.Size,1,fin);  // Read in main image
 
   UpdatePortOverlays();
 
-  if (xMODE & xMODE_CLOUDS) PortPlace(fin,table[1]); // Clouds
+  if (xMODE & xMODE_CLOUDS) 
+		PortPlace(fin,table[1]); // Clouds
 
   // Pads
    for (i=0;i<3;i++) {
       Data->P[plr].Port[PORT_LaunchPad_A+i]=1;
-      if (Data->P[plr].Mission[i].MissionCode>0) Data->P[plr].Port[PORT_LaunchPad_A+i]=2;
-      else if (Data->P[plr].LaunchFacility[i]>1) Data->P[plr].Port[PORT_LaunchPad_A+i]=3;
-      else if (Data->P[plr].LaunchFacility[i]<0) Data->P[plr].Port[PORT_LaunchPad_A+i]=0;
+      if (Data->P[plr].Mission[i].MissionCode>0) 
+				Data->P[plr].Port[PORT_LaunchPad_A+i]=2;
+      else if (Data->P[plr].LaunchFacility[i]>1) 
+				Data->P[plr].Port[PORT_LaunchPad_A+i]=3;
+      else if (Data->P[plr].LaunchFacility[i]<0) // No launch facility
+				Data->P[plr].Port[PORT_LaunchPad_A+i]=0;
       }
 
   if (Vab_Spot==1 && Data->P[plr].Port[PORT_VAB]==2)
@@ -440,12 +510,14 @@ void DrawSpaceport(char plr)
   if (Data->P[plr].Pool[0].Active>=1) 
       PortPlace(fin,table[17-plr*4]); // Draw TRN
 
-  if (Data->P[plr].Port[PORT_Research]>1) PortPlace(fin,table[13+15*plr]);  // RD Stuff
-  if (Data->P[plr].Port[PORT_Research]>2) PortPlace(fin,table[14+15*plr]);
-  if (Data->P[plr].Port[PORT_Research]==3) PortPlace(fin,table[15+15*plr]);
+  if (Data->P[plr].Port[PORT_Research]>1) 
+		PortPlace(fin,table[13+15*plr]);  // RD Stuff
+  if (Data->P[plr].Port[PORT_Research]>2) 
+		PortPlace(fin,table[14+15*plr]);
+  if (Data->P[plr].Port[PORT_Research]==3) 
+		PortPlace(fin,table[15+15*plr]);
 
   for (fm=0;fm<35;fm++) {
-    i=fm;
     idx=Data->P[plr].Port[fm];  // Current Port Level for MObj
 
     if (MObj[fm].Reg[idx].PreDraw>0)   // PreDrawn Shape
@@ -453,8 +525,6 @@ void DrawSpaceport(char plr)
 
     if (MObj[fm].Reg[idx].iNum>0)   // Actual Shape
       PortPlace(fin,table[MObj[fm].Reg[idx].iNum]);
-
-    fm=i;
     }
 
   fclose(fin);
@@ -494,7 +564,6 @@ void DrawSpaceport(char plr)
     else gxPutImage(&local2,gxSET,220,141,0);
 
     DV(&local);DV(&local2);
-
 }
 
 void PortText(int x,int y,char *txt,char col)
@@ -695,22 +764,35 @@ void DoCycle(void)  // Three ranges of color cycling
   gxSetDisplayPalette(pal);
 }
 
-void PortOutLine(unsigned int Count,ui16 *buf,char mode)
+// mode...  0 = ?   1 = copy stored outline ?
+void PortOutLine(unsigned int Count,ui16 *outline,char mode)
 {
   unsigned int i;
-  for (i=0;i<Count;i++) {
-   if (mode==1) {PreOut[i].loc=buf[i];PreOut[i].val=screen[buf[i]];}
-   else buf[i]=PreOut[i].loc;
-   screen[buf[i]]=11;
+
+	if (pPortOutlineRestore)
+		free(pPortOutlineRestore);
+			
+	pPortOutlineRestore=(PORTOUTLINE *)  malloc((sizeof (PORTOUTLINE))*Count);
+	
+	for (i=0;i<Count;i++) {
+   if (mode==1) {		// Save value from the screen 
+		 pPortOutlineRestore[i].loc = outline[i];					// Offset of the outline into the buffer
+		 pPortOutlineRestore[i].val = screen[outline[i]];	// Save original pixel value
+	 }
+   else	// dunno
+		 outline[i] = pPortOutlineRestore[i].loc;
+		
+   screen[outline[i]]=11;	// Color the outline index 11, which should be Yellow
    }
 }
 
 void PortRestore(unsigned int Count)
 {
   unsigned int i;
-  for (i=0;i<Count;i++) screen[PreOut[i].loc]=PreOut[i].val;
-  //free(PreOut);
-  PreOut=NULL;
+  for (i=0;i<Count;i++) 
+		screen[pPortOutlineRestore[i].loc] = pPortOutlineRestore[i].val;
+  free(pPortOutlineRestore);
+  pPortOutlineRestore=NULL;
 }
 
 
@@ -771,24 +853,31 @@ int MapKey(char plr,int key,int old)
 void Port(char plr)
 {
 double last_secs;
-char i,j,kMode,kEnt,k;
+int i,j,kMode,kEnt,k;
 char good;
 int kPad,pKey,gork;
 FILE *fin;
 long stable[55];
 ui16 Count,*bone;
-
-i = 0; /* XXX check uninitialized */
-
-PreOut=(struct SXX *)&buffer[60000];
+int idx = 0;
 
   strcpy(IDT,"i043");strcpy(IKEY,"k043");
   bone=(ui16 *) buffer;
 
   fin=sOpen((plr==0)?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
   fread(&PHead,sizeof PHead,1,fin);
+	SwapLong(PHead.oMObj);
+	SwapLong(PHead.oTab);
+	SwapLong(PHead.oPal);
+	SwapLong(PHead.oPort);
+	SwapLong(PHead.oMse);
+	SwapLong(PHead.oOut);
+	SwapLong(PHead.oAnim);
   fseek(fin,PHead.oOut,SEEK_SET);
   fread(&stable[0],sizeof stable,1,fin);
+	for (i=0; i< 55; i++) {
+		SwapLong(stable[i]);
+	}
   if (plr==0 && Data->Year>65) PortText(5,196,"CAPE KENNEDY",12);
   else if (plr==0) PortText(5,196,"THE CAPE",12);
   else PortText(5,196,"BAIKONOUR",12);
@@ -798,6 +887,7 @@ PreOut=(struct SXX *)&buffer[60000];
   PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);PlayMusic(0);
   kMode=kPad=kEnt=0;
   last_secs = get_time ();
+	i = 0; // this is used to loop through all the selection regions on the port
   while (1)
    {
 	   av_block ();
@@ -818,8 +908,11 @@ PreOut=(struct SXX *)&buffer[60000];
        last_secs = get_time ();
       }
     #endif
-    if (kMode==0) i=0;
-     else if (kMode==1) kEnt=0;
+			if (kMode==0)
+				i=0;
+			else if (kMode==1) 
+				kEnt=0;
+
     do
      {
       #if BABYSND
@@ -851,7 +944,8 @@ PreOut=(struct SXX *)&buffer[60000];
        {
         x=-1;y=-1;
        }
-       for (j=0;j<MObj[(kMode==0) ? i : kEnt].Reg[Data->P[plr].Port[(kMode==0) ? i : kEnt]].qty;j++) 
+
+			for (j=0;j<MObj[(kMode==0) ? i : kEnt].Reg[Data->P[plr].Port[(kMode==0) ? i : kEnt]].qty;j++) 
          if (x>=MObj[(kMode==0) ? i : kEnt].Reg[Data->P[plr].Port[(kMode==0) ? i : kEnt]].CD[j].x1 &&
           y>=MObj[(kMode==0) ? i : kEnt].Reg[Data->P[plr].Port[(kMode==0) ? i : kEnt]].CD[j].y1 &&
           x<=MObj[(kMode==0) ? i : kEnt].Reg[Data->P[plr].Port[(kMode==0) ? i : kEnt]].CD[j].x2 &&
@@ -861,9 +955,12 @@ PreOut=(struct SXX *)&buffer[60000];
           if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
                fread(&Count,sizeof (ui16),1,fin);
-               PreOut=(struct SXX *)&buffer[60000];
+								SwapWord(Count);
                fread(bone,Count*sizeof (ui16),1,fin);
-               //   malloc((sizeof (struct SXX))*Count);
+#ifdef __BIG_ENDIAN__
+							 for (idx = 0; idx < Count; idx++)
+								 SwapWord(bone[idx]);
+#endif
                PortOutLine(Count,bone,1);
                strncpy(&IDT[1],MObj[i].Help,3);
               }
@@ -917,7 +1014,6 @@ PreOut=(struct SXX *)&buffer[60000];
 
                   switch(PortSel(plr,i)) {
 	                  case pNOREDRAW:
-                          PreOut=(struct SXX *)&buffer[60000];
                           if (!(i==28 || i==29 || i==0 || i==31 || i==33 
                             || (Data->Year==57 || (Data->Year==58 && Data->Season==0)))) {
                             PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
@@ -933,7 +1029,6 @@ PreOut=(struct SXX *)&buffer[60000];
 	                        break;
 	                  case pREDRAW:
                           SpotCrap(0,SPOT_KILL);  // remove spots
-                          PreOut=(struct SXX *)&buffer[60000];
 													// Returning to spaceport so fade between redraws
 													FadeOut(2,pal,10,0,0);
 													DrawSpaceport(plr);
@@ -974,7 +1069,13 @@ PreOut=(struct SXX *)&buffer[60000];
 #endif              
                           Vab_Spot=0;
                           PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
-                          if (PreOut!=NULL) PortOutLine(Count,bone,0);
+#ifdef YYY  
+											// I'm not sure why we're redrawing the outlines here, 
+											//commenting it out for now.  if no problems are seen 
+											// with the port outlines then restore thiss
+                       //   if (pPortOutlineRestore) 
+												//		PortOutLine(Count,bone,0);
+#endif
                           PortText(5,196,MObj[i].Name,11);
                           PlayMusic(0);
                      	  break;
@@ -1001,10 +1102,14 @@ PreOut=(struct SXX *)&buffer[60000];
                   kMode=good=SUSPEND=0;
                  if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                     fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
-                    PreOut=(struct SXX *)&buffer[60000];
                     fread(&Count,sizeof (ui16),1,fin);
-                    fread(bone,Count*sizeof (ui16),1,fin);
-                    //malloc((sizeof (struct SXX))*Count);
+										SwapWord(Count);
+										fread(bone,Count*sizeof (ui16),1,fin);
+#ifdef __BIG_ENDIAN__
+										for (idx = 0; idx < Count; idx++)
+											SwapWord(bone[idx]);
+#endif
+                    //pPortOutlineRestore = (PORTOUTLINE *) malloc((sizeof (PORTOUTLINE))*Count);
                     PortOutLine(Count,bone,1);
                     }
 	               while(mousebuttons==1) GetMse(plr,1);

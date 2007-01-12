@@ -201,12 +201,16 @@ void PresPict(char poff)
   in=sOpen("PRESR.BUT","rb",0);
   fseek(in,poff*(sizeof table),SEEK_SET);
   fread(&table,sizeof table,1,in);
+	SwapWord(table.size);
+	SwapLong(table.offset);
   fseek(in,table.offset,SEEK_SET);
+	SwapPal(pal);
   fread(&pal[96],672,1,in);
   fread(buffer,table.size,1,in);
   fclose(in);
   GV(&local,126,84);
   RLED_img(buffer,local.vptr,table.size,local.w,local.h);
+	SwapPal(pal);
   
   gxPutImage(&local,gxSET,183,33,0);
   

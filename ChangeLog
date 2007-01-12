@@ -1,5 +1,16 @@
 2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V83
+
+	* Lots of work on the Mac port, still a work in progress. At least the
+	spaceport works and a the Help text.
+
+	* Lots of additional cleanup in the Spaceport code and variable renaming
+	especially the very confusing PreOut. Renamed it to pPortOutlineRestore and
+	allocated it dynamically instead of having it tacked onto a buffer.  
+
+2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V82
 
 	* AdminPort and NPPort where almost the same.  I removed AdminPort() 

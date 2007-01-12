@@ -112,25 +112,28 @@ int nCREDIT = sizeof CREDIT / sizeof CREDIT[0];
 void Credits(void)
 {
   int k,i;
-  long len[2];
+  i32 len;
   strcpy(IKEY,"i999\0");
   FILE *fin;
 
   fin=sOpen("FIRST.IMG","rb",0);
   FadeOut(2,pal,30,0,0);
   
-  fread(&pal[0],768,1,fin);
-  fread(&len[0],4,1,fin);
-  fseek(fin,len[0],SEEK_CUR);
-  fread(&pal[0],768,1,fin);
-  fread(&len[0],4,1,fin);
-  fread(vhptr.vptr,len[0],1,fin);
+  fread(pal,768,1,fin);
+  fread(&len,4,1,fin);
+	SwapLong(len);
+  fseek(fin,len,SEEK_CUR);
+  fread(pal,768,1,fin);
+  fread(&len,4,1,fin);
+	SwapLong(len);
+  fread(vhptr.vptr,len,1,fin);
   fclose(fin);
+	SwapPal(pal);
 
   for (k=0;k<2;k++) {
     
     if (k!=0) FadeOut(2,pal,30,0,0);  // Screen #2
-    PCX_D((char *)vhptr.vptr,screen,(unsigned) len[0]);
+    PCX_D((char *)vhptr.vptr,screen,len);
     memset(&pal[431],0x00,96);
     screen[63999]=0;
     for (i = 0; i < nCREDIT; i++) {
@@ -177,7 +180,6 @@ read_img_frame (FILE *inf, struct intro_image *ip)
 	char compressed[64 * 1024];
 
 	len = fread (&ip->map, 1, sizeof ip->map, inf);
-	SwapPal((char *)ip->map);
 
 	if (len == 0)
 		return (-1);
@@ -237,6 +239,7 @@ void Introd(void)
   for (k=0;k<INTRO_IMAGE_COUNT;k++) {
     ip = &intro_images[k];
 
+		//SwapPal((char *)ip->map);
     gr_set_color_map (ip->map);
     memcpy (screen, ip->pixels, 320*200);
     gr_sync ();
@@ -263,22 +266,21 @@ done:
 
 void NextTurn(char plr)
 {
-  int i;
-  FILE *fin;
-  long len[2];
-
+  FILE *fin = NULL;
+  i32 len = 0;
    
-  for (i=0;i<768;i++) pal[i]=0;
+	memset(pal,0x00,sizeof(pal));
   gxSetDisplayPalette(pal);
   strcpy(IDT,"i000");strcpy(IKEY,"k000");
     
   fin=sOpen("TURN.BUT","rb",0);
-  len[0]=filelength(fileno(fin))-768;
+  len=filelength(fileno(fin))-768;
   fread(&pal,768,1,fin);
-  fread((char *)screen,len[0],1,fin);
+  fread((char *)screen,len,1,fin);
   fclose(fin);
+	SwapPal(pal);
 
-  RLED_img((char *)screen,vhptr.vptr,(unsigned int)len[0],
+  RLED_img((char *)screen,vhptr.vptr,(unsigned int)len,
 	   vhptr.w,vhptr.h);
 
   gxClearDisplay(0,0);

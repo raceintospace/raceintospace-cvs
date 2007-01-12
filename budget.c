@@ -228,6 +228,8 @@ void BudPict(char poff)
   in=sOpen("BUDD.BUT","rb",0);
   fseek(in,(poff)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
+	SwapWord(P.size);
+	SwapLong(P.offset);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); 
   fread(local.vptr,P.size,1,in);
@@ -240,6 +242,8 @@ void BudPict(char poff)
 	 y=141+((i-2)*14);
 	 fseek(in,(i)*(sizeof P),SEEK_SET);
 	 fread(&P,sizeof P,1,in);
+	 	SwapWord(P.size);
+		SwapLong(P.offset);
 	 fseek(in,P.offset,SEEK_SET);
 	 GV(&local,P.w,P.h); 
 	 fread(local.vptr,P.size,1,in);
@@ -248,7 +252,6 @@ void BudPict(char poff)
    DV(&local);
 	}
   fclose(in);
-  return;
 }
 
 

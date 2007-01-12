@@ -110,6 +110,7 @@ char REvent(char plr)
     fin=sOpen("NTABLE.DAT","rb",0);
     fseek(fin,(sizeof (i16)) * ((plr*60) + (j*10) + random(10)) ,SEEK_SET);
     fread(&m,sizeof m,1,fin);
+		SwapWord(m);
 //    m=BudgetMods[Data->P[plr].Level][(j*10)+random(10)];  // orig code
     fclose(fin);
 

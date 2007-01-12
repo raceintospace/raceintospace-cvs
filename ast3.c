@@ -399,32 +399,39 @@ void Hospital(char plr,int sel)
   fin=sOpen("CEM.IMG","rb",0);
   fread(&pal[0],768,1,fin);
   fread(&size,4,1,fin);
+	SwapLong(size);
   if (sel==1) {
 
     if (plr==1) {
       fseek(fin,size,SEEK_CUR);  // place on the sov cem
       fread(&pal[0],768,1,fin);
       fread(&size,4,1,fin);
+			SwapLong(size);
       }
     }
   if (sel==0) {
     fseek(fin,size,SEEK_CUR);  // Skip past us cem
     fread(&pal[0],768,1,fin);     
     fread(&size,4,1,fin);
+		SwapLong(size);
 
     fseek(fin,size,SEEK_CUR);  // Place on the US hosp
     fread(&pal[0],768,1,fin);
     fread(&size,4,1,fin);
+		SwapLong(size);
+
     if (plr==1) {
       fseek(fin,size,SEEK_CUR);  // Skip to SOv hosp
       fread(&pal[0],768,1,fin);
       fread(&size,4,1,fin);
+			SwapLong(size);
       }
     }
   fread(screen,size,1,fin);
   fclose(fin);
   PCX_D(screen,vhptr.vptr,(unsigned int)size);
 
+	SwapPal(pal);
   gxClearDisplay(0,0);
   ShBox(0,0,319,22);
   ShBox(161,103,319,199);
