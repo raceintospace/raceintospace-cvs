@@ -215,8 +215,8 @@ grDrawLine (int x1, int y1, int x2, int y2)
 inline int
 grGetPixel (int x, int y)
 {
-	assert(x <= 0 && x < MAX_X);
-	assert(y <= 0 && y < MAX_Y);
+	assert(x >= 0 && x < MAX_X);
+	assert(y >= 0 && y < MAX_Y);
 
 	return screen[y * MAX_X + x];
 }

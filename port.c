@@ -425,7 +425,7 @@ void PortPal(char plr)
 void DrawSpaceport(char plr)
 {
   long table[S_QTY];
-  int i,j,k,idx,fm;
+  int i,fm,idx;
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
@@ -859,7 +859,6 @@ int kPad,pKey,gork;
 FILE *fin;
 long stable[55];
 ui16 Count,*bone;
-int idx = 0;
 
   strcpy(IDT,"i043");strcpy(IKEY,"k043");
   bone=(ui16 *) buffer;

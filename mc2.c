@@ -303,11 +303,11 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
          else {  // standard LMs
             if (mcode=='P') {
                if (MH[pad][2]!=NULL) strncat(Mev[step].Name,MH[pad][2]->ID,2);
-               else strncat(Mev[step].Name,MH[1][2]->ID,2);
+               else if(MH[1][2]) strncat(Mev[step].Name,MH[1][2]->ID,2);
                }
             else {
                if (MH[pad][0]!=NULL) strncat(Mev[step].Name,MH[pad][0]->ID,2);
-               else strncat(Mev[step].Name,MH[1][0]->ID,2);
+               else if(MH[1][0]) strncat(Mev[step].Name,MH[1][0]->ID,2);
                }
             }
          }

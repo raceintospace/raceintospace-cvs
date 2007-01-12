@@ -1,5 +1,15 @@
 2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V86
+
+	* Fixed an assertion in grGetPixel()
+
+	* Fixed a crash in Future Missions when mousing over the bubbles
+
+	* Removed some unused local variables in port.c
+
+2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V85
 
 	* Forgot to actually add the diffstat results to the checkin
