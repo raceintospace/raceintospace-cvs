@@ -273,6 +273,7 @@
 				9848ADA80B55849A00A82E45 /* hardef.c */,
 				9848ADA90B55849A00A82E45 /* intel.c */,
 				9848ADAA0B55849A00A82E45 /* intro.c */,
+				002F3A3E09D088BA00EBEB88 /* main.c */,
 				9848ADAB0B55849A00A82E45 /* mc.c */,
 				9848ADAC0B55849A00A82E45 /* mc2.c */,
 				9848ADAD0B55849A00A82E45 /* mis_c.c */,
@@ -310,7 +311,6 @@
 				9848ADCE0B55849A00A82E45 /* sv_lib.h */,
 				9848ADCF0B55849A00A82E45 /* uc.h */,
 				9848ADD00B55849A00A82E45 /* vab.c */,
-				002F3A3E09D088BA00EBEB88 /* main.c */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
