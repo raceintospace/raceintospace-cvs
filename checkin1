@@ -7,7 +7,7 @@ lasttag=`cvs log -h version.c |
       sed 's/://'`
 
 set -x
-cvs -z9 diff -c -r$lasttag > diffs
+cvs -z9 diff -r$lasttag > diffs
 ls -l diffs
     
 

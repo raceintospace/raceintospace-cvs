@@ -1,5 +1,15 @@
 2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V84
+
+	* Modified checkin2 to use diffstat if it's available and append
+	the results to the checkin comment
+
+	* Modified checkin1 and removed the '-c' parameter allowing cvs to
+	use defaults from .cvsrc without conflicts
+
+2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V83
 
 	* Lots of work on the Mac port, still a work in progress. At least the
@@ -9,7 +19,7 @@
 	especially the very confusing PreOut. Renamed it to pPortOutlineRestore and
 	allocated it dynamically instead of having it tacked onto a buffer.  
 
-2007-01-11  Michael McCarty <k6mmc@users.sourceforge.net>
+2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V82
 

@@ -2,6 +2,7 @@
 
 mode=cvs
 
+
 lasttag=`cvs log -h version.c |
 	sed '1,/symbolic names:/d' |
 	head -1 |
@@ -35,9 +36,17 @@ fi
 msg=`cat ChangeLog | 
 	sed -n -e "1{h;n}; /^[0-9]/{x;p}; /\<$lasttag\>/Q; /^[0-9]/!H"`
 
+# diffstat output generation
+diffstat=`which diffstat 2>&1`
+if [ -e "$diffstat" ]
+then
+sep=$'\x0a\x0a=== diffstat output ===\x0a\x0a'
+msgstat=`cvs diff -r $lasttag | $diffstat -w 70`
+fi
+
 echo "prev tag $lasttag; new tag $newtag"
 echo "====== LOG MESSAGE ====="
-echo "$msg"
+echo "$msg$sep$msgstat"
 echo "========================"
 
 echo -n "Ok? "
