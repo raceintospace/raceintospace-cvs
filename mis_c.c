@@ -385,6 +385,12 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		fread(Mob,NORM_TABLE*(sizeof (struct Infin)),1,nfin);
 		fclose(nfin);
 #ifdef __BIG_ENDIAN__
+		for (i = 0; i< NORM_TABLE; i++)
+		{
+			int j;
+			for (j=0;j<10;j++)
+				SwapWord(Mob[i].List[j]);
+		}
 #endif
 	}
 
@@ -409,6 +415,10 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			sidx = cSeq.oLIST[i].sIdx;
 		}
 
+		SwapWord(aidx);
+		SwapWord(sidx);
+
+		
 		if (sidx)
 			play_audio (sidx, mode);
 
@@ -994,8 +1004,8 @@ int StepAnim(int x,int y,FILE *fin)
       }
    if (cFrame<tFrames) {
 	   fread(&BHead,sizeof BHead,1,fin);
-	   fread(vhptr.vptr,BHead.fSize,1,fin);
 		 SwapLong(BHead.fSize);
+	   fread(vhptr.vptr,BHead.fSize,1,fin);
 	   switch(BHead.cType) {
 		   case 0: memcpy(dply.vptr,vhptr.vptr,BHead.fSize); mode=gxSET;break;
 	   case 1: RLED_img(vhptr.vptr,dply.vptr,BHead.fSize,dply.w,dply.h); mode=gxSET; break;
