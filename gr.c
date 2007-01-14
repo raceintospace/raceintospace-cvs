@@ -96,7 +96,7 @@ grClearArea (int x1, int y1, int x2, int y2)
 	if (x1 > x2) { t = x1; x1 = x2; x2 = t; }
 	if (y1 > y2) { t = y1; y1 = y2; y2 = t; }
 
-	for (y = y1; y < y2; ++y) {
+	for (y = y1; y <= y2; ++y) {
 		memset(&screen[y * MAX_X + x1], gr_bg_color, x2-x1+1);
 	}
 }

@@ -835,8 +835,6 @@ GetMouse (void)
 /* get mouse of keyboard input, non-blocking */
 void GetMouse_fast(void)
 {
-  char string[25],rbut=0;
-  memset(string,0x00,25);
   mousebuttons=0;
   oldx=x;oldy=y;
   
@@ -851,7 +849,6 @@ void GetMouse_fast(void)
 		  mousebuttons=0;
 		  grGetMouseCurPos (&x, &y);
 	  }
-	  rbut=0;
   }
   while (bioskey(1)) {
     key=bioskey(0);
@@ -860,10 +857,10 @@ void GetMouse_fast(void)
     //grSetMousePos(319,199);
     }
 
-   if (mousebuttons>0) rbut=key=0;
+   if (mousebuttons>0) key=0;
 
   if (key>>8==15) CloseEmUp(0,0);
-  else if (XMAS && AL_CALL==0 && (rbut || (key>>8==0x3B))) {
+  else if (XMAS && AL_CALL==0 && (key>>8==0x3B)) {
     if (mousebuttons!=1) Help(IDT);
     }
   else if (AL_CALL==0 && ((key>>8)==0x3C)) Help(IKEY);

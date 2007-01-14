@@ -24,6 +24,7 @@ unsigned char* screen;
 unsigned char* screen_2;
 
 char pal[3*256];
+char pal_2[3*256];
 
 int screen_dirty;
 
@@ -414,7 +415,7 @@ av_sync (void)
 	for (row = 0; row < MAX_Y; ++row) {
 		for (col = 0; col < MAX_X; ++col) {
 			i = row * MAX_X + col;
-			p  = &pal  [screen  [i] * 3];
+			p  = &pal[screen[i] * 3];
 			if (screen_2[i] != screen[i])
 			{
 				screen_2[i]  = screen[i];
@@ -488,7 +489,7 @@ av_sync (void)
 			2*(max_y - min_y + 1));
 
 #ifdef PROFILE_GRAPHICS
-	fprintf(stderr, "av_sync: ~%3d%% in ~%3ums.\n",
+	fprintf(stderr, "av_sync: ~%3d%% updated in ~%3ums\n",
 			/* min_x, min_y, max_x, max_y, */
 			100*(max_x - min_x + 1)*(max_y - min_y + 1)/(MAX_X*MAX_Y),
 			SDL_GetTicks() - ticks);

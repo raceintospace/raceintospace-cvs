@@ -1,3 +1,11 @@
+2007-01-12  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V89
+
+	* Fixed off-by-one rectangle filling bug in gr.c
+
+	* Fixed unnecessary redraws in Future(), re-indented.
+
 2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V88

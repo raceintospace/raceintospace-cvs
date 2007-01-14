@@ -146,7 +146,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		unsigned short size;
 	};
 
-	int wlen,i,ii,j;
+	int wlen,i,j;
 	unsigned int fres,max;
 	char lnch=0,AEPT,BABY,Tst2,Tst3;
 	unsigned char sts=0,fem=0;
@@ -365,6 +365,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 #ifdef __BIG_ENDIAN__
 		for (i=0;i<CLIF_TABLE;i++)	{
+            int ii;
 			for (ii=0;ii<10;ii++)
 				SwapWord(Mob[i].List[ii]);
 		}
