@@ -6,10 +6,6 @@ I think that drawing the bar graph also runs the cpu flat out
 
 I'm not seeing the prestige screen for Russian firsts
 
-In astronaut complex, if you visit Capsule training, you can't 
-get back by clicking Continue with the mouse.  You can get back
-by typing Enter.
-
 in the baby screens, don't down sample then up sample
 
 =======
@@ -31,12 +27,6 @@ optimize grPutPixel and grGetPixel
 
 the gx routines should clip - thats easy, but right now they
 make assertions about arguments. Problem fixed in port.c
-
-astronauts faces and patches are not displayed properly
-
-screen clearing is not perfect while overwriting existing strings,
-this can be seen in news (comma char), astronauts screens, future
-missions, intelligence etc.
 
 try mpeg encoding the video
 

@@ -1,4 +1,10 @@
-2007-01-12  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+2007-01-14  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V90
+
+	* Fixed AstFaces(), re-indented. Faces display correctly.
+
+2007-01-14  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V89
 

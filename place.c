@@ -234,50 +234,56 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
   return;
 }
 
-void AstFaces(char plr,int x,int y,char face)
+void
+AstFaces(char plr, int x, int y, char face)
 {
-  long offset;
-  GXHEADER local,local2,local3;
-  char fx,fy;
-  unsigned int j;
-  FILE *fin;
+	long offset;
+	GXHEADER local, local2, local3;
+	char fx, fy;
+	unsigned int j;
+	FILE *fin;
 
-  memset(&pal[192],0x00,192);
-  fin=sOpen("FACES.BUT","rb",0);
-  fseek(fin,87*sizeof(long),SEEK_SET);
+	memset(&pal[192], 0x00, 192);
+	fin = sOpen("FACES.BUT", "rb", 0);
+	fseek(fin, 87 * sizeof(long), SEEK_SET);
 	SwapPal(pal);
-  fread(&pal[192],96,1,fin);
+	fread(&pal[192], 96, 1, fin);
 	SwapPal(pal);
-  fseek(fin,face*(sizeof (long)),SEEK_SET);  // Get Face
-  fread(&offset,sizeof(long),1,fin);
+	fseek(fin, face * (sizeof(long)), SEEK_SET);	// Get Face
+	fread(&offset, sizeof(long), 1, fin);
 	SwapLong(offset);
-  fseek(fin,offset,SEEK_SET);
-  GV(&local,18,15);
-  fread(local.vptr,18*15,1,fin);
+	fseek(fin, offset, SEEK_SET);
+	GV(&local, 18, 15);
+	fread(local.vptr, 18 * 15, 1, fin);
 
-  fseek(fin,(85+plr)*(sizeof (long)),SEEK_SET);  // Get Helmet
-  fread(&offset,sizeof (long),1,fin);
-  fseek(fin,offset,SEEK_SET);
+	fseek(fin, (85 + plr) * (sizeof(long)), SEEK_SET);	// Get Helmet
+	fread(&offset, sizeof(long), 1, fin);
+	fseek(fin, offset, SEEK_SET);
 	SwapLong(offset);
-  GV(&local2,80,50); GV(&local3,80,50);  
-  fread(local2.vptr,80*50,1,fin);
-  fclose(fin);
-  memset(local3.vptr,0x00,80*50);
-
-  if (plr==0) {fx=32;fy=17;} else {fx=33;fy=21;}
-  gxVirtualVirtual(&local,local.x1,local.y1,local.x2,local.y2,&local3,fx,fy,gxSET);
-  for(j=0;j<80*50;j++)
-   if (local2.vptr[j]==0) local2.vptr[j]=local3.vptr[j];
-  gxGetImage(&local3,x,y,x+79,y+49,0);
-  for(j=0;j<80*50;j++)
-   if (local2.vptr[j]!=0) local3.vptr[j]=local2.vptr[j];
-  VBlank();
-  for (j=0;j<80*50;j++)
-   if (local3.vptr[j]!=(7+plr*3)) local3.vptr[j]-=160;
-  VBlank();
-  gxPutImage(&local3,gxSET,x,y,0);
-  DV(&local3);DV(&local2);DV(&local);  // deallocate in reverse order
-  return;
+	GV(&local2, 80, 50);
+	GV(&local3, 80, 50);
+	fread(local2.vptr, 80 * 50, 1, fin);
+	fclose(fin);
+	memset(local3.vptr, 0x00, 80 * 50);
+	if (plr == 0) 	{ fx = 32; fy = 17; }
+	else 			{ fx = 33; fy = 21; }
+	gxVirtualVirtual(&local, 0, 0, local.w - 1, local.h - 1,
+			&local3, fx, fy, gxSET);
+	for (j = 0; j < 80 * 50; j++)
+		if (local2.vptr[j] == 0)
+			local2.vptr[j] = local3.vptr[j];
+	gxGetImage(&local3, x, y, x + 79, y + 49, 0);
+	for (j = 0; j < 80 * 50; j++)
+		if (local2.vptr[j] != 0)
+			local3.vptr[j] = local2.vptr[j];
+	for (j = 0; j < 80 * 50; j++)
+		if (local3.vptr[j] != (7 + plr * 3))
+			local3.vptr[j] -= 160;
+	gxPutImage(&local3, gxSET, x, y, 0);
+	DV(&local3);
+	DV(&local2);
+	DV(&local);					   // deallocate in reverse order
+	return;
 }
 
 

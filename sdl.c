@@ -24,7 +24,6 @@ unsigned char* screen;
 unsigned char* screen_2;
 
 char pal[3*256];
-char pal_2[3*256];
 
 int screen_dirty;
 
