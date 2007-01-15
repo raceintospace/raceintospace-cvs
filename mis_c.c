@@ -476,13 +476,12 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				if (BABY==0 && BIG==0) DoPack(plr,ffin,(AEPT && !mode) ? 1 : 0,Seq,fName);
 				++sts;
 				if (sts==23) sts=0;
-				while (bioskey(1)) {
-					key=bioskey(0);
-					if (key>0) {
-						keep_going = 0;
-						av_silence (AV_SOUND_CHANNEL);
-					}
-				}
+
+                if (bioskey(0) || grGetMouseButtons())
+                {
+                    av_silence (AV_SOUND_CHANNEL);
+                    keep_going = 0;
+                }
 				if (Data->Def.Anim) {
 					idle_loop (FRM_Delay * 3);
 				};
@@ -504,12 +503,10 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			if (AnimSoundCheck())
 				keep_going = 0;
 
-			while (bioskey(1)) {
-				key=bioskey(0);
-				if (key>0) {
-					av_silence (AV_SOUND_CHANNEL);
-					keep_going = 0;
-				}
+            if (bioskey(0) || grGetMouseButtons())
+            {
+                av_silence (AV_SOUND_CHANNEL);
+                keep_going = 0;
 			}
 
 			av_block ();

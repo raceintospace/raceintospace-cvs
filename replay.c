@@ -91,171 +91,187 @@ bot:                          // bottom of routine
 #endif
 
 
-void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type)
+void
+Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 {
- int keep_going;
- struct oLIST {
-   i16 aIdx; 
-   i16 sIdx; 
- };
+	int keep_going;
+	struct oLIST
+	{
+		i16 aIdx;
+		i16 sIdx;
+	};
 
- struct oGROUP {
-   char ID[10];  
-   struct oLIST oLIST[5]; 
- };
+	struct oGROUP
+	{
+		char ID[10];
+		struct oLIST oLIST[5];
+	};
 
- struct NTable {
-   char ID[8];
- };
+	struct NTable
+	{
+		char ID[8];
+	};
 
- struct oFGROUP {
-   char ID[15];
-   struct oLIST oLIST[5];
- };
+	struct oFGROUP
+	{
+		char ID[15];
+		struct oLIST oLIST[5];
+	};
 
- struct Table {
-  char fname[8];
-  long foffset;
-   unsigned short size;
- }; 
+	struct Table
+	{
+		char fname[8];
+		long foffset;
+		unsigned short size;
+	};
 
- int i,j,kk,mode,max;
- FILE *fin,*kfin;
- long offset;
- struct oGROUP *bSeq=NULL,aSeq;
- struct oFGROUP *dSeq=NULL,cSeq;
- struct Table *F;
- char *SEQ_DAT="SEQ.DAT\0";
- char *FSEQ_DAT="FSEQ.DAT\0";
- RPLY Rep;
- GXHEADER dopy,snzy;
- struct frm *frm = NULL;
- int update_map;
+	int i, j, kk, mode, max;
+	FILE *fin, *kfin;
+	long offset;
+	struct oGROUP *bSeq = NULL, aSeq;
+	struct oFGROUP *dSeq = NULL, cSeq;
+	struct Table *F;
+	char *SEQ_DAT = "SEQ.DAT";
+	char *FSEQ_DAT = "FSEQ.DAT";
+	RPLY Rep;
+	GXHEADER dopy, snzy;
+	struct frm *frm = NULL;
+	int update_map;
 
- if (strncmp("OOOO",Type,4)==0)
-  {
-   kfin=sOpen("REPLAY.DAT","rb",1);
-   offset=(plr*100)+num;
-   fseek(kfin,offset * (sizeof Rep),SEEK_SET);
-   fread(&Rep,sizeof Rep,1,kfin);
-   fclose(kfin);
-  }
- else {  // Find correct Sequence
-  bSeq=(struct oGROUP *)&vhptr.vptr[35000];
-  fin=sOpen(SEQ_DAT,"rb",0);
-  offset=filelength(fileno(fin));
-  fread(&vhptr.vptr[35000],offset,1,fin);
-  fclose(fin);
-  mode=0;
-  j=0;
-  while (strncmp(bSeq[j].ID,"XXXX",4)!=0 && strncmp(&bSeq[j].ID[3],Type,strlen(&bSeq[j].ID[3]))!=0)
-   j++;
-  if (strncmp(bSeq[j].ID,"XXXX",4)==0) return;  // bad sequence
-  Rep.Qty=1;
-  Rep.Off[0]=j;
- };
+	if (strncmp("OOOO", Type, 4) == 0)
+	{
+		kfin = sOpen("REPLAY.DAT", "rb", 1);
+		offset = (plr * 100) + num;
+		fseek(kfin, offset * (sizeof Rep), SEEK_SET);
+		fread(&Rep, sizeof Rep, 1, kfin);
+		fclose(kfin);
+	}
+	else
+	{							   // Find correct Sequence
+		bSeq = (struct oGROUP *) &vhptr.vptr[35000];
+		fin = sOpen(SEQ_DAT, "rb", 0);
+		offset = filelength(fileno(fin));
+		fread(&vhptr.vptr[35000], offset, 1, fin);
+		fclose(fin);
+		mode = 0;
+		j = 0;
+		while (strncmp(bSeq[j].ID, "XXXX", 4) != 0
+			&& strncmp(&bSeq[j].ID[3], Type, strlen(&bSeq[j].ID[3])) != 0)
+			j++;
+		if (strncmp(bSeq[j].ID, "XXXX", 4) == 0)
+			return;				   // bad sequence
+		Rep.Qty = 1;
+		Rep.Off[0] = j;
+	};
 
- GV(&snzy,width,height);
- GV(&dopy,160,100);
+	GV(&snzy, width, height);
+	GV(&dopy, 160, 100);
 
- printf ("******\n");
- printf ("%d segments\n", Rep.Qty);
- for (kk=0;kk<Rep.Qty;kk++)
-  {
-   printf ("segment %d: %d\n", kk, Rep.Off[kk]);
-   UpdateMusic();  
-   i=0;
-   if (Rep.Off[kk]<1000)    //Specs: success seq
-    {
-     bSeq=(struct oGROUP *)&vhptr.vptr[35000];
-     fin=sOpen(SEQ_DAT,"rb",0);
-     offset=filelength(fileno(fin));
-     fread(&vhptr.vptr[35000],offset,1,fin);
-     fclose(fin);
-     mode=0;
-    }
-   else { //Specs: failure seq
-    dSeq=(struct oFGROUP *)&vhptr.vptr[35000];
-    F=(struct Table *)&vhptr.vptr[0];
-    fin=sOpen(FSEQ_DAT,"rb",0);
-    fseek(fin,0,SEEK_SET);
-    fread(&vhptr.vptr[0],700,1,fin);
-    i=Rep.Off[kk]/1000;
-    Rep.Off[kk]%=1000;
-    if (i==0 || i==50) {fclose(fin);goto done;}
-    i--; //Specs: offset index klugge
-    offset=F[i].foffset; 
-    fseek(fin,offset,SEEK_SET);
-    fread(&vhptr.vptr[35000],F[i].size,1,fin);
-    fclose(fin);
-    mode=1;
-   };
+	printf("******\n");
+	printf("%d segments\n", Rep.Qty);
+	for (kk = 0; kk < Rep.Qty; kk++)
+	{
+		printf("segment %d: %d\n", kk, Rep.Off[kk]);
+		UpdateMusic();
+		i = 0;
+		if (Rep.Off[kk] < 1000)	   //Specs: success seq
+		{
+			bSeq = (struct oGROUP *) &vhptr.vptr[35000];
+			fin = sOpen(SEQ_DAT, "rb", 0);
+			offset = filelength(fileno(fin));
+			fread(&vhptr.vptr[35000], offset, 1, fin);
+			fclose(fin);
+			mode = 0;
+		}
+		else
+		{						   //Specs: failure seq
+			dSeq = (struct oFGROUP *) &vhptr.vptr[35000];
+			F = (struct Table *) &vhptr.vptr[0];
+			fin = sOpen(FSEQ_DAT, "rb", 0);
+			fseek(fin, 0, SEEK_SET);
+			fread(&vhptr.vptr[0], 700, 1, fin);
+			i = Rep.Off[kk] / 1000;
+			Rep.Off[kk] %= 1000;
+			if (i == 0 || i == 50)
+			{
+				fclose(fin);
+				goto done;
+			}
+			i--;				   //Specs: offset index klugge
+			offset = F[i].foffset;
+			fseek(fin, offset, SEEK_SET);
+			fread(&vhptr.vptr[35000], F[i].size, 1, fin);
+			fclose(fin);
+			mode = 1;
+		};
 
-  if (mode==0) {
-   memcpy(&aSeq,&bSeq[Rep.Off[kk]].ID[0],sizeof aSeq);
-   max=aSeq.ID[1]-0x30;
-  }
-  else {
-   memcpy(&cSeq,&dSeq[Rep.Off[kk]].ID[0],sizeof cSeq);
-   max=cSeq.ID[1]-0x30;
-  };
+		if (mode == 0)
+		{
+			memcpy(&aSeq, &bSeq[Rep.Off[kk]].ID[0], sizeof aSeq);
+			max = aSeq.ID[1] - 0x30;
+		}
+		else
+		{
+			memcpy(&cSeq, &dSeq[Rep.Off[kk]].ID[0], sizeof cSeq);
+			max = cSeq.ID[1] - 0x30;
+		};
 
-  i=0;
+		i = 0;
 
-  keep_going = 1;
-  update_map = 0;
-  while (keep_going && i<max)
-  {
-   UpdateMusic();
+		keep_going = 1;
+		update_map = 0;
+		while (keep_going && i < max)
+		{
+			UpdateMusic();
 
-   if ((frm = frm_open_seq (aSeq.oLIST[i].aIdx, mode)) == NULL)
-	   goto done;
+			if ((frm = frm_open_seq(aSeq.oLIST[i].aIdx, mode)) == NULL)
+				goto done;
 
-   update_map = 1;
+			update_map = 1;
 
-   while (keep_going) {
-	   unsigned char map[384];
+			while (keep_going)
+			{
+				unsigned char map[384];
 
-	   UpdateMusic();
+				UpdateMusic();
 
-	   if (frm_get2 (frm, dopy.vptr, map) <= 0)
-		   break;
+				if (frm_get2(frm, dopy.vptr, map) <= 0)
+					break;
 
-	   if (update_map) {
-		   memcpy (&pal[384], map, 384);
-		   update_map = 0;
-	   }
+				if (update_map)
+				{
+					memcpy(&pal[384], map, 384);
+					update_map = 0;
+				}
 
-	   gxVirtualScale(&dopy,&snzy);
-	   VBlank();
-	   gxPutImage(&snzy,gxSET,dx,dy,0);
-	   
-	   gr_sync ();
+				gxVirtualScale(&dopy, &snzy);
+				VBlank();
+				gxPutImage(&snzy, gxSET, dx, dy, 0);
 
-	   if (bioskey(1)) {
-		   key=bioskey(0);
-		   if (key>0)
-			   keep_going = 0;
-	   }
+				if (bioskey(0) || grGetMouseButtons())
+				{
+					keep_going = 0;
+				}
 
-	   if (frm->frame_rate)
-		   idle_loop_secs (1.0 / frm->frame_rate);
-	   else
-		   idle_loop_secs (1.0 / 8.0);
+				if (frm->frame_rate)
+					idle_loop_secs(1.0 / frm->frame_rate);
+				else
+					idle_loop_secs(1.0 / 8.0);
 
-   }
+			}
 
-   frm_close (frm);
-   frm = NULL;
+			frm_close(frm);
+			frm = NULL;
 
-   i++;
-  }
- }
-done:
- DV(&dopy);DV(&snzy);
- if (frm)
-	 frm_close (frm);
- return;
+			i++;
+		}
+	}
+  done:
+	DV(&dopy);
+	DV(&snzy);
+	if (frm)
+		frm_close(frm);
+	return;
 }
 
 void DispBaby(int x, int y, int loc,char neww)

@@ -29,60 +29,49 @@ extern struct mStr Mis;
 extern char dg[62][6];
 extern char Option,MAIL,BIG;
 
-char OrderMissions(void)
+static int
+cmp_order(const void *p1, const void *p2)
 {
-  int i,j,k;
-  memset(Order,0x00,sizeof Order);
-   // Sort Missions for Proper Order
-   k=0;
-   for (i=0;i<NUM_PLAYERS;i++)
-     for (j=0;j<MAX_MISSIONS;j++)
-       if (Data->P[i].Mission[j].MissionCode>0 && Data->P[i].Mission[j].part!=1) {
-	 Order[k].plr=i;
-	 Order[k].loc=j;
-	 Order[k].budget=Data->P[i].Budget;
-	 Order[k].date=Data->P[i].Mission[j].Month;
-	 k++;
-       };
+    struct order *o1 = (struct order *) p1;
+    struct order *o2 = (struct order *) p2;
 
-   for (i=0;i<k-1;i++)
-     for (j=i+1;j<k;j++) {
-       if (Order[j].date<Order[i].date) {
-	 Order[6].plr=Order[i].plr;
-	 Order[6].loc=Order[i].loc;
-	 Order[6].budget=Order[i].budget;
-	 Order[6].date=Order[i].date;
+    if (o1->date < o2->date)
+        return -1;
+    else if (o1->date == o2->date)
+    {
+        if (o1->budget < o2->budget)
+            return -1;
+        else
+            return 0;
+    }
+    else return 1;
+}
 
-	 Order[i].plr=Order[j].plr;
-	 Order[i].loc=Order[j].loc;
-	 Order[i].budget=Order[j].budget;
-	 Order[i].date=Order[j].date;
+char
+OrderMissions(void)
+{
+	int i, j, k;
 
-	 Order[j].plr=Order[6].plr;
-	 Order[j].loc=Order[6].loc;
-	 Order[j].budget=Order[6].budget;
-	 Order[j].date=Order[6].date;
-       };
-       if ((Order[j].date==Order[i].date) &&
-	   (Order[j].budget<Order[i].budget)) {
-	 Order[6].plr=Order[i].plr;
-	 Order[6].loc=Order[i].loc;
-	 Order[6].budget=Order[i].budget;
-	 Order[6].date=Order[i].date;
+	memset(Order, 0x00, sizeof Order);
+	// Sort Missions for Proper Order
+	k = 0;
+	for (i = 0; i < NUM_PLAYERS; i++)
+		for (j = 0; j < MAX_MISSIONS; j++)
+			if (Data->P[i].Mission[j].MissionCode > 0
+				&& Data->P[i].Mission[j].part != 1)
+			{
+				Order[k].plr = i;
+				Order[k].loc = j;
+				Order[k].budget = Data->P[i].Budget;
+				Order[k].date = Data->P[i].Mission[j].Month;
+				k++;
+			};
+    if (k)
+        qsort(Order, k-1, sizeof(struct order), cmp_order);
 
-	 Order[i].plr=Order[j].plr;
-	 Order[i].loc=Order[j].loc;
-	 Order[i].budget=Order[j].budget;
-	 Order[i].date=Order[j].date;
-
-	 Order[j].plr=Order[6].plr;
-	 Order[j].loc=Order[6].loc;
-	 Order[j].budget=Order[6].budget;
-	 Order[j].date=Order[6].date;
-       };
-     };
-  if (MAIL==-1 && Option==-1 && AI[0]==0 && AI[1]==0 && k!=0) MisOrd(k);
-  return k;
+	if (MAIL == -1 && Option == -1 && AI[0] == 0 && AI[1] == 0 && k != 0)
+		MisOrd(k);
+	return k;
 }
 
 void MisOrd(char num)
@@ -139,11 +128,7 @@ void MisAnn(char plr,char pad)
   PrintAt(127,40,"LAUNCH FACILITY: ");
   grSetColor(1);
   PrintAt(0,0,"PAD ");
-  switch(pad) {
-	case 0: PrintAt(0,0,"A");break;
-	case 1: PrintAt(0,0,"B");break;
-	case 2: PrintAt(0,0,"C");break;
-  };
+  PrintAt(0,0,"A"+pad);
   grSetColor(34);
   PrintAt(127,47,"DATE: ");
   grSetColor(1);

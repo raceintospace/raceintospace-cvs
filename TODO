@@ -4,17 +4,9 @@ on a mission failure, replay mission doesn't show the explosion
 
 I think that drawing the bar graph also runs the cpu flat out
 
-I'm not seeing the prestige screen for Russian firsts
-
 in the baby screens, don't down sample then up sample
 
 =======
-wastes cpu time when showing the new image
-
-drop frames if getting behind on newscaster or movie playback
-
-look into "hold frame" stuff for aligning mission video and audio
-
 fades
 implement config opts for no anim
 

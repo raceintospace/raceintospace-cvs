@@ -48,7 +48,7 @@
   long xMODE;
   HTIMER server;
   char Option=-1,MAIL=-1;
-  int KO,SEG=15,FadeVal,fOFF=-1;
+  int SEG=15,FadeVal,fOFF=-1;
   extern struct mStr Mis;
   extern struct Prest_Upd MP[3];
   struct cdtable *cdt;
@@ -97,7 +97,7 @@ char *S_Name[] = {
 #define SLAVE 1
 #define MODEM_ERROR 4
 
-extern struct order Order[7];
+extern struct order Order[6];
 extern struct ManPool *Men;
 char AI[2]={0,0};
 
@@ -369,8 +369,6 @@ int main(int argc, char *argv[])
   }
 
   xMODE=0;
-
-  KO = 0;
 
   xMODE|=xMODE_NOCOPRO;
 
@@ -667,44 +665,47 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
    // Do Missions Here
    kik=OrderMissions();
 
-   for (i=0;i<kik;i++)
-    if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode!=0 )
-     {
-      if (AI[Order[i].plr]==1)
-       {
-	      if (!CheckIfMissionGo(Order[i].plr,Order[i].loc))
-         ClrMiss(Order[i].plr,Order[i].loc);
-       }
-	    if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode!=0)
-	     {
-        if (!AI[Order[i].plr]) IDLE[0]=IDLE[1]=0;
-		   if (!(Data->P[Order[i].plr].Mission[Order[i].loc].part==1 ||  Data->P[Order[i].plr].Mission[Order[i].loc].Hard[4]==0))
-		    {
-   	  	  prest=Launch(Order[i].plr,Order[i].loc);
-          // check for prestige firsts
-          if (AI[Order[i].plr]==1 && Data->Prestige[22].Place==-1 && KO==1)  // supposed to be 1
-          for (j=0;j<28;j++)
-           {
-            if (j!=4 && j!=5 && j!=6)
-             if (Data->Prestige[j].Place==Order[i].plr && Data->PD[Order[i].plr][j]!=1)
-              {
-               PlayFirst(Order[i].plr,j);
-              }
-           }
-          if (Data->Prestige[22].Place!=-1)
-           {
-            UpdateRecords(1);
-            NewEnd(Data->Prestige[22].Place,Order[i].loc);
-            FadeOut(2,pal,10,0,0);
-            return;
-           }
-		     if (!AI[Order[i].plr] && prest!=-20)  // -20 means scrubbed
-           MisRev(Order[i].plr,prest);
-		    }
-	     }
+for (i = 0; i < kik; i++)
+	if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode != 0)
+	{
+		if (AI[Order[i].plr] == 1)
+		{
+			if (!CheckIfMissionGo(Order[i].plr, Order[i].loc))
+				ClrMiss(Order[i].plr, Order[i].loc);
+		}
+		if (Data->P[Order[i].plr].Mission[Order[i].loc].MissionCode != 0)
+		{
+			if (!AI[Order[i].plr])
+				IDLE[0] = IDLE[1] = 0;
+			if (!(Data->P[Order[i].plr].Mission[Order[i].loc].part == 1
+					|| Data->P[Order[i].plr].Mission[Order[i].loc].Hard[4] ==
+					0))
+			{
+				prest = Launch(Order[i].plr, Order[i].loc);
+				// check for prestige firsts
+				if (AI[Order[i].plr] == 1 && Data->Prestige[22].Place == -1)	// supposed to be 1
+					for (j = 0; j < 28; j++)
+					{
+						if (j != 4 && j != 5 && j != 6)
+							if (Data->Prestige[j].Place == Order[i].plr
+								&& Data->PD[Order[i].plr][j] != 1)
+							{
+								PlayFirst(Order[i].plr, j);
+							}
+					}
+				if (Data->Prestige[22].Place != -1)
+				{
+					UpdateRecords(1);
+					NewEnd(Data->Prestige[22].Place, Order[i].loc);
+					FadeOut(2, pal, 10, 0, 0);
+					return;
+				}
+				if (!AI[Order[i].plr] && prest != -20)	// -20 means scrubbed
+					MisRev(Order[i].plr, prest);
+			}
+		}
 
-   }; //for(i=0...
-
+	};							   //for(i=0...
    Update();  /* Moves Future launches to Missions + More */
 
    // Update M array to speed AI code

@@ -1,5 +1,18 @@
 2007-01-14  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V91
+
+	* Action in Replay() can be now skipped with mouse button.
+
+	* Prestige firsts are properly shown.
+
+	* Fixed a bug in av_sync(), now if there is no reason to repaint the
+	screen it is not done.
+
+	* Used qsort() in OrderMissions().
+
+2007-01-14  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V90
 
 	* Fixed AstFaces(), re-indented. Faces display correctly.

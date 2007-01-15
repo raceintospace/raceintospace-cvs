@@ -298,9 +298,10 @@ av_process_event (SDL_Event *evp)
 		av_mouse_pressed_latched = 1;
 		av_mouse_pressed_x = evp->button.x;
 		av_mouse_pressed_y = evp->button.y;
-		printf ("mouseclick(%d,%d)\n", 
+		printf ("mouseclick(%d,%d) b = %d\n", 
 			av_mouse_pressed_x,
-			av_mouse_pressed_y);
+			av_mouse_pressed_y,
+            evp->button.button);
 		break;
 		
 	case SDL_MOUSEBUTTONUP:
@@ -395,9 +396,8 @@ av_sync (void)
 	unsigned char pixel;
 	*/
 
-	int min_x = MAX_X-1, min_y = MAX_Y-1;
-	int max_x = 0, max_y = 0;
-	int tmp;
+	int min_x = MAX_X, min_y = MAX_Y;
+	int max_x = -1, max_y = -1;
 	char *p;
 	char *outp;
 
@@ -480,23 +480,26 @@ av_sync (void)
 	if (SDL_MUSTLOCK(sur))
 		SDL_UnlockSurface (sur);
 
-	if (max_x < min_x) { tmp = min_x; min_x = max_x; max_x = tmp; }
-	if (max_y < min_y) { tmp = min_y; min_y = max_y; max_y = tmp; }
-
-	SDL_UpdateRect (sur, min_x*2, min_y*2,
-			2*(max_x - min_x + 1),
-			2*(max_y - min_y + 1));
+	if (max_x >= 0 && max_y > 0)
+	{
+		SDL_UpdateRect (sur, min_x*2, min_y*2,
+				2*(max_x - min_x + 1),
+				2*(max_y - min_y + 1));
 
 #ifdef PROFILE_GRAPHICS
-	fprintf(stderr, "av_sync: ~%3d%% updated in ~%3ums\n",
-			/* min_x, min_y, max_x, max_y, */
-			100*(max_x - min_x + 1)*(max_y - min_y + 1)/(MAX_X*MAX_Y),
-			SDL_GetTicks() - ticks);
+		fprintf(stderr, "av_sync: ~%3d%% updated in ~%3ums\n",
+				/* min_x, min_y, max_x, max_y, */
+				100*(max_x - min_x + 1)*(max_y - min_y + 1)/(MAX_X*MAX_Y),
+				SDL_GetTicks() - ticks);
 #endif
-
-	/*
-	SDL_Flip(sur);
-	*/
+	}
+	else
+	{
+#ifdef PROFILE_GRAPHICS
+		fprintf(stderr, "av_sync:	 no update	in ~%3ums\n",
+				SDL_GetTicks() - ticks);
+#endif
+	}
 
 	screen_dirty = 0;
 }
