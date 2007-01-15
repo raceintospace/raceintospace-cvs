@@ -56,9 +56,13 @@ void Moon(char plr)
   in=sOpen("MOON.BUT","rb",0);
   fseek(in,size*(sizeof table),SEEK_CUR);
   fread(&table,sizeof table,1,in);
+	SwapWord(table.size);
+	SwapLong(table.offset);
   fseek(in,table.offset,SEEK_SET);
   GV(&local,104,82);
+	SwapPal(pal);
   fread(&pal[384],384,1,in);  // Individual Palette
+	SwapPal(pal);
   fread(buffer,table.size,1,in);  // Get Image
   fclose(in);
   RLED_img(buffer,local.vptr,table.size,local.w,local.h);
@@ -156,11 +160,16 @@ void SatDraw(char plr)
 
   fin=sOpen("SATBLD.BUT","rb",0);
   fread(&pal[0],768,1,fin);
+	SwapPal(pal);
 
   for (i=0;i<4;i++) {
    
    fseek(fin,(sizeof P)*loc[i]+768,SEEK_SET);
+	 SwapWord(P.size);
+		SwapLong(P.offset);
    fread(&P,sizeof P,1,fin);
+	 SwapWord(P.size);
+	 SwapLong(P.offset);
    GV(&local,P.w,P.h);
    fseek(fin,P.offset,SEEK_SET);
    fread(buffer,P.size,1,fin);
@@ -374,14 +383,20 @@ void LMPict(char poff)
   FILE *in;
   in=sOpen("LMER.BUT","rb",0);
   fread(&table,sizeof table,1,in);
+	SwapWord(table.size);
+	SwapLong(table.offset);
   fseek(in,8*(sizeof table),SEEK_SET);
+	SwapPal(pal);
   fread(&pal[32*3],672,1,in);
+	SwapPal(pal);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   GV(&local,156,89); GV(&local2,156,89);
   RLED_img(buffer,local.vptr,table.size,local.w,local.h);
   fseek(in,(poff)*(sizeof table),SEEK_SET);
   fread(&table,sizeof table,1,in);
+	SwapWord(table.size);
+	SwapLong(table.offset);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   RLED_img(buffer,local2.vptr,table.size,local2.w,local2.h);

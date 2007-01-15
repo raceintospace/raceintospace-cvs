@@ -239,8 +239,9 @@ AstFaces(char plr, int x, int y, char face)
 {
 	long offset;
 	GXHEADER local, local2, local3;
-	char fx, fy;
+	int fx, fy;
 	unsigned int j;
+	int face_offset = 0;
 	FILE *fin;
 
 	memset(&pal[192], 0x00, 192);
@@ -249,17 +250,20 @@ AstFaces(char plr, int x, int y, char face)
 	SwapPal(pal);
 	fread(&pal[192], 96, 1, fin);
 	SwapPal(pal);
-	fseek(fin, face * (sizeof(long)), SEEK_SET);	// Get Face
+	face_offset = ((int)face) * sizeof(i32);
+	fseek(fin, face_offset, SEEK_SET);	// Get Face
 	fread(&offset, sizeof(long), 1, fin);
 	SwapLong(offset);
 	fseek(fin, offset, SEEK_SET);
 	GV(&local, 18, 15);
 	fread(local.vptr, 18 * 15, 1, fin);
 
-	fseek(fin, (85 + plr) * (sizeof(long)), SEEK_SET);	// Get Helmet
+	
+	face_offset = ((int)(85+plr)) * sizeof(i32);
+	fseek(fin, face_offset, SEEK_SET);	// Get Helmet
 	fread(&offset, sizeof(long), 1, fin);
-	fseek(fin, offset, SEEK_SET);
 	SwapLong(offset);
+	fseek(fin, offset, SEEK_SET);
 	GV(&local2, 80, 50);
 	GV(&local3, 80, 50);
 	fread(local2.vptr, 80 * 50, 1, fin);

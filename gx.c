@@ -119,8 +119,8 @@ gxVirtualDisplay (GXHEADER *hp,
 
 	assert(hp);
 	assert(always_zero == 0);
-	//assert(0 <= from_x && from_x < hp->w);
-	//assert(0 <= from_y && from_y < hp->h);
+	assert(0 <= from_x && from_x < hp->w);
+	assert(0 <= from_y && from_y < hp->h);
 	assert(to_x0 <= to_x1);
 	assert(to_y0 <= to_y1);
 	assert(0 <= to_x0 && to_x0 < MAX_X);

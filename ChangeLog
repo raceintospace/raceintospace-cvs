@@ -1,3 +1,10 @@
+2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V92
+
+	* MAC: More endian changes to get most of the Astronaut related areas
+	working
+
 2007-01-14  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V91

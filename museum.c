@@ -105,6 +105,8 @@ void Display_ARROW(char num,int x,int y)
   in=sOpen("ARROWS.BUT","rb",0);
   fseek(in,(num)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
+	SwapWord(P.size);
+	SwapLong(P.offset);
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size)
   {

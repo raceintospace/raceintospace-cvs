@@ -437,8 +437,11 @@ void TopSecret(char plr,char poff)
     if (plr==1) poff=poff+28;
   in=sOpen("INTEL.BUT","rb",0);
   fread(&table,sizeof table,1,in);
+	SwapWord(table.size);
+	SwapLong(table.offset);
   fseek(in,71*(sizeof table),SEEK_SET);
   fread(&pal[0],768,1,in);
+	SwapPal(pal);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   GV(&local,157,100); GV(&local2,157,100);
@@ -447,6 +450,8 @@ void TopSecret(char plr,char poff)
     {
      fseek(in,(poff+1)*(sizeof table),SEEK_SET);
      fread(&table,sizeof table,1,in);
+		 SwapWord(table.size);
+		 SwapLong(table.offset);
      fseek(in,table.offset,SEEK_SET);
      fread(buffer,table.size,1,in);     
      RLED_img(buffer,local2.vptr,table.size,local.w,local.h);
@@ -656,6 +661,7 @@ void Load_CIA_BUT(void)
   fin=sOpen("CIA.BUT","rb",0);
   i=filelength(fileno(fin))-768;
   fread(&pal[0],768,1,fin);
+	SwapPal(pal);
   fread((char *)screen,i,1,fin);
   PCX_D(screen,(char *)vhptr.vptr,i);
   fclose(fin);
