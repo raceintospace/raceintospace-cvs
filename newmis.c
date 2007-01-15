@@ -202,7 +202,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 	       {
 		grSetColor(7);PrintAt(bud,109+14*k,"CAPSULE: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Manned[hold].Name[0]);
 		grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-     itoa(Data->P[plr].Manned[hold].Safety,&Digit[0],10);
+     sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety);
      PrintAt(0,0,&Digit[0]);
      PrintAt(0,0,"%");
 	 //	PrintAt(144+i*111,116+14*k,"%");
@@ -213,7 +213,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 	       {
 		grSetColor(7);PrintAt(bud,109+14*k,"KICKER: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Misc[hold].Name[0]);
      grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-     itoa(Data->P[plr].Misc[hold].Safety,&Digit[0],10);
+     sprintf(&Digit[0],"%d",Data->P[plr].Misc[hold].Safety);
      PrintAt(0,0,&Digit[0]);
      PrintAt(0,0,"%");
     // DispNum(0,0,Data->P[plr].Misc[hold].Safety);
@@ -225,7 +225,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		{
 		 grSetColor(7);PrintAt(bud,109+14*k,"LM: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Manned[hold].Name[0]);
 		 grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-      itoa(Data->P[plr].Manned[hold].Safety,&Digit[0],10);
+      sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety);
       PrintAt(0,0,&Digit[0]);
       PrintAt(0,0,"%");
       //DispNum(0,0,Data->P[plr].Manned[hold].Safety);
@@ -239,7 +239,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		    {
 		     grSetColor(7);PrintAt(bud,109+14*k,"PROBE: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Probe[hold].Name[0]);
 		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-          itoa(Data->P[plr].Probe[hold].Safety,&Digit[0],10);
+          sprintf(&Digit[0],"%d",Data->P[plr].Probe[hold].Safety);
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Probe[hold].Safety);
@@ -250,7 +250,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		    {
 		     grSetColor(7);PrintAt(bud,109+14*k,"DOCKING: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Misc[hold].Name[0]);
 		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-          itoa(Data->P[plr].Misc[hold].Safety,&Digit[0],10);
+          sprintf(&Digit[0],"%d",Data->P[plr].Misc[hold].Safety);
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Misc[hold].Safety);
@@ -265,7 +265,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		    {
 		     grSetColor(7);PrintAt(bud,109+14*k,"ROCKET: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Rocket[hold-1].Name[0]);
 		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-          itoa(Data->P[plr].Rocket[hold-1].Safety,&Digit[0],10);
+          sprintf(&Digit[0],"%d",Data->P[plr].Rocket[hold-1].Safety);
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Rocket[hold-1].Safety);
@@ -276,7 +276,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		   {
 		    grSetColor(7);PrintAt(bud,109+14*k,"ROCKET: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Rocket[hold-5].Name[0]);PrintAt(0,0," W/B");
 		    grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-         itoa((Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[4].Safety)/2,&Digit[0],10);
+         sprintf(&Digit[0],"%d",(Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[4].Safety)/2);
          PrintAt(0,0,&Digit[0]);
          PrintAt(0,0,"%");
         // DispNum(0,0,(Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[4].Safety)/2);
@@ -339,9 +339,8 @@ void AI_Begin(char plr)
   gxSetDisplayPalette(pal);
 
   fin=sOpen("TURN.BUT","rb",0);
-  len[0]=filelength(fileno(fin))-768;
   fread(&pal,768,1,fin);
-  fread((char *)screen,len[0],1,fin);
+  len[0]=fread(screen,1,MAX_X*MAX_Y,fin);
   fclose(fin);
   RLED_img((char *)screen,vhptr.vptr,(unsigned int)len[0],
 	   vhptr.w,vhptr.h);

@@ -120,8 +120,8 @@ void DrawRush(char plr)
   fclose(fin);
 #endif
   fin=sOpen("LPADS.BUT","rb",0);
-  i=filelength(fileno(fin));fread((char *)screen,(long)i,1,fin);fclose(fin);
-  RLED_img((char *)screen,vhptr.vptr,i,vhptr.w,vhptr.h);
+  i=fread(screen,1,MAX_X*MAX_Y,fin);fclose(fin);
+  RLED_img(screen,vhptr.vptr,i,vhptr.w,vhptr.h);
   gxClearDisplay(0,0);
   JR=0;
   for (l=0;l<3;l++) {

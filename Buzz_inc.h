@@ -40,8 +40,6 @@ typedef unsigned long ui32;
 typedef long	i32;
 #endif
 
-#include "mtype.h"
-
 #include "race.h"		// autoconf header
 #include "pace.h"
 

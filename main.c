@@ -53,7 +53,7 @@
   extern struct Prest_Upd MP[3];
   struct cdtable *cdt;
   long PalOff;
-  WORD LetHand;
+  ui16 LetHand;
   char BIG;
 
 char *S_Name[] = {
@@ -309,11 +309,6 @@ open_gamedat (char *raw_name)
 //
 FILE * sOpen(char *Name,char *mode,int loc)
 {
-   char *fName;
-
-   fName=(char *) malloc(128);
-   memset(fName,0x00,128);
-
    if (loc==0) 
 	   return open_gamedat(Name);
 
@@ -395,12 +390,11 @@ int main(int argc, char *argv[])
 
     MakeRecords();
 
-		// ReadInitialGameData((HIST)?"HIST.DAT":"RAST.DAT");
+	// ReadInitialGameData((HIST)?"HIST.DAT":"RAST.DAT");
     if (HIST) fin=sOpen("HIST.DAT","rb",0);
     else fin=sOpen("RAST.DAT","rb",0);
-    i=(int) filelength(fileno(fin));  // get length
-    fread((char *)buffer,i,1,fin); 
-		fclose(fin);
+    i=fread(buffer,1,BUFFER_SIZE,fin); 
+    fclose(fin);
 
     printf ("reading Players: size = %d\n", (int)sizeof (struct Players));
     RLED(buffer,(char *)Data,i);
@@ -508,7 +502,7 @@ int CheckIfMissionGo(char plr,char launchIdx)
 
 	// Always a go for Unmanned missions
   if (mcode==1 || mcode==3 || mcode==5 || (mcode>=7 && mcode<=13) || mcode==15)
-     return TRUE;
+     return 1;
 
 	// Spin through mission hardware checking safety
 	for (idx = Mission_Capsule; idx <= Mission_PrimaryBooster; idx++) {
@@ -538,10 +532,10 @@ int CheckIfMissionGo(char plr,char launchIdx)
 		{
 			// If mission Safety is not within 15 points of the MaxRD then NO Go
 			if (E->MisSaf < (E->MaxRD-15))
-				return FALSE;
+				return 0;
 		}
 	}
-  return TRUE;
+  return 1;
 }
 
 void oclose(int fil)

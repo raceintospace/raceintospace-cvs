@@ -3,6 +3,8 @@ LIBS=@LIBS@
 CPPFLAGS=@CPPFLAGS@
 PROG_NAME=@PROG_NAME@
 
+ACLOCAL_AMFLAGS = -I m4
+
 EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts \
 	-Werror

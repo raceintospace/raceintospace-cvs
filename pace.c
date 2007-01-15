@@ -1,5 +1,6 @@
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "assert.h"
 
 extern GXHEADER vhptr;
 
@@ -43,13 +44,7 @@ getdisk (void)
 void *
 farmalloc (int len)
 {
-	void *p;
-
-	if ((p = malloc (len)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
-	}
-	return (p);
+	return xmalloc((size_t) len);
 }
 
 void
@@ -64,38 +59,25 @@ char *
 slurp_gamedat (char *name)
 {
 	FILE *f;
-	unsigned int len;
-	char *p;
+	ssize_t len;
+	char *p = NULL;
+    size_t buflen = 0;
 
-	f = open_gamedat (name);
-	len = filelength (fileno (f));
+	if (NULL == (f = open_gamedat (name)))
+        return NULL;
 
-	if ((p = malloc (len)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
-	}
+    len = fread_dyn(&p, &buflen, f); 
 
-	if (fread (p, 1, len, f) != len) {
-		fprintf (stderr, "bad read of %s\n", name);
-		exit (1);
-	}
+    if (len < 0)
+    {
+        perror("slurp_gamedat");
+        exit(EXIT_FAILURE);
+    }
 
 	fclose (f);
 
 	return (p);
 }
-
-#if defined(linux) || defined(MACOSX)
-int
-filelength (int fd)
-{
-	struct stat statb;
-	
-	if (fstat (fd, &statb) < 0)
-		return (0);
-	return (statb.st_size);
-}
-#endif
 
 char *letter_dat;
 
@@ -311,21 +293,6 @@ SetPal (char *pal)
 {
 }
 
-#if defined(linux) || defined(MACOSX)
-void
-itoa (int val, char *buf, int len)
-{
-	snprintf (buf, len, "%d", val);
-}
-
-
-void
-ltoa (long val, char *buf, int len)
-{
-	snprintf (buf, len, "%ld", val);
-}
-#endif
-
 void
 getcurdir (int drive, char *buf)
 {
@@ -381,7 +348,7 @@ void
 CloseEmUp (unsigned char error,unsigned int value)
 {
 	printf ("CloseEmUp()\n");
-	exit (0);
+	exit(EXIT_SUCCESS);
 }
 
 struct tblinfo {
@@ -404,27 +371,18 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 	hi = getc (fin);
 	tbl->count = (hi << 8) | lo;
 	
-	if ((tbl->strings = calloc (tbl->count,sizeof *tbl->strings))==NULL){
-		fprintf (stderr, "out of memory\n");
-		exit (1);
-	}
+	tbl->strings = xcalloc(tbl->count, sizeof *tbl->strings);
 
 	idx = 0;
 	while (fread (name, 1, 8, fin) == 8) {
 		name[8] = 0;
-		if ((tbl->strings[idx++] = strdup (name)) == NULL) {
-			fprintf (stderr, "out of memory\n");
-			exit (1);
-		}
+		tbl->strings[idx++] = xstrdup (name);
 	}
 
 	/* now idx is number of read strings */
 	if (tbl->count != idx) {
 		tbl->count = idx;
-		if ((tbl->strings = realloc(tbl->strings, sizeof *tbl->strings)) == NULL) {
-			fprintf(stderr, "out of memory\n");
-			exit(1);
-		}
+		tbl->strings = xrealloc(tbl->strings, sizeof *tbl->strings);
 	}
 		
 	fclose (fin);
@@ -491,10 +449,7 @@ frm_open (char *filename)
 	if ((fin = fopen (filename, "rb")) == NULL)
 		return (NULL);
 
-	if ((frm = calloc (1, sizeof *frm)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
-	}
+	frm = xcalloc (1, sizeof *frm);
 
 	frm->fin = fin;
 	frm->next_frame_chunks = 8;
@@ -612,20 +567,15 @@ idle_loop (int ticks)
 long VoiceOff;
 
 char *soundbuf;
-int soundbuf_size = 0;
-int soundbuf_used = 0;
+size_t soundbuf_size = 0;
+size_t soundbuf_used = 0;
 struct audio_chunk news_chunk;
 	
 void
-soundbuf_alloc (int size)
+soundbuf_alloc(size_t size)
 {
-	if (size > soundbuf_size) {
-		if ((soundbuf = realloc (soundbuf, size)) == NULL) {
-			fprintf (stderr, "out of memory\n");
-			exit (1);
-		}
-		soundbuf_size = size;
-	}
+	if (size > soundbuf_size)
+		soundbuf = xrealloc(soundbuf, soundbuf_size = size);
 }
 
 void
@@ -732,7 +682,7 @@ play_audio (int sidx, int mode)
 	char *raw_name;
 	char filename[1000];
 	FILE *f;
-	int size;
+	ssize_t size;
 
 	if ((raw_name = seq_filename (sidx, mode)) == NULL) {
 		printf ("can't find audio file for %d,%d\n",
@@ -750,11 +700,12 @@ play_audio (int sidx, int mode)
 		return;
 	}
 
-	size = filelength (fileno (f));
-
-	soundbuf_alloc (size);
-
-	fread (soundbuf, 1, size, f);
+    size = fread_dyn(&soundbuf, &soundbuf_size, f);
+    if (size < 0)
+    {
+        perror("play_audio");
+        exit(EXIT_FAILURE);
+    }
 
 	fclose (f);
 
@@ -764,26 +715,26 @@ play_audio (int sidx, int mode)
 }
 
 void *
-xmalloc (int n)
+xmalloc (size_t n)
 {
 	void *p;
 
 	if ((p = malloc (n)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
+		perror("malloc");
+		exit(EXIT_FAILURE);
 	}
 
 	return (p);
 }
 
 void *
-xcalloc (int a, int b)
+xcalloc (size_t a, size_t b)
 {
 	void *p;
 
 	if ((p = calloc (a, b)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
+		perror("calloc");
+		exit(EXIT_FAILURE);
 	}
 
 	return (p);
@@ -792,14 +743,58 @@ xcalloc (int a, int b)
 char *
 xstrdup (char const *s)
 {
-	void *p;
+	void *p = strdup(s);
 
-	if ((p = strdup (s)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
+	if (!p)
+    {
+		perror("strdup");
+		exit(EXIT_FAILURE);
 	}
 
 	return (p);
+}
+
+void *
+xrealloc(void *ptr, size_t size)
+{
+	void *p = realloc(ptr, size);
+
+	if (!p)
+    {
+		perror("realloc");
+		exit(EXIT_FAILURE);
+	}
+
+	return (p);
+}
+
+ssize_t
+fread_dyn(char **destp, size_t *n, FILE *stream)
+{
+    const unsigned bsize = 8192;
+    size_t total = 0, cnt = 0; 
+
+    assert(destp);
+    assert(n);
+    assert(stream);
+
+    if (!*destp) 
+        *destp = xmalloc(*n = bsize);
+
+    while (1) {
+        cnt = fread(*destp+total, 1, *n-total, stream);
+        if (cnt != *n-total)
+        {
+            if (feof(stream))
+                return total+cnt;
+            else if (ferror(stream))
+                return -1;
+        }
+        total += cnt;
+
+        if (*n <= total)
+            *destp = xrealloc(*destp, *n += bsize);
+    }
 }
 
 #define debug_file stdout

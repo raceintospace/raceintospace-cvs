@@ -22,7 +22,7 @@ extern int AUDIO;
 char MFlag,death,durx,MPad,Unm,Dock_Skip,SCRUBS,noDock,InSpace;
 extern struct mStr Mis;
 
-extern WORD MisStat;
+extern ui16 MisStat;
 extern char pCnt,tMen,BIG;            // Counter for pAry
 extern i16 pAry[15];         // Array for Presige Firsts compelted
 extern RPLY Rep;
@@ -1034,7 +1034,7 @@ void DebugSetFailure(char *Text)
  for(i=0;i<5;i++)
   {
    OutBox(187+i*12,74,197+i*12,82);
-   itoa(i,&D[0],10);
+   sprintf(&D[0],"%d",i);
    grSetColor(11);
    PrintAt(190+i*12,80,&D[0]);
   }
@@ -1042,7 +1042,7 @@ void DebugSetFailure(char *Text)
  for(i=0;i<5;i++)
   {
    OutBox(187+i*12,84,197+i*12,92);
-   itoa(i+5,&D[0],10);
+   sprintf(&D[0],"%d",i+5);
    grSetColor(11);
    PrintAt(190+i*12,90,&D[0]);
   }

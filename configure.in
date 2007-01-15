@@ -1,5 +1,8 @@
 AC_INIT(raceintospace.spec)
 
+dnl Specify directory for local macros
+AC_CONFIG_MACRO_DIR([m4])
+
 dnl Get the operating system and version number...
 uname=`uname`
 
@@ -10,9 +13,11 @@ AC_CHECK_LIB(asound,main)
 AC_CHECK_LIB(m,main)
 AC_CHECK_LIB(SDL,main)
 
+AX_CREATE_STDINT_H(int_types.h)
+
 dnl cross-compile specific configuration
 case "$target" in
-i386-mingw32msvc)
+i?86-mingw32msvc)
 	dnl Windows/CygWin configuration
 	LIBS="$LIBS `sdl-config --libs`"
 	PROG_NAME=raceintospace.exe
@@ -27,7 +32,7 @@ esac
 case "$uname" in
 Darwin)
 	dnl Darwin/Mac OS X configuration
-	AC_DEFINE(MACOSX)dnl
+	AC_DEFINE([[MACOSX]])
 	;;
 Linux)
 	dnl Linux OS

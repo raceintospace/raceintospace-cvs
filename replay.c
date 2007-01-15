@@ -150,8 +150,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	{							   // Find correct Sequence
 		bSeq = (struct oGROUP *) &vhptr.vptr[35000];
 		fin = sOpen(SEQ_DAT, "rb", 0);
-		offset = filelength(fileno(fin));
-		fread(&vhptr.vptr[35000], offset, 1, fin);
+        offset = fread(&vhptr.vptr[35000], 1, vhptr.h*vhptr.w-35000, fin);
 		fclose(fin);
 		mode = 0;
 		j = 0;
@@ -178,8 +177,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 		{
 			bSeq = (struct oGROUP *) &vhptr.vptr[35000];
 			fin = sOpen(SEQ_DAT, "rb", 0);
-			offset = filelength(fileno(fin));
-			fread(&vhptr.vptr[35000], offset, 1, fin);
+			offset = fread(&vhptr.vptr[35000], 1, vhptr.h*vhptr.w-35000, fin);
 			fclose(fin);
 			mode = 0;
 		}
@@ -346,8 +344,7 @@ void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,cha
  if (mde)EMPTY_BODY;
 
  fin=sOpen(SEQ_DAT,"rb",0);
- offset=filelength(fileno(fin));
- fread(&vhptr.vptr[35000],offset,1,fin);
+ offset = fread(&vhptr.vptr[35000],1,vhptr.h*vhptr.w-35000,fin);
  fclose(fin);
 
    if (strncmp("OOOO",Type,4)==0) {

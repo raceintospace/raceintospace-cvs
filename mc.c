@@ -43,7 +43,7 @@
   extern char STEPnum;
   extern char pNeg[NUM_PLAYERS][MAX_MISSIONS];
   extern char AI[2];
-  WORD MisStat;
+  ui16 MisStat;
   /* STEP tracks mission step numbers             */
   /* FINAL is the ultimate result of safety check */
   /* JOINT signals the joint mission code         */

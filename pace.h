@@ -84,13 +84,6 @@ void gxVirtualScale (GXHEADER *a, GXHEADER *b);
 void delay (int millisecs);
 int brandom (int limit);
 int biostime (int, long);
-
-#if defined(linux) || defined(MACOSX)
-int filelength (int fd);
-void itoa (int val, char *buf, int len);
-void ltoa (long val, char *buf, int len);
-#endif
-
 int bioskey (int wait);
 int inp (int port);
 

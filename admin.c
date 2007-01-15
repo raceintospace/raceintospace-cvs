@@ -173,7 +173,7 @@ int GenerateTables(char md)
      fin=sOpen(ffblk.ff_name,"rb",1);
      if (fin == NULL)
 	     goto next;
-     fread(FDes,sizeof (struct SF),1,fin);
+     fread(FDes,1,sizeof (struct SF),fin);
      fclose(fin);
      if (md==0) {
       strcpy(FList[tFiles].Title,FDes->Name);
@@ -332,8 +332,8 @@ void FileAccess(char mode)
 			// Read in Saved game data
 
 	   fin=sOpen(FList[now].Name,"rb",1);
-	   fread(FDes,sizeof (struct SF),1,fin);
-	   fread(vhptr.vptr,FDes->fSize,1,fin);
+	   fread(FDes,1,sizeof (struct SF),fin);
+	   fread(vhptr.vptr,1,FDes->fSize,fin);
 	   if (FDes->dSize==sizeof(struct Players))
        {
 #ifdef OLD_DOS_ENCRYPT_SAVEDATA
@@ -353,7 +353,7 @@ void FileAccess(char mode)
         fout=sOpen("EVENT.TMP","wb",1);
         left=32000; // copy EVENT.TMP FILE
         while (left==32000) {
-          left=fread(vhptr.vptr,1,32000,fin);
+          left=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
           fwrite(vhptr.vptr,left,1,fout);
          }
          fclose(fout);
@@ -388,15 +388,21 @@ void FileAccess(char mode)
 
           if (Data->Def.Input==0 || Data->Def.Input==2)
            { // Hist Crews
-            fin=sOpen("CREW.DAT","rb",0); size=filelength(fileno(fin));
-            fread(buffer,size,1,fin);fclose(fin);
-            fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
+            fin=sOpen("CREW.DAT","rb",0);
+            size=fread(buffer,1,BUFFER_SIZE,fin);
+            fclose(fin);
+            fin=sOpen("MEN.DAT","wb",1);
+            fwrite(buffer,size,1,fin);
+            fclose(fin);
 	        }
           else if (Data->Def.Input==1 || Data->Def.Input==3)
            { // User Crews
-	         fin=sOpen("USER.DAT","rb",0); size=filelength(fileno(fin));
-            fread(buffer,size,1,fin);fclose(fin);
-            fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
+	         fin=sOpen("USER.DAT","rb",0);
+             size=fread(buffer,1,BUFFER_SIZE,fin);
+             fclose(fin);
+             fin=sOpen("MEN.DAT","wb",1);
+             fwrite(buffer,size,1,fin);
+             fclose(fin);
 	        }
          } 
         else
@@ -417,14 +423,20 @@ void FileAccess(char mode)
          {
           //Regular save game LOAD
           if (Data->Def.Input==0 || Data->Def.Input==2) { // Hist Crews
-	         fin=sOpen("CREW.DAT","rb",0); size=filelength(fileno(fin));
-           fread(buffer,size,1,fin);fclose(fin);
-           fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
+	         fin=sOpen("CREW.DAT","rb",0);
+             size=fread(buffer,1,BUFFER_SIZE,fin);
+             fclose(fin);
+             fin=sOpen("MEN.DAT","wb",1);
+             fwrite(buffer,size,1,fin);
+             fclose(fin);
 	        }
           else if (Data->Def.Input==1 || Data->Def.Input==3) { // User Crews
-	         fin=sOpen("USER.DAT","rb",0); size=filelength(fileno(fin));
-           fread(buffer,size,1,fin);fclose(fin);
-           fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
+	         fin=sOpen("USER.DAT","rb",0);
+             size=fread(buffer,1,BUFFER_SIZE,fin);
+             fclose(fin);
+             fin=sOpen("MEN.DAT","wb",1);
+             fwrite(buffer,size,1,fin);
+             fclose(fin);
 	        }
         }  
 	      if (Option!=MODEM_ERROR) LOAD=done=1;
@@ -478,8 +490,7 @@ void FileAccess(char mode)
 	   
 	         fin=sOpen("ENDTURN.TMP","rb",1);
 	         if (fin) {
-	            FDes->fSize=filelength(fileno(fin));
-	            fread(vhptr.vptr,FDes->fSize,1,fin);
+	            FDes->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
 	            fclose(fin);
 	         } else FDes->fSize=0;
 
@@ -493,7 +504,7 @@ void FileAccess(char mode)
 	         memset(Name,0x00,sizeof Name);
 	         memset(Temp,0x00,sizeof Temp);
 	         strcpy(Name,"BUZZ");
-	         itoa(i,Temp,10);
+	         sprintf(Temp, "%d", i);
 	         strcat(Name,Temp);
 	         strcat(Name,".SAV");
 	         fin=sOpen(Name,"rb",1);
@@ -585,8 +596,7 @@ void FileAccess(char mode)
         fin=sOpen("ENDTURN.TMP","rb",1);
 	     if (fin)
          {
-	       FDes->fSize=filelength(fileno(fin));
-	       fread(vhptr.vptr,FDes->fSize,1,fin);
+	       FDes->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
 	       fclose(fin);
 	      } else FDes->fSize=0;
 
@@ -600,7 +610,7 @@ void FileAccess(char mode)
 	         memset(Name,0x00,sizeof Name);
 	         memset(Temp,0x00,sizeof Temp);
 	         strcpy(Name,"BUZZ");
-	         itoa(i,Temp,10);
+	         sprintf(Temp, "%d", i);
 	         strcat(Name,Temp);
 	         strcat(Name,".SAV");
 	         fin=sOpen(Name,"rb",1);
@@ -788,11 +798,13 @@ save_game (char *name)
 {
 	FILE *inf, *outf;
 	struct SF hdr;
-	int c;
+    size_t buflen = 0;
+    ssize_t size = 0;
+    char * buf = NULL;
 
 	EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
-        if ((inf = sOpen("ENDTURN.TMP","rb",1)) == NULL) {
+    if ((inf = sOpen("ENDTURN.TMP","rb",1)) == NULL) {
 		printf ("save_game: can't open ENDTURN.TMP\n");
 		return;
 	}
@@ -810,32 +822,46 @@ save_game (char *name)
 	hdr.Season = Data->Season;
 	hdr.Year = Data->Year;
 	hdr.dSize = sizeof(struct Players);
-	hdr.fSize = filelength (fileno (inf));
+	hdr.fSize = 0; //filelength (fileno (inf));
 	   
 	if ((outf = sOpen (name, "wb", 1)) == NULL) {
 		printf ("save_game: can't create %s\n", name);
 		return;
 	}
 
-	fwrite(&hdr,sizeof hdr,1,outf);
+    size = fread_dyn(&buf, &buflen, inf);
+    if (size < 0) {
+        perror("save_game");
+	    fclose (inf);
+        if (&buf)
+            free(&buf);
+        return;
+    }
+    hdr.fSize = size;
 	
-	while ((c = getc (inf)) != EOF)
-		putc (c, outf);
-	fclose (inf);
+	fwrite(&hdr,sizeof hdr,1,outf);
+    fwrite(buf, size, 1, outf);
 	
 	if ((inf = sOpen ("REPLAY.DAT", "rb", 1)) != NULL) {
-		while ((c = getc (inf)) != EOF)
-			putc (c, outf);
+        size = fread_dyn(&buf, &buflen, inf);
+        if (size >= 0)
+            fwrite(buf, size, 1, outf);
+        else
+            perror("save_game");
 		fclose (inf);
 	}
 	
 	if ((inf = sOpen ("EVENT.TMP", "rb", 1)) != NULL) {
-		while ((c = getc (inf)) != EOF)
-			putc (c, outf);
+        size = fread_dyn(&buf, &buflen, inf);
+        if (size >= 0)
+            fwrite(buf, size, 1, outf);
+        else
+            perror("save_game");
 		fclose (inf);
 	}
 
 	fclose (outf);
+    free(buf);
 }
 
 char GetBlockName(char *Nam)
@@ -996,8 +1022,7 @@ int FutureCheck(char plr,char type)
   PortPal(plr);
 
   fin=sOpen("LPADS.BUT","rb",0);
-  i=filelength(fileno(fin));
-  fread((char *)screen,i,1,fin);
+  i=fread(screen, 1, MAX_X*MAX_Y, fin);
   fclose(fin);
   RLED_img(screen,vhptr.vptr,i, vhptr.w,vhptr.h);
   if (type==0) {strcpy(IDT,"i010");strcpy(IKEY,"k010");}
@@ -1240,8 +1265,7 @@ void SaveMail(void)
 	 fin=sOpen("ENDTURN.TMP","rb",1);
 	 if (fin)
      {
-	   FDes->fSize=filelength(fileno(fin));
-	   fread(vhptr.vptr,FDes->fSize,1,fin);
+	   FDes->fSize=fread(vhptr.vptr,1,vhptr.w*vhptr.h,fin);
 	   fclose(fin);
 	  } else FDes->fSize=0;
 
@@ -1255,7 +1279,7 @@ void SaveMail(void)
 	    memset(Name,0x00,sizeof Name);
 	    memset(Temp,0x00,sizeof Temp);
 	    strcpy(Name,"BUZZ");
-	    itoa(i,Temp,10);
+	    sprintf(Temp, "%d", i);
 	    strcat(Name,Temp);
 	    strcat(Name,".SAV");
 	    fin=sOpen(Name,"rb",1);
@@ -1295,13 +1319,13 @@ void EndOfTurnSave(char *inData, int dataLen)
 {
 	FILE *fout = NULL;
 	int compressedLen = 0;
-	char * buffer = malloc(64 * 1024);		// 64k is enough
+	char buffer[dataLen * 2];
 
 	// Remove old save data
 	remove_savedat("ENDTURN.TMP");
 
 	// Create new save data
-	fout=sOpen("ENDTURN.TMP","wb",1);  
+	fout = sOpen("ENDTURN.TMP","wb",1);  
 	compressedLen = RLEC(inData, buffer, dataLen);
 #ifdef OLD_DOS_ENCRYPT_SAVEDATA
 	{
@@ -1317,9 +1341,8 @@ void EndOfTurnSave(char *inData, int dataLen)
 	}
 #endif
 
-	fwrite((char *)buffer, compressedLen, 1, fout);
+	fwrite(buffer, compressedLen, 1, fout);
 	fclose(fout);
-	free(buffer);
 }
 
 

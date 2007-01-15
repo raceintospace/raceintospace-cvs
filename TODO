@@ -2,7 +2,8 @@ autosave
 
 on a mission failure, replay mission doesn't show the explosion
 
-I think that drawing the bar graph also runs the cpu flat out
+I think that drawing the bar graph also runs the cpu flat out. Even worse, I
+think that it also pauses audio and video.
 
 in the baby screens, don't down sample then up sample
 

@@ -40,8 +40,7 @@ void DrawPrefs(int where,char a1,char a2)
   strcpy(IDT,"i013");strcpy(IKEY,"K013");
   fin=sOpen("PREFS.BUT","rb",0);
   fread(&pal[0],768,1,fin);
-  i=filelength(fileno(fin))-768;
-  fread((char *)screen,i,1,fin);
+  i=fread((char *)screen,1,MAX_X*MAX_Y,fin);
   fclose(fin);
 
   RLED_img((char *)screen,vhptr.vptr,i,vhptr.w,vhptr.h);
@@ -297,8 +296,7 @@ long size;
 	       if (Data->Def.Input==0 || Data->Def.Input==2)
            { // Hist Crews
 	         fin=sOpen("CREW.DAT","rb",0);
-            size=filelength(fileno(fin));
-            fread(buffer,size,1,fin);
+            size=fread(buffer,1,BUFFER_SIZE,fin);
             fclose(fin);
 	         fin=sOpen("MEN.DAT","wb",1);
             fwrite(buffer,size,1,fin);
@@ -306,8 +304,8 @@ long size;
 	        }
           else if (Data->Def.Input==1 || Data->Def.Input==3)
            { // User Crews
-	         fin=sOpen("USER.DAT","rb",0); size=filelength(fileno(fin));
-	         fread(buffer,size,1,fin);fclose(fin);
+	         fin=sOpen("USER.DAT","rb",0);
+	         size=fread(buffer,1,BUFFER_SIZE,fin);fclose(fin);
 	         fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
 	        }
          KillMusic();

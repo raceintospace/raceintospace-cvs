@@ -57,7 +57,7 @@ void DrawStatistics(char Win)
  if (AI[Win])
   {
    PrintAt(0,0,"COMPUTER");
-   itoa(Data->P[Win].Track[3],&Digit[0],10);
+   sprintf(&Digit[0],"%d",Data->P[Win].Track[3]);
    PrintAt(0,0,&Digit[0]);
   }     
   else if (Win==0) PrintAt(0,0,&Data->P[Data->Def.Plr1].Name[0]);
@@ -68,7 +68,7 @@ void DrawStatistics(char Win)
  if (AI[other(Win)])
   {
    PrintAt(0,0,"COMPUTER");
-   itoa(Data->P[other(Win)].Track[3],&Digit[0],10);
+   sprintf(&Digit[0],"%d",Data->P[other(Win)].Track[3]);
    PrintAt(0,0,&Digit[0]);
   }
   else if (Win==0) PrintAt(0,0,&Data->P[Data->Def.Plr2].Name[0]);

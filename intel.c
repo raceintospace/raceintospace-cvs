@@ -653,9 +653,8 @@ void Load_CIA_BUT(void)
   FILE *fin;
 
   fin=sOpen("CIA.BUT","rb",0);
-  i=filelength(fileno(fin))-768;
   fread(&pal[0],768,1,fin);
-  fread((char *)screen,i,1,fin);
+  i=fread(screen,1,MAX_X*MAX_Y,fin);
   PCX_D(screen,(char *)vhptr.vptr,i);
   fclose(fin);
 }

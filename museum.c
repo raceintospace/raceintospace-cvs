@@ -608,7 +608,7 @@ void DrawMisHist(char plr,int *where)
    yr=(*where-(*where % 2))/2 +57;
    season =*where % 2;
    ORBox(95,176,224,193,3);     //draw the boxes under date
-   itoa(1900+yr,cYr,10);
+   sprintf(cYr,"%d",1900+yr);
    DispBig(103+(yr-57)*4,178,cYr,0,-1);
 
    RectFill(5,29,314,169,0);

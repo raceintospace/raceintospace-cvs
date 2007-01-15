@@ -110,25 +110,25 @@ GXHEADER flaggy;
 
 struct mSPOT {    // Main SPOT Header
   char ID[40];    // Copyright notice
-  BYTE Qty;       // Number of Paths
-  LONG sOff;      // Spot Offsets
-  LONG pOff;      // Path Offsets
+  ui8 Qty;       // Number of Paths
+  ui32 sOff;      // Spot Offsets
+  ui32 pOff;      // Path Offsets
 } MSPOT;
 
 struct sPATH {       // Spot Anim Path Struct
-  WORD Image;        // Which image to Use
+  ui16 Image;        // Which image to Use
   i16  xPut,yPut;    // Where to place this image
   i16 iHold;         // Repeat this # times
   float Scale;       // Scale object
 };
 
 struct sIMG {
-  BYTE w,h;    // Width and Height
+  ui8 w,h;    // Width and Height
 };
 
 struct headSPOT {
-   WORD size;
-   LONG offset;
+   ui16 size;
+   ui32 offset;
 };
 
 
@@ -137,7 +137,7 @@ FILE *sFin;
 struct headSPOT hSPOT;  // Filled by Seek_sOff();
 struct sPATH sPath,sPathOld;
 struct sIMG sImg,sImgOld;
-LONG pTable,pLoc;
+ui32 pTable,pLoc;
 
  
 void Seek_sOff(int where)
@@ -331,8 +331,7 @@ void WaveFlagSetup(void)
   FILE *fin;
   GV(&flaggy,230,22);
   fin=sOpen("FLAG.SEQ","rb",0);
-  j=filelength(fileno(fin));
-  fread(vhptr.vptr,j,1,fin);
+  j=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
   fclose(fin);
   RLED_img(vhptr.vptr,flaggy.vptr,j,flaggy.w,flaggy.h);
 }
@@ -1073,7 +1072,7 @@ int idx = 0;
 #endif              
                           Vab_Spot=0;
                           PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
-#ifdef YYY  
+#ifdef DEADCODE
 											// I'm not sure why we're redrawing the outlines here, 
 											//commenting it out for now.  if no problems are seen 
 											// with the port outlines then restore thiss

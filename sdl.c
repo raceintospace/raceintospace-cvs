@@ -505,7 +505,7 @@ av_sync (void)
 	else
 	{
 #ifdef PROFILE_GRAPHICS
-		fprintf(stderr, "av_sync:	 no update	in ~%3ums\n",
+		fprintf(stderr, "av_sync:    no update  in ~%3ums\n",
 				SDL_GetTicks() - ticks);
 #endif
 	}

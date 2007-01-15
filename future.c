@@ -48,8 +48,7 @@ void Load_FUT_BUT(void)
   unsigned i;
   GV(&vh,240,90);
   fin=sOpen("NFUTBUT.BUT","rb",0);
-  i=filelength(fileno(fin));
-  fread((char *)screen,i,1,fin);
+  i=fread(screen,1,MAX_X*MAX_Y,fin);
   fclose(fin);
   RLED_img((char *)screen,(char *)vh.vptr,(unsigned)i,vh.w,vh.h);
   return;
@@ -68,9 +67,8 @@ void DrawFuture(char plr,int mis,char pad)
   FadeOut(2,pal,10,0,0);
   Load_FUT_BUT();
   fin=sOpen("FMIN.IMG","rb",0);
-  sz=(unsigned)(filelength(fileno(fin))-768);
   fread(&pal[0],768,1,fin);
-  fread((char *)screen,sz,1,fin);
+  sz=fread(screen,1,MAX_X*MAX_Y,fin);
   fclose(fin);
   RLED_img((char *)screen,(char *)vhptr.vptr,sz,vhptr.w,vhptr.h);
   gxClearDisplay(0,0);

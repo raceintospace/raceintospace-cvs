@@ -40,8 +40,8 @@ int totnews_offset;
 int bufsize;
 int evflag,LOAD_US=0,LOAD_SV=0;
 int Frame;
-BYTE X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex;
-WORD handle0,handle1,handle2,handle3,handle4,handle5;
+ui8 X_Offset,Y_Offset,Depth,Length,MaxFrame,AnimIndex;
+ui16 handle0,handle1,handle2,handle3,handle4,handle5;
 extern char Option;
 
 struct MTAB {
@@ -228,7 +228,7 @@ void DispNews(char plr,char *src,char *dest)
     dest[j]=src[i];
     switch(dest[j]) {
       case 'a': case 'd': case 'f': case 'j': case 'i':
-		itoa(evflag,&Name[0],10);
+		sprintf(&Name[0],"%d",evflag);
 		strncpy(&dest[j],&Name[0],strlen(Name));
 		j+=strlen(Name)-1;
 		break;
@@ -391,7 +391,7 @@ void News(char plr)
   char cYr[5];
   ONEWS oNews;
   char loc=0;
-  BYTE Status=0,BW=0;
+  ui8 Status=0,BW=0;
 
   //: LOAD_US & LOAD_SV  0 None 1 B/W 2 Color
   if (Data->Year<=63)
@@ -432,7 +432,7 @@ void News(char plr)
   if ((plr==0 && LOAD_US==0) || (plr==1 && LOAD_SV==0))
    {
     
-    itoa(1900+Data->Year,cYr,10);
+    sprintf(cYr,"%d",1900+Data->Year);
     if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
      else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
     DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
@@ -477,7 +477,7 @@ void News(char plr)
               else if (plr==0) LoadNewsAnim((BW==0) ? 9 : 8,FIRST_FRAME);
            #if 1
              
-             itoa(1900+Data->Year,cYr,10);
+             sprintf(cYr,"%d",1900+Data->Year);
              if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
               else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
              DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
@@ -534,7 +534,7 @@ void News(char plr)
               else if (plr==0) LoadNewsAnim((BW==0) ? 9 : 8,FIRST_FRAME);
             #if 1
              
-             itoa(1900+Data->Year,cYr,10);
+             sprintf(cYr,"%d",1900+Data->Year);
              if (Data->Season==1) DispBig(42+(BW*200),40-(plr*4),"FALL",0,-1);
               else DispBig(37+(BW*200),40-(plr*4),"SPRING",0,-1);
              DispBig(48+(BW*200),63-(4*plr),&cYr[0],0,-1);
@@ -705,7 +705,7 @@ void PlayNewsAnim(void)
 }
 
 
-void LoadNewsAnim(BYTE Index,BYTE Mode)
+void LoadNewsAnim(ui8 Index,ui8 Mode)
 {
 	GXHEADER local;
 	int i;
@@ -714,11 +714,11 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
 	unsigned MAX=0,TOT=0; 
 
 	struct aCHART {
-		BYTE frames;
-		BYTE x_off;
-		BYTE y_off;
-		BYTE width;
-		BYTE height;
+		ui8 frames;
+		ui8 x_off;
+		ui8 y_off;
+		ui8 width;
+		ui8 height;
 	} aChart;
 
 	struct GOD {

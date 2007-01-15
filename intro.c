@@ -272,9 +272,8 @@ void NextTurn(char plr)
   strcpy(IDT,"i000");strcpy(IKEY,"k000");
     
   fin=sOpen("TURN.BUT","rb",0);
-  len=filelength(fileno(fin))-768;
   fread(&pal,768,1,fin);
-  fread((char *)screen,len,1,fin);
+  len=fread(screen,1,MAX_X*MAX_Y,fin);
   fclose(fin);
 
   RLED_img((char *)screen,vhptr.vptr,(unsigned int)len,

@@ -1,3 +1,19 @@
+2007-01-15  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V94
+
+	* Removed portability problems: itoa, itol, filelength, BYTE, WORD, LONG
+
+	* Started experiments with autotools, m4 directory contains custom macros.
+
+	* Fixed few another bugs and now game ends without a segfault.
+
+	* Fixed one memory leak in main.c
+
+	* mkmovie.c now outputs movies in 24 fps (default was 8)
+
+	* Added new script frm2mpeg.sh
+
 2007-01-15  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V93

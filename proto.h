@@ -804,9 +804,11 @@ void modem_control_string(char *s);
 
 FILE *open_savedat (char *name, char *mode);
 
-void *xmalloc (int);
-void *xcalloc (int, int);
-char *xstrdup (char const *);
+void *xmalloc(size_t);
+void *xcalloc(size_t, size_t);
+char *xstrdup(char const *);
+void *xrealloc(void *ptr, size_t size);
+ssize_t fread_dyn(char **destp, size_t *n, FILE *stream);
 
 void save_game (char *filename);
 

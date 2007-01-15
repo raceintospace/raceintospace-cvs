@@ -122,7 +122,7 @@ void DrawBudget(char player,char *pStatus)
   PrintAt(164,169,"0 MB");
   grSetColor(1);
   if (Data->Season==0) strcpy(&name[0],"SPRING 19"); else strcpy(&name[0],"FALL 19");
-  itoa(Data->Year,&str[0],10);
+  sprintf(&str[0],"%d",Data->Year);
 
   strcat(&name[0],&str[0]);
   DispBig(122,5,&name[0],0,-1);

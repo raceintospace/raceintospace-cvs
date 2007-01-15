@@ -238,7 +238,7 @@ void Drec(char *pos,char *pos2,char mde)
      {
       case 1:grSetColor(9);PrintAt(61,38+(i*24),"DATE: ");
              grSetColor(1);PrintAt(0,0,Months[rec[*pos2][i].month]);PrintAt(0,0," ");
-             itoa(rec[*pos2][i].yr+1900,&Digit[0],10);PrintAt(0,0,&Digit[0]);
+             sprintf(&Digit[0],"%d",rec[*pos2][i].yr+1900);PrintAt(0,0,&Digit[0]);
              if (*pos2==29)
               {
                grSetColor(6);PrintAt(143,38+(i*24),"DURATION: ");grSetColor(1);
@@ -262,22 +262,22 @@ void Drec(char *pos,char *pos2,char mde)
                case 1:case 2:case 3:case 4:case 5:case 6:
                       grSetColor(6);PrintAt(143,48+(i*24),"DATE: ");
                       grSetColor(1);PrintAt(0,0,Months[rec[*pos2][i].month]);PrintAt(0,0," ");
-                      itoa(rec[*pos2][i].yr+1900,&Digit[0],10);PrintAt(0,0,&Digit[0]);
+                      sprintf(&Digit[0],"%d",rec[*pos2][i].yr+1900);PrintAt(0,0,&Digit[0]);
                       break;
                case 35:case 36:grSetColor(6);PrintAt(143,48+(i*24),"MISSIONS: ");
-                       grSetColor(1);itoa(rec[*pos2][i].tag,&Digit[0],10);
+                       grSetColor(1);sprintf(&Digit[0],"%d",rec[*pos2][i].tag);
                        PrintAt(0,0,&Digit[0]);
                        break;
                case 37:case 38:grSetColor(6);PrintAt(143,48+(i*24),"PRESTIGE: ");
-                       grSetColor(1);itoa(rec[*pos2][i].tag,&Digit[0],10);
+                       grSetColor(1);sprintf(&Digit[0],"%d",rec[*pos2][i].tag);
                        PrintAt(0,0,&Digit[0]);
                        break;
                case 39:case 40:grSetColor(6);PrintAt(143,48+(i*24),"DAYS: ");
-                       grSetColor(1);itoa(rec[*pos2][i].tag,&Digit[0],10);
+                       grSetColor(1);sprintf(&Digit[0],"%d",rec[*pos2][i].tag);
                        PrintAt(0,0,&Digit[0]);
                        break;
                case 41:grSetColor(6);PrintAt(143,48+(i*24),"SEASONS: ");
-                       grSetColor(1);itoa(rec[*pos2][i].tag,&Digit[0],10);
+                       grSetColor(1);sprintf(&Digit[0],"%d",rec[*pos2][i].tag);
                        PrintAt(0,0,&Digit[0]);
                        break;
                default:break;
@@ -288,12 +288,12 @@ void Drec(char *pos,char *pos2,char mde)
               {
                grSetColor(1);PrintAt(0,0,&Data->P[rec[*pos2][i].country].Manned[rec[*pos2][i].program].Name[0]);
                grSetColor(6);PrintAt(143,48+(i*24),"PRESTIGE: ");
-               grSetColor(1);itoa(rec[*pos2][i].tag,&Digit[0],10);
+               grSetColor(1);sprintf(&Digit[0],"%d",rec[*pos2][i].tag);
                PrintAt(0,0,&Digit[0]);
               }
              else
               {
-               itoa(rec[*pos2][i].tag,&Digit[0],10);PrintAt(101,38+(i*24),&Digit[0]);
+               sprintf(&Digit[0],"%d",rec[*pos2][i].tag);PrintAt(101,38+(i*24),&Digit[0]);
                switch(*pos2)
                 {
                  case 22:case 23:PrintAt(0,0," CASUALTIES");break;

@@ -404,7 +404,7 @@ void LMBld(char plr)
   ShBox(1,170,319,194);InBox(41,172,279,192);
   DispBig(71,176,"TOTAL LM POINTS",0,-1);
   memset(Name,0,sizeof Name);
-  itoa(Data->P[plr].LMpts,&Name[0],10);
+  sprintf(&Name[0],"%d",Data->P[plr].LMpts);
   DispBig(240,176,&Name[0],0,-1);
   for (i=0;i<2;i++)
 	{

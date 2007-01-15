@@ -236,8 +236,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 	if (mode==0) {
 		fin=sOpen(SEQ_DAT,"rb",0);
-		offset=filelength(fileno (fin));
-		fread(&vhptr.vptr[35000],offset,1,fin);
+		offset=fread(&vhptr.vptr[35000],1,vhptr.h*vhptr.w-35000,fin);
 	} else {
 		F=(struct Table *)&vhptr.vptr[0];
 		fin=sOpen(FSEQ_DAT,"rb",0);

@@ -322,8 +322,7 @@ void Draw_NewEnd(char win)
  gxClearDisplay(0,0);
  in=sOpen("WINNER.BUT","rb",0);
  fread(pal,384,1,in);
- size=filelength(fileno(in))-384;
- fread(vhptr.vptr,size,1,in);
+ size=fread(vhptr.vptr,1,vhptr.h*vhptr.w,in);
  fclose(in);
  PCX_D(vhptr.vptr,screen,size);
  ShBox(0,173,319,199);InBox(5,178,314,194);
@@ -713,7 +712,7 @@ void EndPict(int x,int y,char poff,unsigned char coff)
 	SwapPatchHdr(&P);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w,y+P.h,0);
+  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
   fread(local.vptr,P.size,1,in);
   fclose(in);
   for (j=0;j<P.size;j++)
@@ -736,7 +735,7 @@ void LoserPict(char poff,unsigned char coff)
 	SwapPatchHdr(&P);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,6,32,6+P.w,32+P.h,0);
+  gxGetImage(&local2,6,32,6+P.w-1,32+P.h-1,0);
   fread(local.vptr,P.size,1,in);
   fclose(in);
   for (j=0;j<P.size;j++)

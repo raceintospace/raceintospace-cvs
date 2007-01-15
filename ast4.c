@@ -339,12 +339,12 @@ void DamProb(char plr,char prog,int chk)
  grSetColor(6);
  PrintAt(121,113,"DAMAGE COST: ");
  grSetColor(1);
- itoa(D_Cost,&Digit[0],10);PrintAt(0,0,&Digit[0]);
+ sprintf(&Digit[0],"%d",D_Cost);PrintAt(0,0,&Digit[0]);
  PrintAt(0,0," M.B.");
  grSetColor(6);
  PrintAt(121,122,"SAFETY LOSS: ");
  grSetColor(1);
- itoa(Saf_Loss,&Digit[0],10);PrintAt(0,0,&Digit[0]);
+ sprintf(&Digit[0],"%d",Saf_Loss);PrintAt(0,0,&Digit[0]);
  PrintAt(0,0,"%");
  FadeIn(2,pal,10,0,0);
  
