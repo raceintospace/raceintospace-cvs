@@ -221,15 +221,14 @@ void DrawBudget(char player,char *pStatus)
 
 void BudPict(char poff)
 {
-  struct Patch {char w,h;ui16 size;long offset;} P;
+	PatchHdr P;
   GXHEADER local;
   unsigned int i,x,y;
   FILE *in;
   in=sOpen("BUDD.BUT","rb",0);
   fseek(in,(poff)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
-	SwapWord(P.size);
-	SwapLong(P.offset);
+	SwapPatchHdr(&P);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); 
   fread(local.vptr,P.size,1,in);
@@ -242,8 +241,7 @@ void BudPict(char poff)
 	 y=141+((i-2)*14);
 	 fseek(in,(i)*(sizeof P),SEEK_SET);
 	 fread(&P,sizeof P,1,in);
-	 	SwapWord(P.size);
-		SwapLong(P.offset);
+	SwapPatchHdr(&P);
 	 fseek(in,P.offset,SEEK_SET);
 	 GV(&local,P.w,P.h); 
 	 fread(local.vptr,P.size,1,in);

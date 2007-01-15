@@ -771,9 +771,7 @@ void LoadNewsAnim(BYTE Index,BYTE Mode)
 		SwapLong(table[i].offset);
 	}
 
-	SwapPal(pal);
 	fread(&pal[96],1,672,out);
-	SwapPal(pal);
 
 	Frame=1;
 	AnimIndex=Index;
@@ -930,9 +928,7 @@ void ShowEvt(char plr,char crd)
   
   if (MM.off!=0) {
     fseek(ffin,MM.off,SEEK_SET);
-		SwapPal(pal);
     fread(&pal[384],384,1,ffin);
-		SwapPal(pal);
     fread(vhptr.vptr,(size_t) MM.size,1,ffin);
 
     for (i=0;i<(unsigned int)MM.size;i++) {

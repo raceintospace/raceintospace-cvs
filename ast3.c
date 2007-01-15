@@ -431,7 +431,6 @@ void Hospital(char plr,int sel)
   fclose(fin);
   PCX_D(screen,vhptr.vptr,(unsigned int)size);
 
-	SwapPal(pal);
   gxClearDisplay(0,0);
   ShBox(0,0,319,22);
   ShBox(161,103,319,199);

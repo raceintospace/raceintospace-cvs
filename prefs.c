@@ -44,7 +44,6 @@ void DrawPrefs(int where,char a1,char a2)
   fread((char *)screen,i,1,fin);
   fclose(fin);
 
-	SwapPal(pal);
   RLED_img((char *)screen,vhptr.vptr,i,vhptr.w,vhptr.h);
 
   gxClearDisplay(0,0);
@@ -120,10 +119,7 @@ void DrawPrefs(int where,char a1,char a2)
 void HModel(char mode,char tx)
 {
   unsigned int j,n;
-  struct GO {
-   ui16 size;
-   ui32 offset;
-  } table;
+	SimpleHdr table;
 
   GXHEADER local;
   FILE *in;
@@ -131,15 +127,12 @@ void HModel(char mode,char tx)
   in=sOpen("PRFX.BUT","rb",0);
   fseek(in,(mode==0 || mode==1)*(sizeof table),SEEK_CUR);
   fread(&table,sizeof table,1,in);
-	SwapWord(table.size);
-	SwapLong(table.offset);
+	SwapSimpleHdr(&table);
   fseek(in,table.offset,SEEK_SET);
   GV(&local,127,80);
-	SwapPal(pal);
   fread(&pal[112*3],96*3,1,in);  // Individual Palette
   fread(buffer,table.size,1,in);  // Get Image
   fclose(in);
-	SwapPal(pal);
 
   RLED_img(buffer,local.vptr,table.size, local.w, local.h);
   n = gxVirtualSize(gxVGA_13,127,80);

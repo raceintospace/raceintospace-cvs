@@ -70,6 +70,8 @@ int never_fail;
 #include "proto.h"    // prototypes and general defines
 #include "music.h"    // defines for music names
 
+#include "endianness.h"
+
 #define random brandom
 #undef NULL
 #define NULL 0

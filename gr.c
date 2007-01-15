@@ -45,17 +45,7 @@ static int gr_bg_color;
 void
 gr_set_color_map (unsigned char *map)
 {
-#if defined(MACOSX) && defined(__POWERPC__)
-	int i = 0;
-	for (i = 0; i< 256; i++)
-	{
-		pal[(i*3)+0] = map[(i*3)+2];
-		pal[(i*3)+1] = map[(i*3)+1];
-		pal[(i*3)+2] = map[(i*3)+0];
-	}
-#else
 	memcpy (pal, map, 256 * 3);
-#endif
 }
 
 void

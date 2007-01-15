@@ -1,9 +1,10 @@
 
+#if __BIG_ENDIAN__
+
+#include "assert.h"
 #include "Buzz_inc.h"
 #include "externs.h"
 
-
-#if defined(MACOSX) && defined(__POWERPC__)
 ui32 _SwapLong(ui32 value)
 {
       return (( value >> 24) | ((value >> 8) & 0x0000FF00) | ((value << 8) & 0x00FF0000) | (value << 24));
@@ -13,24 +14,29 @@ ui16 _SwapWord(ui16 value)
 {
       return ((value << 8) | (value >> 8));
 }
-#endif
 
-#if defined(MACOSX) && defined(__POWERPC__)
-void SwapPal(char *pal)
+void SwapSimpleHdr(SimpleHdr *hdr)
 {
-	int i = 0;
-	char temp;
-	for (i = 0; i< 256; i++)
-	{
-		temp = pal[(i*3)+0];
-		pal[(i*3)+0] = pal[(i*3)+2];
-		pal[(i*3)+2] = temp;
-	}
+	assert(hdr);
+
+	SwapWord(hdr->size);
+	SwapLong(hdr->offset);
 }
-#endif
+
+void SwapPatchHdr(PatchHdr *hdr)
+{
+	assert(hdr);
+
+	SwapWord(hdr->w);
+	SwapWord(hdr->h);
+	SwapWord(hdr->size);
+	SwapLong(hdr->offset);
+}
+
+
+
 
 // This is only for loading the unmodified original data
-#if defined(MACOSX) && defined(__POWERPC__)
 void SwapGameDat(void)
 {
 	i16 i,j;
@@ -71,5 +77,6 @@ void SwapGameDat(void)
 
   printf("SwapGameDat: Checksum Data = %ld\n",Data->Checksum);
 }
+
 #endif
 

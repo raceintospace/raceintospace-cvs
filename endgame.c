@@ -287,7 +287,7 @@ void EndGame(char win,char pad)
 
 void Load_LenFlag(char win)
 {
- struct Patch {i16 w,h;ui16 size;long offset;} P;
+	PatchHdr P;
   GXHEADER local,local2;
   unsigned int coff;
   int j,Off_X,Off_Y;
@@ -299,6 +299,7 @@ void Load_LenFlag(char win)
  fread(&pal[coff*3],384,1,in);
  fseek(in,(poff)*(sizeof P),SEEK_CUR);
  fread(&P,sizeof P,1,in);
+	SwapPatchHdr(&P);
  fseek(in,P.offset,SEEK_SET);
  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
  gxClearVirtual(&local2,0);
@@ -320,7 +321,7 @@ void Draw_NewEnd(char win)
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
  in=sOpen("WINNER.BUT","rb",0);
- fread(&pal[0],384,1,in);
+ fread(pal,384,1,in);
  size=filelength(fileno(in))-384;
  fread(vhptr.vptr,size,1,in);
  fclose(in);
@@ -334,8 +335,6 @@ void Draw_NewEnd(char win)
  FadeIn(0,pal,40,128,0);
  Load_LenFlag(win);
  FadeIn(1,pal,200,128,1);
- 
- return;
 }
 
 void NewEnd(char win,char loc)
@@ -703,7 +702,7 @@ void SpecialEnd(void)
 
 void EndPict(int x,int y,char poff,unsigned char coff)
 {
-  struct Patch {char w,h;ui16 size;long offset;} P;
+  PatchHdr P;
   GXHEADER local,local2;
   unsigned int j;
   FILE *in;
@@ -711,6 +710,7 @@ void EndPict(int x,int y,char poff,unsigned char coff)
   fread(&pal[coff*3],384,1,in);
   fseek(in,(poff)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
+	SwapPatchHdr(&P);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
   gxGetImage(&local2,x,y,x+P.w,y+P.h,0);
@@ -725,7 +725,7 @@ void EndPict(int x,int y,char poff,unsigned char coff)
 
 void LoserPict(char poff,unsigned char coff)
 {
-  struct Patch {i16 w,h;ui16 size;long offset;} P;
+	PatchHdr P;
   GXHEADER local,local2;
   unsigned int j;
   FILE *in;
@@ -733,6 +733,7 @@ void LoserPict(char poff,unsigned char coff)
   fread(&pal[coff*3],384,1,in);
   fseek(in,(poff)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
+	SwapPatchHdr(&P);
   fseek(in,P.offset,SEEK_SET);
   GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
   gxGetImage(&local2,6,32,6+P.w,32+P.h,0);

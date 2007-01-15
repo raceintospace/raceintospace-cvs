@@ -128,7 +128,6 @@ void Credits(void)
 	SwapLong(len);
   fread(vhptr.vptr,len,1,fin);
   fclose(fin);
-	SwapPal(pal);
 
   for (k=0;k<2;k++) {
     
@@ -239,7 +238,6 @@ void Introd(void)
   for (k=0;k<INTRO_IMAGE_COUNT;k++) {
     ip = &intro_images[k];
 
-		//SwapPal((char *)ip->map);
     gr_set_color_map (ip->map);
     memcpy (screen, ip->pixels, 320*200);
     gr_sync ();
@@ -278,7 +276,6 @@ void NextTurn(char plr)
   fread(&pal,768,1,fin);
   fread((char *)screen,len,1,fin);
   fclose(fin);
-	SwapPal(pal);
 
   RLED_img((char *)screen,vhptr.vptr,(unsigned int)len,
 	   vhptr.w,vhptr.h);

@@ -417,7 +417,6 @@ void PortPal(char plr)
   fseek(fin,PHead.oPal,SEEK_SET);
   fread(&pal[0],768,1,fin);
   fclose(fin);
-	SwapPal(pal);
   return;
 }
 
@@ -446,7 +445,7 @@ void DrawSpaceport(char plr)
 
   fread(&MObj[0],sizeof MObj,1,fin);
 #ifdef __BIG_ENDIAN__
-	for (i = 0; i < sizeof(MObj)/sizeof(MOBJ); i++)
+	for (i = 0; i < (int)(sizeof(MObj)/sizeof(MOBJ)); i++)
 	{
 		for (j = 0; j < 4; j++)
 		{
@@ -469,7 +468,6 @@ void DrawSpaceport(char plr)
 
   fseek(fin,PHead.oPal,SEEK_SET);
   fread(&pal[0],768,1,fin);
-	SwapPal(pal);
 
   fseek(fin,table[0],SEEK_SET);
   fread(&Img,sizeof Img,1,fin);  // Read in main image Header

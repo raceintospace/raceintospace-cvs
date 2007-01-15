@@ -159,16 +159,13 @@ void PlaceEquip(char plr,char prog)
   int i;
   FILE *fin;
   GXHEADER local,local2;
-  struct FPF {
-   ui16 size;
-   long offset;
-   } table;
+	SimpleHdr table;
 
   GV(&local,80,50);GV(&local2,80,50);
   fin=sOpen("APROG.BUT","rb",0);
   fseek(fin,(plr*7+prog)*(sizeof table),SEEK_SET);
   fread(&table,sizeof table,1,fin);
-
+	SwapSimpleHdr(&table);
   fseek(fin,14*(sizeof table),SEEK_SET);
   fread(&pal[0],768,1,fin);
 

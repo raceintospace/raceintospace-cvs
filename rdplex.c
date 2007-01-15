@@ -84,7 +84,6 @@ void DrawRD(char plr)
   FadeOut(2,pal,10,0,0);
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin); fclose(fin);
-	SwapPal(pal);
 
   gxClearDisplay(0,0);
   Load_RD_BUT(plr);
@@ -607,7 +606,6 @@ void DrawHPurc(char plr)
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin);
   fclose(fin);
-	SwapPal(pal);
 
   Load_RD_BUT(plr);
   gxClearDisplay(0,0);

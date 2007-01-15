@@ -721,9 +721,7 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
   if (which<580) memset(&pal[off*3],0x00,48);
   if(loc!=0 && which<580) {VBlank();gxSetDisplayPalette(pal);}
   fseek(ffin,(long)locl,SEEK_SET);
-	SwapPal(pal);
   fread(&pal[off*3],48,1,ffin);
-	SwapPal(pal);
   fread(boob.vptr,1564,1,ffin);
   for (i=0;i<782;i++) {
    bot[i+782]=((bot[i]&0xF0F0)>>4);
@@ -970,9 +968,7 @@ FILE *OpenAnim(char *fname)
       fread(&AHead,sizeof AHead,1,fin);
 			SwapWord(AHead.w);
 			SwapWord(AHead.h);
-			SwapPal(pal);
       fread(&pal[AHead.cOff*3],AHead.cNum*3,1,fin);
-			SwapPal(pal);
       aLoc=ftell(fin);
       tFrames=AHead.fNum;
       cFrame=0;

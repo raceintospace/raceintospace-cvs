@@ -229,26 +229,20 @@ void ClrMiss(char plr,char pad)
 void PadPict(char poff)
 {
   GXHEADER local,local2;
-  struct FF {
-	ui16 size;
-	long offset;
-   } table;
+	SimpleHdr table;
   FILE *in;
   in=sOpen("LFACIL.BUT","rb",0);
   fread(&table,sizeof table,1,in);
-	SwapWord(table.size);
-	SwapLong(table.offset);
+	SwapSimpleHdr(&table);
   fseek(in,6*(sizeof table),SEEK_SET);
   fread(pal,768,1,in);
-	SwapPal(pal);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   GV(&local,148,148); GV(&local2,148,148);
   RLED_img(buffer,local.vptr,table.size,local.w,local.h);
   fseek(in,(poff)*(sizeof table),SEEK_SET);
   fread(&table,sizeof table,1,in);
-	SwapWord(table.size);
-	SwapLong(table.offset);
+	SwapSimpleHdr(&table);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   RLED_img(buffer,local2.vptr,table.size,local2.w,local2.h);

@@ -1,4 +1,19 @@
-2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
+2007-01-15  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V93
+
+	* Removed all SetPal() calls in favor of just swapping the
+	palette in av_sync() where the pixel magic happens
+
+	* Replaced a bunch of locally defined structures as PatchHdr and 
+	SimpleHdr and added the appropriate Endian swap.
+
+	* Moved endian related headers into endianness.h
+
+	* Replaced all endian related defines with __BIG_ENDIAN__
+	
+
+2007-01-14  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V92
 

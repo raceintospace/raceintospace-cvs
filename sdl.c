@@ -423,26 +423,35 @@ av_sync (void)
 				min_y = minn(min_y, row);
 				max_y = maxx(max_y, row);
 			}
+#ifdef __BIG_ENDIAN__
+#define PAL_R	p[0]
+#define PAL_G	p[1]
+#define PAL_B	p[2]
+#else
+#define PAL_R	p[2]
+#define PAL_G	p[1]
+#define PAL_B	p[0]
+#endif
 
 			i = 4*row*MAX_X + 2*col;
-			outp[3*i]	= p[2] * 4;
-			outp[3*i+1] = p[1] * 4;
-			outp[3*i+2] = p[0] * 4;
+			outp[3*i]	= PAL_R * 4;
+			outp[3*i+1] = PAL_G * 4;
+			outp[3*i+2] = PAL_B * 4;
 
 			i = 4*row*MAX_X + 2*col + 1;
-			outp[3*i]	= p[2] * 4;
-			outp[3*i+1] = p[1] * 4;
-			outp[3*i+2] = p[0] * 4;
+			outp[3*i]	= PAL_R * 4;
+			outp[3*i+1] = PAL_G * 4;
+			outp[3*i+2] = PAL_B * 4;
 
 			i = 4*row*MAX_X + 2*col + 2*MAX_X;
-			outp[3*i  ] = p[2] * 4;
-			outp[3*i+1] = p[1] * 4;
-			outp[3*i+2] = p[0] * 4;
+			outp[3*i  ] = PAL_R * 4;
+			outp[3*i+1] = PAL_G * 4;
+			outp[3*i+2] = PAL_B * 4;
 
 			i = 4*row*MAX_X + 2*col + 2*MAX_X + 1;
-			outp[3*i]	= p[2] * 4;
-			outp[3*i+1] = p[1] * 4;
-			outp[3*i+2] = p[0] * 4;
+			outp[3*i]	= PAL_R * 4;
+			outp[3*i+1] = PAL_G * 4;
+			outp[3*i+2] = PAL_B * 4;
 		}
 	}
 #endif
@@ -470,9 +479,9 @@ av_sync (void)
 
 			outp = sur->pixels + dest_idx;
 
-			outp[0] = p[2] * 4;
-			outp[1] = p[1] * 4;
-			outp[2] = p[0] * 4;
+			outp[0] = PAL_R * 4;
+			outp[1] = PAL_G * 4;
+			outp[2] = PRL_B * 4;
 		}
 	}
 #endif

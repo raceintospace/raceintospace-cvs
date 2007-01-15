@@ -129,10 +129,12 @@ void DispVAB(char plr,char pad)
   fout=sOpen("VAB.IMG","rb",0);
   fread(&M,sizeof M,1,fout);
 	SwapWord(M.fSize);
-  if (plr==1) {fseek(fout,M.fSize,SEEK_CUR);fread(&M,sizeof M,1,fout);}
-	SwapWord(M.fSize);
+  if (plr==1) {
+		fseek(fout,M.fSize,SEEK_CUR);
+		fread(&M,sizeof M,1,fout);	
+		SwapWord(M.fSize);
+}
   memcpy(pal,M.pal,768);
-	SwapPal(pal);
   fread((char *)screen,(long)M.fSize,1,fout);
   fclose(fout);
   PCX_D((char *)screen,vhptr.vptr,M.fSize);

@@ -1,3 +1,6 @@
+#ifndef __DATA_H__
+#define __DATA_H__
+
 /*
     Copyright (C) 2005 Michael K. McCarty & Fritz Bronner
 
@@ -489,6 +492,22 @@ enum SpacePortOverlays
   PORT_Tracking,			// 33 Tracking Station
   PORT_SVHQ,				// 34 Strategic Visions H.Q.
 };
+
+// Typical size/offset file header used for image files
+typedef struct _simpleheader {
+  ui16 size;
+  ui32 offset;
+} SimpleHdr;
+
+// Typical 
+typedef struct _patch {
+  i16 w;
+  i16 h;
+  ui16 size;
+  ui32 offset;
+} PatchHdr;
+
+#endif // __DATA_H__
 
 // Editor settings {{{
 // ex: ts=4 noet sw=2 

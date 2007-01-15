@@ -94,7 +94,7 @@ void SetEvents(void)
    fout=sOpen("EVENT.TMP","wb",1);
    memset(&oNews,0x00,sizeof oNews);
    for (j=0;j<84;j++)
-   fwrite(&oNews,sizeof (struct oldNews),1,fout);
+		 fwrite(&oNews,sizeof (struct oldNews),1,fout);
    fclose(fout);
 
   return;

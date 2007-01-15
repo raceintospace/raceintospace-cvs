@@ -346,8 +346,6 @@ void AI_Begin(char plr)
   RLED_img((char *)screen,vhptr.vptr,(unsigned int)len[0],
 	   vhptr.w,vhptr.h);
 
-	SwapPal(pal);
-
   gxClearDisplay(0,0); ShBox(0,60,319,80);
   grSetColor(6+plr*3);
   if (plr==0) DispBig(15,64,"DIRECTOR OF THE UNITED STATES",0,-1);

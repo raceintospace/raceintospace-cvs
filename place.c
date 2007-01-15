@@ -30,7 +30,7 @@ void BCDraw(int y)
 
 int MChoice(char qty,char *Name)
 {
-	struct Patch {i16 w,h;ui16 size;ui32 offset;} P;
+	PatchHdr P;
 	GXHEADER local,local2;
 	int starty,coff;
 	int i,j;
@@ -56,16 +56,10 @@ int MChoice(char qty,char *Name)
 
 	in=sOpen("BEGGAM.BUT","rb",0);
 	poff=0;coff=128;
-	SwapPal(pal);
 	fread(&pal[coff*3],384,1,in);
 	fseek(in,(poff)*(sizeof P),SEEK_CUR);
 	fread(&P,sizeof P,1,in);
-
-	SwapPal(pal);
-	SwapWord(P.w);
-	SwapWord(P.h);
-	SwapWord(P.size);
-	SwapLong(P.offset);
+	SwapPatchHdr(&P);
 
 	fseek(in,P.offset,SEEK_SET);
 	GV(&local,P.w,P.h); 
@@ -191,18 +185,15 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
      * my data files are corrupted. For correct data behavior is not
      * changed.
      */
-  struct Patch {char w,h;ui16 size;long offset;} P;
+	PatchHdr P;
   GXHEADER local,local2;
   unsigned int j, do_fix = 0;
   FILE *in;
   in=sOpen("PATCHES.BUT","rb",0);
-	SwapPal(pal);
   fread(&pal[coff*3],96,1,in);
-	SwapPal(pal);
   fseek(in,(50*plr+prog*10+poff)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
-	SwapWord(P.size);
-	SwapLong(P.offset);
+	SwapPatchHdr(&P);
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size)
   {
@@ -247,9 +238,7 @@ AstFaces(char plr, int x, int y, char face)
 	memset(&pal[192], 0x00, 192);
 	fin = sOpen("FACES.BUT", "rb", 0);
 	fseek(fin, 87 * sizeof(long), SEEK_SET);
-	SwapPal(pal);
 	fread(&pal[192], 96, 1, fin);
-	SwapPal(pal);
 	face_offset = ((int)face) * sizeof(i32);
 	fseek(fin, face_offset, SEEK_SET);	// Get Face
 	fread(&offset, sizeof(long), 1, fin);
@@ -293,21 +282,18 @@ AstFaces(char plr, int x, int y, char face)
 
 void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
 {
-  struct Patch {char w,h;ui16 size;long offset;} P;
+  PatchHdr P;
   GXHEADER local,local2;
   unsigned int j;
   int do_fix = 0;
   FILE *in;
 
   in=sOpen("MHIST.BUT","rb",0);
-	SwapPal(pal);
   fread(&pal[coff*3],64*3,1,in);
-	SwapPal(pal);
   if (planet>0) fseek(in,(planet-1)*(sizeof P),SEEK_CUR);
   else fseek(in,(7+plr*8+prog)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
-	SwapWord(P.size);
-	SwapLong(P.offset);
+	SwapPatchHdr(&P);
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size) {
       fprintf(stderr, "SmHardMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
@@ -340,10 +326,7 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
 
 void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff)
 {
-  struct GO {
-   ui16 size;
-   long offset;
-  } table;
+	SimpleHdr table;
   char ch;
   GXHEADER local,local2;
   long size;
@@ -364,13 +347,10 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       in=sOpen("RDFULL.BUT","rb",0);
       fseek(in,size*(sizeof table),SEEK_CUR);
       fread(&table,sizeof table,1,in);
-			SwapWord(table.size);
-			SwapLong(table.offset);
+			SwapSimpleHdr(&table);
       fseek(in,table.offset,SEEK_SET);
       GV(&local,104,77);GV(&local2,104,77);
-			SwapPal(pal);
       fread(&pal[coff*3],96*3,1,in);  // Individual Palette
-			SwapPal(pal);
       fread(local2.vptr,table.size,1,in);  // Get Image
       fclose(in);
       RLED_img(local2.vptr,local.vptr,table.size,local.w,local.h);
@@ -415,9 +395,7 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       fread(&AHead,sizeof AHead,1,fin);
 			SwapWord(AHead.w);
 			SwapWord(AHead.h);
-			SwapPal(pal);
       fread(&pal[coff*3],64*3,1,fin);
-			SwapPal(pal);
       fseek(fin,3*(AHead.cNum-64),SEEK_CUR);
       GV(&local,AHead.w,AHead.h);
 

@@ -74,7 +74,6 @@ void DrawFuture(char plr,int mis,char pad)
   fclose(fin);
   RLED_img((char *)screen,(char *)vhptr.vptr,sz,vhptr.w,vhptr.h);
   gxClearDisplay(0,0);
-	SwapPal(pal);
 
   gr_sync ();
 

@@ -77,7 +77,6 @@ void DrawControl(char plr)
   }
   fread(vhptr.vptr,len,1,fin);fclose(fin);
   PCX_D((char *)vhptr.vptr,(char *)screen,(unsigned) len);
-	SwapPal(pal);
 }
 
 void SetW(char ch)
