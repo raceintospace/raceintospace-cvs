@@ -20,8 +20,7 @@ gxCreateVirtual (int mode, GXHEADER *hp,
 	memset (hp, 0, sizeof *hp);
 	hp->w = w;
 	hp->h = h;
-	hp->vptr = malloc (w * h);	// TODO use guarded malloc
-	assert(hp->vptr);
+	hp->vptr = xmalloc(w * h);
 	return gxSUCCESS;
 }
 

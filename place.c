@@ -478,7 +478,7 @@ int Help(char *FName)
 	Swap16bit(Pul.size);
 
   AL_CALL=1;
-  Help=(char *) farmalloc(Pul.size);
+  Help=xmalloc(Pul.size);
   fseek(fin,Pul.offset,SEEK_SET);
   fread(Help,Pul.size,1,fin);
   fclose(fin);
@@ -493,7 +493,7 @@ int Help(char *FName)
       fsize=10*(Help[i]-0x30)+(Help[i+1]-0x30)+1;
       bot=fsize;
 
-      NTxt=(char *)farmalloc((unsigned int) (42*fsize));
+      NTxt=xmalloc((unsigned int) (42*fsize));
       if (NTxt==NULL) CloseEmUp(0,112);  // locks on this line
       memset(NTxt,0x00,(unsigned int)(42*fsize));
       j=line*42;  // should be 0
@@ -513,7 +513,7 @@ int Help(char *FName)
       j=line*42;
       }
    }
-  farfree(Help);
+  free(Help);
 
   key=0;
   GV(&local,250,128);
@@ -585,7 +585,7 @@ int Help(char *FName)
   }
   
   gxPutImage(&local,gxSET,34,32,0);
-  farfree(NTxt);
+  free(NTxt);
   DV(&local);
   
   AL_CALL=0;

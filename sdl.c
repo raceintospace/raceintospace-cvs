@@ -211,8 +211,8 @@ av_setup (int *argcp, char ***argvp)
 
 	atexit(SDL_Quit);
 
-	screen	 = calloc(MAX_X*MAX_Y, 1);
-	screen_2 = calloc(MAX_X*MAX_Y, 1);
+	screen	 = xcalloc(MAX_X*MAX_Y, 1);
+	screen_2 = xcalloc(MAX_X*MAX_Y, 1);
 
 	if (SDL_InitSubSystem (SDL_INIT_AUDIO < 0)) {
 		printf ("no audio\n");

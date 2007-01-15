@@ -1,8 +1,16 @@
+2007-01-15  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V96
+
+	* Removed farmalloc() & farfree(). Now x{m,c,re}alloc() used everywhere.
+
+	* 8, 16 and 32 bit wide datatypes now taken from autoheader int_types.h
+
 2007-01-15  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V95
 
-	*	Renamed the Endian swapping functions
+	* Renamed the Endian swapping functions
 
 2007-01-15  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 

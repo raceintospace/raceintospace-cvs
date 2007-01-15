@@ -358,26 +358,15 @@ int main(int argc, char *argv[])
 
   LOAD=QUIT=0;
 
-  if ((screen = malloc (128 * 1024)) == NULL) {
-	  fprintf (stderr, "can't alloc screen memory\n");
-	  exit (1);
-  }
+  screen = xmalloc(128 * 1024);
 
   xMODE=0;
 
   xMODE|=xMODE_NOCOPRO;
 
-  Data=(struct Players *)farmalloc(sizeof (struct Players) + 1);
-  if (Data==NULL) {
-    printf("Out of Memory allocating DATA struture.\n");
-	exit(0);
-  };
+  Data = xmalloc(sizeof (struct Players) + 1);
+  buffer = xmalloc(BUFFER_SIZE);
 
-  buffer=(char *) farmalloc(BUFFER_SIZE);
-  if (buffer==NULL) {
-    printf("Out of Memory allocating Buffer structure.\n");
-    farfree(Data);exit(0);
-  };
   printf ("main buffer %p (%d)\n", buffer, BUFFER_SIZE);
 
   memset(buffer,0x00,BUFFER_SIZE);

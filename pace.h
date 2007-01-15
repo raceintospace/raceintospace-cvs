@@ -93,8 +93,6 @@ typedef struct {
 	int dummy;
 } *HTIMER;
 
-void *farmalloc (int len);
-void farfree (void *p);
 int getdisk (void);
 void getcurdir (int drive, char *buf);
 

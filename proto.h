@@ -522,7 +522,7 @@ void AIEvent(char plr);
 char ResolveEvent(char plr);
 void Breakgrp(char plr);
 void PlayNewsAnim(void);
-void LoadNewsAnim(BYTE Index,BYTE Mode);
+void LoadNewsAnim(uint8_t Index,uint8_t Mode);
 void ShowEvt(char plr,char crd);
 
 

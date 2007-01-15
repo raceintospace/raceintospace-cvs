@@ -15,33 +15,33 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+#include "race.h"		// autoconf header
+#include "int_types.h"
+#include "pace.h"
 
 #ifndef ui8
-typedef unsigned char ui8;
+typedef uint8_t ui8;
 #endif
 
 #ifndef i8
-typedef char i8;
+typedef int8_t i8;
 #endif
 
 #ifndef ui16
-typedef unsigned short ui16;
+typedef uint16_t ui16;
 #endif
 
 #ifndef i16
-typedef short i16;
+typedef int16_t i16;
 #endif
 
 #ifndef ui32
-typedef unsigned long ui32;
+typedef uint32_t ui32;
 #endif
 
 #ifndef i32
-typedef long	i32;
+typedef int32_t i32;
 #endif
-
-#include "race.h"		// autoconf header
-#include "pace.h"
 
 #ifdef _WIN32
 #include <winsock2.h>

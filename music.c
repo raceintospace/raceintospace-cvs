@@ -39,16 +39,8 @@ get_music_file (char *name)
 		return (NULL);
 	}
 
-	if ((mp = calloc (1, sizeof *mp)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
-	}
-
-	if ((mp->name = strdup (name)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
-	}
-
+	mp = xcalloc(1, sizeof *mp);
+	mp->name = xstrdup (name);
 	mp->next = music_files;
 	music_files = mp;
 
@@ -62,13 +54,8 @@ get_music_file (char *name)
 		goto bad;
 	}
 
-        mp->size = ov_pcm_total(&vf, 0); /* output size in bytes */
-
-	if ((mp->buf = calloc (1, mp->size)) == NULL) {
-		fprintf (stderr, "out of memory\n");
-		exit (1);
-	}
-
+    mp->size = ov_pcm_total(&vf, 0); /* output size in bytes */
+	mp->buf = xcalloc(1, mp->size);
 	togo = mp->size;
 	offset = 0;
 

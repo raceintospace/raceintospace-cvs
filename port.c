@@ -764,10 +764,8 @@ void PortOutLine(unsigned int Count,ui16 *outline,char mode)
 {
   unsigned int i;
 
-	if (pPortOutlineRestore)
-		free(pPortOutlineRestore);
-			
-	pPortOutlineRestore=(PORTOUTLINE *)  malloc((sizeof (PORTOUTLINE))*Count);
+	pPortOutlineRestore = xrealloc(pPortOutlineRestore,
+            sizeof(PORTOUTLINE) * Count);
 	
 	for (i=0;i<Count;i++) {
    if (mode==1) {		// Save value from the screen 

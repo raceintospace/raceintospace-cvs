@@ -28,5 +28,4 @@
   extern long xMODE;
   extern char *S_Name[];
   extern int cdROM,hDISK;
-  extern BYTE *ems;
   extern int screen_dirty;

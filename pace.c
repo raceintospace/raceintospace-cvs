@@ -41,20 +41,6 @@ getdisk (void)
 	return ('C' - 'A');
 }
 
-void *
-farmalloc (int len)
-{
-	return xmalloc((size_t) len);
-}
-
-void
-farfree (void *p)
-{
-	if (p)
-		free (p);
-}
-
-
 char *
 slurp_gamedat (char *name)
 {
@@ -80,8 +66,6 @@ slurp_gamedat (char *name)
 }
 
 char *letter_dat;
-
-
 
 void
 OpenEmUp(void)
@@ -449,7 +433,7 @@ frm_open (char *filename)
 	if ((fin = fopen (filename, "rb")) == NULL)
 		return (NULL);
 
-	frm = xcalloc (1, sizeof *frm);
+	frm = xcalloc(1, sizeof *frm);
 
 	frm->fin = fin;
 	frm->next_frame_chunks = 8;

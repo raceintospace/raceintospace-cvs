@@ -523,7 +523,7 @@ void VAB(char plr)
   FILE* file;
   int MI_size = sizeof (struct MDA) * 28 * 2;
 
-  MI = farmalloc(MI_size);
+  MI = xmalloc(MI_size);
   file = sOpen("VTABLE.DAT", "rb", 0);
   fread(MI, MI_size, 1, file);
   fclose(file);
@@ -548,7 +548,7 @@ begvab:
   {
      Vab_Spot = (Data->P[plr].Mission[0].Hard[Mission_PrimaryBooster] > 0) ? 1 : 0;
      KillMusic();
-     farfree(MI); 
+     free(MI); 
      return;
   };
 

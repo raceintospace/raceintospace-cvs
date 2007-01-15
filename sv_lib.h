@@ -24,29 +24,29 @@
 // Standard definitions
 
 #ifndef BYTE 
-#define BYTE unsigned char
+#define BYTE int8_t
 #endif
 #ifndef WORD
-#define WORD unsigned short
+#define WORD int16_t
 #endif
 #ifndef LONG
-#define LONG unsigned long
+#define LONG int32_t
 #endif
 
 #ifndef UBYTE
-#define UBYTE unsigned char
+#define UBYTE int8_t
 #endif
 
 #ifndef SBYTE
-#define SBYTE char
+#define SBYTE uint8_t
 #endif
 
 #ifndef UWORD
-#define UWORD unsigned short;
+#define UWORD uint16_t
 #endif
 
 #ifndef SWORD
-#define SWORD short;
+#define SWORD int16_t
 #endif
 
 #define TXT 0x03
