@@ -109,32 +109,28 @@ GXHEADER flaggy;
 // SPOT structures and data structure variables
 
 struct mSPOT {    // Main SPOT Header
-  char ID[40];    // Copyright notice
-  ui8 Qty;       // Number of Paths
-  ui32 sOff;      // Spot Offsets
-  ui32 pOff;      // Path Offsets
+  uint8_t ID[40];    // Copyright notice
+  uint8_t Qty;       // Number of Paths
+  uint32_t sOff;      // Spot Offsets
+  uint32_t pOff;      // Path Offsets
 } MSPOT;
 
 struct sPATH {       // Spot Anim Path Struct
-  ui16 Image;        // Which image to Use
-  i16  xPut,yPut;    // Where to place this image
-  i16 iHold;         // Repeat this # times
+  uint16_t Image;        // Which image to Use
+  int16_t  xPut,yPut;    // Where to place this image
+  int16_t iHold;         // Repeat this # times
   float Scale;       // Scale object
 };
 
 struct sIMG {
-  ui8 w,h;    // Width and Height
+  uint8_t w,h;    // Width and Height
 };
 
-struct headSPOT {
-   ui16 size;
-   ui32 offset;
-};
 
 
 i16 sCount,Vab_Spot;        // sCount is the number of steps
 FILE *sFin;
-struct headSPOT hSPOT;  // Filled by Seek_sOff();
+SimpleHdr hSPOT;  // Filled by Seek_sOff();
 struct sPATH sPath,sPathOld;
 struct sIMG sImg,sImgOld;
 ui32 pTable,pLoc;
@@ -144,8 +140,7 @@ void Seek_sOff(int where)
 {
   fseek(sFin,where*(sizeof hSPOT)+(MSPOT.sOff),SEEK_SET);
   fread(&hSPOT,sizeof hSPOT,1,sFin);
-	SwapWord(hSPOT.size);
-	SwapLong(hSPOT.offset);
+	SwapSimpleHdr(&hSPOT);
   fseek(sFin,hSPOT.offset,SEEK_SET);
 }
 
@@ -153,7 +148,7 @@ void Seek_pOff(int where)
 {
   fseek(sFin,where*(sizeof pTable)+(MSPOT.pOff),SEEK_SET);
   fread(&pTable,sizeof pTable,1,sFin);
-	SwapLong(pTable);
+	Swap32bit(pTable);
   fseek(sFin,pTable,SEEK_SET);
 }
 
@@ -182,13 +177,13 @@ void SpotCrap(char loc,char mode)
    if (mode==SPOT_LOAD) {   // Open File
       sFin=sOpen("SPOTS.CDR","rb",0);
       fread(&MSPOT,sizeof MSPOT,1,sFin);    // Read Header
-			SwapLong(MSPOT.sOff);
-			SwapLong(MSPOT.pOff);
+			Swap32bit(MSPOT.sOff);
+			Swap32bit(MSPOT.pOff);
 
       Seek_pOff(loc);  // go to correct path
       fread(&PName,sizeof PName,1,sFin);
       fread(&sCount,sizeof sCount,1,sFin);  // get number of paths parts
-			SwapWord(sCount);
+			Swap16bit(sCount);
       pLoc=ftell(sFin);
       sPath.iHold=1;
       memcpy(vhptr.vptr,screen,64000);
@@ -200,14 +195,14 @@ void SpotCrap(char loc,char mode)
       fseek(sFin,pLoc,SEEK_SET);       // position at next path
       fread(&sPath,sizeof(sPath),1,sFin);  // get the next sPath struct
 			
-			SwapWord(sPath.Image);
-			SwapWord(sPath.xPut);
-			SwapWord(sPath.yPut);
-			SwapWord(sPath.iHold);
+			Swap16bit(sPath.Image);
+			Swap16bit(sPath.xPut);
+			Swap16bit(sPath.yPut);
+			Swap16bit(sPath.iHold);
 			
 #ifdef __BIG_ENDIAN__
 			xx = *(ui32*)(&sPath.Scale);	
-			SwapLong(xx);
+			Swap32bit(xx);
 			*((ui32*) &sPath.Scale) = xx;
 #endif
 
@@ -386,11 +381,11 @@ void PortPlace(FILE * fin,long table)
 
   fseek(fin,table,SEEK_SET);
   fread(&Img,sizeof Img,1,fin);
-	SwapLong(Img.Size);
-	SwapWord(Img.Width);
-	SwapWord(Img.Height);
-	SwapWord(Img.PlaceX);
-	SwapWord(Img.PlaceY);
+	Swap32bit(Img.Size);
+	Swap16bit(Img.Width);
+	Swap16bit(Img.Height);
+	Swap16bit(Img.PlaceX);
+	Swap16bit(Img.PlaceY);
 
 //  if (need_to_fix_width (table))
 //	  Img.Width++;
@@ -412,7 +407,7 @@ void PortPal(char plr)
   FILE *fin;
   fin=sOpen((plr==0)?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
   fread(&PHead,sizeof PHead,1,fin);
-	SwapLong(PHead.oPal);
+	Swap32bit(PHead.oPal);
   fseek(fin,PHead.oPal,SEEK_SET);
   fread(&pal[0],768,1,fin);
   fclose(fin);
@@ -434,13 +429,13 @@ void DrawSpaceport(char plr)
   fin=sOpen((plr==0) ?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
 
   fread(&PHead,sizeof PHead,1,fin);
-	SwapLong(PHead.oMObj);
-	SwapLong(PHead.oTab);
-	SwapLong(PHead.oPal);
-	SwapLong(PHead.oPort);
-	SwapLong(PHead.oMse);
-	SwapLong(PHead.oOut);
-	SwapLong(PHead.oAnim);
+	Swap32bit(PHead.oMObj);
+	Swap32bit(PHead.oTab);
+	Swap32bit(PHead.oPal);
+	Swap32bit(PHead.oPort);
+	Swap32bit(PHead.oMse);
+	Swap32bit(PHead.oOut);
+	Swap32bit(PHead.oAnim);
 
   fread(&MObj[0],sizeof MObj,1,fin);
 #ifdef __BIG_ENDIAN__
@@ -450,10 +445,10 @@ void DrawSpaceport(char plr)
 		{
 			for (k = 0; k < 4; k++)
 			{
-				SwapWord(MObj[i].Reg[j].CD[k].x1);
-				SwapWord(MObj[i].Reg[j].CD[k].x2);
-				SwapWord(MObj[i].Reg[j].CD[k].y1);
-				SwapWord(MObj[i].Reg[j].CD[k].y2);
+				Swap16bit(MObj[i].Reg[j].CD[k].x1);
+				Swap16bit(MObj[i].Reg[j].CD[k].x2);
+				Swap16bit(MObj[i].Reg[j].CD[k].y1);
+				Swap16bit(MObj[i].Reg[j].CD[k].y2);
 			}
 		}
 	}
@@ -462,7 +457,7 @@ void DrawSpaceport(char plr)
   fread(&table[0],sizeof table,1,fin);
 #ifdef __BIG_ENDIAN__
 	for (i = 0; i< S_QTY; i++)
-		SwapLong(table[i]);
+		Swap32bit(table[i]);
 #endif
 
   fseek(fin,PHead.oPal,SEEK_SET);
@@ -470,11 +465,11 @@ void DrawSpaceport(char plr)
 
   fseek(fin,table[0],SEEK_SET);
   fread(&Img,sizeof Img,1,fin);  // Read in main image Header
-	SwapLong(Img.Size);
-	SwapWord(Img.Width);
-	SwapWord(Img.Height);
-	SwapWord(Img.PlaceX);
-	SwapWord(Img.PlaceY);
+	Swap32bit(Img.Size);
+	Swap16bit(Img.Width);
+	Swap16bit(Img.Height);
+	Swap16bit(Img.PlaceX);
+	Swap16bit(Img.PlaceY);
   fread((char *)screen,Img.Size,1,fin);  // Read in main image
 
   UpdatePortOverlays();
@@ -869,17 +864,17 @@ int idx = 0;
 
   fin=sOpen((plr==0)?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
   fread(&PHead,sizeof PHead,1,fin);
-	SwapLong(PHead.oMObj);
-	SwapLong(PHead.oTab);
-	SwapLong(PHead.oPal);
-	SwapLong(PHead.oPort);
-	SwapLong(PHead.oMse);
-	SwapLong(PHead.oOut);
-	SwapLong(PHead.oAnim);
+	Swap32bit(PHead.oMObj);
+	Swap32bit(PHead.oTab);
+	Swap32bit(PHead.oPal);
+	Swap32bit(PHead.oPort);
+	Swap32bit(PHead.oMse);
+	Swap32bit(PHead.oOut);
+	Swap32bit(PHead.oAnim);
   fseek(fin,PHead.oOut,SEEK_SET);
   fread(&stable[0],sizeof stable,1,fin);
 	for (i=0; i< 55; i++) {
-		SwapLong(stable[i]);
+		Swap32bit(stable[i]);
 	}
   if (plr==0 && Data->Year>65) PortText(5,196,"CAPE KENNEDY",12);
   else if (plr==0) PortText(5,196,"THE CAPE",12);
@@ -958,11 +953,11 @@ int idx = 0;
           if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
                fread(&Count,sizeof (ui16),1,fin);
-								SwapWord(Count);
+								Swap16bit(Count);
                fread(bone,Count*sizeof (ui16),1,fin);
 #ifdef __BIG_ENDIAN__
 								for (idx = 0; idx < Count; idx++)
-								 SwapWord(bone[idx]);
+								 Swap16bit(bone[idx]);
 #endif
                PortOutLine(Count,bone,1);
                strncpy(&IDT[1],MObj[i].Help,3);
@@ -1106,11 +1101,11 @@ int idx = 0;
                  if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                     fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
                     fread(&Count,sizeof (ui16),1,fin);
-										SwapWord(Count);
+										Swap16bit(Count);
 										fread(bone,Count*sizeof (ui16),1,fin);
 #ifdef __BIG_ENDIAN__
 										for (idx = 0; idx < Count; idx++)
-											SwapWord(bone[idx]);
+											Swap16bit(bone[idx]);
 #endif
                     //pPortOutlineRestore = (PORTOUTLINE *) malloc((sizeof (PORTOUTLINE))*Count);
                     PortOutLine(Count,bone,1);

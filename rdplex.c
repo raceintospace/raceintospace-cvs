@@ -42,25 +42,25 @@ void SRPrintAt(int x, int y, char *text,char fgd,char bck)
 void Load_RD_BUT(char plr)
 {
   FILE *fin;
-  struct {char na[4];unsigned long size;} Boo;
+  struct {char na[4];uint32_t size;} Boo;
   if (BUTLOAD==1) return;
   GV(&but,282,61);
   GV(&mans,119,17);
 
   fin=sOpen("RDBOX.BUT","rb",0);
   fread(&Boo,sizeof Boo,1,fin);
-	SwapLong(Boo.size);
+	Swap32bit(Boo.size);
 
   if (plr==1)
     while( strncmp("SBUT",&Boo.na[0],4)!=0) {
       fseek(fin,Boo.size,SEEK_CUR);
       fread(&Boo,sizeof Boo,1,fin);
-			SwapLong(Boo.size);
+			Swap32bit(Boo.size);
     }
   fread((char *)buffer,Boo.size,1,fin);
   RLED_img((char *)buffer,(char *)but.vptr,Boo.size,but.w,but.h);
   fread(&Boo,sizeof Boo,1,fin);
-	SwapLong(Boo.size);
+	Swap32bit(Boo.size);
   fread((char *)buffer,Boo.size,1,fin); fclose(fin);
   RLED_img((char *)buffer,mans.vptr,Boo.size,mans.w,mans.h);
   BUTLOAD=1;

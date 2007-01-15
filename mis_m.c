@@ -45,15 +45,15 @@ void GetFailStat(struct XFails *Now,char *FName,int rnum)
   fin=sOpen("FAILS.CDR","rb",0);
   count=44;
   fread(&count,sizeof count,1,fin);  // never written to file
-	SwapLong(count);
+	Swap32bit(count);
   fread(&Pul,sizeof Pul,1,fin);
-	SwapLong(Pul.offset);
-	SwapWord(Pul.size);
+	Swap32bit(Pul.offset);
+	Swap16bit(Pul.size);
   i=0;
   while (strncmpi(Pul.Code,FName,4)!=0 && i<count) {
      fread(&Pul,sizeof Pul,1,fin);
-		 SwapLong(Pul.offset);
-		 SwapWord(Pul.size);
+		 Swap32bit(Pul.offset);
+		 Swap16bit(Pul.size);
      i++;
   }
   if (i==count) {fclose(fin);return;}
@@ -63,18 +63,18 @@ void GetFailStat(struct XFails *Now,char *FName,int rnum)
 	if (rnum<0) { // Unmanned portion
 	  do {
 	     fread(Now,sizeof (struct XFails),1,fin);
-				SwapLong(Now->per);	// Only need to swap this one since we're checking only that
+				Swap32bit(Now->per);	// Only need to swap this one since we're checking only that
 				
 	  } while (Now->per!=rnum);
 	}
   else {
 	  do {
 	     fread(Now,sizeof (struct XFails),1,fin);
-				SwapLong(Now->per);
-				SwapWord(Now->code);
-				SwapWord(Now->val);
-				SwapWord(Now->xtra);
-				SwapWord(Now->fail);
+				Swap32bit(Now->per);
+				Swap16bit(Now->code);
+				Swap16bit(Now->val);
+				Swap16bit(Now->xtra);
+				Swap16bit(Now->fail);
 	  } while (Now->per<=rnum);
 	};
 

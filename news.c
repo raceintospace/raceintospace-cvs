@@ -119,7 +119,7 @@ void OpenNews(char plr,char *buf,int bud)
 
 	for (i = 0; i< 5; i++)
 	{
-		SwapLong(len[i]);
+		Swap32bit(len[i]);
 	}
 
   i=0;
@@ -755,8 +755,8 @@ void LoadNewsAnim(ui8 Index,ui8 Mode)
 
 	for (i = 0; i< 12; i++)
 	{
-		SwapLong(god[i].size);
-		SwapLong(god[i].offset);
+		Swap32bit(god[i].size);
+		Swap32bit(god[i].offset);
 	}
 
 	totnews_offset = god[Index].offset;
@@ -767,8 +767,8 @@ void LoadNewsAnim(ui8 Index,ui8 Mode)
 
 	for (i=0; i< aChart.frames; i++)
 	{
-		SwapWord(table[i].size);
-		SwapLong(table[i].offset);
+		Swap16bit(table[i].size);
+		Swap32bit(table[i].offset);
 	}
 
 	fread(&pal[96],1,672,out);
@@ -923,8 +923,8 @@ void ShowEvt(char plr,char crd)
   fseek(ffin,(plr*115+crd)*(sizeof MM),SEEK_SET);
   fread(&MM,sizeof MM,1,ffin);
 
-	SwapLong(MM.off);	
-	SwapLong(MM.size);
+	Swap32bit(MM.off);	
+	Swap32bit(MM.size);
   
   if (MM.off!=0) {
     fseek(ffin,MM.off,SEEK_SET);

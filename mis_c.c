@@ -253,8 +253,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		if (i==49) err=1;
 
 		if (err==0) {
-			SwapLong(F[i].foffset);
-			SwapWord(F[i].size);
+			Swap32bit(F[i].foffset);
+			Swap16bit(F[i].size);
 			offset=F[i].foffset; 
 			fseek(fin,offset,SEEK_SET);
 			fread(&vhptr.vptr[35000],F[i].size,1,fin);
@@ -289,8 +289,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			j=0;
 		} else {
 			fin=sOpen(FSEQ_DAT,"rb",0);
-			SwapLong(F[0].foffset);
-			SwapWord(F[0].size);
+			Swap32bit(F[0].foffset);
+			Swap16bit(F[0].size);
 			offset=F[0].foffset; 
 			fseek(fin,offset,SEEK_SET);
 			fread(&vhptr.vptr[35000],F[0].size,1,fin);
@@ -366,7 +366,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		for (i=0;i<CLIF_TABLE;i++)	{
             int ii;
 			for (ii=0;ii<10;ii++)
-				SwapWord(Mob[i].List[ii]);
+				Swap16bit(Mob[i].List[ii]);
 		}
 #endif
 		Mob2=(struct OF *)&buffer[15000];
@@ -376,7 +376,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 #ifdef __BIG_ENDIAN__
 		for (i=0;i<SCND_TABLE;i++) 
-			SwapWord(Mob2[i].idx);
+			Swap16bit(Mob2[i].idx);
 #endif
 
 		for (i=0;i<SCND_TABLE;i++) Mob2[i].Name[strlen(Mob2[i].Name)-3]='_'; // patch
@@ -389,7 +389,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		{
 			int j;
 			for (j=0;j<10;j++)
-				SwapWord(Mob[i].List[j]);
+				Swap16bit(Mob[i].List[j]);
 		}
 #endif
 	}
@@ -415,8 +415,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			sidx = cSeq.oLIST[i].sIdx;
 		}
 
-		SwapWord(aidx);
-		SwapWord(sidx);
+		Swap16bit(aidx);
+		Swap16bit(sidx);
 
 		
 		if (sidx)
@@ -960,13 +960,13 @@ FILE *OpenAnim(char *fname)
    while (strncmp(AIndex.ID,fname,4)!=0) {
       fread(&AIndex,sizeof AIndex,1,fin);
       }
-			SwapLong(AIndex.offset);
-			SwapLong(AIndex.size);
+			Swap32bit(AIndex.offset);
+			Swap32bit(AIndex.size);
    fseek(fin,AIndex.offset,SEEK_SET);
 
       fread(&AHead,sizeof AHead,1,fin);
-			SwapWord(AHead.w);
-			SwapWord(AHead.h);
+			Swap16bit(AHead.w);
+			Swap16bit(AHead.h);
       fread(&pal[AHead.cOff*3],AHead.cNum*3,1,fin);
       aLoc=ftell(fin);
       tFrames=AHead.fNum;
@@ -997,7 +997,7 @@ int StepAnim(int x,int y,FILE *fin)
       }
    if (cFrame<tFrames) {
 	   fread(&BHead,sizeof BHead,1,fin);
-		 SwapLong(BHead.fSize);
+		 Swap32bit(BHead.fSize);
 	   fread(vhptr.vptr,BHead.fSize,1,fin);
 	   switch(BHead.cType) {
 		   case 0: memcpy(dply.vptr,vhptr.vptr,BHead.fSize); mode=gxSET;break;

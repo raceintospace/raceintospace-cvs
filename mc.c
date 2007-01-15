@@ -68,12 +68,12 @@ void DrawControl(char plr)
   fin=sOpen("CONTROL.IMG","rb",0);
   fread(pal,768,1,fin);
   fread(&len,4,1,fin);
-	SwapLong(len);
+	Swap32bit(len);
   if (plr==1) {
     fseek(fin,len,SEEK_CUR);
     fread(pal,768,1,fin);
     fread(&len,4,1,fin);
-		SwapLong(len);
+		Swap32bit(len);
   }
   fread(vhptr.vptr,len,1,fin);fclose(fin);
   PCX_D((char *)vhptr.vptr,(char *)screen,(unsigned) len);

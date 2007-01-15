@@ -121,11 +121,11 @@ void Credits(void)
   
   fread(pal,768,1,fin);
   fread(&len,4,1,fin);
-	SwapLong(len);
+	Swap32bit(len);
   fseek(fin,len,SEEK_CUR);
   fread(pal,768,1,fin);
   fread(&len,4,1,fin);
-	SwapLong(len);
+	Swap32bit(len);
   fread(vhptr.vptr,len,1,fin);
   fclose(fin);
 
@@ -190,7 +190,7 @@ read_img_frame (FILE *inf, struct intro_image *ip)
 	if (fread (&len, 4, 1, inf) != 1)
 		goto bad;
 
-	SwapLong(len);
+	Swap32bit(len);
 
 	if (len > sizeof compressed) {
 		fprintf (stderr, "frame too big\n");

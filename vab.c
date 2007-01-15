@@ -118,8 +118,8 @@ void DispVAB(char plr,char pad)
 {
   FILE *fout;
   struct bImg {
-    unsigned char pal[768];
-    ui16 fSize;
+    uint8_t pal[768];
+    uint16_t fSize;
   } M;
 
   strcpy(IDT,"i016");strcpy(IKEY,"k016");
@@ -128,11 +128,11 @@ void DispVAB(char plr,char pad)
 
   fout=sOpen("VAB.IMG","rb",0);
   fread(&M,sizeof M,1,fout);
-	SwapWord(M.fSize);
+	Swap16bit(M.fSize);
   if (plr==1) {
 		fseek(fout,M.fSize,SEEK_CUR);
 		fread(&M,sizeof M,1,fout);	
-		SwapWord(M.fSize);
+		Swap16bit(M.fSize);
 }
   memcpy(pal,M.pal,768);
   fread((char *)screen,(long)M.fSize,1,fout);
@@ -531,11 +531,11 @@ void VAB(char plr)
 #ifdef __BIG_ENDIAN__
 	for (i = 0; i< 2*28; i++)
 {
-		SwapWord(MI[i].x1);
-		SwapWord(MI[i].y1);
-		SwapWord(MI[i].x2);
-		SwapWord(MI[i].y2);
-		SwapWord(MI[i].o);
+		Swap16bit(MI[i].x1);
+		Swap16bit(MI[i].y1);
+		Swap16bit(MI[i].x2);
+		Swap16bit(MI[i].y2);
+		Swap16bit(MI[i].o);
 }
 #endif
 

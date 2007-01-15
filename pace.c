@@ -582,8 +582,8 @@ void
 NGetVoice(char plr,char val)
 {
 	struct TM {
-		long offset;
-		long size;
+		int32_t offset;
+		int32_t size;
 	} ABSnd;
 
 	FILE *mvfile;
@@ -599,12 +599,12 @@ NGetVoice(char plr,char val)
 	fseek(mvfile,val*(sizeof ABSnd),SEEK_SET);
 	fread(&ABSnd,sizeof ABSnd,1,mvfile);
 	
-	SwapLong(ABSnd.offset);
-	SwapLong(ABSnd.size);
+	Swap32bit(ABSnd.offset);
+	Swap32bit(ABSnd.size);
 
 	fseek(mvfile,ABSnd.offset,SEEK_SET);
 
-	printf ("offset %ld; size %ld\n", ABSnd.offset, ABSnd.size);
+	printf ("offset %d; size %d\n", ABSnd.offset, ABSnd.size);
 
 	soundbuf_alloc (ABSnd.size);
 

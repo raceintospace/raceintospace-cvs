@@ -1,3 +1,9 @@
+2007-01-15  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V95
+
+	*	Renamed the Endian swapping functions
+
 2007-01-15  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V94

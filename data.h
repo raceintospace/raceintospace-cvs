@@ -77,7 +77,7 @@ struct Defl {char Plr1,Plr2,Lev1,Lev2,Ast1,Ast2,Input,Anim,Music,Sound;};
 struct PrestType {
   char Add[4];     // 4&5 used for qty completed
   char Goal[2];    // Goal steps used for prest calculations
-  i16 Points[2];   // Total points earned
+  int16_t Points[2];   // Total points earned
   char Indec;      // the index for the first into .History[]
   char Place;      // Who got the prestige first.
   char mPlace;     // If you've done it at all
@@ -94,14 +94,14 @@ enum EquipmentIndex {
 typedef struct _Equipment {
   char Name[20];     // Name of Hardware
   char ID[2];        // EquipID "C0 C1 C2 C3 : Acts as Index
-	i16  Safety;        // current safety factor
-  i16  MisSaf;        // Safety During Mission
-	i16  MSF;           // used only to hold safety for docking kludge
+	int16_t  Safety;        // current safety factor
+  int16_t  MisSaf;        // Safety During Mission
+	int16_t  MSF;           // used only to hold safety for docking kludge
 	char Base;         // initial safety factor
-	i16  InitCost;    // Startup Cost of Unit
+	int16_t  InitCost;    // Startup Cost of Unit
 	char UnitCost;     // Individual Cost
-	i16  UnitWeight;    // Weight of the Item
-	i16  MaxPay;        // Maximum payload
+	int16_t  UnitWeight;    // Weight of the Item
+	int16_t  MaxPay;        // Maximum payload
 	char RDCost;       // Cost of R&D per roll
 	char Code;         // Equipment Code for qty scheduled
 	char Num;          // quantity in inventory
@@ -109,8 +109,8 @@ typedef struct _Equipment {
   char Seas;         // Seasons Program is Active
 	char Used;         // total number used in space
   char IDX[2];       // EquipID "C0 C1 C2 C3 : Acts as Index
-  i16  Steps;        // Program Steps Used
-	i16  Failures;     // number of program failures
+  int16_t  Steps;        // Program Steps Used
+	int16_t  Failures;     // number of program failures
 	char MaxRD;        // maximum R & D
 	char MaxSafety;    // maximum safety factor
 	char SMods;        // safety factor mods for next launch
@@ -178,7 +178,7 @@ struct Astros {
 	char Una;            // Unassigned flag
 	char Crew;           // Crew Assiciated in prog Assigm
 	char Task;           // What his job is in Flt Crew
-	i16  Prestige;       // Prestige Earned
+	int16_t  Prestige;       // Prestige Earned
 	char Days;           // Days in Space
 	char Medals;         // Medals Earned
 	char Save;           // Astro Saving Roll Percent
@@ -205,12 +205,12 @@ struct PastInfo {  // For Records of Missions
 	char Time;                       // Early / Late Flag
 	char Man[2][4];			         // Astros # involved in Mis
 	char Hard[2][5];                 // Set of hardware
-	ui16 result;             // Success / Failure
-	ui16 spResult;           // Actual deciding Result
+	uint16_t result;             // Success / Failure
+	uint16_t spResult;           // Actual deciding Result
 	char Event;                      // Single event code
   char Saf;                        // Safety of the Equipment for delays
 	char Part;                       // Participant in event code
-	i16  Prestige;			            // Prestige Earned on this Mission
+	int16_t  Prestige;			            // Prestige Earned on this Mission
 	char Duration;			            // Length of Mission (units:ABCDEF)
 };
 
@@ -220,13 +220,13 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char Level;                      // Level of Play
 	short Cash;                      // Current Cash on Hand
 	short Budget;                    // Next Season's Budget
-	i16 Prestige;                    // Prestige Earned
-	i16 PrestHist[5][2];             // Prestige History array
-	i16 PresRev[5];                  // Pres. Review History
-	i16 tempPrestige[2];		         // Holds this and prev prestige
+	int16_t Prestige;                    // Prestige Earned
+	int16_t PrestHist[5][2];             // Prestige History array
+	int16_t PresRev[5];                  // Pres. Review History
+	int16_t tempPrestige[2];		         // Holds this and prev prestige
 	short BudgetHistory[40];         // Record of Last 40 Budgets
 	short BudgetHistoryF[40];        // Record of Last 40 Budgets
-	i16 Spend[5][4];                 // Record of last 5 seasons spending
+	int16_t Spend[5][4];                 // Record of last 5 seasons spending
 					                     //  of each equip type
 	char RDMods;                     // R & D Mods for turn only
 	char RDYear;                     // R & D Mods for full year
@@ -297,7 +297,7 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
   char eCount;
 	struct Intelligence {
 	  char code;
-	  i16 num;
+	  int16_t num;
 	  char prog;
 	  char cur;
 	  char index;
@@ -370,7 +370,7 @@ struct MisAst {  // This struct will be -1's if empty
 struct MisEval {
   char step;             // actual step id number
   char loc;              // Mission Step Name Index
-  ui16 StepInfo; // ID of step success  1=succ   !1=fail
+  uint16_t StepInfo; // ID of step success  1=succ   !1=fail
   Equipment *E;   // Pointer into equipment`
   char Prest;            // Prestige Step #  (-1 for none)
   char PComp;            // PComp will be set to amt of prest to be awarded.
@@ -381,7 +381,7 @@ struct MisEval {
   char dgoto;            // where to branch on deaths
   char trace;            // allow tracing of mission (for prest)
   char dice;             // Die roll to check safety against
-  i16 rnum;              // Random number holder for failure type
+  int16_t rnum;              // Random number holder for failure type
   char ast;              // Astro specialist num
   char asf;              // Astro specialist safety addition
   char FName[5];         // Name of Failure File (without .DAT)
@@ -390,8 +390,8 @@ struct MisEval {
 
 struct XFails {
   i32 per;               // Failure Key number
-  i16 code,val,xtra;     // Failure Codes
-  i16 fail;              // failure value ID
+  int16_t code,val,xtra;     // Failure Codes
+  int16_t fail;              // failure value ID
   char text[200];// Failure Text
 };
 
@@ -399,7 +399,7 @@ struct AnimType {
   char ID[8];
   char OVL[4];
   char SD[2][4];         // Sound ID : Max 2
-  i16 w,h;
+  int16_t w,h;
   ui8 sPlay[2];// Frame to play the Sound
   ui8 fNum;    // Number of frames
   ui8 fLoop;   // Times to loop
@@ -437,18 +437,18 @@ struct mStr {
 
 struct MXM {
    char Code[8];
-   i16  Qty;
+   int16_t  Qty;
    i32 Offset[6];
 };
 
-struct VInfo {char name[15],qty,ac,sf,dex,img;i16 wt;};
+struct VInfo {char name[15],qty,ac,sf,dex,img;int16_t wt;};
 struct ManPool {char Name[14],Sex,Cap,LM,EVA,Docking,Endurance;};
-struct order {i16 plr,loc,budget,date;};    
+struct order {int16_t plr,loc,budget,date;};    
 
 struct mfab {
   char Text[2][75];
   char qty;
-  i16 idx[4];
+  int16_t idx[4];
 };
 
 
@@ -495,16 +495,16 @@ enum SpacePortOverlays
 
 // Typical size/offset file header used for image files
 typedef struct _simpleheader {
-  ui16 size;
-  ui32 offset;
+  uint16_t size;
+  uint32_t offset;
 } SimpleHdr;
 
 // Typical 
 typedef struct _patch {
-  i16 w;
-  i16 h;
-  ui16 size;
-  ui32 offset;
+  int16_t w;
+  int16_t h;
+  uint16_t size;
+  uint32_t offset;
 } PatchHdr;
 
 #endif // __DATA_H__

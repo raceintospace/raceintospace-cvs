@@ -44,7 +44,6 @@
 		9848ADE40B55849A00A82E45 /* mis_c.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADAD0B55849A00A82E45 /* mis_c.c */; };
 		9848ADE50B55849A00A82E45 /* mis_m.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADAE0B55849A00A82E45 /* mis_m.c */; };
 		9848ADE60B55849A00A82E45 /* mis.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADAF0B55849A00A82E45 /* mis.h */; };
-		9848ADE70B55849A00A82E45 /* mtype.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADB00B55849A00A82E45 /* mtype.h */; };
 		9848ADE80B55849A00A82E45 /* museum.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADB10B55849A00A82E45 /* museum.c */; };
 		9848ADE90B55849A00A82E45 /* music.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADB20B55849A00A82E45 /* music.c */; };
 		9848ADEA0B55849A00A82E45 /* music.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADB30B55849A00A82E45 /* music.h */; };
@@ -92,7 +91,6 @@
 				9848ADD70B55849A00A82E45 /* data.h in Copy Frameworks into .app bundle */,
 				9848ADDA0B55849A00A82E45 /* externs.h in Copy Frameworks into .app bundle */,
 				9848ADE60B55849A00A82E45 /* mis.h in Copy Frameworks into .app bundle */,
-				9848ADE70B55849A00A82E45 /* mtype.h in Copy Frameworks into .app bundle */,
 				9848ADEA0B55849A00A82E45 /* music.h in Copy Frameworks into .app bundle */,
 				9848ADF00B55849A00A82E45 /* nn.h in Copy Frameworks into .app bundle */,
 				9848ADF20B55849A00A82E45 /* pace.h in Copy Frameworks into .app bundle */,
@@ -151,7 +149,6 @@
 		9848ADAD0B55849A00A82E45 /* mis_c.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = mis_c.c; sourceTree = "<group>"; };
 		9848ADAE0B55849A00A82E45 /* mis_m.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = mis_m.c; sourceTree = "<group>"; };
 		9848ADAF0B55849A00A82E45 /* mis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = mis.h; sourceTree = "<group>"; };
-		9848ADB00B55849A00A82E45 /* mtype.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = mtype.h; sourceTree = "<group>"; };
 		9848ADB10B55849A00A82E45 /* museum.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = museum.c; sourceTree = "<group>"; };
 		9848ADB20B55849A00A82E45 /* music.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = music.c; sourceTree = "<group>"; };
 		9848ADB30B55849A00A82E45 /* music.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = music.h; sourceTree = "<group>"; };
@@ -279,7 +276,6 @@
 				9848ADAD0B55849A00A82E45 /* mis_c.c */,
 				9848ADAE0B55849A00A82E45 /* mis_m.c */,
 				9848ADAF0B55849A00A82E45 /* mis.h */,
-				9848ADB00B55849A00A82E45 /* mtype.h */,
 				9848ADB10B55849A00A82E45 /* museum.c */,
 				9848ADB20B55849A00A82E45 /* music.c */,
 				9848ADB30B55849A00A82E45 /* music.h */,
@@ -537,6 +533,7 @@
 					/Library/Frameworks,
 					"$(FRAMEWORK_SEARCH_PATHS)",
 				);
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -558,6 +555,7 @@
 					/Library/Frameworks,
 					"$(FRAMEWORK_SEARCH_PATHS)",
 				);
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (

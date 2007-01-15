@@ -174,6 +174,9 @@ int GenerateTables(char md)
      if (fin == NULL)
 	     goto next;
      fread(FDes,1,sizeof (struct SF),fin);
+			Swap16bit(FDes->dSize);
+			Swap16bit(FDes->fSize);
+
      fclose(fin);
      if (md==0) {
       strcpy(FList[tFiles].Title,FDes->Name);
@@ -333,6 +336,8 @@ void FileAccess(char mode)
 
 	   fin=sOpen(FList[now].Name,"rb",1);
 	   fread(FDes,1,sizeof (struct SF),fin);
+			Swap16bit(FDes->dSize);
+			Swap16bit(FDes->fSize);
 	   fread(vhptr.vptr,1,FDes->fSize,fin);
 	   if (FDes->dSize==sizeof(struct Players))
        {

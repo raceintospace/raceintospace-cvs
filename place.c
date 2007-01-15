@@ -242,7 +242,7 @@ AstFaces(char plr, int x, int y, char face)
 	face_offset = ((int)face) * sizeof(i32);
 	fseek(fin, face_offset, SEEK_SET);	// Get Face
 	fread(&offset, sizeof(long), 1, fin);
-	SwapLong(offset);
+	Swap32bit(offset);
 	fseek(fin, offset, SEEK_SET);
 	GV(&local, 18, 15);
 	fread(local.vptr, 18 * 15, 1, fin);
@@ -251,7 +251,7 @@ AstFaces(char plr, int x, int y, char face)
 	face_offset = ((int)(85+plr)) * sizeof(i32);
 	fseek(fin, face_offset, SEEK_SET);	// Get Helmet
 	fread(&offset, sizeof(long), 1, fin);
-	SwapLong(offset);
+	Swap32bit(offset);
 	fseek(fin, offset, SEEK_SET);
 	GV(&local2, 80, 50);
 	GV(&local3, 80, 50);
@@ -388,19 +388,19 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       while (strncmp(AIndex.ID,Name,4)!=0) {
        fread(&AIndex,sizeof AIndex,1,fin);
       }
-			SwapLong(AIndex.offset);
-			SwapLong(AIndex.size);
+			Swap32bit(AIndex.offset);
+			Swap32bit(AIndex.size);
       fseek(fin,AIndex.offset,SEEK_SET);
 
       fread(&AHead,sizeof AHead,1,fin);
-			SwapWord(AHead.w);
-			SwapWord(AHead.h);
+			Swap16bit(AHead.w);
+			Swap16bit(AHead.h);
       fread(&pal[coff*3],64*3,1,fin);
       fseek(fin,3*(AHead.cNum-64),SEEK_CUR);
       GV(&local,AHead.w,AHead.h);
 
       fread(&BHead,sizeof BHead,1,fin);
-			SwapLong(BHead.fSize);
+			Swap32bit(BHead.fSize);
       fread(vhptr.vptr,BHead.fSize,1,fin);
       RLED_img(vhptr.vptr,local.vptr,BHead.fSize,local.w,local.h);
       n = gxVirtualSize(gxVGA_13,AHead.w,AHead.h);
@@ -466,7 +466,7 @@ int Help(char *FName)
   fin=sOpen("HELP.CDR","rb",0);
   fread(&count,sizeof count,1,fin);
   fread(&Pul,sizeof Pul,1,fin);
-	SwapLong(count);
+	Swap32bit(count);
 	
   i=0;
   while (strncmpi(Pul.Code,FName,4)!=0 && i<count) {
@@ -474,8 +474,8 @@ int Help(char *FName)
      i++;
   }
   if (i==count) {fclose(fin);return 0;}
-	SwapLong(Pul.offset);
-	SwapWord(Pul.size);
+	Swap32bit(Pul.offset);
+	Swap16bit(Pul.size);
 
   AL_CALL=1;
   Help=(char *) farmalloc(Pul.size);

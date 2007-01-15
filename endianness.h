@@ -3,18 +3,18 @@
 
 #ifdef __BIG_ENDIAN__
 
-#define SwapLong(a)  (a) = _SwapLong((a))
-#define SwapWord(a)  (a) = _SwapWord((a))
-ui32 _SwapLong(ui32 value);
-ui16 _SwapWord(ui16 value);
+#define Swap32bit(a)  (a) = _Swap32bit((a))
+#define Swap16bit(a)  (a) = _Swap16bit((a))
+uint32_t _Swap32bit(uint32_t value);
+uint16_t _Swap16bit(uint16_t value);
 void SwapSimpleHdr(SimpleHdr *hdr);
 void SwapPatchHdr(PatchHdr *hdr);
 void SwapGameDat(void);
 
 #else
 
-#define SwapLong(a)
-#define SwapWord(a)
+#define Swap32bit(a)
+#define Swap16bit(a)
 #define SwapGameDat()
 #define SwapSimpleHdr(a)
 #define SwapPatchHdr(a)
