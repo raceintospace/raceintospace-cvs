@@ -1,3 +1,23 @@
+2007-01-16  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V98
+
+	* Renamed SF and SFInfo to  SaveFileHdr SaveFileInfo and moved them to data.h
+
+	* Renamed FDes and a few other cryptic names to something meaningful
+
+	* Added an enum for the Savegame types
+
+	* Changed the Savegame ID type to a uint32_t instead of char[4] and will
+	use this to determine the endianness of the save data.
+
+	* Registered with Apple for an Application Signature and got 'RiSP' which
+	I'll use with the Mac binaries and as the Savegame ID for endian determination
+
+	* Added application icon on the Mac
+
+	* Moved duplicate macros from museum and replay into macros.h
+
 2007-01-16  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V97

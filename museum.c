@@ -33,26 +33,6 @@ extern struct mStr Mis;
 
 struct Astros *abuf;
 
-#define IRBox(a,b,c,d,e)           {InBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}
-#define ORBox(a,b,c,d,e)           {OutBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}
-
-#define pButton(a,b,c,d,e,f,g) if ((x>=(a) && y>=(b) && x<=(c) && y<=(d) && mousebuttons==1) || ((f)==(g)))\
-                            { \
-                            InBox((a),(b),(c),(d)); \
-                            (e);\
-			    bzdelay (DELAYCNT);\
-               		    if((f)>0) delay(150); \
-                            OutBox((a),(b),(c),(d)); \
-                            };
-
-#define Button2(a,b,c,d,e,f,g) if ((x>=(a) && y>=(b) && x<=(c) && y<=(d) && mousebuttons==1) || ((f)==(g)))\
-                            { \
-                            if (mousebuttons==1) GetMouse();\
-                            (e); \
-                            };
-
-#define poz(a) (((a)<0)?0:(a))
-
 #if 1
 char tame[29][40]={
 "ORBITAL SATELLITE",

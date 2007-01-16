@@ -70,6 +70,8 @@ int never_fail;
 
 #include "endianness.h"
 
+#include "macros.h"		// Collected Macros
+
 #define random brandom
 #undef NULL
 #define NULL 0

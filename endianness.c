@@ -85,8 +85,6 @@ void SwapGameDat(void)
 
 		Swap16bit(Data->P[j].Misc[5].Safety);
 	}
-
-  printf("SwapGameDat: Checksum Data = %ld\n",Data->Checksum);
 }
 
 #endif

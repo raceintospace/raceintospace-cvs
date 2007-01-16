@@ -130,7 +130,7 @@
 
 // ADMIN.C
 void Admin(char plr);
-int GenerateTables(char md);
+int GenerateTables(SaveGameType saveType);
 void GetSaveMouse(void);
 void FileAccess(char mode);
 char GetBlockName(char *Nam);

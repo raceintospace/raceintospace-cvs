@@ -9,7 +9,7 @@ EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts \
 	-Werror
 
-CFLAGS = -g -Wall -I. `sdl-config --cflags`
+CFLAGS = -g -Wall -I. `sdl-config --cflags` -std=c99
 
 # Personal Makefile
 -include Makefile.$(LOGNAME)
@@ -104,6 +104,9 @@ tags: FORCE
 
 TAGS: FORCE
 	etags *.[ch]
+
+cscope: FORCE
+	cscope -b
 
 clean:
 	rm -f *.o *~

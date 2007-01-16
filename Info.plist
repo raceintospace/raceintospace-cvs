@@ -4,10 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array/>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>RaceIntoSpace</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.RaceIntoSpaceProject.RaceIntoSpace</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,9 +19,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>RiSP</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>0.2</string>
 	<key>NSMainNibFile</key>
 	<string>SDLMain</string>
 	<key>NSPrincipalClass</key>

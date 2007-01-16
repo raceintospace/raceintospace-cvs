@@ -69,3 +69,13 @@ create ~/.rpmmacros as:
 %_tmppath /home/race/rpmbuild/tmp
 
 then, run the script "mkrpm"
+
+================================================================
+Macintosh OS X
+
+The Race into Space Project has a registered Application Signature with
+Apple Inc.
+
+Application Signatures:
+ASCII: RiSP  HEX: 52695350
+

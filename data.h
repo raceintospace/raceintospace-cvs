@@ -323,7 +323,7 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 
 struct Players {
 	char BUZZ[4];                    // Save Version Marker
-	ui32 Checksum;                   // Checksum of Data
+	uint32_t Checksum;                   // Checksum of Data
 	char plr[NUM_PLAYERS];                     // Order of Turns
 	struct Defl Def;                 // Defaults
 	char Year;                       // Game Turn
@@ -514,6 +514,28 @@ typedef struct {
   uint16_t size;
   uint32_t offset;
 } PatchHdrSmall;
+
+// Save Game related typedefs
+#define RaceIntoSpace_Signature	'RiSP'
+#define SAVEFILE_UNK_MAGIC	0x1A
+
+typedef enum {
+	SAVEGAME_Normal = 0,
+	SAVEGAME_PlayByMail,
+	SAVEGAME_Modem
+} SaveGameType;
+
+typedef struct {
+	uint32_t ID;		// Going to use this to determine endianness of the save file
+	char Name[23],PName[2][20],Country[2],Season,Year;
+	uint16_t dSize,fSize;
+} SaveFileHdr;
+
+
+typedef struct {
+    char Name[15],Title[23];
+    ui16 time,date;
+} SFInfo;
 
 
 #endif // __DATA_H__

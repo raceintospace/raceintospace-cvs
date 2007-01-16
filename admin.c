@@ -38,15 +38,8 @@
 extern char Sounds,Option,MAIL;
 extern int fOFF;
 
-  struct SF {
-    char ID[4],Name[23],PName[2][20],Country[2],Season,Year;
-    ui16 dSize,fSize;
-  } *FDes,FD;
-
-  struct SFinfo {
-    char Name[15],Title[23];
-    ui16 time,date;
-  } *FList;
+SaveFileHdr *SaveHdr;
+SFInfo *FList;
 
 extern struct mStr Mis;
 
@@ -139,12 +132,8 @@ void Admin(char plr)
   while(1)  { GetMouse();if (mousebuttons==0) break;}
 }
 
-int GenerateTables(char md)
+int GenerateTables(SaveGameType saveType)
 {
-  // md = 0 Regular Save Files
-  // md = 1 Play_by_Mail Save Files
-  // md = 2 Modem Save Files
-
   struct ffblk ffblk;
   int i,j,tFiles,done;
   FILE *fin;
@@ -156,8 +145,8 @@ int GenerateTables(char md)
   memset(buffer,0x00,20480);
 
   // old code lacked parans, so pointed FList off into space - pace
-  FList=(struct SFinfo *)(buffer+5000);
-  FDes=(struct SF *) buffer;
+  FList=(SFInfo *)(buffer+5000);
+  SaveHdr=(SaveFileHdr *) buffer;
 
   if (tFiles>0) {
     tFiles=0;
@@ -173,28 +162,25 @@ int GenerateTables(char md)
      fin=sOpen(ffblk.ff_name,"rb",1);
      if (fin == NULL)
 	     goto next;
-     fread(FDes,1,sizeof (struct SF),fin);
-			Swap16bit(FDes->dSize);
-			Swap16bit(FDes->fSize);
-
+     fread(SaveHdr,1,sizeof (SaveFileHdr),fin);
      fclose(fin);
-     if (md==0) {
-      strcpy(FList[tFiles].Title,FDes->Name);
+     if (saveType == SAVEGAME_Normal) {
+      strcpy(FList[tFiles].Title,SaveHdr->Name);
       tFiles++;
      }
-     else if (md==1)
+     else if (saveType == SAVEGAME_PlayByMail)
       {
-       if (FDes->Country[0]==8 || FDes->Country[1]==9)
+       if (SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9)
         {
-         strcpy(FList[tFiles].Title,FDes->Name);
+         strcpy(FList[tFiles].Title,SaveHdr->Name);
          tFiles++;
         }
       }
-     else if (md==2)
+     else if (saveType == SAVEGAME_Modem)
       {
-       if (FDes->Country[0]==6 || FDes->Country[1]==7)
+       if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7)
         {
-         strcpy(FList[tFiles].Title,FDes->Name);
+         strcpy(FList[tFiles].Title,SaveHdr->Name);
          tFiles++;
         }
       }
@@ -209,9 +195,9 @@ int GenerateTables(char md)
          {
 	       if (stricmp(FList[j].Title,FList[i].Title)<0)
            {
-	         memcpy(&FList[tFiles],&FList[i],sizeof(struct SFinfo));
-	         memcpy(&FList[i],&FList[j],sizeof(struct SFinfo));
-	         memcpy(&FList[j],&FList[tFiles],sizeof(struct SFinfo));
+	         memcpy(&FList[tFiles],&FList[i],sizeof(SFInfo));
+	         memcpy(&FList[i],&FList[j],sizeof(SFInfo));
+	         memcpy(&FList[j],&FList[tFiles],sizeof(SFInfo));
 	        }
          }
        }
@@ -230,14 +216,14 @@ void GetSaveMouse(void)
 void FileAccess(char mode)
 // mode==0 if save allowed
 {
-  char Temp[4],sc=0,md=0;
+  char Temp[4],sc=0;
   long size;
   int tFiles,i,now,done,BarB,temp,left;
   FILE *fin,*fout;
   char Name[12];
   extern char plr[2],AI[2];
   RPLY Rep;
-
+	SaveGameType saveType = SAVEGAME_Normal;
 
   //sp. case -> no regular save off mail/modem game
   if ((mode==0 || mode==1) && (MAIL!=-1 || Option!=-1)) sc=2;
@@ -252,11 +238,14 @@ void FileAccess(char mode)
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
 
-  if (Option!=-1) md=2; //Specs: Modem Save
-   else if (mode==2) md=1; //Specs: Mail Save
-    else md=0; //Specs: Regular Save
+	saveType = SAVEGAME_Normal;
 
-  tFiles=GenerateTables(md);
+  if (Option!=-1) 
+		saveType = SAVEGAME_Modem;
+	else if (mode==2) 
+		saveType = SAVEGAME_PlayByMail;
+
+  tFiles=GenerateTables(saveType);
   
   ShBox(34,32,283,159);
   InBox(37,35,204,45);RectFill(38,36,203,44,7);
@@ -335,21 +324,19 @@ void FileAccess(char mode)
 			// Read in Saved game data
 
 	   fin=sOpen(FList[now].Name,"rb",1);
-	   fread(FDes,1,sizeof (struct SF),fin);
-			Swap16bit(FDes->dSize);
-			Swap16bit(FDes->fSize);
-	   fread(vhptr.vptr,1,FDes->fSize,fin);
-	   if (FDes->dSize==sizeof(struct Players))
+	   fread(SaveHdr,1,sizeof (SaveFileHdr),fin);
+	   fread(vhptr.vptr,1,SaveHdr->fSize,fin);
+	   if (SaveHdr->dSize==sizeof(struct Players))
        {
 #ifdef OLD_DOS_ENCRYPT_SAVEDATA
 				{
 				int moo = 0;
-        srand(FDes->fSize);
-        for(moo=0;moo<FDes->fSize;moo++) vhptr.vptr[moo]^=random(256);
+        srand(SaveHdr->fSize);
+        for(moo=0;moo<SaveHdr->fSize;moo++) vhptr.vptr[moo]^=random(256);
         srand(biostime(0,0L));
 				}
 #endif
- 	      RLED((char *) vhptr.vptr,(char *)Data,FDes->fSize);
+ 	      RLED((char *) vhptr.vptr,(char *)Data,SaveHdr->fSize);
         fread(vhptr.vptr,(sizeof Rep)*200,1,fin);
         fout=sOpen("REPLAY.DAT","wb",1);
         fwrite(vhptr.vptr,(sizeof Rep)*200,1,fout);
@@ -364,7 +351,7 @@ void FileAccess(char mode)
          fclose(fout);
          fclose(fin);
 
-         if (!(FDes->Country[0]==6 || FDes->Country[1]==7 || FDes->Country[0]==8 || FDes->Country[1]==9))
+         if (!(SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7 || SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9))
           {
 	         plr[0]=Data->Def.Plr1;plr[1]=Data->Def.Plr2;
 	         Data->plr[0]=Data->Def.Plr1;
@@ -374,17 +361,17 @@ void FileAccess(char mode)
           }
 
 
-        if (FDes->Country[0]==8 || FDes->Country[1]==9)
+        if (SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9)
          {
           //Play-By-Mail save game LOAD
           Option=-1;fOFF=-1;
           //save file offset
           fOFF=now;
 
-          Data->Season=FDes->Season;
-          Data->Year=FDes->Year;
+          Data->Season=SaveHdr->Season;
+          Data->Year=SaveHdr->Year;
 
-          if (FDes->Country[0]==8) {MAIL=plr[0]=0;plr[1]=1;}
+          if (SaveHdr->Country[0]==8) {MAIL=plr[0]=0;plr[1]=1;}
            else {MAIL=plr[1]=1;plr[0]=0;}
           AI[0]=AI[1]=0;
           Data->Def.Plr1=0;Data->Def.Plr2=1;
@@ -412,11 +399,11 @@ void FileAccess(char mode)
          } 
         else
          //Modem save game LOAd
-        if (FDes->Country[0]==6 || FDes->Country[1]==7)
+        if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7)
          {
           //modem connect up
-          if (FDes->Country[0]==6) {plr[0]=FDes->Country[0];plr[1]=1;}
-           else {plr[1]=FDes->Country[1];plr[0]=0;}
+          if (SaveHdr->Country[0]==6) {plr[0]=SaveHdr->Country[0];plr[1]=1;}
+           else {plr[1]=SaveHdr->Country[1];plr[0]=0;}
           //Modem Play => reset the modem
           if (Option!=-1) DoModem(2);
           Option=MPrefs(1);
@@ -461,22 +448,22 @@ void FileAccess(char mode)
 
 	      while(YES)  { av_block (); GetSaveMouse();if (mousebuttons==NO) break;}
 
-        memset(FDes->Name,0x00,23);
-        done=GetBlockName(FDes->Name);  // Checks Free Space
-        strncpy(FDes->ID,"ID:\0",4);
-        FDes->Name[22]=0x1A;
+        memset(SaveHdr->Name,0x00,23);
+        done=GetBlockName(SaveHdr->Name);  // Checks Free Space
+				SaveHdr->ID = RaceIntoSpace_Signature;
+        SaveHdr->Name[22]=0x1A;
 	      temp=NOTSAME;
 
 	      for (i=0;(i<tFiles && temp==2);i++) 
-	         if (strcmp(FDes->Name,FList[i].Title)==0) {
+	         if (strcmp(SaveHdr->Name,FList[i].Title)==0) {
 	            temp=RequestX("REPLACE FILE",1);
               if (temp==SAME_ABORT) done=0;
 	         }
 
 	      if (done==YES) {
 	         i--;  // decrement to correct for the FOR loop
-	         strcpy(FDes->PName[0],Data->P[plr[0]].Name);
-	         strcpy(FDes->PName[1],Data->P[plr[1]].Name);
+	         strcpy(SaveHdr->PName[0],Data->P[plr[0]].Name);
+	         strcpy(SaveHdr->PName[1],Data->P[plr[1]].Name);
            //modem save game hack
            if (Option!=-1)
             {
@@ -487,17 +474,17 @@ void FileAccess(char mode)
 	          Data->plr[1]=Data->Def.Plr2;
 	          AI[0]=0;AI[1]=0;
             }
-	         FDes->Country[0]=Data->plr[0];
-	         FDes->Country[1]=Data->plr[1];
-	         FDes->Season=Data->Season;
-	         FDes->Year=Data->Year;
-	         FDes->dSize=sizeof(struct Players);
+	         SaveHdr->Country[0]=Data->plr[0];
+	         SaveHdr->Country[1]=Data->plr[1];
+	         SaveHdr->Season=Data->Season;
+	         SaveHdr->Year=Data->Year;
+	         SaveHdr->dSize=sizeof(struct Players);
 	   
 	         fin=sOpen("ENDTURN.TMP","rb",1);
 	         if (fin) {
-	            FDes->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
+	            SaveHdr->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
 	            fclose(fin);
-	         } else FDes->fSize=0;
+	         } else SaveHdr->fSize=0;
 
 	      if (temp==NOTSAME)
           { 
@@ -518,7 +505,7 @@ void FileAccess(char mode)
 	      }
         else fin=sOpen(FList[i].Name,"wb",1);
 
-	     fwrite(FDes,sizeof (struct SF),1,fin);
+	     fwrite(SaveHdr,sizeof (SaveFileHdr),1,fin);
 
       //----------------------------------
       //Specs: Special Modem Save Klugge |
@@ -565,13 +552,13 @@ void FileAccess(char mode)
      InBox(209,78,278,86);
      delay(250);
      while(1) {GetSaveMouse();if (mousebuttons==0) break;}
-     memset(FDes->Name,0x00,23);
-     done=GetBlockName(FDes->Name);  // Checks Free Space
-     strncpy(FDes->ID,"ID:\0",4);
-     FDes->Name[22]=0x1A;
+     memset(SaveHdr->Name,0x00,23);
+     done=GetBlockName(SaveHdr->Name);  // Checks Free Space
+		 SaveHdr->ID = RaceIntoSpace_Signature;
+     SaveHdr->Name[22]=0x1A;
 	  temp=NOTSAME;
 	  for (i=0;(i<tFiles && temp==2);i++) 
-	   if (strcmp(FDes->Name,FList[i].Title)==0)
+	   if (strcmp(SaveHdr->Name,FList[i].Title)==0)
        {
 	     temp=RequestX("REPLACE FILE",1);
         if (temp==SAME_ABORT) done=0;
@@ -579,8 +566,8 @@ void FileAccess(char mode)
 	  if (done==YES)
       {
 	    i--;  // decrement to correct for the FOR loop
-	    strcpy(FDes->PName[0],Data->P[plr[0]].Name);
-	    strcpy(FDes->PName[1],Data->P[plr[1]].Name);
+	    strcpy(SaveHdr->PName[0],Data->P[plr[0]].Name);
+	    strcpy(SaveHdr->PName[1],Data->P[plr[1]].Name);
 
         // play-by-mail save game hack
         // starts US side
@@ -590,20 +577,20 @@ void FileAccess(char mode)
 	     Data->plr[1]=Data->Def.Plr2;
 	     AI[0]=0;AI[1]=0;
 
-	     FDes->Country[0]=Data->plr[0];
-	     FDes->Country[1]=Data->plr[1];
-	     FDes->Season=Data->Season;
-	     FDes->Year=Data->Year;
-	     FDes->dSize=sizeof(struct Players);
+	     SaveHdr->Country[0]=Data->plr[0];
+	     SaveHdr->Country[1]=Data->plr[1];
+	     SaveHdr->Season=Data->Season;
+	     SaveHdr->Year=Data->Year;
+	     SaveHdr->dSize=sizeof(struct Players);
 
 		EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
         fin=sOpen("ENDTURN.TMP","rb",1);
 	     if (fin)
          {
-	       FDes->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
+	       SaveHdr->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
 	       fclose(fin);
-	      } else FDes->fSize=0;
+	      } else SaveHdr->fSize=0;
 
 	      if (temp==NOTSAME)
           { 
@@ -624,7 +611,7 @@ void FileAccess(char mode)
 	      }
         else fin=sOpen(FList[i].Name,"wb",1);
 	   
-	     fwrite(FDes,sizeof (struct SF),1,fin);
+	     fwrite(SaveHdr,sizeof (SaveFileHdr),1,fin);
         fout=sOpen("ENDTURN.TMP","rb",1);
         size=16000L;
         fseek(fout,0,SEEK_SET);
@@ -665,12 +652,12 @@ void FileAccess(char mode)
 	   
 	   remove_savedat(FList[now].Name);
       memset(Name,0x00,sizeof Name);
+			saveType = SAVEGAME_Normal;
 
-      if (Option!=-1) md=2; //Specs: Modem Save
-       else if (mode==2) md=1; //Specs: Mail Save
-        else md=0; //Specs: Regular Save
+      if (Option!=-1) saveType = SAVEGAME_Modem;
+       else if (mode==2) saveType = SAVEGAME_PlayByMail;
 
-	   tFiles=GenerateTables(md);
+	   tFiles=GenerateTables(saveType);
 	   now=0;BarB=0;
 	   RectFill(38,49,190,127,0);
 	   ShBox(39,52+BarB*8,189,60+BarB*8);
@@ -802,7 +789,7 @@ void
 save_game (char *name)
 {
 	FILE *inf, *outf;
-	struct SF hdr;
+	SaveFileHdr hdr;
     size_t buflen = 0;
     ssize_t size = 0;
     char * buf = NULL;
@@ -816,7 +803,7 @@ save_game (char *name)
 
 	memset (&hdr, 0, sizeof hdr);
 
-	strcpy (hdr.ID, "ID:");
+	hdr.ID = RaceIntoSpace_Signature;
 	strcpy (hdr.Name, "AUTOSAVE");
 	hdr.Name[sizeof hdr.Name - 1] = 0x1a;
 
@@ -967,47 +954,47 @@ void FileText(char *name)
     PrintAt(70,147,"NO HISTORY RECORDED");
     return;
   };
-  fread(FDes,sizeof (struct SF),1,fin);
+  fread(SaveHdr,sizeof (SaveFileHdr),1,fin);
   fclose(fin);
   grMoveTo(40,139);
-  //if (((char)FDes->Country[0])&0x02) grSetColor(7+(FDes->Country[1]-2)*3); 
+  //if (((char)SaveHdr->Country[0])&0x02) grSetColor(7+(SaveHdr->Country[1]-2)*3); 
 
   grSetColor(5);
 
-  //grSetColor(6+(FDes->Country[0]%2)*3); 
-  if (FDes->Country[0]==6 || FDes->Country[1]==7) PrintAt(0,0,"MODEM DIRECTOR ");
-   else if (FDes->Country[0]==8 || FDes->Country[1]==9) PrintAt(0,0,"MAIL DIRECTOR ");
-    else if (FDes->Country[0]==2) PrintAt(0,0,"COMPUTER DIRECTOR ");
+  //grSetColor(6+(SaveHdr->Country[0]%2)*3); 
+  if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7) PrintAt(0,0,"MODEM DIRECTOR ");
+   else if (SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9) PrintAt(0,0,"MAIL DIRECTOR ");
+    else if (SaveHdr->Country[0]==2) PrintAt(0,0,"COMPUTER DIRECTOR ");
      else PrintAt(0,0,"HUMAN DIRECTOR ");
-  PrintAt(0,0,&FDes->PName[0][0]);
+  PrintAt(0,0,&SaveHdr->PName[0][0]);
   PrintAt(0,0," OF THE U.S.A.");
 
   grMoveTo(40,147);
-  //if (((char)FDes->Country[1])&0x02) grSetColor(7+(FDes->Country[1]-2)*3); 
+  //if (((char)SaveHdr->Country[1])&0x02) grSetColor(7+(SaveHdr->Country[1]-2)*3); 
 
   grSetColor(9);
 
-  if (FDes->Country[0]==6 || FDes->Country[1]==7) PrintAt(0,0,"VS. MODEM DIRECTOR ");
-   else if (FDes->Country[0]==8 || FDes->Country[1]==9) PrintAt(0,0,"VS. MAIL DIRECTOR ");
-    else if (FDes->Country[1]==3) PrintAt(0,0,"VS. COMPUTER DIRECTOR ");
+  if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7) PrintAt(0,0,"VS. MODEM DIRECTOR ");
+   else if (SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9) PrintAt(0,0,"VS. MAIL DIRECTOR ");
+    else if (SaveHdr->Country[1]==3) PrintAt(0,0,"VS. COMPUTER DIRECTOR ");
      else PrintAt(0,0,"VS. HUMAN DIRECTOR ");
 
-  PrintAt(0,0,&FDes->PName[1][0]);
+  PrintAt(0,0,&SaveHdr->PName[1][0]);
   PrintAt(0,0," OF THE U.S.S.R.");
 
   grMoveTo(40,154);grSetColor(11);
-  if (FDes->Season==0)
+  if (SaveHdr->Season==0)
    {
-    if (FDes->Country[0]==8) PrintAt(0,0,"U.S.A. TURN IN THE SPRING OF ");
-     else if (FDes->Country[1]==9) PrintAt(0,0,"SOVIET TURN IN THE SPRING OF ");
+    if (SaveHdr->Country[0]==8) PrintAt(0,0,"U.S.A. TURN IN THE SPRING OF ");
+     else if (SaveHdr->Country[1]==9) PrintAt(0,0,"SOVIET TURN IN THE SPRING OF ");
       else PrintAt(0,0,"THE SPRING OF ");
    }
   else {
-    if (FDes->Country[0]==8) PrintAt(0,0,"U.S.A. TURN IN THE FALL OF ");
-     else if (FDes->Country[1]==9) PrintAt(0,0,"SOVIET TURN IN THE FALL OF ");
+    if (SaveHdr->Country[0]==8) PrintAt(0,0,"U.S.A. TURN IN THE FALL OF ");
+     else if (SaveHdr->Country[1]==9) PrintAt(0,0,"SOVIET TURN IN THE FALL OF ");
       else PrintAt(0,0,"THE FALL OF ");
    }   
-  DispNum(0,0,19);DispNum(0,0,FDes->Year);PrintAt(0,0,".");
+  DispNum(0,0,19);DispNum(0,0,SaveHdr->Year);PrintAt(0,0,".");
 }
 
 
@@ -1228,15 +1215,15 @@ void SaveMail(void)
 
   tFiles=GenerateTables(0);
   if (tFiles)EMPTY_BODY;
-  memset(FDes->Name,0x00,23);
-  // done=GetBlockName(FDes->Name);  // Checks Free Space
-  strcpy(FDes->Name,FList[fOFF].Title);
-  strncpy(FDes->ID,"ID:\0",4);
-  FDes->Name[22]=0x1A;
+  memset(SaveHdr->Name,0x00,23);
+  // done=GetBlockName(SaveHdr->Name);  // Checks Free Space
+  strcpy(SaveHdr->Name,FList[fOFF].Title);
+	SaveHdr->ID = RaceIntoSpace_Signature;
+  SaveHdr->Name[22]=0x1A;
   temp=NOTSAME;
   done=YES;
   for (i=0;(i<tFiles && temp==2);i++) 
-   if (strcmp(FDes->Name,FList[i].Title)==0)
+   if (strcmp(SaveHdr->Name,FList[i].Title)==0)
     {
      temp=1;
      if (temp==SAME_ABORT) done=0;
@@ -1244,8 +1231,8 @@ void SaveMail(void)
   if (done==YES)
    {
 	 i--;  // decrement to correct for the FOR loop
-	 strcpy(FDes->PName[0],Data->P[plr[0]].Name);
-	 strcpy(FDes->PName[1],Data->P[plr[1]].Name);
+	 strcpy(SaveHdr->PName[0],Data->P[plr[0]].Name);
+	 strcpy(SaveHdr->PName[1],Data->P[plr[1]].Name);
 
     // play-by-mail save game hack
     // switch sides
@@ -1257,12 +1244,12 @@ void SaveMail(void)
 	 Data->plr[1]=Data->Def.Plr2;
 	 AI[0]=0;AI[1]=0;
 
-	 FDes->Country[0]=Data->plr[0];
-	 FDes->Country[1]=Data->plr[1];
+	 SaveHdr->Country[0]=Data->plr[0];
+	 SaveHdr->Country[1]=Data->plr[1];
 
-	 FDes->Season=Data->Season;
-	 FDes->Year=Data->Year;
-	 FDes->dSize=sizeof(struct Players);
+	 SaveHdr->Season=Data->Season;
+	 SaveHdr->Year=Data->Year;
+	 SaveHdr->dSize=sizeof(struct Players);
 
 		EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
@@ -1270,9 +1257,9 @@ void SaveMail(void)
 	 fin=sOpen("ENDTURN.TMP","rb",1);
 	 if (fin)
      {
-	   FDes->fSize=fread(vhptr.vptr,1,vhptr.w*vhptr.h,fin);
+	   SaveHdr->fSize=fread(vhptr.vptr,1,vhptr.w*vhptr.h,fin);
 	   fclose(fin);
-	  } else FDes->fSize=0;
+	  } else SaveHdr->fSize=0;
 
  	 if (temp==NOTSAME)
      { 
@@ -1293,7 +1280,7 @@ void SaveMail(void)
 	  }
      else fin=sOpen(FList[i].Name,"wb",1);
 	   
-	  fwrite(FDes,sizeof (struct SF),1,fin);
+	  fwrite(SaveHdr,sizeof (SaveFileHdr),1,fin);
      fout=sOpen("ENDTURN.TMP","rb",1);
      size=16000L;
      fseek(fout,0x00,SEEK_SET);
