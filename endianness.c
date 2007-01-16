@@ -15,7 +15,8 @@ uint16_t _Swap16bit(uint16_t value)
       return ((value << 8) | (value >> 8));
 }
 
-void SwapSimpleHdr(SimpleHdr *hdr)
+void
+SwapSimpleHdr(SimpleHdr *hdr)
 {
 	assert(hdr);
 
@@ -23,12 +24,22 @@ void SwapSimpleHdr(SimpleHdr *hdr)
 	Swap32bit(hdr->offset);
 }
 
-void SwapPatchHdr(PatchHdr *hdr)
+void
+SwapPatchHdr(PatchHdr *hdr)
 {
 	assert(hdr);
 
 	Swap16bit(hdr->w);
 	Swap16bit(hdr->h);
+	Swap16bit(hdr->size);
+	Swap32bit(hdr->offset);
+}
+
+void
+SwapPatchHdrSmall(PatchHdrSmall *hdr)
+{
+	assert(hdr);
+
 	Swap16bit(hdr->size);
 	Swap32bit(hdr->offset);
 }

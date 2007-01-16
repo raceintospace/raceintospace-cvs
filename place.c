@@ -185,7 +185,7 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
      * my data files are corrupted. For correct data behavior is not
      * changed.
      */
-	PatchHdr P;
+	PatchHdrSmall P;
   GXHEADER local,local2;
   unsigned int j, do_fix = 0;
   FILE *in;
@@ -193,7 +193,7 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
   fread(&pal[coff*3],96,1,in);
   fseek(in,(50*plr+prog*10+poff)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
-	SwapPatchHdr(&P);
+	SwapPatchHdrSmall(&P);
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size)
   {
@@ -282,7 +282,7 @@ AstFaces(char plr, int x, int y, char face)
 
 void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
 {
-  PatchHdr P;
+  PatchHdrSmall P;
   GXHEADER local,local2;
   unsigned int j;
   int do_fix = 0;
@@ -293,7 +293,7 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
   if (planet>0) fseek(in,(planet-1)*(sizeof P),SEEK_CUR);
   else fseek(in,(7+plr*8+prog)*(sizeof P),SEEK_CUR);
   fread(&P,sizeof P,1,in);
-	SwapPatchHdr(&P);
+	SwapPatchHdrSmall(&P);
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size) {
       fprintf(stderr, "SmHardMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",

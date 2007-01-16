@@ -123,7 +123,7 @@ void BarSkill(char plr,int lc,int nw,int *ary)
 
 void SatDraw(char plr)
 {
-	PatchHdr P;
+	PatchHdrSmall P;
   int i,loc[4];
   FILE *fin;
 
@@ -159,7 +159,7 @@ void SatDraw(char plr)
    
    fseek(fin,(sizeof P)*loc[i]+768,SEEK_SET);
    fread(&P,sizeof P,1,fin);
-	SwapPatchHdr(&P);
+	SwapPatchHdrSmall(&P);
    GV(&local,P.w,P.h);
    fseek(fin,P.offset,SEEK_SET);
    fread(buffer,P.size,1,fin);

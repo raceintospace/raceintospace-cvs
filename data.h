@@ -507,6 +507,15 @@ typedef struct _patch {
   uint32_t offset;
 } PatchHdr;
 
+// Typical, or maybe not?
+typedef struct {
+  int8_t w;
+  int8_t h;
+  uint16_t size;
+  uint32_t offset;
+} PatchHdrSmall;
+
+
 #endif // __DATA_H__
 
 // Editor settings {{{

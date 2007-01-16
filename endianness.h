@@ -9,6 +9,7 @@ uint32_t _Swap32bit(uint32_t value);
 uint16_t _Swap16bit(uint16_t value);
 void SwapSimpleHdr(SimpleHdr *hdr);
 void SwapPatchHdr(PatchHdr *hdr);
+void SwapPatchHdrSmall(PatchHdrSmall *hdr);
 void SwapGameDat(void);
 
 #else
@@ -18,6 +19,7 @@ void SwapGameDat(void);
 #define SwapGameDat()
 #define SwapSimpleHdr(a)
 #define SwapPatchHdr(a)
+#define SwapPatchHdrSmall(a)
 
 #endif
 
