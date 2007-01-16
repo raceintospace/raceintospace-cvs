@@ -1,11 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
 #include <string.h>
-#include <sys/ioctl.h>
-#include <sys/time.h>
 
 int vflag;
 
@@ -61,7 +57,7 @@ usage(void)
 {
 	fprintf(stderr,
 		"usage: mkmovie [-d output_dir] [-b output_basename] inputfile\n");
-	exit(1);
+	exit(EXIT_FAILURE);
 }
 
 struct frm
@@ -86,7 +82,7 @@ frm_open(char *filename)
 	if ((frm = calloc(1, sizeof *frm)) == NULL)
 	{
 		fprintf(stderr, "out of memory\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	frm->fin = fin;
@@ -142,6 +138,8 @@ frm_get2(struct frm *frm, void *pixels_arg, void *map)
 		{
 			frm->nframes = val0;
 			frm->frame_rate = raw[15998] | (raw[15999] << 8);
+			if (frm->frame_rate == 0)
+				frm->frame_rate = 8;
 			memcpy(frm->pal + 384, raw + 16000, 384);
 		}
 		pixels = raw;
@@ -169,13 +167,13 @@ main(int argc, char **argv)
 	FILE *movief;
 	int c;
 	char *filename;
-	char *dirname = "./";
+	char *dirname = ".";
 	char *basename = "frame";
 	struct frm *frm;
 	int rc;
 	unsigned char pixels[64 * 1000], map[768];
 	char outfname[100];
-	int i, j, num;
+	int i, j, num, frames;
 	int pixel;
 	unsigned char *up;
 	int r, g, b;
@@ -206,30 +204,32 @@ main(int argc, char **argv)
 	if ((frm = frm_open(filename)) == NULL)
 	{
 		fprintf(stderr, "can't open %s\n", filename);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	memset(map, 0, sizeof map);
 	num = 0;
+	frames = 0;
 	while (1)
 	{
 		if ((rc = frm_get2(frm, pixels, &map[384])) < 0)
 		{
 			printf("error reading frame\n");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 
 		if (rc == 0)
 			break;
 
-		for (j = 0; j < 3; ++j)
+		/* buggy way to get 24 fps, duplicate frames */
+		for ( ; frames < 24; frames += frm->frame_rate)
 		{
-			sprintf(outfname, "%s/%s.%03d.ppm", dirname, basename, num++);
+			sprintf(outfname, "%s/%s.%04d.ppm", dirname, basename, num++);
 
 			if ((movief = fopen(outfname, "wb")) == NULL)
 			{
 				fprintf(stderr, "can't create %s\n", outfname);
-				exit(1);
+				exit(EXIT_FAILURE);
 			}
 
 			fprintf(movief, "P6\n160 100\n255\n");
@@ -250,7 +250,9 @@ main(int argc, char **argv)
 
 			fclose(movief);
 		}
+		frames -= frm->frame_rate;
 	}
-	printf("%d files written.\n", num);
-	return (0);
+	printf("%d frames written, framerate %dfps\n", num, frm->frame_rate);
+	frm_close(frm);
+	return (EXIT_SUCCESS);
 }

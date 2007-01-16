@@ -25,4 +25,4 @@ configure
 race.h
 .DS_Store
 cscope.out
-
+.*.swp
