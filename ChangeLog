@@ -1,5 +1,12 @@
 2007-01-16  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V103
+
+	* Changed defined(linux) to defined(__linux__) so it'll work under ansi c or c99.
+	I guess 'linux' isn't defined under c99, odd.
+
+2007-01-16  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V102
 
 	* Replaced all the variations of the wait for mouse while loops with a function.
