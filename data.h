@@ -516,7 +516,8 @@ typedef struct {
 } PatchHdrSmall;
 
 // Save Game related typedefs
-#define RaceIntoSpace_Signature	'RiSP'
+//#define RaceIntoSpace_Signature	'RiSP'
+#define RaceIntoSpace_Signature 0x52695350		
 #define SAVEFILE_UNK_MAGIC	0x1A
 
 typedef enum {
