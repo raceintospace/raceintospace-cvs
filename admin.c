@@ -129,7 +129,7 @@ void Admin(char plr)
   remove_savedat("PORT.TMP"); // remove temp file
   KillMusic();
   strcpy(IDT,"i000");strcpy(IKEY,"k000");
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
 }
 
 int GenerateTables(SaveGameType saveType)
@@ -879,7 +879,7 @@ char GetBlockName(char *Nam)
   
   gr_sync ();
   key=0;i=0;
-  while(!(key==0x0d || key==0x1b)) {
+  while(!(key==K_ENTER || key==K_ESCAPE)) {
     av_block ();
     gr_maybe_sync ();
     key = bioskey (0);
@@ -906,7 +906,7 @@ char GetBlockName(char *Nam)
   gxPutImage(&local,gxSET,39,50,0);
   DV(&local);
   
-  if(key==0x0d && i>=1) return 1; else return 0;
+  if(key==K_ENTER && i>=1) return 1; else return 0;
 }
 
 
@@ -936,7 +936,7 @@ void BadFileType(void)
     InBox(43,67,197,77);RectFill(44,68,196,76,13);
     grSetColor(11);PrintAt(47,74,"CORRUPT SAVE FILE");
     delay(2000);gxPutImage(&local,gxSET,39,50,0);
-  PauseMouse();
+	PauseMouse();
   gxPutImage(&local,gxSET,39,50,0);
   DV(&local);
 }
@@ -1094,14 +1094,14 @@ int FutureCheck(char plr,char type)
 
   FadeIn(2,pal,10,0,0);
   
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   pad=-1;x=y=mousebuttons=key=0;
   while(pad==-1) {
    key=0;GetMouse();
      if (x>=219 && y>=19 && x<=262 && y<=27 && mousebuttons>0) 
       {
        InBox(219,19,262,27);
-       while(1)  { GetMouse();if (mousebuttons==0) break;}
+       WaitForMouseUp();
        pad=5;key=0;
       }
      if (((!(x>=59 && y>=12 && x<=269 && y<=186))&&mousebuttons>0) || key==K_ESCAPE || key==K_ENTER || key=='E')
@@ -1113,7 +1113,7 @@ int FutureCheck(char plr,char type)
       {
        if ((x>=110 && y>=69+i*51 && x<=262 && y<=77+i*51 && tx[i]!=1 && mousebuttons>0) || (tx[i]!=1 && key=='A'+i)) {
 	     InBox(110,69+i*51,262,77+i*51);
-	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
 	 key=0;
 	 delay(300);
 	 if (p[i]==1) pad=i;
@@ -1177,7 +1177,7 @@ char RequestX(char *s,char md)
   DispBig(166-i*10,65,&s[0],0,-1);
   PrintAt(138,94,"ARE YOU SURE");
   
-  while(mousebuttons!=0) GetMouse();
+  WaitForMouseUp();
   i=2;
   while(i==2) {
     GetMouse();
@@ -1193,11 +1193,11 @@ char RequestX(char *s,char md)
 
   if (md==1) {
     
-    while(mousebuttons!=0) GetMouse();
+    WaitForMouseUp();
     gxPutImage(&local,gxSET,85,52,0);
     DV(&local);
   }
-  while(mousebuttons!=0) GetMouse();
+  WaitForMouseUp();
   return i;
 }
 

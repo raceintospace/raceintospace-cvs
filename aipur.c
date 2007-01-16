@@ -101,7 +101,7 @@ void Stat(char Win)
 {
  int j,i,starty;
  DrawStatistics(Win);
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  i=0;key=0;starty=118;
   while (i==0)
   {
@@ -109,7 +109,7 @@ void Stat(char Win)
 	if ((x>=193 && y>=42 && x<=278 && y<=60 && mousebuttons>0) || key==K_ENTER)
 	  {
 	   InBox(193,42,278,60);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(150);
 	   i=1;key=0;
 	   OutBox(193,42,278,60);
@@ -118,7 +118,7 @@ void Stat(char Win)
    if ((x>=152 && y>=41 && x<=183 && y<=61 && mousebuttons>0) || key=='D')
 	  {
 	   InBox(152,41,183,61);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(150);
       RankMe(Win);DrawStatistics(Win);
 	   key=0;i=0;
@@ -143,7 +143,7 @@ void Stat(char Win)
            }
          }
         InBox(starty+(j*33),87,31+starty+(j*33),107);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
         key=0;strncpy(IKEY,"k999",4);
         switch(j)
          {
@@ -188,7 +188,7 @@ void Stat(char Win)
             }
           }
          InBox(starty+(j*33),132,31+starty+(j*33),152);
-	      while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      WaitForMouseUp();
          key=0;
          switch(j)
           {

@@ -144,7 +144,6 @@ void Credits(void)
     
     FadeIn(2,pal,30,0,0);
     
-
     while(1)  {
       GetMouse();
       if (mousebuttons==0) break;
@@ -296,11 +295,7 @@ void NextTurn(char plr)
   PreLoadMusic( (plr==0) ? M_GOOD : M_FUTURE );
   PlayMusic(1);
   
-
-  while(1)  {
-      GetMouse();
-      if (mousebuttons==0) break;
-      }
+	WaitForMouseUp();
   while (mousebuttons==0 && key==0) GetMouse();
   key=0;
 

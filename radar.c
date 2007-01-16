@@ -269,7 +269,7 @@ void ShowPad(char plr,char pad)
     return;
    }
   strcpy(IDT,"i028\0");strcpy(IKEY,"k028\0");
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
 	key=0;GetMouse();
@@ -278,7 +278,7 @@ void ShowPad(char plr,char pad)
 	  {  // Scrub Mission
 	   InBox(169,181,314,193);
 	   key=0;
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
      ClrMiss(plr,pad);
 	   OutBox(169,181,314,193);
 	   key=0; 
@@ -290,7 +290,7 @@ void ShowPad(char plr,char pad)
 	  {  // Scrub Mission
 	   InBox(169,181,314,193);
 	   key=0;
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	   if (Data->P[plr].Cash>=Data->P[plr].LaunchFacility[pad]) 
 	     { 
 		   temp=0;
@@ -312,10 +312,10 @@ void ShowPad(char plr,char pad)
       if (temp==1) {KillMusic();return;};
 	  }
    else
-	if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d)
+	if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
 	{
 	   InBox(245,5,314,17);key=0;
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	   OutBox(245,5,314,17);
       if (key>0) delay(150);
       KillMusic();

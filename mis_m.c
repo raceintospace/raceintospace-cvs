@@ -1056,13 +1056,13 @@ void DebugSetFailure(char *Text)
  while(1)
   {
    key=0;
-   while(1) {GetMouse();if (mousebuttons==0) break;}
+		WaitForMouseUp();
    GetMouse();
 
-   if ((key==0x0d ) || (x>=187 && y>=95 && x<=245 && y<=103 && mousebuttons>0))
+   if ((key==K_ENTER ) || (x>=187 && y>=95 && x<=245 && y<=103 && mousebuttons>0))
     { 
      InBox(187,95,245,103); 
-     while(1) {GetMouse();if (mousebuttons==0) break;}
+		WaitForMouseUp();
      
      if (i>0) {
        i=atoi(&A[0]);
@@ -1106,7 +1106,7 @@ void DebugSetFailure(char *Text)
         InBox(187+j*12,74,197+j*12,82);
         key=j+0x30;
         A[i++]=key;
-        while(1) {GetMouse();if (mousebuttons==0) break;}
+				WaitForMouseUp();
         if (key>0) delay(150);
         RectFill(142,92,173,100,10);
 	     grSetColor(1);PrintAt(150,98,&A[0]);
@@ -1123,7 +1123,7 @@ void DebugSetFailure(char *Text)
         InBox(187+j*12,84,197+j*12,92);
         key=j+0x35;
         A[i++]=key;
-        while(1) {GetMouse();if (mousebuttons==0) break;}
+				WaitForMouseUp();
         if (k>0) delay(150);
         RectFill(142,92,173,100,10);
         grSetColor(1);PrintAt(150,98,&A[0]);

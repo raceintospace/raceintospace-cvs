@@ -248,7 +248,7 @@ char pRush=0;
   grSetColor(1);
   PlayMusic(0);
   FadeIn(2,pal,10,0,0);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
    key=0;GetMouse();
@@ -292,7 +292,10 @@ char pRush=0;
    // DOWNGRADE MISSION KEYBOARD
 	if (key=='Q' || key=='R' || key=='U')
     {
-	  if (key=='Q') i=0; else if (key=='R') i=1; else if (key=='U') i=2;
+	  if (key=='Q') i=0; 
+		else if (key=='R') i=1; 
+		else if (key=='U') i=2;
+
      if (Data->P[plr].Mission[i].MissionCode>0 && Data->P[plr].Mission[i].part!=1)    
 	   {
 	    
@@ -339,7 +342,7 @@ char pRush=0;
 	      //PrintAt(145,33+i*58,"ORIGINAL MISSION");
 	      //PrintAt(193,77+i*58,"NO PENALTY");
 	     }
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    OutBox(91,41+i*58,264,59+i*58);
 	    
 	   }
@@ -393,7 +396,7 @@ char pRush=0;
 	     //PrintAt(145,33+i*58,"ORIGINAL MISSION");
 	     //PrintAt(193,77+i*58,"NO PENALTY");
 	    }
-	  while(1)  { GetMouse();if (mousebuttons==0) break;}
+	  WaitForMouseUp();
 	  OutBox(91,41+i*58,264,59+i*58);
 	  
 	 }
@@ -401,10 +404,11 @@ char pRush=0;
   if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)     //  CONTINUE
    {
 	 InBox(245,5,314,17);
-	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
     if (key>0) delay(150);
 	 OutBox(245,5,314,17);delay(10);
 	 for (i=0;i<3;i++)
+	 {
 	  if (Data->P[plr].Mission[i].MissionCode>0)
 	   {
 	    if (dgflag[i]!=0)
@@ -413,6 +417,7 @@ char pRush=0;
          pNeg[plr][i]=1;
         }
 	   }
+	 }
 	 if (Data->P[plr].Mission[1].part==1) R2=R1;
 	 if (Data->P[plr].Mission[2].part==1) R3=R2;
 	 if (Data->P[plr].Mission[0].MissionCode>0 && Data->P[plr].Cash>=3*R1)

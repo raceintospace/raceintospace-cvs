@@ -986,13 +986,13 @@ int idx = 0;
                 }
 
                if (key>0 && kMode==1)  // got a keypress
-                if (key!=0x0d) // not return
+                if (key!=K_ENTER) // not return
                  {
                   x=-1;y=-1;kPad=key;
                  }
 
-               if (good==1 || (kMode==0 && mousebuttons==1) || (kMode==1 && key==0x0d) 
-                  || (kMode==0 && key==0x0d))
+               if (good==1 || (kMode==0 && mousebuttons==1) || (kMode==1 && key==K_ENTER) 
+                  || (kMode==0 && key==K_ENTER))
                 {
                  PortRestore(Count);Count=0;
 

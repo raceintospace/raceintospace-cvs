@@ -309,7 +309,7 @@ void Budget(char player)
  char pStatus[]={1,1,1,1};
  DrawBudget(player,pStatus);
  strcpy(IDT,"i007\0");strcpy(IKEY,"k007\0");
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  while (1)
   {
    key=0;GetMouse();
@@ -318,7 +318,7 @@ void Budget(char player)
      if ((x>=166 && y>=29 && x<=236 && y<=41 && mousebuttons>0) || key==K_ENTER)
       {
 	    InBox(167,29,236,41);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
        if (key>0) delay(150);
 	    OutBox(167,29,236,41);
 	    return;  /* Done */
@@ -330,7 +330,7 @@ void Budget(char player)
 		 if (pStatus[0]==1) InBox(133,140,152,152);
 		   else OutBox(133,140,152,152);
 		 
-		 while(1) {GetMouse();if (mousebuttons==0) break;}
+		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=154 && x<=152 && y<166 && mousebuttons>0) || key=='R')
@@ -340,7 +340,7 @@ void Budget(char player)
 		 if (pStatus[1]==1) InBox(133,154,152,166);
 			else OutBox(133,154,152,166);
 		 
-		 while(1) {GetMouse();if (mousebuttons==0) break;}
+		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=168 && x<=152 && y<180 && mousebuttons>0) || key=='C')
@@ -350,7 +350,7 @@ void Budget(char player)
 		 if (pStatus[2]==1) InBox(133,168,152,180);
 			else OutBox(133,168,152,180);
 		 
-		 while(1) {GetMouse();if (mousebuttons==0) break;}
+		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=182 && x<=152 && y<194 && mousebuttons>0) || key=='M')
@@ -360,7 +360,7 @@ void Budget(char player)
 		 if (pStatus[3]==1) InBox(133,182,152,194);
 			else OutBox(133,182,152,194);
 		 
-		 while(1) {GetMouse();if (mousebuttons==0) break;}
+		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
       }
 	}
@@ -501,7 +501,7 @@ void Viewing(char plr)
 	InBox(244,184,313,194);
   FadeIn(2,pal,10,0,0);
   PlayMusic(0);
-  while(1)  {GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
    key=0;GetMouse();

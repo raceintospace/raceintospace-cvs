@@ -461,7 +461,7 @@ void News(char plr)
    Status = 0;
 
   strcpy(IDT,"i002\0");
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
    key=0;
@@ -594,9 +594,10 @@ void News(char plr)
        OutBox(303,120,313,156);
       }  
      else 
-     if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || (key==0x0d))
+     if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || (key==K_ENTER))
       {  // Continue
 	    InBox(245,5,314,17);
+			WaitForMouseUp();
 	    key=0;i=0;
        KillMusic();
        KillVoice();
@@ -620,18 +621,26 @@ void AIEvent(char plr)
   ResolveEvent(plr);
 }             
 
+// ResolveEvent seems to set a flag in the BadCard array
+// and return the index into that array
 char ResolveEvent(char plr)
 {
-  int bad,ctr;
-
-  ctr = 0; /* XXX check uninitialized */
+  int bad,ctr = 0;
 
   bad=REvent(plr);
-  if (bad!=0) {
-    while  (Data->P[plr].BadCard[bad]!=0) {
-      bad=random(14);ctr++;
-      if (ctr>30) {memset(&Data->P[plr].BadCard[0],0x00,15);ctr=0;};
-    }
+  if (bad) {
+	// News event was bad, find an open slot to record the bad event
+    do {
+			ctr++;
+      bad = random(14);
+      if (ctr>30) {
+				// After 30 good faith random attemptes to find an open slot
+				// reset the BadCard array
+				memset(&Data->P[plr].BadCard[0],0x00,sizeof(Data->P[plr].BadCard));
+				ctr=0;
+			}
+    } while  (Data->P[plr].BadCard[bad]!=0);
+
     Data->P[plr].BadCard[bad]=1;
     bad++;
   }

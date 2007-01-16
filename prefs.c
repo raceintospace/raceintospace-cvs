@@ -260,16 +260,16 @@ long size;
 
   /* Data->Def.Sound=Data->Def.Music=1; */
   DrawPrefs(where,hum1,hum2);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
     key=0;GetMouse();
     if (mousebuttons > 0 || key>0)  /* Game Play */
     {
-      if (((x>=245 && y>=5 && x<=314 && y<=17) || key==0x0d) && !(hum1==1 && hum2==1))
+      if (((x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER) && !(hum1==1 && hum2==1))
       {
 	    InBox(245,5,314,17);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
        if (key>0) delay(150); 
 	    OutBox(245,5,314,17);
 	    if (Data->Def.Plr1!=Data->Def.Plr2)
@@ -333,7 +333,7 @@ long size;
       if ((x>=146 && y>=30 && x<=219 && y<=61 && mousebuttons>0) || key=='E')
        {
 	     InBox(146,30,219,61);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
         if (key>0) delay(150);
 	     OutBox(146,30,219,61);
 	     GV(&local2,320,200);
@@ -357,7 +357,7 @@ long size;
       else
       if (((x>=96 && y>=114 && x<=223 && y<=194 && mousebuttons>0) || key==K_SPACE) && (where==3 || where==0))  // Hist
        {
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     Data->Def.Input++;
         if (Data->Def.Input>3) Data->Def.Input=0;
 	     HModel(Data->Def.Input,0);
@@ -366,7 +366,7 @@ long size;
       if ((x>=146 && y>=70 && x<=219 && y<=101 && mousebuttons>0) || key=='A')
        {
 	     InBox(146,70,219,101);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     Data->Def.Anim=abs(Data->Def.Anim-1);
 	     gxVirtualDisplay(&vhptr,72*(Data->Def.Anim),90,147,71,218,100,0);
 	     OutBox(146,70,219,101);
@@ -376,7 +376,7 @@ long size;
       if ((x>=100 && y>=30 && x<=135 && y<=61 && mousebuttons>0) || key=='M')
        {
 	     InBox(100,30,135,61);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
         Data->Def.Music = !Data->Def.Music;
         // SetMusicVolume((Data->Def.Music==1)?100:0);
 		MuteChannel(AV_MUSIC_CHANNEL, !Data->Def.Music);
@@ -388,7 +388,7 @@ long size;
       if ((x>=100 && y>=70 && x<=135 && y<=101 && mousebuttons>0) || key=='S')
        {
 	     InBox(100,70,135,101);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
         Data->Def.Sound = !Data->Def.Sound;
 		MuteChannel(AV_SOUND_CHANNEL, !Data->Def.Sound);
         gxVirtualDisplay(&vhptr,221+34*(Data->Def.Sound),0,101,71,134,100,0);
@@ -402,7 +402,7 @@ long size;
            || (where==0 && ksel==0 && key=='C'))
        {
 	     BinT(8,54,1);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     Data->Def.Plr1++;
 	     if (Data->Def.Plr1>1) Data->Def.Plr1=0;
 	     PLevels(0,Data->Def.Plr1);BinT(8,54,0);
@@ -415,7 +415,7 @@ long size;
           (where==0 && ksel==0 && key=='H'))
        {
 	     InBox(8,77,18,85);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     hum1++; if (hum1>1) hum1=0;
 	     CLevels(0,hum1);
 	     OutBox(8,77,18,85);
@@ -426,7 +426,7 @@ long size;
           ((where==3 || where==0) && ksel==0 && key=='G'))
        {
 	     InBox(8,107,81,138);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     OutBox(8,107,81,138);
 	     Data->Def.Lev1++;
 	     if (Data->Def.Lev1>2) Data->Def.Lev1=0;
@@ -438,7 +438,7 @@ long size;
           ((where==3 || where==0) && ksel==0 && key=='L'))
        {
 	     InBox(8,160,81,191);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     OutBox(8,160,81,191);
 	     Data->Def.Ast1++;
 	     if (Data->Def.Ast1>2) Data->Def.Ast1=0;
@@ -451,7 +451,7 @@ long size;
           || (where==0 && ksel==1 && key=='C'))
        {
 	     BinT(238,54,1);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     Data->Def.Plr2++;
 	     if (Data->Def.Plr2>1) Data->Def.Plr2=0;
 	     PLevels(1,Data->Def.Plr2);BinT(238,54,0);
@@ -463,7 +463,7 @@ long size;
           (where==0 && ksel==1 && key=='H'))
        {
 	     InBox(238,77,248,85);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     hum2++; if (hum2>1) hum2=0;
 	     CLevels(1,hum2);
 	     OutBox(238,77,248,85);
@@ -474,7 +474,7 @@ long size;
           ((where==0 || where==3) && ksel==1 && key=='G'))
        {
 	     InBox(238,107,311,138);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     OutBox(238,107,311,138);
 	     Data->Def.Lev2++;
 	     if (Data->Def.Lev2>2) Data->Def.Lev2=0;
@@ -486,7 +486,7 @@ long size;
          ((where==0 || where==3) && ksel==1 && key=='L'))
       {
 	    InBox(238,160,311,191);
-	    while(1)  { GetMouse();if (mousebuttons==0) break; }
+			WaitForMouseUp();
 	    OutBox(238,160,311,191);
 	    Data->Def.Ast2++;
 	    if (Data->Def.Ast2>2) Data->Def.Ast2=0;
@@ -501,7 +501,7 @@ long size;
 	    for (i=0;i<20;i++) Data->P[0].Name[i]=0x00;
 	    num=0;ch=0;
 	    grSetColor(1);grMoveTo(8,40);DispChr(0x14);
-	    while(ch!=0x0d)
+	    while(ch!=K_ENTER)
         {
 	      ch=getch();
         if (ch!=(ch&0xff)) ch=0x00;
@@ -529,7 +529,7 @@ long size;
 	    for (i=0;i<20;i++) Data->P[1].Name[i]=0x00;
 	    num=0;ch=0;
 	    grSetColor(1); grMoveTo(238,40);DispChr(0x14);
-	    while(ch!=0x0D) {
+	    while(ch!=K_ENTER) {
         ch=getch();
         if (ch!=(ch&0xff)) ch=0x00;
         if (ch>='a' && ch<='z') ch-=0x20;
@@ -610,16 +610,16 @@ void EditAst(void)
  for (i=0;i<106;i++) M_Sv[i]=Sov[i].Cap+Sov[i].LM+Sov[i].EVA+Sov[i].Docking+Sov[i].Endurance; 
  //FadeIn(2,pal,10,0,0);
  
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
   while (1)
   {
 	key=0;GetMouse();
 	if (mousebuttons > 0 || key>0)  /* Game Play */
 	  {
-	   if ((x>=245 && y>=5 && x<=314 && y<=17) || key==0x0d)
+	   if ((x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER)
 	 {
 	  InBox(245,5,314,17);
-	  while(1)  { GetMouse();if (mousebuttons==0) break;}
+	  WaitForMouseUp();
 	  temp=0;
 	  temp=Help("i106");
 	  if (temp==1)
@@ -639,7 +639,7 @@ void EditAst(void)
     if ((x>=6 && y>=27 && x<=33 && y<=43 && mousebuttons>0 && Cnt==1) || key=='U')
       {
 	    InBox(6,27,33,43);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    delay(10);
 	    RectFill(186,48,314,114,0);Cnt=0;DrawStats(now,Cnt);
 	    ShBox(27,49+BarA*8,153,57+BarA*8);First(now,BarA);
@@ -648,12 +648,12 @@ void EditAst(void)
      if ((x>=167 && y>=27 && x<=194 && y<=43 && mousebuttons>0 && Cnt==0) || key=='S')
        {
 	     InBox(167,27,194,43);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     delay(10);RectFill(26,48,154,114,0);Cnt=1;DrawStats(now2,Cnt);
 	     ShBox(187,49+BarB*8,313,57+BarB*8);Second(now2,BarB);
 	     OutBox(6,27,33,43);
        }
-     if (((x>=27 && y>=49+BarA*8 && x<=153 && y<=57+BarA*8 && mousebuttons>0) || key==0x0020) && Cnt==0)
+     if (((x>=27 && y>=49+BarA*8 && x<=153 && y<=57+BarA*8 && mousebuttons>0) || key==K_SPACE) && Cnt==0)
        {
 	     
 	     ChangeStat(now,0,Cnt);  
@@ -661,7 +661,7 @@ void EditAst(void)
 	     First(now,BarA);  
 	     
        }
-     if (((x>=187 && y>=49+BarB*8 && x<=313 && y<=57+BarB*8 && mousebuttons>0) || key==0x0020) && Cnt==1)
+     if (((x>=187 && y>=49+BarB*8 && x<=313 && y<=57+BarB*8 && mousebuttons>0) || key==K_SPACE) && Cnt==1)
        {
 	     
 	     ChangeStat(now2,0,Cnt);
@@ -682,7 +682,7 @@ void EditAst(void)
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
        OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    
       }
      if ((x>=6 && y>=139 && x<=43 && y<=151 && mousebuttons>0) || key=='L')
@@ -698,7 +698,7 @@ void EditAst(void)
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    
       }
      if ((x>=6 && y>=154 && x<=43 && y<=166 && mousebuttons>0) || key=='E')
@@ -714,7 +714,7 @@ void EditAst(void)
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    
       }
      if ((x>=6 && y>=169 && x<=43 && y<=181 && mousebuttons>0) || key=='D')
@@ -730,7 +730,7 @@ void EditAst(void)
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    
       }
      if ((x>=6 && y>=184 && x<=43 && y<=196 && mousebuttons>0) || key=='N')
@@ -746,7 +746,7 @@ void EditAst(void)
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    
       }
       //US SIDE
@@ -774,7 +774,7 @@ void EditAst(void)
 	           ShBox(27,49+BarA*8,153,57+BarA*8);
 	           First(now,BarA);
 	          };
-            while(1)  { GetMouse();if (mousebuttons==0) break;}
+            WaitForMouseUp();
 	         DrawStats(now,0);
 	         
            }
@@ -804,14 +804,14 @@ void EditAst(void)
 	           ShBox(187,49+BarB*8,313,57+BarB*8);
 	           Second(now2,BarB);
 	         };
-           while(1)  { GetMouse();if (mousebuttons==0) break;}
+           WaitForMouseUp();
 	        DrawStats(now2,1);
 	        
           }
         }
        }
 
-      if (((x>=7 && y>=49 && x<=19 && y<=80 && mousebuttons>0) || key==0x4800) && Cnt==0)
+      if (((x>=7 && y>=49 && x<=19 && y<=80 && mousebuttons>0) || key==UP_ARROW) && Cnt==0)
         { /* Lft Up */
 	      InBox(7,49,19,80);
          for (i=0;i<50;i++)
@@ -865,10 +865,10 @@ void EditAst(void)
          key=0;
          GetMouse();
          }
-	      //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      //WaitForMouseUp();
 	      OutBox(7,49,19,80);delay(10);
         }
-      if (((x>=7 && y>=82 && x<=19 && y<=113 && mousebuttons>0) || key==0x5000) && Cnt==0)
+      if (((x>=7 && y>=82 && x<=19 && y<=113 && mousebuttons>0) || key==DN_ARROW) && Cnt==0)
         { /* Lft Dwn */
 	      InBox(7,82,19,113);
          for (i=0;i<50;i++)
@@ -924,10 +924,10 @@ void EditAst(void)
          key=0;
          GetMouse();
          }
-	      //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      //WaitForMouseUp();
 	      OutBox(7,82,19,113);delay(10);
         };
-      if (((x>=167 && y>=49 && x<=179 && y<=80 && mousebuttons>0) || key==0x4800) && Cnt==1)
+      if (((x>=167 && y>=49 && x<=179 && y<=80 && mousebuttons>0) || key==UP_ARROW) && Cnt==1)
         { /* Rt Up */
 	      InBox(167,49,179,80);
          for (i=0;i<50;i++)
@@ -981,10 +981,10 @@ void EditAst(void)
          key=0;
          GetMouse();
         }
-	     //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     //WaitForMouseUp();
          OutBox(167,49,179,80);delay(10);
         };
-      if (((x>=167 && y>=82 && x<=179 && y<=113 && mousebuttons>0) || key==0x5000) && Cnt==1)
+      if (((x>=167 && y>=82 && x<=179 && y<=113 && mousebuttons>0) || key==DN_ARROW) && Cnt==1)
         { /* Rt Dwn */
 	      InBox(167,82,179,113);
          for (i=0;i<50;i++)
@@ -1040,7 +1040,7 @@ void EditAst(void)
         key=0;
         GetMouse();
        }
-	    //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    //WaitForMouseUp();
 	    OutBox(167,82,179,113);delay(10);
 	   };
   }
@@ -1074,7 +1074,7 @@ void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
    grSetColor(1);grMoveTo(215,165);
    key=0;i=0;
    
-   while(!(key==0x0d || key==0x1b))
+   while(!(key==K_ENTER || key==K_ESCAPE))
 	 {
 	  key = bioskey (0);
 	  if (key >= 'a' && key <= 'z')
@@ -1169,7 +1169,7 @@ void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
 	IOBox(210,166,253,178);IOBox(265,166,308,178);IOBox(247,181,278,193);
 	grSetColor(1);
 	PrintAt(222,174,"PLUS");PrintAt(273,174,"MINUS");PrintAt(252,189,"DONE");
-    while(1)  { GetMouse();if (mousebuttons==0) break;}
+    WaitForMouseUp();
     while (1)
       {
 	    key=0;GetMouse();
@@ -1179,7 +1179,7 @@ void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
 	       ++srt;RectFill(248,152,269,160,0);
 	       grSetColor(1);DispNum(256,158,srt);  
 	       delay(10);
-	       while(1)  { GetMouse();if (mousebuttons==0) break;}     
+	       WaitForMouseUp();     
 	       OutBox(212,168,251,176);
 	      }
 	    if ((x>=267 && y>=168 && x<=306 && y<=176 && srt>=1 && mousebuttons>0) || (key=='-' && srt>=1))
@@ -1188,10 +1188,10 @@ void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
 	       --srt;RectFill(248,152,269,160,0);
 	       grSetColor(1);DispNum(256,158,srt);  
 	       delay(10);
-	       while(1)  { GetMouse();if (mousebuttons==0) break;}   
+	       WaitForMouseUp();   
 	       OutBox(267,168,306,176);
 	      }
-	    if ((x>=249 && y>=183 && x<=276 && y<=191 && mousebuttons>0) || key==0x0d)
+	    if ((x>=249 && y>=183 && x<=276 && y<=191 && mousebuttons>0) || key==K_ENTER)
 	      {
 	       InBox(249,183,276,191);
 	       
@@ -1206,7 +1206,7 @@ void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
 	         }
 	       DrawStats(mum,Cnt);
 	       
-	       while(1)  { GetMouse();if (mousebuttons==0) break;}    
+	       WaitForMouseUp();    
 	       OutBox(249,183,276,191);
 	       RectFill(210,156,307,168,0);    
 	       RectFill(210,130,307,142,3);       

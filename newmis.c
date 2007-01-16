@@ -98,14 +98,10 @@ void MisOrd(char num)
   };
   FadeIn(2,pal,10,0,0);
   
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
-  while (1)
-  {
-    key=0;GetMouse();
-    if (mousebuttons > 0 || key > 0)
-	 while(1)  { GetMouse();if (mousebuttons==0)
-	   {FadeOut(2,pal,10,0,0);return;}}
-  };
+  WaitForMouseUp();
+	WaitForKeyOrMouseDown();
+	WaitForMouseUp();
+	FadeOut(2,pal,10,0,0);
 }
 
 
@@ -292,23 +288,23 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
   FadeIn(2,pal,10,0,0);
   
 
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   if (HelpFlag) Help("i156");  // Notification of being an Help
 
   while (1)
   {
 	key=0;GetMouse();
-	if ((x>=59 && y>=70 && x<=116 && y<=82 && mousebuttons > 0) || key==0x0d || key=='C')
+	if ((x>=59 && y>=70 && x<=116 && y<=82 && mousebuttons > 0) || key==K_ENTER || key=='C')
 	  {
 	   InBox(59,70,116,82);
-	   while(1)  { GetMouse();if (mousebuttons==0)break;}
+		WaitForMouseUp();
 	   OutBox(59,70,116,82);
 	   FadeOut(2,pal,10,0,0);BIG=0;return;
 	  }
-	else if ((x>=133 && y>=70 && x<=195 && y<=82 && mousebuttons > 0) || key==0x0d || key=='P')
+	else if ((x>=133 && y>=70 && x<=195 && y<=82 && mousebuttons > 0) || key==K_ENTER || key=='P')
 	  {
 	   InBox(133,70,195,82);
-	   while(1)  { GetMouse();if (mousebuttons==0)break;}
+		WaitForMouseUp();
 	   OutBox(133,70,195,82);
 	   FadeOut(2,pal,10,0,0);BIG=1;return;
 	  }
@@ -317,7 +313,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 	if ((x>=207 && y>=70 && x<=264 && y<=82 && mousebuttons > 0) || key=='S')
 	  {
 	   InBox(207,70,264,82);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	   OutBox(207,70,264,82);
 		{
 		 ClrMiss(plr,pad);

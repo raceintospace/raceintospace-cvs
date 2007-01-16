@@ -88,7 +88,7 @@ int MChoice(char qty,char *Name)
 	DispBig(34,150,"EXIT",1,0);
 
 	FadeIn(2,pal,30,0,0);
-	while(1) {GetMouse();if (mousebuttons==0) break;}
+	WaitForMouseUp();
 	j=-1;starty=9;
 	while(j==-1)
 	{
@@ -144,7 +144,7 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 
   
   FadeIn(2,pal,10,0,0);
-  while(1) {GetMouse();if (mousebuttons==0) break;}
+	WaitForMouseUp();
   j=-1;
   while(j==-1) {
 	av_block ();
@@ -507,7 +507,7 @@ int Help(char *FName)
       i+=5;
       }
    else {   // Text of Line
-      while (Help[i]!=0x0D) NTxt[j++]=Help[i++];
+      while (Help[i]!=0x0d) NTxt[j++]=Help[i++];
       NTxt[j]=0x00;
       i+=2;line++;
       j=line*42;
@@ -543,30 +543,32 @@ int Help(char *FName)
   top=plc=1;
   DispHelp(plc,bot-1,&NTxt[0]);
 
-  
-  while (mousebuttons==1) GetMouse();
+	WaitForMouseUp();
   i=2;
   while(i==2) {
     GetMouse();
-    if (mode==0 && ((x>85 && y>=133 && x<=239 && y<=154 && mousebuttons>0) || (key=='C' || key==0x0d))) {
+    if (mode==0 && ((x>85 && y>=133 && x<=239 && y<=154 && mousebuttons>0) || (key=='C' || key==K_ENTER))) {
       InBox(85,133,239,154);i=0;
-      while(mousebuttons==1) GetMouse(); key=0;
+			WaitForMouseUp();
+			key = 0;
       // Continue Response
     }
     if (mode==1 && ((x>=85 && y>=133 && x<=154 && y<=154 && mousebuttons>0) || key=='Y')) {
       InBox(85,133,154,154);i=1;
-      while (mousebuttons==1) GetMouse();     key=0;
+			WaitForMouseUp();
+			key = 0;
       // Yes Response
     }
     if (mode==1 && ((x>170 && y>=133 && x<=239 && y<=154 && mousebuttons>0) || key=='N')) {
       InBox(170,133,239,154);i=-1;
-      while(mousebuttons==1) GetMouse(); key=0;
+			WaitForMouseUp();
+			key = 0;
       // No Response
     }
     if (plc>top && ((x>=266 && y>50 && x<=277 && y<=87 && mousebuttons>0) || (key>>8)==72 ))
       {
        InBox(266,50,277,87);
-      // while(1)  { GetMouse();if (mousebuttons==0) break;}
+      // WaitForMouseUp();
        plc--;
        DispHelp(plc,bot,&NTxt[0]);
 	   OutBox(266,50,277,87);
@@ -575,7 +577,7 @@ int Help(char *FName)
     if ((plc+11)<bot && ((x>=266 && y>89 && x<=277 && y<=126 && mousebuttons>0) || (key>>8)==80 ))
 	  {
        InBox(266,89,277,126);
-      // while(1)  { GetMouse();if (mousebuttons==0) break;}
+      // WaitForMouseUp();
        plc++;
        DispHelp(plc,bot,&NTxt[0]);
        OutBox(266,89,277,126);
@@ -695,13 +697,13 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
      if (!AI[plr]) PlayMusic(0);
   };
 
-  while(1) {GetMouse();if (mousebuttons==0) break;}
+	WaitForMouseUp();
   while(1) {
 	   GetMouse();
-	   if (mode==0 && ((x>=216 && y>=153 && x<=308 && y<=163 && mousebuttons==1) || (key==0x0d || key=='E')))
+	   if (mode==0 && ((x>=216 && y>=153 && x<=308 && y<=163 && mousebuttons==1) || (key==K_ENTER || key=='E')))
 	   { 
 	      InBox(216,153,308,153);OutBox(245,5,314,17); 
-	      while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      WaitForMouseUp();
         if(key>0) delay(150);
 	      DrawMisHist(plr,where);
         key=0;
@@ -710,7 +712,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
      else if (mode==1 && ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons==1) || key==K_ENTER))
      {
         InBox(245,5,314,17);
-	      while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      WaitForMouseUp();
         if (key>0) delay(150);
 	      OutBox(245,5,314,17);delay(10);
         if (!AI[plr]) KillMusic();
@@ -724,7 +726,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
         if (mode==0) InBox(216,153,309,163);
         grSetColor(11);PrintAt(225,125,"PLAYING...");
          
-	      while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      WaitForMouseUp();
         grSetColor(1);
 
         if (x==0 && y==0) {

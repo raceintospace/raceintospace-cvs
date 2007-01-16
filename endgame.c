@@ -263,7 +263,7 @@ void EndGame(char win,char pad)
  AltHistory(win);
  FadeIn(2,pal,10,0,0);
  
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  i=0;key=0;
  while (i==0)
   {
@@ -271,7 +271,7 @@ void EndGame(char win,char pad)
 	if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
 	  {
 	   InBox(244,5,313,17);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(150);
 	   i=1;key=0;
 	   OutBox(244,5,313,17);
@@ -347,7 +347,7 @@ void NewEnd(char win,char loc)
  Draw_NewEnd(win);
  grSetMousePos(159,181);
  R_V=Burst(win);
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  i=0;key=0;
  GV(&local,162,92);gxClearVirtual(&local,0);
 
@@ -384,7 +384,7 @@ void NewEnd(char win,char loc)
    if (((x>=14 && y>=182 && x<=65 && y<=190 && mousebuttons>0) || key=='H') || R_V==1)
     {
      InBox(14,182,65,190);
-     while(1)  { GetMouse();if (mousebuttons==0) break;}
+     WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
      i=0;key=0;
      OutBox(14,182,65,190);
@@ -399,7 +399,7 @@ void NewEnd(char win,char loc)
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
      InBox(74,182,125,190);
-     while(1)  { GetMouse();if (mousebuttons==0) break;}
+     WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
      i=0;key=0;
      OutBox(74,182,125,190);
@@ -417,7 +417,7 @@ void NewEnd(char win,char loc)
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
      InBox(134,182,185,190);
-     while(1)  { GetMouse();if (mousebuttons==0) break;}
+     WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
      if (R_V==3) R_V=-1;
      i=0;key=0;
@@ -436,7 +436,7 @@ void NewEnd(char win,char loc)
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
      InBox(194,182,245,190);
-     while(1)  { GetMouse();if (mousebuttons==0) break;}
+     WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
      if (R_V==4) R_V=-1;
      i=0;key=0;
@@ -456,7 +456,7 @@ void NewEnd(char win,char loc)
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
      KillMusic();
      InBox(254,182,305,190);
-     while(1)  { GetMouse();if (mousebuttons==0) break;}
+     WaitForMouseUp();
      if (key>0) delay(150);
      i=1;key=0;
      OutBox(254,182,305,190);
@@ -573,7 +573,7 @@ void FakeWin(char win)
  PlayMusic(0);
  FadeIn(2,pal,10,0,0);
  
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  i=0;key=0;
   while (i==0)
   {
@@ -581,7 +581,7 @@ void FakeWin(char win)
 	if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
 	  {
 	   InBox(244,5,313,17);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(150);
 	   i=1;key=0;
 	   OutBox(244,5,313,17);
@@ -682,7 +682,7 @@ void SpecialEnd(void)
  PrintOne(buffer+1000,1);
  FadeIn(2,pal,10,0,0);
  
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  i=0;key=0;
  while (i==0)
   {
@@ -690,7 +690,7 @@ void SpecialEnd(void)
 	 if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
 	  {
 	   InBox(244,5,313,17);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(150);
 	   i=1;key=0;
 	  };

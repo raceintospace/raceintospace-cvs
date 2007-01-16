@@ -1220,7 +1220,7 @@ char FutBad(void)
   PrintAt(96,70,"PROGRAM WITH LESS THAN");
   PrintAt(96,80,"TWO GROUPS AVAILABLE.");
   
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   i=0;
   while(i==0) {
   GetMouse();

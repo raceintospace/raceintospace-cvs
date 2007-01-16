@@ -27,16 +27,6 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 
-#define pnButton(a,b,c,d,e,f,g) if ((x>=(a) && y>=(b) && x<=(c) && y<=(d) && mousebuttons==1) || ((f)!=(g)))\
-			    { \
-			    InBox((a),(b),(c),(d)); \
-			    while(1)  { GetMouse();if (mousebuttons==0) break;} \
-			    (e); \
-				    if((f)>0) delay(150); \
-				OutBox((a),(b),(c),(d)); \
-			    };
-#define poz(a) (((a)<0)?0:(a))
-
 extern GXHEADER but;
 extern char Option,MAIL;
 
@@ -89,7 +79,7 @@ void ShowHard(char plr)
  char Cnt=0; // switch between screens
  DrawHardef(plr);
  strcpy(IDT,"i034");strcpy(IKEY,"k034");
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  while (1)
   {
    key=0;GetMouse();
@@ -98,7 +88,7 @@ void ShowHard(char plr)
       if (((x>=7 && y>=164 && x<=75 && y<=195 && mousebuttons>0) || key=='U') && place!=0)
 		 {
 		  InBox(7,164,75,195);
-		  while(1)  { GetMouse();if (mousebuttons==0) break;}
+		  WaitForMouseUp();
 		  OutBox(7,164,75,195);     
 		  ReButs(place,0);
 		  place=0;
@@ -144,7 +134,7 @@ void ShowHard(char plr)
       if (((x>=83 && y>=164 && x<=156 && y<=195 && mousebuttons>0) || key=='R') && place!=1)
 	    {
 		  InBox(83,164,156,195);
-		  while(1)  { GetMouse();if (mousebuttons==0) break;}
+		  WaitForMouseUp();
 		  OutBox(83,164,156,195);
 		  ReButs(place,1);
 		  place=1;
@@ -156,7 +146,7 @@ void ShowHard(char plr)
       if (((x>=164 && y>=164 && x<=237 && y<=195 && mousebuttons>0) || key=='C') && place!=2)
 	    {
 		  InBox(164,164,237,195);
-		  while(1)  { GetMouse();if (mousebuttons==0) break;}
+		  WaitForMouseUp();
 		  OutBox(164,164,237,195);
 		  /* MANNED */
 		  ReButs(place,2);
@@ -168,7 +158,7 @@ void ShowHard(char plr)
       if (((x>=245 && y>=164 && x<=313 && y<=195 && mousebuttons>0) || key=='M') && place!=3)
 	    {
 		  InBox(245,164,313,195);
-		  while(1)  { GetMouse();if (mousebuttons==0) break;}
+		  WaitForMouseUp();
 		  OutBox(245,164,313,195);
 		  ReButs(place,3);
 		  place=3;
@@ -177,10 +167,10 @@ void ShowHard(char plr)
 		  /* MISC */
 	    }
 	   else
-      if ((x>=244 && y>=5 && x<=314 && y<=17) || key==0x0d)
+      if ((x>=244 && y>=5 && x<=314 && y<=17) || key==K_ENTER)
 	    {
 		  InBox(244,5,314,17);
-		  while(1)  { GetMouse();if (mousebuttons==0) break;}
+		  WaitForMouseUp();
 		  OutBox(244,5,314,17);
 		  Del_RD_BUT();
 		  return;  /* Done */
@@ -958,14 +948,14 @@ void RankMe(char plr)
  }
  FadeIn(2,pal,5,0,0);
  
- while(1) {GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  while(1)
 	{
 	 GetMouse();
-	 if ((x>=0 && y>=0 && x<=319 && y<=199 && mousebuttons>0) || key==0x0d)
+	 if ((x>=0 && y>=0 && x<=319 && y<=199 && mousebuttons>0) || key==K_ENTER)
 	   {
 		if (key>0) {delay(300);key=0;};
-		while(1)  { GetMouse();if (mousebuttons==0) break;}
+		WaitForMouseUp();
       key=0;
 		return;
 	   }

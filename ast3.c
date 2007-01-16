@@ -199,7 +199,7 @@ void Train(char plr,int level)
 	default:break;
   };
   
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
 	key=0;GetMouse();
@@ -211,7 +211,7 @@ void Train(char plr,int level)
 	 ShBox(26,130+BarA*8,152,138+BarA*8);
 	 DispLeft(plr,BarA,count,now2,&M[0]);
 		 TrainText(plr,M[now2],count);
-	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
 	 
 	  }
 	}
@@ -270,7 +270,7 @@ void Train(char plr,int level)
         key=0;
         GetMouse();
        }
-	   //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   //WaitForMouseUp();
 	   OutBox(6,130,18,161);delay(10);
      }
      else
@@ -328,14 +328,14 @@ void Train(char plr,int level)
         key=0;
         GetMouse();
        }
-	    //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    //WaitForMouseUp();
 	    OutBox(6,163,18,194);delay(10);
 	   }
      else
 	  if (((x>=168 && y>=181 && x<=314 && y<=193 && mousebuttons>0) || key=='W') && count>0)
       {
 	    InBox(168,181,314,193);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
        if (key>0) delay(150);
 	    OutBox(168,181,314,193);
        // Help box are you sure
@@ -371,7 +371,7 @@ void Train(char plr,int level)
 	  if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
       {
 	    InBox(245,5,314,17);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
        if (key>0) delay(150);
 	    OutBox(245,5,314,17);
        KillMusic();
@@ -473,7 +473,7 @@ void Hospital(char plr,int sel)
   DispLeft(plr,BarA,count,now2,&M[0]);
   FadeIn(2,pal,10,0,0);
   PlayMusic(0);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
     key=0;GetMouse();
@@ -486,7 +486,7 @@ void Hospital(char plr,int sel)
 	     RectFill(26,129,153,195,0);
 	     ShBox(26,130+BarA*8,152,138+BarA*8);
 	     DispLeft(plr,BarA,count,now2,&M[0]);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     
 	    }
      }  
@@ -507,7 +507,7 @@ void Hospital(char plr,int sel)
 	      DispLeft(plr,BarA,count,now2,&M[0]);
 	     };
 	    
-	   // while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   // WaitForMouseUp();
 	    OutBox(6,130,18,161);delay(10);
       }
     else 
@@ -529,13 +529,13 @@ void Hospital(char plr,int sel)
 		  DispLeft(plr,BarA,count,now2,&M[0]);
 	    };
 	   
-	  // while(1)  { GetMouse();if (mousebuttons==0) break;}
+	  // WaitForMouseUp();
 	   OutBox(6,163,18,194);delay(10);
      };
    if ((mousebuttons>0 && x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER)
     {
 	  InBox(245,5,314,17);
-	  while(1)  { GetMouse();if (mousebuttons==0) break;}
+	  WaitForMouseUp();
     KillMusic();
 	  return;  /* Done */
     }; /* end x-y if */

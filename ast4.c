@@ -145,9 +145,10 @@ void AstLevel(char plr,char prog,char crew,char ast)
    // don't do this for level three
    PrintAt(0,0,"  M:");DispNum(0,0,Data->P[plr].Pool[man].Mood);
 
-   key=0;
-   if (mousebuttons>0) while (mousebuttons>0) GetMouse();
-     else while (key==0) GetMouse();
+	 key=0;
+	 if (mousebuttons) WaitForMouseUp();
+	 else while (key==0) GetMouse();
+
    gxPutImage(&local,gxSET,94,38,0);
    DV(&local);
    return;
@@ -348,7 +349,7 @@ void DamProb(char plr,char prog,int chk)
  PrintAt(0,0,"%");
  FadeIn(2,pal,10,0,0);
  
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  while(1)
   {
    key=0;GetMouse();
@@ -357,7 +358,7 @@ void DamProb(char plr,char prog,int chk)
 	   if ((x>=118 && y>=132 && x<=187 && y<=153 && mousebuttons>0) || key=='Y')
        {
 	     InBox(118,132,187,153);
-	     while(1) { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
         if (key>0) delay(150);
 	     Data->P[plr].Cash-=D_Cost;
         switch(prog)
@@ -382,7 +383,7 @@ void DamProb(char plr,char prog,int chk)
 	   if ((x>=203 && y>=132 && x<=272 && y<=153 && mousebuttons>0) || key=='N')
        {
 	     InBox(203,132,272,153);
-	     while(1) { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
          if (key>0) delay(150);
 	     return;
 	     }
@@ -406,7 +407,7 @@ void CrewProb(char plr,char prog)
    else PrintAt(0,0,"ASTR"); PrintAt(0,0,"ONAUTS IN THE");
  PrintAt(90,96,"PROGRAM TO ASSIGN CREWS");
  
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  while(1)
   {
    key=0;GetMouse();
@@ -415,7 +416,7 @@ void CrewProb(char plr,char prog)
 	 if ((x>=83 && y>=154 && x<=236 && y<=165 && mousebuttons>0) || key==K_ENTER || key==K_ESCAPE)
       { 
 	    InBox(83,154,236,165);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
        if (key>0) delay(150);
 	    return;  // Abort - Redo Mission
 	   }
@@ -487,7 +488,7 @@ void Programs(char plr,char prog)
   chk=CheckProgram(plr,prog);
   
   if (chk==0) {if (plr==0) Help("i113");else Help("i114");KillMusic();return;}
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
     key=0;GetMouse();
@@ -499,7 +500,7 @@ void Programs(char plr,char prog)
 	 DispLeft(plr,BarA,count,now2,&M[0]);
 	 ShBox(26,130+BarA*8,152,138+BarA*8);
 	 BarSkill(plr,BarA,now2,&M[0]);
-	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
 	 ShBox(26,130+BarA*8,152,138+BarA*8);
 	 DispLeft(plr,BarA,count,now2,&M[0]);
 	 
@@ -616,7 +617,7 @@ void Programs(char plr,char prog)
         key=0;
         GetMouse();
        }
-	    //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    //WaitForMouseUp();
 	    OutBox(6,163,18,194);
       }
      else
@@ -670,7 +671,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 		    Data->P[plr].Crew[prog][grp][3]);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
       }
       else
       if (x>=164 && y>=154 && x<=238 && y<=166 && mousebuttons>0)
@@ -681,7 +682,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 		    Data->P[plr].Crew[prog][grp][3]);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
       }
       else
       if (x>=164 && y>=169 && x<=238 && y<=181 && mousebuttons>0)
@@ -692,7 +693,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 		    Data->P[plr].Crew[prog][grp][3]);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
       }
       else
       if (x>=164 && y>=184 && x<=238 && y<=196 && mousebuttons>0)
@@ -703,7 +704,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 		    Data->P[plr].Crew[prog][grp][3]);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
       }
       else
       if (x>=241 && y>=139 && x<=315 && y<=151 && mousebuttons>0)
@@ -714,7 +715,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 		    Data->P[plr].Crew[prog][grp][3]);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
       }
       else
       if (x>=241 && y>=154 && x<=315 && y<=166 && mousebuttons>0)
@@ -725,7 +726,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 		    Data->P[plr].Crew[prog][grp][3]);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
        }
       else
       if (x>=241 && y>=169 && x<=315 && y<=181 && mousebuttons>0)
@@ -736,7 +737,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 		    Data->P[plr].Crew[prog][grp][3]);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
       }
       else
       if (x>=241 && y>=184 && x<=315 && y<=196 && mousebuttons>0)
@@ -747,7 +748,7 @@ void Programs(char plr,char prog)
 		    Data->P[plr].Crew[prog][grp][1],
 		    Data->P[plr].Crew[prog][grp][2],
 	       Data->P[plr].Crew[prog][grp][3]);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
       }
       else
       if (((x>=245 && y>=88 && x<=314 && y<=100 && mousebuttons>0) || key=='A') && Gcnt[grp]<max)
@@ -778,7 +779,7 @@ void Programs(char plr,char prog)
    		    Data->P[plr].Crew[prog][grp][1],
    		    Data->P[plr].Crew[prog][grp][2],
    		    Data->P[plr].Crew[prog][grp][3]);
-   	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+   	 WaitForMouseUp();
        if (key>0) delay(150);
    	 OutBox(245,88,314,100);
 	   }; /* End outer if */
@@ -803,7 +804,7 @@ void Programs(char plr,char prog)
 	      PrintAt(88,96,"CREW OF A CURRENT MISSION,");
 	      PrintAt(88,104,"CANNOT BREAK THIS CREW.");
 	      
-	      while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      WaitForMouseUp();
 	      i=1;
 	      while(i==1)
 	       {
@@ -813,7 +814,7 @@ void Programs(char plr,char prog)
 		       if ((x>=83 && y>=154 && x<=236 && y<=165 && mousebuttons!=0) || key==K_ENTER)
 		        {
 		         InBox(83,154,236,165);
-		         while(1)  { GetMouse();if (mousebuttons==0) break;}
+		         WaitForMouseUp();
 		         OutBox(83,154,236,165);
 		         gxVirtualDisplay(&vhptr,75,43,75,43,244,173,0);
 		         i=2;
@@ -841,7 +842,7 @@ void Programs(char plr,char prog)
     	 for (i=1;i<5;i++)
     	   DrawPosition(prog,i);
        
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    OutBox(245,106,314,118);
 	   };
     }
@@ -849,7 +850,7 @@ void Programs(char plr,char prog)
    if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
     {     /* Exit */
 	  InBox(245,5,314,17);
-	  while(1)  { GetMouse();if (mousebuttons==0) break;}
+	  WaitForMouseUp();
      if (key>0) delay(150);
 	  OutBox(245,5,314,17);delay(10);
 	  for (i=0;i<8;i++) {

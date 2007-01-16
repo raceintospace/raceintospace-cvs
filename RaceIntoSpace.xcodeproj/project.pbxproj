@@ -13,6 +13,8 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		981A43A20B55A437004A6D9A /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 981A43A10B55A437004A6D9A /* libSDLmain.a */; };
+		983B08AD0B5D87DE00425925 /* raceintospace.1 in Resources */ = {isa = PBXBuildFile; fileRef = 983B08AB0B5D87DD00425925 /* raceintospace.1 */; };
+		983B08AE0B5D87DE00425925 /* raceintospace.spec in Resources */ = {isa = PBXBuildFile; fileRef = 983B08AC0B5D87DE00425925 /* raceintospace.spec */; };
 		9848AD900B55843A00A82E45 /* admin.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848AD870B55843A00A82E45 /* admin.c */; };
 		9848AD910B55843A00A82E45 /* aimast.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848AD880B55843A00A82E45 /* aimast.c */; };
 		9848AD920B55843A00A82E45 /* aimis.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848AD890B55843A00A82E45 /* aimis.c */; };
@@ -51,7 +53,6 @@
 		9848ADED0B55849A00A82E45 /* news_sup.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADB60B55849A00A82E45 /* news_sup.c */; };
 		9848ADEE0B55849A00A82E45 /* news_suq.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADB70B55849A00A82E45 /* news_suq.c */; };
 		9848ADEF0B55849A00A82E45 /* news.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADB80B55849A00A82E45 /* news.c */; };
-		9848ADF00B55849A00A82E45 /* nn.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADB90B55849A00A82E45 /* nn.h */; };
 		9848ADF10B55849A00A82E45 /* pace.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADBA0B55849A00A82E45 /* pace.c */; };
 		9848ADF20B55849A00A82E45 /* pace.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADBB0B55849A00A82E45 /* pace.h */; };
 		9848ADF30B55849A00A82E45 /* place.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADBC0B55849A00A82E45 /* place.c */; };
@@ -100,7 +101,6 @@
 				9848ADDA0B55849A00A82E45 /* externs.h in Copy Frameworks into .app bundle */,
 				9848ADE60B55849A00A82E45 /* mis.h in Copy Frameworks into .app bundle */,
 				9848ADEA0B55849A00A82E45 /* music.h in Copy Frameworks into .app bundle */,
-				9848ADF00B55849A00A82E45 /* nn.h in Copy Frameworks into .app bundle */,
 				9848ADF20B55849A00A82E45 /* pace.h in Copy Frameworks into .app bundle */,
 				9848ADF70B55849A00A82E45 /* proto.h in Copy Frameworks into .app bundle */,
 				9848ADFC0B55849A00A82E45 /* records.h in Copy Frameworks into .app bundle */,
@@ -125,6 +125,8 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* RaceIntoSpace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RaceIntoSpace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		981A43A10B55A437004A6D9A /* libSDLmain.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDLmain.a; path = /opt/local/lib/libSDLmain.a; sourceTree = "<absolute>"; };
+		983B08AB0B5D87DD00425925 /* raceintospace.1 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.man; path = raceintospace.1; sourceTree = SOURCE_ROOT; };
+		983B08AC0B5D87DE00425925 /* raceintospace.spec */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = raceintospace.spec; sourceTree = SOURCE_ROOT; };
 		9848AD870B55843A00A82E45 /* admin.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = admin.c; sourceTree = SOURCE_ROOT; };
 		9848AD880B55843A00A82E45 /* aimast.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = aimast.c; sourceTree = SOURCE_ROOT; };
 		9848AD890B55843A00A82E45 /* aimis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = aimis.c; sourceTree = SOURCE_ROOT; };
@@ -163,7 +165,6 @@
 		9848ADB60B55849A00A82E45 /* news_sup.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = news_sup.c; sourceTree = SOURCE_ROOT; };
 		9848ADB70B55849A00A82E45 /* news_suq.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = news_suq.c; sourceTree = SOURCE_ROOT; };
 		9848ADB80B55849A00A82E45 /* news.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = news.c; sourceTree = SOURCE_ROOT; };
-		9848ADB90B55849A00A82E45 /* nn.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nn.h; sourceTree = SOURCE_ROOT; };
 		9848ADBA0B55849A00A82E45 /* pace.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pace.c; sourceTree = SOURCE_ROOT; };
 		9848ADBB0B55849A00A82E45 /* pace.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pace.h; sourceTree = SOURCE_ROOT; };
 		9848ADBC0B55849A00A82E45 /* place.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = place.c; sourceTree = SOURCE_ROOT; };
@@ -299,7 +300,6 @@
 				9848ADB60B55849A00A82E45 /* news_sup.c */,
 				9848ADB70B55849A00A82E45 /* news_suq.c */,
 				9848ADB80B55849A00A82E45 /* news.c */,
-				9848ADB90B55849A00A82E45 /* nn.h */,
 				9848ADBA0B55849A00A82E45 /* pace.c */,
 				9848ADBB0B55849A00A82E45 /* pace.h */,
 				9848ADBC0B55849A00A82E45 /* place.c */,
@@ -349,6 +349,8 @@
 		98C017AF0B5D48430080F98E /* Documents */ = {
 			isa = PBXGroup;
 			children = (
+				983B08AB0B5D87DD00425925 /* raceintospace.1 */,
+				983B08AC0B5D87DE00425925 /* raceintospace.spec */,
 				98C017DE0B5D4C200080F98E /* ChangeLog */,
 				98C017B50B5D48800080F98E /* COPYING */,
 				98C017B60B5D48800080F98E /* DEVELOPER */,
@@ -414,6 +416,8 @@
 				98C017C20B5D48800080F98E /* WHO_SPOT in Resources */,
 				98C017C80B5D49EB0080F98E /* RaceIntoSpace.icns in Resources */,
 				98C017DF0B5D4C200080F98E /* ChangeLog in Resources */,
+				983B08AD0B5D87DE00425925 /* raceintospace.1 in Resources */,
+				983B08AE0B5D87DE00425925 /* raceintospace.spec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

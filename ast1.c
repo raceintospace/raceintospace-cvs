@@ -232,7 +232,7 @@ i=j=k=BarA=BarB=MaxMen=Index=now=now2=max=min=count=0;
 PreLoadMusic(M_DRUMSM);
 PlayMusic(0);
 DrawAstCheck(plr);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   i=0;
   while (i==0)
    {
@@ -241,7 +241,7 @@ DrawAstCheck(plr);
      {
       
       InBox(100,135,148,147);
-      while(1)  { GetMouse();if (mousebuttons==0) break;}
+      WaitForMouseUp();
       if (Data->P[plr].AstroLevel==0) Index=20; else Index=15;
       if (Data->P[plr].Cash>=Index) i=1; else i=2;
       if (Data->P[plr].AstroDelay>0) i=2;
@@ -253,7 +253,7 @@ DrawAstCheck(plr);
      {
       
       InBox(168,135,216,147);
-      while(1)  { GetMouse();if (mousebuttons==0) break;}
+      WaitForMouseUp();
       if (key>0) delay(150);
       i=2;OutBox(168,135,216,147);
      }
@@ -297,7 +297,7 @@ DrawAstCheck(plr);
   DispEight2(now2,BarA,count);
   FadeIn(2,pal,10,0,0);
   
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
    key=0;GetMouse();
@@ -312,7 +312,7 @@ DrawAstCheck(plr);
     	 now-=BarB; now+=i;BarB=i;
 	    ShBox(187,130+BarB*8,313,138+BarB*8);
 	    DispEight(now,BarB);
-    	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+    	 WaitForMouseUp();
     	 
       }
      if (((x>=27 && y>=(131+i*8) && x<=151 && y<=(137+i*8) && mousebuttons>0)
@@ -324,7 +324,7 @@ DrawAstCheck(plr);
 	    now2-=BarA; now2+=i;BarA=i;
 	    ShBox(26,130+BarA*8,152,138+BarA*8);
 	    DispEight2(now2,BarA,count);
-    	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+    	 WaitForMouseUp();
     	 
       }
     }
@@ -377,7 +377,7 @@ DrawAstCheck(plr);
         key=0;
         GetMouse();
        }
-	    //while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    //WaitForMouseUp();
      	 OutBox(6,130,18,161);delay(10);
      }
      else
@@ -431,7 +431,7 @@ DrawAstCheck(plr);
         key=0;
         GetMouse();
        }
-        // while(1)  { GetMouse();if (mousebuttons==0) break;}
+        // WaitForMouseUp();
 	      OutBox(6,163,18,194);delay(10);
       }
       else
@@ -483,7 +483,7 @@ DrawAstCheck(plr);
         key=0;
         GetMouse();
        }
-	     // while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     // WaitForMouseUp();
 	      OutBox(167,130,179,161);delay(10);
         }
       else
@@ -535,7 +535,7 @@ DrawAstCheck(plr);
         key=0;
         GetMouse();
        }
-	    // while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    // WaitForMouseUp();
 	     OutBox(167,163,179,194);delay(10);
        }
       else
@@ -556,7 +556,7 @@ DrawAstCheck(plr);
    	  DispEight2(now2,BarA,count);
    	  DispEight(now,BarB);
    	  
-   	  while(1)  { GetMouse();if (mousebuttons==0) break;}
+   	  WaitForMouseUp();
         if (key>0) delay(110);
    	  OutBox(7,111,151,123);
        }
@@ -587,7 +587,7 @@ DrawAstCheck(plr);
 	      DispEight2(now2,BarA,count);
 	   };
 	   
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(110);
 	   OutBox(168,111,313,123);
      };
@@ -601,7 +601,7 @@ DrawAstCheck(plr);
          }
        if (fem==0 && count == MaxSel) {
 	 InBox(245,5,314,17);
-	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
     if (key>0) delay(150);
 	 for (i=0;i<count;i++) {
 	   strcpy(&Data->P[plr].Pool[i+Data->P[plr].AstroCount].Name[0],&Men[sel[i]].Name[0]);

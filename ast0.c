@@ -75,13 +75,13 @@ void Moon(char plr)
   
   PlayMusic(0);
   FadeIn(2,pal,0,0,0);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
 	key=0;GetMouse();
-	 if ((x>=115 && y>=152 && x<=216 && y<=162 && mousebuttons>0) || key==0x000d) {
+	 if ((x>=115 && y>=152 && x<=216 && y<=162 && mousebuttons>0) || key==K_ENTER) {
 	   InBox(115,152,216,162);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	   if (key>0) delay(150);
       KillMusic();
 	   key=0;return; // Continue
@@ -422,13 +422,13 @@ void LMBld(char plr)
   
   PlayMusic(0);
   FadeIn(2,pal,0,0,0);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
 	key=0;GetMouse();
-	 if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x000d) {
+	 if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) {
 	   InBox(245,5,314,17);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	   if (key>0) delay(150);
      KillMusic();
 	   key=0;return; // Continue
@@ -449,29 +449,29 @@ void SatBld(char plr)
   FadeIn(2,pal,0,0,0);
 
   key=0;
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
 	GetMouse();
-	 if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x000d) {
+	 if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) {
 	   InBox(245,5,314,17);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	   if (key>0) delay(150);
 	  // OutBox(245,5,314,17);
       KillMusic();
 	   key=0;return; // Continue
 	  }
-	else if (Data->P[plr].Probe[1].Num>=0 && ((x>=166 && y>=60 && x<=199 && y<=66 && mousebuttons>0) || key==0x4B00)) {  // Right
+	else if (Data->P[plr].Probe[1].Num>=0 && ((x>=166 && y>=60 && x<=199 && y<=66 && mousebuttons>0) || key==LT_ARROW)) { 
 	   InBox(166,60,199,66);key=0;
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	  delay(10);key=0;
 	  if (plan==0) plan=5; else plan--;
 	  PlanText(plr,plan);
 	   OutBox(166,60,199,66);
 	  }
-	else if (Data->P[plr].Probe[1].Num>=0 && ((x>=201 && y>=60 && x<=234 && y<=66 && mousebuttons>0) || key==0x4D00)) {   // Left
+	else if (Data->P[plr].Probe[1].Num>=0 && ((x>=201 && y>=60 && x<=234 && y<=66 && mousebuttons>0) || key==RT_ARROW)) {
 	   InBox(201,60,234,66);key=0;
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
 	  delay(10);key=0;
 	  if (plan>4) plan=0; else plan++;
 	  PlanText(plr,plan);

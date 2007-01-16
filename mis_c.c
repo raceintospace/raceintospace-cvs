@@ -899,7 +899,8 @@ char FailureMode(char plr,int prelim,char *text)
   FadeIn(2,pal,10,0,0);
   
 
-  while(mousebuttons!=0) GetMouse();key=0;
+	WaitForMouseUp();
+	key = 0;
   while(bioskey(1)) bioskey(0);
 
   while (1)
@@ -910,10 +911,10 @@ char FailureMode(char plr,int prelim,char *text)
     }
 
     GetMouse();
-    if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d)
+    if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
     {
        InBox(245,5,314,17);
-       while(1)  { GetMouse();if (mousebuttons==0) break;}
+       WaitForMouseUp();
        OutBox(245,5,314,17);delay(10);
        FadeOut(2,pal2,10,0,0);
      //  DrawControl(plr);
@@ -930,7 +931,7 @@ char FailureMode(char plr,int prelim,char *text)
     if ((x>=6 && y>=114 && x<=151 && y<=126 && prelim==3 && mousebuttons>0) || (prelim==7 && key=='S'))
     {
        InBox(6,114,151,126);
-       while(1)  { GetMouse();if (mousebuttons==0) break;}
+       WaitForMouseUp();
        OutBox(6,114,151,126);delay(10);
        FadeOut(2,pal2,10,0,0);
     //   DrawControl(plr);

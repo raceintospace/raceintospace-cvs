@@ -816,6 +816,7 @@ GetMouse (void)
 	GetMouse_fast ();
 }
 
+
 /* get mouse of keyboard input, non-blocking */
 void GetMouse_fast(void)
 {
@@ -851,6 +852,21 @@ void GetMouse_fast(void)
   else if (AL_CALL==0 && ((key>>8)==0x3D)) Help("i123");
 }
 
+void WaitForMouseUp(void) 
+{
+	// Wait for mouse and key to be up
+	while (mousebuttons)
+		GetMouse();
+}
+
+void WaitForKeyOrMouseDown(void) 
+{
+	// Wait for mouse and key to be up
+	while (mousebuttons==0 || key==0) 
+		GetMouse();
+}
+
+
 void PauseMouse(void)
 {
 	/* wait until mouse button is released */
@@ -860,7 +876,6 @@ void PauseMouse(void)
 	}
 
 	GetMouse ();
-	return;
 }
 
 void PrintAt(int x,int y,char *s)

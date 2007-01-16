@@ -597,7 +597,7 @@ void Bre(char plr)
  TopSecret(plr,100); // just the blue background
  BackIntel(plr,year);
  FadeIn(2,pal,10,0,0);
- while(1)  { GetMouse();if (mousebuttons==0) break;}
+ WaitForMouseUp();
  while (1)
   {
     key=0;GetMouse();
@@ -606,7 +606,7 @@ void Bre(char plr)
       if ((x>=135 && y>32 && x<=145 && y<=77 && mousebuttons>0) || key==UP_ARROW)
        {
         InBox(135,32,145,77);
-        while(1)  { GetMouse();if (mousebuttons==0) break;}
+        WaitForMouseUp();
         if (year>=0 && year+1<=Data->P[plr].PastIntel[0].cur-1)
 	      {
 	       
@@ -622,7 +622,7 @@ void Bre(char plr)
      if ((x>=135 && y>85 && x<=145 && y<=130 && mousebuttons>0) || key==DN_ARROW)
        {
         InBox(135,85,145,130);
-        while(1)  { GetMouse();if (mousebuttons==0) break;}
+        WaitForMouseUp();
         if (year-1>=0) 
 	       {
 	        
@@ -638,7 +638,7 @@ void Bre(char plr)
       if ((x>=244 && y>=5 && x<=313 && y<=17 && mousebuttons>0) || key==K_ENTER)
       {
 	    InBox(244,5,313,17);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
        if (key>0) delay(150);
 	    OutBox(244,5,313,17);
 	    break;  /* Done */
@@ -740,7 +740,7 @@ void IStat(char plr)
 int place=-1;
 
   DrawIStat(plr);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
 	key=0;GetMouse();
@@ -749,7 +749,7 @@ int place=-1;
      if (((x>=7 && y>=164 && x<=75 && y<=195 && mousebuttons>0) || key=='U') && place!=0)
       {
 	    InBox(7,164,75,195);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    OutBox(7,164,75,195);
 	    ReButs(place,0);
 	    place=0;
@@ -759,7 +759,7 @@ int place=-1;
       if (((x>=83 && y>=164 && x<=156 && y<=195 && mousebuttons>0) || key=='R') && place!=1)
        {
 	     InBox(83,164,156,195);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     OutBox(83,164,156,195);
 	     ReButs(place,1);
 	     place=1;
@@ -769,7 +769,7 @@ int place=-1;
       if (((x>=164 && y>=164 && x<=237 && y<=195 && mousebuttons>0) || key=='C') && place!=2)
        {
 	     InBox(164,164,237,195);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     OutBox(164,164,237,195);
 	     /* MANNED */
 	     ReButs(place,2);
@@ -779,7 +779,7 @@ int place=-1;
       if (((x>=245 && y>=164 && x<=313 && y<=195 && mousebuttons>0) || key=='M') && place!=3)
       {
 	    InBox(245,164,313,195);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    OutBox(245,164,313,195);
 	    ReButs(place,3);
 	    place=3;
@@ -789,7 +789,7 @@ int place=-1;
 	  if ((x>=244 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
       {
 	    InBox(244,5,314,17);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
        if (key>0) delay(150);
 	    OutBox(244,5,314,17);
 	    Del_RD_BUT();

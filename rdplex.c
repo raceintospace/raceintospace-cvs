@@ -215,7 +215,7 @@ char RD(char plr)
   PreLoadMusic(M_HARDWARE);
   FadeIn(2,pal,10,0,0);
   PlayMusic(0);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
     UpdateMusic();
@@ -287,14 +287,14 @@ char RD(char plr)
        if (hardware==4) b=Data->P[plr].Misc[unit-1].RDCost;
        RDButTxt(b*roll,buy[hardware-1][unit-1],plr);
        ManSel(roll);
-       while(1)  { GetMouse();if (mousebuttons==0) break;}
+       WaitForMouseUp();
       }
       else
       if ((x>=5 && y>=184 && x<=74 && y<=194 && mousebuttons>0) || key==LT_ARROW)  /* LEFT ARROW */
       {
 	    roll=0;
 	    InBox(5,184,74,194);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    switch(hardware)
 	     {
 	      case 1: unit= (unit-1 == 0) ? 3 : unit-1;break;
@@ -315,7 +315,7 @@ char RD(char plr)
       {
 	    roll=0;
 	    InBox(83,184,152,194);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    switch(hardware)
 	     {
 	      case 1: unit = (unit+1 > 3) ? 1 : unit+1;break;
@@ -366,9 +366,10 @@ char RD(char plr)
 	else QUnit(hardware,unit,plr);
       }
      else
-      if (((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0)) || key==0x0d)
+      if (((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0)) || key==K_ENTER)
       {
 	    InBox(245,5,314,17);
+   	 WaitForMouseUp();
 	    for(i=0;i<4;i++) for(j=0;j<7;j++) Data->P[plr].Buy[i][j]=buy[i][j];
        KillMusic();
 	    Del_RD_BUT();
@@ -403,7 +404,7 @@ char RD(char plr)
 
 	    FadeIn(2,pal,10,0,0);
        PlayMusic(1);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
       };
     };
   };
@@ -677,14 +678,14 @@ char HPurc(char plr)
   PreLoadMusic(M_FILLER);
   FadeIn(2,pal,10,0,0);
   PlayMusic(1);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
     UpdateMusic();
     key=0;GetMouse();
     if ((x>266 && y>164 && x<314 && y<174 && mousebuttons>0) || key=='Z') {
       InBox(266,164,314,174);
-      while(mousebuttons!=0) GetMouse();
+			WaitForMouseUp();
   //    memcpy(Data,vhptr.vptr,sizeof(struct Players));
       undo=sOpen("UNDO.TMP","rb",1);
       fread(Data,sizeof (struct Players),1,undo);
@@ -728,7 +729,7 @@ char HPurc(char plr)
       {
 	    InBox(5,184,74,194);
 	    delay(5);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
 	    OutBox(5,184,74,194);
 	    switch(hardware) {
 	     case 1: unit= (unit-1 == 0) ? 3 : unit-1;break;
@@ -743,7 +744,7 @@ char HPurc(char plr)
       if ((x>=83 && y>=184 && x<=152 && y<=194 && mousebuttons>0) || key==RT_ARROW) /* RIGHT ARROW */
       {
    	 InBox(83,184,152,194);
-	    while(1)  { GetMouse();if (mousebuttons==0) break;}
+	    WaitForMouseUp();
    	 OutBox(83,184,152,194);
     	 switch(hardware) {
     	   case 1: unit = (unit+1 > 3 ) ? 1 : unit+1;break;
@@ -758,7 +759,7 @@ char HPurc(char plr)
       if ((y>=182 && y<=195 && x>=166 && x<=314 && mousebuttons>0) || key=='P')  /* PURCHASE */
        {
     	   InBox(165,182,315,195);
-   	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+   	   WaitForMouseUp();
    	   OutBox(165,182,315,195);
         // NEED DELAY CHECK
         switch(hardware)
@@ -782,6 +783,7 @@ char HPurc(char plr)
       if (((y>=3 && y<=19) && (x>=243 && x<=316 && mousebuttons>0)) || key==K_ENTER)
        {
      	  InBox(245,5,314,17);
+				WaitForMouseUp();
         KillMusic();
         Del_RD_BUT(); call=0;
         HARD1=1;UNIT1=1;
@@ -792,6 +794,7 @@ char HPurc(char plr)
       if ((x>=5 && y>=73 && x<=152 && y<=83 && mousebuttons>0) || key=='V')         // Gateway to RD
        {
     	 InBox(5,73,152,83);
+			 WaitForMouseUp();
     	 HARD1=hardware; UNIT1=unit;
        KillMusic();
        remove_savedat("UNDO.TMP");
@@ -816,7 +819,7 @@ char HPurc(char plr)
        PreLoadMusic(M_FILLER);
    	 FadeIn(2,pal,10,0,0);
        PlayMusic(1);
-   	 while(1)  { GetMouse();if (mousebuttons==0) break;}
+   	 WaitForMouseUp();
       };
   };
 }

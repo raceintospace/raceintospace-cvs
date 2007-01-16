@@ -616,7 +616,7 @@ begvab:
   DispWts(cwt,pay[rk]);
   
   FadeIn(2,pal,10,0,0);
-  while(1)  { GetMouse();if (mousebuttons==0) break;}
+  WaitForMouseUp();
   while (1)
   {
     key=0;GetMouse();
@@ -668,7 +668,7 @@ begvab:
      if ((x>=177 && y>=185 && x<=242 && y<=195 && mousebuttons>0) || (key==K_ESCAPE || key=='E'))
       {
 	      InBox(177,185,242,195);
-	      while(1)  { GetMouse();if (mousebuttons==0) break;}
+	      WaitForMouseUp();
         if (key>0) delay(150);
 	      OutBox(177,185,242,195);
 				// Clear mission hardware
@@ -680,7 +680,7 @@ begvab:
       if (((x>=249 && y>=185 && x<=314 && y<=195 && mousebuttons>0) || key=='S') && Data->P[plr].Mission[mis].MissionCode!=0)
 	    {
   	     InBox(249,185,314,195);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
         if (key>0) delay(100);
 	     OutBox(249,185,314,195);
        ClrMiss(plr,mis);
@@ -721,7 +721,7 @@ begvab:
 
 	      if (j==j2) {
 	         InBox(245,5,314,17);
-	         while(1)  { GetMouse();if (mousebuttons==0) break;}
+	         WaitForMouseUp();
               if (key>0) delay(150);
 	         OutBox(245,5,314,17);
 	         for (i=Mission_Capsule; i<=Mission_Probe_DM; i++) {
@@ -762,7 +762,7 @@ begvab:
 	   ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);
 	   DispWts(cwt,pay[rk]);
 	   DispRck(plr,rk);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(100);
 	   OutBox(64,181,161,191);
 	   /* Rocket Choose */
@@ -775,7 +775,7 @@ begvab:
 	   cwt=0;for (i=0;i<4;i++) cwt+=VAS[ccc][i].wt;
 	   ShowVA(ccc);DispWts(cwt,pay[rk]);
 	   DispVA(plr,ccc);
-	   while(1)  { GetMouse();if (mousebuttons==0) break;}
+	   WaitForMouseUp();
       if (key>0) delay(100);
 	   OutBox(64,129,161,175);
 	   /* RIGHT Choose */

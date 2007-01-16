@@ -151,7 +151,7 @@ void Review(char plr)
 PreLoadMusic((plr==0)?M_PRES:M_RD);
 DrawReview(plr);
 PlayMusic(0);
-while(1)  { GetMouse();if (mousebuttons==0) break;}
+WaitForMouseUp();
  while (1)
   {
    key=0;GetMouse();
@@ -160,7 +160,7 @@ while(1)  { GetMouse();if (mousebuttons==0) break;}
       if ((x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER)
 	    {
 	     InBox(245,5,314,17);
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
        KillMusic();
 	     //FadeOut(2,pal,10,0,0);
 	     return;  /* Done */

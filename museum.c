@@ -246,15 +246,15 @@ void ShowPrest(char plr)
   DPrest(plr,&pos,&pos2);
   FadeIn(2,pal,5,0,0);
   
-  while(1) {GetMouse();if (mousebuttons==0) break;}
+	WaitForMouseUp();
   while(1)
   {
       GetMouse();
           // Parse Button actions, note that return is embedded in first pButton
-          if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d) {
+          if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) {
             InBox(245,5,314,17);
             if (key>0) {delay(300);key=0;};
-            while(1)  { GetMouse();if (mousebuttons==0) break;}
+            WaitForMouseUp();
             OutBox(245,5,314,17); key=0;
             strcpy(IDT,"i000");strcpy(IKEY,"k000");
             return;
@@ -472,17 +472,17 @@ void ShowSpHist(char plr)
   DrawMisHist(plr,&pos);
   FadeIn(2,pal,5,0,0);
   
-  while(1) {GetMouse();if (mousebuttons==0) break;}
+	WaitForMouseUp();
   while(1)
   {
       GetMouse();
       Mission_Data_Buttons(plr,&pos);
       // Parse Button actions, note that return is embedded in first pButton
-      if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==0x0d)
+      if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
        {
 	     InBox(245,5,314,17);
         if (key>0) {delay(300);key=0;};
-	     while(1)  { GetMouse();if (mousebuttons==0) break;}
+	     WaitForMouseUp();
 	     OutBox(245,5,314,17);
 	     return;
        }
@@ -820,16 +820,15 @@ void ShowAstrosHist(char plr)
   DisplAstData(plr,&pos,&pos2);  
   FadeIn(2,pal,5,0,0);
   
-
-  while(1) {GetMouse();if (mousebuttons==0) break;}
+	WaitForMouseUp();
   while(1)
   {
       GetMouse();
           // Parse Button actions, note that continue button is not a macro
-          if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons > 0) || key==0x0d) {
+          if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons > 0) || key==K_ENTER) {
             InBox(245,5,314,17);
             if (key>0) {delay(300);key=0;};
-            while(1)  { GetMouse();if (mousebuttons==0) break;}
+            WaitForMouseUp();
             OutBox(245,5,314,17);
 	    DV(&vhptr2);
 	    key=0;
