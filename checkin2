@@ -38,13 +38,13 @@ msg=`cat ChangeLog |
 
 # diffstat output generation
 diffstat=`which diffstat 2>&1`
-if [ -e "$diffstat" ]
-then
-sep=$'\x0a\x0a=== diffstat output ===\x0a\x0a'
-msgstat=`cvs diff -r $lasttag | $diffstat -w 70`
-fi
 
 echo "prev tag $lasttag; new tag $newtag"
+if [ -e "$diffstat" ]
+then
+	echo "=== diffstat output ==="
+	cvs diff -r $lasttag "$@" | $diffstat -w 70
+fi
 echo "====== LOG MESSAGE ====="
 echo "$msg$sep$msgstat"
 echo "========================"
@@ -58,7 +58,7 @@ then
 	exit 1
 fi
 
-cvs -z9 commit -R -m "$msg"
+cvs -z9 commit -R -m "$msg" "$@"
 if [ $? != 0 ]
 then
     echo "error during cvs commit"
