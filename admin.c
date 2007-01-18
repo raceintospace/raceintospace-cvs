@@ -306,6 +306,7 @@ void FileAccess(char mode)
 	  int endianSwap = 0;	// Default this to false
 	  char *load_buffer = NULL;
 	  size_t fileLength = 0, eventSize = 0;
+	  size_t readLen = 0;
 	  
     InBox(209,50,278,58);
 	  delay(250);
@@ -333,9 +334,10 @@ void FileAccess(char mode)
 		   SaveHdr->compSize = _Swap16bit(SaveHdr->compSize);
 		   SaveHdr->dataSize = _Swap16bit(SaveHdr->dataSize);
 	   }
-	   load_buffer = malloc(SaveHdr->compSize);
+	  readLen = SaveHdr->compSize;
+	   load_buffer = malloc(readLen);
 	   
-	   fread(load_buffer,1,SaveHdr->compSize,fin);
+	   readLen = fread(load_buffer,1,readLen,fin);
 	   if (SaveHdr->dataSize==sizeof(struct Players))
        {
 #ifdef OLD_DOS_ENCRYPT_SAVEDATA
@@ -357,22 +359,22 @@ void FileAccess(char mode)
 		   
 		// Read the Replay Data
 		load_buffer = malloc((sizeof(REPLAY)) * MAX_REPLAY_ITEMS);
-        fread(load_buffer,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fin);
+        readLen = fread(load_buffer,1,sizeof(REPLAY)*MAX_REPLAY_ITEMS,fin);
 		if (endianSwap)
 		{
 			REPLAY *r = NULL;
+			r = (REPLAY *) load_buffer;
 			int i;
 			for(i = 0; i< MAX_REPLAY_ITEMS; i++)
 			{
 				int ii;
-				r = (REPLAY *) load_buffer+(i*sizeof(REPLAY));
 				for (ii = 0; ii < r->Qty; ii++)
-					r->Off[ii] = _Swap16bit(r->Off[ii]);
+					r[i].Off[ii] = _Swap16bit(r[i].Off[ii]);
 					
 			}
 		}
 		fout=sOpen("REPLAY.DAT","wb",1);
-        fwrite(load_buffer,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fout);
+        fwrite(load_buffer,1,sizeof(REPLAY)*MAX_REPLAY_ITEMS,fout);
         fclose(fout);
 		free(load_buffer);
 
@@ -380,7 +382,7 @@ void FileAccess(char mode)
 		
 		// Read the Event Data
 		load_buffer = malloc(eventSize);
-		fread(load_buffer,eventSize,1,fin);
+		readLen = fread(load_buffer,1,eventSize,fin);
 		fclose(fin);
 		
 		if (endianSwap)

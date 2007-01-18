@@ -1,4 +1,14 @@
 2007-01-18  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V106
+
+	* Modified Xcode project to remove replay.h and uc.h and
+	rearranged the project groups
+
+	* Loading of Big Endian save games under Little Endian platform
+	works now
+
+2007-01-18  Michael McCarty <k6mmc@users.sourceforge.net>
 	
 	* V105
 

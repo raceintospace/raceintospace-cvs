@@ -3,6 +3,10 @@
 
 uint32_t _Swap32bit(uint32_t value);
 uint16_t _Swap16bit(uint16_t value);
+void 			SwapGameDat(void);
+
+#define Swap32bit_alt(a)  (a) = _Swap32bit((a))
+#define Swap16bit_alt(a)  (a) = _Swap16bit((a))
 
 #ifdef __BIG_ENDIAN__
 
@@ -11,7 +15,6 @@ uint16_t _Swap16bit(uint16_t value);
 void SwapSimpleHdr(SimpleHdr *hdr);
 void SwapPatchHdr(PatchHdr *hdr);
 void SwapPatchHdrSmall(PatchHdrSmall *hdr);
-void SwapGameDat(void);
 
 #else
 
