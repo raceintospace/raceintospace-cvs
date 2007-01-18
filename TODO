@@ -13,6 +13,8 @@ implement config opts for no anim
 
 clean up extra gr_sync's
 
+Remove up ENDTURN.TMP, EVENT.TMP, REPLAY.DAT on exit
+
 ================================================================
 enhancements:
 

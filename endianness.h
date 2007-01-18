@@ -20,7 +20,6 @@ void SwapPatchHdrSmall(PatchHdrSmall *hdr);
 
 #define Swap32bit(a)
 #define Swap16bit(a)
-#define SwapGameDat()
 #define SwapSimpleHdr(a)
 #define SwapPatchHdr(a)
 #define SwapPatchHdrSmall(a)
