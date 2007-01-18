@@ -9,7 +9,6 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "mis.h"
-#include "replay.h"
 
 #define MIS_SET 0             // FAILURES ON
 
@@ -25,7 +24,7 @@ extern struct mStr Mis;
 extern ui16 MisStat;
 extern char pCnt,tMen,BIG;            // Counter for pAry
 extern i16 pAry[15];         // Array for Presige Firsts compelted
-extern RPLY Rep;
+extern REPLAY Rep;
 
 void Tick(char);
 

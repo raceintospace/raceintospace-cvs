@@ -26,9 +26,6 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
-#include "replay.h"
-
-#define PreChe(a,b) (Data->Prestige[(b)].Place==(a) || Data->Prestige[(b)].mPlace==(a))
 
 extern char Month[12][11];
 extern char AI[2];

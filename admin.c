@@ -26,7 +26,6 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
-#include "replay.h"
 
 #define MODEM_ERROR 4
 #define NOTSAME 2
@@ -208,21 +207,15 @@ int GenerateTables(SaveGameType saveType)
   return tFiles;
 }
 
-void GetSaveMouse(void)
-{
-  GetMouse();
-}
-
 void FileAccess(char mode)
 // mode==0 if save allowed
 {
-  char Temp[4],sc=0;
+  char sc=0;
   long size;
   int tFiles,i,now,done,BarB,temp,left;
   FILE *fin,*fout;
   char Name[12];
   extern char plr[2],AI[2];
-  RPLY Rep;
 	SaveGameType saveType = SAVEGAME_Normal;
 
   //sp. case -> no regular save off mail/modem game
@@ -290,9 +283,8 @@ void FileAccess(char mode)
   FadeIn(2,pal,10,0,0);
   
   
-  while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
   while(!done) {
-    GetSaveMouse();
+    GetMouse();
     
     for (i=0;i<9;i++)
      {  // Right Select Box
@@ -304,14 +296,17 @@ void FileAccess(char mode)
     	   ShBox(39,52+BarB*8,189,60+BarB*8);
         DrawFiles(now,BarB,tFiles);
 	      FileText(&FList[now].Name[0]);
-        while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
-   	   
+		  WaitForMouseUp();   	   
        }
     }  
     
   if ((sc==0 || sc==2) && tFiles>0 && ((x>=209 && y>=50 && x<=278 && y<=58 && mousebuttons>0)
    || (key=='L')))
    {
+	  int endianSwap = 0;	// Default this to false
+	  char *load_buffer = NULL;
+	  size_t fileLength = 0, eventSize = 0;
+	  
     InBox(209,50,278,58);
 	  delay(250);
     if (mode==1) temp=1;
@@ -319,38 +314,94 @@ void FileAccess(char mode)
 	    temp=Help("i101");
      }    
 
-	 while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
     if (temp>=0) {
 			// Read in Saved game data
 
 	   fin=sOpen(FList[now].Name,"rb",1);
-	   fread(SaveHdr,1,sizeof (SaveFileHdr),fin);
-	   fread(vhptr.vptr,1,SaveHdr->fSize,fin);
-	   if (SaveHdr->dSize==sizeof(struct Players))
+		
+		fseek(fin,0,SEEK_END);
+		fileLength = ftell(fin);
+		rewind(fin);
+		fread(SaveHdr,1,sizeof (SaveFileHdr),fin);
+
+	   // Determine Endian Swap
+	   if (SaveHdr->dataSize!=sizeof(struct Players))
+		   endianSwap = 1;
+	
+	   if (endianSwap) {
+		   SaveHdr->compSize = _Swap16bit(SaveHdr->compSize);
+		   SaveHdr->dataSize = _Swap16bit(SaveHdr->dataSize);
+	   }
+	   load_buffer = malloc(SaveHdr->compSize);
+	   
+	   fread(load_buffer,1,SaveHdr->compSize,fin);
+	   if (SaveHdr->dataSize==sizeof(struct Players))
        {
 #ifdef OLD_DOS_ENCRYPT_SAVEDATA
 				{
 				int moo = 0;
-        srand(SaveHdr->fSize);
-        for(moo=0;moo<SaveHdr->fSize;moo++) vhptr.vptr[moo]^=random(256);
+        srand(SaveHdr->compSize);
+        for(moo=0;moo<SaveHdr->compSize;moo++) load_buffer[moo]^=random(256);
         srand(biostime(0,0L));
 				}
 #endif
- 	      RLED((char *) vhptr.vptr,(char *)Data,SaveHdr->fSize);
-        fread(vhptr.vptr,(sizeof Rep)*200,1,fin);
-        fout=sOpen("REPLAY.DAT","wb",1);
-        fwrite(vhptr.vptr,(sizeof Rep)*200,1,fout);
+ 	      RLED((char *) load_buffer,(char *)Data,SaveHdr->compSize);
+		   free(load_buffer);
+		   
+		   // Swap Players Data
+		   if (endianSwap)
+		   {
+			 SwapGameDat();
+		   }
+		   
+		// Read the Replay Data
+		load_buffer = malloc((sizeof(REPLAY)) * MAX_REPLAY_ITEMS);
+        fread(load_buffer,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fin);
+		if (endianSwap)
+		{
+			REPLAY *r = NULL;
+			int i;
+			for(i = 0; i< MAX_REPLAY_ITEMS; i++)
+			{
+				int ii;
+				r = (REPLAY *) load_buffer+(i*sizeof(REPLAY));
+				for (ii = 0; ii < r->Qty; ii++)
+					r->Off[ii] = _Swap16bit(r->Off[ii]);
+					
+			}
+		}
+		fout=sOpen("REPLAY.DAT","wb",1);
+        fwrite(load_buffer,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fout);
         fclose(fout);
+		free(load_buffer);
 
+		eventSize = fileLength - ftell(fin);
+		
+		// Read the Event Data
+		load_buffer = malloc(eventSize);
+		fread(load_buffer,eventSize,1,fin);
+		fclose(fin);
+		
+		if (endianSwap)
+		{
+			int i;
+			for (i = 0; i < 84; i++)
+			{
+				ONEWS *on = (ONEWS *) load_buffer + (i * sizeof(ONEWS));
+				if (on->offset) {
+					on->offset = _Swap32bit(on->offset);
+					on->size = _Swap16bit(on->size);
+				}
+			}
+			
+			// File Structure is 84 longs 42 per side
+		}
         fout=sOpen("EVENT.TMP","wb",1);
-        left=32000; // copy EVENT.TMP FILE
-        while (left==32000) {
-          left=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
-          fwrite(vhptr.vptr,left,1,fout);
-         }
-         fclose(fout);
-         fclose(fin);
-
+		fwrite(load_buffer,eventSize,1,fout);
+		fclose(fout);
+		free(load_buffer);
+		
          if (!(SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7 || SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9))
           {
 	         plr[0]=Data->Def.Plr1;plr[1]=Data->Def.Plr2;
@@ -446,7 +497,7 @@ void FileAccess(char mode)
 	      InBox(209,64,278,72);
 	      delay(250);
 
-	      while(YES)  { av_block (); GetSaveMouse();if (mousebuttons==NO) break;}
+		  WaitForMouseUp();
 
         memset(SaveHdr->Name,0x00,23);
         done=GetBlockName(SaveHdr->Name);  // Checks Free Space
@@ -478,13 +529,13 @@ void FileAccess(char mode)
 	         SaveHdr->Country[1]=Data->plr[1];
 	         SaveHdr->Season=Data->Season;
 	         SaveHdr->Year=Data->Year;
-	         SaveHdr->dSize=sizeof(struct Players);
+	         SaveHdr->dataSize=sizeof(struct Players);
 	   
 	         fin=sOpen("ENDTURN.TMP","rb",1);
 	         if (fin) {
-	            SaveHdr->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
+	            SaveHdr->compSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
 	            fclose(fin);
-	         } else SaveHdr->fSize=0;
+	         } else SaveHdr->compSize=0;
 
 	      if (temp==NOTSAME)
           { 
@@ -493,12 +544,7 @@ void FileAccess(char mode)
 	        do {
             if (fin) fclose(fin);
 	         i++;
-	         memset(Name,0x00,sizeof Name);
-	         memset(Temp,0x00,sizeof Temp);
-	         strcpy(Name,"BUZZ");
-	         sprintf(Temp, "%d", i);
-	         strcat(Name,Temp);
-	         strcat(Name,".SAV");
+			 sprintf(Name,"BUZZ%d.SAV",i);
 	         fin=sOpen(Name,"rb",1);
 	        } while (fin!=NULL);  // Find unique name
           fin=sOpen(Name,"wb",1);
@@ -530,9 +576,9 @@ void FileAccess(char mode)
         fclose(fout);
 
         fout=sOpen("REPLAY.DAT","rb",1);
-        fread(vhptr.vptr,(sizeof Rep)*200,1,fout);
+        fread(vhptr.vptr,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fout);
         fclose(fout);
-        fwrite(vhptr.vptr,(sizeof Rep)*200,1,fin); // save Replay File
+        fwrite(vhptr.vptr,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fin); // save Replay File
 
         fout=sOpen("EVENT.TMP","rb",1);  // Save Event File
         left=32000; // copy EVENT.TMP FILE
@@ -551,7 +597,7 @@ void FileAccess(char mode)
     {
      InBox(209,78,278,86);
      delay(250);
-     while(1) {GetSaveMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
      memset(SaveHdr->Name,0x00,23);
      done=GetBlockName(SaveHdr->Name);  // Checks Free Space
 		 SaveHdr->ID = RaceIntoSpace_Signature;
@@ -581,16 +627,16 @@ void FileAccess(char mode)
 	     SaveHdr->Country[1]=Data->plr[1];
 	     SaveHdr->Season=Data->Season;
 	     SaveHdr->Year=Data->Year;
-	     SaveHdr->dSize=sizeof(struct Players);
+	     SaveHdr->dataSize=sizeof(struct Players);
 
 		EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
         fin=sOpen("ENDTURN.TMP","rb",1);
 	     if (fin)
          {
-	       SaveHdr->fSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
+	       SaveHdr->compSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
 	       fclose(fin);
-	      } else SaveHdr->fSize=0;
+	      } else SaveHdr->compSize=0;
 
 	      if (temp==NOTSAME)
           { 
@@ -599,12 +645,7 @@ void FileAccess(char mode)
 	        do {
 	         i++;
            if (fin) fclose(fin);
-	         memset(Name,0x00,sizeof Name);
-	         memset(Temp,0x00,sizeof Temp);
-	         strcpy(Name,"BUZZ");
-	         sprintf(Temp, "%d", i);
-	         strcat(Name,Temp);
-	         strcat(Name,".SAV");
+			sprintf(Name,"BUZZ%d.SAV",i);
 	         fin=sOpen(Name,"rb",1);
 	        } while (fin!=NULL);  // Find unique name
           fin=sOpen(Name,"wb",1);
@@ -622,9 +663,9 @@ void FileAccess(char mode)
          }
         fclose(fout);
         fout=sOpen("REPLAY.DAT","rb",1);
-        fread(vhptr.vptr,(sizeof Rep)*200,1,fout);
+        fread(vhptr.vptr,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fout);
         fclose(fout);
-        fwrite(vhptr.vptr,(sizeof Rep)*200,1,fin); // save Replay File
+        fwrite(vhptr.vptr,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fin); // save Replay File
 
         fout=sOpen("EVENT.TMP","rb",1);  // Save Event File
         left=32000; // copy EVENT.TMP FILE
@@ -644,7 +685,7 @@ void FileAccess(char mode)
     {
 	 InBox(209,92,278,100);
 	 delay(250);
-	 while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
+	 WaitForMouseUp();
 	 OutBox(209,92,278,100);
 	 // perform delete
 	 i=RequestX("DELETE FILE",1);
@@ -677,7 +718,7 @@ void FileAccess(char mode)
        {
 	      InBox(209,106,278,114);
 	      delay(250);
-	      while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
+		  WaitForMouseUp();
 	      OutBox(209,106,278,114);
 	      key=0;done=1;
       }
@@ -685,7 +726,7 @@ void FileAccess(char mode)
       {
 	    InBox(209,120,278,128);
     	 delay(250);
-    	 while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
+		 WaitForMouseUp();
 	    OutBox(209,120,278,128);
  	    // perform quit
 	    i=RequestX("QUIT",1);
@@ -718,7 +759,7 @@ void FileAccess(char mode)
 	   FileText(&FList[now].Name[0]);
 	 };
 	 
-	 //while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
+	 //  WaitForMouseUp();
 	 OutBox(191,50,202,87);
 	 // perform Up Button
 	 key=0;
@@ -775,7 +816,7 @@ void FileAccess(char mode)
 	 };
 	 
    
-	 //while(1)  { GetSaveMouse();if (mousebuttons==0) break;}
+	 //  WaitForMouseUp();
 	 OutBox(191,89,202,126);
 	 // perform Down Button
 	 key=0;
@@ -813,8 +854,8 @@ save_game (char *name)
 	hdr.Country[1] = Data->plr[1];
 	hdr.Season = Data->Season;
 	hdr.Year = Data->Year;
-	hdr.dSize = sizeof(struct Players);
-	hdr.fSize = 0; //filelength (fileno (inf));
+	hdr.dataSize = sizeof(struct Players);
+	hdr.compSize = 0; //filelength (fileno (inf));
 	   
 	if ((outf = sOpen (name, "wb", 1)) == NULL) {
 		printf ("save_game: can't create %s\n", name);
@@ -829,7 +870,7 @@ save_game (char *name)
             free(&buf);
         return;
     }
-    hdr.fSize = size;
+    hdr.compSize = size;
 	
 	fwrite(&hdr,sizeof hdr,1,outf);
     fwrite(buf, size, 1, outf);
@@ -1204,14 +1245,11 @@ char RequestX(char *s,char md)
 
 void SaveMail(void)
 {
- char Temp[4];
  long size;
  int tFiles,i,done=0,temp,left;
  FILE *fin,*fout;
  char Name[12];
  extern char plr[2],AI[2];
- RPLY Rep;
-
 
   tFiles=GenerateTables(0);
   if (tFiles)EMPTY_BODY;
@@ -1249,7 +1287,7 @@ void SaveMail(void)
 
 	 SaveHdr->Season=Data->Season;
 	 SaveHdr->Year=Data->Year;
-	 SaveHdr->dSize=sizeof(struct Players);
+	 SaveHdr->dataSize=sizeof(struct Players);
 
 		EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
@@ -1257,9 +1295,9 @@ void SaveMail(void)
 	 fin=sOpen("ENDTURN.TMP","rb",1);
 	 if (fin)
      {
-	   SaveHdr->fSize=fread(vhptr.vptr,1,vhptr.w*vhptr.h,fin);
+	   SaveHdr->compSize=fread(vhptr.vptr,1,vhptr.w*vhptr.h,fin);
 	   fclose(fin);
-	  } else SaveHdr->fSize=0;
+	  } else SaveHdr->compSize=0;
 
  	 if (temp==NOTSAME)
      { 
@@ -1268,12 +1306,7 @@ void SaveMail(void)
 	   do {
 	    i++;
       if (fin) fclose(fin);
-	    memset(Name,0x00,sizeof Name);
-	    memset(Temp,0x00,sizeof Temp);
-	    strcpy(Name,"BUZZ");
-	    sprintf(Temp, "%d", i);
-	    strcat(Name,Temp);
-	    strcat(Name,".SAV");
+		sprintf(Name,"BUZZ%d.SAV",i);
 	    fin=sOpen(Name,"rb",1);
 	   } while (fin!=NULL);  // Find unique name
      fin=sOpen(Name,"wb",1);
@@ -1291,9 +1324,9 @@ void SaveMail(void)
       }
      fclose(fout);
      fout=sOpen("REPLAY.DAT","rb",1);
-     fread(vhptr.vptr,(sizeof Rep)*200,1,fout);
+     fread(vhptr.vptr,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fout);
      fclose(fout);
-     fwrite(vhptr.vptr,(sizeof Rep)*200,1,fin); // save Replay File
+     fwrite(vhptr.vptr,(sizeof(REPLAY))*MAX_REPLAY_ITEMS,1,fin); // save Replay File
      fout=sOpen("EVENT.TMP","rb",1);  // Save Event File
      left=32000; // copy EVENT.TMP FILE
      while (left==32000)

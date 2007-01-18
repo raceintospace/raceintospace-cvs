@@ -1,3 +1,38 @@
+2007-01-18  Michael McCarty <k6mmc@users.sourceforge.net>
+	
+	* V105
+
+	* Removed replay.h, moved structures into data.h and spelled REPLAY correctly
+
+	* Modified the SwapGameDat() to swap all Player data, need to rework this so it
+	can be used on Little Endian machines to help with converting save data.
+
+	* Modified the Load game to handle game data no matter what endian platform
+	it was saved on.  Currently this only works when loading little endian saves
+	on a big endian platform.  I need to change SwapGameDat() to fix this.
+
+	* Changed a few more mouse while pressed loops
+
+	* Changed the loading of save game data to use allocated buffers
+
+	* Changed the creation of the savegame name to use sprintf
+
+	* Renamed items in the SaveFileHdr to be meaningful
+
+	* Added V104 Changelog items since they were missed on checkin
+
+2007-01-18  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V104
+
+	* Added utility raw2wav
+
+	* Fixed utils/Makefile
+
+	* Removed uc.h header
+
+	* checkin2 script now accepts a list of files to commit
+
 2007-01-16  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V103

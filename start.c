@@ -25,7 +25,6 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
-#include "replay.h"
 
 extern char pNeg[NUM_PLAYERS][MAX_MISSIONS];
 extern char MAIL;
@@ -43,7 +42,7 @@ void SetEvents(void)
   char Per[6][5]={{100,0,0,0,0},{0,100,0,0,0},{0,62,38,0,0},{0,50,20,30,0},
 		  {0,35,20,20,25},{0,25,25,25,25}};
   struct Q{char fir,qty,pic;} D[5]= {{1,3,0},{4,40,0},{44,19,0},{63,17,0},{80,20,0}};
-  RPLY Rep;
+  REPLAY Rep;
   ONEWS oNews;
   memset(&Rep,0x00,sizeof Rep);
 

@@ -218,14 +218,14 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char Header[4];                  // Sync information
 	char Name[20];                   // Player Name
 	char Level;                      // Level of Play
-	short Cash;                      // Current Cash on Hand
-	short Budget;                    // Next Season's Budget
+	int16_t Cash;                      // Current Cash on Hand
+	int16_t Budget;                    // Next Season's Budget
 	int16_t Prestige;                    // Prestige Earned
 	int16_t PrestHist[5][2];             // Prestige History array
 	int16_t PresRev[5];                  // Pres. Review History
 	int16_t tempPrestige[2];		         // Holds this and prev prestige
-	short BudgetHistory[40];         // Record of Last 40 Budgets
-	short BudgetHistoryF[40];        // Record of Last 40 Budgets
+	int16_t BudgetHistory[40];         // Record of Last 40 Budgets
+	int16_t BudgetHistoryF[40];        // Record of Last 40 Budgets
 	int16_t Spend[5][4];                 // Record of last 5 seasons spending
 					                     //  of each equip type
 	char RDMods;                     // R & D Mods for turn only
@@ -288,7 +288,7 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char Block;                      // Blocked Mission Number
 	struct MissionType Future[MAX_MISSIONS];    // Future Mission Info
 	struct PastInfo History[100];    // Past Mission History
-	short PastMis;                   // Number of Past Missions
+	int16_t PastMis;                   // Number of Past Missions
 	char Other;                      // Catastrophic Fail on Turn
 					 // 1 = Cat Failure
 					 // 2 = Program Death
@@ -515,9 +515,27 @@ typedef struct {
   uint32_t offset;
 } PatchHdrSmall;
 
+
+#define MAX_REPLAY_ITEMS	200L
+#define MAX_REPLAY_ITEM_OFFSETS	35
+
+// Mission Replay Data Structure
+typedef struct ReplayItem {
+   uint8_t Qty;         // Number of Animated Sequences
+   uint16_t Off[35];     // Offsets to Each animated Part
+} REPLAY;
+
+enum Opponent_Status {Ahead,Equal,Behind};
+
+typedef struct oldNews {
+  uint32_t offset;
+  uint16_t size;
+} ONEWS;
+
 // Save Game related typedefs
 //#define RaceIntoSpace_Signature	'RiSP'
 #define RaceIntoSpace_Signature 0x52695350		
+#define RaceIntoSpace_Old_Sig 0x49443a00  //'ID:\0"
 #define SAVEFILE_UNK_MAGIC	0x1A
 
 typedef enum {
@@ -529,7 +547,8 @@ typedef enum {
 typedef struct {
 	uint32_t ID;		// Going to use this to determine endianness of the save file
 	char Name[23],PName[2][20],Country[2],Season,Year;
-	uint16_t dSize,fSize;
+	uint16_t dataSize;		// Size of Players struct
+	uint16_t compSize;		// Compressed size of data
 } SaveFileHdr;
 
 

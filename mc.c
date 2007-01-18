@@ -24,7 +24,6 @@
 //
 #include "Buzz_inc.h"
 #include "externs.h"
-#include "replay.h"
 #include "mis.h"
 
   Equipment *MH[2][8];   // Pointer to the hardware
@@ -32,7 +31,7 @@
   struct MisEval Mev[60];  // was *Mev;
   struct mStr Mis;
   struct MXM *AList;
-  RPLY Rep;
+  REPLAY Rep;
   extern char BIG;
 
   char pCnt,tMen;     // Counter for pAry

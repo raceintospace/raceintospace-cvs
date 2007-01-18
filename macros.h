@@ -35,6 +35,9 @@
 
 #define poz(a) (((a)<0)?0:(a))
 
+// AI related macro
+#define PreChe(a,b) (Data->Prestige[(b)].Place==(a) || Data->Prestige[(b)].mPlace==(a))
+
 
 #endif
 

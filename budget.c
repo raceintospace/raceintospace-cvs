@@ -25,7 +25,6 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
-#include "replay.h"
 
 #define DELAYCNT 55
 

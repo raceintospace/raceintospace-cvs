@@ -387,7 +387,9 @@ int main(int argc, char *argv[])
 
     printf ("reading Players: size = %d\n", (int)sizeof (struct Players));
     RLED(buffer,(char *)Data,i);
+#ifdef __BIG_ENDIAN__
 		SwapGameDat();	// Take care of endian read
+#endif
     if (Data->Checksum!=(sizeof (struct Players))) {
       printf("BARIS Note: Wrong version of Data File.\n");
       CloseEmUp(0,0);

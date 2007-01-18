@@ -26,7 +26,6 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
-#include "replay.h"
 
 double load_news_anim_start;
 
@@ -444,7 +443,7 @@ void News(char plr)
 
   // File Structure is 84 longs 42 per side 
 
-  fout=sOpen("EVENT.TMP","r+b",1);
+  fout=sOpen("EVENT.TMP","w+b",1);
   fseek(fout,0,SEEK_END);
   oNews.offset=ftell(fout); oNews.size=(strlen(buffer));
   fwrite(buffer,strlen(buffer),1,fout);

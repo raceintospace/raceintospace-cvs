@@ -24,7 +24,6 @@
 //
 #include "Buzz_inc.h"
 #include "externs.h"
-#include "replay.h"
 
 #define FRM_Delay     25
 
@@ -133,7 +132,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	struct Table *F;
 	char *SEQ_DAT = "SEQ.DAT";
 	char *FSEQ_DAT = "FSEQ.DAT";
-	RPLY Rep;
+	REPLAY Rep;
 	GXHEADER dopy, snzy;
 	struct frm *frm = NULL;
 	int update_map;
@@ -331,7 +330,7 @@ void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,cha
  long offset;
  struct oGROUP *bSeq,aSeq;
  char *SEQ_DAT="SEQ.DAT\0";
- RPLY Rep;
+ REPLAY Rep;
  GXHEADER dopy,snzy;
  struct frm *frm;
 

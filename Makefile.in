@@ -51,8 +51,7 @@ uninstall:
 	rm -f $(DESTDIR)/usr/share/raceintospace/README
 
 BARIS_HFILES = Buzz_inc.h data.h endianness.h externs.h mis.h mtype.h	\
-	macros.h music.h pace.h pcx_hdr.h proto.h records.h replay.h \
-	soundfx.h	\
+	macros.h music.h pace.h pcx_hdr.h proto.h records.h soundfx.h	\
 	sv_lib.h uc.h soundint.h
 
 BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \

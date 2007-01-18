@@ -26,9 +26,6 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
-#include  "replay.h"
-
-#define PreChe(a,b) (Data->Prestige[(b)].Place==(a) || Data->Prestige[(b)].mPlace==(a))
 
 struct cStr {i16 cost,sf,i;} Mew[5];
 int whe[2],rck[2];
