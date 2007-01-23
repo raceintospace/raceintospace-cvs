@@ -1,3 +1,5 @@
+# @configure_input@
+
 CC=@CC@
 LIBS=@LIBS@
 CPPFLAGS=@CPPFLAGS@
@@ -6,7 +8,7 @@ PROG_NAME=@PROG_NAME@
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
-	-Wno-char-subscripts \
+	-Wno-char-subscripts -Wno-deprecated-declarations \
 	-Werror
 
 CFLAGS = -g -Wall -I. `sdl-config --cflags` -std=c99
@@ -19,7 +21,7 @@ CFLAGS = -g -Wall -I. `sdl-config --cflags` -std=c99
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
 
-PROGS = imgsplit vtest decode getport mkmovie getvab mtest sdltest
+PROGS = imgsplit vtest decode getport getvab mtest sdltest
 all: $(PROG_NAME)
 
 extra: all $(PROGS)
@@ -75,14 +77,25 @@ imgsplit: imgsplit.o
 vtest: vtest.o
 	$(CC) $(CFLAGS) -o vtest vtest.o -lasound -lm
 
+ifeq (@have_avformat@, yes)
+PROGS += vtest2
+
+vtest2.o: vtest2.c
+	@echo "$(CC) ...flags... -c $*.c"
+	@$(CC) $(CFLAGS) `ffmpeg-config --cflags` $(EXTRA_WARNINGS) -c $*.c
+
+vtest2: vtest2.o
+	$(CC) $(CFLAGS) -o vtest2 vtest2.o `ffmpeg-config --libs avcodec avformat` `sdl-config --libs`
+else
+vtest2: FORCE
+	@echo "You don't have libavformat required for vtest2!"; exit 1
+endif
+
 decode: decode.o
 	$(CC) $(CFLAGS) -o decode decode.o -lm
 
 getport: getport.o
 	$(CC) $(CFLAGS) -o getport getport.o -lm
-
-mkmovie: mkmovie.o
-	$(CC) $(CFLAGS) -o mkmovie mkmovie.o -lm
 
 getvab: getvab.o
 	$(CC) $(CFLAGS) -o getvab getvab.o -lm

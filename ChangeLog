@@ -1,3 +1,13 @@
+2007-01-23  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V108
+
+	* Added utils/frm2theora.sh, changed utils/mkmovie.c to match
+
+	* Added test program vtest2.c, depending on ffmpegs libavformat
+
+	* Modified autoconf stuff to match
+
 2007-01-18  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V107

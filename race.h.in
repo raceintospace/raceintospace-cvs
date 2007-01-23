@@ -1,6 +1,13 @@
+/* @configure_input@ */
 
 /* Check if libvorbis file is available */
 #undef HAVE_LIBVORBISFILE
 
 /* Check if building on Mac OS */
 #undef MACOSX
+
+/* Check if target is big endian */
+#undef __BIG_ENDIAN__
+
+/* Check if avformat is available */
+#undef HAVE_LIBAVFORMAT

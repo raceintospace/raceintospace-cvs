@@ -173,7 +173,7 @@ main(int argc, char **argv)
 	int rc;
 	unsigned char pixels[64 * 1000], map[768];
 	char outfname[100];
-	int i, j, num, frames;
+	int i, j, num;
 	int pixel;
 	unsigned char *up;
 	int r, g, b;
@@ -209,7 +209,6 @@ main(int argc, char **argv)
 
 	memset(map, 0, sizeof map);
 	num = 0;
-	frames = 0;
 	while (1)
 	{
 		if ((rc = frm_get2(frm, pixels, &map[384])) < 0)
@@ -220,37 +219,31 @@ main(int argc, char **argv)
 
 		if (rc == 0)
 			break;
+		sprintf(outfname, "%s/%s.%04d.ppm", dirname, basename, num++);
 
-		/* buggy way to get 24 fps, duplicate frames */
-		for ( ; frames < 24; frames += frm->frame_rate)
+		if ((movief = fopen(outfname, "wb")) == NULL)
 		{
-			sprintf(outfname, "%s/%s.%04d.ppm", dirname, basename, num++);
-
-			if ((movief = fopen(outfname, "wb")) == NULL)
-			{
-				fprintf(stderr, "can't create %s\n", outfname);
-				exit(EXIT_FAILURE);
-			}
-
-			fprintf(movief, "P6\n160 100\n255\n");
-
-			for (i = 0; i < 160 * 100; i++)
-			{
-				pixel = pixels[i];
-				up = &map[pixel * 3];
-
-				r = up[0] * 4;
-				g = up[1] * 4;
-				b = up[2] * 4;
-
-				putc(r, movief);
-				putc(g, movief);
-				putc(b, movief);
-			}
-
-			fclose(movief);
+			fprintf(stderr, "can't create %s\n", outfname);
+			exit(EXIT_FAILURE);
 		}
-		frames -= frm->frame_rate;
+
+		fprintf(movief, "P6\n160 100\n255\n");
+
+		for (i = 0; i < 160 * 100; i++)
+		{
+			pixel = pixels[i];
+			up = &map[pixel * 3];
+
+			r = up[0] * 4;
+			g = up[1] * 4;
+			b = up[2] * 4;
+
+			putc(r, movief);
+			putc(g, movief);
+			putc(b, movief);
+		}
+
+		fclose(movief);
 	}
 	printf("%d frames written, framerate %dfps\n", num, frm->frame_rate);
 	frm_close(frm);
