@@ -1,3 +1,10 @@
+2007-01-25  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V110
+
+	* Added a DOS utility and BC31 project and sources for a tool
+	which will decrypt old DOS BARIS save games for use with this version
+
 2007-01-24  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V109
