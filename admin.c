@@ -192,7 +192,7 @@ int GenerateTables(SaveGameType saveType)
        {
         for (j=i+1;j<tFiles;j++)
          {
-	       if (stricmp(FList[j].Title,FList[i].Title)<0)
+	       if (xstrcasecmp(FList[j].Title,FList[i].Title)<0)
            {
 	         memcpy(&FList[tFiles],&FList[i],sizeof(SFInfo));
 	         memcpy(&FList[i],&FList[j],sizeof(SFInfo));

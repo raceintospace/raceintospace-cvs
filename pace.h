@@ -8,9 +8,6 @@
 
 #include "av.h"
 
-#define stricmp strcasecmp
-#define strncmpi strncasecmp
-
 typedef struct {
 	unsigned char *vptr;
 	int x1, y1, x2, y2;
@@ -169,5 +166,9 @@ void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 struct timezone;
 int gettimeofday (struct timeval *tv, struct timezone *tz);
 #endif
+
+int xstrcasecmp (char const *a, char const *b);
+int xstrncasecmp (char const *a, char const *b, int len);
+
 
 #endif /* __PACE_H__ */

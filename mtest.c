@@ -88,7 +88,7 @@ get_music (char *filetype, int idx, void *buf, int bufsize)
 	len = strlen (filetype);
 
 	for (i = 0, dp = dirs; i < MDIRS; i++, dp++) {
-		if (strncasecmp (dp->dir.ID, filetype, len) == 0)
+		if (xstrncasecmp (dp->dir.ID, filetype, len) == 0)
 			break;
 	}
 

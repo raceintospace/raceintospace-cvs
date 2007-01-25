@@ -469,7 +469,7 @@ int Help(char *FName)
 	Swap32bit(count);
 	
   i=0;
-  while (strncmpi(Pul.Code,FName,4)!=0 && i<count) {
+  while (xstrncasecmp(Pul.Code,FName,4)!=0 && i<count) {
      fread(&Pul,sizeof Pul,1,fin);
      i++;
   }

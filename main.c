@@ -27,6 +27,7 @@
 //****************************************************************
 
 #include "Buzz_inc.h"
+#include <getopt.h>
 
 #ifdef MACOSX
 // SDL.h needs to be included here to replace the original main() with
@@ -194,9 +195,9 @@ env_setup (void)
 			if (keyword[0] == '#')
 				continue;
 
-			if (strcasecmp (keyword, "cdrom") == 0) {
+			if (xstrcasecmp (keyword, "cdrom") == 0) {
 				strcpy (cdrom_dir, value);
-			} else if (strcasecmp (keyword, "music") == 0) {
+			} else if (xstrcasecmp (keyword, "music") == 0) {
 				strcpy (music_dir, value);
 			} else {
 				printf ("unknown keyword \"%s\" in config file\n", keyword);
@@ -286,7 +287,7 @@ open_gamedat (char *raw_name)
 	}
 
 	for (gp = gamedat_files; gp; gp = gp->next) {
-		if (strcasecmp (gp->filename, cooked_name) == 0) {
+		if (xstrcasecmp (gp->filename, cooked_name) == 0) {
 			f = fopen (gp->fullname, "rb");
 
 			printf ("open_gamedat (\"%s\") => %s\n",

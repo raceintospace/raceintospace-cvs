@@ -315,7 +315,7 @@ next_saved_game (struct ffblk *ffblk)
 		len = strlen (dp->d_name);
 		if (len < 4)
 			continue;
-		if (strncasecmp (dp->d_name + len - 4, ".SAV", 4) != 0)
+		if (xstrncasecmp (dp->d_name + len - 4, ".SAV", 4) != 0)
 			continue;
 
 		strncpy (ffblk->ff_name, dp->d_name, sizeof ffblk->ff_name);
@@ -727,14 +727,10 @@ xcalloc (size_t a, size_t b)
 char *
 xstrdup (char const *s)
 {
-	void *p = strdup(s);
+	void *p;
 
-	if (!p)
-    {
-		perror("strdup");
-		exit(EXIT_FAILURE);
-	}
-
+	p = xmalloc (strlen (s) + 1);
+	strcpy (p, s);
 	return (p);
 }
 
@@ -863,3 +859,28 @@ gettimeofday (struct timeval *tv, struct timezone *tz)
 	return (0);
 }
 #endif
+
+int
+xstrcasecmp (char const *a, char const *b)
+{
+	while (*a) {
+		if (tolower (*a & 0xff) != tolower (*b & 0xff))
+			break;
+		a++;
+		b++;
+	}
+	return (*a - *b);
+}
+
+int
+xstrncasecmp (char const *a, char const *b, int n)
+{
+	while (n && *a) {
+		if (tolower (*a & 0xff) != tolower (*b & 0xff))
+			break;
+		a++;
+		b++;
+		n--;
+	}
+	return (*a - *b);
+}

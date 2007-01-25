@@ -1,3 +1,19 @@
+2007-01-24  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V109
+
+	* various portability tweaks to get it to compile on Fedora core 5
+	again
+	
+	* it turns out strcasecmp is not all that standard, so convered
+	uses of it, strncasecmp, strcmpi and strncmpi to xstrcasecmp
+	and xstrncasecmp, written explicitly in pace.c
+
+	* strdup is also not in c99, so changed implementation of xstrdup
+	to avoid it
+	
+	* add note about how to run aclocal in DEVELOPER
+
 2007-01-23  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V108

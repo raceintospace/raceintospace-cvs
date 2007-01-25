@@ -1,5 +1,6 @@
 compiling on linux:
 
+$ aclocal -I m4
 $ autoconf
 $ configure
 $ make
@@ -30,9 +31,10 @@ extract SDL.dll from this and put it in raceintospace source directory
 
 4. compile
 
-run "autoconf" as a normal linux program
-run "cross-configure.sh"
-run "cross-make.sh"
+run "aclocal -I m4"
+run "autoconf"
+run "./mingw-configure"
+run "./mingw-make"
 
 5. run (I'm using wine-0.9.27 on Fedora core 5)
 

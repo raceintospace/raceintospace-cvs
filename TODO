@@ -1,3 +1,12 @@
+note: some of the wait_??.frm movies are 14 frames per second instead of 8
+
+for i in *; do (cd $i; for j in *.ppm; do cjpeg -optimize -quality 30 $j > $j.jpeg; echo $i/$j; done) done
+
+mjpeg compressing all the movies: 50 megabytes
+
+ueva_08
+
+
 autosave
 
 on a mission failure, replay mission doesn't show the explosion

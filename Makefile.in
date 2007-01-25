@@ -124,6 +124,8 @@ clean:
 	rm -f *.o *~
 	rm -f raceintospace imgsplit sdltest decode getport
 	rm -f getvab mkmovie mtest vtest
+	rm -f raceintospace.exe
+	rm -f raceintospace.tar.gz
 
 distclean: clean
 	rm -f config.log config.status Makefile race.h
@@ -133,8 +135,3 @@ distclean: clean
 tar:
 	rm -f raceintospace.tar raceintospace.tar.gz
 	tar -czf raceintospace.tar.gz Makefile ChangeLog *.[ch] domount .gdbinit $(EXTRA_SOURCES)
-
-
-
-
-

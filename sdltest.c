@@ -31,7 +31,7 @@ get_music_file (char *name)
 	int chop;
 
 	for (mp = music_files; mp; mp = mp->next) {
-		if (strcasecmp (name, mp->name) == 0)
+		if (xstrcasecmp (name, mp->name) == 0)
 			return (mp);
 	}
 

@@ -46,7 +46,6 @@ CYGWIN*)
 	;;
 esac
 
-
 AC_SUBST(PROG_NAME)
 
 AC_CONFIG_HEADER(race.h)

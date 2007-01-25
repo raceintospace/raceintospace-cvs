@@ -648,7 +648,7 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
    try=0;which=0;
    while (try<SCND_TABLE)
     {
-     if (strncmpi(fName,Mob2[try].Name,strlen(Mob2[try].Name))==0) break;
+     if (xstrncasecmp(fName,Mob2[try].Name,strlen(Mob2[try].Name))==0) break;
       else try++;
     };
    if (try>=SCND_TABLE) which=415+random(25);
@@ -676,7 +676,7 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
        while (try<CLIF_TABLE)
         {
          strcpy(Val2,&Mob[try].Code[0]);
-         if (strncmpi(Val1,Val2,strlen(Val1))==0) break;
+         if (xstrncasecmp(Val1,Val2,strlen(Val1))==0) break;
           else try++;
         };
         if (try>=CLIF_TABLE) which=415+random(25);
