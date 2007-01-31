@@ -1,5 +1,14 @@
 2007-01-31  Michael McCarty <k6mmc@users.sourceforge.net>
 
+	* V113
+
+	* Gave rush.c, hardef.c, and intel.c a much needed indenting
+
+	* Changed some float constants to multiply by floats
+	  -- ie changed 2 to 2.0
+
+2007-01-31  Michael McCarty <k6mmc@users.sourceforge.net>
+
 	* V112
 
 	* Checked XXX tagged variables in intel.c and hardef.c
