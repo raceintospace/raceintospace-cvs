@@ -209,7 +209,7 @@ void PInfo(char plr,char loc)
 {
  char j,Pt[4][7],stge;
  int i,tot,sfu;
- float Sc;
+ float ScaleAmt;
  
  GradRect(4,23,315,159,0);
  for(i=4;i<316;i+=2) {grPutPixel(i,57,11);grPutPixel(i,91,11);grPutPixel(i,125,11);}
@@ -251,7 +251,7 @@ void PInfo(char plr,char loc)
   // make sure there are no negative vals in Pt
   for (i=0;i<4;i++)
      for(j=0;j<7;j++) Pt[i][j]=maxx(Pt[i][j],0);
-  tot=0;Sc=0;
+  tot=0;ScaleAmt=0;
   switch(loc)
    {
     case 0:if (Pt[2][5] >= Pt[2][6])
@@ -277,21 +277,28 @@ void PInfo(char plr,char loc)
 	   break;
 	default:break;
    }
-  if (tot<20) Sc=5; else if (tot<20) Sc=10; else if (tot<60) Sc=15;
-    else if (tot<80) Sc=20; else if (tot<100) Sc=25; else if (tot<120) Sc=30;
-      else if (tot<140) Sc=35; else if (tot<160) Sc=40; else if (tot<200) Sc=50;
+  if (tot<20) ScaleAmt=5; 
+  else if (tot<40) ScaleAmt=10; 
+  else if (tot<60) ScaleAmt=15;
+  else if (tot<80) ScaleAmt=20; 
+  else if (tot<100) ScaleAmt=25; 
+  else if (tot<120) ScaleAmt=30;
+  else if (tot<140) ScaleAmt=35; 
+  else if (tot<160) ScaleAmt=40; 
+  else if (tot<200) ScaleAmt=50;
+
     grSetColor(9);
-    DispNum(5,55,Sc*3);
-    DispNum(5,89,Sc*2);
-    DispNum(5,123,Sc);
-  Sc=25/Sc;   
+    DispNum(5,55,ScaleAmt*3);
+    DispNum(5,89,ScaleAmt*2);
+    DispNum(5,123,ScaleAmt);
+  ScaleAmt=25/ScaleAmt;   
   switch(loc)
    {
     case 1:for (i=0;i<4;i++)
 	    {
 	     sfu=-1;
 	     if (Data->P[plr].Rocket[i].Num>=0)
-	       sfu=Sc*Pt[1][i];
+	       sfu=ScaleAmt*Pt[1][i];
 	     switch(i)
 	       {
 		case 0:if (sfu>0)
@@ -330,7 +337,7 @@ void PInfo(char plr,char loc)
 		 } // end switch
 	    }; // end case 1 'rockets'
 	   break;
-    case 0: sfu=-1;if (Data->P[plr].Manned[6].Num>=0) sfu=Sc*Pt[2][6];
+    case 0: sfu=-1;if (Data->P[plr].Manned[6].Num>=0) sfu=ScaleAmt*Pt[2][6];
 	    if (sfu>0) 
 	      {
 	       RectFill(25,159-sfu*136/100,63,159,6);
@@ -338,7 +345,7 @@ void PInfo(char plr,char loc)
 	      };
 	     if (plr==0 && sfu>0) HDispIt(60,153,88,176,7,133);
 	      else if (sfu>0) HDispIt(90,151,119,176,7,131);         
-	     sfu=-1;if (Data->P[plr].Manned[5].Num>=0) sfu=Sc*Pt[2][5];
+	     sfu=-1;if (Data->P[plr].Manned[5].Num>=0) sfu=ScaleAmt*Pt[2][5];
 	    if (sfu>0) 
 	      {
 		   RectFill(101,159-sfu*136/100,139,159,6);
@@ -349,7 +356,7 @@ void PInfo(char plr,char loc)
 	     for (i=0;i<3;i++)
 	       {
 		sfu=-1;
-		if (Data->P[plr].Probe[i].Num>=0) sfu=Sc*Pt[0][i];
+		if (Data->P[plr].Probe[i].Num>=0) sfu=ScaleAmt*Pt[0][i];
 		switch(i)
 		  {
 		   case 0:if (sfu>0) 
@@ -381,7 +388,7 @@ void PInfo(char plr,char loc)
     case 2:for (i=0;i<5;i++)
 	     {
 	      sfu=-1;
-	      if (Data->P[plr].Manned[i].Num>=0) sfu=Sc*Pt[2][i];
+	      if (Data->P[plr].Manned[i].Num>=0) sfu=ScaleAmt*Pt[2][i];
 	      switch(i)
 	       {
 		case 0:if (sfu>0) 
@@ -428,31 +435,31 @@ void PInfo(char plr,char loc)
 	       } // end switch
 	      } // end case 2 'manned' programs
 	   break;
-    case 3:sfu=-1;if (Data->P[plr].Misc[3].Num>=0) sfu=Sc*Pt[3][3];
+    case 3:sfu=-1;if (Data->P[plr].Misc[3].Num>=0) sfu=ScaleAmt*Pt[3][3];
 		if (sfu>0) {
 		 RectFill(19,159-sfu*136/100,57,159,6);
 		 RectFill(19,159-sfu*136/100,56,158,5);}
 		if (plr==0 && sfu>0) HDispIt(68,65,76,75,17,145);
 		 else if (sfu>0) HDispIt(78,65,86,75,17,145);
-	       sfu=-1;if (Data->P[plr].Misc[4].Num>=0)sfu=Sc*Pt[3][4];
+	       sfu=-1;if (Data->P[plr].Misc[4].Num>=0)sfu=ScaleAmt*Pt[3][4];
 	       if (sfu>0) {
 		 RectFill(72,159-sfu*136/100,110,159,6);
 		 RectFill(72,159-sfu*136/100,109,158,5);}
 		if (plr==0 && sfu>0) HDispIt(88,62,100,75,64,143);
 		 else if (sfu>0) HDispIt(102,66,114,75,64,147);
-		   sfu=-1;if (Data->P[plr].Rocket[4].Num>=0) sfu=Sc*Pt[1][4];
+		   sfu=-1;if (Data->P[plr].Rocket[4].Num>=0) sfu=ScaleAmt*Pt[1][4];
 		 if (sfu>0) {
 		  RectFill(118,159-sfu*136/100,156,159,6);
 		  RectFill(118,159-sfu*136/100,155,158,5);}
 	       if (plr==0 && sfu>0) HDispIt(1,120,14,151,113,125);
 		 else if (sfu>0) HDispIt(16,130,31,151,113,135);
-	     sfu=-1;if (Data->P[plr].Misc[0].Num>=0) sfu=Sc*Pt[3][0];
+	     sfu=-1;if (Data->P[plr].Misc[0].Num>=0) sfu=ScaleAmt*Pt[3][0];
 	    if (sfu>0) {
 		  RectFill(173,159-sfu*136/100,211,159,6);
 		  RectFill(173,159-sfu*136/100,210,158,5);}
 	    if (plr==0 && sfu>0) HDispIt(33,140,47,151,165,145);
 	      else if (sfu>0) HDispIt(49,138,61,151,165,143);
-	    sfu=-1;if (Data->P[plr].Misc[1].Num>=0) sfu=Sc*Pt[3][1];
+	    sfu=-1;if (Data->P[plr].Misc[1].Num>=0) sfu=ScaleAmt*Pt[3][1];
 	    if (sfu>0) {
 	      RectFill(226,159-sfu*136/100,254,159,6);
 	      RectFill(226,159-sfu*136/100,253,158,5);}
@@ -461,7 +468,7 @@ void PInfo(char plr,char loc)
 	     sfu=-1;
 
 
-	     if (Data->P[1].Misc[2].Num>=0) sfu=Sc*Pt[3][2];
+	     if (Data->P[1].Misc[2].Num>=0) sfu=ScaleAmt*Pt[3][2];
 	     if (sfu>0 && plr==1)
 	       {
 		     RectFill(275,159-sfu*136/100,313,159,6);
@@ -478,11 +485,8 @@ void PInfo(char plr,char loc)
 void HInfo(char plr,char loc,char w)
 {
   int i,sfu,sfs,tot; 
-  float ov,un,Sc;
+  float ov,un,ScaleAmt = 0.0;
 
-  Sc = 0; /* XXX check uninitialized */
-
-  
   if (w==0) {
     GradRect(4,23,315,159,0);
     for (i=4;i<316;i+=2) {
@@ -517,14 +521,20 @@ void HInfo(char plr,char loc,char w)
 	   break;
     default:break;
    }
-  if (tot<20) Sc=5; else if (tot<20) Sc=10; else if (tot<60) Sc=15;
-    else if (tot<80) Sc=20; else if (tot<100) Sc=25; else if (tot<120) Sc=30;
+
+  if (tot<20) ScaleAmt=5.0; 
+  else if (tot<40) ScaleAmt=10.0; 
+  else if (tot<60) ScaleAmt=15.0;
+  else if (tot<80) ScaleAmt=20.0; 
+  else if (tot<100) ScaleAmt=25.0; 
+  else if (tot<120) ScaleAmt=30.0;
+
     grSetColor(9);
-    DispNum(5,55,Sc*3);
-    DispNum(5,89,Sc*2);
-    DispNum(5,123,Sc);
+    DispNum(5,55,ScaleAmt*3);
+    DispNum(5,89,ScaleAmt*2);
+    DispNum(5,123,ScaleAmt);
   } 
- Sc=25/Sc;
+ ScaleAmt=25/ScaleAmt;
  grSetColor(1);
   switch(loc) 
    {
@@ -534,7 +544,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[plr].Rocket[i].Num>=0)
 		   {
-		sfu=Sc*Data->P[plr].Rocket[i].Steps;
+		sfu=ScaleAmt*Data->P[plr].Rocket[i].Steps;
 		  if (sfu>0) 
 			 {
 			  ov=Data->P[plr].Rocket[i].Steps-Data->P[plr].Rocket[i].Failures;
@@ -606,7 +616,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[plr].Manned[i].Num>=0)
 	       {
-		sfu=Sc*Data->P[plr].Manned[i].Steps;
+		sfu=ScaleAmt*Data->P[plr].Manned[i].Steps;
 		  if (sfu>0)
 			 {
 			  ov=Data->P[plr].Manned[i].Steps-Data->P[plr].Manned[i].Failures;
@@ -689,7 +699,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[plr].Manned[6].Num>=0)
 	       {
-		sfu=Sc*Data->P[plr].Manned[6].Steps;
+		sfu=ScaleAmt*Data->P[plr].Manned[6].Steps;
 		  if (sfu>0)
 			 {
 			  ov=Data->P[plr].Manned[6].Steps-Data->P[plr].Manned[6].Failures;
@@ -713,7 +723,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[plr].Manned[5].Num>=0)
 	       {
-		sfu=Sc*Data->P[plr].Manned[5].Steps;
+		sfu=ScaleAmt*Data->P[plr].Manned[5].Steps;
 		  if (sfu>0)
 			 {
 			  ov=Data->P[plr].Manned[5].Steps-Data->P[plr].Manned[5].Failures;
@@ -739,7 +749,7 @@ void HInfo(char plr,char loc,char w)
 		sfu=-1;sfs=-1;
 		if (Data->P[plr].Probe[i].Num>=0)
 		  {
-		   sfu=Sc*Data->P[plr].Probe[i].Steps;
+		   sfu=ScaleAmt*Data->P[plr].Probe[i].Steps;
 		     if (sfu>0)
 			    { 
 			     ov=Data->P[plr].Probe[i].Steps-Data->P[plr].Probe[i].Failures;
@@ -792,7 +802,7 @@ void HInfo(char plr,char loc,char w)
 	    sfu=-1;sfs=-1;
 	    if (Data->P[plr].Misc[3].Num>=0)
 	      {
-	       sfu=Sc*Data->P[plr].Misc[3].Steps;
+	       sfu=ScaleAmt*Data->P[plr].Misc[3].Steps;
 		 if (sfu>0)
 			{ 
 			 ov=Data->P[plr].Misc[3].Steps-Data->P[plr].Misc[3].Failures;
@@ -812,7 +822,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[plr].Misc[4].Num>=0)
 	      {
-	       sfu=Sc*Data->P[plr].Misc[4].Steps;
+	       sfu=ScaleAmt*Data->P[plr].Misc[4].Steps;
 		 if (sfu>0)
 			{ 
 			 ov=Data->P[plr].Misc[4].Steps-Data->P[plr].Misc[4].Failures;
@@ -831,7 +841,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[plr].Rocket[4].Num>=0)
 	       {
-		sfu=Sc*Data->P[plr].Rocket[4].Steps;
+		sfu=ScaleAmt*Data->P[plr].Rocket[4].Steps;
 		 if (sfu>0)
 			 {
 			  ov=Data->P[plr].Rocket[4].Steps-Data->P[plr].Rocket[4].Failures;
@@ -850,7 +860,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[plr].Misc[0].Num>=0)
 	       {
-		sfu=Sc*Data->P[plr].Misc[0].Steps;
+		sfu=ScaleAmt*Data->P[plr].Misc[0].Steps;
 		  if (sfu>0)
 			 { 
 			  ov=Data->P[plr].Misc[0].Steps-Data->P[plr].Misc[0].Failures;
@@ -869,7 +879,7 @@ void HInfo(char plr,char loc,char w)
 		 sfu=-1;sfs=-1;
 		 if (Data->P[plr].Misc[1].Num>=0)
 	       {
-		sfu=Sc*Data->P[plr].Misc[1].Steps;
+		sfu=ScaleAmt*Data->P[plr].Misc[1].Steps;
 		  if (sfu>0)
 			 {
 			  ov=Data->P[plr].Misc[1].Steps-Data->P[plr].Misc[1].Failures;
@@ -888,7 +898,7 @@ void HInfo(char plr,char loc,char w)
 	     sfu=-1;sfs=-1;
 	     if (Data->P[1].Misc[2].Num>=0)
 		   {
-    		 sfu=Sc*Data->P[1].Misc[2].Steps;
+    		 sfu=ScaleAmt*Data->P[1].Misc[2].Steps;
 		    if (sfu>0)
 			  { 
 			   ov=Data->P[1].Misc[2].Steps-Data->P[1].Misc[2].Failures;
@@ -964,10 +974,8 @@ void RankMe(char plr)
 
 void DrawRank(char plr)
 {
- int i,MaxPz=0,MaxNg=0,Px,Py,t1,t2,Cur,OffSet,Year_Inc=12,score;
+ int i,MaxPz=0,MaxNg=0,Px,Py,t1,t2,Cur=0,OffSet,Year_Inc=12,score;
  char Digit[4];
-
- Cur = 0; /* XXX check uninitialized */
 
  strcpy(IDT,"i030");strcpy(IKEY,"k030");
  

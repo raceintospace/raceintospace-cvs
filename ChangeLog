@@ -1,3 +1,11 @@
+2007-01-31  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V112
+
+	* Checked XXX tagged variables in intel.c and hardef.c
+
+	* Renamed variable Sc in hardef.c to ScaleAmt to be clear
+
 2007-01-30  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V111

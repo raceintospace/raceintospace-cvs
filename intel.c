@@ -313,9 +313,7 @@ void BackIntel(char p,char year)
 
 void HarIntel(char p,char acc)
 {
- int mr,i,prg=0,ind,j=0,k=0,save[28],lo=0,hi=28,tot=0,nf=0,seg=0;
-
- ind = 0; /* XXX check uninitialized */
+ int mr,i,prg=0,ind=0,j=0,k=0,save[28],lo=0,hi=28,tot=0,nf=0,seg=0;
 
  static char F[10][11] = {
   {7,0,7,8,11,14,15,12,12,12}, //58
@@ -409,10 +407,11 @@ void HarIntel(char p,char acc)
 
   if (k>=28) {HarIntel(p,0);return;}
   } // end else
- if (j>=0 && j<7) {prg=0;ind=j;};
- if (j>=7 && j<14) {prg=1;ind=j-7;};
- if (j>=14 && j<21) {prg=2;ind=j-14;};
- if (j>=21 && j<28) {prg=3;ind=j-21;};
+
+ if (j>=0 && j<7) {prg=0;ind=j;}
+ else if (j>=7 && j<14) {prg=1;ind=j-7;}
+ else if (j>=14 && j<21) {prg=2;ind=j-14;}
+ else if (j>=21 && j<28) {prg=3;ind=j-21;}
 
   mr=Data->P[p].PastIntel[0].cur;nf=0;
  for (i=0;i<mr;i++)
