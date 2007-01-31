@@ -223,10 +223,7 @@ char Was_Goal(char total,char which)
 {
    char i,val,x=10;
 
-   val = 0; /* XXX check uninitialized */
-
    switch(which) {
-      case -1: return -1;
       case MANSPACE:val=4; break; // RECOVERY
       case EORBIT:val=1;break;    // OIB
       case LPASS:val=14;break;    // LIRA
@@ -240,7 +237,9 @@ char Was_Goal(char total,char which)
       case DOCK:val=8;break;             // Docking
       case EWALK:val=7;break;     // E EVA
       case LWALK:val=15;break;    // L EVA
-      default: break;
+      case -1: 
+			default:
+					return -1;
       }
 
    i=0;
@@ -790,11 +789,9 @@ int Find_MaxGoal(void)
 
 int U_AllotPrest(char plr,char mis)
 {
-   int i,total,other,negs,mcode,lun;
+   int i=0,total,other,negs,mcode,lun;
    extern struct mStr Mis;
    char PVal[28];
-
-   i = 0; /* XXX check uninitialized */
 
    memset(PVal,0x00,sizeof PVal);     // CLEAR TOTAL VALUE
    total=0, negs=0, lun=0;
