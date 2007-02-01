@@ -26,7 +26,6 @@
 		9848ADD20B55849A00A82E45 /* budget.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848AD9B0B55849A00A82E45 /* budget.c */; };
 		9848ADD30B55849A00A82E45 /* Buzz_inc.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848AD9C0B55849A00A82E45 /* Buzz_inc.h */; };
 		9848ADD50B55849A00A82E45 /* crew.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848AD9E0B55849A00A82E45 /* crew.c */; };
-		9848ADD60B55849A00A82E45 /* data_defs.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848AD9F0B55849A00A82E45 /* data_defs.h */; };
 		9848ADD70B55849A00A82E45 /* data.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADA00B55849A00A82E45 /* data.h */; };
 		9848ADD80B55849A00A82E45 /* endgame.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADA10B55849A00A82E45 /* endgame.c */; };
 		9848ADD90B55849A00A82E45 /* endianness.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADA20B55849A00A82E45 /* endianness.c */; };
@@ -68,7 +67,6 @@
 		9848AE020B55849A00A82E45 /* soundfx.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADCB0B55849A00A82E45 /* soundfx.h */; };
 		9848AE030B55849A00A82E45 /* soundint.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADCC0B55849A00A82E45 /* soundint.h */; };
 		9848AE040B55849A00A82E45 /* start.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADCD0B55849A00A82E45 /* start.c */; };
-		9848AE050B55849A00A82E45 /* sv_lib.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADCE0B55849A00A82E45 /* sv_lib.h */; };
 		9848AE070B55849A00A82E45 /* vab.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADD00B55849A00A82E45 /* vab.c */; };
 		9853C70A0B71475E005568E2 /* raceintospace.1 in Resources */ = {isa = PBXBuildFile; fileRef = 9853C7080B71475E005568E2 /* raceintospace.1 */; };
 		9853C70B0B71475E005568E2 /* raceintospace.spec in Resources */ = {isa = PBXBuildFile; fileRef = 9853C7090B71475E005568E2 /* raceintospace.spec */; };
@@ -81,6 +79,7 @@
 		9853C71E0B7147A6005568E2 /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = 9853C7190B7147A6005568E2 /* TODO */; };
 		9853C71F0B7147A6005568E2 /* WHO_SPOT in Resources */ = {isa = PBXBuildFile; fileRef = 9853C71A0B7147A6005568E2 /* WHO_SPOT */; };
 		98C017C80B5D49EB0080F98E /* RaceIntoSpace.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98C017C70B5D49EB0080F98E /* RaceIntoSpace.icns */; };
+		98DC49DF0B71D40B007A82EE /* gamedata.c in Sources */ = {isa = PBXBuildFile; fileRef = 98DC49DE0B71D40B007A82EE /* gamedata.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -93,7 +92,6 @@
 				002F3A0009D0884600EBEB88 /* SDL.framework in Copy Frameworks into .app bundle */,
 				9848ADD10B55849A00A82E45 /* av.h in Copy Frameworks into .app bundle */,
 				9848ADD30B55849A00A82E45 /* Buzz_inc.h in Copy Frameworks into .app bundle */,
-				9848ADD60B55849A00A82E45 /* data_defs.h in Copy Frameworks into .app bundle */,
 				9848ADD70B55849A00A82E45 /* data.h in Copy Frameworks into .app bundle */,
 				9848ADDA0B55849A00A82E45 /* externs.h in Copy Frameworks into .app bundle */,
 				9848ADE60B55849A00A82E45 /* mis.h in Copy Frameworks into .app bundle */,
@@ -103,7 +101,6 @@
 				9848ADFC0B55849A00A82E45 /* records.h in Copy Frameworks into .app bundle */,
 				9848AE020B55849A00A82E45 /* soundfx.h in Copy Frameworks into .app bundle */,
 				9848AE030B55849A00A82E45 /* soundint.h in Copy Frameworks into .app bundle */,
-				9848AE050B55849A00A82E45 /* sv_lib.h in Copy Frameworks into .app bundle */,
 			);
 			name = "Copy Frameworks into .app bundle";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,7 +130,6 @@
 		9848AD9B0B55849A00A82E45 /* budget.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = budget.c; sourceTree = "<group>"; };
 		9848AD9C0B55849A00A82E45 /* Buzz_inc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Buzz_inc.h; sourceTree = "<group>"; };
 		9848AD9E0B55849A00A82E45 /* crew.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = crew.c; sourceTree = "<group>"; };
-		9848AD9F0B55849A00A82E45 /* data_defs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = data_defs.h; sourceTree = "<group>"; };
 		9848ADA00B55849A00A82E45 /* data.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = data.h; sourceTree = "<group>"; };
 		9848ADA10B55849A00A82E45 /* endgame.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = endgame.c; sourceTree = "<group>"; };
 		9848ADA20B55849A00A82E45 /* endianness.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = endianness.c; sourceTree = "<group>"; };
@@ -175,7 +171,6 @@
 		9848ADCB0B55849A00A82E45 /* soundfx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = soundfx.h; sourceTree = "<group>"; };
 		9848ADCC0B55849A00A82E45 /* soundint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = soundint.h; sourceTree = "<group>"; };
 		9848ADCD0B55849A00A82E45 /* start.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = start.c; sourceTree = "<group>"; };
-		9848ADCE0B55849A00A82E45 /* sv_lib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = sv_lib.h; sourceTree = "<group>"; };
 		9848ADD00B55849A00A82E45 /* vab.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = vab.c; sourceTree = "<group>"; };
 		9853C7080B71475E005568E2 /* raceintospace.1 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.man; path = raceintospace.1; sourceTree = "<group>"; };
 		9853C7090B71475E005568E2 /* raceintospace.spec */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = raceintospace.spec; sourceTree = "<group>"; };
@@ -188,6 +183,7 @@
 		9853C7190B7147A6005568E2 /* TODO */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		9853C71A0B7147A6005568E2 /* WHO_SPOT */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = WHO_SPOT; sourceTree = "<group>"; };
 		98C017C70B5D49EB0080F98E /* RaceIntoSpace.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = RaceIntoSpace.icns; sourceTree = SOURCE_ROOT; };
+		98DC49DE0B71D40B007A82EE /* gamedata.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = gamedata.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,13 +274,13 @@
 				9848AD9B0B55849A00A82E45 /* budget.c */,
 				9848AD9C0B55849A00A82E45 /* Buzz_inc.h */,
 				9848AD9E0B55849A00A82E45 /* crew.c */,
-				9848AD9F0B55849A00A82E45 /* data_defs.h */,
 				9848ADA00B55849A00A82E45 /* data.h */,
 				9848ADA10B55849A00A82E45 /* endgame.c */,
 				9848ADA20B55849A00A82E45 /* endianness.c */,
 				9848ADA30B55849A00A82E45 /* externs.h */,
 				9848ADA40B55849A00A82E45 /* futbub.c */,
 				9848ADA50B55849A00A82E45 /* future.c */,
+				98DC49DE0B71D40B007A82EE /* gamedata.c */,
 				9848ADA60B55849A00A82E45 /* gr.c */,
 				9848ADA70B55849A00A82E45 /* gx.c */,
 				9848ADA80B55849A00A82E45 /* hardef.c */,
@@ -321,7 +317,6 @@
 				9848ADCB0B55849A00A82E45 /* soundfx.h */,
 				9848ADCC0B55849A00A82E45 /* soundint.h */,
 				9848ADCD0B55849A00A82E45 /* start.c */,
-				9848ADCE0B55849A00A82E45 /* sv_lib.h */,
 				9848ADD00B55849A00A82E45 /* vab.c */,
 			);
 			includeInIndex = 1;
@@ -456,6 +451,7 @@
 				9848AE010B55849A00A82E45 /* sdl.c in Sources */,
 				9848AE040B55849A00A82E45 /* start.c in Sources */,
 				9848AE070B55849A00A82E45 /* vab.c in Sources */,
+				98DC49DF0B71D40B007A82EE /* gamedata.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
