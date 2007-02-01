@@ -14,7 +14,7 @@ int vflag;
 void
 usage (void)
 {
-	fprintf (stderr, "usage: getvab\n");
+	fprintf (stderr, "usage: getvab filename\n");
 	exit (1);
 }
 
@@ -53,8 +53,6 @@ main (int argc, char **argv)
 	int plr;
 	char outname[1000];
 
-	filename = "/l/baris/gamedat/vab.img";
-
 	while ((c = getopt (argc, argv, "")) != EOF) {
 		switch (c) {
 		default:
@@ -62,8 +60,10 @@ main (int argc, char **argv)
 		}
 	}
 
-	if (optind != argc)
+	if (argc - optind != 1)
 		usage ();
+
+	filename = argv[optind];
 
 	if ((f = fopen (filename, "rb")) == NULL) {
 		fprintf (stderr, "can't open %s\n", filename);

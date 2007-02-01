@@ -26,6 +26,7 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "mis.h"
+#include "gamedata.h"
 
 #define FRM_Delay 22
 
@@ -123,28 +124,6 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 {
 	char *fName;
 	int keep_going;
-
-	struct oLIST {
-		i16 aIdx; 
-		i16 sIdx; 
-	};
-
-	struct oGROUP {
-		char ID[10];  
-		struct oLIST oLIST[5]; 
-	};
-
-	struct oFGROUP {
-		char ID[15];  
-		struct oLIST oLIST[5]; 
-	};
-
-	struct Table {
-		char fname[8];
-		long foffset;
-		unsigned short size;
-	};
-
 	int wlen,i,j;
 	unsigned int fres,max;
 	char lnch=0,AEPT,BABY,Tst2,Tst3;

@@ -913,7 +913,7 @@ void ShowEvt(char plr,char crd)
     long size;
   } MM;
 
-  memset(&pal[96],0,672);VBlank();SetPal(pal);
+  memset(&pal[96],0,672);VBlank(); /* SetPal(pal); FIXME */
   if (plr==0) {
    switch(crd)
     {
@@ -943,7 +943,7 @@ void ShowEvt(char plr,char crd)
      if (screen[i]>=32) screen[i]=vhptr.vptr[i];
     }
   }
-  VBlank();SetPal(pal);
+  VBlank();/* SetPal(pal); FIXME */
   
   fclose(ffin);
 }

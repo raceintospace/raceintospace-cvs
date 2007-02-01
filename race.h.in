@@ -1,13 +1,14 @@
-/* @configure_input@ */
+#ifndef _RACE_H
+#define _RACE_H
 
-/* Check if libvorbis file is available */
-#undef HAVE_LIBVORBISFILE
-
-/* Check if building on Mac OS */
-#undef MACOSX
-
-/* Check if target is big endian */
 #undef __BIG_ENDIAN__
+#undef CONFIG_MACOSX
+#undef CONFIG_OS2
+#undef CONFIG_WIN32
+#undef HAVE_LIBOGG
+#undef HAVE_LIBVORBIS
+#undef HAVE_LIBVORBISFILE
+#undef HAVE_LIBTHEORA
+#undef HAVE_LIBASOUND
 
-/* Check if avformat is available */
-#undef HAVE_LIBAVFORMAT
+#endif /* _RACE_H */

@@ -273,11 +273,6 @@ StopAudio(char mode)
 }
 
 void
-SetPal (char *pal)
-{
-}
-
-void
 getcurdir (int drive, char *buf)
 {
 	getcwd (buf, 100);
@@ -346,6 +341,7 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 	FILE *fin;
 	int lo, hi;
 	int idx;
+    char *p;
 	char name[100];
 
 	if ((fin = sOpen (keyname, "rb", 0)) == NULL)
@@ -359,7 +355,12 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 
 	idx = 0;
 	while (fread (name, 1, 8, fin) == 8) {
-		name[8] = 0;
+		name[8] = '\0';
+        for (p = name; *p; p++) {
+            *p = tolower (*p);
+            if (*p == '#')
+                *p = '_';
+        }
 		tbl->strings[idx++] = xstrdup (name);
 	}
 
@@ -402,7 +403,6 @@ frm_open_seq (int seq, int mode)
 {
 	struct tblinfo *tp;
 	char filename[1000];
-	char *p;
 
 	if (mode == 0)
 		tp = &frm_tbl;
@@ -413,12 +413,6 @@ frm_open_seq (int seq, int mode)
 		return (NULL);
 
 	sprintf (filename, "%s/rom/%s.frm", cdrom_dir, tp->strings[seq]);
-	for (p = filename; *p; p++) {
-		*p = tolower (*p);
-		if (*p == '#')
-			*p = '_';
-	}
-	
 	return (frm_open (filename));
 }
 
@@ -725,7 +719,7 @@ xcalloc (size_t a, size_t b)
 }
 
 char *
-xstrdup (char const *s)
+xstrdup (const char *s)
 {
 	void *p;
 

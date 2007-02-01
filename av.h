@@ -2,6 +2,8 @@
 
 #define _AV_H
 
+#include <SDL/SDL.h>
+
 #define AV_NUM_CHANNELS     2
 #define AV_ALL_CHANNELS     -1
 #define AV_SOUND_CHANNEL    0

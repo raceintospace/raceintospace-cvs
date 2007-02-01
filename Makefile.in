@@ -11,7 +11,7 @@ EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts -Wno-deprecated-declarations \
 	-Werror
 
-CFLAGS = -g -Wall -I. `sdl-config --cflags` -std=c99
+CFLAGS = -g -Wall `sdl-config --cflags` -std=c99
 
 # Personal Makefile
 -include Makefile.$(LOGNAME)
@@ -52,9 +52,9 @@ uninstall:
 	rm -rf $(DESTDIR)/usr/share/doc/raceintospace
 	rm -f $(DESTDIR)/usr/share/raceintospace/README
 
-BARIS_HFILES = Buzz_inc.h data.h endianness.h externs.h mis.h mtype.h	\
-	macros.h music.h pace.h pcx_hdr.h proto.h records.h soundfx.h	\
-	sv_lib.h uc.h soundint.h
+BARIS_HFILES = av.h Buzz_inc.h data.h endianness.h externs.h gamedata.h \
+	int_types.h macros.h mis.h music.h pace.h proto.h records.h \
+	soundfx.h soundint.h
 
 BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	ast2.o ast3.o ast4.o budget.o crew.o endgame.o	    \
@@ -64,12 +64,12 @@ BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	news_suq.o							    \
 	place.o port.o prefs.o prest.o radar.o rdplex.o records.o \
 	replay.o review.o rush.o start.o   \
-	vab.o pace.o gx.o gr.o sdl.o music.o
+	vab.o pace.o gx.o gr.o sdl.o music.o gamedata.o
+
 $(PROG_NAME): $(BARIS_OBJS)
 	$(CC) $(CFLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
 
 # $(BARIS_OBJS): $(BARIS_HFILES)
-
 
 imgsplit: imgsplit.o
 	$(CC) $(CFLAGS) -o imgsplit imgsplit.o -lm
@@ -77,18 +77,17 @@ imgsplit: imgsplit.o
 vtest: vtest.o
 	$(CC) $(CFLAGS) -o vtest vtest.o -lasound -lm
 
-ifeq (@have_avformat@, yes)
+ifeq (@have_theora@@have_vorbis@,yesyes)
 PROGS += vtest2
-
 vtest2.o: vtest2.c
 	@echo "$(CC) ...flags... -c $*.c"
-	@$(CC) $(CFLAGS) `ffmpeg-config --cflags` $(EXTRA_WARNINGS) -c $*.c
+	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
 
 vtest2: vtest2.o
-	$(CC) $(CFLAGS) -o vtest2 vtest2.o `ffmpeg-config --libs avcodec avformat` `sdl-config --libs`
+	$(CC) $(LDFLAGS) -o vtest2 vtest2.o -logg -lvorbis -ltheora -lSDL
 else
 vtest2: FORCE
-	@echo "You don't have libavformat required for vtest2!"; exit 1
+	@echo "You don't have libogg and/or libtheora required for vtest2!"; exit 1
 endif
 
 decode: decode.o

@@ -183,7 +183,7 @@ env_setup (void)
 
 	strcpy (cdrom_dir, "c:/raceintospace/cdrom");
 	strcpy (music_dir, "c:/raceintospace/music");
-#elif
+#else
 #error "unknown os"
 #endif
 
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
 
   LOAD=QUIT=0;
 
-  screen = xmalloc(128 * 1024);
+//  screen = xmalloc(128 * 1024);
 
   xMODE=0;
 
@@ -1324,13 +1324,15 @@ void Plop(char plr,char mode)
   } else strcpy(sName,"static.frm");
 
   fin=sOpen(sName,"rb",0);
+  if (!fin)
+      return;
   wlen=8;
   fread(&vhptr.vptr[40000],1,wlen*2048,fin);
   vhptr.vptr[40000]=vhptr.vptr[40001]=vhptr.vptr[40002]=vhptr.vptr[40005];
   vhptr.vptr[55999]=vhptr.vptr[55995];
   vhptr.vptr[55998]=vhptr.vptr[55994];
   memcpy(&pal[384],&vhptr.vptr[56000],384);
-  SetPal(pal);
+  /* SetPal(pal); FIXME */
   if (BIG==0) SMove(&vhptr.vptr[40000],80,3+plr*10);
   else LMove(&vhptr.vptr[40000]);
   fclose(fin);

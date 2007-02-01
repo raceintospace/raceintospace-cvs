@@ -7,11 +7,29 @@ dnl Get the operating system and version number...
 uname=`uname`
 
 AC_PROG_CC
+AC_C_INLINE
+AC_C_BIGENDIAN(AC_DEFINE([__BIG_ENDIAN__]))
 
 AC_CHECK_LIB(vorbisfile,main)
 AC_CHECK_LIB(asound,main)
 AC_CHECK_LIB(m,main)
-AC_CHECK_LIB(SDL,main)
+AC_CHECK_LIB([SDL],main)
+dnl avcodec depends on avformat so just test the former
+AC_CHECK_LIB(ogg,ogg_stream_init,
+[
+	AC_DEFINE([HAVE_LIBOGG])
+	AC_SUBST(have_ogg, yes)
+	AC_CHECK_LIB(theora,theora_decode,
+	[
+		AC_DEFINE([HAVE_LIBTHEORA])
+		AC_SUBST(have_theora, yes)
+	])
+	AC_CHECK_LIB(vorbis,vorbis_synthesis,
+	[
+		AC_DEFINE([HAVE_LIBVORBIS])
+		AC_SUBST(have_vorbis, yes)
+	])
+])
 
 AX_CREATE_STDINT_H(int_types.h)
 

@@ -24,7 +24,7 @@
 //
 // Support files for NEWS.C
 
-#include <Buzz_inc.h>
+#include "Buzz_inc.h"
 #include "externs.h"
 
 int Steal(int p,int prog,int type) // type= 1:postive -1:negative search

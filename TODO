@@ -1,12 +1,3 @@
-note: some of the wait_??.frm movies are 14 frames per second instead of 8
-
-for i in *; do (cd $i; for j in *.ppm; do cjpeg -optimize -quality 30 $j > $j.jpeg; echo $i/$j; done) done
-
-mjpeg compressing all the movies: 50 megabytes
-
-ueva_08
-
-
 autosave
 
 on a mission failure, replay mission doesn't show the explosion
@@ -15,6 +6,8 @@ I think that drawing the bar graph also runs the cpu flat out. Even worse, I
 think that it also pauses audio and video.
 
 in the baby screens, don't down sample then up sample
+
+factor out common parts of replay.c and mis_c.c
 
 =======
 fades
@@ -31,8 +24,6 @@ optimize grPutPixel and grGetPixel
 
 the gx routines should clip - thats easy, but right now they
 make assertions about arguments. Problem fixed in port.c
-
-try mpeg encoding the video
 
 Yank strings into a separate string table
 

@@ -24,6 +24,9 @@
 //
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "gamedata.h"
+
+#ifdef DEADCODE
 
 #define FRM_Delay     25
 
@@ -38,6 +41,7 @@ extern long aLoc;
 extern GXHEADER dply;
 extern struct AnimType AHead;
 extern struct BlockHead BHead;
+#endif
 
 #if 0
 void RLEF(char *dest, char *src, unsigned int src_size)
@@ -89,67 +93,49 @@ bot:                          // bottom of routine
 }
 #endif
 
-
 void
 Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 {
 	int keep_going;
-	struct oLIST
-	{
-		i16 aIdx;
-		i16 sIdx;
-	};
-
-	struct oGROUP
-	{
-		char ID[10];
-		struct oLIST oLIST[5];
-	};
-
-	struct NTable
-	{
-		char ID[8];
-	};
-
-	struct oFGROUP
-	{
-		char ID[15];
-		struct oLIST oLIST[5];
-	};
-
-	struct Table
-	{
-		char fname[8];
-		long foffset;
-		unsigned short size;
-	};
-
 	int i, j, kk, mode, max;
-	FILE *fin, *kfin;
+	FILE *seqf, *fseqf;
 	long offset;
-	struct oGROUP *bSeq = NULL, aSeq;
-	struct oFGROUP *dSeq = NULL, cSeq;
-	struct Table *F;
-	char *SEQ_DAT = "SEQ.DAT";
-	char *FSEQ_DAT = "FSEQ.DAT";
+	struct oGROUP group;
+	struct oFGROUP fgroup;
+	struct Table table;
 	REPLAY Rep;
 	GXHEADER dopy, snzy;
 	struct frm *frm = NULL;
 	int update_map;
 
+	seqf = sOpen("SEQ.DAT", "rb", 0);
+	fseqf = sOpen("FSEQ.DAT", "rb", 0);
+
+	if (!seqf || !fseqf)
+	{
+		if (!seqf)
+			fclose(seqf);
+		if (!fseqf)
+			fclose(fseqf);
+		return;
+	}
+
 	if (strncmp("OOOO", Type, 4) == 0)
 	{
-		kfin = sOpen("REPLAY.DAT", "rb", 1);
+		FILE *f = sOpen("REPLAY.DAT", "rb", 1);
+
 		offset = (plr * 100) + num;
-		fseek(kfin, offset * (sizeof Rep), SEEK_SET);
-		fread(&Rep, sizeof Rep, 1, kfin);
-		fclose(kfin);
+		fseek(f, offset * (sizeof Rep), SEEK_SET);
+		/* TODO: fread_REPLAY(&Rep, 1, f); */
+		fread(&Rep, sizeof Rep, 1, f);
+		fclose(f);
 	}
 	else
 	{							   // Find correct Sequence
+#if 0
 		bSeq = (struct oGROUP *) &vhptr.vptr[35000];
 		fin = sOpen(SEQ_DAT, "rb", 0);
-        offset = fread(&vhptr.vptr[35000], 1, vhptr.h*vhptr.w-35000, fin);
+		fread_oGROUP(bSeq, (vhptr.h * vhptr.w - 35000) / sizeof_oGROUP, fin);
 		fclose(fin);
 		mode = 0;
 		j = 0;
@@ -160,6 +146,29 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 			return;				   // bad sequence
 		Rep.Qty = 1;
 		Rep.Off[0] = j;
+#endif
+		struct oGROUP grps[32];
+		int num_read = 0, tot_read = 0;
+
+		mode = 0;
+		do
+		{
+			num_read = fread_oGROUP(grps, 32, seqf);
+			for (j = 0; j < num_read; ++j)
+			{
+				if (strncmp(grps[j].ID, "XXXX", 4) == 0)
+					/* XXX: bad sequence? */
+					return;
+				if (strncmp(&grps[j].ID[3], Type,
+						strlen(&grps[j].ID[3]) == 0))
+					break;
+			}
+			if (j == num_read)
+				break;
+			tot_read += num_read;
+		} while (num_read);
+		Rep.Qty = 1;
+		Rep.Off[0] = tot_read + j;
 	};
 
 	GV(&snzy, width, height);
@@ -171,57 +180,47 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	{
 		printf("segment %d: %d\n", kk, Rep.Off[kk]);
 		UpdateMusic();
-		i = 0;
 		if (Rep.Off[kk] < 1000)	   //Specs: success seq
 		{
-			bSeq = (struct oGROUP *) &vhptr.vptr[35000];
-			fin = sOpen(SEQ_DAT, "rb", 0);
-			offset = fread(&vhptr.vptr[35000], 1, vhptr.h*vhptr.w-35000, fin);
-			fclose(fin);
+			fseek(seqf, Rep.Off[kk] * sizeof_oGROUP, SEEK_SET);
+			fread_oGROUP(&group, 1, seqf);
+			max = group.ID[1] - '0';
 			mode = 0;
 		}
 		else
 		{						   //Specs: failure seq
-			dSeq = (struct oFGROUP *) &vhptr.vptr[35000];
-			F = (struct Table *) &vhptr.vptr[0];
-			fin = sOpen(FSEQ_DAT, "rb", 0);
-			fseek(fin, 0, SEEK_SET);
-			fread(&vhptr.vptr[0], 700, 1, fin);
+			// MAX 50 Tables
 			i = Rep.Off[kk] / 1000;
 			Rep.Off[kk] %= 1000;
 			if (i == 0 || i == 50)
-			{
-				fclose(fin);
 				goto done;
-			}
 			i--;				   //Specs: offset index klugge
-			offset = F[i].foffset;
-			fseek(fin, offset, SEEK_SET);
-			fread(&vhptr.vptr[35000], F[i].size, 1, fin);
-			fclose(fin);
+			fseek(fseqf, i * sizeof_Table, SEEK_SET);
+			fread_Table(&table, 1, fseqf);
+			offset = table.foffset;
+			fseek(fseqf, offset, SEEK_SET);
+			/* XXX: Why use table.size? */
+			/* fread(&vhptr.vptr[35000], table.size, 1, fseqf); */
+			fread_oFGROUP(&fgroup, 1, fseqf);
 			mode = 1;
-		};
-
-		if (mode == 0)
-		{
-			memcpy(&aSeq, &bSeq[Rep.Off[kk]].ID[0], sizeof aSeq);
-			max = aSeq.ID[1] - 0x30;
-		}
-		else
-		{
-			memcpy(&cSeq, &dSeq[Rep.Off[kk]].ID[0], sizeof cSeq);
-			max = cSeq.ID[1] - 0x30;
+			max = fgroup.ID[1] - '0';
 		};
 
 		i = 0;
-
 		keep_going = 1;
 		update_map = 0;
 		while (keep_going && i < max)
 		{
+			int frm_idx;
+
 			UpdateMusic();
 
-			if ((frm = frm_open_seq(aSeq.oLIST[i].aIdx, mode)) == NULL)
+			if (mode == 1)		   /* failure */
+				frm_idx = fgroup.oLIST[i].aIdx;
+			else
+				frm_idx = group.oLIST[i].aIdx;
+
+			if ((frm = frm_open_seq(frm_idx, mode)) == NULL)
 				goto done;
 
 			update_map = 1;
@@ -246,20 +245,16 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 				gxPutImage(&snzy, gxSET, dx, dy, 0);
 
 				if (bioskey(0) || grGetMouseButtons())
-				{
 					keep_going = 0;
-				}
 
 				if (frm->frame_rate)
 					idle_loop_secs(1.0 / frm->frame_rate);
 				else
 					idle_loop_secs(1.0 / 8.0);
-
 			}
 
 			frm_close(frm);
 			frm = NULL;
-
 			i++;
 		}
 	}
@@ -268,6 +263,8 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	DV(&snzy);
 	if (frm)
 		frm_close(frm);
+	fclose(fseqf);
+	fclose(seqf);
 	return;
 }
 
@@ -311,20 +308,6 @@ void DispBaby(int x, int y, int loc,char neww)
 
 void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,char mde)
 {
- struct oLIST {
-   i16 aIdx; 
-   i16 sIdx; 
- };
-
- struct oGROUP {
-   char ID[10];  
-   struct oLIST oLIST[5]; 
- };
-
- struct NTable {
-   char ID[8];
- };
-
  int j;
  FILE *fin,*kfin;
  long offset;
