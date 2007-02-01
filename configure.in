@@ -19,7 +19,7 @@ AC_CHECK_LIB(ogg,ogg_stream_init,
 [
 	AC_DEFINE([HAVE_LIBOGG])
 	AC_SUBST(have_ogg, yes)
-	AC_CHECK_LIB(theora,theora_decode,
+	AC_CHECK_LIB(theora,theora_decode_init,
 	[
 		AC_DEFINE([HAVE_LIBTHEORA])
 		AC_SUBST(have_theora, yes)
