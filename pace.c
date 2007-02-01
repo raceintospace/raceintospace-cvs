@@ -256,7 +256,7 @@ long RLEC (char *src, char *dest, unsigned int src_size)
 	return (dest_i);
 }
 
-#if defined(__linux__) || defined(MACOSX)
+#if defined(__linux__) || defined(CONFIG_MACOSX)
 int
 biostime (int a, long b)
 {

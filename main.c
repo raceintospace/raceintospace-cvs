@@ -29,7 +29,7 @@
 #include "Buzz_inc.h"
 #include <getopt.h>
 
-#ifdef MACOSX
+#ifdef CONFIG_MACOSX
 // SDL.h needs to be included here to replace the original main() with
 // what it needs for the Mac
 #include "SDL.h"
@@ -159,7 +159,7 @@ env_setup (void)
 	char keyword[1000], value[1000];
 	char dirname[1000];
 
-#if defined(__linux__) || defined(MACOSX)
+#if defined(__linux__) || defined(CONFIG_MACOSX)
 	char *home;
 
 	if ((home = getenv ("HOME")) == NULL) {

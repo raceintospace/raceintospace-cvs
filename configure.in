@@ -50,7 +50,7 @@ esac
 case "$uname" in
 Darwin)
 	dnl Darwin/Mac OS X configuration
-	AC_DEFINE([[MACOSX]])
+	AC_DEFINE([CONFIG_MACOSX])
 	;;
 Linux)
 	dnl Linux OS
