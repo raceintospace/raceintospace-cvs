@@ -102,10 +102,11 @@ extern struct order Order[6];
 extern struct ManPool *Men;
 char AI[2]={0,0};
 
+#ifdef DEAD_CODE
 static char BUZZ_DIR[32];
 
-
 void Plop(char plr,char mode);
+#endif
 
 void mikeCrearScreen(void)
 {
@@ -164,14 +165,19 @@ env_setup (void)
 
 	if ((home = getenv ("HOME")) == NULL) {
 		printf ("you must set your $HOME environment variable\n");
-		exit (1);
+		exit (EXIT_FAILURE);
 	}
 
 	sprintf (savedat_dir, "%s/.raceintospace", home);
-	mkdir (savedat_dir, 0777);
+	if (mkdir (savedat_dir, 0777) < 0 && errno != EEXIST)
+    {
+		printf ("mkdir %s => %s\n", savedat_dir,
+			strerror (errno));
+    }
 
 	strcpy (cdrom_dir, "/usr/share/raceintospace/cdrom");
 	strcpy (music_dir, "/usr/share/raceintospace/music");
+	strcpy (movies_dir, "/usr/share/raceintospace/movies");
 
 #elif _WIN32
 	mkdir ("c:/raceintospace");
@@ -183,6 +189,7 @@ env_setup (void)
 
 	strcpy (cdrom_dir, "c:/raceintospace/cdrom");
 	strcpy (music_dir, "c:/raceintospace/music");
+	strcpy (movies_dir, "c:/raceintospace/movies");
 #else
 #error "unknown os"
 #endif
@@ -199,6 +206,8 @@ env_setup (void)
 				strcpy (cdrom_dir, value);
 			} else if (xstrcasecmp (keyword, "music") == 0) {
 				strcpy (music_dir, value);
+			} else if (xstrcasecmp (keyword, "movies") == 0) {
+				strcpy (movies_dir, value);
 			} else {
 				printf ("unknown keyword \"%s\" in config file\n", keyword);
 			}
@@ -348,8 +357,10 @@ int main(int argc, char *argv[])
 	  }
   }
 
+#ifdef DEAD_CODE
   memset(BUZZ_DIR,0x00,32);
   getcwd(BUZZ_DIR,32);
+#endif
 
   hDISK=getdisk();
 
@@ -1293,52 +1304,80 @@ int MisRandom(void)
   return nval-50;
 }
 
-void Plop(char plr,char mode)
+#ifdef DEAD_CODE
+#   ifdef CONFIG_THEORA_VIDEO
+#      include "av.h"
+#      include "mmfile.h"
+#   endif
+
+void
+Plop(char plr, char mode)
 {
- int wlen,fres;
- FILE *fin;
- char sName[20];
+	char sName[20];
 
-  memset(sName,0x00,sizeof sName);
-  randomize();
-  fres=random(10000);
-  if (mode==0) {
-   if (fres<2000) strcpy(sName,(plr==0) ? "us1.frm" : "sviet1.frm");
-    else if (fres<4000) strcpy(sName,(plr==0) ? "us2.frm" : "sviet2.frm");
-    else if (fres<6000) strcpy(sName,(plr==0) ? "us3.frm" : "sviet3.frm");
-    else if (fres<8000) strcpy(sName,(plr==0) ? "us4.frm" : "sviet4.frm");
-    else strcpy(sName,(plr==0) ? "us5.frm" : "sviet5.frm");
-   }
-  else if (mode==1) {
-   if (fres<900) strcpy(sName,"passt01.frm");
-    else if (fres<1800) strcpy(sName,"passt02.frm");
-    else if (fres<2700) strcpy(sName,"passt03.frm");
-    else if (fres<3600) strcpy(sName,"passt04.frm");
-    else if (fres<4500) strcpy(sName,"passt05.frm");
-    else if (fres<5400) strcpy(sName,"passt06.frm");
-    else if (fres<6300) strcpy(sName,"passt07.frm");
-    else if (fres<7200) strcpy(sName,"passt08.frm");
-    else if (fres<8100) strcpy(sName,"passt09.frm");
-    else if (fres<9000) strcpy(sName,"passt10.frm");
-    else strcpy(sName,"passt11.frm");
-  } else strcpy(sName,"static.frm");
+#   ifndef CONFIG_THEORA_VIDEO
+	int wlen;
+	FILE *fin;
+	char *ext = "frm";
+#   else
+	char *ext = "ogg";
+	mm_file vidfile;
+	char fname[1000];
+#   endif
 
-  fin=sOpen(sName,"rb",0);
-  if (!fin)
-      return;
-  wlen=8;
-  fread(&vhptr.vptr[40000],1,wlen*2048,fin);
-  vhptr.vptr[40000]=vhptr.vptr[40001]=vhptr.vptr[40002]=vhptr.vptr[40005];
-  vhptr.vptr[55999]=vhptr.vptr[55995];
-  vhptr.vptr[55998]=vhptr.vptr[55994];
-  memcpy(&pal[384],&vhptr.vptr[56000],384);
-  /* SetPal(pal); FIXME */
-  if (BIG==0) SMove(&vhptr.vptr[40000],80,3+plr*10);
-  else LMove(&vhptr.vptr[40000]);
-  fclose(fin);
-  return;
+	if (mode == 0)
+		sprintf(sName, "%s%d.%s", (plr == 0) ? "us" : "sviet",
+			random(5) + 1, ext);
+	else if (mode == 1)
+		sprintf(sName, "passt%02d.%s", random(11) + 1, ext);
+	else
+		sprintf(sName, "static.%s", ext);
+
+#   ifndef CONFIG_THEORA_VIDEO
+	fin = sOpen(sName, "rb", 0);
+	if (!fin)
+		return;
+	wlen = 8;
+	fread(&vhptr.vptr[40000], 1, wlen * 2048, fin);
+	vhptr.vptr[40000] = vhptr.vptr[40001] = vhptr.vptr[40002] =
+		vhptr.vptr[40005];
+	vhptr.vptr[55999] = vhptr.vptr[55995];
+	vhptr.vptr[55998] = vhptr.vptr[55994];
+	memcpy(&pal[384], &vhptr.vptr[56000], 384);
+	/* SetPal(pal); FIXME */
+	if (BIG == 0)
+		SMove(&vhptr.vptr[40000], 80, 3 + plr * 10);
+	else
+		LMove(&vhptr.vptr[40000]);
+	fclose(fin);
+	return;
+#   else
+	sprintf(fname, "%s/%s", movies_dir, sName);
+	/* INFO */ printf("mm_open(%s)\n", fname);
+	if (mm_open(&vidfile, fname) <= 0)
+		return;
+	if (mm_video_info(&vidfile, NULL, NULL, NULL) <= 0)
+		goto end;
+	if (mm_decode_video(&vidfile, video_overlay) <= 0)
+		goto end;
+	if (BIG == 0)
+	{
+		video_rect.w = 160;
+		video_rect.h = 100;
+		video_rect.x = 80;
+		video_rect.y = 3 + plr * 10;
+	}
+	else
+	{
+		video_rect.x = MAX_X / 4;
+		video_rect.y = MAX_Y / 4;
+		video_rect.w = MAX_X / 2;
+		video_rect.h = MAX_Y / 2;
+	}
+  end:
+	mm_close(&vidfile);
+#   endif
 }
 
-
+#endif
 // EOF
-

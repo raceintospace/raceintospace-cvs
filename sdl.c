@@ -16,8 +16,15 @@
 
 void dbg(char const *fmt, ...) __attribute__ ((format(printf, 1, 2)));
 
+int av_mouse_cur_x, av_mouse_cur_y;
+int av_mouse_pressed_x, av_mouse_pressed_y;
+int av_mouse_pressed_cur;
+int av_mouse_pressed_latched;
+
 SDL_Surface *display;
-SDL_Surface *screen_surf;
+SDL_Overlay *video_overlay;
+SDL_Rect video_rect;
+static SDL_Surface *screen_surf;
 static SDL_Surface *screen_surf2x;
 
 static SDL_Color pal_colors[256];
@@ -246,16 +253,39 @@ av_setup(int *argcp, char ***argvp)
 	if ((display = SDL_SetVideoMode(640, 400, 24,
 				SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
 	{
-		fprintf(stderr, "error in SDL_SetVideoMode\n");
+		/* ERROR */ fprintf(stderr, "error in SDL_SetVideoMode: %s\n",
+                SDL_GetError());
 		exit(1);
 	}
 
 	screen = xcalloc(MAX_X * MAX_Y, 1);
 	screen_surf = SDL_CreateRGBSurfaceFrom(screen, 320, 200, 8,
 		MAX_X, 0, 0, 0, 0);
+    if (!screen_surf)
+    {
+        /* ERROR */ fprintf(stderr, "can't create screen surface: %s\n",
+                SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
 	screen_surf2x = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 400, 8,
 		~0, ~0, ~0, 0);
-	// screen_2 = xcalloc(MAX_X*MAX_Y, 1);
+    if (!screen_surf2x)
+    {
+        /* ERROR */ fprintf(stderr, "can't create screen_2x surface: %s\n",
+                SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+#ifdef CONFIG_THEORA_VIDEO
+    /* XXX: Hardcoded video width & height */
+    video_overlay = SDL_CreateYUVOverlay(160, 100, SDL_YV12_OVERLAY, display);
+    if (!video_overlay)
+    {
+        /* ERROR */ fprintf(stderr, "can't create video_overlay: %s\n",
+                SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
+#endif
 
 	SDL_EnableUNICODE(1);
 	SDL_WM_SetCaption("Race Into Space", NULL);
@@ -430,7 +460,7 @@ NUpdateVoice(void)
 static SDL_Surface *
 SDL_Scale2x(SDL_Surface * src, SDL_Surface * dst)
 {
-	unsigned x, y, bpp;
+	int x, y, bpp;
 	uint8_t *from, *to;
 	SDL_Rect clp;
 	SDL_PixelFormat *pf;
@@ -529,6 +559,7 @@ void
 av_sync(void)
 {
 	int i = 0;
+    SDL_Rect r;
 
 	/*
 	 * int row, col;
@@ -557,6 +588,14 @@ av_sync(void)
 	SDL_Scale2x(screen_surf, screen_surf2x);
 	SDL_SetColors(screen_surf2x, pal_colors, 0, 256);
 	SDL_BlitSurface(screen_surf2x, NULL, display, NULL);
+    if (video_rect.h && video_rect.w)
+    {
+        r.h = 2 * video_rect.h;
+        r.w = 2 * video_rect.w;
+        r.x = 2 * video_rect.x;
+        r.y = 2 * video_rect.y;
+        SDL_DisplayYUVOverlay(video_overlay, &r);
+    }
 	SDL_Flip(display);
 	screen_dirty = 0;
 	return;

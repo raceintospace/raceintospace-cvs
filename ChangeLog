@@ -1,3 +1,11 @@
+2007-02-04  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V118
+
+	* Added (or hacked) support for theora video files
+
+	* Several tweaks in Makefile and configure.in
+
 2007-01-31  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V117

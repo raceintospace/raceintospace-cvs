@@ -1,6 +1,12 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "assert.h"
+#include "pace.h"
+
+char cdrom_dir[1000];
+char savedat_dir[1000];
+char music_dir[1000];
+char movies_dir[1000];
 
 extern GXHEADER vhptr;
 

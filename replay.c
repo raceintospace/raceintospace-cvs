@@ -26,6 +26,11 @@
 #include "externs.h"
 #include "gamedata.h"
 
+#ifdef CONFIG_THEORA_VIDEO
+#include "mmfile.h"
+#include "av.h"
+#endif
+
 #ifdef DEADCODE
 
 #define FRM_Delay     25
@@ -104,9 +109,15 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	struct oFGROUP fgroup;
 	struct Table table;
 	REPLAY Rep;
+#ifdef CONFIG_THEORA_VIDEO
+	mm_file vidfile;
+    char fname[1000];
+    float fps;
+#else
 	GXHEADER dopy, snzy;
 	struct frm *frm = NULL;
-	int update_map;
+	int update_map = 0;
+#endif
 
 	seqf = sOpen("SEQ.DAT", "rb", 0);
 	fseqf = sOpen("FSEQ.DAT", "rb", 0);
@@ -147,32 +158,27 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 		Rep.Qty = 1;
 		Rep.Off[0] = j;
 #endif
-		struct oGROUP grps[32];
-		int num_read = 0, tot_read = 0;
-
 		mode = 0;
-		do
-		{
-			num_read = fread_oGROUP(grps, 32, seqf);
-			for (j = 0; j < num_read; ++j)
-			{
-				if (strncmp(grps[j].ID, "XXXX", 4) == 0)
-					/* XXX: bad sequence? */
-					return;
-				if (strncmp(&grps[j].ID[3], Type,
-						strlen(&grps[j].ID[3]) == 0))
-					break;
-			}
-			if (j == num_read)
-				break;
-			tot_read += num_read;
-		} while (num_read);
+        j = 0;
+		while (fread_oGROUP(&group, 1, seqf))
+        {
+            if (strncmp(group.ID, "XXXX", 4) == 0)
+                /* XXX: bad sequence? */
+                return;
+            if (strcmp(&group.ID[3], Type) == 0)
+                break;
+            j++;
+        }
 		Rep.Qty = 1;
-		Rep.Off[0] = tot_read + j;
+		Rep.Off[0] = j;
 	};
 
+#ifndef CONFIG_THEORA_VIDEO
 	GV(&snzy, width, height);
 	GV(&dopy, 160, 100);
+#endif
+
+    WaitForMouseUp();
 
 	printf("******\n");
 	printf("%d segments\n", Rep.Qty);
@@ -208,7 +214,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 		i = 0;
 		keep_going = 1;
-		update_map = 0;
+	//	update_map = 0;
 		while (keep_going && i < max)
 		{
 			int frm_idx;
@@ -219,6 +225,8 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 				frm_idx = fgroup.oLIST[i].aIdx;
 			else
 				frm_idx = group.oLIST[i].aIdx;
+
+#ifndef CONFIG_THEORA_VIDEO
 
 			if ((frm = frm_open_seq(frm_idx, mode)) == NULL)
 				goto done;
@@ -256,13 +264,56 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 			frm_close(frm);
 			frm = NULL;
 			i++;
+
+#else
+            /* here we should create YUV Overlay, but we can't use it on
+             * pallettized surface, so we use a global Overlay initialized in
+             * sdl.c. */
+            sprintf(fname, "%s/%s.ogg", movies_dir, seq_filename(frm_idx, mode));
+            /* INFO */ printf("mm_open(%s)\n", fname);
+			if (mm_open(&vidfile, fname) <= 0)
+				goto done;
+
+            /* TODO do not ignore width/height */
+            if (mm_video_info(&vidfile, NULL, NULL, &fps) <= 0)
+                goto done;
+
+			while (keep_going)
+			{
+				UpdateMusic();
+
+                video_rect.x = dx;
+                video_rect.y = dy;
+                video_rect.w = width;
+                video_rect.h = height;
+
+                /* TODO track decoding time and adjust delays */
+                if (mm_decode_video(&vidfile, video_overlay) <= 0)
+                    break;
+
+				if (bioskey(0) || grGetMouseButtons())
+					keep_going = 0;
+
+                /* TODO idle_loop is too inaccurate for this */
+                idle_loop_secs(1.0 / fps);
+			}
+
+			mm_close(&vidfile);
+			i++;
+#endif
 		}
 	}
   done:
+#ifndef CONFIG_THEORA_VIDEO
 	DV(&dopy);
 	DV(&snzy);
 	if (frm)
 		frm_close(frm);
+#else
+    mm_close(&vidfile);
+    video_rect.w = 0;
+    video_rect.h = 0;
+#endif
 	fclose(fseqf);
 	fclose(seqf);
 	return;

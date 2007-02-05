@@ -9,6 +9,8 @@ in the baby screens, don't down sample then up sample
 
 factor out common parts of replay.c and mis_c.c
 
+preload next frame during mission playback so transitions are smooth
+
 =======
 fades
 implement config opts for no anim

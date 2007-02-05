@@ -16,21 +16,36 @@ CFLAGS = -g -Wall `sdl-config --cflags` -std=c99
 # Personal Makefile
 -include Makefile.$(LOGNAME)
 
-.c.o:
-	@echo "$(CC) ...flags... -c $*.c"
-	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c
-	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
-
 PROGS = imgsplit vtest decode getport getvab mtest sdltest
+
+EXTRA_SOURCES = README raceintospace.1
+
+DESTDIR=/
+
+BARIS_HFILES = av.h Buzz_inc.h data.h endianness.h externs.h gamedata.h \
+	int_types.h macros.h mis.h music.h pace.h proto.h records.h \
+	soundfx.h soundint.h mmfile.h
+
+BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
+	ast2.o ast3.o ast4.o budget.o crew.o endgame.o	    \
+	endianness.o \
+	futbub.o future.o hardef.o intel.o intro.o main.o mc2.o mc.o \
+	mis_c.o mis_m.o museum.o newmis.o news.o news_sup.o	    \
+	news_suq.o \
+	place.o port.o prefs.o prest.o radar.o rdplex.o records.o \
+	replay.o review.o rush.o start.o   \
+	vab.o pace.o gx.o gr.o sdl.o music.o gamedata.o
+
+ifeq (@theora_video@,yes)
+PROGS += vtest2
+BARIS_OBJS += mmfile.o  
+endif
+
 all: $(PROG_NAME)
 
 extra: all $(PROGS)
 
-EXTRA_SOURCES = README raceintospace.1
-
 rpm_all: raceintospace
-
-DESTDIR=/
 
 install: raceintospace
 	mkdir -p $(DESTDIR)/usr/bin
@@ -52,43 +67,24 @@ uninstall:
 	rm -rf $(DESTDIR)/usr/share/doc/raceintospace
 	rm -f $(DESTDIR)/usr/share/raceintospace/README
 
-BARIS_HFILES = av.h Buzz_inc.h data.h endianness.h externs.h gamedata.h \
-	int_types.h macros.h mis.h music.h pace.h proto.h records.h \
-	soundfx.h soundint.h
-
-BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
-	ast2.o ast3.o ast4.o budget.o crew.o endgame.o	    \
-	endianness.o \
-	futbub.o future.o hardef.o intel.o intro.o main.o mc2.o mc.o \
-	mis_c.o mis_m.o museum.o newmis.o news.o news_sup.o	    \
-	news_suq.o							    \
-	place.o port.o prefs.o prest.o radar.o rdplex.o records.o \
-	replay.o review.o rush.o start.o   \
-	vab.o pace.o gx.o gr.o sdl.o music.o gamedata.o
-
+# cheat, we still use CC but print LD
 $(PROG_NAME): $(BARIS_OBJS)
-	$(CC) $(CFLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
+	@echo "$(LD) ...flags... -o $@ ...libs..."
+	@$(CC) $(LDLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
 
-# $(BARIS_OBJS): $(BARIS_HFILES)
+.c.o:
+	@echo "$(CC) ...flags... -c $*.c"
+	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c
+	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
+
+vtest2: vtest2.o mmfile.o
+	$(CC) $(LDFLAGS) -o vtest2 vtest2.o mmfile.o -logg -lvorbis -ltheora -lSDL
 
 imgsplit: imgsplit.o
 	$(CC) $(CFLAGS) -o imgsplit imgsplit.o -lm
 
 vtest: vtest.o
 	$(CC) $(CFLAGS) -o vtest vtest.o -lasound -lm
-
-ifeq (@have_theora@@have_vorbis@,yesyes)
-PROGS += vtest2
-vtest2.o: vtest2.c
-	@echo "$(CC) ...flags... -c $*.c"
-	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
-
-vtest2: vtest2.o
-	$(CC) $(LDFLAGS) -o vtest2 vtest2.o -logg -lvorbis -ltheora -lSDL
-else
-vtest2: FORCE
-	@echo "You don't have libogg and/or libtheora required for vtest2!"; exit 1
-endif
 
 decode: decode.o
 	$(CC) $(CFLAGS) -o decode decode.o -lm
@@ -101,9 +97,6 @@ getvab: getvab.o
 
 mtest: mtest.o
 	$(CC) $(CFLAGS) -o mtest mtest.o -lm
-
-sdl.o: sdl.c
-	$(CC) $(CFLAGS) `sdl-config --cflags` -c sdl.c
 
 sdltest: sdltest.o
 	$(CC) $(CFLAGS) -o sdltest sdltest.o `sdl-config --libs` -lvorbisfile -lm

@@ -11,19 +11,19 @@
 #define AV_MIN_VOLUME       0
 #define AV_MAX_VOLUME       127
 
-void av_step (void);
-void av_block (void);
-void av_setup (int *argcp, char ***argvp);
-void av_silence (int channel);
-void av_sync (void);
+extern void av_step (void);
+extern void av_block (void);
+extern void av_setup (int *argcp, char ***argvp);
+extern void av_silence (int channel);
+extern void av_sync (void);
 
 struct audio_chunk {
 	struct audio_chunk *next;
 	void *data;
-	int size;
+	unsigned size;
 	int loop;
 };
-void play (struct audio_chunk *cp, int channel);
+extern void play (struct audio_chunk *cp, int channel);
 
 struct audio_channel {
     unsigned                volume;
@@ -37,16 +37,19 @@ struct audio_channel {
     unsigned                offset;          /* data offset in chunk */
 };
 
-char AnimSoundCheck(void);
-void UpdateAudio (void);
-void MuteChannel(int channel, int mute);
+extern char AnimSoundCheck(void);
+extern void UpdateAudio (void);
+extern void MuteChannel(int channel, int mute);
 
-double get_time (void);
-int bioskey (int peek);
+extern double get_time (void);
+extern int bioskey (int peek);
 
-int av_mouse_cur_x, av_mouse_cur_y;
-int av_mouse_pressed_x, av_mouse_pressed_y;
-int av_mouse_pressed_cur;
-int av_mouse_pressed_latched;
+extern int av_mouse_cur_x, av_mouse_cur_y;
+extern int av_mouse_pressed_x, av_mouse_pressed_y;
+extern int av_mouse_pressed_cur;
+extern int av_mouse_pressed_latched;
+
+extern SDL_Overlay *video_overlay;
+extern SDL_Rect video_rect;
 
 #endif /* ifndef _AV_H */

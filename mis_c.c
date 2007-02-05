@@ -28,6 +28,11 @@
 #include "mis.h"
 #include "gamedata.h"
 
+#ifdef CONFIG_THEORA_VIDEO
+#include "av.h"
+#include "mmfile.h"
+#endif
+
 #define FRM_Delay 22
 
 #define NORM_TABLE 397
@@ -66,7 +71,7 @@ extern char BIG;
 
 void Tick(char plr);
 void Clock(char plr,char clck,char mode,char tm);
-void Plop(char plr,char mode);
+// void Plop(char plr,char mode);
 
 // Who and What the hell are "Shining Happy People?"
 
@@ -134,9 +139,15 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	struct oFGROUP *dSeq,cSeq;
 	struct Table *F;
 	char sName[20],err=0;
-	char *SEQ_DAT="SEQ.DAT\0";
-	char *FSEQ_DAT="FSEQ.DAT\0";
+	char *SEQ_DAT="SEQ.DAT";
+	char *FSEQ_DAT="FSEQ.DAT";
+#ifndef CONFIG_THEORA_VIDEO
 	struct frm *frm = NULL;
+#else
+    mm_file vidfile;
+    char fname[1000];
+    float fps;
+#endif
 	int hold_count;
 
 	F = NULL; /* XXX check uninitialized */
@@ -144,7 +155,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	bSeq = NULL; /* XXX check uninitialized */
 	i = j = 0; /* XXX check uninitialized */
 
-	memset(buffer,0x00,sizeof BUFFER_SIZE);
+	memset(buffer,0x00,BUFFER_SIZE);
 	SHTS[0]=random(10);SHTS[1]=random(10);SHTS[2]=random(10);SHTS[3]=random(10);
 
 	if (fEarly && step!=0) return; //Specs: unmanned mission cut short
@@ -372,7 +383,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 #endif
 	}
 
-	Plop(plr,1); //Specs: random single frame for sound buffering
+	// Plop(plr,1); //Specs: random single frame for sound buffering
 
 	i=0;
 
@@ -383,7 +394,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	while (keep_going && i<(int)max) {
 		int aidx, sidx;
 
-		if (i!=0) Plop(plr,2);   //Specs: static frame
+		// if (i!=0) Plop(plr,2);   //Specs: static frame
 
 		if (mode==0) {
 			aidx = aSeq.oLIST[i].aIdx;
@@ -403,10 +414,23 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		if ((fName = seq_filename (aidx, mode)) == NULL)
 			fName = "(unknown)";
 
+#ifndef CONFIG_THEORA_VIDEO
 		if ((frm = frm_open_seq (aidx, mode)) == NULL) {
 			printf ("can't open frm seq %d,%d\n", aidx, mode);
 			break;
 		}
+#else
+
+        sprintf(fname, "%s/%s.ogg", movies_dir, seq_filename(aidx, mode));
+        /* INFO */ printf("mm_open(%s)\n", fname);
+        if (mm_open(&vidfile, fname) <= 0)
+            break;
+
+        /* TODO do not ignore width/height */
+        if (mm_video_info(&vidfile, NULL, NULL, &fps) <= 0)
+            break;
+
+#endif
 		j=0;
 
 		hold_count = 0;
@@ -416,17 +440,27 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			if (BABY==0 && BIG==0) Tick(plr);
 
 			if (hold_count == 0) {
+#ifndef CONFIG_THEORA_VIDEO
 				if (frm_get2 (frm, &vhptr.vptr[40000], &pal[384]) <= 0)
 					break;
 
 				if (j == 0)
-					printf ("frame rate %d\n",
-						frm->frame_rate);
+					printf ("frame rate %d\n", frm->frame_rate);
 
 				if (frm->next_frame_chunks == 0 && j == 0) {
 					printf ("*** need fancy handling for hold\n");
 					hold_count = 1;
 				}
+#else
+            /* TODO track decoding time and adjust delays */
+            if (mm_decode_video(&vidfile, video_overlay) <= 0)
+                break;
+
+            if (j == 0)
+                printf ("frame rate %g\n", fps);
+
+            /* XXX I don't get the fancy "hold thing so I left it out */
+#endif
 			} else if (hold_count < 8) {
 				//Specs: single frame hold
 				idle_loop (FRM_Delay);
@@ -441,6 +475,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				printf ("**** need to come out of hold\n");
 			}
 
+#ifndef CONFIG_THEORA_VIDEO
 			if (BIG==0)SMove(&vhptr.vptr[40000],80,3+plr*10);
 			else LMove(&vhptr.vptr[40000]);
 
@@ -449,6 +484,26 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			else
 				idle_loop_secs (1.0 / 8.0);
 
+#else
+            video_rect.w = 160;
+            video_rect.h = 100;
+            if (BIG==0)
+            {
+                video_rect.x = 80;
+                video_rect.y = 3+plr*10;
+            }
+            else
+            {
+                memset(screen, 0, MAX_X*MAX_Y);
+                video_rect.x = MAX_X / 4;
+                video_rect.y = MAX_Y / 4;
+                video_rect.h = MAX_Y / 2;
+                video_rect.w = MAX_X / 2;
+            }
+
+            /* TODO idle_loop is too inaccurate for this */
+            idle_loop_secs(1.0 / fps);
+#endif
 			if (sts<23) {
 				if (BABY==0 && BIG==0) DoPack(plr,ffin,(AEPT && !mode) ? 1 : 0,Seq,fName);
 				++sts;
@@ -466,8 +521,12 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			}
 		}
 
+#ifndef CONFIG_THEORA_VIDEO
 		frm_close (frm);
 		frm = NULL;
+#else
+        mm_close(&vidfile);
+#endif
 
 		i++;
 	}
@@ -496,9 +555,14 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	}
 
 	fclose(ffin);  // Specs: babypicx.cdr
-
+#ifndef CONFIG_THEORA_VIDEO
 	if (frm)
 		frm_close (frm);
+#else
+    mm_close(&vidfile);
+    video_rect.h = 0;
+    video_rect.w = 0;
+#endif
 }
 
 void Tick(char plr)

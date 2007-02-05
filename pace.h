@@ -142,9 +142,6 @@ struct frm *frm_open_seq (int seq, int mode);
 int frm_get2 (struct frm *frm, void *pixels_arg, void *map);
 void frm_close (struct frm *frm);
 
-
-char cdrom_dir[1000];
-
 void remove_savedat (char *name);
 
 void idle_loop (int ticks);
@@ -157,8 +154,10 @@ void play_audio (int sidx, int mode);
 void bzdelay (int ticks);
 void GetMouse_fast (void);
 
-char savedat_dir[1000];
-char music_dir[1000];
+extern char cdrom_dir[1000];
+extern char savedat_dir[1000];
+extern char music_dir[1000];
+extern char movies_dir[1000];
 
 void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 

@@ -125,7 +125,7 @@ fread_##type(struct type *dst, size_t num, FILE *f) \
     while (num > 0) \
     { \
         elems = (num < (bufelems)) ? num : (bufelems); \
-        elems = fread(tmp, sizeof_##type, num, f); \
+        elems = fread(tmp, sizeof_##type, elems, f); \
         if (!elems) \
             break; \
         for (i = 0; i < elems; ++i, ++dst) \
@@ -147,7 +147,7 @@ fwrite_##type(const struct type *src, size_t num, FILE *f) \
         elems = (num < (bufelems)) ? num : (bufelems); \
         for (i = 0; i < elems; ++i, ++src) \
             put_##type(tmp+i*sizeof_##type, src); \
-        elems = fwrite(tmp, sizeof_##type, num, f); \
+        elems = fwrite(tmp, sizeof_##type, elems, f); \
         if (!elems) \
             break; \
         total += elems; \
@@ -165,14 +165,14 @@ get_##type (struct type *dst, const uint8_t *src) \
 #define DECL_GET_FIELD_SCALAR(type, name, num) \
     for (i = 0; i < (num); ++i) \
     { \
-        *((type *)((char *)&dst->name)+i) = get_##type(src); \
+        *(((type *)&dst->name)+i) = get_##type(src); \
         src += sizeof_##type; \
     } \
 
 #define DECL_GET_FIELD_STRUCT(str, type, name, num) \
     for (i = 0; i < (num); ++i) \
     { \
-        get_##type(((str type *)((char *)&dst->name)+i), src); \
+        get_##type((((str type *)&dst->name)+i), src); \
         src += sizeof_##type; \
     } \
 
@@ -187,14 +187,14 @@ put_##type (uint8_t *dst, const struct type *src) \
 #define DECL_PUT_FIELD_SCALAR(type, name, num) \
     for (i = 0; i < (num); ++i) \
     { \
-        put_##type(dst, *((type *)((char *)&src->name)+i)); \
+        put_##type(dst, *(((type *)&src->name)+i)); \
         dst += sizeof_##type; \
     } \
 
 #define DECL_PUT_FIELD_STRUCT(str, type, name, num) \
     for (i = 0; i < (num); ++i) \
     { \
-        put_##type(dst, (str type *)((char *)&src->name)+i); \
+        put_##type(dst, ((str type *)(&src->name))+i); \
         dst += sizeof_##type; \
     } \
 
@@ -273,7 +273,24 @@ DECL_FREAD(struct, oFGROUP, 32)
 /* DECL_FWRITE(struct, oFGROUP, 32) */
 
 #if 0
+/* REPLAY */
+DECL_GET_START(, REPLAY)
+    DECL_GET_FIELD_SCALAR(uint8_t, Qty, 1)
+    DECL_GET_FIELD_SCALAR(uint16_t, Off, 35)
+DECL_GET_END
+
+DECL_PUT_START(, REPLAY)
+    DECL_PUT_FIELD_SCALAR(uint8_t, Qty, 1)
+    DECL_PUT_FIELD_SCALAR(uint16_t, Off, 35)
+DECL_PUT_END
+
+DECL_FREAD(, REPLAY, 32)
+DECL_FWRITE(, REPLAY, 32)
+#endif
+
+#if 0
 #include <stdio.h>
+uint8_t arr[1000];
 int main (void)
 {
     char *fname = "/tmp/data.test";

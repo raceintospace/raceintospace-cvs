@@ -1,6 +1,7 @@
 #ifndef _GAMEDATA_H
 #define _GAMEDATA_H
 
+#include "race.h"
 #include <stdio.h>
 #include "int_types.h"  /* auto-generated inttypes.h */
 
