@@ -1,7 +1,7 @@
 # @configure_input@
 
 CC=@CC@
-LIBS=@LIBS@
+LIBS=@LIBS@ @SDL_LIBS@
 CPPFLAGS=@CPPFLAGS@
 PROG_NAME=@PROG_NAME@
 
@@ -11,7 +11,7 @@ EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts -Wno-deprecated-declarations \
 	-Werror
 
-CFLAGS = -g -Wall `sdl-config --cflags` -std=c99
+CFLAGS = -g -Wall @SDL_CFLAGS@ -std=c99
 
 # Personal Makefile
 -include Makefile.$(LOGNAME)
@@ -78,7 +78,7 @@ $(PROG_NAME): $(BARIS_OBJS)
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
 
 vtest2: vtest2.o mmfile.o
-	$(CC) $(LDFLAGS) -o vtest2 vtest2.o mmfile.o -logg -lvorbis -ltheora -lSDL
+	$(CC) $(LDFLAGS) -o vtest2 vtest2.o mmfile.o -logg -lvorbis -ltheora @SDL_LIBS@
 
 imgsplit: imgsplit.o
 	$(CC) $(CFLAGS) -o imgsplit imgsplit.o -lm
@@ -99,7 +99,7 @@ mtest: mtest.o
 	$(CC) $(CFLAGS) -o mtest mtest.o -lm
 
 sdltest: sdltest.o
-	$(CC) $(CFLAGS) -o sdltest sdltest.o `sdl-config --libs` -lvorbisfile -lm
+	$(CC) $(CFLAGS) -o sdltest sdltest.o @SDL_LIBS@ -lvorbisfile -lm
 
 FORCE:
 

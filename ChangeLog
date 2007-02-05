@@ -1,3 +1,9 @@
+2007-02-05  Michael McCarty <k6mmc@users.sourceforge.net>
+	
+	* V119
+
+	* Changed the SDL related autoconf stuff
+
 2007-02-04  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V118
