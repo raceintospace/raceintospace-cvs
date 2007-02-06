@@ -58,3 +58,4 @@ release checklist
 check with valgrind
 compile with -O
 compile with -DNDEBUG
+windows binaries!!!

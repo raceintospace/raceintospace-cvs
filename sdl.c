@@ -7,7 +7,7 @@
 #include <math.h>
 #include <signal.h>
 #include <memory.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "Buzz_inc.h"
 
 #include "av.h"
@@ -48,13 +48,13 @@ intr(int sig)
 
 static int have_audio;
 
-static SDL_AudioSpec audio_desired, audio_obtained;
+static SDL_AudioSpec audio_desired;
 
 static void
 audio_callback(void *userdata, Uint8 * stream, int len)
 {
 	int togo, thistime, i, left;
-	Uint8 silence = audio_obtained.silence;
+	Uint8 silence = 0; /* audio_obtained.silence; */
 	int num_active = AV_NUM_CHANNELS;
 	unsigned sample, sum;
 	struct audio_channel *chp;
@@ -297,7 +297,8 @@ av_setup(int *argcp, char ***argvp)
 		audio_desired.freq = 11025;
 		audio_desired.format = AUDIO_U8;
 		audio_desired.channels = 1;
-		audio_desired.samples = 8192;
+		/* audio was unresponsive on win32 so let's use shorter buffer */
+		audio_desired.samples = 2048; /* was 8192 */
 		audio_desired.callback = audio_callback;
 
 		/* initialize audio channels */
@@ -310,9 +311,11 @@ av_setup(int *argcp, char ***argvp)
 			Channels[i].offset = 0;
 		}
 
-		if (SDL_OpenAudio(&audio_desired, &audio_obtained) < 0)
+		/* we don't care what we got, library will convert for us */
+		if (SDL_OpenAudio(&audio_desired, NULL) < 0)
 		{
-			fprintf(stderr, "error in SDL_OpenAudio\n");
+			fprintf(stderr, "error in SDL_OpenAudio: %s\n",
+					SDL_GetError());
 			exit(1);
 		}
 

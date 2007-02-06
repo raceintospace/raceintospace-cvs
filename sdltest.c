@@ -6,7 +6,7 @@
 #include <math.h>
 #include <signal.h>
 #include <memory.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include <vorbis/vorbisfile.h>
 

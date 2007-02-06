@@ -1,24 +1,27 @@
 # @configure_input@
 
 CC=@CC@
-LIBS=@LIBS@ @SDL_LIBS@
+LIBS=@LIBS@ @OGG_LIBS@ @VORBIS_LIBS@ @VORBISFILE_LIBS@ @SDL_LIBS@
 CPPFLAGS=@CPPFLAGS@
-PROG_NAME=@PROG_NAME@
+PROG_NAME=@PACKAGE_TARNAME@@EXEEXT@
+CFLAGS =-g -Wall -std=c99 @CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @SDL_CFLAGS@
+TAR_NAME=@PACKAGE_TARNAME@-@PACKAGE_VERSION@
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_FLAGS = -I m4
 
 EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts -Wno-deprecated-declarations \
 	-Werror
-
-CFLAGS = -g -Wall @SDL_CFLAGS@ -std=c99
 
 # Personal Makefile
 -include Makefile.$(LOGNAME)
 
 PROGS = imgsplit vtest decode getport getvab mtest sdltest
 
-EXTRA_SOURCES = README raceintospace.1
+EXTRA_SOURCES = README COPYING DEVELOPER ChangeLog \
+				raceintospace.1 \
+				configure Makefile.in Makefile race.h.in \
+				m4
 
 DESTDIR=/
 
@@ -37,8 +40,11 @@ BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
 	vab.o pace.o gx.o gr.o sdl.o music.o gamedata.o
 
 ifeq (@theora_video@,yes)
-PROGS += vtest2
 BARIS_OBJS += mmfile.o  
+endif
+
+ifeq (@have_theora@@have_ogg@@have_vorbis@,yesyesyes)
+PROGS += vtest2
 endif
 
 all: $(PROG_NAME)
@@ -78,7 +84,7 @@ $(PROG_NAME): $(BARIS_OBJS)
 	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
 
 vtest2: vtest2.o mmfile.o
-	$(CC) $(LDFLAGS) -o vtest2 vtest2.o mmfile.o -logg -lvorbis -ltheora @SDL_LIBS@
+	$(CC) $(LDFLAGS) -o vtest2 vtest2.o mmfile.o @OGG_LIBS@ @VORBIS_LIBS@ -ltheora @SDL_LIBS@
 
 imgsplit: imgsplit.o
 	$(CC) $(CFLAGS) -o imgsplit imgsplit.o -lm
@@ -99,7 +105,7 @@ mtest: mtest.o
 	$(CC) $(CFLAGS) -o mtest mtest.o -lm
 
 sdltest: sdltest.o
-	$(CC) $(CFLAGS) -o sdltest sdltest.o @SDL_LIBS@ -lvorbisfile -lm
+	$(CC) $(CFLAGS) -o sdltest sdltest.o @SDL_LIBS@ @VORBISFILE_LIBS@ -lm
 
 FORCE:
 
@@ -114,16 +120,23 @@ cscope: FORCE
 
 clean:
 	rm -f *.o *~
-	rm -f raceintospace imgsplit sdltest decode getport
-	rm -f getvab mkmovie mtest vtest
-	rm -f raceintospace.exe
-	rm -f raceintospace.tar.gz
+	rm -f int_types.h race.h
+	rm -f $(PROG_NAME)
+	rm -f $(PROGS)
+	rm -f $(TAR_NAME).*
 
 distclean: clean
 	rm -f config.log config.status Makefile race.h
 	rm -f configure
 	rm -rf autom4te.cache
 
-tar:
-	rm -f raceintospace.tar raceintospace.tar.gz
-	tar -czf raceintospace.tar.gz Makefile ChangeLog *.[ch] domount .gdbinit $(EXTRA_SOURCES)
+configure: configure.in
+	-aclocal $(ACLOCAL_FLAGS)
+	autoconf
+
+tar: $(EXTRA_SOURCES)
+	rm -f $(TAR_NAME).tar*
+	rm -rf .temp
+	mkdir -p .temp/$(TAR_NAME)
+	(cd .temp/$(TAR_NAME) && ln -s $(addprefix ../../,*.[ch] $(EXTRA_SOURCES)) ./)
+	tar -zchC .temp --exclude CVS -f $(TAR_NAME).tar.gz $(TAR_NAME)

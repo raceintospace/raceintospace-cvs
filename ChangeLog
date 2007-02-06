@@ -1,3 +1,15 @@
+2007-02-06  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+	
+	* V120
+
+	* Few fixes & improvements in configure.in & Makefile.in
+
+	* Added new macros to m4/
+
+	* Added configure.mingw, it works for me
+
+	* Small changes in audio init in sdl.c
+
 2007-02-05  Michael McCarty <k6mmc@users.sourceforge.net>
 	
 	* V119

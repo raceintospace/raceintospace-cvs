@@ -8,7 +8,7 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 #include <theora/theora.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #ifndef min
 #define min(a, b) (((a) <= (b)) ? (a) : (b))

@@ -32,7 +32,7 @@
 #ifdef CONFIG_MACOSX
 // SDL.h needs to be included here to replace the original main() with
 // what it needs for the Mac
-#include "SDL.h"
+#include <SDL.h>
 #endif
 
   int cdROM,hDISK;

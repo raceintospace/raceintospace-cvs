@@ -12,7 +12,7 @@
 #include <math.h>
 #include <signal.h>
 #include <memory.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #define xrealloc realloc
 #define xmalloc  malloc
