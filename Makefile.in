@@ -120,13 +120,13 @@ cscope: FORCE
 
 clean:
 	rm -f *.o *~
-	rm -f int_types.h race.h
 	rm -f $(PROG_NAME)
 	rm -f $(PROGS)
 	rm -f $(TAR_NAME).*
 
 distclean: clean
-	rm -f config.log config.status Makefile race.h
+	rm -f config.log config.status Makefile
+	rm -f int_types.h race.h
 	rm -f configure
 	rm -rf autom4te.cache
 

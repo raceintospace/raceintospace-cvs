@@ -29,8 +29,8 @@
 
 double load_news_anim_start;
 
-char *totnews_dat;
-int totnews_offset;
+static char *totnews_dat;
+static int totnews_offset;
 
 #define PHYS_PAGE_OFFSET  0x4000
 #define BUFFR_FRAMES 1
@@ -755,7 +755,8 @@ void LoadNewsAnim(ui8 Index,ui8 Mode)
 		}
 	};
 
-	totnews_dat = slurp_gamedat ("totnews.cdr");
+	if (!totnews_dat)
+		totnews_dat = slurp_gamedat ("totnews.cdr");
 
 	out=sOpen("TOTNEWS.CDR","rb",0);
 	fseek(out,0x00,SEEK_SET);
