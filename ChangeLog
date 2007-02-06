@@ -1,3 +1,10 @@
+2007-02-06  Michael McCarty <k6mmc@users.sourceforge.net>
+
+	* V122
+
+	* Small change to confgure.in that seems to remove the need to run
+	aclocal with "-I m4" params
+
 2007-02-06  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 	
 	* V121

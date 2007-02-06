@@ -3,6 +3,8 @@ AC_INIT(Race Into Space,0.3,k6mmc@users.sourceforge.net,raceintospace)
 dnl Specify directory for local macros
 AC_CONFIG_MACRO_DIR([m4])
 
+ACLOCAL="$ACLOCAL -I m4 $ACLOCAL_FLAGS"
+
 AC_ARG_ENABLE(theora_video,
 	AC_HELP_STRING([--enable-theora-video],
 		[enable support for theora-encoded video files]),
