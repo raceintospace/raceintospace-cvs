@@ -1012,7 +1012,7 @@ LoadNewsAnim(ui8 Index, ui8 Mode, FILE * fp)
 
 	for (i = 0; i < aChart.frames; i++)
 	{
-		SwapSimpleHdr(table[i]);
+		SwapSimpleHdr(&table[i]);
 	}
 
 	fread(&pal[96], 1, 672, fp);
