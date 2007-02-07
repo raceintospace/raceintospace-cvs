@@ -18,6 +18,7 @@
 #include "race.h"		// autoconf header
 #include "int_types.h"
 #include "pace.h"
+//#include "valgrind.h"
 
 #ifndef ui8
 typedef uint8_t ui8;

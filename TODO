@@ -1,3 +1,5 @@
+Organize this TODO file
+
 autosave
 
 on a mission failure, replay mission doesn't show the explosion
@@ -10,6 +12,14 @@ in the baby screens, don't down sample then up sample
 factor out common parts of replay.c and mis_c.c
 
 preload next frame during mission playback so transitions are smooth
+
+Soviet Newscaster in the 3rd animated segment (Close Out) has a pretty significant
+delay before starting the animation
+
+Audio pops on the soviet newscaster, maybe there's some bad data at the end of the
+RAW file that needs to be clipped.
+
+Audio isn't in sync for the newscasters
 
 =======
 fades

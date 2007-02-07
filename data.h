@@ -504,10 +504,15 @@ enum SpacePortOverlays
 };
 
 // Typical size/offset file header used for image files
-typedef struct _simpleheader {
+typedef struct _simpleheader6 {
   uint16_t size;
   uint32_t offset;
 } SimpleHdr;
+
+typedef struct _simpleheader8 {
+  uint32_t size;
+  uint32_t offset;
+} SimpleHdrW;
 
 // Typical 
 typedef struct _patch {

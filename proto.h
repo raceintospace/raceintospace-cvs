@@ -513,7 +513,7 @@ void NFrame(int x1, int y1, int x2, int y2);
 void GoNews(char plr);
 void OpenNews(char plr,char *buf,int bud);
 void DispNews(char plr,char *src,char *dest);
-void PreLoadAnim(char plr,char mode);
+FILE* PreLoadAnim(char plr,char mode);
 void CloseNewsAnim(void);
 void DrawNews(char plr);
 void DrawNText(char plr,char got);
@@ -522,8 +522,8 @@ void DeAlloc(BYTE Page);
 void AIEvent(char plr);
 char ResolveEvent(char plr);
 void Breakgrp(char plr);
-void PlayNewsAnim(void);
-void LoadNewsAnim(uint8_t Index,uint8_t Mode);
+void PlayNewsAnim(FILE*);
+FILE* LoadNewsAnim(uint8_t Index,uint8_t Mode, FILE *fp);
 void ShowEvt(char plr,char crd);
 
 
