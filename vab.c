@@ -116,28 +116,37 @@ void GradRect2(int x1,int y1,int x2,int y2,char plr)
 
 void DispVAB(char plr,char pad)
 {
-  FILE *fout;
-  struct bImg {
-    uint8_t pal[768];
-    uint16_t fSize;
-  } M;
+  FILE *fp = NULL;
+  uint16_t image_len = 0;
 
   strcpy(IDT,"i016");strcpy(IKEY,"k016");
   
   FadeOut(2,pal,10,0,0);
 
-  fout=sOpen("VAB.IMG","rb",0);
-  fread(&M,sizeof M,1,fout);
-	Swap16bit(M.fSize);
+// VAB.IMG is
+//  ** Player 0 image
+//   char[768]   -- palette
+//   uint16_t    -- length of following PCX compressed image
+//   image_data[] --
+//  ** Player 1 image
+//   char[768]   -- palette
+//   uint16_t    -- length of following PCX compressed image
+//   image_data[]
+
+  fp = sOpen("VAB.IMG","rb",0);
+  fread(pal,768,1,fp);
+  fread(&image_len,sizeof(image_len), 1, fp);
   if (plr==1) {
-		fseek(fout,M.fSize,SEEK_CUR);
-		fread(&M,sizeof M,1,fout);	
-		Swap16bit(M.fSize);
-}
-  memcpy(pal,M.pal,768);
-  fread((char *)screen,(long)M.fSize,1,fout);
-  fclose(fout);
-  PCX_D((char *)screen,vhptr.vptr,M.fSize);
+	Swap16bit(image_len);
+		fseek(fp,image_len,SEEK_CUR);
+		fread(pal,768,1,fp);
+		fread(&image_len,sizeof(image_len), 1, fp);
+  }
+  Swap16bit(image_len);
+  fread((char *)screen,image_len,1,fp);
+  fclose(fp);
+
+  PCX_D((char *)screen,vhptr.vptr,image_len);
 
   gxClearDisplay(0,0);
   ShBox(0,0,319,22);ShBox(0,24,170,99);

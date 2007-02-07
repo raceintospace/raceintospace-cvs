@@ -1,5 +1,12 @@
 2007-02-07  Michael McCarty <mkmccarty@raceintospace.org>
 
+	* V124
+
+	* Changed reading of VAB.IMG and added a comment on the
+	VAB.IMG file structure
+
+2007-02-07  Michael McCarty <mkmccarty@raceintospace.org>
+
 	* V123
 
 	* Changed the newscaster animation to just use a single file
