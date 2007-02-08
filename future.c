@@ -995,7 +995,7 @@ void MissionName(int val,int xx,int yy,int len)
   for (i=0;i<50;i++) {
     if (j>len && Mis.Name[i]==' ') {yy+=7;j=0;grMoveTo(xx,yy);}
     else DispChr(Mis.Name[i]);
-    j++;if (Mis.Name[i]==NULL) break;
+    j++;if (Mis.Name[i]=='\0') break;
   };
   return;
 }

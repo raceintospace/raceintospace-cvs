@@ -701,6 +701,7 @@ void SpecialEnd(void)
 
 void EndPict(int x,int y,char poff,unsigned char coff)
 {
+    /* XXX: game crashes in this function */ 
   PatchHdr P;
   GXHEADER local,local2;
   unsigned int j;

@@ -861,16 +861,15 @@ save_game (char *name)
 	   
 	if ((outf = sOpen (name, "wb", 1)) == NULL) {
 		printf ("save_game: can't create %s\n", name);
-		return;
+		goto cleanup;
 	}
 
     size = fread_dyn(&buf, &buflen, inf);
+    fclose(inf);
+    inf = NULL;
     if (size < 0) {
         perror("save_game");
-	    fclose (inf);
-        if (&buf)
-            free(&buf);
-        return;
+        goto cleanup;
     }
     hdr.compSize = size;
 	
@@ -882,8 +881,12 @@ save_game (char *name)
         if (size >= 0)
             fwrite(buf, size, 1, outf);
         else
+        {
             perror("save_game");
-		fclose (inf);
+            goto cleanup;
+        }
+        fclose(inf);
+        inf = NULL;
 	}
 	
 	if ((inf = sOpen ("EVENT.TMP", "rb", 1)) != NULL) {
@@ -891,12 +894,21 @@ save_game (char *name)
         if (size >= 0)
             fwrite(buf, size, 1, outf);
         else
+        {
             perror("save_game");
-		fclose (inf);
+            goto cleanup;
+        }
+        fclose(inf);
+        inf = NULL;
 	}
 
-	fclose (outf);
-    free(buf);
+cleanup:
+    if (outf)
+        fclose(outf);
+    if (inf)
+        fclose(inf);
+    if (buf)
+        free(buf);
 }
 
 char GetBlockName(char *Nam)

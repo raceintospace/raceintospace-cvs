@@ -908,7 +908,7 @@ char FailureMode(char plr,int prelim,char *text)
   for (i=0;i<200;i++) {
     if (j>40 && text[i]==' ') {k+=7;j=0;grMoveTo(12,k);}
     else DispChr(text[i]);
-    j++;if (text[i]==NULL) break;
+    j++;if (text[i]=='\0') break;
   };
 
 

@@ -454,10 +454,10 @@ void DrawVText(char got)
     if (strncmp(&buf[0],"THIS CONCLUDES OUR NEWS",23)==0) grSetColor(11);
     if (strncmp(&buf[0],"CHECK INTEL",11)==0) grSetColor(11);
 
-    while(buf[0]!='x'&& buf[0]!=NULL) {DispChr(buf[0]);buf++;};
+    while(buf[0]!='x'&& buf[0]!='\0') {DispChr(buf[0]);buf++;};
     yy+=7;
     buf++;
-    if (*buf==NULL) i=9;
+    if (*buf=='\0') i=9;
   }
   
   return;

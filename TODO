@@ -1,5 +1,7 @@
 Organize this TODO file
 
+Find the reason behind segfault in EndPict() in endgame.c
+
 autosave
 
 on a mission failure, replay mission doesn't show the explosion

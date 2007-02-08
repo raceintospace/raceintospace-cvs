@@ -1,11 +1,19 @@
 2007-02-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V127
+
+	* Hunted down file descriptor leak
+
+	* Removed NULL redefinition
+
+2007-02-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V126
 
 	* Added SimpleHdr and SimpleHdrW to gamedata.c, changed rest of code to
 	use new interface
 
-	* Taken care about nasty bug related to structure packing and order of
+	* Taken care of a nasty bug related to structure packing and order of
 	includes
 
 	* Changed level of indentation for preprocessor macros to 0

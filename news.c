@@ -506,14 +506,14 @@ DrawNText(char plr, char got)
 		if (strncmp(&buf[0], "CHECK THE TRACKING STATION", 26) == 0)
 			grSetColor((plr == 0) ? 9 : 7);
 
-		while (buf[0] != 'x' && buf[0] != NULL)
+		while (buf[0] != 'x' && buf[0] != '\0')
 		{
 			DispChr(buf[0]);
 			buf++;
 		};
 		yy += 9;
 		buf++;
-		if (*buf == NULL)
+		if (*buf == '\0')
 			i = 9;
 	}
 

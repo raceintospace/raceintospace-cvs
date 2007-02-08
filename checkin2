@@ -37,11 +37,17 @@ fi
 msg=`cat ChangeLog | 
 	sed -n -e "1{h;n}; /^[0-9]/{x;p}; /\<$lasttag\>/Q; /^[0-9]/!H"`
 
+if [ $# -ne 0 ] ; then
+	# correct me if I'm wrong - it does not hurt to have same argument
+	# twice in cvs commit...
+	set -- "$@" $required_commits
+fi
+
 # diffstat output generation
 diffstat=`which diffstat 2>&1`
 
 echo "prev tag $lasttag; new tag $newtag"
-if [ -e "$diffstat" ]
+if [ -x "$diffstat" ]
 then
 	echo "=== diffstat output ==="
 	cvs diff -r $lasttag "$@" | $diffstat -w 70
@@ -57,12 +63,6 @@ read x
 if [ "$x" != "y" ]
 then
 	exit 1
-fi
-
-if [ $# -ne 0 ] ; then
-	# correct me if I'm wrong - it does not hurt to have same argument
-	# twice in cvs commit...
-	set -- "$@" $required_commits
 fi
 
 cvs -z9 commit -R -m "$msg" "$@"

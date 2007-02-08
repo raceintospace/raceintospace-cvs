@@ -85,5 +85,3 @@ int never_fail;
 #include "macros.h"		// Collected Macros
 
 #define random brandom
-#undef NULL
-#define NULL 0
