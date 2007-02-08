@@ -712,7 +712,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
         if(key>0) delay(150);
 	      DrawMisHist(plr,where);
         key=0;
-	      goto done;
+	      break;
 	   }
      else if (mode==1 && ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons==1) || key==K_ENTER))
      {
@@ -723,7 +723,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
         if (!AI[plr]) KillMusic();
         FadeOut(2,pal,10,0,0);
         key=0;
-	      goto done;  /* Done */
+	      break;
      }
 	   else if ((x>=216 && y>=136 && x<=308 && y<=146 && mousebuttons==1) || (key=='R'))
 	   {
@@ -798,7 +798,6 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 	   }; // if
 
   }; // while
-done:
 #ifdef CONFIG_THEORA_VIDEO
   video_rect.w = 0;
   video_rect.h = 0;

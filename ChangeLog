@@ -1,3 +1,9 @@
+2007-02-07  Michael McCarty <mkmccarty@raceintospace.org>
+
+	* V128
+
+	* Changed the goto in place.c to a break, fixing a compiler error on Mac and Gentoo
+
 2007-02-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V127
