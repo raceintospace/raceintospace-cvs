@@ -128,8 +128,8 @@ fread_##type(struct type *dst, size_t num, FILE *f) \
         elems = fread(tmp, sizeof_##type, elems, f); \
         if (!elems) \
             break; \
-        for (i = 0; i < elems; ++i, ++dst) \
-            get_##type(dst, tmp+i*sizeof_##type); \
+        for (i = 0; i < elems; ++i) \
+            get_##type(dst++, tmp+i*sizeof_##type); \
         total += elems; \
         num -= elems; \
     } \
@@ -145,8 +145,8 @@ fwrite_##type(const struct type *src, size_t num, FILE *f) \
     while (num > 0) \
     { \
         elems = (num < (bufelems)) ? num : (bufelems); \
-        for (i = 0; i < elems; ++i, ++src) \
-            put_##type(tmp+i*sizeof_##type, src); \
+        for (i = 0; i < elems; ++i) \
+            put_##type(tmp+i*sizeof_##type, src++); \
         elems = fwrite(tmp, sizeof_##type, elems, f); \
         if (!elems) \
             break; \
@@ -271,6 +271,36 @@ DECL_PUT_END
 
 DECL_FREAD(struct, oFGROUP, 32)
 /* DECL_FWRITE(struct, oFGROUP, 32) */
+
+/* SimpleHdr */
+
+DECL_GET_START(, SimpleHdr)
+    DECL_GET_FIELD_SCALAR(uint16_t, size, 1)
+    DECL_GET_FIELD_SCALAR(uint32_t, offset, 1)
+DECL_GET_END
+
+DECL_PUT_START(, SimpleHdr)
+    DECL_PUT_FIELD_SCALAR(uint16_t, size, 1)
+    DECL_PUT_FIELD_SCALAR(uint32_t, offset, 1)
+DECL_PUT_END
+
+DECL_FREAD(, SimpleHdr, 32)
+/* DECL_FWRITE(, SimpleHdr, 32) */
+
+/* SimpleHdrW */
+
+DECL_GET_START(, SimpleHdrW)
+    DECL_GET_FIELD_SCALAR(uint32_t, size, 1)
+    DECL_GET_FIELD_SCALAR(uint32_t, offset, 1)
+DECL_GET_END
+
+DECL_PUT_START(, SimpleHdrW)
+    DECL_PUT_FIELD_SCALAR(uint32_t, size, 1)
+    DECL_PUT_FIELD_SCALAR(uint32_t, offset, 1)
+DECL_PUT_END
+
+DECL_FREAD(, SimpleHdrW, 32)
+/* DECL_FWRITE(, SimpleHdrW, 32) */
 
 #if 0
 /* REPLAY */

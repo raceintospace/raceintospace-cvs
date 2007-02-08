@@ -23,6 +23,7 @@
 // Programmed by Michael K McCarty
 //
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
 
@@ -128,20 +129,20 @@ struct sIMG {
 
 
 
-i16 sCount,Vab_Spot;        // sCount is the number of steps
+int16_t sCount,Vab_Spot;        // sCount is the number of steps
 FILE *sFin;
 SimpleHdr hSPOT;  // Filled by Seek_sOff();
 struct sPATH sPath,sPathOld;
 struct sIMG sImg,sImgOld;
-ui32 pTable,pLoc;
+uint32_t pTable,pLoc;
 
  
-void Seek_sOff(int where)
+void
+Seek_sOff(int where)
 {
-  fseek(sFin,where*(sizeof hSPOT)+(MSPOT.sOff),SEEK_SET);
-  fread(&hSPOT,sizeof hSPOT,1,sFin);
-	SwapSimpleHdr(&hSPOT);
-  fseek(sFin,hSPOT.offset,SEEK_SET);
+	fseek(sFin, where * sizeof_SimpleHdr + MSPOT.sOff, SEEK_SET);
+	fread_SimpleHdr(&hSPOT, 1, sFin);
+	fseek(sFin, hSPOT.offset, SEEK_SET);
 }
 
 void Seek_pOff(int where)

@@ -24,8 +24,10 @@
 //
 // Museum Main Files
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
+
 extern struct mStr Mis;
 
 extern GXHEADER but;
@@ -432,9 +434,8 @@ void TopSecret(char plr,char poff)
   if (poff<56)
     if (plr==1) poff=poff+28;
   in=sOpen("INTEL.BUT","rb",0);
-  fread(&table,sizeof table,1,in);
-	SwapSimpleHdr(&table);
-  fseek(in,71*(sizeof table),SEEK_SET);
+  fread_SimpleHdr(&table,1,in);
+  fseek(in,71*sizeof_SimpleHdr,SEEK_SET);
   fread(&pal[0],768,1,in);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
@@ -442,9 +443,8 @@ void TopSecret(char plr,char poff)
   RLED_img(buffer,local.vptr,table.size,local.w,local.h);
   if (poff!=100)
     {
-     fseek(in,(poff+1)*(sizeof table),SEEK_SET);
-     fread(&table,sizeof table,1,in);
-		 SwapSimpleHdr(&table);
+     fseek(in,(poff+1)*sizeof_SimpleHdr,SEEK_SET);
+     fread_SimpleHdr(&table,1,in);
      fseek(in,table.offset,SEEK_SET);
      fread(buffer,table.size,1,in);     
      RLED_img(buffer,local2.vptr,table.size,local.w,local.h);

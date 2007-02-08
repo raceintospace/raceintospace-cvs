@@ -503,17 +503,6 @@ enum SpacePortOverlays
   PORT_SVHQ,				// 34 Strategic Visions H.Q.
 };
 
-// Typical size/offset file header used for image files
-typedef struct _simpleheader6 {
-  uint16_t size;
-  uint32_t offset;
-} SimpleHdr;
-
-typedef struct _simpleheader8 {
-  uint32_t size;
-  uint32_t offset;
-} SimpleHdrW;
-
 // Typical 
 typedef struct _patch {
   int16_t w;

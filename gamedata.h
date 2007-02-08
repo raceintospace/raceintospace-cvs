@@ -1,6 +1,12 @@
 #ifndef _GAMEDATA_H
 #define _GAMEDATA_H
 
+/* See Buzz_inc.h for comments on this */
+#ifdef ALTERED_STRUCTURE_PACKING
+#error Make sure that gamedata.h is included before Buzz_inc.h
+#undefined /* to make errors appear on all compilers */
+#endif
+
 #include "race.h"
 #include <stdio.h>
 #include "int_types.h"  /* auto-generated inttypes.h */
@@ -82,6 +88,23 @@ struct oFGROUP {
 #define sizeof_oFGROUP (15 + 5*sizeof_oLIST)
 extern size_t fread_oFGROUP(struct oFGROUP *dst, size_t num, FILE *f);
 
+/* used in: MOON.BUT, LMER.BUT, APROG.BUT, INTEL.BUT,
+ *          RDFULL.BUT, PRFX.BUT, LFACIL.BUT, PRESR.BUT */
+typedef struct {
+    uint16_t size;
+    uint32_t offset;
+} SimpleHdr;
+#define sizeof_SimpleHdr (2+4)
+extern size_t fread_SimpleHdr(SimpleHdr *dst, size_t num, FILE *f);
+
+/* used in TOTNEWS.CDR */
+typedef struct {
+	uint32_t size;
+	uint32_t offset;
+} SimpleHdrW;
+
+#define sizeof_SimpleHdrW (4+4)
+extern size_t fread_SimpleHdrW(SimpleHdrW * dst, size_t num, FILE * f);
 /*
  * File: REPLAY.DAT
  * Desc: Contains indices to animation sequences of past player missions.

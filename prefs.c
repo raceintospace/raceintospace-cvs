@@ -23,6 +23,7 @@
 // Programmed by Michael K McCarty
 //
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
 
@@ -124,9 +125,8 @@ void HModel(char mode,char tx)
   FILE *in;
 
   in=sOpen("PRFX.BUT","rb",0);
-  fseek(in,(mode==0 || mode==1)*(sizeof table),SEEK_CUR);
-  fread(&table,sizeof table,1,in);
-	SwapSimpleHdr(&table);
+  fseek(in,(mode==0 || mode==1)*sizeof_SimpleHdr,SEEK_CUR);
+  fread_SimpleHdr(&table,1,in);
   fseek(in,table.offset,SEEK_SET);
   GV(&local,127,80);
   fread(&pal[112*3],96*3,1,in);  // Individual Palette

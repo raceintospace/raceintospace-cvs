@@ -662,7 +662,7 @@ void UpdateRecords(char Ty);
 // REPLAY.C
 void RLEF(void *dest, void *src, unsigned int src_size);
 void DispBaby(int x, int y, int loc,char neww);
-void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,char mde);
+void AbzFrame(char plr,int num,int dx,int dy,int width,int height,char *Type,char mode);
 void Replay(char plr,int num,int dx,int dy,int width,int height,char *Type);
 
 // REVIEW.C

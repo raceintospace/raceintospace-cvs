@@ -24,6 +24,7 @@
 //
 // Review Main Files
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
 
@@ -196,9 +197,8 @@ void PresPict(char poff)
 	SimpleHdr table;
   FILE *in;
   in=sOpen("PRESR.BUT","rb",0);
-  fseek(in,poff*(sizeof table),SEEK_SET);
-  fread(&table,sizeof table,1,in);
-	SwapSimpleHdr(&table);
+  fseek(in,poff*sizeof_SimpleHdr,SEEK_SET);
+  fread_SimpleHdr(&table,1,in);
   fseek(in,table.offset,SEEK_SET);
   fread(&pal[96],672,1,in);
   fread(buffer,table.size,1,in);

@@ -25,8 +25,10 @@
 //
 // NewsCaster Main Files
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "macros.h"
 
 double load_news_anim_start;
 
@@ -922,7 +924,6 @@ FILE *
 LoadNewsAnim(ui8 Index, ui8 Mode, FILE * fp)
 {
 	GXHEADER local;
-	int i;
 	int aframe;
 	unsigned MAX = 0, TOT = 0;
 
@@ -999,22 +1000,13 @@ LoadNewsAnim(ui8 Index, ui8 Mode, FILE * fp)
 	if (!fp)
 		fp = sOpen("TOTNEWS.CDR", "rb", 0);
 	fseek(fp, 0x00, SEEK_SET);
-	fread(&hdr, sizeof hdr, 1, fp);
-
-	Swap32bit(hdr[Index].size);
-	Swap32bit(hdr[Index].offset);
+	fread_SimpleHdrW(hdr, ARRAY_LENGTH(hdr), fp);
 
 	totnews_offset = hdr[Index].offset;
 
 	fseek(fp, hdr[Index].offset, SEEK_SET);
 	fread(&aChart, sizeof aChart, 1, fp);
-	fread(table, sizeof(SimpleHdr), aChart.frames, fp);
-
-	for (i = 0; i < aChart.frames; i++)
-	{
-		SwapSimpleHdr(&table[i]);
-	}
-
+	fread_SimpleHdr(table, aChart.frames, fp);
 	fread(&pal[96], 1, 672, fp);
 
 	Frame = 1;
@@ -1220,3 +1212,5 @@ ShowEvt(char plr, char crd)
 }
 
 // EOF
+
+

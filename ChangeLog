@@ -1,3 +1,18 @@
+2007-02-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V126
+
+	* Added SimpleHdr and SimpleHdrW to gamedata.c, changed rest of code to
+	use new interface
+
+	* Taken care about nasty bug related to structure packing and order of
+	includes
+
+	* Changed level of indentation for preprocessor macros to 0
+
+	* Some of older changes were not checked in to CVS, possibly a bug in
+	checkin2
+
 2007-02-07  Michael McCarty <mkmccarty@raceintospace.org>
 
 	* V125
@@ -33,6 +48,16 @@
 
 	* Small change to confgure.in that seems to remove the need to run
 	aclocal with "-I m4" params
+
+2007-02-06  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+	
+	* V122
+
+	* From now on checkin2 will always check in Changelog and version.c
+	
+	* Factored out some common functionality in replay.c
+
+	* Changes in place.c finish the first step towards removing *.frm files
 
 2007-02-06  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 	

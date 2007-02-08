@@ -98,15 +98,6 @@ void SwapGameDat(void)
 
 #ifdef __BIG_ENDIAN__
 void
-SwapSimpleHdr(SimpleHdr *hdr)
-{
-	assert(hdr);
-
-	Swap16bit(hdr->size);
-	Swap32bit(hdr->offset);
-}
-
-void
 SwapPatchHdr(PatchHdr *hdr)
 {
 	assert(hdr);
@@ -125,9 +116,6 @@ SwapPatchHdrSmall(PatchHdrSmall *hdr)
 	Swap16bit(hdr->size);
 	Swap32bit(hdr->offset);
 }
-
-
-
 #endif
 
 

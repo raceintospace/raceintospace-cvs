@@ -23,6 +23,7 @@
 // Programmed by Michael K McCarty
 //
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
 
@@ -51,9 +52,8 @@ void Moon(char plr)
   if (size>13) size=13;
 
   in=sOpen("MOON.BUT","rb",0);
-  fseek(in,size*(sizeof table),SEEK_CUR);
-  fread(&table,sizeof table,1,in);
-	SwapSimpleHdr(&table);
+  fseek(in,sizeof_SimpleHdr * plr,SEEK_SET);
+  fread_SimpleHdr(&table,1,in);
   fseek(in,table.offset,SEEK_SET);
   GV(&local,104,82);
   fread(&pal[384],384,1,in);  // Individual Palette
@@ -369,17 +369,15 @@ void LMPict(char poff)
 	SimpleHdr table;
   FILE *in;
   in=sOpen("LMER.BUT","rb",0);
-  fread(&table,sizeof table,1,in);
-	SwapSimpleHdr(&table);
-  fseek(in,8*(sizeof table),SEEK_SET);
+  fread_SimpleHdr(&table,1,in);
+  fseek(in,8*sizeof_SimpleHdr,SEEK_SET);
   fread(&pal[32*3],672,1,in);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   GV(&local,156,89); GV(&local2,156,89);
   RLED_img(buffer,local.vptr,table.size,local.w,local.h);
-  fseek(in,(poff)*(sizeof table),SEEK_SET);
-  fread(&table,sizeof table,1,in);
-	SwapSimpleHdr(&table);
+  fseek(in,(poff)*sizeof_SimpleHdr,SEEK_SET);
+  fread_SimpleHdr(&table,1,in);
   fseek(in,table.offset,SEEK_SET);
   fread(buffer,table.size,1,in);
   RLED_img(buffer,local2.vptr,table.size,local2.w,local2.h);

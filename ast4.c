@@ -23,6 +23,7 @@
 // Programmed by Michael K McCarty
 //
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
 
@@ -164,10 +165,9 @@ void PlaceEquip(char plr,char prog)
 
   GV(&local,80,50);GV(&local2,80,50);
   fin=sOpen("APROG.BUT","rb",0);
-  fseek(fin,(plr*7+prog)*(sizeof table),SEEK_SET);
-  fread(&table,sizeof table,1,fin);
-	SwapSimpleHdr(&table);
-  fseek(fin,14*(sizeof table),SEEK_SET);
+  fseek(fin,(plr*7+prog)*sizeof_SimpleHdr,SEEK_SET);
+  fread_SimpleHdr(&table,1,fin);
+  fseek(fin,14*sizeof_SimpleHdr,SEEK_SET);
   fread(&pal[0],768,1,fin);
 
   fseek(fin,table.offset,SEEK_SET);

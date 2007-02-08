@@ -2,6 +2,7 @@
 
 mode=cvs
 
+required_commits="ChangeLog version.c"
 
 lasttag=`cvs log -h version.c |
 	sed '1,/symbolic names:/d' |
@@ -56,6 +57,12 @@ read x
 if [ "$x" != "y" ]
 then
 	exit 1
+fi
+
+if [ $# -ne 0 ] ; then
+	# correct me if I'm wrong - it does not hurt to have same argument
+	# twice in cvs commit...
+	set -- "$@" $required_commits
 fi
 
 cvs -z9 commit -R -m "$msg" "$@"

@@ -23,10 +23,10 @@
 // Programmed by Michael K McCarty
 //
 
+#include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "mis.h"
-#include "gamedata.h"
 
 #ifdef CONFIG_THEORA_VIDEO
 #include "av.h"

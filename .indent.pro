@@ -24,7 +24,7 @@
 -npcs
 -nprs
 -pmt
--ppi3
+-ppi0 /* indent level for preprocessor macros */
 -psl
 -saf
 -sai

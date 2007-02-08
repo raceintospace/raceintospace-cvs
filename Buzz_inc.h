@@ -61,11 +61,22 @@ typedef int32_t i32;
 // EMS Includes
 // #include "sv_lib.h"
 
-#pragma pack(1)
-
 int never_fail;
 
+/* FIXME: non-portable. Used to get struct layout like in DOS days */
+#pragma pack(1)
+
 #include "data.h"     // main data structures
+
+/* get the alignment back to defaults */
+/* #pragma pack() */
+
+/* BIG FIXME: Unfortunately structures defined in some functions rely on tight
+ * packing. This setting mainly breaks things in gamedata.h, so we make sure
+ * we notice bad order of #includes. That's another good reason to make all
+ * code use the gamedata.c interfaces. */
+#define ALTERED_STRUCTURE_PACKING
+
 #include "proto.h"    // prototypes and general defines
 #include "music.h"    // defines for music names
 

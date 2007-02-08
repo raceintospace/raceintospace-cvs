@@ -2,6 +2,7 @@
 #ifndef __MACROS_H__
 #define __MACROS_H__
 
+#define ARRAY_LENGTH(arr) ((sizeof (arr)) / (sizeof ((arr)[0])))
 
 #define IRBox(a,b,c,d,e)           {InBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}
 #define ORBox(a,b,c,d,e)           {OutBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}

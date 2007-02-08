@@ -12,7 +12,6 @@ void 			SwapGameDat(void);
 
 #define Swap32bit(a)  (a) = _Swap32bit((a))
 #define Swap16bit(a)  (a) = _Swap16bit((a))
-void SwapSimpleHdr(SimpleHdr *hdr);
 void SwapPatchHdr(PatchHdr *hdr);
 void SwapPatchHdrSmall(PatchHdrSmall *hdr);
 
@@ -20,7 +19,6 @@ void SwapPatchHdrSmall(PatchHdrSmall *hdr);
 
 #define Swap32bit(a)
 #define Swap16bit(a)
-#define SwapSimpleHdr(a)
 #define SwapPatchHdr(a)
 #define SwapPatchHdrSmall(a)
 
