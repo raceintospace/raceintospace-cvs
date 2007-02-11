@@ -2,6 +2,7 @@
 #include "externs.h"
 #include "assert.h"
 #include "pace.h"
+#include "av.h"
 
 char cdrom_dir[1000];
 char savedat_dir[1000];
@@ -167,12 +168,13 @@ RLED_img (void *src_raw, void *dest_raw, unsigned int src_size, int w, int h)
 		if (count < 0) {
 			count = -count + 1;
 			val = src[used++];
-			for (i = 0; i < count; i++)
-				*dest++ = val;
+            memset(dest, val, count);
+            dest += count;
 		} else {
 			count++;
-			for (i = 0; i < count; i++)
-				*dest++ = src[used++];
+            memcpy(dest, &src[used], count);
+            used += count;
+            dest += count;
 		}
 	}
 
@@ -185,23 +187,50 @@ RLED_img (void *src_raw, void *dest_raw, unsigned int src_size, int w, int h)
 
 	dest = dest_raw;
 	for (row = 0; row < h; row++) {
-		for (col = 0; col < w; col++) {
-			from_idx = row * (w+1) + col;
-			*dest++ = buf[from_idx];
-		}
+        memcpy(dest, &buf[row * (w+1)], w);
+        dest += w;
 	}
 
 	return (w * h);
 }
 
+/*
+ * Original sources say:
+ * @param wh = 0 - fade colors from 0 to val,
+ *           = 1 - fade colors from val to 3*256,
+ *           = 2 - fade all colors
+ * @param palx pointer to palette
+ * @param steps
+ * @param val pivot index in palette array
+ * @param mode if mode == 1 then preserve non-faded colors, else make black
+ */
 void
 FadeIn (char wh,char *palx,int steps,int val,char mode)
 {
+    int from = 0;
+    int to = 256;
+    if (wh == 0)
+        to = val;
+    else if (wh == 1)
+        from = val;
+    else
+        assert(wh == 2);
+    av_set_fading(AV_FADE_IN, from, to, steps, !!mode);
 }
 
 void
 FadeOut(char wh,char *palx,int steps,int val,char mode)
 {
+    int from = 0;
+    int to = 256;
+    int preserve_unchanged = !!mode;
+    if (wh == 0)
+        to = val;
+    else if (wh == 1)
+        from = val;
+    else
+        assert(wh == 2);
+    av_set_fading(AV_FADE_OUT, from, to, steps, !!mode);
 }
 
 void

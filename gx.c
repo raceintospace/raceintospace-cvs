@@ -2,6 +2,8 @@
 #include <limits.h>
 #include <assert.h>
 #include "externs.h"
+#include "av.h"
+#include <SDL.h>
 
 extern unsigned char *screen;
 extern GXHEADER vhptr;
@@ -64,6 +66,7 @@ gxPutImage (GXHEADER *hp, int mode, int x, int y, int op2)
 {
 	int row, col, from_idx, to_idx;
 	int clip_x, clip_y;
+	SDL_Rect r;
 
 	assert(op2 == 0);
 	assert(hp);
@@ -93,15 +96,20 @@ gxPutImage (GXHEADER *hp, int mode, int x, int y, int op2)
 		break;
 	}
 
+	r.x = x; r.y = y;
+	r.w = clip_x; r.h = clip_y;
+	av_need_update(&r);
 	screen_dirty = 1;
 }
 
 void
 gxClearDisplay (int a, int b)
 {
+	SDL_Rect r = {0, 0, MAX_X, MAX_Y};
 	assert(a == 0 && b == 0);
 
 	memset (screen, 0, MAX_X * MAX_Y);
+	av_need_update(&r);
 	screen_dirty = 1;
 }
 
@@ -115,6 +123,7 @@ gxVirtualDisplay (GXHEADER *hp,
 	int row, from_idx, to_idx;
 	int width, height;
 	int clip_x, clip_y;
+	SDL_Rect r;
 
 	assert(hp);
 	assert(always_zero == 0);
@@ -138,6 +147,9 @@ gxVirtualDisplay (GXHEADER *hp,
 		to_idx = (to_y0 + row) * MAX_X + to_x0;
 		memcpy(&screen[to_idx], &hp->vptr[from_idx], clip_x);
 	}
+	r.x = to_x0; r.y = to_y0;
+	r.w = clip_x; r.h = clip_y;
+	av_need_update(&r);
 	screen_dirty = 1;
 }
 

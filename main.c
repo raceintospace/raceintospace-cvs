@@ -326,26 +326,32 @@ FILE * sOpen(char *Name,char *mode,int loc)
 }
 
 void
-usage (void)
+usage (int fail)
 {
-	fprintf (stderr, "usage: raceintospace [-i]\n");
-	exit (1);
+	fprintf (stderr, "usage: raceintospace [-i] [-n] [-a] [-f]\n");
+	exit ((fail) ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
 int main(int argc, char *argv[])
 {
-  int i,cdstat;
+  int i,cdstat,want_audio = 1, want_fading = 1;
   FILE *fin;
   int c;
 
   char AName[6][22]={"NEW GAME","OLD GAME","MODEM","PLAY BY MAIL","CREDITS","EXIT TO DOS"};
   char ex;
 
-  env_setup ();
-  av_setup (&argc, &argv);
-
-  while ((c = getopt (argc, argv, "in")) != EOF) {
+  while ((c = getopt (argc, argv, "haifn")) != EOF) {
 	  switch (c) {
+	  case 'h':
+		  usage(0);
+		  break;
+	  case 'a':
+		  want_audio = 0;
+		  break;
+	  case 'f':
+		  want_fading = 0;
+		  break;
 	  case 'n':
 		  never_fail = 1;
 		  break;
@@ -353,18 +359,20 @@ int main(int argc, char *argv[])
 		  show_intro_flag = 1;
 		  break;
 	  default:
-		  usage ();
+		  usage (1);
 	  }
   }
+
+  env_setup ();
+  av_setup (want_audio, want_fading);
 
 #ifdef DEAD_CODE
   memset(BUZZ_DIR,0x00,32);
   getcwd(BUZZ_DIR,32);
+  FadeVal = 10;
 #endif
 
   hDISK=getdisk();
-
-  FadeVal = 10;
 
   strcpy(IDT,"i000\0");  strcpy(IKEY,"k000\0");
 

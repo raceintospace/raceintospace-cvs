@@ -29,6 +29,7 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "macros.h"
+#include "av.h"
 
 double load_news_anim_start;
 
@@ -1158,7 +1159,6 @@ ShowEvt(char plr, char crd)
 	} MM;
 
 	memset(&pal[96], 0, 672);
-	VBlank();					   /* SetPal(pal); FIXME */
 	if (plr == 0)
 	{
 		switch (crd)
@@ -1196,6 +1196,8 @@ ShowEvt(char plr, char crd)
 
 	if (MM.off != 0)
 	{
+        unsigned min_x = MAX_X, min_y = MAX_Y, max_x = 0, max_y = 0;
+
 		fseek(ffin, MM.off, SEEK_SET);
 		fread(&pal[384], 384, 1, ffin);
 		fread(vhptr.vptr, (size_t) MM.size, 1, ffin);
@@ -1203,8 +1205,15 @@ ShowEvt(char plr, char crd)
 		for (i = 0; i < (unsigned int) MM.size; i++)
 		{
 			if (screen[i] >= 32)
+            {
 				screen[i] = vhptr.vptr[i];
+                min_x = min(min_x, i % MAX_X);
+                min_y = min(min_y, i / MAX_X);
+                max_x = max(max_x, i % MAX_X);
+                max_y = max(max_y, i / MAX_X);
+            }
 		}
+        av_need_update_xy(min_x, min_y, max_x, max_y);
 	}
 	VBlank();					   /* SetPal(pal); FIXME */
 

@@ -26,6 +26,8 @@
 #include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "macros.h"
+#include "av.h"
 
 #define LET_A   0x09
 #define LET_M   0x0A
@@ -187,7 +189,7 @@ void SpotCrap(char loc,char mode)
 			Swap16bit(sCount);
       pLoc=ftell(sFin);
       sPath.iHold=1;
-      memcpy(vhptr.vptr,screen,64000);
+      memcpy(vhptr.vptr,screen,MAX_X*MAX_Y);
       sPathOld.xPut=-1;
       SpotCrap(0,SPOT_STEP);
       // All opened up
@@ -472,6 +474,7 @@ void DrawSpaceport(char plr)
 	Swap16bit(Img.PlaceX);
 	Swap16bit(Img.PlaceY);
   fread((char *)screen,Img.Size,1,fin);  // Read in main image
+  av_need_update_xy(0, 0, MAX_X, MAX_Y);
 
   UpdatePortOverlays();
 
@@ -652,7 +655,8 @@ void Master(char plr)
 	DrawSpaceport(plr);
   FadeIn(2,pal,10,0,0);
 
-  memcpy(vhptr.vptr,screen,64000);
+  memcpy(vhptr.vptr,screen,MAX_X*MAX_Y);
+  av_need_update_xy(0, 0, MAX_X, MAX_Y);
 
 #if SPOT_ON
   if ((Data->P[plr].Pool[0].Active|Data->P[plr].Pool[1].Active|Data->P[plr].Pool[2].Active)>=1)
@@ -728,65 +732,122 @@ void GetMse(char plr,char fon)
   GetMouse_fast();
 }
 
-void DoCycle(void)  // Three ranges of color cycling
+void
+DoCycle(void)					// Three ranges of color cycling
 {
-  int i,tmp1,tmp2,tmp3,j;
-  j = 384;
+	int i, tmp1, tmp2, tmp3, j;
+    /* hardcoded rectangles with water */
+    struct rectangle {
+        int x1, y1, x2, y2;
+    } r[] = {
+        {141, 163, 156, 175},
+        {0, 50, 71, 72},
+        {168, 16, 294, 32},
+        {109, 11, 170, 39},
+        {116,114, 157,145}
+    };
 
-  i = 0;
-  tmp1=pal[j+3*i+0];tmp2=pal[j+3*i+1];tmp3=pal[j+3*i+2];
-  for ( ;i<3;i++) {
-    pal[j+i*3+0]=pal[j+(i+1)*3+0];
-    pal[j+i*3+1]=pal[j+(i+1)*3+1];
-    pal[j+i*3+2]=pal[j+(i+1)*3+2];};
-  pal[j+3*i]=tmp1;pal[j+3*i+1]=tmp2;pal[j+3*i+2]=tmp3;
+	j = 384;
 
-  i = 4;
-  tmp1=pal[j+3*i+0];tmp2=pal[j+3*i+1];tmp3=pal[j+3*i+2];
-  for ( ;i<11;i++) {
-    pal[j+i*3+0]=pal[j+(i+1)*3+0];
-    pal[j+i*3+1]=pal[j+(i+1)*3+1];
-    pal[j+i*3+2]=pal[j+(i+1)*3+2];};
-  pal[j+3*i]=tmp1;pal[j+3*i+1]=tmp2;pal[j+3*i+2]=tmp3;
+	i = 0;
+	tmp1 = pal[j + 3 * i + 0];
+	tmp2 = pal[j + 3 * i + 1];
+	tmp3 = pal[j + 3 * i + 2];
+	for (; i < 3; i++)
+	{
+		pal[j + i * 3 + 0] = pal[j + (i + 1) * 3 + 0];
+		pal[j + i * 3 + 1] = pal[j + (i + 1) * 3 + 1];
+		pal[j + i * 3 + 2] = pal[j + (i + 1) * 3 + 2];
+	};
+	pal[j + 3 * i] = tmp1;
+	pal[j + 3 * i + 1] = tmp2;
+	pal[j + 3 * i + 2] = tmp3;
 
-  i = 12;
-  tmp1=pal[j+3*i+0];tmp2=pal[j+3*i+1];tmp3=pal[j+3*i+2];
-  for ( ;i<15;i++) {
-    pal[j+i*3+0]=pal[j+(i+1)*3+0];
-    pal[j+i*3+1]=pal[j+(i+1)*3+1];
-    pal[j+i*3+2]=pal[j+(i+1)*3+2];};
-  pal[j+3*i]=tmp1;pal[j+3*i+1]=tmp2;pal[j+3*i+2]=tmp3;
+	i = 4;
+	tmp1 = pal[j + 3 * i + 0];
+	tmp2 = pal[j + 3 * i + 1];
+	tmp3 = pal[j + 3 * i + 2];
+	for (; i < 11; i++)
+	{
+		pal[j + i * 3 + 0] = pal[j + (i + 1) * 3 + 0];
+		pal[j + i * 3 + 1] = pal[j + (i + 1) * 3 + 1];
+		pal[j + i * 3 + 2] = pal[j + (i + 1) * 3 + 2];
+	};
+	pal[j + 3 * i] = tmp1;
+	pal[j + 3 * i + 1] = tmp2;
+	pal[j + 3 * i + 2] = tmp3;
 
-  gxSetDisplayPalette(pal);
+	i = 12;
+	tmp1 = pal[j + 3 * i + 0];
+	tmp2 = pal[j + 3 * i + 1];
+	tmp3 = pal[j + 3 * i + 2];
+	for (; i < 15; i++)
+	{
+		pal[j + i * 3 + 0] = pal[j + (i + 1) * 3 + 0];
+		pal[j + i * 3 + 1] = pal[j + (i + 1) * 3 + 1];
+		pal[j + i * 3 + 2] = pal[j + (i + 1) * 3 + 2];
+	};
+	pal[j + 3 * i] = tmp1;
+	pal[j + 3 * i + 1] = tmp2;
+	pal[j + 3 * i + 2] = tmp3;
+
+	gxSetDisplayPalette(pal);
+
+    for (i = 0; i < (int) ARRAY_LENGTH(r); ++i)
+    {
+        av_need_update_xy(r[i].x1, r[i].y1, r[i].x2, r[i].y2);
+    }
 }
 
 // mode...  0 = ?   1 = copy stored outline ?
-void PortOutLine(unsigned int Count,ui16 *outline,char mode)
+void
+PortOutLine(unsigned int Count, ui16 * outline, char mode)
 {
-  unsigned int i;
+	int min_x = MAX_X, min_y = MAX_Y, max_x = 0, max_y = 0;
+	unsigned int i;
 
 	pPortOutlineRestore = xrealloc(pPortOutlineRestore,
-            sizeof(PORTOUTLINE) * Count);
-	
-	for (i=0;i<Count;i++) {
-   if (mode==1) {		// Save value from the screen 
-		 pPortOutlineRestore[i].loc = outline[i];					// Offset of the outline into the buffer
-		 pPortOutlineRestore[i].val = screen[outline[i]];	// Save original pixel value
-	 }
-   else	// dunno
-		 outline[i] = pPortOutlineRestore[i].loc;
-		
-   screen[outline[i]]=11;	// Color the outline index 11, which should be Yellow
-   }
+		sizeof(PORTOUTLINE) * Count);
+
+	for (i = 0; i < Count; i++)
+	{
+		if (mode == 1)
+		{						   // Save value from the screen 
+			pPortOutlineRestore[i].loc = outline[i];	// Offset of the outline into the buffer
+			pPortOutlineRestore[i].val = screen[outline[i]];	// Save original pixel value
+		}
+		else					   // dunno
+			outline[i] = pPortOutlineRestore[i].loc;
+		screen[outline[i]] = 11;   // Color the outline index 11, which should be Yellow
+		min_x = min(min_x, outline[i] % MAX_X);
+		min_y = min(min_y, outline[i] / MAX_X);
+		max_x = max(max_x, outline[i] % MAX_X);
+		max_y = max(max_y, outline[i] / MAX_X);
+	}
+	if (Count)
+		av_need_update_xy(min_x, min_y, max_x, max_y);
 }
 
-void PortRestore(unsigned int Count)
+void
+PortRestore(unsigned int Count)
 {
-  unsigned int i;
-  for (i=0;i<Count;i++) 
-		screen[pPortOutlineRestore[i].loc] = pPortOutlineRestore[i].val;
-  free(pPortOutlineRestore);
-  pPortOutlineRestore=NULL;
+	int min_x = MAX_X, min_y = MAX_Y, max_x = 0, max_y = 0;
+	unsigned int i;
+    int loc;
+
+	for (i = 0; i < Count; i++)
+	{
+        loc = pPortOutlineRestore[i].loc;
+		screen[loc] = pPortOutlineRestore[i].val;
+		min_x = min(min_x, loc % MAX_X);
+		min_y = min(min_y, loc / MAX_X);
+		max_x = max(max_x, loc % MAX_X);
+		max_y = max(max_y, loc / MAX_X);
+	}
+	if (Count)
+		av_need_update_xy(min_x, min_y, max_x, max_y);
+	free(pPortOutlineRestore);
+	pPortOutlineRestore = NULL;
 }
 
 
@@ -951,13 +1012,8 @@ int idx = 0;
           PortText(5,196,MObj[i].Name,11);
           if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
-               fread(&Count,sizeof (ui16),1,fin);
-								Swap16bit(Count);
-               fread(bone,Count*sizeof (ui16),1,fin);
-#ifdef __BIG_ENDIAN__
-								for (idx = 0; idx < Count; idx++)
-								 Swap16bit(bone[idx]);
-#endif
+               fread_uint16_t(&Count,1,fin);
+               fread_uint16_t(bone,Count,fin);
                PortOutLine(Count,bone,1);
                strncpy(&IDT[1],MObj[i].Help,3);
               }
@@ -1015,7 +1071,8 @@ int idx = 0;
                             || (Data->Year==57 || (Data->Year==58 && Data->Season==0)))) {
                             PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
 #if SPOT_ON
-                          memcpy(screen,vhptr.vptr,64000);
+                          memcpy(screen,vhptr.vptr,MAX_X*MAX_Y);
+                          av_need_update_xy(0, 0, MAX_X, MAX_Y);
 #endif
                           }
 
@@ -1032,7 +1089,7 @@ int idx = 0;
 													FadeIn(2,pal,10,0,0);
 
 #if SPOT_ON
-                          memcpy(vhptr.vptr,screen,64000);
+                          memcpy(vhptr.vptr,screen,MAX_X*MAX_Y);
                           gork=random(100);
                           if (Vab_Spot==1 && Data->P[plr].Port[PORT_VAB]==2) 
                            {
@@ -1099,13 +1156,8 @@ int idx = 0;
                   kMode=good=SUSPEND=0;
                  if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0) {
                     fseek(fin,stable[MObj[i].Reg[Data->P[plr].Port[i]].sNum],SEEK_SET);
-                    fread(&Count,sizeof (ui16),1,fin);
-										Swap16bit(Count);
-										fread(bone,Count*sizeof (ui16),1,fin);
-#ifdef __BIG_ENDIAN__
-										for (idx = 0; idx < Count; idx++)
-											Swap16bit(bone[idx]);
-#endif
+                    fread_uint16_t(&Count,1,fin);
+                    fread_uint16_t(bone,Count,fin);
                     //pPortOutlineRestore = (PORTOUTLINE *) malloc((sizeof (PORTOUTLINE))*Count);
                     PortOutLine(Count,bone,1);
                     }

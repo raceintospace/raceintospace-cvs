@@ -27,9 +27,9 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "mis.h"
+#include "av.h"
 
 #ifdef CONFIG_THEORA_VIDEO
-#include "av.h"
 #include "mmfile.h"
 #endif
 
@@ -637,6 +637,7 @@ void Clock(char plr,char clck,char mode,char tm)
    case 7:grPutPixel(sx-1,sy-1,mode);break;
    default:break;
   };
+ av_need_update_xy(sx - 2, sy - 2, sx + 2, sy - 2);
  return;
 }
 

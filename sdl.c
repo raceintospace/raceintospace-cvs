@@ -9,6 +9,7 @@
 #include <memory.h>
 #include <SDL.h>
 #include "Buzz_inc.h"
+#include "macros.h"
 
 #include "av.h"
 #define MAX_X	320
@@ -35,7 +36,18 @@ unsigned char *screen;
 
 // unsigned char* screen_2;
 
-char pal[3 * 256];
+unsigned char pal[3 * 256];
+
+/* data about current fading operation */
+static struct fade_information {
+    unsigned from;
+    unsigned to;
+    unsigned step;
+    unsigned steps;
+    unsigned force_black;
+    int inc;
+    unsigned end;
+} fade_info;
 
 int screen_dirty;
 
@@ -48,7 +60,32 @@ intr(int sig)
 
 static int have_audio;
 
+static int do_fading;
+
 static SDL_AudioSpec audio_desired;
+
+static unsigned char *dirty_tree;
+static unsigned dirty_tree_length;
+static SDL_Rect *dirty_rect_list;
+
+static void
+alloc_dirty_tree(void)
+{
+    int depth = AV_DTREE_DEPTH + 1;
+    int ratio = 1;
+    int bytes = 0;
+    /* use power series formula, S = (1 - q**(n+1))/(1 - q) */
+    while (depth--)
+        ratio *= 4;
+    bytes = (1 - ratio) / (1 - 4);
+    dirty_tree = xcalloc(bytes, 1);
+    dirty_tree_length = bytes;
+
+    ratio /= 4;
+    dirty_rect_list = xcalloc(ratio, sizeof(SDL_Rect));
+}
+
+static int get_dirty_rect_list();
 
 static void
 audio_callback(void *userdata, Uint8 * stream, int len)
@@ -230,7 +267,7 @@ sdl_timer_callback(Uint32 interval, void *param)
 }
 
 void
-av_setup(int *argcp, char ***argvp)
+av_setup(int want_audio, int want_fading)
 {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
@@ -240,7 +277,7 @@ av_setup(int *argcp, char ***argvp)
 
 	atexit(SDL_Quit);
 
-	if (SDL_InitSubSystem(SDL_INIT_AUDIO < 0))
+	if (!want_audio || SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
 		printf("no audio\n");
 	}
@@ -286,6 +323,12 @@ av_setup(int *argcp, char ***argvp)
         exit(EXIT_FAILURE);
     }
 #endif
+
+    fade_info.step = 1;
+    fade_info.steps = 1;
+    do_fading = want_fading;
+
+    alloc_dirty_tree();
 
 	SDL_EnableUNICODE(1);
 	SDL_WM_SetCaption("Race Into Space", NULL);
@@ -559,161 +602,89 @@ SDL_Scale2x(SDL_Surface * src, SDL_Surface * dst)
 }
 
 void
+transform_palette(void)
+{
+    unsigned i, j, step, steps;
+    struct range {
+        unsigned start, end;
+    } ranges[] = {{0, fade_info.from}, {fade_info.to, 256}};
+
+    for (j = 0; j < ARRAY_LENGTH(ranges); ++j)
+        for (i = ranges[j].start; i < ranges[j].end; ++i)
+        {
+            if (!fade_info.force_black)
+            {
+                pal_colors[i].r = pal[3 * i] * 4;
+                pal_colors[i].g = pal[3 * i + 1] * 4;
+                pal_colors[i].b = pal[3 * i + 2] * 4;
+            }
+            else
+            {
+                pal_colors[i].r = 0;
+                pal_colors[i].g = 0;
+                pal_colors[i].b = 0;
+            }
+        }
+    step = fade_info.step;
+    steps = fade_info.steps;
+    /* sanity checks */
+    assert(steps != 0 && step <= steps);
+    for (i = fade_info.from; i < fade_info.to; ++i)
+    {
+        /* 
+         * This should be done this way, but unfortunately some image files
+         * have palettes for which pal * 4 overflows single byte. They display
+         * correctly in game, but not when multiplication factor varies.
+        pal_colors[i].r = pal[3 * i] * 4 * step / steps;
+        pal_colors[i].g = pal[3 * i + 1] * 4 * step / steps;
+        pal_colors[i].b = pal[3 * i + 2] * 4 * step / steps;
+         */
+
+        pal_colors[i].r = pal[3 * i] * 4;
+        pal_colors[i].r = pal_colors[i].r * step / steps;
+        pal_colors[i].g = pal[3 * i + 1] * 4;
+        pal_colors[i].g = pal_colors[i].g * step / steps;
+        pal_colors[i].b = pal[3 * i + 2] * 4;
+        pal_colors[i].b = pal_colors[i].b * step / steps;
+    }
+}
+
+void
 av_sync(void)
 {
-	int i = 0;
+	int num_rect = 0;
     SDL_Rect r;
 
-	/*
-	 * int row, col;
-	 * 
-	 * int src_row, src_col, src_idx;
-	 * int dest_row, dest_col, dest_idx;
-	 * unsigned char pixel;
-	 * 
-	 * int min_x = MAX_X, min_y = MAX_Y;
-	 * int max_x = -1, max_y = -1;
-	 * char *p;
-	 * char *outp;
-	 */
-
 #ifdef PROFILE_GRAPHICS
+    float tot_area = 0;
+    int i = 0;
 	Uint32 ticks = SDL_GetTicks();
 #endif
 
-	/* copy palette */
-	for (i = 0; i < 256; ++i)
-	{
-		pal_colors[i].r = pal[3 * i] * 4;
-		pal_colors[i].g = pal[3 * i + 1] * 4;
-		pal_colors[i].b = pal[3 * i + 2] * 4;
-	}
 	SDL_Scale2x(screen_surf, screen_surf2x);
+	/* copy palette and handle fading! */
+    transform_palette();
 	SDL_SetColors(screen_surf2x, pal_colors, 0, 256);
 	SDL_BlitSurface(screen_surf2x, NULL, display, NULL);
     if (video_rect.h && video_rect.w)
     {
+        av_need_update(&video_rect);
         r.h = 2 * video_rect.h;
         r.w = 2 * video_rect.w;
         r.x = 2 * video_rect.x;
         r.y = 2 * video_rect.y;
         SDL_DisplayYUVOverlay(video_overlay, &r);
     }
-	SDL_Flip(display);
-	screen_dirty = 0;
-	return;
-
-#if 0
-	if (SDL_MUSTLOCK(display))
-		SDL_LockSurface(display);
-
-	outp = display->pixels;
-
-#   if 1
-	for (row = 0; row < MAX_Y; ++row)
-	{
-		for (col = 0; col < MAX_X; ++col)
-		{
-			i = row * MAX_X + col;
-			p = &pal[screen[i] * 3];
-			if (screen_2[i] != screen[i])
-			{
-				screen_2[i] = screen[i];
-				min_x = minn(min_x, col);
-				max_x = maxx(max_x, col);
-				min_y = minn(min_y, row);
-				max_y = maxx(max_y, row);
-			}
-#      ifdef __BIG_ENDIAN__
-#         define PAL_R	p[0]
-#         define PAL_G	p[1]
-#         define PAL_B	p[2]
-#      else
-#         define PAL_R	p[2]
-#         define PAL_G	p[1]
-#         define PAL_B	p[0]
-#      endif
-
-			i = 4 * row * MAX_X + 2 * col;
-			outp[3 * i] = PAL_R * 4;
-			outp[3 * i + 1] = PAL_G * 4;
-			outp[3 * i + 2] = PAL_B * 4;
-
-			i = 4 * row * MAX_X + 2 * col + 1;
-			outp[3 * i] = PAL_R * 4;
-			outp[3 * i + 1] = PAL_G * 4;
-			outp[3 * i + 2] = PAL_B * 4;
-
-			i = 4 * row * MAX_X + 2 * col + 2 * MAX_X;
-			outp[3 * i] = PAL_R * 4;
-			outp[3 * i + 1] = PAL_G * 4;
-			outp[3 * i + 2] = PAL_B * 4;
-
-			i = 4 * row * MAX_X + 2 * col + 2 * MAX_X + 1;
-			outp[3 * i] = PAL_R * 4;
-			outp[3 * i + 1] = PAL_G * 4;
-			outp[3 * i + 2] = PAL_B * 4;
-		}
-	}
-#   endif
-
-#   if 0
-	for (dest_row = 0; dest_row < 2 * MAX_Y; dest_row++)
-	{
-		src_row = dest_row / 2;
-		for (dest_col = 0; dest_col < 2 * MAX_X; dest_col++)
-		{
-			src_col = dest_col / 2;
-
-			src_idx = src_row * MAX_X + src_col;
-			dest_idx = (dest_row * 2 * MAX_X + dest_col) * 3;
-
-			if (screen_2[src_idx] != screen[src_idx])
-			{
-				screen_2[src_idx] = screen[src_idx];
-				min_x = minn(min_x, src_col);
-				max_x = maxx(max_x, src_col);
-				min_y = minn(min_y, src_row);
-				max_y = maxx(max_y, src_row);
-			}
-
-			pixel = screen[src_idx] & 0xff;
-			p = pal + pixel * 3;
-
-			outp = display->pixels + dest_idx;
-
-			outp[0] = PAL_R * 4;
-			outp[1] = PAL_G * 4;
-			outp[2] = PRL_B * 4;
-		}
-	}
-#   endif
-
-	if (SDL_MUSTLOCK(display))
-		SDL_UnlockSurface(display);
-
-	if (max_x >= 0 && max_y > 0)
-	{
-		SDL_UpdateRect(display, min_x * 2, min_y * 2,
-			2 * (max_x - min_x + 1), 2 * (max_y - min_y + 1));
-
-#   ifdef PROFILE_GRAPHICS
-		fprintf(stderr, "av_sync: ~%3d%% updated in ~%3ums\n",
-			/* min_x, min_y, max_x, max_y, */
-			100 * (max_x - min_x + 1) * (max_y - min_y +
-				1) / (MAX_X * MAX_Y), SDL_GetTicks() - ticks);
-#   endif
-	}
-	else
-	{
-#   ifdef PROFILE_GRAPHICS
-		fprintf(stderr, "av_sync:	 no update	in ~%3ums\n",
-			SDL_GetTicks() - ticks);
-#   endif
-	}
-
-	screen_dirty = 0;
+    num_rect = get_dirty_rect_list();
+    SDL_UpdateRects(display, num_rect, dirty_rect_list);
+#ifdef PROFILE_GRAPHICS
+    for (i = 0; i < num_rect; ++i)
+        tot_area += dirty_rect_list[i].w * dirty_rect_list[i].h;
+    tot_area = tot_area * 100 / (2*MAX_X) / (2*MAX_Y);
+    /* DEBUG */ fprintf(stderr, "av_sync: %3d rect(s) (%6.2f%%) updated in ~%3ums\n",
+            num_rect, tot_area, SDL_GetTicks() - ticks);
 #endif
+	screen_dirty = 0;
 }
 
 void
@@ -731,4 +702,162 @@ MuteChannel(int channel, int mute)
 		assert(channel >= 0 && channel < AV_NUM_CHANNELS);
 		Channels[channel].mute = mute;
 	}
+}
+
+/* 
+ * A hack, but hey, it works :)
+ * Adding periodic timer won't work, because we can't call av_sync from timer.
+ * The only thing allowed is SDL_PushEvent, and we don't have event-driven
+ * setup. So for now either this or nothing.
+ */
+void
+av_set_fading(int type, int from, int to, int steps, int preserve)
+{
+    int dir = (type == AV_FADE_IN) ? 1 : -1;
+    unsigned st;  
+    unsigned st_end;
+    SDL_Rect r = {0, 0, MAX_X, MAX_Y};
+
+    if (!do_fading)
+        return;
+
+    if (!steps > 0)
+        steps = 5;
+    st = (type == AV_FADE_IN) ? 0 : steps;
+    st_end = steps - st;
+
+    fade_info.from = from;
+    fade_info.to = to;
+    fade_info.steps = steps;
+    fade_info.step = st;
+    fade_info.force_black = !preserve;
+    fade_info.inc = dir;
+    fade_info.end = st_end;
+
+    for (;fade_info.step != fade_info.end; fade_info.step += fade_info.inc)
+    {
+        av_need_update(&r);
+        av_sync();
+        SDL_Delay(10);
+    }
+    av_need_update(&r);
+    av_sync();
+}
+
+/* compute area of intersection of rectangles */
+inline static int
+intersect_area(SDL_Rect *first, SDL_Rect *second)
+{
+    int isect_h = 0, isect_w = 0;
+    SDL_Rect *t;
+    /* 
+     * Treat dimensions separately. Sort accroding to start point,
+     * then compute amount of overlap.
+     */
+    if (first->x > second->x)
+    {
+        t = first; first = second; second = t;
+    }
+    if (first->x + first->w < second->x)
+        return 0;
+    else
+        isect_w = min(second->w, first->x + first->w - second->x);
+
+    if (first->y > second->y)
+    {
+        t = first; first = second; second = t;
+    }
+    if (first->y + first->h < second->y)
+        return 0;
+    else
+        isect_h = min(second->h, first->y + first->h - second->y);
+
+    return isect_h * isect_w;
+}
+
+static void
+update_rect(SDL_Rect *fill, int x, int y, int w, int h, int idx, int level)
+{
+    SDL_Rect r = {x, y, w, h};
+    int nw = w / 2;
+    int nh = h / 2;
+    int area = 0;
+
+    assert((unsigned)idx < dirty_tree_length);
+
+    /* PRUNING: see if already dirty */
+    if (dirty_tree[idx])
+        return;
+
+    /* PRUNING: check if covered area > AV_DTREE_FILL_RATIO */
+    area = intersect_area(fill, &r);
+    if (area == 0)
+        return;
+    else if (level == AV_DTREE_DEPTH
+            || area > AV_DTREE_FILL_RATIO * h * w)
+    {
+        dirty_tree[idx] = 1;
+        return;
+    }
+
+    idx *= 4;
+    level += 1;
+
+    update_rect(fill, x,      y,      nw,     nh,     idx + 1, level);
+    update_rect(fill, x + nw, y,      w - nw, nh,     idx + 2, level);
+    update_rect(fill, x,      y + nh, nw,     h - nh, idx + 3, level);
+    update_rect(fill, x + nw, y + nh, w - nw, h - nh, idx + 4, level);
+}
+
+static void
+fill_rect_list(SDL_Rect *arr, int *len, int x, int y, int w, int h,
+        int idx, int level)
+{
+    int nw = w / 2;
+    int nh = h / 2;
+
+    if (level > AV_DTREE_DEPTH)
+        return;
+
+    assert((unsigned)idx < dirty_tree_length);
+
+    if (dirty_tree[idx])
+    {
+        /* XXX multiply by 2 because of scaling */
+        SDL_Rect r = {2*x, 2*y, 2*w, 2*h};
+        memcpy(&arr[(*len)++], &r, sizeof(r));
+        return;
+    }
+
+    idx *= 4;
+    level += 1;
+
+    fill_rect_list(arr, len, x,      y,      nw,     nh,     idx + 1, level);
+    fill_rect_list(arr, len, x + nw, y,      w - nw, nh,     idx + 2, level);
+    fill_rect_list(arr, len, x,      y + nh, nw,     h - nh, idx + 3, level);
+    fill_rect_list(arr, len, x + nw, y + nh, w - nw, h - nh, idx + 4, level);
+}
+
+static int
+get_dirty_rect_list(void)
+{
+    int len = 0;
+    fill_rect_list(dirty_rect_list, &len, 0, 0, MAX_X, MAX_Y, 0, 0);
+    memset(dirty_tree, 0, dirty_tree_length);
+    return len;
+}
+
+/* Public interface to dirty rectangle tree */
+void
+av_need_update(SDL_Rect *r)
+{
+    update_rect(r, 0, 0, MAX_X, MAX_Y, 0, 0);
+    screen_dirty = 1;
+}
+
+void
+av_need_update_xy(int x1, int y1, int x2, int y2)
+{
+    SDL_Rect r = {x1, y1, x2-x1+1, y2-y1+1};
+    av_need_update(&r);
 }

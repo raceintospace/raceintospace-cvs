@@ -163,7 +163,7 @@ WaitForMouseUp();
 	     InBox(245,5,314,17);
 	     WaitForMouseUp();
        KillMusic();
-	     //FadeOut(2,pal,10,0,0);
+	     FadeOut(2,pal,10,0,0);
 	     return;  /* Done */
        };
      }

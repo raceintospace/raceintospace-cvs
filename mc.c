@@ -25,6 +25,7 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "mis.h"
+#include "av.h"
 
   Equipment *MH[2][8];   // Pointer to the hardware
   struct MisAst MA[2][4];  //[2][4]
@@ -76,6 +77,8 @@ void DrawControl(char plr)
   }
   fread(vhptr.vptr,len,1,fin);fclose(fin);
   PCX_D((char *)vhptr.vptr,(char *)screen,(unsigned) len);
+  av_need_update_xy(0, 0, MAX_X, MAX_Y);
+
 }
 
 void SetW(char ch)

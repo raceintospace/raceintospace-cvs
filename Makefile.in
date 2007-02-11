@@ -76,7 +76,7 @@ uninstall:
 # cheat, we still use CC but print LD
 $(PROG_NAME): $(BARIS_OBJS)
 	@echo "$(LD) ...flags... -o $@ ...libs..."
-	@$(CC) $(LDLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
+	@$(CC) $(LDFLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
 
 .c.o:
 	@echo "$(CC) ...flags... -c $*.c"

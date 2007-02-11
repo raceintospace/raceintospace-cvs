@@ -77,6 +77,7 @@ void
 grClearArea (int x1, int y1, int x2, int y2)
 {
 	int y, t;
+	SDL_Rect r;
 
 	assert(0 <= x1 && x1 < MAX_X);
 	assert(0 <= x2 && x2 < MAX_X);
@@ -89,6 +90,12 @@ grClearArea (int x1, int y1, int x2, int y2)
 	for (y = y1; y <= y2; ++y) {
 		memset(&screen[y * MAX_X + x1], gr_bg_color, x2-x1+1);
 	}
+
+	r.x = x1;
+	r.y = y1;
+	r.h = y2-y1+1;
+	r.w = x2-x1+1;
+	av_need_update(&r);
 }
 
 static int gr_cur_x, gr_cur_y;
@@ -104,9 +111,7 @@ inline void
 grPutPixel (int x, int y, int color)
 {
 	screen[y * MAX_X + x] = color;
-	screen_dirty = 1;
 }
-
 
 //#define abs(a) (((a) >= 0) ? (a) : (0))
 #define swap(a,b) (t = a, a = b, b = t)
@@ -181,6 +186,7 @@ grMoveRel (int dx, int dy)
 void
 grDrawRect (int x1, int y1, int x2, int y2, int mode)
 {
+	SDL_Rect r;
 	int t;
 
 	assert (mode == grOUTLINE);
@@ -193,6 +199,8 @@ grDrawRect (int x1, int y1, int x2, int y2, int mode)
 	grLineTo (x2, y2);
 	grLineTo (x1, y2);
 	grLineTo (x1, y1);
+	r.x = x1; r.y = y1;
+	r.w = x2-x1+1; r.h = y2-y1+1;
 }
 
 void

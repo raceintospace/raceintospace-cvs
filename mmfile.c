@@ -1,7 +1,7 @@
 #include "race.h"
 #include "mmfile.h"
 #include "int_types.h"
-#include "Buzz_inc.h"
+#include "Buzz_inc.h"  /* need to get rid of this */
 #include <assert.h>
 #include <stdio.h>
 #include <limits.h>
@@ -54,6 +54,7 @@ get_packet(mm_file * mf, ogg_packet * pkt, enum stream_type type)
 {
 	ogg_stream_state *stream, *other;
 	ogg_page pg;
+    enum stream_type other_type;
 	int rv = 0;
 
 	assert(mf);
@@ -64,32 +65,55 @@ get_packet(mm_file * mf, ogg_packet * pkt, enum stream_type type)
 			assert(mf->video);
 			stream = mf->video;
 			other = mf->audio;
+            other_type = MEDIA_AUDIO;
 			break;
 		case MEDIA_AUDIO:
 			assert(mf->audio);
 			stream = mf->audio;
 			other = mf->video;
+            other_type = MEDIA_VIDEO;
 			break;
 		default:
             /*ERROR*/
 			printf("bad stream type\n");
 			return -1;
 	}
+    if (mf->end_of_stream & type)
+        return 0;
 	while (0 == ogg_stream_packetout(stream, pkt))
 	{
 		rv = get_page(mf, &pg);
-		if (rv < 0)
-			return -1;
-		if (rv == 0)
-			return 0;
-		if (ogg_stream_pagein(stream, &pg) < 0
-			&& !(other && ogg_stream_pagein(other, &pg) == 0))
-		{
-			/* DEBUG */ printf("got page not associated with any stream, "
-				"serial %x\n", ogg_page_serialno(&pg));
-			/* drop page */
-		}
+		if (rv <= 0)
+			return rv;
+		if (ogg_stream_pagein(stream, &pg) < 0)
+        {
+            if (other && ogg_stream_pagein(other, &pg) == 0)
+            {
+                /*
+                 * Got page from other stream. If user won't ever decode this
+                 * then we need to clean up it here - otherwise read but not
+                 * decoded packets would accumulate.
+                 */
+                if (mf->drop_packets & other_type)
+                {
+                    ogg_packet packet;
+                    while (ogg_stream_packetout(other, &packet))
+                        /* just drop packets */;
+                }
+            }
+            else 
+            {
+                /* DEBUG */ printf("got page not associated with any stream, "
+                    "serial %x\n", ogg_page_serialno(&pg));
+                /*
+                 * drop page. Ogg source code says ogg_page member pointers are
+                 * initialized to static buffers, so there is no need to free
+                 * anything.
+                 */
+            }
+        }
 	}
+    mf->end_of_stream |= (!!pkt->e_o_s) * type;
 	return 1;
 }
 
@@ -244,7 +268,6 @@ init_vorbis(mm_file * mf, ogg_page * pg)
 static int
 yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv,
 	SDL_Overlay * ovl)
-
 {
 	unsigned i, h, w, xoff, yoff;
 	uint8_t *yp, *up, *vp;
@@ -313,6 +336,7 @@ yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv,
 	SDL_UnlockYUVOverlay(ovl);
 	return 0;
 }
+
 /* rval < 0: error, > 0: have audio or video */
 int
 mm_open(mm_file * mf, const char *fname)
@@ -352,6 +376,14 @@ mm_open(mm_file * mf, const char *fname)
   err:
 	mm_close(mf);
 	return retval;
+}
+
+unsigned
+mm_ignore(mm_file * mf, unsigned mask)
+{
+    unsigned old = mf->drop_packets;
+    mf->drop_packets = mask;
+    return old;
 }
 
 int
@@ -448,6 +480,12 @@ mm_decode_video(mm_file * mf, SDL_Overlay * ovl)
 	assert(mf);
 	if (!mf->video)
 		return -1;
+    if (mf->drop_packets & MEDIA_VIDEO)
+    {
+        /* WARNING */
+        printf("requested decode but MEDIA_VIDEO is set to ignore\n");
+        return -1;
+    }
 	for (;;)
 	{
 		rv = get_packet(mf, &pkt, MEDIA_VIDEO);
@@ -480,6 +518,12 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 	assert(mf);
 	if (!mf->audio)
 		return -1;
+    if (mf->drop_packets & MEDIA_AUDIO)
+    {
+        /* WARNING */
+        printf("requested decode but MEDIA_AUDIO is set to ignore\n");
+        return -1;
+    }
 	for (;;)
 	{
 		/* output any samples left from last conversion */
@@ -535,4 +579,3 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 	/* NOT REACHED */
 	return 0;
 }
-

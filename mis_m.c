@@ -490,7 +490,7 @@ int MCGraph(char plr,int lc,int safety,int val,char prob)
       RectFill(lc-2,195,lc,195-(safety-Mev[STEP].asf)*22/100,6);
       for (i=195;i>195-val*22/100;i--) {
          RectFill(lc-2,195,lc,i,21);
-         delay(30);
+         delay(15);
          }
       if (val>safety && prob==0) {RectFill(lc-2,195,lc,195-val*22/100,9);lc=191;}
       else if (val>safety) {RectFill(lc-2,195,lc,195-val*22/100,9);lc+=5;}
@@ -518,7 +518,7 @@ int MCGraph(char plr,int lc,int safety,int val,char prob)
       RectFill(lc-2,195,lc,195-(safety-Mev[STEP].asf)*22/100,6);
       for (i=195;i>195-val*22/100;i--) {
          RectFill(lc-2,195,lc,i,21);
-         delay(30);
+         delay(15);
          }
       if (val>safety && prob==0) {RectFill(lc-2,195,lc,195-val*22/100,9);lc=76;}
       else if (val>safety) {RectFill(lc-2,195,lc,195-val*22/100,9);lc+=5;}

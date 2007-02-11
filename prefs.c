@@ -608,7 +608,7 @@ void EditAst(void)
  for (i=0;i<106;i++) M_Sv[i]=0;
  for (i=0;i<106;i++) M_Us[i]=Men[i].Cap+Men[i].LM+Men[i].EVA+Men[i].Docking+Men[i].Endurance;
  for (i=0;i<106;i++) M_Sv[i]=Sov[i].Cap+Sov[i].LM+Sov[i].EVA+Sov[i].Docking+Sov[i].Endurance; 
- //FadeIn(2,pal,10,0,0);
+ FadeIn(2,pal,10,0,0);
  
  WaitForMouseUp();
   while (1)

@@ -4,6 +4,9 @@
 
 #define ARRAY_LENGTH(arr) ((sizeof (arr)) / (sizeof ((arr)[0])))
 
+#define min(a, b) (((a) <= (b)) ? (a) : (b))
+#define max(a, b) (((a) >= (b)) ? (a) : (b))
+
 #define IRBox(a,b,c,d,e)           {InBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}
 #define ORBox(a,b,c,d,e)           {OutBox((a),(b),(c),(d));RectFill((a)+1,(b)+1,(c)-1,(d)-1,(e));}
 

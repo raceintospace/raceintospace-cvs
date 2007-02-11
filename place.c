@@ -19,10 +19,7 @@
 #include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
-
-#ifdef CONFIG_THEORA_VIDEO
 #include "av.h"
-#endif
 
 extern char IDT[5],IKEY[5],AL_CALL,AI[2];
 extern struct mStr Mis;
@@ -130,22 +127,25 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 {
   int i,j,starty=100;
   GXHEADER local;
-  FILE *fin;
+  FILE *fin=sOpen("PORTBUT.BUT","rb",0);
   
   //FadeOut(2,pal,10,0,0);
 
   GV(&local,30,19);
 
   starty-=(qty*23/2);
+
+  /* hard-coded magic numbers, yuck */
+  av_need_update_xy(23, starty, 60+22*15, 20+23*qty);
+
   for (i=0;i<qty;i++) {
 	 BCDraw(starty+23*i);
 	 DispBig(60,starty+4+23*i,&Name[i*22],1,0);
-    fin=sOpen("PORTBUT.BUT","rb",0);
     fseek(fin,Imx[i]*570,SEEK_SET);
     fread((char *)local.vptr,570,1,fin);
-    fclose(fin);
     gxPutImage(&local,gxSET,24,starty+1+23*i,0);
   }
+  fclose(fin);
   DV(&local);
 
   
@@ -425,28 +425,36 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
   return;
 }
 
-void DispHelp(char top, char bot, char *txt)
+void
+DispHelp(char top, char bot, char *txt)
 {
-   int i,pl=0;
-   i=0;
-   
-   while (i++<top) {
-      if (txt[i*42]==(char) 0xcc) grSetColor(txt[i*42+1]);
-      }
-   i=top;
-   RectFill(38,49,260,127,3);
-   while (i<=bot && pl<11) {
-      if (txt[i*42]==(char)0xCC) {
-	 grSetColor(txt[i*42+1]);
-	 PrintAt(45,55+7*pl,&txt[i*42+2]);
-	 }     
-      else {
-	 PrintAt(45,55+7*pl,&txt[i*42]);
-	 }
-      pl++;i++;
-      }
-   
-   return;
+	int i, pl = 0;
+
+	i = 0;
+
+	while (i++ < top)
+	{
+		if (txt[i * 42] == (char) 0xcc)
+			grSetColor(txt[i * 42 + 1]);
+	}
+	i = top;
+	RectFill(38, 49, 260, 127, 3);
+	while (i <= bot && pl < 11)
+	{
+		if (txt[i * 42] == (char) 0xCC)
+		{
+			grSetColor(txt[i * 42 + 1]);
+			PrintAt(45, 55 + 7 * pl, &txt[i * 42 + 2]);
+		}
+		else
+		{
+			PrintAt(45, 55 + 7 * pl, &txt[i * 42]);
+		}
+		pl++;
+		i++;
+	}
+
+	return;
 }
 
 int Help(char *FName)
@@ -523,6 +531,7 @@ int Help(char *FName)
   key=0;
   GV(&local,250,128);
   gxGetImage(&local,34,32,283,159,0);
+  av_need_update_xy(34,32,283,159);
 
   ShBox(34,32,283,159);
   InBox(37,35,279,45); InBox(37,48,261,128);
@@ -547,6 +556,7 @@ int Help(char *FName)
   PrintAt(157-fsize*3,42,&NTxt[2]);
   top=plc=1;
   DispHelp(plc,bot-1,&NTxt[0]);
+  av_sync();
 
 	WaitForMouseUp();
   i=2;

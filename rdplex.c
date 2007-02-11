@@ -407,35 +407,24 @@ char RD(char plr)
 	    WaitForMouseUp();
       };
     };
+    gr_maybe_sync();
   };
 }
 
 void ManSel(int mm)
 {
-  
-  switch(mm)
-  {
-   case 0: InBox(165,157,185,175);  OutBox(191,157,211,175);
-	   OutBox(217,157,237,175); OutBox(243,157,263,175);
-	   OutBox(269,157,289,175); OutBox(295,157,315,175);break;
-   case 1: OutBox(165,157,185,175); InBox(191,157,211,175);
-	   OutBox(217,157,237,175); OutBox(243,157,263,175);
-	   OutBox(269,157,289,175); OutBox(295,157,315,175);break;
-   case 2: OutBox(165,157,185,175); OutBox(191,157,211,175);
-	   InBox(217,157,237,175);  OutBox(243,157,263,175);
-	   OutBox(269,157,289,175); OutBox(295,157,315,175);break;
-   case 3: OutBox(165,157,185,175); OutBox(191,157,211,175);
-	   OutBox(217,157,237,175); InBox(243,157,263,175);
-	   OutBox(269,157,289,175); OutBox(295,157,315,175);break;
-   case 4: OutBox(165,157,185,175); OutBox(191,157,211,175);
-	   OutBox(217,157,237,175); OutBox(243,157,263,175);
-	   InBox(269,157,289,175);  OutBox(295,157,315,175);break;
-   case 5: OutBox(165,157,185,175); OutBox(191,157,211,175);
-	   OutBox(217,157,237,175); OutBox(243,157,263,175);
-	   OutBox(269,157,289,175); InBox(295,157,315,175);break;
-  };
-  
-  return;
+    int dx = 26;
+    int i;
+
+    for (i = 0; i < 6; ++i)
+    {
+        if (i == mm)
+            InBox(165+i*dx, 157, 185+i*dx, 175);
+        else
+            OutBox(165+i*dx, 157, 185+i*dx, 175);
+    }
+
+    av_need_update_xy(165, 157, 165+i*dx, 175);
 }
 
 char QUnit(char hwx,char unx,char plr)
