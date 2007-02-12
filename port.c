@@ -915,10 +915,6 @@ FILE *fin;
 long stable[55];
 ui16 Count,*bone;
 
-#ifdef __BIG_ENDIAN__
-int idx = 0; 
-#endif
-
   strcpy(IDT,"i043");strcpy(IKEY,"k043");
   bone=(ui16 *) buffer;
 

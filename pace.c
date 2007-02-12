@@ -153,11 +153,9 @@ RLED_img (void *src_raw, void *dest_raw, unsigned int src_size, int w, int h)
 	signed char *dest;
 	unsigned int used;
 	int count, val;
-	int i;
 	int total;
 	signed char buf[128 * 1024];
-	int row, col;
-	int from_idx;
+	int row;
 
 	dest = buf;
 
@@ -223,7 +221,7 @@ FadeOut(char wh,char *palx,int steps,int val,char mode)
 {
     int from = 0;
     int to = 256;
-    int preserve_unchanged = !!mode;
+
     if (wh == 0)
         to = val;
     else if (wh == 1)
