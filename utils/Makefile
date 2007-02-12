@@ -1,2 +1,14 @@
+CFLAGS += -O2 -I.. -Wall
+
+VPATH = ..
+
+.PHONY: all clean
+
+all: mkmovie mknews
+
+clean:
+	-rm *.o mkmovie mknews
+
 mkmovie : mkmovie.c
-	$(CC) mkmovie.c -o mkmovie
+
+mknews : mknews.o gamedata.o

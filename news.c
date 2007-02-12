@@ -375,7 +375,7 @@ DispNews(char plr, char *src, char *dest)
 }
 
 FILE *
-PreLoadAnim(char plr, char mode)
+PreLoadAnim(char plr, char bw)
 {
 	FILE *fp = NULL;
 
@@ -390,7 +390,7 @@ PreLoadAnim(char plr, char mode)
 	PrintAt(73, 68, "UPDATING NEWSCASTER ANIMATION");
 	grSetColor(11);
 	PrintAt(64, 81, "INSTALLING YOUR NEW");
-	if (mode == 1)
+	if (bw)
 		PrintAt(64, 90, "BLACK AND WHITE TV SET.");
 	else
 		PrintAt(64, 90, "COLOR TV SET.");
@@ -408,17 +408,18 @@ PreLoadAnim(char plr, char mode)
 		PrintAt(0, 0, "SOVIET NEWSCASTER");
 	}
 	FadeIn(2, pal, 10, 0, 0);
+    bw = !!bw;
 	if (plr == 1)
 	{
-		fp = LoadNewsAnim((mode == 0) ? 10 : 11, BUFFR_FRAMES, NULL);	//Angle
-		LoadNewsAnim((mode == 0) ? 6 : 7, BUFFR_FRAMES, fp);	//Closing
-		LoadNewsAnim((mode == 0) ? 4 : 5, BUFFR_FRAMES, fp);	//Opening
+		fp = LoadNewsAnim(10+bw, BUFFR_FRAMES, NULL);	//Angle
+		LoadNewsAnim(6+bw, BUFFR_FRAMES, fp);	//Closing
+		LoadNewsAnim(4+bw, BUFFR_FRAMES, fp);	//Opening
 	}
 	else
 	{
-		fp = LoadNewsAnim((mode == 0) ? 9 : 8, BUFFR_FRAMES, NULL);	//Angle
-		LoadNewsAnim((mode == 0) ? 3 : 2, BUFFR_FRAMES, fp);	//Closing
-		LoadNewsAnim((mode == 0) ? 1 : 0, BUFFR_FRAMES, fp);	//Opening
+		fp = LoadNewsAnim(9-bw, BUFFR_FRAMES, NULL);	//Angle
+		LoadNewsAnim(3-bw, BUFFR_FRAMES, fp);	//Closing
+		LoadNewsAnim(1-bw, BUFFR_FRAMES, fp);	//Opening
 	};
 	FadeOut(2, pal, 10, 0, 0);
 

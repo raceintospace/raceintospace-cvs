@@ -1,6 +1,7 @@
 #include "race.h"
 #include "mmfile.h"
 #include "int_types.h"
+#include "macros.h"
 #include "Buzz_inc.h"  /* need to get rid of this */
 #include <assert.h>
 #include <stdio.h>
@@ -9,10 +10,6 @@
 #include <vorbis/codec.h>
 #include <theora/theora.h>
 #include <SDL.h>
-
-#ifndef min
-#define min(a, b) (((a) <= (b)) ? (a) : (b))
-#endif
 
 /* return -1 on error, 0 on end of file, 1 on successful page read */
 static int
