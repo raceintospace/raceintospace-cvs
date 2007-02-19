@@ -19,7 +19,6 @@
 #include "externs.h"
 
 //extern char BudgetMods[3][6][10];
-extern int evflag;
 extern char AI[2];
 extern struct mStr Mis;
 

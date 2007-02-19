@@ -399,7 +399,7 @@ struct MisEval {
 };
 
 struct XFails {
-  i32 per;               // Failure Key number
+  int32_t per;               // Failure Key number
   int16_t code,val,xtra;     // Failure Codes
   int16_t fail;              // failure value ID
   char text[200];// Failure Text
@@ -410,17 +410,17 @@ struct AnimType {
   char OVL[4];
   char SD[2][4];         // Sound ID : Max 2
   int16_t w,h;
-  ui8 sPlay[2];// Frame to play the Sound
-  ui8 fNum;    // Number of frames
-  ui8 fLoop;   // Times to loop
-  ui8 cOff;    // Color offsets
-  ui8 cNum;    // Number of Colors
+  uint8_t sPlay[2];// Frame to play the Sound
+  uint8_t fNum;    // Number of frames
+  uint8_t fLoop;   // Times to loop
+  uint8_t cOff;    // Color offsets
+  uint8_t cNum;    // Number of Colors
   // char cPal[cNum];    // Placemarker for RGB Colors
 };
 
 struct BlockHead {
-  ui8 cType;   // Type of Compression
-  i32 fSize;            // Size of data frame
+  uint8_t cType;   // Type of Compression
+  int32_t fSize;            // Size of data frame
   // char aFrame[fSize];
 };
 
@@ -440,7 +440,7 @@ struct mStr {
        Lun,         // Lunar Mission
        mEq,           // Minimum Equipment
        mCrew;         // Useful for Morgans Code
-  ui8 mVab[2];       // Hardware Requirements
+  uint8_t mVab[2];       // Hardware Requirements
   char PCat[5],       // Prestige Category List
        LMAd;          // LM Addition Points
 };
@@ -448,7 +448,7 @@ struct mStr {
 struct MXM {
    char Code[8];
    int16_t  Qty;
-   i32 Offset[6];
+   int32_t Offset[6];
 };
 
 struct VInfo {char name[15],qty,ac,sf,dex,img;int16_t wt;};
@@ -558,7 +558,7 @@ typedef struct {
 
 typedef struct {
     char Name[15],Title[23];
-    ui16 time,date;
+    uint16_t time,date;
 } SFInfo;
 
 

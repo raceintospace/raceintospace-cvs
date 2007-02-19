@@ -27,7 +27,7 @@
 //****************************************************************
 
 #include "Buzz_inc.h"
-#include <getopt.h>
+#include "options.h"
 
 #ifdef CONFIG_MACOSX
 // SDL.h needs to be included here to replace the original main() with
@@ -108,277 +108,40 @@ static char BUZZ_DIR[32];
 void Plop(char plr,char mode);
 #endif
 
-void mikeCrearScreen(void)
-{
-  memset(screen,0x00,64000);
-}
-
-struct gamedat_file {
-	struct gamedat_file *next;
-	char *filename;
-	char *fullname;
-};
-
-struct gamedat_file *gamedat_files;
-
-void
-add_gamedat_files (char *dirname)
-{
-	DIR *dir;
-	struct dirent *dp;
-	char fullname[1000];
-	struct gamedat_file *gp;
-
-	if ((dir = opendir (dirname)) == NULL)
-		return;
-
-	while ((dp = readdir (dir)) != NULL) {
-		if (dp->d_name[0] == '.')
-			continue;
-
-		sprintf (fullname, "%s/%s", dirname, dp->d_name);
-
-		gp = xcalloc (1, sizeof *gp);
-
-		gp->filename = xstrdup (dp->d_name);
-		gp->fullname = xstrdup (fullname);
-
-		gp->next = gamedat_files;
-		gamedat_files = gp;
-	}
-
-	closedir (dir);
-}
-		
-
-void
-env_setup (void)
-{
-	char *alt_location;
-	FILE *f;
-	char buf[1000];
-	char keyword[1000], value[1000];
-	char dirname[1000];
-
-#if defined(__linux__) || defined(CONFIG_MACOSX)
-	char *home;
-
-	if ((home = getenv ("HOME")) == NULL) {
-		printf ("you must set your $HOME environment variable\n");
-		exit (EXIT_FAILURE);
-	}
-
-	sprintf (savedat_dir, "%s/.raceintospace", home);
-	if (mkdir (savedat_dir, 0777) < 0 && errno != EEXIST)
-    {
-		printf ("mkdir %s => %s\n", savedat_dir,
-			strerror (errno));
-    }
-
-	strcpy (cdrom_dir, "/usr/share/raceintospace/cdrom");
-	strcpy (music_dir, "/usr/share/raceintospace/music");
-	strcpy (movies_dir, "/usr/share/raceintospace/movies");
-
-#elif _WIN32
-	mkdir ("c:/raceintospace");
-	strcpy (savedat_dir, "c:/raceintospace/savedat");
-	if (mkdir (savedat_dir) < 0) {
-		printf ("mkdir %s => %s\n", savedat_dir,
-			strerror (errno));
-	}
-
-	strcpy (cdrom_dir, "c:/raceintospace/cdrom");
-	strcpy (music_dir, "c:/raceintospace/music");
-	strcpy (movies_dir, "c:/raceintospace/movies");
-#else
-#error "unknown os"
-#endif
-
-
-	if ((f = open_savedat ("CONFIG", "r")) != NULL) {
-		while (fgets (buf, sizeof buf, f) != NULL) {
-			if (sscanf (buf, "%s %s", keyword, value) != 2)
-				continue;
-			if (keyword[0] == '#')
-				continue;
-
-			if (xstrcasecmp (keyword, "cdrom") == 0) {
-				strcpy (cdrom_dir, value);
-			} else if (xstrcasecmp (keyword, "music") == 0) {
-				strcpy (music_dir, value);
-			} else if (xstrcasecmp (keyword, "movies") == 0) {
-				strcpy (movies_dir, value);
-			} else {
-				printf ("unknown keyword \"%s\" in config file\n", keyword);
-			}
-		}
-		fclose (f);
-	}
-
-	sprintf (dirname, "%s/gamedat", cdrom_dir);
-	add_gamedat_files (dirname);
-
-	sprintf (dirname, "%s/GAMEDAT", cdrom_dir);
-	add_gamedat_files (dirname);
-
-	sprintf (dirname, "%s/rom", cdrom_dir);
-	add_gamedat_files (dirname);
-
-	sprintf (dirname, "%s/ROM", cdrom_dir);
-	add_gamedat_files (dirname);
-
-	sprintf (dirname, "%s/rom/audio", cdrom_dir);
-	add_gamedat_files (dirname);
-
-	sprintf (dirname, "%s/ROM/AUDIO", cdrom_dir);
-	add_gamedat_files (dirname);
-
-	// If BARIS_ROOT is an environment variable then use that to find game data
-	if ((alt_location = getenv("BARIS_ROOT")) != NULL)
-	{
-		sprintf (dirname, "%s/GAMEDAT", alt_location);
-		add_gamedat_files (dirname);
-
-		sprintf (dirname, "%s/ROM", alt_location);
-		add_gamedat_files (dirname);
-
-		sprintf (dirname, "%s/ROM/AUDIO", alt_location);
-		add_gamedat_files (dirname);
-	}
-
-	if ((f = open_gamedat ("USA_PORT.DAT")) == NULL) {
-		fprintf (stderr, "can't open game data files... expected CDROM at \"%s\"\n",
-			 cdrom_dir);
-		exit (1);
-	}
-	fclose (f);
-}
-
-FILE *
-open_savedat (char *name, char *mode)
-{
-	char fullname[1000];
-	FILE *f;
-
-	sprintf (fullname, "%s/%s", savedat_dir, name);
-
-	f = fopen (fullname, mode);
-
-	printf ("open_savedat(\"%s\",\"%s\") => %s\n",
-		fullname, mode,
-		f ? "success" : "can't open");
-
-	return (f);
-}
-
-void
-remove_savedat(char *fName)
-{
-	char fullname[1000];
-
-	sprintf (fullname, "%s/%s", savedat_dir, fName);
-	remove (fullname);
-}
-
-
-FILE *
-open_gamedat (char *raw_name)
-{
-	char cooked_name[1000];
-	FILE *f;
-	struct gamedat_file *gp;
-	char *p;
-
-	strcpy (cooked_name, raw_name);
-	for (p = cooked_name; *p; p++) {
-		if (*p == '#')
-			*p = '_';
-	}
-
-	for (gp = gamedat_files; gp; gp = gp->next) {
-		if (xstrcasecmp (gp->filename, cooked_name) == 0) {
-			f = fopen (gp->fullname, "rb");
-
-			printf ("open_gamedat (\"%s\") => %s\n",
-				gp->fullname,
-				f ? "success" : "can't open");
-
-			return (f);
-		}
-	}
-
-	printf ("open_gamedat: can't find %s\n", raw_name);
-	return (NULL);
-}
-		
-/////////////////////////////////////////////////
-//
-//
-//  loc == 0 for FIND_FILE
-//         1 for SAVEDAT DIR
-//
-FILE * sOpen(char *Name,char *mode,int loc)
-{
-   if (loc==0) 
-	   return open_gamedat(Name);
-
-   return open_savedat (Name,mode);
-}
-
-void
-usage (int fail)
-{
-	fprintf (stderr, "usage: raceintospace [-i] [-n] [-a] [-f]\n");
-	exit ((fail) ? EXIT_FAILURE : EXIT_SUCCESS);
-}
-
 int main(int argc, char *argv[])
 {
-  int i,cdstat,want_audio = 1, want_fading = 1;
+  int i,cdstat;
   FILE *fin;
-  int c;
 
   char AName[6][22]={"NEW GAME","OLD GAME","MODEM","PLAY BY MAIL","CREDITS","EXIT TO DOS"};
   char ex;
 
-  while ((c = getopt (argc, argv, "haifn")) != EOF) {
-	  switch (c) {
-	  case 'h':
-		  usage(0);
-		  break;
-	  case 'a':
-		  want_audio = 0;
-		  break;
-	  case 'f':
-		  want_fading = 0;
-		  break;
-	  case 'n':
-		  never_fail = 1;
-		  break;
-	  case 'i':
-		  show_intro_flag = 1;
-		  break;
-	  default:
-		  usage (1);
-	  }
+  argc = setup_options(argc, argv);
+
+  fin = open_gamedat("USA_PORT.DAT");
+  if (fin == NULL)
+  {
+      /* ERROR */ fprintf(stderr,
+              "can't find gamedat files!\n"
+              "try setting BARIS_DATA to gamedata directory.\n");
+      exit(EXIT_FAILURE);
+  }
+  fclose(fin);
+
+  if (create_save_dir() != 0)
+  {
+      /* ERROR */ fprintf(stderr,
+              "can't create save directory %s - %s\n"
+              "try setting BARIS_SAVE to some writable location.\n",
+              options.dir_savegame, strerror(errno));
+      exit(EXIT_FAILURE);
   }
 
-  env_setup ();
-  av_setup (want_audio, want_fading);
-
-#ifdef DEAD_CODE
-  memset(BUZZ_DIR,0x00,32);
-  getcwd(BUZZ_DIR,32);
-  FadeVal = 10;
-#endif
-
-  hDISK=getdisk();
+  av_setup();
 
   strcpy(IDT,"i000\0");  strcpy(IKEY,"k000\0");
 
   LOAD=QUIT=0;
-
-//  screen = xmalloc(128 * 1024);
 
   xMODE=0;
 
@@ -387,12 +150,13 @@ int main(int argc, char *argv[])
   Data = xmalloc(sizeof (struct Players) + 1);
   buffer = xmalloc(BUFFER_SIZE);
 
-  printf ("main buffer %p (%d)\n", buffer, BUFFER_SIZE);
+  /* DEBUG */ //printf ("main buffer %p (%d)\n", buffer, BUFFER_SIZE);
 
   memset(buffer,0x00,BUFFER_SIZE);
 
   OpenEmUp();                   // OPEN SCREEN AND SETUP GOODIES
-  Introd();
+  if (options.want_intro)
+      Introd();
 
   ex=0;
   while(ex==0) {
@@ -415,7 +179,7 @@ int main(int argc, char *argv[])
       CloseEmUp(0,0);
     }
 
-    mikeCrearScreen();
+    gxClearDisplay(0,0);
     PortPal(0);
     key=0;strcpy(IDT,"i000\0");strcpy(IKEY,"i000\0");
     df=1;
@@ -453,7 +217,7 @@ tommy:
           else AI[1]=0;
 	      InitData();                   // PICK EVENT CARDS N STUFF
 	      MainLoop();                   // PLAY GAME
-        mikeCrearScreen();
+            gxClearDisplay(0,0);
 
          //PreLoadMusic(M_LIFTOFF);
          //PlayMusic(1);
@@ -475,7 +239,7 @@ tommy:
           }
          else if (!QUIT) FadeOut(2,pal,10,0,0);
          QUIT=0;
-         mikeCrearScreen();
+        gxClearDisplay(0,0);
          //PreLoadMusic(M_LIFTOFF);
          //PlayMusic(1);
 	      break;
@@ -549,13 +313,6 @@ int CheckIfMissionGo(char plr,char launchIdx)
   return 1;
 }
 
-void oclose(int fil)
-{
- close(fil);
- return;
-}
-
-
 void InitData(void)
 {
   int i,j;
@@ -567,7 +324,6 @@ void InitData(void)
       Data->P[j].PresRev[i]=8;
   return;
 }
-
 
 void MainLoop(void)
 {
@@ -650,7 +406,7 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
        Master(plr[i]);                // PLAY TURN
        //restore sound
 //       SetVoiceVolume(115);
-       mikeCrearScreen();
+        gxClearDisplay(0,0);
        IDLE[plr[i]]++;
        if (LOAD==1) goto restart;     // TEST FOR LOAD
      } else {
@@ -758,7 +514,6 @@ for (i = 0; i < kik; i++)
     } else Data->Season++;
   };
   FadeOut(2,pal,10,0,0);
-    mikeCrearScreen();
   Museum(0);
   Museum(1);
   return;
@@ -884,7 +639,7 @@ void WaitForMouseUp(void)
 void WaitForKeyOrMouseDown(void) 
 {
 	// Wait for mouse and key to be up
-	while (mousebuttons==0 || key==0) 
+	while (mousebuttons==0 && key==0) 
 		GetMouse();
 }
 
@@ -907,15 +662,13 @@ void PrintAt(int x,int y,char *s)
   if (strlen(s) > 100) return;
   for(i=0;i<(int)strlen(s);i++)
     DispChr(s[i]);
+  av_need_update_xy(x, y-15, x+i*15, y);
   return;
 }
 
 void PrintAtKey(int x,int y,char *s,char val)
 {
-  short i;
-  if (x!=0 && y!=0) grMoveTo(x,y);
-  for(i=0;i<(int)strlen(s);i++)
-    DispChr(s[i]);
+  PrintAt(x, y, s);
   grMoveTo(x,y);grSetColor(9);
   DispChr(s[val]);
   return;
@@ -1054,12 +807,14 @@ void InBox(int x1,int y1,int x2,int y2)
 {
   grSetColor(2);  grMoveTo(x1,y2);  grLineTo(x2,y2);  grLineTo(x2,y1);
   grSetColor(4);  grLineTo(x1,y1);  grLineTo(x1,y2);
+  av_need_update_xy(x1, y1, x2, y2);
 }
 
 void OutBox(int x1,int y1,int x2,int y2)
 {
   grSetColor(4);  grMoveTo(x1,y2); grLineTo(x2,y2);  grLineTo(x2,y1);
   grSetColor(2);  grMoveTo(x2-1,y1); grLineTo(x1,y1);  grLineTo(x1,y2-1);
+  av_need_update_xy(x1, y1, x2, y2);
 }
 
 void IOBox(int x1, int y1, int x2, int y2)

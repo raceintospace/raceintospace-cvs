@@ -3,15 +3,11 @@
 #include "assert.h"
 #include "pace.h"
 #include "av.h"
-
-char cdrom_dir[1000];
-char savedat_dir[1000];
-char music_dir[1000];
-char movies_dir[1000];
+#include "options.h"
 
 extern GXHEADER vhptr;
 
-void frm_init (void);
+void seq_init (void);
 
 char
 DoModem(int sel)
@@ -28,48 +24,13 @@ MPrefs(char mode)
 
 struct Prest_Upd MP[3];
 
-
 int put_serial(unsigned char n) {return 0;}
 void MesCenter(void){}
-
-
-
-
 
 int
 AquireDrive (void)
 {
 	return 'K' - 'A';
-}
-
-int
-getdisk (void) 
-{
-	return ('C' - 'A');
-}
-
-char *
-slurp_gamedat (char *name)
-{
-	FILE *f;
-	ssize_t len;
-	char *p = NULL;
-    size_t buflen = 0;
-
-	if (NULL == (f = open_gamedat (name)))
-        return NULL;
-
-    len = fread_dyn(&p, &buflen, f); 
-
-    if (len < 0)
-    {
-        perror("slurp_gamedat");
-        exit(EXIT_FAILURE);
-    }
-
-	fclose (f);
-
-	return (p);
 }
 
 char *letter_dat;
@@ -79,7 +40,7 @@ OpenEmUp(void)
 {
 	srand(clock());
 
-	frm_init ();
+	seq_init ();
 
 	GV(&vhptr,320,200);     // Allocate only Virtual Buffer
 
@@ -303,58 +264,8 @@ biostime (int a, long b)
 void
 StopAudio(char mode) 
 {
+    av_silence(AV_SOUND_CHANNEL);
 }
-
-void
-getcurdir (int drive, char *buf)
-{
-	getcwd (buf, 100);
-}
-
-static DIR *f_dir;
-
-
-int
-first_saved_game (struct ffblk *ffblk)
-{
-	if (f_dir) {
-		closedir (f_dir);
-		f_dir = NULL;
-	}
-
-	if ((f_dir = opendir (savedat_dir)) == NULL)
-		return (1);
-
-	return (next_saved_game (ffblk));
-}
-
-int
-next_saved_game (struct ffblk *ffblk)
-{
-	struct dirent *dp;
-	int len;
-
-	memset (ffblk, 0, sizeof *ffblk);
-
-	if (f_dir == NULL)
-		return (1);
-
-	while ((dp = readdir (f_dir)) != NULL) {
-		len = strlen (dp->d_name);
-		if (len < 4)
-			continue;
-		if (xstrncasecmp (dp->d_name + len - 4, ".SAV", 4) != 0)
-			continue;
-
-		strncpy (ffblk->ff_name, dp->d_name, sizeof ffblk->ff_name);
-		ffblk->ff_name[sizeof ffblk->ff_name - 1] = 0;
-
-		return (0);
-	}
-
-	return (1);
-}
-
 
 void
 CloseEmUp (unsigned char error,unsigned int value)
@@ -409,7 +320,7 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 struct tblinfo frm_tbl, frm_ftbl;
 
 void
-frm_init (void)
+seq_init (void)
 {
 	frm_read_tbl ("SEQ.KEY", &frm_tbl);
 	frm_read_tbl ("FSEQ.KEY", &frm_ftbl);
@@ -429,97 +340,6 @@ seq_filename (int seq, int mode)
 		return (NULL);
 
 	return (tp->strings[seq]);
-}
-
-struct frm *
-frm_open_seq (int seq, int mode)
-{
-	struct tblinfo *tp;
-	char filename[1000];
-
-	if (mode == 0)
-		tp = &frm_tbl;
-	else
-		tp = &frm_ftbl;
-
-	if (seq < 0 || seq >= tp->count)
-		return (NULL);
-
-	sprintf (filename, "%s/rom/%s.frm", cdrom_dir, tp->strings[seq]);
-	return (frm_open (filename));
-}
-
-struct frm *
-frm_open (char *filename)
-{
-	struct frm *frm;
-	FILE *fin;
-
-	printf ("frm_open(\"%s\")\n", filename);
-
-	if ((fin = fopen (filename, "rb")) == NULL)
-		return (NULL);
-
-	frm = xcalloc(1, sizeof *frm);
-
-	frm->fin = fin;
-	frm->next_frame_chunks = 8;
-	frm->frame_idx = 0;
-
-	return (frm);
-}
-		
-void
-frm_close (struct frm *frm)
-{
-	if (frm) {
-		if (frm->fin)
-			fclose (frm->fin);
-		free (frm);
-	}
-}
-
-int
-frm_get2 (struct frm *frm, void *pixels_arg, void *map)
-{
-	unsigned char raw[64 * 1024];
-	unsigned char pbuf[64 * 1024];
-	unsigned int n;
-	int val0, val1;
-	unsigned char *pixels;
-
-	n = frm->next_frame_chunks * 2048;
-
-	if (n == 0)
-		return (0);
-
-	if (n > sizeof raw)
-		return (-1);
-
-	fread (raw, 1, n, frm->fin);
-	val0 = raw[0] | (raw[1] << 8);
-	val1 = raw[2];
-
-	if (frm->next_frame_chunks == 8) {
-		if (frm->frame_idx == 0) {
-			frm->nframes = val0;
-			frm->frame_rate = raw[15998] | (raw[15999] << 8);
-			memcpy (frm->pal + 384, raw + 16000, 384);
-		}
-		pixels = raw;
-	} else {
-		int compressed_size = val0;
-		RLED (raw + 3, pbuf, compressed_size);
-		pixels = pbuf;
-	}
-
-	memcpy (pixels_arg, pixels, 160 * 100);
-	memcpy (map, frm->pal + 384, 384);
-			
-	frm->next_frame_chunks = val1;
-	frm->frame_idx++;
-
-	return (1);
 }
 
 void
@@ -557,7 +377,7 @@ idle_loop_secs (double secs)
 {
 	double start;
 
-	gr_sync ();
+	gr_maybe_sync ();
 
 	start = get_time ();
 
@@ -582,57 +402,76 @@ size_t soundbuf_size = 0;
 size_t soundbuf_used = 0;
 struct audio_chunk news_chunk;
 	
-void
-soundbuf_alloc(size_t size)
+ssize_t
+load_audio_file(const char *name, char **data, size_t *size)
 {
-	if (size > soundbuf_size)
-		soundbuf = xrealloc(soundbuf, soundbuf_size = size);
+    mm_file mf;
+    unsigned channels, rate;
+    const size_t def_size = 16 * 1024;
+    size_t offset = 0;
+    ssize_t read = 0;
+    double start = get_time();
+
+    assert(name);
+    assert(data);
+    assert(size);
+
+    if (mm_open_fp(&mf, sOpen(name, "rb", FT_AUDIO)) < 0)
+        return -1;
+
+    if (mm_audio_info(&mf, &channels, &rate) < 0)
+    {
+		/* WARN */ printf("no audio data in file %s\n", name);
+        mm_close(&mf);
+        return -1;
+    }
+
+	if (channels != 1 || rate != 11025)
+	{
+		/* WARN */ printf("file %s is not mono, 11025Hz\n", name);
+		mm_close(&mf);
+		return -1;
+	}
+
+    if (!*data)
+        *data = xmalloc(*size = def_size);
+
+	while (0 < (read = mm_decode_audio(&mf,
+						*data+offset, *size-offset)))
+	{
+		offset += read;
+		if (*size <= offset)
+			*data = xrealloc(*data, *size *= 2);
+	}
+
+    mm_close(&mf);
+
+    /* DEBUG */ fprintf(stderr, "load_audio_file(%s) took %5.4f sec.\n",
+            name, get_time() - start);
+
+    return offset;
 }
 
 void
 NGetVoice(char plr,char val)
 {
-	struct TM {
-		int32_t offset;
-		int32_t size;
-	} ABSnd;
+    char fname[100];
+    ssize_t bytes = 0;
 
-	FILE *mvfile;
-
-	printf ("**** NGetVoice(%d,%d)\n", plr, val);
-
-	if (VoiceOff!=-1) KillVoice();
-	VoiceOff=val;
-
-	mvfile = sOpen( (plr==0) ? "UNEWS.CDR" : "SNEWS.CDR" ,"rb",0);
-	if (mvfile==NULL) {VoiceOff=-1;return;}  // file not here
-
-	fseek(mvfile,val*(sizeof ABSnd),SEEK_SET);
-	fread(&ABSnd,sizeof ABSnd,1,mvfile);
-	
-	Swap32bit(ABSnd.offset);
-	Swap32bit(ABSnd.size);
-
-	fseek(mvfile,ABSnd.offset,SEEK_SET);
-
-	printf ("offset %d; size %d\n", ABSnd.offset, ABSnd.size);
-
-	soundbuf_alloc (ABSnd.size);
-
-	fseek (mvfile, ABSnd.offset, SEEK_SET);
-	fread (soundbuf, 1, ABSnd.size, mvfile);
-
-	fclose (mvfile);
-
-	soundbuf_used = ABSnd.size;
+    sprintf(fname, "%s_%03d.ogg", (plr ? "sov" : "usa"), val);
+    bytes = load_audio_file(fname, &soundbuf, &soundbuf_size);
+    soundbuf_used = (bytes > 0) ? bytes : 0;
 }
 
 void
 PlayVoice (void)
 {
+    if (!soundbuf_used)
+        return;
 	news_chunk.data = soundbuf;
 	news_chunk.size = soundbuf_used;
-	play (&news_chunk, AV_SOUND_CHANNEL);
+	news_chunk.next = NULL;
+	play(&news_chunk, AV_SOUND_CHANNEL);
 }
 
 void
@@ -650,28 +489,9 @@ StopVoice (void)
 void
 PlayAudio(char *name, char mode)
 {
-	FILE* file;
-    int size = 16 * 1024;
-    int total = 0;
-    int bytes = 0;
-
-	printf ("PlayAudio(%s)\n", name);
-	file = open_gamedat(name);
-	if (!file)
-		return;
-
-    av_silence(AV_SOUND_CHANNEL);
-
-    do {
-        soundbuf_alloc (size+total);
-        bytes = fread(soundbuf+total, 1, size, file);
-        total += bytes;
-    } while (bytes);
-
-	fclose (file);
-
-	soundbuf_used = total;
-
+    ssize_t bytes = 0;
+    bytes = load_audio_file(name, &soundbuf, &soundbuf_size);
+    soundbuf_used = (bytes > 0) ? bytes : 0;
 	PlayVoice();
 }
 
@@ -690,39 +510,13 @@ getch (void)
 void
 play_audio (int sidx, int mode)
 {
-	char *raw_name;
 	char filename[1000];
-	FILE *f;
 	ssize_t size;
 
-	if ((raw_name = seq_filename (sidx, mode)) == NULL) {
-		printf ("can't find audio file for %d,%d\n",
-			sidx, mode);
-		return;
-	}
-
-	sprintf (filename, "%s.raw", raw_name);
-
-	printf ("play %s\n", filename);
-
-	if ((f = open_gamedat (filename)) == NULL) {
-		printf ("can't open sound %d,%d: %s\n", 
-			sidx, mode, filename);
-		return;
-	}
-
-    size = fread_dyn(&soundbuf, &soundbuf_size, f);
-    if (size < 0)
-    {
-        perror("play_audio");
-        exit(EXIT_FAILURE);
-    }
-
-	fclose (f);
-
-	soundbuf_used = size;
-
-	PlayVoice ();
+    sprintf(filename, "%s.ogg", seq_filename(sidx,mode));
+    size = load_audio_file(filename, &soundbuf, &soundbuf_size);
+	soundbuf_used = (size > 0) ? size : 0;
+    PlayVoice ();
 }
 
 void *
@@ -800,7 +594,7 @@ fread_dyn(char **destp, size_t *n, FILE *stream)
         total += cnt;
 
         if (*n <= total)
-            *destp = xrealloc(*destp, *n += bsize);
+            *destp = xrealloc(*destp, *n *= 2);
     }
 }
 

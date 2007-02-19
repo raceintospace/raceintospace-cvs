@@ -50,8 +50,11 @@ void DrawPrefs(int where,char a1,char a2)
   ShBox(0,0,319,22);ShBox(0,24,89,199);
   ShBox(91,24,228,107);
   IOBox(98,28,137,63);IOBox(98,68,137,103);
-  IOBox(144,28,221,63);IOBox(144,68,221,103);
-  
+  IOBox(144,28,221,63);
+  /* This draws disabled button around camera */
+  /* IOBox(144,68,221,103); */
+  InBox(144,68,221,103);
+
   ShBox(91,109,228,199);InBox(95,113,224,195);RectFill(96,114,223,194,0);
   ShBox(230,24,319,199);
 
@@ -110,9 +113,9 @@ void DrawPrefs(int where,char a1,char a2)
   HModel(Data->Def.Input,1);
 
   
-  if (where==0 || where==2) 
-  FadeIn(2,pal,10,0,0);
   PlayMusic(0);
+  // if (where==0 || where==2) 
+  FadeIn(2,pal,10,0,0);
   return;
 }
 
@@ -365,12 +368,15 @@ long size;
       else
       if ((x>=146 && y>=70 && x<=219 && y<=101 && mousebuttons>0) || key=='A')
        {
+		   /* disable this option right now */
+#if 0
 	     InBox(146,70,219,101);
 	     WaitForMouseUp();
 	     Data->Def.Anim=abs(Data->Def.Anim-1);
 	     gxVirtualDisplay(&vhptr,72*(Data->Def.Anim),90,147,71,218,100,0);
 	     OutBox(146,70,219,101);
 	     /* Anim Level */
+#endif
        }
       else
       if ((x>=100 && y>=30 && x<=135 && y<=61 && mousebuttons>0) || key=='M')
@@ -1046,178 +1052,298 @@ void EditAst(void)
   }
 }
 
-void ChangeStat(char mum,char Cur,char Cnt) // Cur holds current setting
+void
+ChangeStat(char mum, char Cur, char Cnt)	// Cur holds current setting
 {
- char tot,srt = 0,max,i,mxc,Save_Name[14];
+	char tot, srt = 0, max, i, mxc, Save_Name[14];
 
- memset(Save_Name,0x00,sizeof Save_Name);
- RectFill(210,130,307,142,3);
- RectFill(205,151,316,196,3);
- grSetColor(6);
- if (Cur==0)
-  {
-   PrintAt(231,138,"NAME CHANGE");InBox(209,155,308,169);
-   RectFill(210,156,307,168,0);
-   if (Cnt==0)
-    {
-     strcpy(Save_Name,Men[mum].Name);
-     memset(Men[mum].Name,0x00,sizeof Men[mum].Name);
-    }
-    else
-     if (Cnt==1)
-      {
-       strcpy(Save_Name,Sov[mum].Name);
-       memset(Sov[mum].Name,0x00,sizeof Sov[mum].Name);
-      }
-   grSetColor(1);grMoveTo(215,165);
-   key=0;i=0;
-   
-   while(!(key==K_ENTER || key==K_ESCAPE))
-	 {
-	  key = bioskey (0);
-	  if (key >= 'a' && key <= 'z')
-		  key = toupper (key);
-	  if (key&0x00ff)
+	memset(Save_Name, 0x00, sizeof Save_Name);
+	RectFill(210, 130, 307, 142, 3);
+	RectFill(205, 151, 316, 196, 3);
+	grSetColor(6);
+	if (Cur == 0)
+	{
+		PrintAt(231, 138, "NAME CHANGE");
+		InBox(209, 155, 308, 169);
+		RectFill(210, 156, 307, 168, 0);
+		if (Cnt == 0)
 		{
-		 if ((i<13) && ((key==' ') || ((key>='A' && key<='Z')) ||
-		   (key>='0' && key<='9')))
-			{  // valid key
-			 if (Cnt==0) 
-			   {
-			    Men[mum].Name[i++]=key;
-			    grSetColor(1);PrintAt(215,165,&Men[mum].Name[0]);
-			   }
-			  else 
-			   {
-			    Sov[mum].Name[i++]=key;
-			    grSetColor(1);PrintAt(215,165,&Sov[mum].Name[0]);
-			   }
-			 key=0;
-			}
-		if (i>0 && key==0x08)
-		   {
-			if (Cnt==0) Men[mum].Name[--i]=0x00;
-			  else Sov[mum].Name[--i]=0x00;
-			RectFill(210,156,307,168,0);
-			grSetColor(1);
-			if (Cnt==0) PrintAt(215,165,&Men[mum].Name[0]);
-			  else PrintAt(215,165,&Sov[mum].Name[0]);
-			key=0;
-		   }
-      if (key==K_ESCAPE)
-        {
-         if (Cnt==0) memset(Men[mum].Name,0x00,sizeof Men[mum].Name);
-          else memset(Sov[mum].Name,0x00,sizeof Sov[mum].Name);
-         i=0;
-         RectFill(210,156,307,168,0);
-			grSetColor(1);
-			if (Cnt==0) PrintAt(215,165,&Men[mum].Name[0]);
-			  else PrintAt(215,165,&Sov[mum].Name[0]);
-         key=0;
-        }
-
+			strcpy(Save_Name, Men[mum].Name);
+			memset(Men[mum].Name, 0x00, sizeof Men[mum].Name);
 		}
-	 } 
-   if (i==0) 
-    {
-     if (Cnt==0) strcpy(Men[mum].Name,Save_Name);
-      else strcpy(Sov[mum].Name,Save_Name);
-    }
-	DrawStats(mum,Cnt);RectFill(210,156,307,168,0);    
-   RectFill(210,130,307,142,3);RectFill(205,151,316,196,3);    
-   
-   return;
-  }
- else if (Cur>=1 && Cur<=5)
-   {
-    grSetColor(9);PrintAt(228,138,"SKILL CHANGE");
-    tot=0;
-    if (Cur!=1) 
-      {if (Cnt==0) tot+=Men[mum].Cap; else tot+=Sov[mum].Cap;}
-    if (Cur!=2) 
-      {if (Cnt==0) tot+=Men[mum].LM; else tot+=Sov[mum].LM;}
-    if (Cur!=3) 
-      {if (Cnt==0) tot+=Men[mum].EVA; else tot+=Sov[mum].EVA;}
-    if (Cur!=4) 
-      {if (Cnt==0) tot+=Men[mum].Docking; else tot+=Sov[mum].Docking;}
-    if (Cur!=5) 
-      {if (Cnt==0) tot+=Men[mum].Endurance; else tot+=Sov[mum].Endurance;}
-    switch(Cur)
-     {
-      case 1:if (Cnt==0) srt=Men[mum].Cap;else srt=Sov[mum].Cap;break;
-      case 2:if (Cnt==0) srt=Men[mum].LM;else srt=Sov[mum].LM;break;
-      case 3:if (Cnt==0) srt=Men[mum].EVA;else srt=Sov[mum].EVA;break;
-      case 4:if (Cnt==0) srt=Men[mum].Docking;else srt=Sov[mum].Docking;break;
-      case 5:if (Cnt==0) srt=Men[mum].Endurance;else srt=Sov[mum].Endurance;break;
-      default:break;
-     }
-    mxc=0;
-    if (Cnt==0) mxc=M_Us[mum];
-      else mxc=M_Sv[mum];
-    tot=mxc-tot;
-    InBox(209,151,241,161);InBox(247,151,270,161);InBox(276,151,308,161);
-    RectFill(248,152,269,160,0);grSetColor(9);
-	PrintAt(214,158,"MIN 0");PrintAt(281,158,"MAX");
-	if (strcmp(Men[97].Name,"VON BRAUN")==0) tot=4;
-	if (tot>=4) tot=4;
-	DispNum(302,158,tot);
-	max=tot;
-	grSetColor(1);DispNum(256,158,srt);
-	// plus minus goes here
-	IOBox(210,166,253,178);IOBox(265,166,308,178);IOBox(247,181,278,193);
-	grSetColor(1);
-	PrintAt(222,174,"PLUS");PrintAt(273,174,"MINUS");PrintAt(252,189,"DONE");
-    WaitForMouseUp();
-    while (1)
-      {
-	    key=0;GetMouse();
-     	 if ((x>=212 && y>=168 && x<=251 && y<=176 && srt<max && mousebuttons>0) || (key=='+' && srt<max))  
-	      {
-	       InBox(212,168,251,176);
-	       ++srt;RectFill(248,152,269,160,0);
-	       grSetColor(1);DispNum(256,158,srt);  
-	       delay(10);
-	       WaitForMouseUp();     
-	       OutBox(212,168,251,176);
-	      }
-	    if ((x>=267 && y>=168 && x<=306 && y<=176 && srt>=1 && mousebuttons>0) || (key=='-' && srt>=1))
-	      {
-	       InBox(267,168,306,176);
-	       --srt;RectFill(248,152,269,160,0);
-	       grSetColor(1);DispNum(256,158,srt);  
-	       delay(10);
-	       WaitForMouseUp();   
-	       OutBox(267,168,306,176);
-	      }
-	    if ((x>=249 && y>=183 && x<=276 && y<=191 && mousebuttons>0) || key==K_ENTER)
-	      {
-	       InBox(249,183,276,191);
-	       
-	       switch(Cur)
-	         {
-	          case 1:if (Cnt==0) Men[mum].Cap=srt;else Sov[mum].Cap=srt;break;
-	          case 2:if (Cnt==0) Men[mum].LM=srt;else Sov[mum].LM=srt;break;
-	          case 3:if (Cnt==0) Men[mum].EVA=srt;else Sov[mum].EVA=srt;break;
-	          case 4:if (Cnt==0) Men[mum].Docking=srt;else Sov[mum].Docking=srt;break;
-	          case 5:if (Cnt==0) Men[mum].Endurance=srt;else Sov[mum].Endurance=srt;break;
-	          default:break;
-	         }
-	       DrawStats(mum,Cnt);
-	       
-	       WaitForMouseUp();    
-	       OutBox(249,183,276,191);
-	       RectFill(210,156,307,168,0);    
-	       RectFill(210,130,307,142,3);       
-	       RectFill(205,151,316,196,3);
-          grSetColor(9);
-          PrintAt(13,132,"CAP");PrintAt(13,147,"L.M.");         
-          PrintAt(13,162,"EVA");PrintAt(13,177,"DOCK.");PrintAt(13,192,"ENDR.");             
-	       
-	       return;
-	      }
-       } 
-   } // end else-if
-  return;
+		else if (Cnt == 1)
+		{
+			strcpy(Save_Name, Sov[mum].Name);
+			memset(Sov[mum].Name, 0x00, sizeof Sov[mum].Name);
+		}
+		grSetColor(1);
+		grMoveTo(215, 165);
+		key = 0;
+		i = 0;
+
+		while (!(key == K_ENTER || key == K_ESCAPE))
+		{
+			gr_maybe_sync();
+			key = getch();
+			if (key >= 'a' && key <= 'z')
+				key = toupper(key);
+			if (key & 0x00ff)
+			{
+				if ((i < 13) && ((key == ' ') || ((key >= 'A' && key <= 'Z'))
+						|| (key >= '0' && key <= '9')))
+				{				   // valid key
+					if (Cnt == 0)
+					{
+						Men[mum].Name[i++] = key;
+						grSetColor(1);
+						PrintAt(215, 165, &Men[mum].Name[0]);
+					}
+					else
+					{
+						Sov[mum].Name[i++] = key;
+						grSetColor(1);
+						PrintAt(215, 165, &Sov[mum].Name[0]);
+					}
+					key = 0;
+				}
+				if (i > 0 && key == 0x08)
+				{
+					if (Cnt == 0)
+						Men[mum].Name[--i] = 0x00;
+					else
+						Sov[mum].Name[--i] = 0x00;
+					RectFill(210, 156, 307, 168, 0);
+					grSetColor(1);
+					if (Cnt == 0)
+						PrintAt(215, 165, &Men[mum].Name[0]);
+					else
+						PrintAt(215, 165, &Sov[mum].Name[0]);
+					key = 0;
+				}
+				if (key == K_ESCAPE)
+				{
+					if (Cnt == 0)
+						memset(Men[mum].Name, 0x00, sizeof Men[mum].Name);
+					else
+						memset(Sov[mum].Name, 0x00, sizeof Sov[mum].Name);
+					i = 0;
+					RectFill(210, 156, 307, 168, 0);
+					grSetColor(1);
+					if (Cnt == 0)
+						PrintAt(215, 165, &Men[mum].Name[0]);
+					else
+						PrintAt(215, 165, &Sov[mum].Name[0]);
+					key = 0;
+				}
+
+			}
+		}
+		if (i == 0)
+		{
+			if (Cnt == 0)
+				strcpy(Men[mum].Name, Save_Name);
+			else
+				strcpy(Sov[mum].Name, Save_Name);
+		}
+		DrawStats(mum, Cnt);
+		RectFill(210, 156, 307, 168, 0);
+		RectFill(210, 130, 307, 142, 3);
+		RectFill(205, 151, 316, 196, 3);
+
+		return;
+	}
+	else if (Cur >= 1 && Cur <= 5)
+	{
+		grSetColor(9);
+		PrintAt(228, 138, "SKILL CHANGE");
+		tot = 0;
+		if (Cur != 1)
+		{
+			if (Cnt == 0)
+				tot += Men[mum].Cap;
+			else
+				tot += Sov[mum].Cap;
+		}
+		if (Cur != 2)
+		{
+			if (Cnt == 0)
+				tot += Men[mum].LM;
+			else
+				tot += Sov[mum].LM;
+		}
+		if (Cur != 3)
+		{
+			if (Cnt == 0)
+				tot += Men[mum].EVA;
+			else
+				tot += Sov[mum].EVA;
+		}
+		if (Cur != 4)
+		{
+			if (Cnt == 0)
+				tot += Men[mum].Docking;
+			else
+				tot += Sov[mum].Docking;
+		}
+		if (Cur != 5)
+		{
+			if (Cnt == 0)
+				tot += Men[mum].Endurance;
+			else
+				tot += Sov[mum].Endurance;
+		}
+		switch (Cur)
+		{
+			case 1:
+				if (Cnt == 0)
+					srt = Men[mum].Cap;
+				else
+					srt = Sov[mum].Cap;
+				break;
+			case 2:
+				if (Cnt == 0)
+					srt = Men[mum].LM;
+				else
+					srt = Sov[mum].LM;
+				break;
+			case 3:
+				if (Cnt == 0)
+					srt = Men[mum].EVA;
+				else
+					srt = Sov[mum].EVA;
+				break;
+			case 4:
+				if (Cnt == 0)
+					srt = Men[mum].Docking;
+				else
+					srt = Sov[mum].Docking;
+				break;
+			case 5:
+				if (Cnt == 0)
+					srt = Men[mum].Endurance;
+				else
+					srt = Sov[mum].Endurance;
+				break;
+			default:
+				break;
+		}
+		mxc = 0;
+		if (Cnt == 0)
+			mxc = M_Us[mum];
+		else
+			mxc = M_Sv[mum];
+		tot = mxc - tot;
+		InBox(209, 151, 241, 161);
+		InBox(247, 151, 270, 161);
+		InBox(276, 151, 308, 161);
+		RectFill(248, 152, 269, 160, 0);
+		grSetColor(9);
+		PrintAt(214, 158, "MIN 0");
+		PrintAt(281, 158, "MAX");
+		if (strcmp(Men[97].Name, "VON BRAUN") == 0)
+			tot = 4;
+		if (tot >= 4)
+			tot = 4;
+		DispNum(302, 158, tot);
+		max = tot;
+		grSetColor(1);
+		DispNum(256, 158, srt);
+		// plus minus goes here
+		IOBox(210, 166, 253, 178);
+		IOBox(265, 166, 308, 178);
+		IOBox(247, 181, 278, 193);
+		grSetColor(1);
+		PrintAt(222, 174, "PLUS");
+		PrintAt(273, 174, "MINUS");
+		PrintAt(252, 189, "DONE");
+		WaitForMouseUp();
+		while (1)
+		{
+			key = 0;
+			GetMouse();
+			if ((x >= 212 && y >= 168 && x <= 251 && y <= 176 && srt < max
+					&& mousebuttons > 0) || (key == '+' && srt < max))
+			{
+				InBox(212, 168, 251, 176);
+				++srt;
+				RectFill(248, 152, 269, 160, 0);
+				grSetColor(1);
+				DispNum(256, 158, srt);
+				delay(10);
+				WaitForMouseUp();
+				OutBox(212, 168, 251, 176);
+			}
+			if ((x >= 267 && y >= 168 && x <= 306 && y <= 176 && srt >= 1
+					&& mousebuttons > 0) || (key == '-' && srt >= 1))
+			{
+				InBox(267, 168, 306, 176);
+				--srt;
+				RectFill(248, 152, 269, 160, 0);
+				grSetColor(1);
+				DispNum(256, 158, srt);
+				delay(10);
+				WaitForMouseUp();
+				OutBox(267, 168, 306, 176);
+			}
+			if ((x >= 249 && y >= 183 && x <= 276 && y <= 191
+					&& mousebuttons > 0) || key == K_ENTER)
+			{
+				InBox(249, 183, 276, 191);
+
+				switch (Cur)
+				{
+					case 1:
+						if (Cnt == 0)
+							Men[mum].Cap = srt;
+						else
+							Sov[mum].Cap = srt;
+						break;
+					case 2:
+						if (Cnt == 0)
+							Men[mum].LM = srt;
+						else
+							Sov[mum].LM = srt;
+						break;
+					case 3:
+						if (Cnt == 0)
+							Men[mum].EVA = srt;
+						else
+							Sov[mum].EVA = srt;
+						break;
+					case 4:
+						if (Cnt == 0)
+							Men[mum].Docking = srt;
+						else
+							Sov[mum].Docking = srt;
+						break;
+					case 5:
+						if (Cnt == 0)
+							Men[mum].Endurance = srt;
+						else
+							Sov[mum].Endurance = srt;
+						break;
+					default:
+						break;
+				}
+				DrawStats(mum, Cnt);
+
+				WaitForMouseUp();
+				OutBox(249, 183, 276, 191);
+				RectFill(210, 156, 307, 168, 0);
+				RectFill(210, 130, 307, 142, 3);
+				RectFill(205, 151, 316, 196, 3);
+				grSetColor(9);
+				PrintAt(13, 132, "CAP");
+				PrintAt(13, 147, "L.M.");
+				PrintAt(13, 162, "EVA");
+				PrintAt(13, 177, "DOCK.");
+				PrintAt(13, 192, "ENDR.");
+
+				return;
+			}
+		}
+	}							   // end else-if
+	return;
 }
 
 void DrawStats(char mum,char chce)

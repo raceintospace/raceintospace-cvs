@@ -9,7 +9,7 @@
 #define AV_SOUND_CHANNEL    0
 #define AV_MUSIC_CHANNEL    1
 #define AV_MIN_VOLUME       0
-#define AV_MAX_VOLUME       127
+#define AV_MAX_VOLUME       SDL_MIX_MAXVOLUME
 
 #define AV_FADE_IN          0
 #define AV_FADE_OUT         1
@@ -27,7 +27,7 @@
 
 extern void av_step (void);
 extern void av_block (void);
-extern void av_setup (int want_audio, int want_fading);
+extern void av_setup (void);
 extern void av_silence (int channel);
 extern void av_sync (void);
 
@@ -65,6 +65,8 @@ extern int av_mouse_pressed_latched;
 
 extern SDL_Overlay *video_overlay;
 extern SDL_Rect video_rect;
+extern SDL_Overlay *news_overlay;
+extern SDL_Rect news_rect;
 extern void av_need_update(SDL_Rect *r);
 extern void av_need_update_xy(int x1, int y1, int x2, int y2);
 

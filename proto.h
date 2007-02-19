@@ -15,6 +15,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+/* XXX clean this up */
+#include "mmfile.h"
+#include "data.h"
 // ***************************
 //   USEFUL AND RARE DEFINES
 // ***************************
@@ -381,8 +384,6 @@ void NextTurn(char plr);
 
 
 // MAIN.C
-FILE *sOpen(char *Name,char *mode,int loc);
-
 void Rout_Debug(int line, char *file);
 void RestoreDir(void);
 int main(int argc, char *argv[]);
@@ -522,8 +523,8 @@ void DeAlloc(BYTE Page);
 void AIEvent(char plr);
 char ResolveEvent(char plr);
 void Breakgrp(char plr);
-void PlayNewsAnim(FILE*);
-FILE* LoadNewsAnim(uint8_t Index,uint8_t Mode, FILE *fp);
+int PlayNewsAnim(mm_file *);
+mm_file *LoadNewsAnim(int plr, int bw, int type, int Mode, mm_file * fp);
 void ShowEvt(char plr,char crd);
 
 
@@ -567,7 +568,7 @@ void UpdatePortOverlays(void);
 void Master(char plr);
 void GetMse(char plr,char fon);
 void DoCycle(void);
-void PortOutLine(unsigned int Count,ui16 *buf,char mode);
+void PortOutLine(unsigned int Count,uint16_t *buf,char mode);
 void PortRestore(unsigned int Count);
 int MapKey(char plr,int key,int old) ;
 void Port(char plr);
@@ -802,14 +803,6 @@ char DoModem(int sel);
 void exit_program(void);
 void hangup(void);
 void modem_control_string(char *s);
-
-FILE *open_savedat (char *name, char *mode);
-
-void *xmalloc(size_t);
-void *xcalloc(size_t, size_t);
-char *xstrdup(char const *);
-void *xrealloc(void *ptr, size_t size);
-ssize_t fread_dyn(char **destp, size_t *n, FILE *stream);
 
 void save_game (char *filename);
 

@@ -97,14 +97,6 @@ typedef struct {
 #define sizeof_SimpleHdr (2+4)
 extern size_t fread_SimpleHdr(SimpleHdr *dst, size_t num, FILE *f);
 
-/* used in TOTNEWS.CDR */
-typedef struct {
-	uint32_t size;
-	uint32_t offset;
-} SimpleHdrW;
-
-#define sizeof_SimpleHdrW (4+4)
-extern size_t fread_SimpleHdrW(SimpleHdrW * dst, size_t num, FILE * f);
 /*
  * File: REPLAY.DAT
  * Desc: Contains indices to animation sequences of past player missions.

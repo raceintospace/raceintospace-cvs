@@ -4,11 +4,15 @@ target=i586-mingw32msvc
 build=i686-linux
 cross_tools=$HOME/cross-tools/$target
 export PATH="$cross_tools/bin:$PATH"
-exec ./configure --build=$build --host=$target --target=$target \
+exec ../configure --build=$build --host=$target --target=$target \
 	--with-sdl=$cross_tools --disable-sdltest \
 	--with-ogg=$cross_tools --disable-oggtest \
-	--with-voribis=$cross_tools --disable-vorbistest \
-	CFLAGS=-I$cross_tools/include \
-	CPPFLAGS=-I$cross_tools/include \
+	--with-vorbis=$cross_tools --disable-vorbistest \
+	CPPFLAGS="-I. -I.. -I- -I$cross_tools/include" \
 	LDFLAGS=-L$cross_tools/lib \
 	"$@"
+
+# -I- splits directory search path and turns off searching 
+# for includes in quotes "*.h" in directory of the preprocessed file.
+# It is required because cpp was reading the race.h from main source dir
+# instead of os_win32 dir.

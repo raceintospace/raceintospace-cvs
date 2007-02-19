@@ -30,23 +30,43 @@
 #include "externs.h"
 #include "macros.h"
 #include "av.h"
+#include "mmfile.h"
+static char *news_shots[] = { "angle", "opening", "closing" };
 
 double load_news_anim_start;
-
-static int totnews_offset;
 
 #define PHYS_PAGE_OFFSET  0x4000
 #define BUFFR_FRAMES 1
 #define FIRST_FRAME 0
+#define TOMS_BUGFIX 69
 
-int bufsize;
-int evflag, LOAD_US = 0, LOAD_SV = 0;
-int Frame;
-ui8 X_Offset, Y_Offset, Depth, Length, MaxFrame, AnimIndex;
+int evflag;
+static int bufsize, LOAD_US = 0, LOAD_SV = 0;
+static int Frame, MaxFrame, AnimIndex = 255;
+#ifdef DEAD_CODE
 ui16 handle0, handle1, handle2, handle3, handle4, handle5;
+#endif
 extern char Option;
 
 SimpleHdr table[99];
+
+enum news_type {
+    NEWS_ANGLE,
+    NEWS_OPENING,
+    NEWS_CLOSING
+};
+
+/* country, color, type */
+static int news_index[2][2][3] = {
+    { /* usa */
+        { 9, 1, 3 }, /* color */
+        { 8, 0, 2 }, /* b&w */
+    },
+    { /* soviet */
+        { 10, 4, 6 }, /* color */
+        { 11, 5, 7 }, /* b&w */
+    },
+};
 
 struct rNews
 {
@@ -184,7 +204,7 @@ OpenNews(char plr, char *buf, int bud)
 	}
 
 	//-----------------------------------------------------
-	//Specs: check tracking station for directors message | 
+	//Specs: check tracking station for directors message |
 	//-----------------------------------------------------
 #if 1
 	if (Option != -1)
@@ -374,6 +394,7 @@ DispNews(char plr, char *src, char *dest)
 	};
 }
 
+#ifdef DEAD_CODE
 FILE *
 PreLoadAnim(char plr, char bw)
 {
@@ -409,22 +430,14 @@ PreLoadAnim(char plr, char bw)
 	}
 	FadeIn(2, pal, 10, 0, 0);
     bw = !!bw;
-	if (plr == 1)
-	{
-		fp = LoadNewsAnim(10+bw, BUFFR_FRAMES, NULL);	//Angle
-		LoadNewsAnim(6+bw, BUFFR_FRAMES, fp);	//Closing
-		LoadNewsAnim(4+bw, BUFFR_FRAMES, fp);	//Opening
-	}
-	else
-	{
-		fp = LoadNewsAnim(9-bw, BUFFR_FRAMES, NULL);	//Angle
-		LoadNewsAnim(3-bw, BUFFR_FRAMES, fp);	//Closing
-		LoadNewsAnim(1-bw, BUFFR_FRAMES, fp);	//Opening
-	};
+    fp = LoadNewsAnim(plr, bw, NEWS_ANGLE, BUFFR_FRAMES, NULL);
+    LoadNewsAnim(plr, bw, NEWS_CLOSING, BUFFR_FRAMES, fp);
+    LoadNewsAnim(plr, bw, NEWS_OPENING, BUFFR_FRAMES, fp);
 	FadeOut(2, pal, 10, 0, 0);
 
 	return fp;
 }
+#endif
 
 void
 DrawNews(char plr)
@@ -521,6 +534,7 @@ DrawNText(char plr, char got)
 
 }
 
+
 void
 News(char plr)
 {
@@ -530,9 +544,15 @@ News(char plr)
 	ONEWS oNews;
 	char loc = 0;
 	ui8 Status = 0, BW = 0;
-	FILE *fp = NULL;
+    mm_file video_file, *fp = &video_file;
 	FILE *fout = NULL;
 
+    BW = (Data->Year <= 63);
+
+    memset(fp, 0, sizeof(*fp));
+
+#ifdef DEAD_CODE
+    /* no need to preload anims */
 	//: LOAD_US & LOAD_SV  0 None 1 B/W 2 Color
 	if (Data->Year <= 63)
 	{
@@ -576,10 +596,10 @@ News(char plr)
 		else
 			LOAD_SV = 2;
 	}
+#endif
 //  DrawNews(plr);
 	GoNews(plr);
 
-#if 1
 	if ((plr == 0 && LOAD_US == 0) || (plr == 1 && LOAD_SV == 0))
 	{
 
@@ -591,15 +611,15 @@ News(char plr)
 		DispBig(48 + (BW * 200), 63 - (4 * plr), &cYr[0], 0, -1);
 
 	};
-#endif
+
 	for (i = 0; i < (int) strlen(buffer); i++)
 		if (buffer[i] == 'x')
 			bline++;
 	bline -= 8;
 
-	// File Structure is 84 longs 42 per side 
+	// File Structure is 84 longs 42 per side
 
-	fout = sOpen("EVENT.TMP", "w+b", 1);
+	fout = sOpen("EVENT.TMP", "r+b", 1);
 	fseek(fout, 0, SEEK_END);
 	oNews.offset = ftell(fout);
 	oNews.size = (strlen(buffer));
@@ -607,14 +627,14 @@ News(char plr)
 	fseek(fout, (plr * 42 + Data->P[plr].eCount - 1) * (sizeof(struct oldNews)), SEEK_SET);
 	fwrite(&oNews, sizeof(struct oldNews), 1, fout);
 	fclose(fout);
+
+    /* XXX there is also M_NEW1950, why it is unused? */
 	PreLoadMusic(M_NEW1970);
 
 	PlayMusic(0);
 
-	if (plr == 1)
-		fp = LoadNewsAnim((BW == 0) ? 10 : 11, 69, fp);	// Tom's News kludge
-	else if (plr == 0)
-		fp = LoadNewsAnim((BW == 0) ? 9 : 8, 69, fp);	// search TCS001 to find code
+	/* Tom's News kludge, also open and load first anim */
+    fp = LoadNewsAnim(plr, BW, NEWS_ANGLE, TOMS_BUGFIX, fp);
 	loc = 1;
 	Status = 0;
 
@@ -632,12 +652,10 @@ News(char plr)
 			switch (loc)
 			{
 				case 0:		   //: Angle In
-					if (plr == 1)
-						LoadNewsAnim((BW == 0) ? 10 : 11, FIRST_FRAME, fp);
-					else if (plr == 0)
-						LoadNewsAnim((BW == 0) ? 9 : 8, FIRST_FRAME, fp);
-#if 1
-
+                    AnimIndex = 255;
+                    LoadNewsAnim(plr, BW, NEWS_ANGLE, FIRST_FRAME, fp);
+    /* TODO this is skipped as it will be overlaid by movie frame anyway */
+#if 0
 					sprintf(cYr, "%d", 1900 + Data->Year);
 					if (Data->Season == 1)
 						DispBig(42 + (BW * 200), 40 - (plr * 4), "FALL", 0, -1);
@@ -650,10 +668,7 @@ News(char plr)
 					loc++;
 					break;
 				case 1:		   //: Intro
-					if (plr == 1)
-						LoadNewsAnim((BW == 0) ? 4 : 5, FIRST_FRAME, fp);
-					else if (plr == 0)
-						LoadNewsAnim((BW == 0) ? 1 : 0, FIRST_FRAME, fp);
+                    LoadNewsAnim(plr, BW, NEWS_OPENING, FIRST_FRAME, fp);
 					Status = 0;
 					if (AnimIndex == 5)
 					{
@@ -661,31 +676,33 @@ News(char plr)
 						RectFill(227, 108, 228, 108, grGetPixel(227, 108));
 
 					}
-					PlayNewsAnim(fp);
-					PlayNewsAnim(fp);
-					PlayNewsAnim(fp);
-					PlayNewsAnim(fp);
 					NGetVoice(plr, 0);
+					PlayNewsAnim(fp);
+					PlayNewsAnim(fp);
+					PlayNewsAnim(fp);
+					PlayNewsAnim(fp);
 					PlayVoice();
 					loc++;
 					break;
 				case 2:		   //: Event (sound)
+					loc++;
+					if (IsChannelMute(AV_SOUND_CHANNEL))
+                    {
+                        /* if no sound then just skip event picture */
+						Status = 1;
+                        break;
+                    }
 					NGetVoice(plr, Data->Events[Data->Count] + 2);
 					PlayVoice();
 					Status = 0;
-					loc++;
-					if (IsChannelMute(AV_SOUND_CHANNEL))
-						Status = 1;	//no sound klugge(skip over event picture)
 					i = bline;
 					ShowEvt(plr, Data->Events[Data->Count]);
 					bline = i;
 					break;
 				case 3:		   //: Close
-					if (plr == 1)
-						LoadNewsAnim((BW == 0) ? 6 : 7, FIRST_FRAME, fp);
-					else if (plr == 0)
-						LoadNewsAnim((BW == 0) ? 3 : 2, FIRST_FRAME, fp);
+                    LoadNewsAnim(plr, BW, NEWS_CLOSING, FIRST_FRAME, fp);
 					Status = 0;
+					NGetVoice(plr, 1);
 					if (plr == 0)
 					{			   // This is done to sync with audio
 						PlayNewsAnim(fp);
@@ -694,20 +711,21 @@ News(char plr)
 						PlayNewsAnim(fp);
 						PlayNewsAnim(fp);
 					}
-					NGetVoice(plr, 1);
 					PlayVoice();
+                    /* the "mysterious" delay of soviet newscaster.
+                     * she is out of sync anyway... */
+#ifdef DEAD_CODE
 					if (plr == 1)
 					{
 						bzdelay(170);
 					};
+#endif
 					loc++;
 					break;
 				case 4:		   //: Angle Out
-					if (plr == 1)
-						LoadNewsAnim((BW == 0) ? 10 : 11, FIRST_FRAME, fp);
-					else if (plr == 0)
-						LoadNewsAnim((BW == 0) ? 9 : 8, FIRST_FRAME, fp);
-#if 1
+                    LoadNewsAnim(plr, BW, NEWS_ANGLE, FIRST_FRAME, fp);
+/* TODO this is skipped as it will be overlaid by movie frame anyway */
+#if 0
 
 					sprintf(cYr, "%d", 1900 + Data->Year);
 					if (Data->Season == 1)
@@ -742,16 +760,10 @@ News(char plr)
 					break;
 			};
 
-		if (Frame != MaxFrame)
-		{
-			PlayNewsAnim(fp);
-			if (Frame == MaxFrame)
-				Status = 1;
-		}
-		else
-		{
-			idle_loop_secs(.125);
-		}
+		if (loc != 3 && loc != 6 && !Status)
+            Status = PlayNewsAnim(fp);
+        else
+			idle_loop_secs(.05); /* was: .125 */
 
 		//: Repeat News Sequence
 		if (key == 'R' && loc == 6)
@@ -803,8 +815,8 @@ News(char plr)
 		}
 //   gr_sync ();
 	};
-	if (fp)
-		fclose(fp);
+    mm_close(fp);
+    news_rect.w = news_rect.h = 0;
 }
 
 void
@@ -868,7 +880,7 @@ Breakgrp(char plr)
 					{
 						for (i = 0; i < Data->P[j].Gcnt[k][l]; i++)
 						{
-							Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].oldAssign = 
+							Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].oldAssign =
 							  Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Assign;
 							Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Assign = 0;
 							Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Crew = 0;
@@ -886,62 +898,86 @@ Breakgrp(char plr)
 		};						   /* for k */
 }
 
-void
-PlayNewsAnim(FILE * fp)
+/* modified to return true if end of anim */
+int
+PlayNewsAnim(mm_file * fp)
 {
-	char *buf = NULL;
-	int readlen = 0;
-	GXHEADER local;
 	double delta;
-	int frames_realtime;
-	int skip_frame;
+	double fps = 15;			/* TODO hardcoded fps here! */
+	int skip_frame = 0;
 
-	skip_frame = 0;
+	if (Frame == MaxFrame)
+		return 1;
+
 	delta = get_time() - load_news_anim_start;
-	frames_realtime = delta * 15;
-	if (Frame < frames_realtime)
+	if (Frame < (int) (delta * fps))
 		skip_frame = 1;
 
-	GV(&local, Depth, Length);
+	if (mm_decode_video(fp, news_overlay) <= 0)
+	{
+		MaxFrame = Frame;
+		return 1;
+	}
+	screen_dirty = 1;
 
-	readlen = table[Frame % MaxFrame].size;
-	buf = malloc(readlen);
-	fseek(fp, table[Frame].offset + totnews_offset, SEEK_SET);
-	fread(buf, 1, readlen, fp);
-	RLED_img(buf, &local.vptr[0], readlen, Depth, Length);
-	free(buf);
+	/* TODO skipping frames should not use decode_video */
+	if (!skip_frame)
+	{
+		static double diff = 0;
+		double t1 = get_time(), to_sleep;
 
-	gxPutImage(&local, gxXOR, X_Offset, Y_Offset, 0);
-
-	DV(&local);
+		to_sleep = (Frame - delta * fps) / fps - diff;
+		idle_loop_secs(to_sleep);
+		diff = get_time() - t1 - to_sleep;
+		/* DEBUG2 *///printf("sleep % 4.3f, drift % 4.3f\n", to_sleep, diff);
+	}
 	Frame += 1;
 
-	if (skip_frame == 0)
-		idle_loop_secs(1 / 16.0);
-
-	return;
+	return 0;
 }
 
-FILE *
-LoadNewsAnim(ui8 Index, ui8 Mode, FILE * fp)
+static void
+DrawTopNewsBox(int player)
 {
-	GXHEADER local;
-	int aframe;
+	OutBox(0, 0, 319, 113);
+	grSetColor(3);
+	Box(1, 1, 318, 112);
+	Box(2, 2, 317, 111);
+	InBox(3, 3, 316, 110);
+	ShBox(240, 3, 316, 22);
+	RectFill(315, 20, 317, 21, 3);
+	RectFill(241, 2, 242, 4, 3);
+	IOBox(243, 3, 316, 19);
+	grSetColor(1);
+	PrintAt(258, 13, "CONTINUE");
+	av_need_update_xy(0, 0, 319, 113);
+}
+
+static void
+DrawBottomNewsBox(int player)
+{
+	ShBox(0, 115, 319, 199);
+	InBox(4, 118, 297, 196);
+	RectFill(5, 119, 296, 195, 7 + 3 * player);
+	InBox(301, 118, 315, 196);
+	RectFill(302, 119, 314, 195, 0);
+	ShBox(303, 120, 313, 156);
+	ShBox(303, 158, 313, 194);
+	UPArrow(305, 126);
+	DNArrow(305, 163);
+	DrawNText(player, 0);
+}
+
+mm_file *
+LoadNewsAnim(int plr, int bw, int type, int Mode, mm_file * fp)
+{
+    int Index = news_index[plr][bw][type];
+#ifdef DEAD_CODE
 	unsigned MAX = 0, TOT = 0;
+	int aframe;
+#endif
 
-	struct aCHART
-	{
-		ui8 frames;
-		ui8 x_off;
-		ui8 y_off;
-		ui8 width;
-		ui8 height;
-	} aChart;
-
-	SimpleHdrW hdr[12];
-
-	load_news_anim_start = get_time();
-
+#ifdef DEAD_CODE
 	if (Mode == 1)
 	{
 		switch (Index)
@@ -998,153 +1034,62 @@ LoadNewsAnim(ui8 Index, ui8 Mode, FILE * fp)
 				break;
 		}
 	};
+#endif
 
-	if (!fp)
-		fp = sOpen("TOTNEWS.CDR", "rb", 0);
-	fseek(fp, 0x00, SEEK_SET);
-	fread_SimpleHdrW(hdr, ARRAY_LENGTH(hdr), fp);
+    if (AnimIndex != Index)
+    {
+        char fname[100];
+        unsigned h, w;
 
-	totnews_offset = hdr[Index].offset;
+        mm_close(fp);
+        news_rect.w = news_rect.h = 0;
 
-	fseek(fp, hdr[Index].offset, SEEK_SET);
-	fread(&aChart, sizeof aChart, 1, fp);
-	fread_SimpleHdr(table, aChart.frames, fp);
-	fread(&pal[96], 1, 672, fp);
+        sprintf(fname, "%s_%s_%s.ogg",
+                plr ? "sov" : "usa",
+                bw  ? "bw"  : "col",
+                news_shots[type]);
 
+		/* XXX error checking */
+        mm_open_fp(fp, sOpen(fname, "rb", FT_VIDEO));
+
+        /* XXX we know fps anyway */
+        mm_video_info(fp, &w, &h, NULL);
+        news_rect.h = h;
+        news_rect.w = w;
+        news_rect.x = 4;
+        news_rect.y = 4;
+    }
 	Frame = 1;
 	AnimIndex = Index;
-	MaxFrame = aChart.frames;
-	X_Offset = aChart.x_off;
-	Y_Offset = aChart.y_off;
-	Depth = aChart.width;
-	Length = aChart.height;
+    MaxFrame = 0;
 
-	//Specs: calculate frames for allocation
-	aframe = hdr[Index].size / 16384L;
-	aframe += 2;				   //buffer between animations in EMS
-
-	if (Mode == 0)
+	// Specs: Display Single Frame
+	if (Mode == FIRST_FRAME)
 	{
-
-		RectFill(4, 4, 239, 109, 0);
-		RectFill(240, 23, 315, 109, 0);
-
-	};
-	if (Mode == 0)
-		if (Index == 9 || Index == 1 || Index == 3)
-		{
-
-			ShBox(240, 3, 316, 22);
-			RectFill(315, 20, 317, 21, 3);
-			RectFill(241, 2, 242, 4, 3);
-			IOBox(243, 3, 316, 19);
-			grSetColor(1);
-			PrintAt(258, 13, "CONTINUE");
-
-		};
-	//Specs: Display Single Frame
-	if (Mode == 0)
-	{
-		gxSetDisplayPalette(pal);
-		VBlank();
-		fseek(fp, table[0].offset + hdr[Index].offset, SEEK_SET);
-		fread(vhptr.vptr, table[0].size, 1, fp);
-		gxCreateVirtual(gxCMM, &vhptr2, gxVGA_13, 312, 106);
-		RLED_img(vhptr.vptr, vhptr2.vptr, table[0].size, vhptr2.w, vhptr2.h);
-		GV(&local, 80, 24);
-
-		gxGetImage(&local, 240, 0, 319, 23, 0);
-		gxPutImage(&vhptr2, gxSET, 4, 4, 0);
-		VBlank();
-		gxPutImage(&local, gxSET, 240, 0, 0);
-
-		gxDestroyVirtual(&vhptr2);
-		DV(&local);
-
+        /* XXX: error checking */
+        mm_decode_video(fp, news_overlay);
+        screen_dirty = 1;
 	};
 
-	if (Mode == 69)
-	{							   // *************** TCS001 my kludge (tom) 3/15/94
-
-		RectFill(0, 0, MAX_X - 1, MAX_Y - 1, 0);	// clears screen
-
-		//  RectFill(4,4,239,109,0);    //clears news anim space
-		//  RectFill(240,23,315,109,0);
-
-		gxSetDisplayPalette(pal);
+    // *************** TCS001 my kludge (tom) 3/15/94
+    if (Mode == TOMS_BUGFIX)
+	{
 		FadeOut(2, pal, 1, 0, 0);
 
-		// DrawNews() conv
-		gxClearDisplay(0, 0);	   // DrawNews() conv
-		memset(screen, 0xff, 320 * 113);	// DrawNews() conv
-		OutBox(0, 0, 319, 113);	   // DrawNews() conv
-		grSetColor(3);			   // DrawNews() conv
-		Box(1, 1, 318, 112);
-		Box(2, 2, 317, 111);	   // DrawNews() conv
-		InBox(3, 3, 316, 110);	   // DrawNews() conv
-		ShBox(240, 3, 316, 22);	   // DrawNews() conv
-		RectFill(315, 20, 317, 21, 3);	// DrawNews() conv
-		RectFill(241, 2, 242, 4, 3);	// DrawNews() conv
-		IOBox(243, 3, 316, 19);	   // DrawNews() conv
-		grSetColor(1);
-		PrintAt(258, 13, "CONTINUE");	// DrawNews() conv
-		ShBox(0, 115, 319, 199);   // DrawNews() conv
-		InBox(4, 118, 297, 196);   // DrawNews() conv
-		if (Index == 9 || Index == 8)
-			RectFill(5, 119, 296, 195, 7);	// If US
-		else
-			RectFill(5, 119, 296, 195, 10);	// else USSR
+		gxClearDisplay(0, 0);
+        DrawTopNewsBox(plr);
+        DrawBottomNewsBox(plr);
 
-		InBox(301, 118, 315, 196);
-		RectFill(302, 119, 314, 195, 0);	// DrawNews() conv
-		ShBox(303, 120, 313, 156);
-		ShBox(303, 158, 313, 194); // DrawNews() conv
-		UPArrow(305, 126);
-		DNArrow(305, 163);		   // DrawNews() conv
+        /* XXX: error checking */
+        mm_decode_video(fp, news_overlay);
+        screen_dirty = 1;
 
-		if (Index == 9 || Index == 8)
-			DrawNText(0, 0);	   // if US
-		else
-			DrawNText(1, 0);	   // else USSR      DRAWS THE TEXT
+        /* This fade was too long given current fades impl. */
+		FadeIn(2, pal, 10, 0, 0); /* was: 50 */
+	}
 
-		fseek(fp, table[0].offset + hdr[Index].offset, SEEK_SET);
-		fread(vhptr.vptr, table[0].size, 1, fp);
-		gxCreateVirtual(gxCMM, &vhptr2, gxVGA_13, 312, 106);
-		RLED_img(vhptr.vptr, vhptr2.vptr, table[0].size, vhptr2.w, vhptr2.h);
-		GV(&local, 80, 24);
-		gxGetImage(&local, 240, 0, 319, 23, 0);
-		gxPutImage(&local, gxSET, 240, 0, 0);
-		gxPutImage(&vhptr2, gxSET, 4, 4, 0);	// put under setpal
-		VBlank();
+    load_news_anim_start = get_time();
 
-		if (Index == 10 || Index == 11)	// Russian Whitespace in corner kludge
-		{
-			RectFill(240, 4, 315, 22, 0);	//clears news anim space
-			ShBox(240, 3, 316, 22);
-			RectFill(315, 20, 317, 21, 3);
-			RectFill(241, 2, 242, 4, 3);
-			IOBox(243, 3, 316, 19);
-			grSetColor(1);
-			PrintAt(258, 13, "CONTINUE");
-		}
-		else
-		{
-			ShBox(240, 3, 316, 22);
-			RectFill(315, 20, 317, 21, 3);
-			RectFill(241, 2, 242, 4, 3);
-			IOBox(243, 3, 316, 19);
-			grSetColor(1);
-			PrintAt(258, 13, "CONTINUE");
-		}
-
-		FadeIn(2, pal, 50, 0, 0);
-
-		gxDestroyVirtual(&vhptr2);
-		DV(&local);
-
-	}							   // end TCS kludge ************************************
-
-	//fclose(fp);
 	return fp;
 }
 
@@ -1152,12 +1097,8 @@ void
 ShowEvt(char plr, char crd)
 {
 	FILE *ffin;
-	size_t i;
-	struct mm
-	{
-		long off;
-		long size;
-	} MM;
+    uint32_t offset;
+    uint32_t length;
 
 	memset(&pal[96], 0, 672);
 	if (plr == 0)
@@ -1187,36 +1128,24 @@ ShowEvt(char plr, char crd)
 		}
 	}
 	ffin = sOpen("NEWS.CDR", "rb", 0);
-	if (ffin == NULL)
-		return;					   // file does not exist
-	fseek(ffin, (plr * 115 + crd) * (sizeof MM), SEEK_SET);
-	fread(&MM, sizeof MM, 1, ffin);
+	if (!ffin)
+		return;
+	fseek(ffin, (plr * 115 + crd) * 2 * sizeof(uint32_t), SEEK_SET);
+    fread_uint32_t(&offset, 1, ffin);
+    fread_uint32_t(&length, 1, ffin);
 
-	Swap32bit(MM.off);
-	Swap32bit(MM.size);
-
-	if (MM.off != 0)
+    /*
+     * This loop overwrites newscaster video frame, so we use hardcoded values for
+     * update rectangle offsets.
+     */
+	if (offset && length)
 	{
-        unsigned min_x = MAX_X, min_y = MAX_Y, max_x = 0, max_y = 0;
-
-		fseek(ffin, MM.off, SEEK_SET);
+		fseek(ffin, offset, SEEK_SET);
 		fread(&pal[384], 384, 1, ffin);
-		fread(vhptr.vptr, (size_t) MM.size, 1, ffin);
-
-		for (i = 0; i < (unsigned int) MM.size; i++)
-		{
-			if (screen[i] >= 32)
-            {
-				screen[i] = vhptr.vptr[i];
-                min_x = min(min_x, i % MAX_X);
-                min_y = min(min_y, i / MAX_X);
-                max_x = max(max_x, i % MAX_X);
-                max_y = max(max_y, i / MAX_X);
-            }
-		}
-        av_need_update_xy(min_x, min_y, max_x, max_y);
+		fread(screen, (size_t) min(length, MAX_X * 110), 1, ffin);
+        DrawTopNewsBox(plr);
 	}
-	VBlank();					   /* SetPal(pal); FIXME */
+    news_rect.w = news_rect.h = 0;
 
 	fclose(ffin);
 }

@@ -40,7 +40,7 @@ void Intel(char plr)
 
 	if (plr==1) {PreLoadMusic(M_INTELLEG);strncpy((char *)&IName[1],"KGB",3);}
   else PreLoadMusic(M_INTEL);
-  FadeOut(2,pal,10,0,0);
+  // FadeOut(2,pal,10,0,0);
   PlayMusic(0);
   beg=1;
 
@@ -58,6 +58,7 @@ void Intel(char plr)
         else PrintAt(166,197,"FALL 19");DispNum(0,0,Data->Year);
         grSetColor(11);if (Data->Season==0) PrintAt(165,196,"SPRING 19");
         else PrintAt(165,196,"FALL 19");DispNum(0,0,Data->Year);
+        FadeIn(2,pal,10,0,0);
         
      }
      strncpy(IDT,(plr==0) ?"i704":"i705",4);

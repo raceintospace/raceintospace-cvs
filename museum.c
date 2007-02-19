@@ -89,11 +89,11 @@ void Display_ARROW(char num,int x,int y)
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size)
   {
-      fprintf(stderr,
+      /* fprintf(stderr,
               "Display_ARROW(): w*h != size (%hhd*%hhd == %d != %hd)\n",
-              P.w, P.h, P.w*P.h, P.size);
+              P.w, P.h, P.w*P.h, P.size); */
       if ((P.w+1) * P.h == P.size) {
-          fprintf(stderr, "Display_ARROW(): P.w++ saves the day!\n");
+          /* fprintf(stderr, "Display_ARROW(): P.w++ saves the day!\n"); */
           P.w++;
           do_fix = 1;
       }
@@ -126,14 +126,13 @@ void Museum(char plr)
 
   AImg[3]+=plr;
   PreLoadMusic(M_THEME);
-  FadeOut(2,pal,10,0,0);
+  // FadeOut(2,pal,10,0,0);
   PlayMusic(1);
   beg=0;
 
   do {
      if (beg==0) beg=(Data->P[plr].AstroCount>0)? 7 : 6;  // mods for astros
      else {
-        
         FadeOut(2,pal,10,0,0);
 
         DrawSpaceport(plr);
@@ -146,6 +145,7 @@ void Museum(char plr)
         grSetColor(11);if (Data->Season==0) PrintAt(165,196,"SPRING 19");
         else PrintAt(165,196,"FALL 19");DispNum(0,0,Data->Year);
         
+        FadeIn(2,pal,10,0,0);
      }
 
 #if 0

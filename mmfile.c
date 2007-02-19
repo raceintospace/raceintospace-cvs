@@ -3,6 +3,7 @@
 #include "int_types.h"
 #include "macros.h"
 #include "Buzz_inc.h"  /* need to get rid of this */
+#include <math.h>
 #include <assert.h>
 #include <stdio.h>
 #include <limits.h>
@@ -10,6 +11,9 @@
 #include <vorbis/codec.h>
 #include <theora/theora.h>
 #include <SDL.h>
+
+/* need to fix this */
+#define xmalloc malloc
 
 /* return -1 on error, 0 on end of file, 1 on successful page read */
 static int
@@ -336,7 +340,7 @@ yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv,
 
 /* rval < 0: error, > 0: have audio or video */
 int
-mm_open(mm_file * mf, const char *fname)
+mm_open_fp(mm_file * mf, FILE *file)
 {
 	int retval = -1;
 	int res = 0;
@@ -345,10 +349,9 @@ mm_open(mm_file * mf, const char *fname)
 	ogg_page pg;
 
 	assert(mf);
-	assert(fname);
 	memset(mf, 0, sizeof(*mf));
 
-	mf->file = fopen(fname, "rb");
+	mf->file = file;
 	if (!mf->file)
 		return retval;
 	ogg_sync_init(&mf->sync);
@@ -373,6 +376,14 @@ mm_open(mm_file * mf, const char *fname)
   err:
 	mm_close(mf);
 	return retval;
+}
+
+int
+mm_open(mm_file * mf, const char *fname)
+{
+    assert(mf);
+    assert(fname);
+    return mm_open_fp(mf, fopen(fname, "rb"));
 }
 
 unsigned
@@ -438,7 +449,7 @@ mm_close(mm_file * mf)
 
 /* rval < 0: no video in file */
 int
-mm_video_info(const mm_file * mf, int *width, int *height, float *fps)
+mm_video_info(const mm_file * mf, unsigned *width, unsigned *height, float *fps)
 {
 	assert(mf);
 	if (!mf->video)
@@ -455,7 +466,7 @@ mm_video_info(const mm_file * mf, int *width, int *height, float *fps)
 
 /* rval < 0: no audio in file */
 int
-mm_audio_info(const mm_file * mf, int *channels, int *rate)
+mm_audio_info(const mm_file * mf, unsigned *channels, unsigned *rate)
 {
 	assert(mf);
 	if (!mf->audio)
@@ -537,7 +548,7 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 			/* conv floats to uint8_t */
 			for (i = 0; i < samples; ++i)
 			{
-				int val = ((mono[i] + 1) / 2) * UCHAR_MAX;
+				int val = roundf((mono[i] + 1.0) / 2.0 * UCHAR_MAX);
 
 				if (val > UCHAR_MAX)
 					val = UCHAR_MAX;

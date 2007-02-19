@@ -26,18 +26,15 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include <assert.h>
-
-#ifdef CONFIG_THEORA_VIDEO
 #include "mmfile.h"
 #include "av.h"
-#endif
 
 #ifdef DEADCODE
 
-#define FRM_Delay       25
+#define FRM_Delay		25
 
-#define STL_OFF         26715
-#define ANIM_PARTS      297
+#define STL_OFF			26715
+#define ANIM_PARTS		297
 
 extern char STEPnum, loc[4];
 extern struct MisEval Mev[60];
@@ -173,16 +170,9 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	struct Table table;
 	REPLAY Rep;
 
-#ifdef CONFIG_THEORA_VIDEO
 	mm_file vidfile;
-	char fname[1000];
 	float fps;
-#else
-	GXHEADER dopy, snzy;
-	struct frm *frm = NULL;
-	int update_map = 0;
-#endif
-
+	double last_time;
 	if (find_replay(&Rep, NULL, plr, num, Type) < 0)
 		return;
 
@@ -197,11 +187,6 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 			fclose(fseqf);
 		return;
 	}
-
-#ifndef CONFIG_THEORA_VIDEO
-	GV(&snzy, width, height);
-	GV(&dopy, 160, 100);
-#endif
 
 	WaitForMouseUp();
 
@@ -220,18 +205,17 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 		}
 		else
 		{						   //Specs: failure seq
+			int j = 0;
 			// MAX 50 Tables
 			i = Rep.Off[kk] / 1000;
-			Rep.Off[kk] %= 1000;
+			j = Rep.Off[kk] % 1000;
 			if (i == 0 || i == 50)
 				goto done;
 			i--;				   //Specs: offset index klugge
 			fseek(fseqf, i * sizeof_Table, SEEK_SET);
 			fread_Table(&table, 1, fseqf);
 			offset = table.foffset;
-			fseek(fseqf, offset, SEEK_SET);
-			/* XXX: Why use table.size? */
-			/* fread(&vhptr.vptr[35000], table.size, 1, fseqf); */
+			fseek(fseqf, offset + j * sizeof_oFGROUP, SEEK_SET);
 			fread_oFGROUP(&fgroup, 1, fseqf);
 			mode = 1;
 			max = fgroup.ID[1] - '0';
@@ -239,10 +223,12 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 		i = 0;
 		keep_going = 1;
-		//  update_map = 0;
+		//	update_map = 0;
 		while (keep_going && i < max)
 		{
 			int frm_idx;
+			char *seq_fname = NULL;
+			char fname[20];
 
 			UpdateMusic();
 
@@ -251,58 +237,25 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 			else
 				frm_idx = group.oLIST[i].aIdx;
 
-#ifndef CONFIG_THEORA_VIDEO
-
-			if ((frm = frm_open_seq(frm_idx, mode)) == NULL)
-				goto done;
-
-			update_map = 1;
-
-			while (keep_going)
-			{
-				unsigned char map[384];
-
-				UpdateMusic();
-
-				if (frm_get2(frm, dopy.vptr, map) <= 0)
-					break;
-
-				if (update_map)
-				{
-					memcpy(&pal[384], map, 384);
-					update_map = 0;
-				}
-
-				gxVirtualScale(&dopy, &snzy);
-				VBlank();
-				gxPutImage(&snzy, gxSET, dx, dy, 0);
-
-				if (bioskey(0) || grGetMouseButtons())
-					keep_going = 0;
-
-				if (frm->frame_rate)
-					idle_loop_secs(1.0 / frm->frame_rate);
-				else
-					idle_loop_secs(1.0 / 8.0);
-			}
-
-			frm_close(frm);
-			frm = NULL;
-			i++;
-
-#else
 			/* here we should create YUV Overlay, but we can't use it on
 			 * pallettized surface, so we use a global Overlay initialized in
 			 * sdl.c. */
-			sprintf(fname, "%s/%s.ogg", movies_dir, seq_filename(frm_idx,
-					mode));
+			seq_fname = seq_filename(frm_idx, mode);
+			if (!seq_fname)
+				seq_fname = "(unknown)";
+
+			snprintf(fname, sizeof(fname), "%s.ogg", seq_fname);
+
 			/* INFO */ printf("mm_open(%s)\n", fname);
-			if (mm_open(&vidfile, fname) <= 0)
+
+			if (mm_open_fp(&vidfile, sOpen(fname, "rb", FT_VIDEO)) <= 0)
 				goto done;
 
 			/* TODO do not ignore width/height */
 			if (mm_video_info(&vidfile, NULL, NULL, &fps) <= 0)
 				goto done;
+
+			last_time = get_time();
 
 			while (keep_going)
 			{
@@ -312,6 +265,8 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 				video_rect.y = dy;
 				video_rect.w = width;
 				video_rect.h = height;
+
+				screen_dirty = 1;
 
 				/* TODO track decoding time and adjust delays */
 				if (mm_decode_video(&vidfile, video_overlay) <= 0)
@@ -326,20 +281,12 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 			mm_close(&vidfile);
 			i++;
-#endif
 		}
 	}
   done:
-#ifndef CONFIG_THEORA_VIDEO
-	DV(&dopy);
-	DV(&snzy);
-	if (frm)
-		frm_close(frm);
-#else
 	mm_close(&vidfile);
 	video_rect.w = 0;
 	video_rect.h = 0;
-#endif
 	fclose(fseqf);
 	fclose(seqf);
 	return;
@@ -398,16 +345,11 @@ AbzFrame(char plr, int num, int dx, int dy, int width, int height,
 	struct oGROUP grp;
 	REPLAY Rep;
 
-    /* force mode to zero */
-    mode = 0;
+	/* force mode to zero */
+	mode = 0;
 
-#ifndef CONFIG_THEORA_VIDEO
-	GXHEADER dopy, snzy;
-	struct frm *frm;
-#else
 	char fname[100];
 	mm_file vidfile;
-#endif
 
 	memset(&grp, 0, sizeof grp);
 
@@ -416,33 +358,11 @@ AbzFrame(char plr, int num, int dx, int dy, int width, int height,
 
 	idx = grp.oLIST[0].aIdx;
 
-#ifndef CONFIG_THEORA_VIDEO
-	GV(&snzy, width, height);
-	GV(&dopy, 160, 100);
-
-	if ((frm = frm_open_seq(idx, mode)) != NULL)
-	{
-		frm_get2(frm, dopy.vptr, &pal[384]);
-		frm_close(frm);
-	}
-	else
-	{
-		memset(dopy.vptr, 0, 160 * 100);
-		memset(&pal[384], 0, 384);
-	}
-
-	gxVirtualScale(&dopy, &snzy);
-	VBlank();
-	RectFill(dx, dy, dx + width, dy + height - 1, 0);
-	gxPutImage(&snzy, gxSET, dx, dy, 0);
-
-	DV(&dopy);
-	DV(&snzy);
-#else
-	sprintf(fname, "%s/%s.ogg", movies_dir, seq_filename(idx, mode));
+	/* XXX use a generic function */
+	snprintf(fname, sizeof(fname), "%s.ogg", seq_filename(idx, mode));
 
 	/* INFO */ printf("mm_open(%s)\n", fname);
-	if (mm_open(&vidfile, fname) <= 0)
+	if (mm_open_fp(&vidfile, sOpen(fname, "rb", FT_VIDEO)) <= 0)
 		return;
 
 	if (mm_video_info(&vidfile, NULL, NULL, NULL) <= 0)
@@ -458,5 +378,4 @@ AbzFrame(char plr, int num, int dx, int dy, int width, int height,
 
   done:
 	mm_close(&vidfile);
-#endif
 }

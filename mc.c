@@ -213,7 +213,7 @@ int Launch(char plr,char mis)
       FadeIn(2,pal,10,0,0);
       }
    else 
-		if (BIG==1) memset(screen,0x00,64000);
+		if (BIG==1) gxClearDisplay(0, 0);
 
 #define fpf(a,b) fprintf(a,#b ": %d\n",b)
 

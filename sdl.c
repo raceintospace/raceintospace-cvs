@@ -10,12 +10,11 @@
 #include <SDL.h>
 #include "Buzz_inc.h"
 #include "macros.h"
+#include "options.h"
 
 #include "av.h"
 #define MAX_X	320
 #define MAX_Y	200
-
-void dbg(char const *fmt, ...) __attribute__ ((format(printf, 1, 2)));
 
 int av_mouse_cur_x, av_mouse_cur_y;
 int av_mouse_pressed_x, av_mouse_pressed_y;
@@ -24,7 +23,9 @@ int av_mouse_pressed_latched;
 
 SDL_Surface *display;
 SDL_Overlay *video_overlay;
+SDL_Overlay *news_overlay;
 SDL_Rect video_rect;
+SDL_Rect news_rect;
 static SDL_Surface *screen_surf;
 static SDL_Surface *screen_surf2x;
 
@@ -90,99 +91,51 @@ static int get_dirty_rect_list();
 static void
 audio_callback(void *userdata, Uint8 * stream, int len)
 {
-	int togo, thistime, i, left;
-	Uint8 silence = 0; /* audio_obtained.silence; */
-	int num_active = AV_NUM_CHANNELS;
-	unsigned sample, sum;
-	struct audio_channel *chp;
+	int ch = 0;
 
-	struct
+	for (ch = 0; ch < AV_NUM_CHANNELS; ++ch)
 	{
-		Uint8 *data;
-		unsigned coeff;
-	} arr[AV_NUM_CHANNELS];
+		int pos = 0;
+		struct audio_channel *chp = &Channels[ch];
 
-	togo = len;
-
-	while (togo > 0 && num_active > 0)
-	{
-		thistime = togo;
-		// sum = 0;
-		sum = AV_NUM_CHANNELS * AV_MAX_VOLUME;
-		num_active = AV_NUM_CHANNELS;
-
-		/* init mixer data */
-		for (i = 0; i < AV_NUM_CHANNELS; ++i)
+		if (!chp->mute && chp->volume)
 		{
-			arr[i].data = NULL;
-			arr[i].coeff = 0;
-			chp = &Channels[i];
-			// sum += chp->volume;
-			if (chp->chunk)
+			struct audio_chunk *ac = chp->chunk;
+
+			while (ac)
 			{
-				left = chp->chunk->size - chp->offset;
-				if (left < 0)
-				{
-					chp->chunk = NULL;
-					chp->chunk_tailp = &chp->chunk;
-					chp->offset = 0;
-					num_active--;
-					continue;
-				}
-				if (left < thistime)
-					thistime = left;
-				arr[i].data = chp->chunk->data + chp->offset;
-				if (!chp->mute)
-					arr[i].coeff = chp->volume;
-			}
-			else
-				num_active--;
-		}
+				int bytes =
+					min(len - pos, (int) ac->size - (int) chp->offset);
 
-		if (!num_active)
-			break;
+				/*
+				 * SDL docs say that this should not be used to mix more than
+				 * 2 channels, BUT SDL_mixer library just does that for each
+				 * stream! Anyway, we have 2 channels so no worries ;)
+				 */
+				SDL_MixAudio(stream + pos, ac->data + chp->offset,
+						bytes, chp->volume);
 
-		left = thistime;
+				pos += bytes;
+				chp->offset += bytes;
 
-		while (left--)
-		{
-			sample = 0;
-			/* Make this outer loop? */
-			for (i = 0; i < AV_NUM_CHANNELS; ++i)
-				sample +=
-					arr[i].coeff * (arr[i].data ? *(arr[i].data++) : silence)
-					+ (AV_MAX_VOLUME - arr[i].coeff) * silence;
-			sample /= sum;
-			if (sample > 255)
-				sample = 255;
-			*(stream++) = (Uint8) sample;
-		}
-
-		togo -= thistime;
-		assert(togo >= 0);
-
-		for (i = 0; i < AV_NUM_CHANNELS; ++i)
-		{
-			chp = &Channels[i];
-			if (chp->chunk)
-			{
-				chp->offset += thistime;
-				if (chp->offset >= chp->chunk->size)
+				if (chp->offset == ac->size)
 				{
 					chp->offset = 0;
-					if (!chp->chunk->loop)
+					if (!ac->loop)
 					{
-						chp->chunk = chp->chunk->next;
-						if (chp->chunk == NULL)
+						ac = chp->chunk = chp->chunk->next;
+						if (!chp->chunk)
 							chp->chunk_tailp = &chp->chunk;
-						/* why this lastp?? */
+						/* why this tailp?? */
 					}
 				}
+
+				if (pos == len)
+					break;
+
 			}
 		}
 	}
-
-	memset(stream, silence, togo);
 }
 
 /* 0 means busy playing audio; 1 means idle */
@@ -200,6 +153,8 @@ int
 IsChannelMute(int channel)
 {
 	assert(channel >= 0 && channel < AV_NUM_CHANNELS);
+    if (!have_audio)
+        return 1;
 	return Channels[channel].mute;
 }
 
@@ -221,7 +176,7 @@ play(struct audio_chunk *new_chunk, int channel)
 	{
 		if (cp == new_chunk)
 		{
-			printf("play: attempt to do duplicate chunk add\n");
+			/* DEBUG */ printf("play: attempt to do duplicate chunk add\n");
 			av_silence(channel);
 			break;
 		}
@@ -267,28 +222,40 @@ sdl_timer_callback(Uint32 interval, void *param)
 }
 
 void
-av_setup(int want_audio, int want_fading)
+av_setup(void)
 {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
-		fprintf(stderr, "SDL_Init error\n");
+		/* ERROR */ fprintf(stderr, "SDL_Init error\n");
 		exit(1);
 	}
 
 	atexit(SDL_Quit);
 
-	if (!want_audio || SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+#ifdef CONFIG_WIN32
+	/*
+	 * default direct-audio-something has got unreasonably long audio buffers,
+	 * but if user knows what he's doing then no problemo...
+	 */
+	if (!SDL_getenv("SDL_AUDIODRIVER"))
+			SDL_putenv("SDL_AUDIODRIVER=waveout");
+	/*
+	 * also some sources mention that on win audio needs to be initialised
+	 * together with video. Maybe, it works for me as it is now.
+	 */
+#endif
+
+	if (!options.want_audio || SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
-		printf("no audio\n");
+		/* INFO */ printf("no audio\n");
 	}
 	else
 	{
-		printf("audio initialized\n");
+		/* INFO */ printf("audio initialized\n");
 		have_audio = 1;
 	}
 
-	if ((display = SDL_SetVideoMode(640, 400, 24,
-				SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
+	if ((display = SDL_SetVideoMode(640, 400, 24, SDL_SWSURFACE)) == NULL)
 	{
 		/* ERROR */ fprintf(stderr, "error in SDL_SetVideoMode: %s\n",
                 SDL_GetError());
@@ -313,7 +280,6 @@ av_setup(int want_audio, int want_fading)
         exit(EXIT_FAILURE);
     }
 
-#ifdef CONFIG_THEORA_VIDEO
     /* XXX: Hardcoded video width & height */
     video_overlay = SDL_CreateYUVOverlay(160, 100, SDL_YV12_OVERLAY, display);
     if (!video_overlay)
@@ -322,16 +288,25 @@ av_setup(int want_audio, int want_fading)
                 SDL_GetError());
         exit(EXIT_FAILURE);
     }
-#endif
+    news_overlay = SDL_CreateYUVOverlay(312, 106, SDL_YV12_OVERLAY, display);
+    /* XXX: Hardcoded video width & height */
+    if (!news_overlay)
+    {
+        /* ERROR */ fprintf(stderr, "can't create news_overlay: %s\n",
+                SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
 
     fade_info.step = 1;
     fade_info.steps = 1;
-    do_fading = want_fading;
+    do_fading = options.want_fade;
 
     alloc_dirty_tree();
 
 	SDL_EnableUNICODE(1);
-	SDL_WM_SetCaption("Race Into Space", NULL);
+    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
+            SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_WM_SetCaption(PACKAGE_STRING, NULL);
 
 	if (have_audio)
 	{
@@ -357,7 +332,7 @@ av_setup(int want_audio, int want_fading)
 		/* we don't care what we got, library will convert for us */
 		if (SDL_OpenAudio(&audio_desired, NULL) < 0)
 		{
-			fprintf(stderr, "error in SDL_OpenAudio: %s\n",
+			/* ERROR */ fprintf(stderr, "error in SDL_OpenAudio: %s\n",
 					SDL_GetError());
 			exit(1);
 		}
@@ -417,8 +392,9 @@ av_process_event(SDL_Event * evp)
 			av_mouse_pressed_latched = 1;
 			av_mouse_pressed_x = evp->button.x;
 			av_mouse_pressed_y = evp->button.y;
-			printf("mouseclick(%d,%d) b = %d\n",
+			/* DEBUG2 */ /*printf("mouseclick(%d,%d) b = %d\n",
 				av_mouse_pressed_x, av_mouse_pressed_y, evp->button.button);
+				*/
 			break;
 
 		case SDL_MOUSEBUTTONUP:
@@ -435,7 +411,7 @@ av_process_event(SDL_Event * evp)
 		case SDL_ACTIVEEVENT:
 			break;
 		default:
-			printf("got uknown event %d\n", evp->type);
+			/* DEBUG */ printf("got uknown event %d\n", evp->type);
 			break;
 	}
 }
@@ -675,13 +651,30 @@ av_sync(void)
         r.y = 2 * video_rect.y;
         SDL_DisplayYUVOverlay(video_overlay, &r);
     }
+    if (news_rect.h && news_rect.w)
+    {
+        static int warned = 0;
+        av_need_update(&news_rect);
+        r.h = 2 * news_rect.h;
+        r.w = 2 * news_rect.w;
+        r.x = 2 * news_rect.x;
+        r.y = 2 * news_rect.y;
+        if (!SDL_DisplayYUVOverlay(news_overlay, &r))
+        {
+            if (!warned)
+            {
+                warned = 1;
+                printf("Err: %s\n", SDL_GetError());
+            }
+        }
+    }
     num_rect = get_dirty_rect_list();
     SDL_UpdateRects(display, num_rect, dirty_rect_list);
 #ifdef PROFILE_GRAPHICS
     for (i = 0; i < num_rect; ++i)
         tot_area += dirty_rect_list[i].w * dirty_rect_list[i].h;
     tot_area = tot_area * 100 / (2*MAX_X) / (2*MAX_Y);
-    /* DEBUG */ fprintf(stderr, "av_sync: %3d rect(s) (%6.2f%%) updated in ~%3ums\n",
+    /* DEBUG2 */ fprintf(stderr, "av_sync: %3d rect(s) (%6.2f%%) updated in ~%3ums\n",
             num_rect, tot_area, SDL_GetTicks() - ticks);
 #endif
 	screen_dirty = 0;

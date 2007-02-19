@@ -29,3 +29,4 @@
   extern char *S_Name[];
   extern int cdROM,hDISK;
   extern int screen_dirty;
+  extern int evflag; /* news.c, used in news_seq.c */

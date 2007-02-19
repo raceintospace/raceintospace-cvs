@@ -28,10 +28,7 @@
 #include "externs.h"
 #include "mis.h"
 #include "av.h"
-
-#ifdef CONFIG_THEORA_VIDEO
 #include "mmfile.h"
-#endif
 
 #define FRM_Delay 22
 
@@ -127,7 +124,6 @@ bot:                          // bottom of routine
 
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
-	char *fName;
 	int keep_going;
 	int wlen,i,j;
 	unsigned int fres,max;
@@ -141,13 +137,9 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	char sName[20],err=0;
 	char *SEQ_DAT="SEQ.DAT";
 	char *FSEQ_DAT="FSEQ.DAT";
-#ifndef CONFIG_THEORA_VIDEO
-	struct frm *frm = NULL;
-#else
     mm_file vidfile;
-    char fname[1000];
+	FILE *mmfp;
     float fps;
-#endif
 	int hold_count;
 
 	F = NULL; /* XXX check uninitialized */
@@ -224,29 +216,25 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	else dSeq=(struct oFGROUP *)&vhptr.vptr[35000];
 
 	if (mode==0) {
-		fin=sOpen(SEQ_DAT,"rb",0);
+		fin=open_gamedat(SEQ_DAT);
 		offset=fread(&vhptr.vptr[35000],1,vhptr.h*vhptr.w-35000,fin);
 	} else {
+		fin = open_gamedat(FSEQ_DAT);
 		F=(struct Table *)&vhptr.vptr[0];
-		fin=sOpen(FSEQ_DAT,"rb",0);
-		fseek(fin,0,SEEK_SET);
-		fread(&vhptr.vptr[0],700,1,fin);
+		fread_Table(F,50,fin);
 
 		err=0;  //Specs: reset error
 
-		for (i=0;i<49;i++) {
+		for (i=0;i<50;i++) {
 			if (strncmp(F[i].fname,Mev[step].FName,4)==0)
 				break;
 		}
 
-		if (i==49) err=1;
+		if (i==50) err=1;
 
 		if (err==0) {
-			Swap32bit(F[i].foffset);
-			Swap16bit(F[i].size);
-			offset=F[i].foffset; 
-			fseek(fin,offset,SEEK_SET);
-			fread(&vhptr.vptr[35000],F[i].size,1,fin);
+			fseek(fin, F[i].foffset, SEEK_SET);
+			fread_oFGROUP(dSeq, F[i].size / sizeof_oFGROUP, fin);
 		}
 	};
 
@@ -268,7 +256,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		while(strncmp(sName,&Seq[strlen(Seq)-2],2) !=0) {
 			j++;
 			strncpy(sName,&dSeq[j].ID[3+strlen(&dSeq[j].ID[3])-2],2);
-			if (j>=F[i].size) {err=1;break;} 
+			if (j>=F[i].size/sizeof_oFGROUP) {err=1;break;} 
 		}
 	};
 
@@ -277,12 +265,9 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		if (mode==0) {
 			j=0;
 		} else {
-			fin=sOpen(FSEQ_DAT,"rb",0);
-			Swap32bit(F[0].foffset);
-			Swap16bit(F[0].size);
-			offset=F[0].foffset; 
-			fseek(fin,offset,SEEK_SET);
-			fread(&vhptr.vptr[35000],F[0].size,1,fin);
+			fin=open_gamedat(FSEQ_DAT);
+			fseek(fin,F[0].foffset,SEEK_SET);
+			fread_oFGROUP(dSeq,F[0].size/sizeof_oFGROUP,fin);
 			fclose(fin);
 		}
 	}
@@ -332,8 +317,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			BABY=1;
 	}
 
-	if (mode==0) memcpy(&aSeq,&bSeq[j].ID[0],sizeof aSeq);
-	else memcpy(&cSeq,&dSeq[j].ID[0],sizeof cSeq);
+	if (mode==0) memcpy(&aSeq,&bSeq[j],sizeof aSeq);
+	else memcpy(&cSeq,&dSeq[j],sizeof cSeq);
 
 	fout=sOpen("REPLAY.TMP","at",1);
 	if (mode==0) fprintf(fout,"%d\n",(unsigned int)j);
@@ -343,12 +328,12 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 	if (AI[plr]==1) return;
 
-	ffin=sOpen("BABYPICX.CDR","rb",0);
+	ffin=open_gamedat("BABYPICX.CDR");
 
 	Mob=(struct Infin *) buffer;
 
 	if (AEPT && !mode) {
-		if ((nfin=sOpen("BABYCLIF.CDR","rb",0))==NULL) return;
+		if ((nfin=open_gamedat("BABYCLIF.CDR"))==NULL) return;
 		fread(Mob,CLIF_TABLE*(sizeof (struct Infin)),1,nfin); //Specs: First Table
 
 #ifdef __BIG_ENDIAN__
@@ -370,7 +355,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 		for (i=0;i<SCND_TABLE;i++) Mob2[i].Name[strlen(Mob2[i].Name)-3]='_'; // patch
 	} else {
-		nfin=sOpen("BABYNORM.CDR","rb",0);
+		nfin=open_gamedat("BABYNORM.CDR");
 		fread(Mob,NORM_TABLE*(sizeof (struct Infin)),1,nfin);
 		fclose(nfin);
 #ifdef __BIG_ENDIAN__
@@ -387,14 +372,14 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 	i=0;
 
-	if (mode==0) max=aSeq.ID[1]-0x30;
-	else max=cSeq.ID[1]-0x30;
+	if (mode==0) max=aSeq.ID[1]-'0';
+	else max=cSeq.ID[1]-'0';
 
 	keep_going = 1;
 	while (keep_going && i<(int)max) {
 		int aidx, sidx;
-
-		// if (i!=0) Plop(plr,2);   //Specs: static frame
+		char *seq_name = NULL;
+		char name[20]; /* XXX: assumption about seq_filename len */
 
 		if (mode==0) {
 			aidx = aSeq.oLIST[i].aIdx;
@@ -407,30 +392,23 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		Swap16bit(aidx);
 		Swap16bit(sidx);
 
-		
 		if (sidx)
 			play_audio (sidx, mode);
 
-		if ((fName = seq_filename (aidx, mode)) == NULL)
-			fName = "(unknown)";
+		if ((seq_name = seq_filename(aidx, mode)) == NULL)
+			seq_name = "(unknown)";
 
-#ifndef CONFIG_THEORA_VIDEO
-		if ((frm = frm_open_seq (aidx, mode)) == NULL) {
-			printf ("can't open frm seq %d,%d\n", aidx, mode);
-			break;
-		}
-#else
+		snprintf(name, sizeof(name), "%s.ogg", seq_name);
+		mmfp = sOpen(name, "rb", FT_VIDEO);
 
-        sprintf(fname, "%s/%s.ogg", movies_dir, seq_filename(aidx, mode));
-        /* INFO */ printf("mm_open(%s)\n", fname);
-        if (mm_open(&vidfile, fname) <= 0)
+        /* INFO */ printf("mm_open(%s)\n", name);
+        if (mm_open_fp(&vidfile, mmfp) <= 0)
             break;
 
         /* TODO do not ignore width/height */
         if (mm_video_info(&vidfile, NULL, NULL, &fps) <= 0)
             break;
 
-#endif
 		j=0;
 
 		hold_count = 0;
@@ -440,27 +418,18 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			if (BABY==0 && BIG==0) Tick(plr);
 
 			if (hold_count == 0) {
-#ifndef CONFIG_THEORA_VIDEO
-				if (frm_get2 (frm, &vhptr.vptr[40000], &pal[384]) <= 0)
-					break;
 
-				if (j == 0)
-					printf ("frame rate %d\n", frm->frame_rate);
-
-				if (frm->next_frame_chunks == 0 && j == 0) {
-					printf ("*** need fancy handling for hold\n");
-					hold_count = 1;
-				}
-#else
             /* TODO track decoding time and adjust delays */
             if (mm_decode_video(&vidfile, video_overlay) <= 0)
                 break;
+
+            screen_dirty = 1;
 
             if (j == 0)
                 printf ("frame rate %g\n", fps);
 
             /* XXX I don't get the fancy "hold thing so I left it out */
-#endif
+
 			} else if (hold_count < 8) {
 				//Specs: single frame hold
 				idle_loop (FRM_Delay);
@@ -475,16 +444,6 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				printf ("**** need to come out of hold\n");
 			}
 
-#ifndef CONFIG_THEORA_VIDEO
-			if (BIG==0)SMove(&vhptr.vptr[40000],80,3+plr*10);
-			else LMove(&vhptr.vptr[40000]);
-
-			if (frm->frame_rate)
-				idle_loop_secs (1.0 / frm->frame_rate);
-			else
-				idle_loop_secs (1.0 / 8.0);
-
-#else
             video_rect.w = 160;
             video_rect.h = 100;
             if (BIG==0)
@@ -503,9 +462,8 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
             /* TODO idle_loop is too inaccurate for this */
             idle_loop_secs(1.0 / fps);
-#endif
 			if (sts<23) {
-				if (BABY==0 && BIG==0) DoPack(plr,ffin,(AEPT && !mode) ? 1 : 0,Seq,fName);
+				if (BABY==0 && BIG==0) DoPack(plr,ffin,(AEPT && !mode) ? 1 : 0,Seq,seq_name);
 				++sts;
 				if (sts==23) sts=0;
 
@@ -521,19 +479,14 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			}
 		}
 
-#ifndef CONFIG_THEORA_VIDEO
-		frm_close (frm);
-		frm = NULL;
-#else
         mm_close(&vidfile);
-#endif
 
 		i++;
 	}
 
 	if (!IsChannelMute(AV_SOUND_CHANNEL)) {
 		if (lnch == 0)
-			PlayAudio("WH.RAW",0);
+			PlayAudio("wh.ogg",0);
 		keep_going = 1;
 		while (keep_going) {
 			if (AnimSoundCheck())
@@ -555,14 +508,9 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	}
 
 	fclose(ffin);  // Specs: babypicx.cdr
-#ifndef CONFIG_THEORA_VIDEO
-	if (frm)
-		frm_close (frm);
-#else
     mm_close(&vidfile);
     video_rect.h = 0;
     video_rect.w = 0;
-#endif
 }
 
 void Tick(char plr)
@@ -998,7 +946,7 @@ FILE *OpenAnim(char *fname)
       long size;
       } AIndex;
 
-   fin=sOpen("LIFTOFF.ABZ","rb",0);
+   fin=open_gamedat("LIFTOFF.ABZ");
    if (!fin) {printf("File Error on File: %s\n",fname);return fin;}
    fread(&AIndex,sizeof AIndex,1,fin);
    while (strncmp(AIndex.ID,fname,4)!=0) {

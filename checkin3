@@ -1,0 +1,64 @@
+#!/usr/bin/perl -l
+
+use File::Temp qw/tempfile/;
+use Fcntl qw/:seek/;
+
+my $fname = "ChangeLog";
+my $tagname = "";
+
+open IN, $fname or die "open $fname: $!\n";
+($logf, $logfname) = tempfile("commit_log.XXXXX") or die "tempfile: $!\n";
+(undef, $diffname) = tempfile("commit_diff.XXXXX") or die "tempfile: $!\n";
+
+$SIG{INT} = $SIG{HUP} = $SIG{QUIT} = $SIG{TERM} = \&cleanup;
+
+print "=== LOG MESSAGE ===";
+while (<IN>) {
+    chomp;
+    $tagname = $1 if /^\s+\*\s+([A-Z0-9-]+)\s*$/;
+    last if /^200/ and $. != 1;
+    print $logf $_ if not /^\s*$/;
+    print if not /^\s*$/;
+}
+
+close IN or die "close $fname: $!\n";
+close $logf or die "close $logfname: $!\n";
+
+if (not $tagname) {
+    warn "no tagname found, aborting" if not $tagname;
+    exit 1;
+}
+
+my $cmd = "cvs diff > $diffname";
+print $cmd;
+system "cvs diff > $diffname";
+
+# obviously assume pathsep = ':' and dirsep = '/'
+if (grep { -x "$_/diffstat" } split ":", $ENV{PATH}) {
+    print "=== DIFFSTAT ===";
+    system "diffstat < $diffname";
+}
+
+$cmd = '${PAGER:-less} < '.$diffname;
+print "=== REVIEW CHANGES? ===";
+if (<STDIN> =~ /^[yY]/) {
+#    print $cmd;
+    system $cmd;
+} 
+
+$cmd = "cvs commit -R -F $logfname && cvs tag -R $tagname";
+print "=== COMMIT? ===";
+if (<STDIN> =~ /^[yY]/) {
+    print $cmd;
+    system $cmd;
+} 
+
+END {
+    cleanup();
+}
+
+sub cleanup {
+    unlink $logfname;
+    unlink $diffname;
+    exit 0;
+}

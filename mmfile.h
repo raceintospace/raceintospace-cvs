@@ -29,10 +29,11 @@ typedef struct
 } mm_file;
 
 extern int mm_open(mm_file * mf, const char *fname);
+extern int mm_open_fp(mm_file * mf, FILE *file);
 extern unsigned mm_ignore(mm_file * mf, unsigned mask);
 extern int mm_close(mm_file * mf);
-extern int mm_video_info(const mm_file * mf, int *width, int *height, float *fps);
-extern int mm_audio_info(const mm_file * mf, int *channels, int *rate);
+extern int mm_video_info(const mm_file * mf, unsigned *width, unsigned *height, float *fps);
+extern int mm_audio_info(const mm_file * mf, unsigned *channels, unsigned *rate);
 extern int mm_decode_video(mm_file * mf, SDL_Overlay * ovl);
 extern int mm_decode_audio(mm_file * mf, void *buf, int buflen);
 

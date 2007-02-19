@@ -24,8 +24,10 @@
 //
 // All Administration Main Files
 
+
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "av.h"
 
 #define MODEM_ERROR 4
 #define NOTSAME 2
@@ -52,7 +54,7 @@ void Admin(char plr)
   if (plr==1) strncpy(&AName[3][0],"COSMO",5);
   if (Data->P[plr].AstroDelay>0) AImg[3]=5;
 
-  FadeOut(2,pal,10,0,0);
+  //FadeOut(2,pal,10,0,0);
   i=0;beg=1;
   
   do {
@@ -72,6 +74,7 @@ void Admin(char plr)
         grSetColor(11);if (Data->Season==0) PrintAt(165,196,"SPRING 19");
         else PrintAt(165,196,"FALL 19");DispNum(0,0,Data->Year);
         
+        FadeIn(2,pal,10,0,0);
      }
 
      PlayMusic(0);
@@ -945,6 +948,7 @@ char GetBlockName(char *Nam)
 	 (key>='0' && key<='9'))) {  // valid key
 	Nam[i++]=key;
 	grSetColor(1);PrintAt(53,102,&Nam[0]);
+    av_need_update_xy(52,96,189,104);
 	key=0;
       }
       if (i>0 && key==0x08) {
@@ -1384,6 +1388,4 @@ void EndOfTurnSave(char *inData, int dataLen)
 	fclose(fout);
 }
 
-
 // EOF
-

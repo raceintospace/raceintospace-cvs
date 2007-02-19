@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
-#include <dirent.h>
 #include <errno.h>
 
 #include "av.h"
@@ -18,14 +17,7 @@ typedef struct {
 	int dummy;
 } drvr_desc;
 
-struct ffblk {
-	char ff_name[64];
-	int ff_ftime;
-	int ff_fdate;
-};
-
-int first_saved_game (struct ffblk *ffblk);
-int next_saved_game (struct ffblk *ffblk);
+ssize_t load_audio_file(const char *, char **data, size_t *size);
 
 #define grTRACK 1
 #define grCARROW 2
@@ -116,9 +108,6 @@ double get_time (void);
 
 int show_intro_flag;
 
-FILE *open_gamedat (char *name);
-char *slurp_gamedat (char *name);
-
 char *letter_dat;
 
 void gr_sync (void);
@@ -142,22 +131,14 @@ struct frm *frm_open_seq (int seq, int mode);
 int frm_get2 (struct frm *frm, void *pixels_arg, void *map);
 void frm_close (struct frm *frm);
 
-void remove_savedat (char *name);
-
 void idle_loop (int ticks);
 void idle_loop_secs (double secs);
 
-void env_setup (void);
 char *seq_filename (int seq, int mode);
 void play_audio (int sidx, int mode);
 
 void bzdelay (int ticks);
 void GetMouse_fast (void);
-
-extern char cdrom_dir[1000];
-extern char savedat_dir[1000];
-extern char music_dir[1000];
-extern char movies_dir[1000];
 
 void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
 
@@ -166,8 +147,12 @@ struct timezone;
 int gettimeofday (struct timeval *tv, struct timezone *tz);
 #endif
 
+void *xmalloc (size_t size);
+void *xcalloc (size_t nelems, size_t size);
+void *xrealloc (void *ptr, size_t size);
+char *xstrdup (char const *a);
 int xstrcasecmp (char const *a, char const *b);
 int xstrncasecmp (char const *a, char const *b, int len);
-
+ssize_t fread_dyn(char **destp, size_t *n, FILE *stream);
 
 #endif /* __PACE_H__ */

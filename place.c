@@ -136,8 +136,6 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   starty-=(qty*23/2);
 
   /* hard-coded magic numbers, yuck */
-  av_need_update_xy(23, starty, 60+22*15, 20+23*qty);
-
   for (i=0;i<qty;i++) {
 	 BCDraw(starty+23*i);
 	 DispBig(60,starty+4+23*i,&Name[i*22],1,0);
@@ -148,8 +146,9 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   fclose(fin);
   DV(&local);
 
+  av_need_update_xy(23, starty, 60+22*15, starty+23*i);
   
-  FadeIn(2,pal,10,0,0);
+  // FadeIn(2,pal,10,0,0);
 	WaitForMouseUp();
   j=-1;
   while(j==-1) {
@@ -203,10 +202,10 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size)
   {
-      fprintf(stderr, "PatchMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
-              P.w, P.h, P.w*P.h, P.size);
+      /* fprintf(stderr, "PatchMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
+              P.w, P.h, P.w*P.h, P.size); */
       if ((P.w+1) * P.h == P.size) {
-          fprintf(stderr, "PatchMe(): P.w++ saves the day!\n");
+          /* fprintf(stderr, "PatchMe(): P.w++ saves the day!\n"); */
           P.w++;
           do_fix = 1;
       }
@@ -302,10 +301,10 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
 	SwapPatchHdrSmall(&P);
   fseek(in,P.offset,SEEK_SET);
   if (P.w * P.h != P.size) {
-      fprintf(stderr, "SmHardMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
-              P.w, P.h, P.w*P.h, P.size);
+      /* fprintf(stderr, "SmHardMe(): w*h != size (%hhd*%hhd == %d != %hd)\n",
+              P.w, P.h, P.w*P.h, P.size); */
       if ((P.w+1) * P.h == P.size) {
-          fprintf(stderr, "SmHardMe(): P.w++ saves the day!\n");
+          /* fprintf(stderr, "SmHardMe(): P.w++ saves the day!\n"); */
           P.w++;
           do_fix = 1;
       }
@@ -507,7 +506,6 @@ int Help(char *FName)
       bot=fsize;
 
       NTxt=xmalloc((unsigned int) (42*fsize));
-      if (NTxt==NULL) CloseEmUp(0,112);  // locks on this line
       memset(NTxt,0x00,(unsigned int)(42*fsize));
       j=line*42;  // should be 0
       mode=Help[i+3]-0x30;
@@ -808,10 +806,8 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 	   }; // if
 
   }; // while
-#ifdef CONFIG_THEORA_VIDEO
   video_rect.w = 0;
   video_rect.h = 0;
-#endif
 
 }
 

@@ -18,13 +18,9 @@ preload next frame during mission playback so transitions are smooth
 Soviet Newscaster in the 3rd animated segment (Close Out) has a pretty significant
 delay before starting the animation
 
-Audio pops on the soviet newscaster, maybe there's some bad data at the end of the
-RAW file that needs to be clipped.
-
 Audio isn't in sync for the newscasters
 
 =======
-fades
 implement config opts for no anim
 
 clean up extra gr_sync's

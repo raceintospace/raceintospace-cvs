@@ -258,8 +258,8 @@ void ShowPad(char plr,char pad)
 {
   char temp;
   PreLoadMusic((plr==1)?M_USMIL:M_USSRMIL);
-  PadDraw(plr,pad);
   PlayMusic(0);
+  PadDraw(plr,pad);
   temp=CheckCrewOK(plr,pad);
    if (temp==1) //found mission no crews
    {
@@ -281,7 +281,7 @@ void ShowPad(char plr,char pad)
      ClrMiss(plr,pad);
 	   OutBox(169,181,314,193);
 	   key=0; 
-	   if (Data->P[plr].Mission[pad].MissionCode==0) {KillMusic();return;};
+	   if (Data->P[plr].Mission[pad].MissionCode==0) return;
 	  }
    else
 	if ((Data->P[plr].LaunchFacility[pad]<=Data->P[plr].Cash && Data->P[plr].LaunchFacility[pad]>1 && x>=169 && y>=181 && x<=314 && y<=193 && mousebuttons>0)
@@ -308,7 +308,7 @@ void ShowPad(char plr,char pad)
 	    }
 	   OutBox(169,181,314,193);
 	   key=0;
-      if (temp==1) {KillMusic();return;};
+      if (temp==1) return;
 	  }
    else
 	if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
@@ -317,7 +317,6 @@ void ShowPad(char plr,char pad)
 	   WaitForMouseUp();
 	   OutBox(245,5,314,17);
       if (key>0) delay(150);
-      KillMusic();
 	   key=0; return;  /* Done */
 	};
   }

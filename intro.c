@@ -237,9 +237,10 @@ void Introd(void)
   for (k=0;k<INTRO_IMAGE_COUNT;k++) {
     ip = &intro_images[k];
 
+    FadeOut(2, pal, 30, 0, 0);
     gr_set_color_map (ip->map);
-    memcpy (screen, ip->pixels, 320*200);
-    gr_sync ();
+    memcpy (screen, ip->pixels, MAX_X * MAX_Y);
+    FadeIn(2, pal, 30, 0, 0);
 
     start = get_time ();
     while (get_time () - start < 3) {
@@ -247,18 +248,13 @@ void Introd(void)
 
 	    key = 0;
 	    PauseMouse();
-	    if (key==K_ESCAPE)
+	    if (key || grGetMouseButtons())
 		    goto done;
-
-	    if (show_intro_flag == 0)
-		    goto done;
-
     }
-    key=0;
   }
 
 done:
-  memset(screen,0x00,64000);
+  gxClearDisplay(0,0);
 }
 
 void NextTurn(char plr)
@@ -295,13 +291,13 @@ void NextTurn(char plr)
   PreLoadMusic( (plr==0) ? M_GOOD : M_FUTURE );
   PlayMusic(1);
   
-	WaitForMouseUp();
-  while (mousebuttons==0 && key==0) GetMouse();
-  key=0;
+  WaitForMouseUp();
+  WaitForKeyOrMouseDown();
+  key = 0;
 
   KillMusic();
   FadeOut(2,pal,10,0,0);
-  memset(screen,0x00,64000);
+  gxClearDisplay(0,0);
   return;
 }
 

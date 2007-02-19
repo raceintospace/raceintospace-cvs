@@ -93,7 +93,6 @@ audio_cb(void *userdata, Uint8 * stream, int len)
 	memcpy(stream, abuf->buf + abuf->off, to_copy);
 	abuf->bytes -= to_copy;
 	abuf->off += to_copy;
-	memset(stream + to_copy, 0, len - to_copy);
 }
 
 int
@@ -101,9 +100,14 @@ main(int argc, char **argv)
 {
 	char *file = NULL;
 	int have_video = 0, have_audio = 0;
-	int h = 0, w = 0;
+	unsigned h = 0, w = 0;
 	float fps = 0.0;
-	int ch = 0, hz = 0;
+	unsigned ch = 0, hz = 0;
+	struct audiobuf abuf;
+	int end = 0;
+	SDL_Surface *display = NULL;
+	SDL_Overlay *ovl = NULL;
+	SDL_Event event;
 	mm_file media;
 
 	if (argc > 1)
@@ -131,10 +135,6 @@ main(int argc, char **argv)
 
 	if (have_video)
 	{
-		SDL_Surface *display = NULL;
-		SDL_Overlay *ovl = NULL;
-		int64_t oldt, newt;
-
 		if ((display = SDL_SetVideoMode(w, h, 24,
 					SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
 			eprintf("SDL_SetVideoMode: %s\n", SDL_GetError());
@@ -142,26 +142,13 @@ main(int argc, char **argv)
 		if ((ovl = SDL_CreateYUVOverlay(w, h,
 					SDL_YV12_OVERLAY, display)) == NULL)
 			eprintf("SDL_CreateYUVOverlay: %s\n", SDL_GetError());
-
-		/* XXX: Need a better way of timing sync */
-		oldt = xgettime();
-		while (mm_decode_video(&media, ovl) > 0)
-		{
-			SDL_Rect r = { 0, 0, w, h };
-			newt = 1e6 / fps + oldt - xgettime();
-			if (newt > 0)
-				usleep(newt);
-			SDL_DisplayYUVOverlay(ovl, &r);
-			oldt = xgettime();
-		}
-		SDL_FreeYUVOverlay(ovl);
 	}
+
 
 	if (have_audio)
 	{
-		struct audiobuf abuf;
-		int64_t tdiff;
 		int bytes;
+		uint64_t tdiff;
 		SDL_AudioSpec desired;
 
 		desired.channels = ch;
@@ -194,13 +181,56 @@ main(int argc, char **argv)
 			(double) (abuf.bytes) / ch / hz);
 
 		SDL_PauseAudio(0);
+	}
 
-		while (abuf.bytes > 0)
-			sleep(1);
+	while (!end)
+	{ 
+		while(SDL_PollEvent(&event))
+			switch (event.type)
+			{
+				case SDL_QUIT:
+					end = 1;
+					break;
+				case SDL_KEYDOWN:
+					if (event.key.keysym.sym == SDLK_q
+							|| event.key.keysym.sym == SDLK_ESCAPE)
+						end = 1;
+					break;
+				default:
+					break;
+			}
 
+		if (have_video && !end) {
+			static int64_t oldt, newt;
+			if (mm_decode_video(&media, ovl) > 0)
+			{
+				SDL_Rect r = { 0, 0, w, h };
+				newt = 1e6 / fps + oldt - xgettime();
+				if (newt > 0)
+					SDL_Delay(newt/1000);
+				SDL_DisplayYUVOverlay(ovl, &r);
+				oldt = xgettime();
+			}
+			else
+				end = 1;
+		}
+
+		if (have_audio && abuf.bytes <= 0)
+			end = 1;
+
+		if (!have_video)
+			SDL_Delay(100);
+	}
+
+	if (have_audio)
+	{
 		SDL_PauseAudio(1);
-
 		free(abuf.buf);
+	}
+
+	if (have_video) 
+	{
+		SDL_FreeYUVOverlay(ovl);
 	}
 
 	SDL_Quit();

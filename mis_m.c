@@ -99,7 +99,7 @@ void MisCheck(char plr,char mpad)
    
 
    if (!AI[plr] && BIG==0) {
-      FadeOut(1,pal,100,128,1);
+      //FadeOut(1,pal,100,128,1);
       if (plr==1) {
          RectFill(189,173,249,196,55);
          for (i=190;i<250;i+=2) {

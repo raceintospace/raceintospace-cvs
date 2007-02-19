@@ -1,11 +1,29 @@
 # @configure_input@
 
 CC=@CC@
-LIBS=@LIBS@ @OGG_LIBS@ @VORBIS_LIBS@ @VORBISFILE_LIBS@ @SDL_LIBS@
-CPPFLAGS=@CPPFLAGS@
-PROG_NAME=@PACKAGE_TARNAME@@EXEEXT@
-CFLAGS =-g -Wall -std=c99 @CFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @SDL_CFLAGS@
+LIBS=@LIBS@ @OGG_LIBS@ @VORBIS_LIBS@ @SDL_LIBS@
+CPPFLAGS=@CPPFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @SDL_CFLAGS@ \
+		 -DCONFIG_DATADIR=\"${DATA_DIR}\"
+PACKAGE_TARNAME=@PACKAGE_TARNAME@
+PROG_NAME=${PACKAGE_TARNAME}@EXEEXT@
+CFLAGS =-g -Wall -std=c99 @CFLAGS@
 TAR_NAME=@PACKAGE_TARNAME@-@PACKAGE_VERSION@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+datadir = @datadir@
+datarootdir = @datarootdir@
+mandir = @mandir@
+docdir = @docdir@
+DATA_DIR=${datarootdir}/${PACKAGE_TARNAME}
+
+# HACK - use vpath to search for files in win32 build
+vpath %.@OBJEXT@
+vpath %.c
+vpath %.h
+
+vpath %.c ../
+vpath %.h ../
 
 ACLOCAL_FLAGS = -I m4
 
@@ -16,96 +34,83 @@ EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 # Personal Makefile
 -include Makefile.$(LOGNAME)
 
-PROGS = imgsplit vtest decode getport getvab mtest sdltest
+PROGS = $(addsuffix @EXEEXT@, \
+	imgsplit vtest decode getport getvab mtest sdltest vtest2)
 
 EXTRA_SOURCES = README COPYING DEVELOPER ChangeLog \
 				raceintospace.1 \
 				configure Makefile.in Makefile race.h.in \
 				m4
 
-DESTDIR=/
-
 BARIS_HFILES = av.h Buzz_inc.h data.h endianness.h externs.h gamedata.h \
-	int_types.h macros.h mis.h music.h pace.h proto.h records.h \
-	soundfx.h soundint.h mmfile.h
+	int_types.h macros.h mis.h music.h pace.h proto.h records.h soundfx.h \
+	soundint.h mmfile.h options.h fs.h
 
-BARIS_OBJS = admin.o aimast.o aimis.o aipur.o ast0.o ast1.o	    \
-	ast2.o ast3.o ast4.o budget.o crew.o endgame.o	    \
-	endianness.o \
-	futbub.o future.o hardef.o intel.o intro.o main.o mc2.o mc.o \
-	mis_c.o mis_m.o museum.o newmis.o news.o news_sup.o	    \
-	news_suq.o \
-	place.o port.o prefs.o prest.o radar.o rdplex.o records.o \
-	replay.o review.o rush.o start.o   \
-	vab.o pace.o gx.o gr.o sdl.o music.o gamedata.o
-
-ifeq (@theora_video@,yes)
-BARIS_OBJS += mmfile.o  
-endif
-
-ifeq (@have_theora@@have_ogg@@have_vorbis@,yesyesyes)
-PROGS += vtest2
-endif
+BARIS_OBJS = $(addsuffix .@OBJEXT@, \
+	admin aimast aimis aipur ast0 ast1 ast2 ast3 ast4 budget crew endgame \
+	endianness futbub future hardef intel intro main mc2 mc mis_c mis_m museum \
+	newmis news news_sup news_suq place port prefs prest radar rdplex records \
+	replay review rush start vab pace gx gr sdl music gamedata mmfile options fs \
+)
 
 all: $(PROG_NAME)
 
 extra: all $(PROGS)
 
-rpm_all: raceintospace
+rpm_all: $(PROG_NAME)
 
-install: raceintospace
-	mkdir -p $(DESTDIR)/usr/bin
-	mkdir -p $(DESTDIR)/usr/share/man/man1
-	mkdir -p $(DESTDIR)/usr/share/doc/raceintospace
-	mkdir -p $(DESTDIR)/usr/share/raceintospace/music
-	install -c -m 755 raceintospace $(DESTDIR)/usr/bin/raceintospace
-	gzip < raceintospace.1 \
-	   > $(DESTDIR)/usr/share/man/man1/raceintospace.1.gz
-	install -c -m 644 README $(DESTDIR)/usr/share/doc/raceintospace/.
+install: $(PROG_NAME)
+	mkdir -p ${bindir}
+	mkdir -p ${mandir}/man6
+	mkdir -p ${docdir}
+	mkdir -p $(DATA_DIR)
+	install -c -m 755 $(PROG_NAME) ${bindir}
+	gzip < $(PROG_NAME).6 > ${mandir}/man6/$(PROG_NAME).6.gz
+	install -c -m 644 README ${docdir}/.
 
 rpm_install: install
-	cp -pr /usr/share/raceintospace/music/*.ogg \
-		$(DESTDIR)/usr/share/raceintospace/music/.
+	cp -pr ./audio $(DATA_DIR)
+	cp -pr ./video $(DATA_DIR)
+	cp -pr ./gamedata $(DATA_DIR)
 
 uninstall:
-	rm -f $(DESTDIR)/usr/bin/raceintospace
-	rm -f $(DESTDIR)/usr/share/man/man1/raceintospace.1*
-	rm -rf $(DESTDIR)/usr/share/doc/raceintospace
-	rm -f $(DESTDIR)/usr/share/raceintospace/README
+	rm -f ${bindir}/$(PROG_NAME)
+	rm -f ${mandir}/man6/$(PROG_NAME).6*
+	rm -rf ${docdir}
+	rm -rf $(DATA_DIR)
 
 # cheat, we still use CC but print LD
 $(PROG_NAME): $(BARIS_OBJS)
 	@echo "$(LD) ...flags... -o $@ ...libs..."
-	@$(CC) $(LDFLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
+	@$(CC) $(CFLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
 
-.c.o:
-	@echo "$(CC) ...flags... -c $*.c"
-	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -O -c -o TMP.o $*.c
-	@$(CC) $(CFLAGS) $(EXTRA_WARNINGS) -c $*.c
+.c.@OBJEXT@:
+	@echo "$(CC) ...flags... -c $<"
+	@$(CC) $(CPPFLAGS) $(CFLAGS) $(EXTRA_WARNINGS) -c $<
 
-vtest2: vtest2.o mmfile.o
-	$(CC) $(LDFLAGS) -o vtest2 vtest2.o mmfile.o @OGG_LIBS@ @VORBIS_LIBS@ -ltheora @SDL_LIBS@
+vtest2@EXEEXT@: $(addsuffix @OBJEXT@, vtest2 mmfile)
+	$(CC) $(CFLAGS) -o $@ $^ @OGG_LIBS@ @VORBIS_LIBS@ -ltheora @SDL_LIBS@
 
-imgsplit: imgsplit.o
-	$(CC) $(CFLAGS) -o imgsplit imgsplit.o -lm
+imgsplit@EXEEXT@: imgsplit.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-vtest: vtest.o
-	$(CC) $(CFLAGS) -o vtest vtest.o -lasound -lm
+vtest@EXEEXT@: vtest.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ -lasound -lm
 
-decode: decode.o
-	$(CC) $(CFLAGS) -o decode decode.o -lm
+decode@EXEEXT@: decode.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-getport: getport.o
-	$(CC) $(CFLAGS) -o getport getport.o -lm
+getport@EXEEXT@: getport.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-getvab: getvab.o
-	$(CC) $(CFLAGS) -o getvab getvab.o -lm
+getvab@EXEEXT@: getvab.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-mtest: mtest.o
-	$(CC) $(CFLAGS) -o mtest mtest.o -lm
+mtest@EXEEXT@: mtest.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-sdltest: sdltest.o
-	$(CC) $(CFLAGS) -o sdltest sdltest.o @SDL_LIBS@ @VORBISFILE_LIBS@ -lm
+sdltest@EXEEXT@: sdltest.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ @SDL_LIBS@ @VORBISFILE_LIBS@ -lm
 
 FORCE:
 
@@ -119,13 +124,13 @@ cscope: FORCE
 	cscope -b
 
 clean:
-	rm -f *.o *~
+	rm -f *.@OBJEXT@ *~
 	rm -f $(PROG_NAME)
 	rm -f $(PROGS)
 	rm -f $(TAR_NAME).*
 
 distclean: clean
-	rm -f config.log config.status Makefile
+	rm -f config.log config.cache config.status Makefile
 	rm -f int_types.h race.h
 	rm -f configure
 	rm -rf autom4te.cache
@@ -134,9 +139,23 @@ configure: configure.in
 	-aclocal $(ACLOCAL_FLAGS)
 	autoconf
 
+race.h.in: configure.in
+	autoheader
+
 tar: $(EXTRA_SOURCES)
 	rm -f $(TAR_NAME).tar*
 	rm -rf .temp
 	mkdir -p .temp/$(TAR_NAME)
 	(cd .temp/$(TAR_NAME) && ln -s $(addprefix ../../,*.[ch] $(EXTRA_SOURCES)) ./)
 	tar -zchC .temp --exclude CVS -f $(TAR_NAME).tar.gz $(TAR_NAME)
+
+datatar:
+	rm -f $(PACKAGE_TARNAME)-data.tar.gz
+	tar -czhvf ${PACKAGE_TARNAME}-data.tar.gz audio video gamedata
+
+datazip:
+	rm -f $(PACKAGE_TARNAME)-data.zip
+	zip -r ${PACKAGE_TARNAME}-data.zip audio video gamedata
+
+# Os makefile
+-include Makefile.os

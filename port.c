@@ -41,6 +41,8 @@
 #define pREDRAW 1
 #define pEXIT 2
 #define pQUIT 3
+#define pNOFADE 4
+#define pNEWMUSIC 5
 
 int put_serial(unsigned char n);
 
@@ -299,22 +301,22 @@ void SpotCrap(char loc,char mode)
     }
   #if BABYSND
    if ((loc>=0 && loc<=8) || (loc>=15 && loc<=19) || loc==12 || loc==14 || loc==11 || loc==10)
-    if (mode==SPOT_LOAD && Data->Def.Sound)
+    if (mode==SPOT_LOAD && !IsChannelMute(AV_SOUND_CHANNEL))
      {
       switch(loc) {
-       case 1:case 6:PlayAudio("JET.RAW",0);break;
-       case 3:case 8:PlayAudio("VCRASH.RAW",0);break;
-       case 16:PlayAudio("TRAIN.RAW",0);break;
-       case 4:PlayAudio("CRAWLER.RAW",0);break;
-       case 0:case 5:PlayAudio("VTHRUST.RAW",0);break;
-       case 10:PlayAudio("GATE.RAW",0);break;
-       case 18:PlayAudio("SVPROPS.RAW",0);break;
-       case 2:case 7:PlayAudio("HELI_00.RAW",0);break;
-       case 17:PlayAudio("RADARSV.RAW",0);break;
-       case 11:PlayAudio("RADARUS.RAW",0);break;
-       case 12:case 14:PlayAudio("LIGHTNG.RAW",0);break;
-       case 19:PlayAudio("CRANE.RAW",0);break;
-       case 15:PlayAudio("TRUCK.RAW",0);break;
+       case 1:case 6:PlayAudio("jet.ogg",0);break;
+       case 3:case 8:PlayAudio("vcrash.ogg",0);break;
+       case 16:PlayAudio("train.ogg",0);break;
+       case 4:PlayAudio("crawler.ogg",0);break;
+       case 0:case 5:PlayAudio("vthrust.ogg",0);break;
+       case 10:PlayAudio("gate.ogg",0);break;
+       case 18:PlayAudio("svprops.ogg",0);break;
+       case 2:case 7:PlayAudio("heli_00.ogg",0);break;
+       case 17:PlayAudio("radarsv.ogg",0);break;
+       case 11:PlayAudio("radarus.ogg",0);break;
+       case 12:case 14:PlayAudio("lightng.ogg",0);break;
+       case 19:PlayAudio("crane.ogg",0);break;
+       case 15:PlayAudio("truck.ogg",0);break;
        default:break;
       };
       turnoff=1;
@@ -909,7 +911,7 @@ void Port(char plr)
 {
 double last_secs;
 int i,j,kMode,kEnt,k;
-char good;
+char good, res;
 int kPad,pKey,gork;
 FILE *fin;
 long stable[55];
@@ -1061,8 +1063,10 @@ ui16 Count,*bone;
                     }
                   else SUSPEND=1;
 
-                  switch(PortSel(plr,i)) {
+                  res = PortSel(plr, i);
+                  switch(res) {
 	                  case pNOREDRAW:
+#ifdef DEAD_CODE
                           if (!(i==28 || i==29 || i==0 || i==31 || i==33 
                             || (Data->Year==57 || (Data->Year==58 && Data->Season==0)))) {
                             PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
@@ -1071,18 +1075,33 @@ ui16 Count,*bone;
                           av_need_update_xy(0, 0, MAX_X, MAX_Y);
 #endif
                           }
+#endif
 
                           PortText(5,196,MObj[i].Name,11);
+#ifdef DEAD_CODE
                           if (!(i==28 || i==29 || i==0 || i==31 || i==33 
                              || (Data->Year==57 || (Data->Year==58 && Data->Season==0))))
                             PlayMusic(0);
+#endif
 	                        break;
 	                  case pREDRAW:
+	                  case pNEWMUSIC:
+                      case pNOFADE:
+                          if (res != pNOFADE)
+                          {
+                              PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
+                              PlayMusic(0);
+                          }
+
                           SpotCrap(0,SPOT_KILL);  // remove spots
 													// Returning to spaceport so fade between redraws
-													FadeOut(2,pal,10,0,0);
-													DrawSpaceport(plr);
-													FadeIn(2,pal,10,0,0);
+						if (res == pREDRAW)
+                            FadeOut(2,pal,10,0,0);
+
+						DrawSpaceport(plr);
+
+						if (res == pREDRAW)
+                            FadeIn(2,pal,10,0,0);
 
 #if SPOT_ON
                           memcpy(vhptr.vptr,screen,MAX_X*MAX_Y);
@@ -1118,7 +1137,6 @@ ui16 Count,*bone;
                             else if (gork<60) SpotCrap(2+(5*plr),SPOT_LOAD);
 #endif              
                           Vab_Spot=0;
-                          PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
 #ifdef DEADCODE
 											// I'm not sure why we're redrawing the outlines here, 
 											//commenting it out for now.  if no problems are seen 
@@ -1127,7 +1145,6 @@ ui16 Count,*bone;
 												//		PortOutLine(Count,bone,0);
 #endif
                           PortText(5,196,MObj[i].Name,11);
-                          PlayMusic(0);
                      	  break;
                	   case pEXIT:
                           FadeOut(2,pal,10,0,0);
@@ -1190,19 +1207,19 @@ char PortSel(char plr,char loc)
            return pNOREDRAW;
         }
         strcpy(IDT,"i027\0");
-        Intel(plr); return pREDRAW;
+        Intel(plr); return pNEWMUSIC;
     case PORT_Capitol: strcpy(IDT,(plr==0)?"i021":"i532");strcpy(IKEY,(plr==0)?"k021":"k532");
             Review(plr); return pREDRAW;
     case PORT_Cemetery: strcpy(IDT,"i020");Hospital(plr,1); return pREDRAW;
     case PORT_VAB: if (Option!=-1) {put_serial(LET_V);put_serial(LET_V);put_serial(LET_V);}
             strcpy(IDT,"i015");MisOK=0;VAB(plr); return pREDRAW;
     case PORT_Museum: if (Option!=-1) {put_serial(LET_M);put_serial(LET_M);put_serial(LET_M);}
-            strcpy(IDT,"i027");Museum(plr); return pREDRAW;
+            strcpy(IDT,"i027");Museum(plr); return pNEWMUSIC;
     case PORT_Admin: if (Option!=-1) {put_serial(LET_A);put_serial(LET_A);put_serial(LET_A);}
             strcpy(IDT,"i027");Admin(plr);
             if (LOAD==1) return pEXIT;
             else if (QUIT==1) return pQUIT;
-            else {if (plr==0) Vab_Spot=4;return pREDRAW;}
+            else {if (plr==0) Vab_Spot=4;return pNEWMUSIC;}
     case PORT_AstroComplex: strcpy(IDT,"i039");Limbo(plr);return pREDRAW;// Astro Complex
     case PORT_MedicalCtr: strcpy(IDT,"i041");Hospital(plr,0); return pREDRAW;
     case PORT_BasicTraining: strcpy(IDT,"i038");Train(plr,0);return pREDRAW;
@@ -1236,8 +1253,8 @@ char PortSel(char plr,char loc)
                Rush(plr);RUSH=1;
                return pREDRAW;
                }
-             else Help("i104");
-             return pREDRAW;
+             else  Help("i104");
+             return pNOFADE;
 
     case PORT_ViewingStand: strcpy(IDT,"i017");strcpy(IKEY,"k017");Viewing(plr);return pREDRAW;
     case PORT_FlagPole: // Flag Pole : End turn
@@ -1279,7 +1296,7 @@ char PortSel(char plr,char loc)
     case PORT_SovMonumentAlt: Help("i025");return pNOREDRAW; // Sov Mon #2
     case PORT_Zond: strcpy(IDT,"i036");Programs(plr,3);return pREDRAW; // Zond
     case PORT_Tracking: if (Option!=-1) {MesCenter();Vab_Spot=3;return pREDRAW;} // Tracking
-              else {Help("i042");Vab_Spot=3;return pREDRAW;}
+              else {Help("i042");Vab_Spot=3;return pNOFADE;}
     case PORT_SVHQ: return pNOREDRAW; // SV
     default: return pNOREDRAW;
   }
@@ -1327,6 +1344,7 @@ char Request(char plr,char *s,char md)
        InBox(93,105,162,128);i=1;
        delay(50);key=0;
      };
+     delay(50);
   }; /* End while */
 
   if (md>0) {

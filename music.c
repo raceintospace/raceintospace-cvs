@@ -1,17 +1,14 @@
 #include "race.h"
-
-#if HAVE_LIBVORBISFILE
-
-#include <vorbis/vorbisfile.h>
-
 #include "Buzz_inc.h"
+#include "mmfile.h"
+#include "pace.h"
 
 
 struct music_file {
 	struct music_file *next;
 	char *name;
 	char *buf;
-	int size;
+	size_t size;
 };
 struct music_file *music_files;
 
@@ -19,103 +16,79 @@ struct music_file *
 get_music_file (char *name)
 {
 	struct music_file *mp;
-	FILE *inf;
-	int togo, offset;
-	OggVorbis_File vf;
-	int ret;
-	int bs;
-	char fullname[1000];
+	char fname[20];
 	int chop;
+    ssize_t bytes;
 
 	for (mp = music_files; mp; mp = mp->next) {
 		if (xstrcasecmp (name, mp->name) == 0)
 			return (mp);
 	}
 
-	sprintf (fullname, "%s/%s.ogg", music_dir, name);
-
-	if ((inf = fopen (fullname, "rb")) == NULL) {
-		printf ("can't open music file %s\n", fullname);
-		return (NULL);
-	}
+	snprintf (fname, sizeof(fname), "%s.ogg", name);
 
 	mp = xcalloc(1, sizeof *mp);
-	mp->name = xstrdup (name);
-	mp->next = music_files;
-	music_files = mp;
+    mp->size = 0;
 
-	if (ov_open (inf, &vf, NULL, 0) < 0) {
-		fprintf(stderr, "ERROR: Failed to open input as vorbis\n");
-		goto bad;
-	}
+    bytes = load_audio_file(fname, &mp->buf, &mp->size);
 
-	if (ov_info(&vf, 0)->channels != 1) {
-		fprintf (stderr, "ERROR: ogg file must be mono\n");
-		goto bad;
-	}
+    if (bytes < 0)
+    {
+        free(mp->buf);
+        return NULL;
+    }
 
-    mp->size = ov_pcm_total(&vf, 0); /* output size in bytes */
-	mp->buf = xcalloc(1, mp->size);
-	togo = mp->size;
-	offset = 0;
+    mp->name = xstrdup (name);
+    mp->next = music_files;
+    music_files = mp;
 
-	while (togo > 0) {
-		if ((ret = ov_read (&vf, mp->buf + offset,
-				    togo, 0, 1, 0, &bs)) < 0)
-			break;
-
-		offset += ret;
-		togo -= ret;
-	}
-
-	ov_clear(&vf); /* closes inf */
-
+	/* XXX: last ~2s of our music files is just garbage, get rid of it */
 	chop = 2 * 11025;
-	if (mp->size > chop)
-		mp->size -= chop;
+	if (bytes > chop)
+		bytes -= chop;
 
-	return (mp);
-bad:
-	fclose (inf);
-	return (mp);
+	/* Shorten the mem to actual size */
+	mp->buf = xrealloc(mp->buf, (mp->size = bytes));
+
+    return mp;
 }
 
 struct music_key {
 	int idx;
 	char *name;
 } music_key[] = {
-	{ M_ASSEMBLY, "ASSEMBLY" },
-	{ M_ASTTRNG, "ASTTRNG" },
-	{ M_BADNEWS, "BADNEWS" },
-	{ M_DRUMSM, "DRUMSM" },
-	{ M_ELEPHANT, "ELEPHANT" },
-	{ M_FILLER, "FILLER" },
-	{ M_FUTURE, "FUTURE" },
-	{ M_GOOD, "GOOD" },
-	{ M_HARDWARE, "HARDWARE" },
-	{ M_HISTORY, "HISTORY" },
-	{ M_INTEL, "INTEL" },
-	{ M_INTELLEG, "INTELLEG" },
-	{ M_INTERLUD, "INTERLUD" },
-	{ M_LIFTOFF, "LIFTOFF" },
-	{ M_MISSPLAN, "MISSPLAN" },
-	{ M_NEW1950, "NEW1950" },
-	{ M_NEW1970, "NEW1970" },
-	{ M_PRES, "PRES" },
-	{ M_PRGMTRG, "PRGMTRG" },
-	{ M_RD, "R&D" },
-	{ M_SOVTYP, "SOVTYP" },
-	{ M_SUCCESS, "SUCCESS" },
-	{ M_SVFUN, "SVFUN" },
-	{ M_SVLOGO, "SVLOGO" },
-	{ M_SVPORT, "SVPORT2" },
-	{ M_THEME, "THEME" },
-	{ M_UNSUCC, "UNSUCC" },
-	{ M_USFUN, "USFUN" },
-	{ M_USMIL, "USMIL" },
-	{ M_USPORT, "USPORT2" },
-	{ M_USSRMIL, "USSRMIL" },
-	{ M_VICTORY, "VICTORY" },
+	{ M_ASSEMBLY, "assembly" },
+	{ M_ASTTRNG, "asttrng" },
+	{ M_BADNEWS, "badnews" },
+	{ M_DRUMSM, "drumsm" },
+	{ M_ELEPHANT, "elephant" },
+	{ M_FILLER, "filler" },
+	{ M_FUTURE, "future" },
+	{ M_GOOD, "good" },
+	{ M_HARDWARE, "hardware" },
+	{ M_HISTORY, "history" },
+	{ M_INTEL, "intel" },
+	{ M_INTELLEG, "intelleg" },
+	{ M_INTERLUD, "interlud" },
+	{ M_LIFTOFF, "liftoff" },
+	{ M_MISSPLAN, "missplan" },
+	{ M_NEW1950, "new1950" },
+	{ M_NEW1970, "new1970" },
+	{ M_PRES, "pres" },
+	{ M_PRGMTRG, "prgmtrg" },
+	{ M_RD, "r&d" },
+	{ M_SOVTYP, "sovtyp" },
+	{ M_SUCCESS, "success" },
+	{ M_SVFUN, "svfun" },
+	{ M_SVLOGO, "svlogo" },
+	{ M_SVPORT, "svport2" },
+	{ M_THEME, "theme" },
+	{ M_UNSUCC, "unsucc" },
+	{ M_USFUN, "usfun" },
+	{ M_USMIL, "usmil" },
+	{ M_USPORT, "usport2" },
+	{ M_USSRMIL, "ussrmil" },
+	{ M_VICTORY, "victory" },
 	{ 0, NULL },
 };
 
@@ -173,13 +146,3 @@ UpdateMusic (void)
 {
 	av_step ();
 }
-
-#else /* HAVE_LIBVORBISFILE */
-
-void PlayMusic(char mode) {}
-void KillMusic(void) {}
-void PreLoadMusic(char val) {}
-void UpdateMusic (void) {}
-
-
-#endif /* HAVE_LIBVORBISFILE */

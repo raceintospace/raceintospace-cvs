@@ -28,7 +28,6 @@
 
 #define DELAYCNT 55
 
-extern int evflag;
 extern struct mStr Mis;
 
 void DrawBudget(char player,char *pStatus)
@@ -459,7 +458,6 @@ void DrawVText(char got)
     buf++;
     if (*buf=='\0') i=9;
   }
-  
   return;
 }
 

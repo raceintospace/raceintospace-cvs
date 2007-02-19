@@ -1,4 +1,4 @@
-CFLAGS += -O2 -I.. -Wall
+CFLAGS += -g -I.. -Wall
 
 VPATH = ..
 
