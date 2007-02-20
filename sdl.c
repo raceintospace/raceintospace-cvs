@@ -176,7 +176,9 @@ play(struct audio_chunk *new_chunk, int channel)
 	{
 		if (cp == new_chunk)
 		{
-			/* DEBUG */ printf("play: attempt to do duplicate chunk add\n");
+#if 0
+			/* DEBUG */ fprintf(stderr, "play: attempt to do duplicate chunk add\n");
+#endif
 			av_silence(channel);
 			break;
 		}
@@ -247,11 +249,11 @@ av_setup(void)
 
 	if (!options.want_audio || SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
-		/* INFO */ printf("no audio\n");
+		/* INFO */ fprintf(stderr, "sdl: no audio\n");
 	}
 	else
 	{
-		/* INFO */ printf("audio initialized\n");
+		/* INFO */ fprintf(stderr, "sdl: audio initialized\n");
 		have_audio = 1;
 	}
 
@@ -299,7 +301,7 @@ av_setup(void)
 
     fade_info.step = 1;
     fade_info.steps = 1;
-    do_fading = options.want_fade;
+    do_fading = 1;
 
     alloc_dirty_tree();
 
@@ -411,7 +413,7 @@ av_process_event(SDL_Event * evp)
 		case SDL_ACTIVEEVENT:
 			break;
 		default:
-			/* DEBUG */ printf("got uknown event %d\n", evp->type);
+			/* DEBUG */ /* fprintf(stderr, "got uknown event %d\n", evp->type); */
 			break;
 	}
 }

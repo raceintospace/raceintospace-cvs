@@ -270,7 +270,7 @@ StopAudio(char mode)
 void
 CloseEmUp (unsigned char error,unsigned int value)
 {
-	printf ("CloseEmUp()\n");
+	/* DEBUG */ /* fprintf (stderr, "CloseEmUp()\n"); */
 	exit(EXIT_SUCCESS);
 }
 
@@ -412,6 +412,9 @@ load_audio_file(const char *name, char **data, size_t *size)
     ssize_t read = 0;
     double start = get_time();
 
+	/* make compiler happy */
+	start *= 1.0;
+
     assert(name);
     assert(data);
     assert(size);
@@ -421,14 +424,15 @@ load_audio_file(const char *name, char **data, size_t *size)
 
     if (mm_audio_info(&mf, &channels, &rate) < 0)
     {
-		/* WARN */ printf("no audio data in file %s\n", name);
+		/* WARN */ fprintf(stderr, "no audio data in file '%s'\n", name);
         mm_close(&mf);
         return -1;
     }
 
 	if (channels != 1 || rate != 11025)
 	{
-		/* WARN */ printf("file %s is not mono, 11025Hz\n", name);
+		/* WARN */ fprintf(stderr,
+				"file '%s' is not mono, 11025Hz\n", name);
 		mm_close(&mf);
 		return -1;
 	}
@@ -446,8 +450,10 @@ load_audio_file(const char *name, char **data, size_t *size)
 
     mm_close(&mf);
 
+#if 0
     /* DEBUG */ fprintf(stderr, "load_audio_file(%s) took %5.4f sec.\n",
             name, get_time() - start);
+#endif
 
     return offset;
 }

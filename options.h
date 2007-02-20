@@ -6,7 +6,6 @@ typedef struct {
     char *dir_gamedata;
     int want_audio;
     int want_intro;
-    int want_fade;
     int want_cheats;
 } game_options;
 

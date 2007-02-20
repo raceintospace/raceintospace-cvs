@@ -119,7 +119,7 @@ int MChoice(char qty,char *Name)
 		}
 	}   //while(j=...
 
-	printf ("MChoice = %d\n", j);
+	/* DEBUG */ /* fprintf (stderr, "MChoice = %d\n", j); */
 	return j;
 }
 

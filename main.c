@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
   Data = xmalloc(sizeof (struct Players) + 1);
   buffer = xmalloc(BUFFER_SIZE);
 
-  /* DEBUG */ //printf ("main buffer %p (%d)\n", buffer, BUFFER_SIZE);
+  /* DEBUG */ //fprintf (stderr, "main buffer %p (%d)\n", buffer, BUFFER_SIZE);
 
   memset(buffer,0x00,BUFFER_SIZE);
 
@@ -169,13 +169,14 @@ int main(int argc, char *argv[])
     i=fread(buffer,1,BUFFER_SIZE,fin); 
     fclose(fin);
 
-    printf ("reading Players: size = %d\n", (int)sizeof (struct Players));
+    /* DEBUG */ /* fprintf (stderr, "reading Players: size = %d\n",
+		(int)sizeof (struct Players)); */
     RLED(buffer,(char *)Data,i);
 #ifdef __BIG_ENDIAN__
 		SwapGameDat();	// Take care of endian read
 #endif
     if (Data->Checksum!=(sizeof (struct Players))) {
-      printf("BARIS Note: Wrong version of Data File.\n");
+      /* ERROR */ fprintf(stderr, "BARIS Error: Wrong version of Data File.\n");
       CloseEmUp(0,0);
     }
 
@@ -1116,7 +1117,7 @@ Plop(char plr, char mode)
 	return;
 #   else
 	sprintf(fname, "%s/%s", movies_dir, sName);
-	/* INFO */ printf("mm_open(%s)\n", fname);
+	/* INFO */ /* fprintf(stderr, "mm_open('%s')\n", fname);*/
 	if (mm_open(&vidfile, fname) <= 0)
 		return;
 	if (mm_video_info(&vidfile, NULL, NULL, NULL) <= 0)

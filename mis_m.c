@@ -255,10 +255,11 @@ void MisCheck(char plr,char mpad)
 
     PROBLEM=(val>safety) ? 1: 0;
 
-    if (never_fail)
+    if (!AI[plr] && never_fail)
 	    PROBLEM = 0;
 
-    printf ("SAFETY: %d %d %d\n", val, safety, PROBLEM);
+    /* DEBUG */ /* fprintf (stderr, "SAFETY: %2d %2d%s\n",
+			val, safety, PROBLEM ? " PROBLEM" : ""); */
 
     if (!AI[plr] && BIG==0) 
       if (!(fEarly && STEP!=0))

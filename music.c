@@ -92,12 +92,14 @@ struct music_key {
 	{ 0, NULL },
 };
 
-struct music_file *cur_music;
+static struct music_file *cur_music;
+static int same_music = 0;
 
 void
 PreLoadMusic(char val)
 {
 	struct music_key *dp;
+	struct music_file *mf;
 
 	for (dp = music_key; dp->name; dp++) {
 		if (dp->idx == val)
@@ -105,13 +107,20 @@ PreLoadMusic(char val)
 	}
 
 	if (dp->name == NULL) {
-		printf ("PreLoadMusic: unknown idx %d\n", val);
+		/* WARN */ fprintf (stderr, "PreLoadMusic: unknown idx %d\n", val);
 		return;
 	}
 
-	printf ("PreLoadMusic(%s)\n", dp->name);
+	/* DEBUG */ /* printf ("PreLoadMusic(%s)\n", dp->name); */
 
-	cur_music = get_music_file (dp->name);
+	mf = get_music_file (dp->name);
+
+	if (mf == cur_music)
+		same_music = 1;
+	else
+		same_music = 0;
+
+	cur_music = mf;
 }
 
 struct audio_chunk music_chunk;
@@ -120,6 +129,9 @@ void
 PlayMusic(char mode) 
 {
 	if (cur_music == NULL)
+		return;
+
+	if (same_music)
 		return;
 
     /*

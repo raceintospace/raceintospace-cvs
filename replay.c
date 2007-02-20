@@ -190,11 +190,14 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 	WaitForMouseUp();
 
-	/* INFO */ printf("******\n");
-	/* INFO */ printf("%d segments\n", Rep.Qty);
+#if 0
+	/* DEBUG */ fprintf(stderr, "******\n");
+	/* DEBUG */ fprintf(stderr, "%d segments\n", Rep.Qty);
+#endif
 	for (kk = 0; kk < Rep.Qty; kk++)
 	{
-		/* INFO */ printf("segment %d: %d\n", kk, Rep.Off[kk]);
+		/* DEBUG */ /* fprintf(stderr, "segment %d: %d\n", kk, Rep.Off[kk]);
+		 */
 		UpdateMusic();
 		if (Rep.Off[kk] < 1000)	   //Specs: success seq
 		{
@@ -246,7 +249,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 			snprintf(fname, sizeof(fname), "%s.ogg", seq_fname);
 
-			/* INFO */ printf("mm_open(%s)\n", fname);
+			/* DEBUG */ /* fprintf(stderr, "mm_open(%s)\n", fname); */
 
 			if (mm_open_fp(&vidfile, sOpen(fname, "rb", FT_VIDEO)) <= 0)
 				goto done;
@@ -361,7 +364,7 @@ AbzFrame(char plr, int num, int dx, int dy, int width, int height,
 	/* XXX use a generic function */
 	snprintf(fname, sizeof(fname), "%s.ogg", seq_filename(idx, mode));
 
-	/* INFO */ printf("mm_open(%s)\n", fname);
+	/* DEBUG */ /* fprintf(stderr, "mm_open(%s)\n", fname); */
 	if (mm_open_fp(&vidfile, sOpen(fname, "rb", FT_VIDEO)) <= 0)
 		return;
 

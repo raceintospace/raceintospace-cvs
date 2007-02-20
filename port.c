@@ -217,12 +217,9 @@ void SpotCrap(char loc,char mode)
       fread(&sImg,sizeof sImg,1,sFin);    // get image header
 
       {
-	      static int warned;
 	      int expected_w = hSPOT.size / sImg.h;
-	      if (sImg.w != expected_w && warned == 0) {
-		      warned = 1;
-		      printf ("************ fixing sImg.w %d->%d\n",
-			      sImg.w, expected_w);
+		  /* DEBUG - FIXING sImg.w */
+	      if (sImg.w != expected_w) {
 		      sImg.w = expected_w;
 	      }
       }

@@ -58,7 +58,7 @@ void Admin(char plr)
   i=0;beg=1;
   
   do {
-     if (i!=6) PreLoadMusic(M_GOOD);
+     PreLoadMusic(M_GOOD);
      if (beg) beg=0;
      else {
         
@@ -843,7 +843,8 @@ save_game (char *name)
 	EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
     if ((inf = sOpen("ENDTURN.TMP","rb",1)) == NULL) {
-		printf ("save_game: can't open ENDTURN.TMP\n");
+		/* WARN */ fprintf (stderr,
+				"save_game: can't open ENDTURN.TMP\n");
 		return;
 	}
 
@@ -863,7 +864,7 @@ save_game (char *name)
 	hdr.compSize = 0; //filelength (fileno (inf));
 	   
 	if ((outf = sOpen (name, "wb", 1)) == NULL) {
-		printf ("save_game: can't create %s\n", name);
+		/* WARN */ fprintf (stderr, "save_game: can't create %s\n", name);
 		goto cleanup;
 	}
 

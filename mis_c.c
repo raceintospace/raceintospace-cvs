@@ -401,7 +401,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		snprintf(name, sizeof(name), "%s.ogg", seq_name);
 		mmfp = sOpen(name, "rb", FT_VIDEO);
 
-        /* INFO */ printf("mm_open(%s)\n", name);
+        /* INFO */ /* fprintf(stderr, "mm_open(%s)\n", name); */
         if (mm_open_fp(&vidfile, mmfp) <= 0)
             break;
 
@@ -419,14 +419,16 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 			if (hold_count == 0) {
 
-            /* TODO track decoding time and adjust delays */
-            if (mm_decode_video(&vidfile, video_overlay) <= 0)
-                break;
+				/* TODO track decoding time and adjust delays */
+				if (mm_decode_video(&vidfile, video_overlay) <= 0)
+					break;
 
-            screen_dirty = 1;
+				screen_dirty = 1;
 
-            if (j == 0)
-                printf ("frame rate %g\n", fps);
+				if (j == 0)
+				{
+					/* DEBUG */ /* fprintf(stderr, "frame rate %g\n", fps); */
+				}
 
             /* XXX I don't get the fancy "hold thing so I left it out */
 
@@ -441,7 +443,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				idle_loop (FRM_Delay);
 				hold_count++;
 			} else {
-				printf ("**** need to come out of hold\n");
+				/* WARN */ fprintf (stderr, "**** need to come out of hold\n");
 			}
 
             video_rect.w = 160;
@@ -947,7 +949,11 @@ FILE *OpenAnim(char *fname)
       } AIndex;
 
    fin=open_gamedat("LIFTOFF.ABZ");
-   if (!fin) {printf("File Error on File: %s\n",fname);return fin;}
+	if (!fin)
+	{								   
+	/* ERROR */ fprintf(stderr, "File Error on File: %s\n", fname);
+		return fin;
+	}
    fread(&AIndex,sizeof AIndex,1,fin);
    while (strncmp(AIndex.ID,fname,4)!=0) {
       fread(&AIndex,sizeof AIndex,1,fin);

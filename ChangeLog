@@ -1,16 +1,14 @@
-2007-02-19  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+2007-02-20  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
-	* V132
+	* V133
 
-	* Merged changes from B1-theora_and_ogg:
+	* Rewrote config file code.
 
-	* All videos and music now use theora and vorbis.
+	* Intro is on by default.
 
-	* New directory structure for audio, video and game data.
+	* Commented out unnecessary console output.
 
-	* Win32 cross-compilation and binary installer setup.
-
-	* Fixes in drawing code, mostly related to tracking screen updates.
+	* Added few copyright notices.
 
 2007-02-19  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 

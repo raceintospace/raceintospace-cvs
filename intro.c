@@ -169,7 +169,7 @@ struct intro_image {
 	unsigned char map[256 * 3];
 	unsigned char pixels[320 * 200];
 };
-struct intro_image intro_images[INTRO_IMAGE_COUNT];
+struct intro_image *intro_images;
 
 int
 read_img_frame (FILE *inf, struct intro_image *ip)
@@ -214,6 +214,8 @@ read_intro_images (void)
 	FILE *fin;
 	int i;
 
+	intro_images = xmalloc(sizeof(struct intro_image)*INTRO_IMAGE_COUNT);
+
 	fin = sOpen ("FIRST.IMG","rb",0);
 
 	for (i = 0; i < 15; i++) {
@@ -248,13 +250,16 @@ void Introd(void)
 
 	    key = 0;
 	    PauseMouse();
-	    if (key || grGetMouseButtons())
-		    goto done;
+	    if (key == K_ESCAPE)
+			goto done;
+		else if (key || grGetMouseButtons())
+		    break;
     }
   }
 
 done:
   gxClearDisplay(0,0);
+  free(intro_images);
 }
 
 void NextTurn(char plr)
