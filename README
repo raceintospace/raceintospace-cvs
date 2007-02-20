@@ -1,29 +1,40 @@
-See also the file DEVELOPER
+0. License
 
-To run the game:
+    Race Into Space is distributed under GNU General Pulic License (GPL)
+    version 2. You can find the terms and conditions in file COPYING.
 
-Make a directory /usr/share/raceintospace/cdrom and put the files from
-the original cdrom there.  So, for example, you should have the file
-/usr/share/raceintospace/cdrom/gamedat/unews.cdr The program is
-tolerant of whether the file names are in upper or lower case.
+1. Running the game
 
-Put the music files in /usr/share/raceintospace/music This will be
-done automatically if you install the rpm file.  If not, you can get
-music.tar.gz from the Sourceforge project at
+    If you have downloaded the source distribution then see DEVELOPER file.
+    Follow on once you have the game executables ready.
 
-	http://sourceforge.net/project/showfiles.php?group_id=129186
+    Try to run the game, it will probably complain about missing
+    data files. This should not happen if you have downloaded and
+    properly installed one of binary distributions (ie. RPM or windows
+    installer). If you have built the game from source then get the
+    data files from http://sf.net/projects/raceintospace/
 
-To compile, simply type "make".
+    Once you have your data files extracted, edit the file
+    ~/.raceintospace/config - it will be created when you start
+    the game for the first time. Hopefully the file format is
+    self-explanatory.  By the way, your saved games will be stored
+    in the same directory (~/.raceintospace)
 
-The executable program is "raceintospace" which doesn't require any
-arguments.
+    Alternatively you can specify location of configuration directory
+    and game data directory with environment variables BARIS_SAVE
+    and BARIS_DATA, respectively. These are also supported when
+    present on the command line, ie:
 
-Your saved games will be written to $HOME/.raceintospace
+    $ raceintospace BARIS_DATA=$HOME/baris/
 
-The development system is
+    Good luck on your way to the Moon!
 
-Fedora core 5
-SDL 1.2.9
-libvorbis-1.1.2
+2. Troubleshooting
 
-Pace Willisson <pace@alum.mit.edu>
+    Probably you will run into some bugs, at least if you play
+    the game long enough. To help us improve raceintospace please
+    try to find a way to reproduce the crash and email it to
+    kmccarty@raceintospace.org, possibly accompanied by a save game
+    file and your system information (libraries, etc.)
+
+3. Development: see file DEVELOPER.

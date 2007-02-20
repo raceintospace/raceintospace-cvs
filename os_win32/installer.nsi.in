@@ -39,7 +39,7 @@
 ;--------------------------------
 ;Pages
 
-  !insertmacro MUI_PAGE_LICENSE "..\COPYING"
+  !insertmacro MUI_PAGE_LICENSE "COPYING.txt"
   ;!insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
@@ -66,9 +66,10 @@ Section "Dummy Section" SecDummy
   ;Libraries
   File *.dll
   ;Documentation
-  File /oname=README.txt ..\README
-  File /oname=DEVELOPER.txt ..\DEVELOPER
-  File /oname=COPYING.txt ..\COPYING
+  File README.txt
+  File DEVELOPER.txt
+  File AUTHORS.txt
+  File COPYING.txt
   ;Icon
   File Shuttle.ico
   ;Data files
@@ -119,6 +120,7 @@ Section "Uninstall"
   Delete "$INSTDIR\Uninstall.exe"
   Delete "$INSTDIR\README.txt"
   Delete "$INSTDIR\COPYING.txt"
+  Delete "$INSTDIR\AUTHORS.txt"
   Delete "$INSTDIR\DEVELOPER.txt"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\${PTARNAME}.exe"
