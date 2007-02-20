@@ -8,8 +8,8 @@ exec ../configure --build=$build --host=$target --target=$target \
 	--with-sdl=$cross_tools --disable-sdltest \
 	--with-ogg=$cross_tools --disable-oggtest \
 	--with-vorbis=$cross_tools --disable-vorbistest \
-	CPPFLAGS="-I. -I.. -I- -I$cross_tools/include" \
-	LDFLAGS=-L$cross_tools/lib \
+	--with-theora=$cross_tools \
+	CPPFLAGS="-I. -I.. -I-" \
 	"$@"
 
 # -I- splits directory search path and turns off searching 

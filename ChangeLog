@@ -1,3 +1,9 @@
+2007-02-21  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V135
+
+	* New autoconf macro for testing availability of theora lib.
+
 2007-02-20  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V134

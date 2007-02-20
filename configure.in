@@ -34,10 +34,7 @@ XIPH_PATH_OGG(,
 XIPH_PATH_VORBIS(,
 	AC_MSG_ERROR([[*** Vorbis library is required ***]]))
 
-AC_CHECK_LIB(theora,main,
-	[
-	 	[LIBS]="-ltheora $LIBS"
-	],
+XIPH_PATH_THEORA(,
 	AC_MSG_ERROR([[*** Theora library is required ***]]))
 
 dnl ==============================

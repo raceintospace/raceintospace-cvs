@@ -1,9 +1,9 @@
 # @configure_input@
 
 CC=@CC@
-LIBS=@LIBS@ @OGG_LIBS@ @VORBIS_LIBS@ @SDL_LIBS@
-CPPFLAGS=@CPPFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @SDL_CFLAGS@ \
-		 -DCONFIG_DATADIR=\"${DATA_DIR}\"
+LIBS=@LIBS@ @OGG_LIBS@ @VORBIS_LIBS@ @THEORA_LIBS@ @SDL_LIBS@
+CPPFLAGS=@CPPFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @THEORA_CFLAGS@ \
+		 @SDL_CFLAGS@ -DCONFIG_DATADIR=\"${DATA_DIR}\"
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PROG_NAME=${PACKAGE_TARNAME}@EXEEXT@
 CFLAGS =-g -Wall -std=c99 @CFLAGS@
@@ -92,7 +92,7 @@ $(PROG_NAME): $(BARIS_OBJS)
 	@$(CC) $(CPPFLAGS) $(CFLAGS) $(EXTRA_WARNINGS) -c $<
 
 vtest2@EXEEXT@: $(addsuffix @OBJEXT@, vtest2 mmfile)
-	$(CC) $(CFLAGS) -o $@ $^ @OGG_LIBS@ @VORBIS_LIBS@ -ltheora @SDL_LIBS@
+	$(CC) $(CFLAGS) -o $@ $^ @OGG_LIBS@ @VORBIS_LIBS@ @THEORA_LIBS@ @SDL_LIBS@
 
 imgsplit@EXEEXT@: imgsplit.@OBJEXT@
 	$(CC) $(CFLAGS) -o $@ $^ -lm
@@ -138,7 +138,7 @@ distclean: clean
 	rm -f configure
 	rm -rf autom4te.cache
 
-configure: configure.in
+configure: configure.in $(wildcard m4/*.m4)
 	-aclocal $(ACLOCAL_FLAGS)
 	autoconf
 
