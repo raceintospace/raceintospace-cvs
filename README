@@ -33,8 +33,9 @@
 
     Probably you will run into some bugs, at least if you play
     the game long enough. To help us improve raceintospace please
-    try to find a way to reproduce the crash and email it to
-    kmccarty@raceintospace.org, possibly accompanied by a save game
-    file and your system information (libraries, etc.)
+    try to find a way to reproduce it and submit a bug report 
+    via the Tracker at http://sf.net/projects/raceintospace/
+    possibly accompanied by a save game file and your system 
+    information (libraries, etc.)
 
 3. Development: see file DEVELOPER.
