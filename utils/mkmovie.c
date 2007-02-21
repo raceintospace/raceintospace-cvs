@@ -173,7 +173,7 @@ main(int argc, char **argv)
 	int rc;
 	unsigned char pixels[64 * 1000], map[768];
 	char outfname[100];
-	int i, j, num;
+	int i, num;
 	int pixel;
 	unsigned char *up;
 	int r, g, b;

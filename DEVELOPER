@@ -41,13 +41,12 @@ ones would probably have to be built from source.
     8)  to build an installer you will need makensis tool, get it from
         http://nsis.sourceforge.net/, it is also available in debian (nsis)
 
-4. Building on Mac OS X (INCOMPLETE)
+4. Building on Mac OS X
 
-    The Race into Space Project has a registered Application Signature with
-    Apple Inc.
-
-    Application Signatures:
-    ASCII: RiSP  HEX: 52695350
+    1)  Use Darwin Ports to get the development libraries libsdl-dev libtheora libogg libvorbis
+				# port install libsdl libtheora libogg libvorbis
+    2)  $ ./configure --with-OGG=/opt/local --with-theora=/opt/local
+    3)  $ make
 
 5. Making RPM's (THIS SECTION NEEDS UPDATING)
 
