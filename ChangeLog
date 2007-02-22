@@ -1,3 +1,15 @@
+2007-02-21  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V139
+
+	* configure.in: added checks for getenv and SDL_getenv.
+
+	* options.c: #define getenv to something else if necessary.
+
+	* AUTHORS: added file to the project.
+
+	* checkin3: added checks for command return values interruptions.
+
 2007-02-21  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V138

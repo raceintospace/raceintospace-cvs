@@ -68,6 +68,29 @@ dnl ===========================
 
 AC_FUNC_MKDIR
 
+AC_CHECK_FUNC(getenv,
+	AC_DEFINE([HAVE_GETENV], 1,
+			  [Define to 1 if you have the `getenv' function.]))
+
+dnl Probably another approach is to check for higher SDL library version.
+save_libs="$LIBS";
+save_cflags="$CFLAGS"
+LIBS="$SDL_LIBS $LIBS";
+CFLAGS="$CFLAGS $SDL_CFLAGS"
+AC_MSG_CHECKING([[for SDL_getenv]])
+AC_LINK_IFELSE([
+	AC_LANG_PROGRAM(
+		[[#include <SDL.h>]],
+		[[SDL_getenv("HOME")]])],
+	[
+		AC_DEFINE([HAVE_SDL_GETENV], 1,
+				  [Define to 1 if you have the `SDL_getenv' function.])
+		AC_MSG_RESULT(yes)
+	],
+	AC_MSG_RESULT(no))
+LIBS="$save_libs"
+CFLAGS="$save_cflags"
+
 dnl =============================
 dnl === Check system services ===
 dnl =============================

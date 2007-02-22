@@ -32,25 +32,29 @@ if (not $tagname) {
 my $cmd = "cvs diff > $diffname";
 print $cmd;
 system "cvs diff > $diffname";
+# cvs diff has got botched exit status and no way of knowing if it succeeded.
+die "No changes! What are you checking in???\n" if not $?;
 
 # obviously assume pathsep = ':' and dirsep = '/'
 if (grep { -x "$_/diffstat" } split ":", $ENV{PATH}) {
     print "=== DIFFSTAT ===";
-    system "diffstat < $diffname";
+    system "diffstat < $diffname"
+		and die "diffstat failed!\n";
 }
 
 $cmd = '${PAGER:-less} < '.$diffname;
 print "=== REVIEW CHANGES? ===";
 if (<STDIN> =~ /^[yY]/) {
-#    print $cmd;
-    system $cmd;
+    system $cmd
+		and die "PAGER failed???\n";
 } 
 
 $cmd = "cvs commit -R -F $logfname && cvs tag -R $tagname";
 print "=== COMMIT? ===";
 if (<STDIN> =~ /^[yY]/) {
     print $cmd;
-    system $cmd;
+    system $cmd
+		and die "cvs commit or tag failed!\n";
 } 
 
 END {

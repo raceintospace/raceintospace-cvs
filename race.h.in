@@ -13,6 +13,9 @@
    */
 #undef HAVE_DIRENT_H
 
+/* Define to 1 if you have 'getenv' function */
+#undef HAVE_GETENV
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -27,6 +30,9 @@
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
+
+/* Define to 1 if you have SDL_getenv. */
+#undef HAVE_SDL_GETENV
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -53,6 +59,9 @@
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
+
+/* Define if Theora support is available */
+#undef HAVE_THEORA
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H

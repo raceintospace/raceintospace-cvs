@@ -35,7 +35,6 @@
 #  define DEFAULT_DATADIR ("c:/" PACKAGE_TARNAME )
 #  define DEFAULT_SAVEDIR ("c:/" PACKAGE_TARNAME "/savedat")
 #elif CONFIG_LINUX
-/* TODO: make this depend on PREFIX */
 #  define DEFAULT_DATADIR CONFIG_DATADIR
 #  define DEFAULT_SAVEDIR (".")
 #elif CONFIG_MACOSX
@@ -49,6 +48,15 @@
 
 #ifndef DEFAULT_SAVEDIR
 #  define DEFAULT_SAVEDIR (".")
+#endif
+
+#if !HAVE_GETENV
+#  if HAVE_SDL_GETENV
+#    define getenv SDL_getenv
+#  else
+#    warn I don't know a way to read environment on this system
+#    define getenv(a) (NULL)
+#  endif
 #endif
 
 game_options options;
@@ -263,8 +271,8 @@ setup_options(int argc, char *argv[])
 		else if (strcmp(env_vars[i].name, ENVIRON_SAVEDIR) == 0
 			&& ((str = getenv("HOME"))
 #if CONFIG_WIN32
-				|| (str = SDL_getenv("HOMEPATH"))
-				|| (str = SDL_getenv("USERPROFILE"))
+				|| (str = getenv("HOMEPATH"))
+				|| (str = getenv("USERPROFILE"))
 #endif
 			))
 		{
