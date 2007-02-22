@@ -23,6 +23,8 @@
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
+#include <memory.h>
+#include <stdlib.h>
 #include <limits.h>
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>

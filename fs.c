@@ -23,6 +23,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 /* see how do we call mkdir */
 #if HAVE_MKDIR

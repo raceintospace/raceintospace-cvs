@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <SDL.h>
 
 #define ENVIRON_DATADIR ("BARIS_DATA")
@@ -257,10 +258,10 @@ setup_options(int argc, char *argv[])
 	/* first set up defaults */
 	for (i = 0; i < (int) ARRAY_LENGTH(env_vars); ++i)
 	{
-		if ((str = SDL_getenv(env_vars[i].name)))
+		if ((str = getenv(env_vars[i].name)))
 			*env_vars[i].dest = xstrdup(str);
 		else if (strcmp(env_vars[i].name, ENVIRON_SAVEDIR) == 0
-			&& ((str = SDL_getenv("HOME"))
+			&& ((str = getenv("HOME"))
 #if CONFIG_WIN32
 				|| (str = SDL_getenv("HOMEPATH"))
 				|| (str = SDL_getenv("USERPROFILE"))

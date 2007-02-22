@@ -12,19 +12,20 @@
     2)  $ ./configure
     3)  $ make
 
-2. Building on Windows using mingw32
+Notes: I needed to do these extra things before ./configure:
 
-This setup was not tested, but you may be the first one to try.
-You will need development versions of libraries mentioned above.
-mingw32 version of SDL is available at http://libsdl.org, other
-ones would probably have to be built from source.
+	# cp m4/theora.m4 /usr/share/aclocal/.
+	$ aclocal -I m4
+	$ autoconf
 
-    1)  cd os_win32/
-    2)  Edit file configure.mingw32
-    3)  run ./configure.mingw32
-    4)  make
+autoconf prints one error:
 
-3. Cross compiling: Linux - Windows: tested
+	configure.in:51: error: possibly undefined macro: AC_TYPE_SSIZE_T
+
+which can be ignored
+
+
+2. Cross compiling: Linux - Windows: tested
 
     1)  install the cross compiler as described at:
         http://www.libsdl.org/extras/win32/cross/README.txt
@@ -41,14 +42,14 @@ ones would probably have to be built from source.
     8)  to build an installer you will need makensis tool, get it from
         http://nsis.sourceforge.net/, it is also available in debian (nsis)
 
-4. Building on Mac OS X
+3. Building on Mac OS X
 
     1)  Use Darwin Ports to get the development libraries libsdl-dev libtheora libogg libvorbis
 				# port install libsdl libtheora libogg libvorbis
     2)  $ ./configure --with-OGG=/opt/local --with-theora=/opt/local
     3)  $ make
 
-5. Making RPM's (THIS SECTION NEEDS UPDATING)
+4. Making RPM's (THIS SECTION NEEDS UPDATING)
 
     1)  useful instructions:
         https://pmc.ucsc.edu/~dmk/notes/RPMs/Creating_RPMs.html
@@ -59,6 +60,20 @@ ones would probably have to be built from source.
         %_topdir /home/race/rpmbuild
         %_tmppath /home/race/rpmbuild/tmp
     5)  run the script "mkrpm"
+
+5. Building on Windows using mingw32
+
+This method was used in early testing, but may no longer work.  Give
+it a shot if you like.  You will need development versions of
+libraries mentioned above.  mingw32 version of SDL is available at
+http://libsdl.org, other ones would probably have to be built from
+source.
+
+    1)  cd os_win32/
+    2)  Edit file configure.mingw32
+    3)  run ./configure.mingw32
+    4)  make
+
 
 6. CVS access
 
