@@ -17,7 +17,6 @@ sdltest
 *.hex
 TMP
 raceintospace
-raceintospace.tar.gz
 autom4te.cache
 config.log
 config.status
@@ -26,3 +25,8 @@ race.h
 .DS_Store
 cscope.out
 .*.swp
+.temp
+Makefile
+aclocal.m4
+int_types.h
+*.tar.gz

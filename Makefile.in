@@ -8,14 +8,16 @@ PACKAGE_TARNAME=@PACKAGE_TARNAME@
 PROG_NAME=${PACKAGE_TARNAME}@EXEEXT@
 CFLAGS =-g -Wall -std=c99 @CFLAGS@
 TAR_NAME=@PACKAGE_TARNAME@-@PACKAGE_VERSION@
-prefix = @prefix@
+
+# rpmbuild uses DESTDIR to stage the compilation output
+DESTDIR=
+prefix = $(DESTDIR)/@prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
 datadir = @datadir@
-datarootdir = @datarootdir@
 mandir = @mandir@
-docdir = @docdir@
-DATA_DIR=${datarootdir}/${PACKAGE_TARNAME}
+docdir = ${datadir}/doc/${PACKAGE_TARNAME}
+DATA_DIR=${datadir}/${PACKAGE_TARNAME}
 
 # HACK - use vpath to search for files in win32 build
 vpath %.@OBJEXT@
@@ -71,10 +73,13 @@ install: $(PROG_NAME)
 	gzip < $(PROG_NAME).6 > ${mandir}/man6/$(PROG_NAME).6.gz
 	install -c -m 644 README ${docdir}/.
 
+# don't change the source of these copies ... they copy
+# data from the compilation environment into the build root
 rpm_install: install
-	cp -pr ./audio $(DATA_DIR)
-	cp -pr ./video $(DATA_DIR)
-	cp -pr ./gamedata $(DATA_DIR)
+	cp -pr /usr/local/share/raceintospace/audio $(DATA_DIR)
+	cp -pr /usr/local/share/raceintospace/video $(DATA_DIR)
+	cp -pr /usr/local/share/raceintospace/gamedata $(DATA_DIR)
+	find $(DATA_DIR) -type f -print | xargs chmod a-x+r
 
 uninstall:
 	rm -f ${bindir}/$(PROG_NAME)
@@ -127,7 +132,7 @@ cscope: FORCE
 	cscope -b
 
 clean:
-	rm -f *.@OBJEXT@ *~
+	rm -f *.@OBJEXT@ *~ diffs
 	rm -f $(PROG_NAME)
 	rm -f $(PROGS)
 	rm -f $(TAR_NAME).*

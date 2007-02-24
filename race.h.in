@@ -13,7 +13,7 @@
    */
 #undef HAVE_DIRENT_H
 
-/* Define to 1 if you have 'getenv' function */
+/* Define to 1 if you have the `getenv' function. */
 #undef HAVE_GETENV
 
 /* Define to 1 if you have the <inttypes.h> header file. */
@@ -31,7 +31,7 @@
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
 
-/* Define to 1 if you have SDL_getenv. */
+/* Define to 1 if you have the `SDL_getenv' function. */
 #undef HAVE_SDL_GETENV
 
 /* Define to 1 if you have the <stdint.h> header file. */
@@ -87,19 +87,19 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* The size of `char', as computed by sizeof. */
+/* The size of a `char', as computed by sizeof. */
 #undef SIZEOF_CHAR
 
-/* The size of `int', as computed by sizeof. */
+/* The size of a `int', as computed by sizeof. */
 #undef SIZEOF_INT
 
-/* The size of `long', as computed by sizeof. */
+/* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
-/* The size of `short', as computed by sizeof. */
+/* The size of a `short', as computed by sizeof. */
 #undef SIZEOF_SHORT
 
-/* The size of `void*', as computed by sizeof. */
+/* The size of a `void*', as computed by sizeof. */
 #undef SIZEOF_VOIDP
 
 /* Define to 1 if you have the ANSI C header files. */
@@ -117,8 +117,5 @@
 #undef inline
 #endif
 
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Define to `unsigned' if <sys/types.h> does not define. */
 #undef size_t
-
-/* Define to `int' if <sys/types.h> does not define. */
-#undef ssize_t

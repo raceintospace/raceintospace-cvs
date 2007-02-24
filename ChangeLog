@@ -1,3 +1,22 @@
+2007-02-24  Pace Willisson  <pace@rhino.pacew.com>
+
+	* V140
+	
+	* bring rpm building up to date
+
+	* one of the main ideas is that a simple "make; make install" on
+	Linux style systems puts stuff under /usr/local, but the make that
+	happens inside the rpm building process uses /usr
+
+	* here are the main changes:
+	
+	* add DESTDIR to makefile which allows "make install" to install
+	into a different tree than the program is compiled to run under
+	
+	* configure doesn't set @docdir@, so make the docdir Makefile
+	variable go under ${datadir}; similarly, configure doesn't set
+	@datarootdir@, so use ${datadir} for that too;
+
 2007-02-21  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V139

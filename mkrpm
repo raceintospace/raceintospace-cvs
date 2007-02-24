@@ -1,23 +1,24 @@
 #! /bin/sh
 
 name=raceintospace
-ver=0.2
+ver=0.4
 
 name_ver=${name}-${ver}
 
-set -x
 make tar
-rm -rf TMP
-mkdir -p TMP/$name_ver
-cat $name.tar.gz | (cd TMP/$name_ver; tar -xzf -)
-(cd TMP; tar -czf ~/rpmbuild/SOURCES/${name_ver}.tar.gz ${name_ver})
+cp ${name_ver}.tar.gz ~/rpmbuild/SOURCES/.
 
-sed "s/@VER@/$ver/" < $name.spec > ~/rpmbuild/SPECS/$name.spec
+(
+    sed "s/@VER@/$ver/" < $name.spec
+    find /usr/local/share/raceintospace -type f -print | sed 's:/local::'
+) > ~/rpmbuild/SPECS/$name.spec
 
 rpmbuild -ba ~/rpmbuild/SPECS/$name.spec
 
-cp ~/rpmbuild/RPMS/i386/${name}-${ver}-1.i386.rpm ~/race-release
-cp $name.tar.gz ~/race-release/${name}-${ver}.tar.gz
+cp ~/rpmbuild/RPMS/i386/${name}-${ver}-1.i386.rpm ~/race-release/.
+cp ${name_ver}.tar.gz ~/race-release/.
+
+exit
 
 echo -n "send to sourceforge? "
 read x
