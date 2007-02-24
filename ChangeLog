@@ -1,5 +1,11 @@
 2007-02-24  Pace Willisson  <pace@rhino.pacew.com>
 
+	* V141
+	
+	* allow any key to end intro pictures, instead of just Escape
+
+	* I noted a few bugs at the top of the TODO file
+
 	* V140
 	
 	* bring rpm building up to date

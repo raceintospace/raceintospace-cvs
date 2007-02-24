@@ -1,5 +1,10 @@
 Organize this TODO file
 
+bug: on Linux, the theora videos are displayed 24 pixels too high, cutting
+off the top and displaying a green band underneath
+
+bug: the background music when the newscaster is talking is too loud
+
 Find the reason behind segfault in EndPict() in endgame.c
 
 autosave

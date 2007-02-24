@@ -250,7 +250,7 @@ void Introd(void)
 
 	    key = 0;
 	    PauseMouse();
-	    if (key == K_ESCAPE)
+	    if (key)
 			goto done;
 		else if (key || grGetMouseButtons())
 		    break;
