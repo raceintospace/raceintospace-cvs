@@ -201,6 +201,7 @@ init_theora(mm_file * mf, ogg_page * pg)
 	{
 		ogg_stream_clear(&stream);
 		theora_info_clear(th_info);
+		free(th_info);
 		mf->video_info = NULL;
 	}
 	return rval;
@@ -263,7 +264,6 @@ init_vorbis(mm_file * mf, ogg_page * pg)
 	/* maybe print something about comment or etc? */
 
 	mf->audio_ctx = xmalloc(sizeof(*mf->audio_ctx));
-	mf->audio_blk = xmalloc(sizeof(*mf->audio_blk));
 	mf->audio = xmalloc(sizeof(*mf->audio));
 	vo_blk = xmalloc(sizeof(*vo_blk));
 	memcpy(mf->audio, &stream, sizeof(stream));
@@ -446,7 +446,7 @@ mm_close(mm_file * mf)
 	{
 		vorbis_block_clear(mf->audio_blk);
 		free(mf->audio_blk);
-		mf->audio_ctx = NULL;
+		mf->audio_blk = NULL;
 	}
 	if (mf->audio_ctx)
 	{

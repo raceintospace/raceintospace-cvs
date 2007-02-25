@@ -98,7 +98,7 @@ main(int argc, char **argv)
 		usage(argv[0]);
 
 	if (mm_open(&media, file) <= 0)
-		printf("No audio or video in `%s'\n", file);
+		eprintf("No audio or video in `%s'\n", file);
 
 	if (mm_video_info(&media, &w, &h, &fps) >= 0)
 	{
@@ -126,31 +126,30 @@ main(int argc, char **argv)
 			eprintf("SDL_CreateYUVOverlay: %s\n", SDL_GetError());
 	}
 
-
 	if (have_audio)
 	{
 		int bytes;
-        int bps;
+		int bps;
 		double tdiff;
 		SDL_AudioSpec desired;
 
 		desired.channels = ch;
 		desired.freq = hz;
 		desired.format = AUDIO_U8;
-        bps = 1*1;
+		bps = ch * 1;
 		desired.samples = 4096;
 		desired.callback = audio_cb;
 		desired.userdata = &abuf;
 		if (SDL_OpenAudio(&desired, NULL) < 0)
 			eprintf("SDL_OpenAudio: %s\n", SDL_GetError());
 
-		abuf.size = 4*4096;
+		abuf.size = 4 * 4096;
 		abuf.off = 0;
 		abuf.bytes = 0;
 		abuf.buf = xmalloc(abuf.size);
 
 		tdiff = get_time();
-		while ((bytes = mm_convert_audio(&media,
+		while ((bytes = mm_decode_audio(&media,
 					abuf.buf + abuf.bytes, abuf.size - abuf.bytes)) > 0)
 		{
 			abuf.bytes += bytes;
@@ -162,14 +161,14 @@ main(int argc, char **argv)
 
 		printf("Decoding: %.3f seconds\n", get_time() - tdiff);
 		printf("Audio: %d samples, %.2f seconds\n", abuf.bytes / bps,
-                (double) (abuf.bytes) / bps / desired.freq);
+			(double) (abuf.bytes) / bps / desired.freq);
 
 		SDL_PauseAudio(0);
 	}
 
 	while (!end)
-	{ 
-		while(SDL_PollEvent(&event))
+	{
+		while (SDL_PollEvent(&event))
 			switch (event.type)
 			{
 				case SDL_QUIT:
@@ -177,15 +176,17 @@ main(int argc, char **argv)
 					break;
 				case SDL_KEYDOWN:
 					if (event.key.keysym.sym == SDLK_q
-							|| event.key.keysym.sym == SDLK_ESCAPE)
+						|| event.key.keysym.sym == SDLK_ESCAPE)
 						end = 1;
 					break;
 				default:
 					break;
 			}
 
-		if (have_video && !end) {
+		if (have_video && !end)
+		{
 			static double oldt, newt;
+
 			if (mm_decode_video(&media, ovl) > 0)
 			{
 				SDL_Rect r = { 0, 0, w, h };
@@ -212,7 +213,7 @@ main(int argc, char **argv)
 		free(abuf.buf);
 	}
 
-	if (have_video) 
+	if (have_video)
 	{
 		SDL_FreeYUVOverlay(ovl);
 	}
@@ -222,3 +223,5 @@ main(int argc, char **argv)
 
 	return EXIT_SUCCESS;
 }
+
+/* vim: set noet ts=4 sw=4 tw=77: */
