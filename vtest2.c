@@ -16,7 +16,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include "race.h"
-#include "pace.h"
+#include "utils.h"
 #include "mmfile.h"
 #include "int_types.h"
 #include <assert.h>
@@ -26,46 +26,12 @@
 #include <unistd.h>
 #include <limits.h>
 #include <time.h>
-#include <sys/time.h>
 #include <math.h>
-#include <signal.h>
-#include <memory.h>
 #include <SDL.h>
 
 #ifndef min
 #   define min(a, b) ((a) <= (b) ? (a) : (b))
 #endif
-
-/* taken from ffmpeg project */
-#ifdef CONFIG_WIN32
-#   include <sys/types.h>
-#   include <sys/timeb.h>
-#elif defined(CONFIG_OS2)
-#   include <string.h>
-#   include <sys/time.h>
-#else
-#   include <unistd.h>
-#   include <fcntl.h>
-#   include <sys/time.h>
-#endif
-
-/* TODO: make sure it works and move where it belongs (portability?) */
-int64_t
-xgettime(void)
-{
-#ifdef CONFIG_WIN32
-	struct timeb tb;
-
-	_ftime(&tb);
-	return ((int64_t) tb.time * (int64_t) (1000)
-		+ (int64_t) tb.millitm) * (int64_t) (1000);
-#else
-	struct timeval tv;
-
-	gettimeofday(&tv, NULL);
-	return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
-#endif
-}
 
 void
 eperror(const char *str)
@@ -164,25 +130,27 @@ main(int argc, char **argv)
 	if (have_audio)
 	{
 		int bytes;
-		uint64_t tdiff;
+        int bps;
+		double tdiff;
 		SDL_AudioSpec desired;
 
 		desired.channels = ch;
 		desired.freq = hz;
 		desired.format = AUDIO_U8;
+        bps = 1*1;
 		desired.samples = 4096;
 		desired.callback = audio_cb;
 		desired.userdata = &abuf;
 		if (SDL_OpenAudio(&desired, NULL) < 0)
 			eprintf("SDL_OpenAudio: %s\n", SDL_GetError());
 
-		abuf.size = 4096;
+		abuf.size = 4*4096;
 		abuf.off = 0;
 		abuf.bytes = 0;
 		abuf.buf = xmalloc(abuf.size);
 
-		tdiff = xgettime();
-		while ((bytes = mm_decode_audio(&media,
+		tdiff = get_time();
+		while ((bytes = mm_convert_audio(&media,
 					abuf.buf + abuf.bytes, abuf.size - abuf.bytes)) > 0)
 		{
 			abuf.bytes += bytes;
@@ -190,11 +158,11 @@ main(int argc, char **argv)
 				abuf.buf = xrealloc(abuf.buf, abuf.size *= 2);
 		};
 		if (bytes < 0)
-			eperror("decode_audio");
+			eperror("convert_audio");
 
-		printf("Decoding: %.3fs\n", (xgettime() - tdiff) / 1e6);
-		printf("Audio: %d samples, %.2fs\n", abuf.bytes / ch,
-			(double) (abuf.bytes) / ch / hz);
+		printf("Decoding: %.3f seconds\n", get_time() - tdiff);
+		printf("Audio: %d samples, %.2f seconds\n", abuf.bytes / bps,
+                (double) (abuf.bytes) / bps / desired.freq);
 
 		SDL_PauseAudio(0);
 	}
@@ -217,15 +185,15 @@ main(int argc, char **argv)
 			}
 
 		if (have_video && !end) {
-			static int64_t oldt, newt;
+			static double oldt, newt;
 			if (mm_decode_video(&media, ovl) > 0)
 			{
 				SDL_Rect r = { 0, 0, w, h };
-				newt = 1e6 / fps + oldt - xgettime();
+				newt = 1 / fps + oldt - get_time();
 				if (newt > 0)
-					SDL_Delay(newt/1000);
+					SDL_Delay(newt * 1000);
 				SDL_DisplayYUVOverlay(ovl, &r);
-				oldt = xgettime();
+				oldt = get_time();
 			}
 			else
 				end = 1;

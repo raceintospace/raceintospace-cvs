@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "externs.h"
 #include "av.h"
+#include "utils.h"
 #include <SDL.h>
 
 extern unsigned char *screen;

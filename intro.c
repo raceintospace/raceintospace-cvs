@@ -25,6 +25,7 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "utils.h"
 GXHEADER local2;
 
 struct CREDIT {

@@ -19,6 +19,7 @@
 #include "fs.h"
 #include "options.h"
 #include "pace.h"
+#include "utils.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>

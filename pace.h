@@ -72,7 +72,6 @@ void gxVirtualScale (GXHEADER *a, GXHEADER *b);
 
 void delay (int millisecs);
 int brandom (int limit);
-int biostime (int, long);
 int bioskey (int wait);
 int inp (int port);
 
@@ -101,9 +100,6 @@ void LMove (void *p);
 
 int getch (void);
 
-int setup_gtk (int *argcp, char ***argvp);
-void step_gtk (void);
-void display_gtk_img (unsigned char *rgb);
 double get_time (void);
 
 int show_intro_flag;
@@ -117,20 +113,6 @@ void gr_set_color_map (unsigned char *map);
 
 int RLED_img (void *src, void *dest, unsigned int src_size, int w, int h);
 
-struct frm {
-	FILE *fin;
-	int next_frame_chunks;
-	int frame_idx;
-	int nframes;
-	int frame_rate;
-	unsigned char pal[768];
-};
-
-struct frm *frm_open (char *filename);
-struct frm *frm_open_seq (int seq, int mode);
-int frm_get2 (struct frm *frm, void *pixels_arg, void *map);
-void frm_close (struct frm *frm);
-
 void idle_loop (int ticks);
 void idle_loop_secs (double secs);
 
@@ -141,18 +123,5 @@ void bzdelay (int ticks);
 void GetMouse_fast (void);
 
 void dbg (char const *fmt, ...) __attribute__ ((format (printf, 1, 2)));
-
-#ifdef _WIN32
-struct timezone;
-int gettimeofday (struct timeval *tv, struct timezone *tz);
-#endif
-
-void *xmalloc (size_t size);
-void *xcalloc (size_t nelems, size_t size);
-void *xrealloc (void *ptr, size_t size);
-char *xstrdup (char const *a);
-int xstrcasecmp (char const *a, char const *b);
-int xstrncasecmp (char const *a, char const *b, int len);
-ssize_t fread_dyn(char **destp, size_t *n, FILE *stream);
 
 #endif /* __PACE_H__ */

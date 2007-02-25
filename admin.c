@@ -28,6 +28,7 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "av.h"
+#include "utils.h"
 
 #define MODEM_ERROR 4
 #define NOTSAME 2
@@ -348,7 +349,7 @@ void FileAccess(char mode)
 				int moo = 0;
         srand(SaveHdr->compSize);
         for(moo=0;moo<SaveHdr->compSize;moo++) load_buffer[moo]^=random(256);
-        srand(biostime(0,0L));
+		randomize();
 				}
 #endif
  	      RLED((char *) load_buffer,(char *)Data,SaveHdr->compSize);
@@ -1381,7 +1382,7 @@ void EndOfTurnSave(char *inData, int dataLen)
 		}
 		// Reseed the random number generator 
 		// -- this may have been the source of created complaints about randomness
-		srand(biostime(0,0L));
+		randomize();
 	}
 #endif
 

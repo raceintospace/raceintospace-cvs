@@ -4,6 +4,7 @@
 #include "pace.h"
 #include "av.h"
 #include "options.h"
+#include "utils.h"
 
 extern GXHEADER vhptr;
 
@@ -38,7 +39,7 @@ char *letter_dat;
 void
 OpenEmUp(void)
 {
-	srand(clock());
+	randomize();
 
 	seq_init ();
 
@@ -47,14 +48,6 @@ OpenEmUp(void)
 	XMAS=1; /* we do have a mouse */
 
 	letter_dat = slurp_gamedat ("letter.dat");
-}
-
-double
-get_time (void)
-{
-	struct timeval tv;
-	gettimeofday (&tv, NULL);
-	return (tv.tv_sec + tv.tv_usec / 1e6);
 }
 
 int
@@ -210,13 +203,12 @@ CDAccess (int drive,int track,char op)
 	return (0);
 }
 
-
 int
 brandom (int limit)
 {
 	if (limit == 0)
 		return (0);
-	return (rand () % limit);
+	return (int) (limit * (rand() / (RAND_MAX + 1.0)));
 }
 
 long RLEC (char *src, char *dest, unsigned int src_size)
@@ -249,17 +241,6 @@ long RLEC (char *src, char *dest, unsigned int src_size)
 	}
 	return (dest_i);
 }
-
-#if defined(__linux__) || defined(CONFIG_MACOSX)
-int
-biostime (int a, long b)
-{
-	struct timeval tv;
-
-	gettimeofday (&tv, NULL);
-	return (tv.tv_sec * 1000 * 1000 + tv.tv_usec);
-}
-#endif
 
 void
 StopAudio(char mode) 
@@ -369,7 +350,7 @@ LMove (void *p)
 void
 randomize (void)
 {
-	srand (clock ());
+	srand (get_time() * 1000);
 }
 
 void
@@ -525,85 +506,6 @@ play_audio (int sidx, int mode)
     PlayVoice ();
 }
 
-void *
-xmalloc (size_t n)
-{
-	void *p;
-
-	if ((p = malloc (n)) == NULL) {
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-
-	return (p);
-}
-
-void *
-xcalloc (size_t a, size_t b)
-{
-	void *p;
-
-	if ((p = calloc (a, b)) == NULL) {
-		perror("calloc");
-		exit(EXIT_FAILURE);
-	}
-
-	return (p);
-}
-
-char *
-xstrdup (const char *s)
-{
-	void *p;
-
-	p = xmalloc (strlen (s) + 1);
-	strcpy (p, s);
-	return (p);
-}
-
-void *
-xrealloc(void *ptr, size_t size)
-{
-	void *p = realloc(ptr, size);
-
-	if (!p)
-    {
-		perror("realloc");
-		exit(EXIT_FAILURE);
-	}
-
-	return (p);
-}
-
-ssize_t
-fread_dyn(char **destp, size_t *n, FILE *stream)
-{
-    const unsigned bsize = 8192;
-    size_t total = 0, cnt = 0; 
-
-    assert(destp);
-    assert(n);
-    assert(stream);
-
-    if (!*destp) 
-        *destp = xmalloc(*n = bsize);
-
-    while (1) {
-        cnt = fread(*destp+total, 1, *n-total, stream);
-        if (cnt != *n-total)
-        {
-            if (feof(stream))
-                return total+cnt;
-            else if (ferror(stream))
-                return -1;
-        }
-        total += cnt;
-
-        if (*n <= total)
-            *destp = xrealloc(*destp, *n *= 2);
-    }
-}
-
 #define debug_file stdout
 void
 vdbg (char const *fmt, va_list args)
@@ -671,43 +573,4 @@ dbg (char const *fmt, ...)
 	va_start (args, fmt);
 	vdbg (fmt, args);
 	va_end (args);
-}
-
-#ifdef _WIN32
-#include <sys/timeb.h>
-int
-gettimeofday (struct timeval *tv, struct timezone *tz)
-{
-	struct _timeb t;
-
-	_ftime (&t);
-	tv->tv_sec = t.time;
-	tv->tv_usec = t.millitm * 1000;
-	return (0);
-}
-#endif
-
-int
-xstrcasecmp (char const *a, char const *b)
-{
-	while (*a) {
-		if (tolower (*a & 0xff) != tolower (*b & 0xff))
-			break;
-		a++;
-		b++;
-	}
-	return (*a - *b);
-}
-
-int
-xstrncasecmp (char const *a, char const *b, int n)
-{
-	while (n && *a) {
-		if (tolower (*a & 0xff) != tolower (*b & 0xff))
-			break;
-		a++;
-		b++;
-		n--;
-	}
-	return (*a - *b);
 }

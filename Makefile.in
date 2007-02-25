@@ -42,20 +42,21 @@ PROGS = $(addsuffix @EXEEXT@, \
 EXTRA_SOURCES = AUTHORS README COPYING DEVELOPER TODO ChangeLog \
 				raceintospace.6 \
 				configure Makefile.in race.h.in \
-				$(shell ls m4/*.m4) \
+				$(wildcard m4/*.m4) \
 				$(shell find os_macosx -name CVS -prune -o -type f -print) \
 				os_win32/configure.mingw os_win32/Shuttle.ico \
 				os_win32/installer.nsi.in os_win32/Makefile.os
 
 BARIS_HFILES = av.h Buzz_inc.h data.h endianness.h externs.h gamedata.h \
 	int_types.h macros.h mis.h music.h pace.h proto.h records.h soundfx.h \
-	soundint.h mmfile.h options.h fs.h
+	soundint.h mmfile.h options.h fs.h utils.h
 
 BARIS_OBJS = $(addsuffix .@OBJEXT@, \
 	admin aimast aimis aipur ast0 ast1 ast2 ast3 ast4 budget crew endgame \
 	endianness futbub future hardef intel intro main mc2 mc mis_c mis_m museum \
 	newmis news news_sup news_suq place port prefs prest radar rdplex records \
 	replay review rush start vab pace gx gr sdl music gamedata mmfile options fs \
+	utils \
 )
 
 all: $(PROG_NAME)
@@ -96,7 +97,7 @@ $(PROG_NAME): $(BARIS_OBJS)
 	@echo "$(CC) ...flags... -c $<"
 	@$(CC) $(CPPFLAGS) $(CFLAGS) $(EXTRA_WARNINGS) -c $<
 
-vtest2@EXEEXT@: $(addsuffix @OBJEXT@, vtest2 mmfile)
+vtest2@EXEEXT@: $(addsuffix .@OBJEXT@, vtest2 mmfile utils)
 	$(CC) $(CFLAGS) -o $@ $^ @OGG_LIBS@ @VORBIS_LIBS@ @THEORA_LIBS@ @SDL_LIBS@
 
 imgsplit@EXEEXT@: imgsplit.@OBJEXT@

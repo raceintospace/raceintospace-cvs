@@ -2,6 +2,7 @@
 #include "Buzz_inc.h"
 #include "mmfile.h"
 #include "pace.h"
+#include "utils.h"
 
 
 struct music_file {

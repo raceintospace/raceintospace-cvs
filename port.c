@@ -28,6 +28,7 @@
 #include "externs.h"
 #include "macros.h"
 #include "av.h"
+#include "utils.h"
 
 #define LET_A   0x09
 #define LET_M   0x0A

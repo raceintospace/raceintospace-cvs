@@ -28,6 +28,7 @@
 
 #include "Buzz_inc.h"
 #include "options.h"
+#include "utils.h"
 
 #ifdef CONFIG_MACOSX
 // SDL.h needs to be included here to replace the original main() with

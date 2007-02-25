@@ -11,6 +11,7 @@
 #include "Buzz_inc.h"
 #include "macros.h"
 #include "options.h"
+#include "utils.h"
 
 #include "av.h"
 #define MAX_X	320

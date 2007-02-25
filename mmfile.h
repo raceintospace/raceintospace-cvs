@@ -7,6 +7,8 @@
 #include <theora/theora.h>
 #include <SDL.h>
 
+#define MM_AUDIO_FORMAT AUDIO_U16SYS
+
 enum stream_type
 {
 	MEDIA_AUDIO = 1,
@@ -36,5 +38,8 @@ extern int mm_video_info(const mm_file * mf, unsigned *width, unsigned *height, 
 extern int mm_audio_info(const mm_file * mf, unsigned *channels, unsigned *rate);
 extern int mm_decode_video(mm_file * mf, SDL_Overlay * ovl);
 extern int mm_decode_audio(mm_file * mf, void *buf, int buflen);
+#if 0
+extern int mm_convert_audio(mm_file * mf, void *buf, int buflen, SDL_AudioSpec *spec);
+#endif
 
 #endif /* _MM_FILE_H */

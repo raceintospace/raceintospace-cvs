@@ -29,6 +29,7 @@
 #include "mis.h"
 #include "av.h"
 #include "mmfile.h"
+#include "utils.h"
 
 #define FRM_Delay 22
 

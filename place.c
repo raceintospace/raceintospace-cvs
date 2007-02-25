@@ -20,6 +20,7 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "av.h"
+#include "utils.h"
 
 extern char IDT[5],IKEY[5],AL_CALL,AI[2];
 extern struct mStr Mis;

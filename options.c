@@ -20,6 +20,7 @@
 #include "macros.h"
 #include "pace.h"
 #include "fs.h"
+#include "utils.h"
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>

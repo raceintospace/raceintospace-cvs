@@ -27,6 +27,7 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "utils.h"
 extern char AI[2];
 
   struct VInfo VAS[7][4];

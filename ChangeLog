@@ -1,3 +1,20 @@
+2007-02-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V142
+
+	* pace.c (brandom): Use higher bits from rand().
+	(randomize): Uses wall time as RNG seed.
+	Removed biostime().
+
+	* utils.c: New file, factored out from pace.c.
+
+	* mmfile.c (mm_decode_audio): Support for many channels.
+	(mm_convert_audio): New function, but SDL resampling is crap.
+
+	* admin.c (FileAccess, EndOfTurnSave): Use randomize().
+
+	* Makefile: Added utils object file.
+
 2007-02-24  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V141

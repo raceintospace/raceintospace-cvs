@@ -19,7 +19,7 @@
 #include "mmfile.h"
 #include "int_types.h"
 #include "macros.h"
-#include "pace.h"
+#include "utils.h"
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
@@ -46,19 +46,19 @@ get_page(mm_file * mf, ogg_page * pg)
 	{
 		p = ogg_sync_buffer(&mf->sync, bufsize);
 		if (!p)
-        {
+		{
 			/* ERROR */ printf("ogg_sync_buffer\n");
-            return -1;
-        }
+			return -1;
+		}
 
 		if (0 == (n = fread(p, 1, bufsize, mf->file)))
 			return (feof(mf->file)) ? 0 : -1;
 
 		if (ogg_sync_wrote(&mf->sync, n))
-        {
-			/* ERROR */printf("ogg_sync_wrote, buffer overflow\n");
-            return -1;
-        }
+		{
+			/* ERROR */ printf("ogg_sync_wrote, buffer overflow\n");
+			return -1;
+		}
 	}
 	/* XXX: following may segfault if non-ogg file is read */
 	if (res < 0 || ogg_page_version(pg) != 0)
@@ -71,7 +71,7 @@ get_packet(mm_file * mf, ogg_packet * pkt, enum stream_type type)
 {
 	ogg_stream_state *stream, *other;
 	ogg_page pg;
-    enum stream_type other_type;
+	enum stream_type other_type;
 	int rv = 0;
 
 	assert(mf);
@@ -82,55 +82,56 @@ get_packet(mm_file * mf, ogg_packet * pkt, enum stream_type type)
 			assert(mf->video);
 			stream = mf->video;
 			other = mf->audio;
-            other_type = MEDIA_AUDIO;
+			other_type = MEDIA_AUDIO;
 			break;
 		case MEDIA_AUDIO:
 			assert(mf->audio);
 			stream = mf->audio;
 			other = mf->video;
-            other_type = MEDIA_VIDEO;
+			other_type = MEDIA_VIDEO;
 			break;
 		default:
-            /*ERROR*/
-			printf("bad stream type\n");
+			 /*ERROR*/ printf("bad stream type\n");
 			return -1;
 	}
-    if (mf->end_of_stream & type)
-        return 0;
+	if (mf->end_of_stream & type)
+		return 0;
 	while (0 == ogg_stream_packetout(stream, pkt))
 	{
 		rv = get_page(mf, &pg);
 		if (rv <= 0)
 			return rv;
 		if (ogg_stream_pagein(stream, &pg) < 0)
-        {
-            if (other && ogg_stream_pagein(other, &pg) == 0)
-            {
-                /*
-                 * Got page from other stream. If user won't ever decode this
-                 * then we need to clean up it here - otherwise read but not
-                 * decoded packets would accumulate.
-                 */
-                if (mf->drop_packets & other_type)
-                {
-                    ogg_packet packet;
-                    while (ogg_stream_packetout(other, &packet))
-                        /* just drop packets */;
-                }
-            }
-            else 
-            {
-                /* DEBUG */ printf("got page not associated with any stream, "
-                    "serial %x\n", ogg_page_serialno(&pg));
-                /*
-                 * drop page. Ogg source code says ogg_page member pointers are
-                 * initialized to static buffers, so there is no need to free
-                 * anything.
-                 */
-            }
-        }
+		{
+			if (other && ogg_stream_pagein(other, &pg) == 0)
+			{
+				/*
+				 * Got page from other stream. If user won't ever decode this
+				 * then we need to clean up it here - otherwise read but not
+				 * decoded packets would accumulate.
+				 */
+				if (mf->drop_packets & other_type)
+				{
+					ogg_packet packet;
+
+					while (ogg_stream_packetout(other, &packet))
+						/* just drop packets */ ;
+				}
+			}
+			else
+			{
+				/* DEBUG */
+					printf("got page not associated with any stream, "
+					"serial %x\n", ogg_page_serialno(&pg));
+				/*
+				 * drop page. Ogg source code says ogg_page member pointers are
+				 * initialized to static buffers, so there is no need to free
+				 * anything.
+				 */
+			}
+		}
 	}
-    mf->end_of_stream |= (!!pkt->e_o_s) * type;
+	mf->end_of_stream |= (!!pkt->e_o_s) * type;
 	return 1;
 }
 
@@ -283,8 +284,7 @@ init_vorbis(mm_file * mf, ogg_page * pg)
 }
 
 static int
-yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv,
-	SDL_Overlay * ovl)
+yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv, SDL_Overlay * ovl)
 {
 	unsigned i, h, w, xoff, yoff;
 	uint8_t *yp, *up, *vp;
@@ -356,7 +356,7 @@ yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv,
 
 /* rval < 0: error, > 0: have audio or video */
 int
-mm_open_fp(mm_file * mf, FILE *file)
+mm_open_fp(mm_file * mf, FILE * file)
 {
 	int retval = -1;
 	int res = 0;
@@ -397,17 +397,18 @@ mm_open_fp(mm_file * mf, FILE *file)
 int
 mm_open(mm_file * mf, const char *fname)
 {
-    assert(mf);
-    assert(fname);
-    return mm_open_fp(mf, fopen(fname, "rb"));
+	assert(mf);
+	assert(fname);
+	return mm_open_fp(mf, fopen(fname, "rb"));
 }
 
 unsigned
 mm_ignore(mm_file * mf, unsigned mask)
 {
-    unsigned old = mf->drop_packets;
-    mf->drop_packets = mask;
-    return old;
+	unsigned old = mf->drop_packets;
+
+	mf->drop_packets = mask;
+	return old;
 }
 
 int
@@ -465,7 +466,8 @@ mm_close(mm_file * mf)
 
 /* rval < 0: no video in file */
 int
-mm_video_info(const mm_file * mf, unsigned *width, unsigned *height, float *fps)
+mm_video_info(const mm_file * mf, unsigned *width, unsigned *height,
+	float *fps)
 {
 	assert(mf);
 	if (!mf->video)
@@ -504,12 +506,12 @@ mm_decode_video(mm_file * mf, SDL_Overlay * ovl)
 	assert(mf);
 	if (!mf->video)
 		return -1;
-    if (mf->drop_packets & MEDIA_VIDEO)
-    {
-        /* WARNING */
-        printf("requested decode but MEDIA_VIDEO is set to ignore\n");
-        return -1;
-    }
+	if (mf->drop_packets & MEDIA_VIDEO)
+	{
+		/* WARNING */
+		printf("requested decode but MEDIA_VIDEO is set to ignore\n");
+		return -1;
+	}
 	for (;;)
 	{
 		rv = get_packet(mf, &pkt, MEDIA_VIDEO);
@@ -535,47 +537,60 @@ mm_decode_video(mm_file * mf, SDL_Overlay * ovl)
 int
 mm_decode_audio(mm_file * mf, void *buf, int buflen)
 {
-	int rv = 0, samples = 0, left = buflen, total = 0;
-	ogg_packet pkt;
-	float **pcm;
+	const int max_val = UCHAR_MAX;
+	const int min_val = 0;
+	const int bytes_per_sample = 1;
+
+	int rv = 0, samples = 0, left = 0, total = 0;
+	unsigned channels = 0;
 
 	assert(mf);
-	if (!mf->audio)
+	if (-1 == mm_audio_info(mf, &channels, NULL))
 		return -1;
-    if (mf->drop_packets & MEDIA_AUDIO)
-    {
-        /* WARNING */
-        printf("requested decode but MEDIA_AUDIO is set to ignore\n");
-        return -1;
-    }
-	for (;;)
+	if (mf->drop_packets & MEDIA_AUDIO)
 	{
-		/* output any samples left from last conversion */
-		while ((samples = vorbis_synthesis_pcmout(mf->audio_ctx, &pcm)) > 0)
+		/* WARNING */
+		printf("requested decode but MEDIA_AUDIO is set to ignore\n");
+		return -1;
+	}
+
+	/* convert buflen [bytes] to left [samples] */
+	left = buflen;
+	left = left / channels / bytes_per_sample;
+
+	while (left > 0)
+	{
+		float **pcm;
+		ogg_packet pkt;
+
+		/* also outputs any samples left from last decoding */
+		while (left > 0
+			&& (samples = vorbis_synthesis_pcmout(mf->audio_ctx, &pcm)) > 0)
 		{
 			int i = 0;
-			float *mono = pcm[0];	/* just left channel, or mono */
-
-			if (left <= 0)
-				return total;
+			unsigned ch = 0;
 
 			samples = min(samples, left);
 
-			/* conv floats to uint8_t */
 			for (i = 0; i < samples; ++i)
 			{
-				int val = roundf((mono[i] + 1.0) / 2.0 * UCHAR_MAX);
+				for (ch = 0; ch < channels; ++ch)
+				{
+					/* XXX: lrint requires C99 */
+					int val = lrint((pcm[ch][i] + 1.0) / 2.0 * max_val);
 
-				if (val > UCHAR_MAX)
-					val = UCHAR_MAX;
-				if (val < 0)
-					val = 0;
-				*((uint8_t *) buf + total + i) = val;
+					if (val > max_val)
+						val = max_val;
+					if (val < min_val)
+						val = min_val;
+					*((uint8_t *) buf + (total + i) * channels + ch) = val;
+				}
 			}
 
 			total += samples;
 			left -= samples;
 			vorbis_synthesis_read(mf->audio_ctx, samples);
+
 		}
 		/* grab new packets if we need more */
 		for (;;)
@@ -584,7 +599,7 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 			if (rv < 0)
 				return rv;
 			else if (rv == 0)
-				return total;
+				return total * channels * bytes_per_sample;
 
 			/* have packet, synthesize */
 			if (vorbis_synthesis(mf->audio_blk, &pkt) == 0)
@@ -595,11 +610,65 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 			else
 			{
 				/* DEBUG */
-					printf("packet does not a valid vorbis frame!\n");
+				printf("packet does not a valid vorbis frame!\n");
 				/* get next packet */
 			}
 		}
 	}
-	/* NOT REACHED */
-	return 0;
+
+	return total * channels * bytes_per_sample;
 }
+
+#if 0
+int
+mm_convert_audio(mm_file * mf, void *buf, int buflen, SDL_AudioSpec * spec)
+{
+	SDL_AudioCVT cvt;
+	unsigned channels, rate;
+	uint8_t *tmp_buf = NULL;
+	int allocated = 0;
+	int to_decode = 0;
+	int decoded = 0;
+
+	assert(mf);
+	assert(spec);
+
+	if (-1 == mm_audio_info(mf, &channels, &rate))
+		return -1;
+
+	if (-1 == SDL_BuildAudioCVT(&cvt,
+			MM_AUDIO_FORMAT, channels, rate,
+			spec->format, spec->channels, spec->freq))
+		return -1;
+
+	/* Check if we need alloc memory or can dest buffer be used directly */
+	to_decode = buflen / cvt.len_ratio;
+	if (to_decode > buflen)
+	{
+		allocated = 1;
+		tmp_buf = xmalloc(to_decode);
+	}
+	else
+		tmp_buf = buf;
+
+	decoded = mm_decode_audio(mf, tmp_buf, to_decode);
+	if (decoded <= 0)
+		return decoded;
+
+	cvt.buf = tmp_buf;
+	cvt.len = decoded;
+
+	if (-1 == SDL_ConvertAudio(&cvt))
+		return -1;
+
+	if (allocated)
+	{
+		memcpy(buf, tmp_buf, cvt.len * cvt.len_ratio);
+		free(tmp_buf);
+	}
+
+	return cvt.len * cvt.len_ratio;
+}
+#endif
+
+/* vi: set noet ts=4 sw=4 tw=78: */
