@@ -2,7 +2,8 @@
 #define _UTILS_H
 
 #include "race.h"
-#include "inttypes.h"
+#include "int_types.h"
+#include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,7 +13,7 @@ void *xrealloc (void *ptr, size_t size);
 char *xstrdup (char const *a);
 int xstrcasecmp (char const *a, char const *b);
 int xstrncasecmp (char const *a, char const *b, int len);
-ssize_t fread_dyn(char **destp, size_t *n, FILE *stream);
+ssize_t fread_dyn (char **destp, size_t *n, FILE *stream);
 double get_time (void);
 
 #endif /* _UTILS_H */

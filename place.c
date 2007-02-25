@@ -363,7 +363,7 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
       n = gxVirtualSize(gxVGA_13,104,77);
       for (j=0;j<n;j++) local.vptr[j]+=coff;
 
-      local.vptr[104*77]=0;
+      local.vptr[n - 1]=0;
       if (FADE==0) gxSetDisplayPalette(pal);
       gxPutImage(&local,gxSET,x,y,0);
       DV(&local); DV(&local2);

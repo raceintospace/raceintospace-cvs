@@ -1,5 +1,23 @@
 2007-02-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V144
+
+	* .gdbinint: Added electric fence support.
+
+	* mc2.c (MissionSteps): Negative array index fix.
+
+	* pace.c: Commented out debug stuff.
+
+	* place.c (BigHardMe): Off by one fixed (real pain on win32).
+
+	* admin.c (EditAst): Memory overrun fixed.
+
+	* utils.c (get_time): Mingw32 struct _timeb fix.
+
+	* utils.h: Fixed order of includes.
+
+2007-02-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V143
 
 	* mmfile.c (init_theora, init_vorbis, mm_close): Memory leaks.

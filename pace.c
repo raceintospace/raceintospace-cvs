@@ -507,6 +507,7 @@ play_audio (int sidx, int mode)
 }
 
 #define debug_file stdout
+#if 0
 void
 vdbg (char const *fmt, va_list args)
 {
@@ -574,3 +575,4 @@ dbg (char const *fmt, ...)
 	vdbg (fmt, args);
 	va_end (args);
 }
+#endif

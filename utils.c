@@ -23,7 +23,8 @@ double
 get_time (void)
 {
 #ifdef CONFIG_WIN32
-	struct timeb tb;
+    /* mingw was complaining */
+	struct _timeb tb;
 
 	_ftime(&tb);
 	return tb.time + tb.millitm / 1e3;
@@ -138,3 +139,5 @@ fread_dyn(char **destp, size_t *n, FILE *stream)
             *destp = xrealloc(*destp, *n *= 2);
     }
 }
+
+/* vim: set noet ts=4 sw=4 tw=77: */

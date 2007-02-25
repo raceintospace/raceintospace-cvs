@@ -210,20 +210,24 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
       if (MANNED[pad]>0)
 	      switch(Mev[step].Class) {
 	         case 0:  // capsule
-     		      Mev[step].ast=CAP[pad]; // index into MA
-	            Mev[step].asf=MA[pad][Mev[step].ast].A->Cap;
+                 Mev[step].ast=CAP[pad]; // index into MA
+                 if (Mev[step].ast >= 0)
+                     Mev[step].asf=MA[pad][Mev[step].ast].A->Cap;
 	            break;
 	         case 2:  // lm
      		      Mev[step].ast=LM[pad]; // index into MA
-	            Mev[step].asf=MA[pad][Mev[step].ast].A->LM;
+                  if (Mev[step].ast >= 0)
+                      Mev[step].asf=MA[pad][Mev[step].ast].A->LM;
                break;
 	         case 3:  // docking
      		      Mev[step].ast=DOC[pad]; // index into MA
-	            Mev[step].asf=MA[pad][Mev[step].ast].A->Docking;
+                  if (Mev[step].ast >= 0)
+                      Mev[step].asf=MA[pad][Mev[step].ast].A->Docking;
                break;
 	         case 5:  // eva
      		      Mev[step].ast=EVA[pad]; // index into MA
-	            Mev[step].asf=MA[pad][Mev[step].ast].A->EVA;
+                  if (Mev[step].ast >= 0)
+                      Mev[step].asf=MA[pad][Mev[step].ast].A->EVA;
                break;
 	         case 7:  // covers power on for docking module
                Mev[step].ast=-1;
@@ -636,4 +640,4 @@ void MisRush(char ms)
   return;
 }
 
-// EOF
+/* vim: set noet ts=4 sw=4 tw=77: */

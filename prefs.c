@@ -26,6 +26,7 @@
 #include "gamedata.h"
 #include "Buzz_inc.h"
 #include "externs.h"
+#include <assert.h>
 
 extern struct ManPool *Men;
 struct ManPool *Sov;
@@ -596,16 +597,17 @@ void EditAst(void)
  Cnt=Cur=0; // holds current change
  ShBox(27,49+BarA*8,153,57+BarA*8); ShBox(187,49+BarB*8,313,57+BarB*8);
  Men=(struct ManPool *) buffer;
- Sov=(struct ManPool *) buffer+10000;
+ Sov=(struct ManPool *) buffer+106*sizeof(struct ManPool);
+ assert(2 * 106 * sizeof(struct ManPool) < BUFFER_SIZE);
  FadeIn(2,pal,10,0,0);  
  
  temp=Help("i105");
  
  if (temp==1) fin = sOpen("CREW.DAT","rb",0);   /* Open Astronaut Data File  */
    else fin=sOpen("USER.DAT","rb",0);
- fseek(fin,((sizeof (struct ManPool))*106)*0,SEEK_SET);
+ /* fseek(fin,((sizeof (struct ManPool))*106)*0,SEEK_SET); */
  fread(Men,(sizeof (struct ManPool))*106,1,fin);
- fseek(fin,((sizeof (struct ManPool))*106)*1,SEEK_SET);
+ /* fseek(fin,((sizeof (struct ManPool))*106)*1,SEEK_SET); */
  fread(Sov,(sizeof (struct ManPool))*106,1,fin);
  fclose(fin);
 
