@@ -25,6 +25,7 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "macros.h"
 
   extern Equipment *MH[2][8];   // Pointer to the main
   //struct MisHard *MH; //[2][7]
@@ -571,25 +572,33 @@ void MissionSetDown(char plr,char mis)
 }
 
 
-// Add Duration Negs to All Mission Steps  :: struct Mis needs to be filled
-void MisDur(char plr,char dur) {
-  int i,j,diff;
+/* Add Duration Negs to All Mission Steps - struct Mis needs to be filled */
+void
+MisDur(char plr, char dur)
+{
+	int i, j, diff;
+	int manned = 0;
 
-  i = 0; /* XXX check uninitialized */
-
-  diff=dur-Data->P[plr].DurLevel;
-  if (Data->P[plr].DurLevel==0) diff--;
-  if (diff<=0) return;
-  diff=5*diff;
-	/* XXX MH[0][0] is NULL sometimes! (apollo EOR titan landing) */
-  if (MH[i][0]->ID[0]!='C') return;  // Don't give negs to unmanned
-  if (Mis.Dur==0) {
-   for (i=0;i<2;i++)
-      for (j=0;j<7;j++)
-        if (MH[i][j]!=NULL) MH[i][j]->MisSaf-=(char) diff;
-   }
-// will handle individual durations later
-  return;
+	diff = dur - Data->P[plr].DurLevel;
+	if (Data->P[plr].DurLevel == 0)
+		diff--;
+	if (diff <= 0)
+		return;
+	diff = 5 * diff;
+	if ((MH[0][0] && MH[0][0]->ID[0] == 'C')
+		|| (MH[1][0] && MH[1][0]->ID[0] == 'C'))
+		manned = 1;
+	if (!manned)
+		return;					   /* Don't give negs to unmanned */
+	if (Mis.Dur == 0)
+	{
+		for (i = 0; i < (int) ARRAY_LENGTH(MH); i++)
+			for (j = 0; j < (int) ARRAY_LENGTH(MH[0]); j++)
+				if (MH[i][j] != NULL)
+					MH[i][j]->MisSaf -= (char) diff;
+	}
+	/* will handle individual durations later */
+	return;
 }
 
 
