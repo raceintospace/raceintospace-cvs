@@ -16,7 +16,7 @@ Enable memory allocation debugging through Electric Fence (efence(3)).
 end
 
 
-define erfence-under
+define efence-under
         set environment EF_PROTECT_BELOW 1
         set environment LD_PRELOAD /usr/lib/libefence.so.0.0
         echo Enabled Electric Fence for undeflow detection\n

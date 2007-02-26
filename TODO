@@ -1,71 +1,62 @@
-Organize this TODO file
+BUGS
+====
 
-bug: on Linux, the theora videos are displayed 24 pixels too high, cutting
-off the top and displaying a green band underneath
+These should be fixed as soon as possible as they crash the binary or
+seriously affect gameplay.
 
-bug: the background music when the newscaster is talking is too loud
+ * [7] mc2.c(MisDur): segfault for (some?) joint missions.
+ * [5] endgame.c(EndPict): segfault.
+ * [5] news video is not clipped, green band appears (pace, linux).
+ * [3] aipur.c(RDafford):562, class == 2 && MaxRD == 80 && Safety == 90 (???).
 
-Find the reason behind segfault in EndPict() in endgame.c
+NOT IMPLEMENTED
+===============
 
-autosave
+Features present in the original BARIS but not implemented or not working
+properly in Race Into Space.
 
-I think that drawing the bar graph also runs the cpu flat out. Even worse, I
-think that it also pauses audio and video.
+ * [5] Autosave does work, but reloading the game after failures does not
+ bring back the prestige lost (look at president's ranking).
+ * [5] Configuration option for still images instead of videos (do we need it?)
 
-in the baby screens, don't down sample then up sample
+ENCHANCEMENTS
+=============
 
-factor out common parts of replay.c and mis_c.c
+Incremental enchancements that would improve quality of software but do not
+change anything considered essential to playability. This includes code
+refactoring as well.
 
-preload next frame during mission playback so transitions are smooth
+ * [9] Reduce dependencies between game logic and game engine.
+ * [5] Remove temporary files on exit.
+ * [5] Remove extra gr_sync calls.
+ * [5] Preload next frame during mission playback.
+ * [5] Newscaster animations and sounds should be better synced.
+ * [5] Music is too loud during newscasts (pace, linux)
+ * [5] Bar graphs during mission tests pause audio and video.
+ * [5] Baby pictures shown on missions are downsampled and upsampled.
+ * [3] Optimize grPutPixel and grGetPixel (I'm not sure it's needed)
+ * [3] Clipping in gx* routines.
 
-Soviet Newscaster in the 3rd animated segment (Close Out) has a pretty significant
-delay before starting the animation
+EXTENSIONS
+==========
 
-Audio isn't in sync for the newscasters
+Improvements that might change rules and/or gameplay balance.
 
-=======
-implement config opts for no anim
+ * Plenty of them, just look at
+ http://www.baris-online.net/wiki/index.php/Enhancements
 
-clean up extra gr_sync's
+CODE REFACTORING
+================
 
-Remove up ENDTURN.TMP, EVENT.TMP, REPLAY.DAT on exit
+ * [9] Comment undocumented game-logic structures.
+ * [7] Remove "magic numbers" (at least as many as possible).
+ * [7] Reduce number and visibility of global variables, rename some.
+ * [7] Move game strings into a separate string table or file.
+ * [5] Clean up header files, separate functionality.
+ * [5] Factor video display code out from mis_c.c and replay.c
 
-================================================================
-enhancements:
+OTHER IDEAS
+===========
 
-optimize grPutPixel and grGetPixel
-
-the gx routines should clip - thats easy, but right now they
-make assertions about arguments. Problem fixed in port.c
-
-Yank strings into a separate string table
-
-================================================================
-possible old bugs
-
-in RDafford, figure out how this came to be MaxRD = 80, but Safety = 90 once:
- if (class==2) roll+=Data->P[plr].Manned[index].MaxRD - Data->P[plr].Manned[index].Safety;
-
-================================================================
-CODE MAINTENANCE
-
-Clean up header files.
-
-Reduce global variables, most should be static anyway.
-
-Comment mysterious bits & pieces.
-
-Remove "magic numbers", change to #defines or enums.
-
-Comment important data structures.
-
-Introduce less cryptic names for some variables, especially globals!
-
-BIG THING: Separate game logic and AI from every other stuff
-================================================================
-
-release checklist
-
-check with valgrind
-compile with -O
-compile with -DNDEBUG
+ * Release checklist: valgrind, electric fence, CFLAGS=-O2 -DNDEBUG
+Everything that does not fit into previous sections.
