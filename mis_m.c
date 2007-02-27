@@ -10,6 +10,7 @@
 #include "externs.h"
 #include "mis.h"
 #include "utils.h"
+#include "options.h"
 
 #define MIS_SET 0             // FAILURES ON
 
@@ -256,7 +257,7 @@ void MisCheck(char plr,char mpad)
 
     PROBLEM=(val>safety) ? 1: 0;
 
-    if (!AI[plr] && never_fail)
+    if (!AI[plr] && options.want_cheats)
 	    PROBLEM = 0;
 
     /* DEBUG */ /* fprintf (stderr, "SAFETY: %2d %2d%s\n",

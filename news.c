@@ -1,4 +1,3 @@
-
 /*
     Copyright (C) 2005 Michael K. McCarty & Fritz Bronner
 
@@ -107,7 +106,7 @@ GoNews(char plr)
 
 	j = 0;
 	memset(buffer + 6000, 0x00, 8000);	//clear memory
-	list = (struct rNews *) buffer + 6000;
+	list = (struct rNews *) (buffer + 6000);
 	for (i = 0; i < (int) strlen(buffer); i++)
 	{
 		if (buffer[i] == 'x')

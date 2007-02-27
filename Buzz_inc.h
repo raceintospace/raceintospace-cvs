@@ -61,8 +61,6 @@ typedef int32_t i32;
 // EMS Includes
 // #include "sv_lib.h"
 
-int never_fail;
-
 /* FIXME: non-portable. Used to get struct layout like in DOS days */
 #pragma pack(1)
 

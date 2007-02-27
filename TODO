@@ -4,6 +4,7 @@ BUGS
 These should be fixed as soon as possible as they crash the binary or
 seriously affect gameplay.
 
+ * [5] records.c(RecChange): segfault.
  * [5] endgame.c(EndPict): segfault.
  * [5] news video is not clipped, green band appears (pace, linux).
  * [3] aipur.c(RDafford):562, class == 2 && MaxRD == 80 && Safety == 90 (???).

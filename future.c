@@ -46,7 +46,6 @@ void Load_FUT_BUT(void)
 {
   FILE *fin;
   unsigned i;
-  GV(&vh,240,90);
   fin=sOpen("NFUTBUT.BUT","rb",0);
   i=fread(screen,1,MAX_X*MAX_Y,fin);
   fclose(fin);
@@ -435,12 +434,14 @@ Future(char plr)
 
 	GV(&local, 166, 9);
 	GV(&local2, 177, 197);
+    GV(&vh,240,90);                  /* global variable */
   begfut:
 	MisNum = FutureCheck(plr, 0);
 	if (MisNum == 5)
 	{
 		DV(&local);
 		DV(&local2);
+        DV(&vh);
 		return;
 	}
 
@@ -454,6 +455,7 @@ Future(char plr)
 	DuraType = FMen = MisType = 0;
 	ClrFut(plr, MisNum);
 	DrawFuture(plr, MisType, MisNum);
+begfut_noredraw:
 //  for (i=0;i<5;i++) ClearRX(i+1);
 	while (1)
 	{
@@ -523,7 +525,6 @@ Future(char plr)
 
 			gxPutImage(&local2, gxSET, 74, 3, 0);
 			// DV(&local2);
-			DV(&vh);
 			if (Ok == 1)
 			{
 				Data->P[plr].Future[MisNum].Duration = DuraType;
@@ -532,9 +533,10 @@ Future(char plr)
 			else
 			{
 				ClrFut(plr, MisNum);
-				DuraType = FMen = MisType = 0;
+				// DuraType = FMen = MisType = 0;
 				key = 0;
-				DrawFuture(plr, MisType, MisNum);
+                goto begfut_noredraw;
+				// DrawFuture(plr, MisType, MisNum);
 			}
 			key = 0;
 		};

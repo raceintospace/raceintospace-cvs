@@ -1122,6 +1122,8 @@ void UpdateRecords(char Ty)
 void RecChange(int i,int j,int k,int temp,int max,char Rec_Change,char hold)
 {
  int loop;
+ 
+ /* XXX: SEGFAULT - some record entries are null (rec[k][loop].astro) */
 
  if (Rec_Change!=0)
   for(loop=0;loop<3;loop++)
