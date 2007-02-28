@@ -240,7 +240,6 @@ void Introd(void)
   for (k=0;k<INTRO_IMAGE_COUNT;k++) {
     ip = &intro_images[k];
 
-    FadeOut(2, pal, 30, 0, 0);
     gr_set_color_map (ip->map);
     memcpy (screen, ip->pixels, MAX_X * MAX_Y);
     FadeIn(2, pal, 30, 0, 0);
@@ -256,6 +255,7 @@ void Introd(void)
 		else if (key || grGetMouseButtons())
 		    break;
     }
+    FadeOut(2, pal, 30, 0, 0);
   }
 
 done:
@@ -307,7 +307,4 @@ void NextTurn(char plr)
   return;
 }
 
-
-
-
-/* EOF */
+/* vim: set noet ts=4 sw=4 tw=77: */

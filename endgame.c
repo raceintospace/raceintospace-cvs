@@ -29,6 +29,8 @@
 #define MAXWAIT 1
 #define PutPixel(x,y,col) grPutPixel(x,y,col)
 
+const int draw_projectiles = 0;
+
 extern char Month[12][11];
 extern char AI[2];
 extern char Nums[30][7];
@@ -44,103 +46,155 @@ char PF[29][40]={
     "MANNED DOCKING","WOMAN IN SPACE","SPACE WALK","MANNED SPACE MISSION"};
 
 
-char Burst(char win)
+char
+Burst(char win)
 {
- float Spsn[2];
- char R_value=0;
- struct PROJECTILE
-  {
-   char clr;
-   float vel[2];
-	float  psn[2];
-   i16 per;
-  } Bomb[NUM_LIGHTS];
- int  lp1,lp2,Region,xx,yy,cdstat;
- float Ang,Spd,InitSpd;
- char clr=1;
- key=0;
- strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
- gxGetImage(&vhptr,0,0,319,199,0);
- while (1)
-  {
-   cdstat=CDAccess(cdROM,3,3);  // CD STATUS
-   if (!(cdstat&0x02)) {
-    CDAccess(cdROM,3,2); // STOP CD
-    CDAccess(cdROM,3,1); // PLAY CD
-   }
-   Region=random(100);
-   if (Region<60) 
-    {
-     Spsn[0] = 132+random(187);
-     Spsn[1] = 5+random(39);
-    }
-   else
-    { 
-     Spsn[0] = 178+random(66);
-     Spsn[1] = 11+random(33);
-    }
-   InitSpd = random(MAXINITSPEED);
-   for (lp1=0;lp1<NUM_LIGHTS;lp1++)
-    {
-	  Ang = random(2*PI);
-	  Spd = random(InitSpd);
-	  Bomb[lp1].psn[0] = Spsn[0];
-	  Bomb[lp1].psn[1] = Spsn[1];
-	  Bomb[lp1].vel[0] = Spd * cos(Ang);
-	  Bomb[lp1].vel[1] = Spd * sin(Ang);
-	  Bomb[lp1].clr= clr;
-	  Bomb[lp1].per= random(FLY_TIME);
-    }
-   for (lp1=0;lp1<FLY_TIME;lp1++)
-	 for (lp2=0;lp2<NUM_LIGHTS;lp2++)
-	  {
-      xx=Bomb[lp2].psn[0]; yy=Bomb[lp2].psn[1];
-      if (xx>=0 && xx<320 && yy>=0 && yy<=172) PutPixel(xx,yy,vhptr.vptr[xx+320*yy]);
-      key=0;GetMouse();
-      if (key>0 || mousebuttons>0)
-       {
-        if ((x>=14 && y>=182 && x<=65 && y<=190 && mousebuttons>0) || key=='H') R_value=1;
-        if ((x>=74 && y>=182 && x<=125 && y<=190 && mousebuttons>0) || key=='S') R_value= 2;
-        if ((x>=134 && y>=182 && x<=185 && y<=190 && mousebuttons>0) || key=='P') R_value=3;
-        if ((x>=194 && y>=182 && x<=245 && y<=190 && mousebuttons>0) || key=='M') R_value=4;
-        if ((x>=254 && y>=182 && x<=305 && y<=190 && mousebuttons>0) || key==K_ENTER) R_value=5;
-        if (R_value>0)
-         {
-          
-          gxPutImage(&vhptr,gxSET,0,0,0);
-          strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
-          
-          return(R_value);
-         }
-       } 
-	   Bomb[lp2].vel[1]= Bomb[lp2].vel[1] + GRAVITY;
-	   Bomb[lp2].vel[0]= Bomb[lp2].vel[0] * FRICTION;
-	   Bomb[lp2].vel[1]= Bomb[lp2].vel[1] * FRICTION;
+	float Spsn[2];
+	char R_value = 0;
+	struct PROJECTILE
+	{
+		char clr;
+		float vel[2];
+		float psn[2];
+		i16 per;
+	} Bomb[NUM_LIGHTS];
+	int lp1, lp2, Region, xx, yy, cdstat;
+	float Ang, Spd, InitSpd;
+	char clr = 1;
 
-	   Bomb[lp2].psn[0]= (float)Bomb[lp2].psn[0] + Bomb[lp2].vel[0];
-	   Bomb[lp2].psn[1]= (float)Bomb[lp2].psn[1] + Bomb[lp2].vel[1];
-      xx=Bomb[lp2].psn[0]; yy=Bomb[lp2].psn[1];
-      if (win==0)
-       {
-        if (clr==1) clr=6;
-	      else if (clr==6) clr=9;
-	       else if (clr==9) clr=1;
-       }
-      else
-       {
-        if (clr==1) clr=9;
-         else if (clr==9) clr=11;
-          else if (clr==11) clr=9; 
-       }
-	   if (lp1 < Bomb[lp2].per && (xx>=0 && xx<320 && yy>=0 && yy<=172))
-        PutPixel(xx,yy,clr);
-	  }
-    for (lp2=0;lp2<NUM_LIGHTS;lp2++)
-     {
-      xx=Bomb[lp2].psn[0]; yy=Bomb[lp2].psn[1];
-      if (xx>=0 && xx<320 && yy>=0 && yy<=172) PutPixel(xx,yy,vhptr.vptr[xx+320*yy]);
-     }
-  } // end while
+	key = 0;
+	strncpy(IDT, "i144", 4);
+	strncpy(IKEY, "k044", 4);
+	gxGetImage(&vhptr, 0, 0, 319, 199, 0);
+	while (1)
+	{
+		cdstat = CDAccess(cdROM, 3, 3);	// CD STATUS
+		if (!(cdstat & 0x02))
+		{
+			CDAccess(cdROM, 3, 2); // STOP CD
+			CDAccess(cdROM, 3, 1); // PLAY CD
+		}
+		Region = random(100);
+		if (Region < 60)
+		{
+			Spsn[0] = 132 + random(187);
+			Spsn[1] = 5 + random(39);
+		}
+		else
+		{
+			Spsn[0] = 178 + random(66);
+			Spsn[1] = 11 + random(33);
+		}
+		InitSpd = random(MAXINITSPEED);
+		for (lp1 = 0; lp1 < NUM_LIGHTS; lp1++)
+		{
+			Ang = random(2 * PI);
+			Spd = random(InitSpd);
+			Bomb[lp1].psn[0] = Spsn[0];
+			Bomb[lp1].psn[1] = Spsn[1];
+			Bomb[lp1].vel[0] = Spd * cos(Ang);
+			Bomb[lp1].vel[1] = Spd * sin(Ang);
+			Bomb[lp1].clr = clr;
+			Bomb[lp1].per = random(FLY_TIME);
+		}
+		for (lp1 = 0; lp1 < FLY_TIME; lp1++)
+		{
+			for (lp2 = 0; lp2 < NUM_LIGHTS; lp2++)
+			{
+				xx = Bomb[lp2].psn[0];
+				yy = Bomb[lp2].psn[1];
+				/* This is overkill for pixels, but let's see... */
+				if (xx >= 0 && xx < 320 && yy >= 0 && yy <= 172)
+				{
+					PutPixel(xx, yy, vhptr.vptr[xx + 320 * yy]);
+					if (draw_projectiles)
+						av_need_update_xy(xx, yy, xx, yy);
+				}
+				key = 0;
+				/* We can't wait 30 ms on default timer */
+				if (draw_projectiles)
+					GetMouse_fast();
+				else
+					GetMouse();
+				if (key > 0 || mousebuttons > 0)
+				{
+					if ((x >= 14 && y >= 182 && x <= 65 && y <= 190
+							&& mousebuttons > 0) || key == 'H')
+						R_value = 1;
+					if ((x >= 74 && y >= 182 && x <= 125 && y <= 190
+							&& mousebuttons > 0) || key == 'S')
+						R_value = 2;
+					if ((x >= 134 && y >= 182 && x <= 185 && y <= 190
+							&& mousebuttons > 0) || key == 'P')
+						R_value = 3;
+					if ((x >= 194 && y >= 182 && x <= 245 && y <= 190
+							&& mousebuttons > 0) || key == 'M')
+						R_value = 4;
+					if ((x >= 254 && y >= 182 && x <= 305 && y <= 190
+							&& mousebuttons > 0) || key == K_ENTER)
+						R_value = 5;
+					if (R_value > 0)
+					{
+
+						gxPutImage(&vhptr, gxSET, 0, 0, 0);
+						strncpy(IDT, "i144", 4);
+						strncpy(IKEY, "k044", 4);
+
+						return (R_value);
+					}
+				}
+				Bomb[lp2].vel[1] = Bomb[lp2].vel[1] + GRAVITY;
+				Bomb[lp2].vel[0] = Bomb[lp2].vel[0] * FRICTION;
+				Bomb[lp2].vel[1] = Bomb[lp2].vel[1] * FRICTION;
+
+				Bomb[lp2].psn[0] =
+					(float) Bomb[lp2].psn[0] + Bomb[lp2].vel[0];
+				Bomb[lp2].psn[1] =
+					(float) Bomb[lp2].psn[1] + Bomb[lp2].vel[1];
+				xx = Bomb[lp2].psn[0];
+				yy = Bomb[lp2].psn[1];
+				if (win == 0)
+				{
+					if (clr == 1)
+						clr = 6;
+					else if (clr == 6)
+						clr = 9;
+					else if (clr == 9)
+						clr = 1;
+				}
+				else
+				{
+					if (clr == 1)
+						clr = 9;
+					else if (clr == 9)
+						clr = 11;
+					else if (clr == 11)
+						clr = 9;
+				}
+				if (lp1 < Bomb[lp2].per && (xx >= 0 && xx < 320 && yy >= 0
+						&& yy <= 172))
+				{
+					PutPixel(xx, yy, clr);
+					if (draw_projectiles)
+						av_need_update_xy(xx, yy, xx, yy);
+				}
+			}
+			/* XXX: need to optimize SDL_Scale2x for this to work */
+			if (draw_projectiles)
+				av_sync();
+		}
+		for (lp2 = 0; lp2 < NUM_LIGHTS; lp2++)
+		{
+			xx = Bomb[lp2].psn[0];
+			yy = Bomb[lp2].psn[1];
+			if (xx >= 0 && xx < 320 && yy >= 0 && yy <= 172)
+			{
+				PutPixel(xx, yy, vhptr.vptr[xx + 320 * yy]);
+				if (draw_projectiles)
+					av_need_update_xy(xx, yy, xx, yy);
+			}
+		}
+	}							   // end while
 
 }
 
@@ -300,14 +354,18 @@ void Load_LenFlag(char win)
  fseek(in,(poff)*(sizeof P),SEEK_CUR);
  fread(&P,sizeof P,1,in);
 	SwapPatchHdr(&P);
+	P.w++; /* BUGFIX as everywhere */
  fseek(in,P.offset,SEEK_SET);
  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
  gxClearVirtual(&local2,0);
- gxGetImage(&local2,Off_X,Off_Y,P.w,P.h,0);
+ gxGetImage(&local2,Off_X,Off_Y,Off_X+P.w-1,Off_Y+P.h-1,0);
  fread(local.vptr,P.size,1,in);
  fclose(in);
  for (j=0;j<P.size;j++)
-	local2.vptr[j]=local.vptr[j]+coff;
+	/* now fix the strip */
+	if ((j+1) % P.w != 0)
+		local2.vptr[j]=local.vptr[j]+coff;
+
  gxPutImage(&local2,gxSET,Off_X,Off_Y,0);
  DV(&local); DV(&local2);
  return;
@@ -331,9 +389,9 @@ void Draw_NewEnd(char win)
  grSetColor(1);
  PrintAt(21,188,"HISTORY");PrintAt(85,188,"STATS");PrintAt(142,188,"PARADE");
  PrintAt(198,188,"MOON EVA");PrintAt(268,188,"EXIT");
- FadeIn(0,pal,40,128,0);
+ FadeIn(0,pal,10,128,0);
  Load_LenFlag(win);
- FadeIn(1,pal,200,128,1);
+ FadeIn(1,pal,40,128,1);
 }
 
 void NewEnd(char win,char loc)
@@ -375,7 +433,7 @@ void NewEnd(char win,char loc)
       memset(&pal[384],0,384);gxSetDisplayPalette(pal);
       gxClearVirtual(&local,0);
       Load_LenFlag(win);
-      FadeIn(1,pal,80,128,1);
+      FadeIn(1,pal,40,128,1);
       
       if (R_V==0 || R_V==-1) R_V=Burst(win);
       Re_Draw=0;
@@ -422,7 +480,7 @@ void NewEnd(char win,char loc)
      if (R_V==3) R_V=-1;
      i=0;key=0;
      Re_Draw=1;OutBox(134,182,185,190);
-     FadeOut(1,pal,100,128,1);RectFill(195,0,319,172,0);
+     FadeOut(1,pal,40,128,1);RectFill(195,0,319,172,0);
      gxGetImage(&local,149,9,309,100,0);
      ShBox(149,9,309,100);InBox(153,13,305,96);
      PreLoadMusic(M_PRGMTRG);
@@ -441,7 +499,7 @@ void NewEnd(char win,char loc)
      if (R_V==4) R_V=-1;
      i=0;key=0;
      OutBox(194,182,245,190);Re_Draw=1;
-     FadeOut(1,pal,100,128,1);RectFill(195,0,319,172,0);
+     FadeOut(1,pal,40,128,1);RectFill(195,0,319,172,0);
      gxGetImage(&local,149,9,309,100,0);
      ShBox(149,9,309,100);InBox(153,13,305,96);
      PreLoadMusic(M_MISSPLAN);
@@ -594,7 +652,7 @@ void FakeWin(char win)
 void FakeHistory(char plr,char Fyear)  // holds the winning player
 {
  char bud;
- memset(buffer,0x00,20480);
+ memset(buffer, 0, BUFFER_SIZE);
  if (Fyear<=65) bud=0+plr;
    else if (Fyear<=67) bud=2+plr;
 	 else if (Fyear<=69) bud=4+plr;
@@ -634,10 +692,10 @@ void PrintOne(char *buf,char tken)
  grSetColor(7);
  k=0;
  if (tken==0)  k=127; else k=170;
- grMoveTo(18,k);
+ grMoveTo(10,k);
   for (i=0;i<(int)strlen(buf);i++)
 	{
-	 if (buf[i]=='*') {k+=7;grMoveTo(18,k);}
+	 if (buf[i]=='*') {k+=7;grMoveTo(10,k);}
 	   else DispChr(buf[i]);
 	}
 }
@@ -645,7 +703,7 @@ void PrintOne(char *buf,char tken)
 void AltHistory(char plr)  // holds the winning player
 {
  char bud;
- memset(buffer,0x00,20480);
+ memset(buffer, 0, BUFFER_SIZE);
  if (Data->Year<=65) bud=0+plr;
    else if (Data->Year<=67) bud=2+plr;
 	 else if (Data->Year<=69) bud=4+plr;
@@ -674,10 +732,10 @@ void SpecialEnd(void)
  InBox(178,3,205,19);FlagSm(0,179,4);
  InBox(210,3,237,19);FlagSm(1,211,4);
  LoserPict(0,128); // load loser picture 
- memset(buffer,0x00,20480);    
+ memset(buffer,0x00,BUFFER_SIZE);    
  HistFile(buffer+1000,10);
  PrintOne(buffer+1000,0);
- memset(buffer,0x00,20480);
+ memset(buffer,0x00,BUFFER_SIZE);
  HistFile(buffer+1000,11);
  PrintOne(buffer+1000,1);
  FadeIn(2,pal,10,0,0);
@@ -699,51 +757,68 @@ void SpecialEnd(void)
  return;
 }
 
-void EndPict(int x,int y,char poff,unsigned char coff)
+void
+EndPict(int x, int y, char poff, unsigned char coff)
 {
-    /* XXX: game crashes in this function */ 
-  PatchHdr P;
-  GXHEADER local,local2;
-  unsigned int j;
-  FILE *in;
-  in=sOpen("ENDGAME.BUT","rb",0);
-  fread(&pal[coff*3],384,1,in);
-  fseek(in,(poff)*(sizeof P),SEEK_CUR);
-  fread(&P,sizeof P,1,in);
-	SwapPatchHdr(&P);
-  fseek(in,P.offset,SEEK_SET);
-  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,x,y,x+P.w-1,y+P.h-1,0);
-  fread(local.vptr,P.size,1,in);
-  fclose(in);
-  for (j=0;j<P.size;j++)
-	if(local.vptr[j]!=0) local2.vptr[j]=local.vptr[j]+coff;
-  gxPutImage(&local2,gxSET,x,y,0);
-  DV(&local); DV(&local2);
-  return;
+	PatchHdrSmall P;
+	GXHEADER local, local2;
+	unsigned int j;
+	FILE *in;
+
+	in = sOpen("ENDGAME.BUT", "rb", 0);
+	fread(&pal[coff * 3], 384, 1, in);
+	fseek(in, (poff) * (sizeof P), SEEK_CUR);
+	fread(&P, sizeof P, 1, in);
+	SwapPatchHdrSmall(&P);
+	/*
+	 * off by one error in data file - again
+	 * P.w += 1 solves the problem, but then
+	 * we get a strip of garbage on the right hand side
+	 */
+	P.w++;
+	fseek(in, P.offset, SEEK_SET);
+	GV(&local, P.w, P.h);
+	GV(&local2, P.w, P.h);
+	gxGetImage(&local2, x, y, x + P.w - 1, y + P.h - 1, 0);
+	fread(local.vptr, P.size, 1, in);
+	fclose(in);
+	for (j = 0; j < P.size; j++)
+		/* fix the strip */
+		if (local.vptr[j] != 0 && ((j+1) % P.w != 0))
+			local2.vptr[j] = local.vptr[j] + coff;
+	gxPutImage(&local2, gxSET, x, y, 0);
+	DV(&local);
+	DV(&local2);
+	return;
 }
 
-void LoserPict(char poff,unsigned char coff)
+void
+LoserPict(char poff, unsigned char coff)
 {
+	/* This hasn't got an off-by-one...*/
 	PatchHdr P;
-  GXHEADER local,local2;
-  unsigned int j;
-  FILE *in;
-  in=sOpen("LOSER.BUT","rb",0);
-  fread(&pal[coff*3],384,1,in);
-  fseek(in,(poff)*(sizeof P),SEEK_CUR);
-  fread(&P,sizeof P,1,in);
+	GXHEADER local, local2;
+	unsigned int j;
+	FILE *in;
+
+	in = sOpen("LOSER.BUT", "rb", 0);
+	fread(&pal[coff * 3], 384, 1, in);
+	fseek(in, (poff) * (sizeof P), SEEK_CUR);
+	fread(&P, sizeof P, 1, in);
 	SwapPatchHdr(&P);
-  fseek(in,P.offset,SEEK_SET);
-  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
-  gxGetImage(&local2,6,32,6+P.w-1,32+P.h-1,0);
-  fread(local.vptr,P.size,1,in);
-  fclose(in);
-  for (j=0;j<P.size;j++)
-	if(local.vptr[j]!=0) local2.vptr[j]=local.vptr[j]+coff;
-  gxPutImage(&local2,gxSET,6,32,0);
-  DV(&local); DV(&local2);
-  return;
+	fseek(in, P.offset, SEEK_SET);
+	GV(&local, P.w, P.h);
+	GV(&local2, P.w, P.h);
+	gxGetImage(&local2, 6, 32, 6 + P.w - 1, 32 + P.h - 1, 0);
+	fread(local.vptr, P.size, 1, in);
+	fclose(in);
+	for (j = 0; j < P.size; j++)
+		if (local.vptr[j] != 0)
+			local2.vptr[j] = local.vptr[j] + coff;
+	gxPutImage(&local2, gxSET, 6, 32, 0);
+	DV(&local);
+	DV(&local2);
+	return;
 }
 
 
@@ -804,5 +879,4 @@ void PlayFirst(char plr,char first)
  return;
 }
 
-
-
+/* vim: set noet ts=4 sw=4 tw=77: */

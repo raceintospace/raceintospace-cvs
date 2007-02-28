@@ -1,5 +1,16 @@
 2007-02-28  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V149
+
+	* endgame.c (Burst): Fireworks can be turned on or off.
+	(Load_LenFlag, EndPict): Picture loading fixes.
+	(FakeHistory): Text coordinates.
+	(NewEnd): Shorter fades.
+
+	* intro.c (Introd): Fading.
+
+2007-02-28  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V148
 
 	* mc.c (Launch): Fix crash during average safety calculation.
