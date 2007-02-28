@@ -217,15 +217,32 @@ int Launch(char plr,char mis)
 
 #define fpf(a,b) fprintf(a,#b ": %d\n",b)
 
-   memset(&Rep,0x00,sizeof Rep); // Clear Replay Data Struct
-   i=avg=temp=0;
-   while(Mev[i].loc!=0x7f)
-    {
-     temp+=Mev[i].E->MisSaf+Mev[i].asf;++avg;
-     i++;
-    };
-   avg=(int)temp/(int)avg;
-   if (!AI[plr] && mcode>=53 && avg>=3 && avg<=105) SafetyRecords(plr,avg);
+	memset(&Rep, 0x00, sizeof Rep);	   // Clear Replay Data Struct
+
+	/* whatever this mcode means... */
+	if (!AI[plr] && mcode >= 53 )
+	{
+		avg = temp = 0;
+
+		for (i = 0; Mev[i].loc != 0x7f; ++i)
+		{
+			/* Bugfix -> We need to skip cases when Mev[i].E is NULL */
+			/* Same solution as used in mis_m.c (MisCheck):207 */
+			if (!Mev[i].E)
+				continue;
+
+			avg += Mev[i].E->MisSaf + Mev[i].asf;
+			temp += 1;
+		};
+
+		if (temp)
+			avg /= temp;
+		else
+			avg = 0;
+
+		if (avg >= 3 && avg <= 105)
+			SafetyRecords(plr, avg);
+	}
 
 //   if (!AI[plr]) {PreLoadMusic(M_ELEPHANT); PlayMusic(0);}
 
@@ -385,7 +402,4 @@ int MaxFailPad(char which)
    return t;
 }
 
-
-
-
-// EOF
+/* vim: set noet ts=4 sw=4 tw=77: */
