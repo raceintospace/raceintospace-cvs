@@ -507,12 +507,7 @@ begfut_noredraw:
 					&& y <= 17 && mousebuttons > 0) || key == K_ENTER))
 		{
 			InBox(244, 5, 313, 17);
-			while (1)
-			{
-				GetMouse();
-				if (mousebuttons == 0)
-					break;
-			}
+			WaitForMouseUp();
 			if (key > 0)
 				delay(300);
 			key = 0;
@@ -905,6 +900,8 @@ begfut_noredraw:
 			|| (key == K_SPACE))
 		{
 			InBox(5, 132, 16, 146);
+			WaitForMouseUp();
+			delay(50);
 			MisType = Data->P[plr].Future[MisNum].MissionCode;
 			if (MisType != 0)
 				Missions(plr, 8, 37, MisType, 1);
@@ -1236,4 +1233,4 @@ char FutBad(void)
   return (i);
 }
 
-// EOF
+/* vim: set noet ts=4 sw=4 tw=77: */

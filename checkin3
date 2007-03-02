@@ -3,8 +3,20 @@
 use File::Temp qw/tempfile/;
 use Fcntl qw/:seek/;
 
+my @req_files = qw/ChangeLog version.c/;
 my $fname = "ChangeLog";
 my $tagname = "";
+
+# we have files to checkin in argv. if empty, then checkin all.
+if (@ARGV) {
+    # some files are required in every checkin...
+    for my $r (@req_files) {
+        push @ARGV, $r unless grep {$_ eq $r} @ARGV;
+    }
+}
+
+# not perfect, but system() is not perfect either...
+my $file_list = join " ", @ARGV;
 
 open IN, $fname or die "open $fname: $!\n";
 ($logf, $logfname) = tempfile("commit_log.XXXXX") or die "tempfile: $!\n";
@@ -29,13 +41,13 @@ if (not $tagname) {
     exit 1;
 }
 
-my $cmd = "cvs diff > $diffname";
+my $cmd = "cvs diff $file_list > $diffname";
 print $cmd;
-system "cvs diff > $diffname";
+system $cmd;
 # cvs diff has got botched exit status and no way of knowing if it succeeded.
 die "No changes! What are you checking in???\n" if not $?;
 
-# obviously assume pathsep = ':' and dirsep = '/'
+# assume pathsep = ':' and dirsep = '/'
 if (grep { -x "$_/diffstat" } split ":", $ENV{PATH}) {
     print "=== DIFFSTAT ===";
     system "diffstat < $diffname"
@@ -49,7 +61,8 @@ if (<STDIN> =~ /^[yY]/) {
 		and die "PAGER failed???\n";
 } 
 
-$cmd = "cvs commit -R -F $logfname && cvs tag -R $tagname";
+# always tag all files.
+$cmd = "cvs commit -R -F $logfname $file_list && cvs tag -R $tagname";
 print "=== COMMIT? ===";
 if (<STDIN> =~ /^[yY]/) {
     print $cmd;

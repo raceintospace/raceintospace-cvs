@@ -1,3 +1,11 @@
+2007-03-02  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V150
+
+	* future.c (Future): Added delay in "show steps" button.
+
+	* checkin3: Can specify files to commit.
+
 2007-02-28  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V149
