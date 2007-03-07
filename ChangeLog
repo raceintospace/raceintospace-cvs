@@ -1,3 +1,11 @@
+2007-03-07  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V151
+
+	* endgame.c (Load_LenFlag): US and USSR bugs differed.
+
+	* Other small fixes.
+
 2007-03-02  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V150

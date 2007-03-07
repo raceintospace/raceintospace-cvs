@@ -1,5 +1,5 @@
-#ifndef _ENVIRONMENT_H
-#define _ENVIRONMENT_H
+#ifndef _OPTIONS_H
+#define _OPTIONS_H
 
 typedef struct {
     char *dir_savegame;
@@ -12,4 +12,4 @@ typedef struct {
 extern game_options options;
 extern int setup_options(int argc, char ** argv);
 
-#endif /* _ENVIRONMENT_H */
+#endif /* _OPTIONS_H */

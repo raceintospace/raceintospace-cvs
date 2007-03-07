@@ -354,7 +354,8 @@ void Load_LenFlag(char win)
  fseek(in,(poff)*(sizeof P),SEEK_CUR);
  fread(&P,sizeof P,1,in);
 	SwapPatchHdr(&P);
-	P.w++; /* BUGFIX as everywhere */
+	if (win!=1)
+		P.w++; /* BUGFIX as everywhere */
  fseek(in,P.offset,SEEK_SET);
  GV(&local,P.w,P.h); GV(&local2,P.w,P.h);
  gxClearVirtual(&local2,0);
@@ -363,7 +364,7 @@ void Load_LenFlag(char win)
  fclose(in);
  for (j=0;j<P.size;j++)
 	/* now fix the strip */
-	if ((j+1) % P.w != 0)
+	if (win == 1 || ((j+1) % P.w != 0))
 		local2.vptr[j]=local.vptr[j]+coff;
 
  gxPutImage(&local2,gxSET,Off_X,Off_Y,0);

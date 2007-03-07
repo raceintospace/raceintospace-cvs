@@ -20,7 +20,7 @@ AC_ARG_WITH(theora,
     )
 if test "x$theora_prefix" = "x"; then
     if test "x$prefix" = "xNONE"; then
-        theora_prefix="/usr/local"
+        theora_prefix="/usr"
     else
         theora_prefix="$prefix"
     fi
