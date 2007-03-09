@@ -1,3 +1,12 @@
+2007-03-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V152
+
+	* configure.in: Advanced version number to R04-2.
+
+	* main.c (PrintAt, DispBig): Smaller redraw area.
+	(DispChr): Force upper case.
+
 2007-03-07  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V151

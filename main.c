@@ -29,6 +29,7 @@
 #include "Buzz_inc.h"
 #include "options.h"
 #include "utils.h"
+#include <ctype.h>
 
 #ifdef CONFIG_MACOSX
 // SDL.h needs to be included here to replace the original main() with
@@ -664,7 +665,7 @@ void PrintAt(int x,int y,char *s)
   if (strlen(s) > 100) return;
   for(i=0;i<(int)strlen(s);i++)
     DispChr(s[i]);
-  av_need_update_xy(x, y-15, x+i*15, y);
+  av_need_update_xy(x, y-7, x+i*7, y);
   return;
 }
 
@@ -694,6 +695,7 @@ void DispBig(int x,int y,char *txt,char mode,char te)
   int i,k,l,px;
   struct LET {char width,img[15][21];} letter;
   int c;
+  int x0 = x;
 
   y--;
   if(mode)EMPTY_BODY;
@@ -716,6 +718,7 @@ void DispBig(int x,int y,char *txt,char mode,char te)
       }
     x+=letter.width-1;
   };
+  av_need_update_xy(x0, y, x, y+15);
 }
 
 void DispNum(int xx,int yy,int num)
@@ -922,7 +925,7 @@ void Flag(int x,int y,char plr)
 
 void DispChr(char chr)
 {
-  switch(chr)
+  switch(toupper(chr))
   {
     case 'A': LR(0,-3);LR(1,-1);LR(2,0);LR(1,1);LR(0,3);LR(-1,-1);
 	      LR(-2,0);MR(5,1);break;
