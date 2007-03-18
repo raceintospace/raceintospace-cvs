@@ -1,5 +1,11 @@
 2007-03-18  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V154
+
+	* fs.h: Forgot to check in.
+
+2007-03-18  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V153
 
 	* options.c (get_homedir, setup_options): Bugfix #1682988, refactor.

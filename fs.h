@@ -27,5 +27,6 @@ extern int create_save_dir(void);
 extern int remove_savedat(const char *name);
 extern int first_saved_game (struct ffblk *ffblk);
 extern int next_saved_game (struct ffblk *ffblk);
+extern void fix_pathsep(char *path);
 
 #endif /* _FS_H */
