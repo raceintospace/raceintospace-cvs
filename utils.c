@@ -37,7 +37,7 @@ get_time (void)
 }
 
 int
-xstrcasecmp (char const *a, char const *b)
+xstrcasecmp (const char *a, const char *b)
 {
 	while (*a) {
 		if (tolower (*a & 0xff) != tolower (*b & 0xff))
@@ -49,7 +49,7 @@ xstrcasecmp (char const *a, char const *b)
 }
 
 int
-xstrncasecmp (char const *a, char const *b, int n)
+xstrncasecmp (const char *a, const char *b, size_t n)
 {
 	while (n && *a) {
 		if (tolower (*a & 0xff) != tolower (*b & 0xff))
@@ -95,6 +95,17 @@ xstrdup (const char *s)
 	p = xmalloc (strlen (s) + 1);
 	strcpy (p, s);
 	return (p);
+}
+
+char *
+xstrcat2 (const char* s1, const char* s2)
+{
+	char *s = NULL;
+	assert(s1 && s2);
+	s = xmalloc(strlen(s1) + strlen(s2) + 1);
+	strcpy(s, s1);
+	strcat(s, s2);
+	return s;
 }
 
 void *

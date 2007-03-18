@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
   if (fin == NULL)
   {
       /* ERROR */ fprintf(stderr,
-              "can't find gamedat files!\n"
+              "can't find game data files!\n"
               "try setting BARIS_DATA to gamedata directory.\n");
       exit(EXIT_FAILURE);
   }
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
   if (create_save_dir() != 0)
   {
       /* ERROR */ fprintf(stderr,
-              "can't create save directory %s - %s\n"
+              "can't create save directory %s: %s\n"
               "try setting BARIS_SAVE to some writable location.\n",
               options.dir_savegame, strerror(errno));
       exit(EXIT_FAILURE);

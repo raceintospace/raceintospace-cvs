@@ -28,6 +28,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+/* path separator setup */
+#ifndef PATHSEP
+# if CONFIG_WIN32
+#  define PATHSEP '\\'
+# else
+#  define PATHSEP '/'
+# endif
+#endif
+
 /* see how do we call mkdir */
 #if HAVE_MKDIR
 # if MKDIR_TAKES_ONE_ARG
@@ -66,11 +75,43 @@ static DIR *save_dir;
  * gamedata & savedata access functions
  */
 
+void
+fix_pathsep(char *name)
+{
+	for (; *name; ++name)
+		if (*name == '/')
+			*name = PATHSEP;
+}
+
+static FILE*
+try_fopen(const char *fname, const char *mode)
+{
+	FILE* fp = NULL;
+	assert(fname);
+	assert(mode);
+	/* DEBUG */ /* fprintf(stderr, "fs: trying to fopen(\"%s\", \"%s\")\n",
+	cooked, mode); */
+
+	fp = fopen(fname, mode);
+
+	/* TODO: ENOENT is POSIX, ANSI equivalent for file does not exist??? */
+	if (!fp && errno != ENOENT)
+	{
+		int esave = errno;
+		/* WARN */ fprintf(stderr, "fs: can't open %s: %s\n",
+				fname, strerror(errno));
+		errno = esave;
+	}
+
+	return fp;
+}
+
 /* try to open base/xxx/name for xxx = arg4 ... */
 static FILE *
 s_open_helper(const char *base, const char *name, const char *mode, ...)
 {
 	FILE *f = NULL;
+	int serrno;
 	char *p = NULL;
 	char *cooked = xmalloc(1024);
 	size_t len = 1024, len2 = 0;
@@ -90,8 +131,11 @@ s_open_helper(const char *base, const char *name, const char *mode, ...)
 		len2 = len_base + len_name + len_p + 3;
 		if (len2 > len)
 			cooked = xrealloc(cooked, (len = len2));
+
 		sprintf(cooked, "%s/%s/%s", base, p, name);
-		f = fopen(cooked, mode);
+		fix_pathsep(cooked);
+
+		f = try_fopen(cooked, mode);
 		if (f)
 			break;
 
@@ -100,12 +144,14 @@ s_open_helper(const char *base, const char *name, const char *mode, ...)
 			if (isupper(*s))
 				*s = tolower(*s);
 
-		f = fopen(cooked, mode);
+		f = try_fopen(cooked, mode);
 		if (f)
 			break;
 	}
+	serrno = errno;
 	va_end(ap);
 	free(cooked);
+	errno = serrno;
 	return f;
 }
 
@@ -138,7 +184,7 @@ sOpen(const char *name, const char *mode, int type)
 			f = s_open_helper(sd, name, mode,
 					".",
 					NULL);
-			where = "save data";
+			where = "savegame";
 			break;
 		case FT_AUDIO:
 			f = s_open_helper(gd, name, mode,
@@ -146,7 +192,6 @@ sOpen(const char *name, const char *mode, int type)
 					"audio/music",
 					"audio/news",
 					"audio/sounds",
-					".",
 					NULL);
 			where = "audio";
 			break;
@@ -155,7 +200,6 @@ sOpen(const char *name, const char *mode, int type)
 					"video/mission",
 					"video/news",
 					"video/training",
-					".",
 					NULL);
 			where = "video";
 			break;
@@ -166,7 +210,7 @@ sOpen(const char *name, const char *mode, int type)
 	if (!f)
 	{
 		int serrno = errno;
-		/* WARN */ fprintf(stderr, "can't %s file %s in %s directory\n",
+		/* WARN */ fprintf(stderr, "can't %s file %s in %s dir(s).\n",
 			strchr(mode, 'w') ? "create" : "access", name, where);
 		errno = serrno;
 	}
@@ -182,6 +226,7 @@ remove_savedat(const char *name)
 	int rv = 0;
 
 	sprintf(cooked, "%s/%s", options.dir_savegame, name);
+	fix_pathsep(cooked);
 	rv = remove(cooked);
 	free(cooked);
 	return rv;
@@ -229,7 +274,6 @@ create_save_dir(void)
 {
 	if (mkdir(options.dir_savegame, 0777) < 0 && errno != EEXIST)
 		return -1;
-	errno = 0;
 	return 0;
 }
 
@@ -275,3 +319,6 @@ next_saved_game(struct ffblk *ffblk)
 
 	return (1);
 }
+
+/* vim: set noet ts=4 sw=4 tw=77: */
+

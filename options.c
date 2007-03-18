@@ -118,7 +118,7 @@ skip_past_newline(FILE * f)
 	return fscanf(f, "%*[^\r\n] ");
 }
 
-int
+static int
 parse_var_value(FILE * f, int index)
 {
 	char format[128];
@@ -146,7 +146,7 @@ parse_var_value(FILE * f, int index)
 	return 0;
 }
 
-int
+static int
 read_config_file(void)
 {
 	FILE *f = open_savedat("config", "rt");
@@ -221,7 +221,7 @@ read_config_file(void)
 	return -err;
 }
 
-int
+static int
 write_default_config(void)
 {
 	int i = 0;
@@ -233,8 +233,8 @@ write_default_config(void)
 	if (!f)
 	{
 		/* WARN */ fprintf(stderr,
-				"can't write default configuration to %s/%s\n",
-				options.dir_savegame, "config");
+				"can't write default configuration to %s/%s: %s\n",
+				options.dir_savegame, "config", strerror(errno));
 		return -1;
 	}
 	else
@@ -255,9 +255,44 @@ write_default_config(void)
 	return err;
 }
 
-/* returns length of modified argv */
+/* return a location of user's home directory, or NULL if unknown.
+ * returned string is malloc-ed */
+static char *
+get_homedir(void)
+{
+	char *s = NULL;
 
-/* possibly maintain a list of dirs to search?? */
+	if ((s = getenv("HOME")))
+	{
+		return xstrdup(s);
+	}
+#if CONFIG_WIN32
+	if ((s = getenv("HOMEPATH")))
+	{
+		char *s2 = NULL;
+
+		if ((s2 = getenv("HOMEDRIVE")) || (s2 = getenv("HOMESHARE")))
+		{
+			return xstrcat2(s2, s);
+		}
+	}
+	if ((s = getenv("USERPROFILE")))
+	{
+		return xstrdup(s);
+	}
+#endif
+	return NULL;
+}
+
+static void
+fixpath_options(void)
+{
+	fix_pathsep(options.dir_savegame);
+	fix_pathsep(options.dir_gamedata);
+}
+
+/* returns length of modified argv */
+/* TODO: possibly maintain a list of dirs to search?? */
 int
 setup_options(int argc, char *argv[])
 {
@@ -270,18 +305,14 @@ setup_options(int argc, char *argv[])
 		if ((str = getenv(env_vars[i].name)))
 			*env_vars[i].dest = xstrdup(str);
 		else if (strcmp(env_vars[i].name, ENVIRON_SAVEDIR) == 0
-			&& ((str = getenv("HOME"))
-#if CONFIG_WIN32
-				|| (str = getenv("HOMEPATH"))
-				|| (str = getenv("USERPROFILE"))
-#endif
-			))
+			&& (str = get_homedir()))
 		{
 
 			size_t len = strlen(str) + strlen(PACKAGE_TARNAME) + 3;
 
 			*env_vars[i].dest = xmalloc(len);
 			sprintf(*env_vars[i].dest, "%s/.%s", str, PACKAGE_TARNAME);
+			free(str);
 		}
 		else
 			*env_vars[i].dest = xstrdup(env_vars[i].def_val);
@@ -290,6 +321,8 @@ setup_options(int argc, char *argv[])
 	options.want_audio = 1;
 	options.want_intro = 1;
 	options.want_cheats = 0;
+
+	fixpath_options();
 
 	/* now try to read config file, if it exists */
 	if (read_config_file() < 0)
@@ -379,5 +412,9 @@ setup_options(int argc, char *argv[])
 		argc--;
 	}
 
+	fixpath_options();
+
 	return argc;
 }
+
+/* vim: set noet ts=4 sw=4 tw=77: */
