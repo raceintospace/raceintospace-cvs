@@ -43,10 +43,16 @@
   ;!insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+
+  ;Optins for finish page
+  !define MUI_FINISHPAGE_SHOWREADME "README.txt"
+  !define MUI_FINISHPAGE_NOREBOOTSUPPORT
+  
+  !insertmacro MUI_PAGE_FINISH
   
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
-  
+
 ;--------------------------------
 ;Languages
  
@@ -59,8 +65,6 @@ Section "Dummy Section" SecDummy
 
   SetOutPath "$INSTDIR"
   
-  ;ADD YOUR OWN FILES HERE...
-
   ;Executable
   File ${PTARNAME}.exe
   ;Libraries
@@ -114,8 +118,6 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
-
-  ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\Uninstall.exe"
   Delete "$INSTDIR\README.txt"

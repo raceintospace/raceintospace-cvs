@@ -12,18 +12,17 @@
     2)  $ ./configure
     3)  $ make
 
-Notes: I needed to do these extra things before ./configure:
+    Notes: I needed to do these extra things before ./configure:
 
-	# cp m4/theora.m4 /usr/share/aclocal/.
-	$ aclocal -I m4
-	$ autoconf
+        # cp m4/theora.m4 /usr/share/aclocal/.
+        $ aclocal -I m4
+        $ autoconf
 
-autoconf prints one error:
+    autoconf prints one error:
 
-	configure.in:51: error: possibly undefined macro: AC_TYPE_SSIZE_T
+        configure.in:51: error: possibly undefined macro: AC_TYPE_SSIZE_T
 
-which can be ignored
-
+    which can be ignored
 
 2. Cross compiling: Linux - Windows: tested
 
@@ -35,8 +34,8 @@ which can be ignored
     4)  download SDL runtime for win32 and put SDL.dll into
         os_win32 directory.
     5)  download and cross-compile required libraries, put the dlls into
-        os_win32 directory, static versions and C headers into directories you
-        were using in step 3)
+        os_win32 directory, static versions and C headers into directories
+        you were using in step 3)
     6)  edit os_win32/configure.mingw, run it
     7)  make
     8)  to build an installer you will need makensis tool, get it from
@@ -44,8 +43,8 @@ which can be ignored
 
 3. Building on Mac OS X
 
-    1)  Use Darwin Ports to get the development libraries libsdl-dev libtheora libogg libvorbis
-				# port install libsdl libtheora libogg libvorbis
+    1)  Use Darwin Ports to get the development libraries:
+        # port install libsdl libtheora libogg libvorbis
     2)  $ ./configure --with-OGG=/opt/local --with-theora=/opt/local
     3)  $ make
 
@@ -63,11 +62,11 @@ which can be ignored
 
 5. Building on Windows using mingw32
 
-This method was used in early testing, but may no longer work.  Give
-it a shot if you like.  You will need development versions of
-libraries mentioned above.  mingw32 version of SDL is available at
-http://libsdl.org, other ones would probably have to be built from
-source.
+    This method was used in early testing, but may no longer work.  Give
+    it  a shot  if  you like.   You will  need  development versions  of
+    libraries mentioned  above. mingw32 version  of SDL is  available at
+    http://libsdl.org, other ones  would probably have to  be built from
+    source.
 
     1)  cd os_win32/
     2)  Edit file configure.mingw32
@@ -76,6 +75,6 @@ source.
 
 6. CVS access
 
-    You can get the most recent version of the game using anonymous
-    CVS access. See http://sourceforge.net/cvs/?group_id=129186 for
+    You can  get the  most recent  version of  the game  using anonymous
+    CVS   access. See  http://sourceforge.net/cvs/?group_id=129186   for
     instructions.

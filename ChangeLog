@@ -1,3 +1,13 @@
+2007-03-19  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V155
+
+	* README: Added info about environment setup on win32 platforms.
+
+	* AUTHORS, DEVELOPER: Reformatting.
+
+	* os_win32/installer.nsi.in: Show README.txt after install.
+
 2007-03-18  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V154
