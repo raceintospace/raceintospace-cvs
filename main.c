@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
 {
   int i,cdstat;
   FILE *fin;
+  const char * see_readme = "look for further instructions in the README file.";
 
   char AName[6][22]={"NEW GAME","OLD GAME","MODEM","PLAY BY MAIL","CREDITS","EXIT TO DOS"};
   char ex;
@@ -125,7 +126,8 @@ int main(int argc, char *argv[])
   {
       /* ERROR */ fprintf(stderr,
               "can't find game data files!\n"
-              "try setting BARIS_DATA to gamedata directory.\n");
+              "set environment variable BARIS_DATA or edit config file.\n"
+              "%s\n", see_readme);
       exit(EXIT_FAILURE);
   }
   fclose(fin);
@@ -133,9 +135,9 @@ int main(int argc, char *argv[])
   if (create_save_dir() != 0)
   {
       /* ERROR */ fprintf(stderr,
-              "can't create save directory %s: %s\n"
-              "try setting BARIS_SAVE to some writable location.\n",
-              options.dir_savegame, strerror(errno));
+              "can't create save directory %s: %s!\n"
+              "set environment variable BARIS_SAVE to a writable dir.\n"
+              "%s\n", options.dir_savegame, strerror(errno), see_readme);
       exit(EXIT_FAILURE);
   }
 
