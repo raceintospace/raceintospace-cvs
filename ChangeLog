@@ -1,3 +1,9 @@
+2007-03-21  Michael McCarty <mkmccarty@raceintospace.org>
+
+	* V157
+
+	* Modified options.c for MACOSX so it builds from source again
+
 2007-03-21  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V156

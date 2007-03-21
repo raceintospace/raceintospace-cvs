@@ -39,7 +39,8 @@
 #  define DEFAULT_DATADIR CONFIG_DATADIR
 #  define DEFAULT_SAVEDIR (".")
 #elif CONFIG_MACOSX
-#  warn TODO: fill something in here...
+#  define DEFAULT_DATADIR CONFIG_DATADIR
+#  define DEFAULT_SAVEDIR (".")
 #endif
 
 /* and provide defaults for unspecified OS */
