@@ -227,6 +227,11 @@ sdl_timer_callback(Uint32 interval, void *param)
 void
 av_setup(void)
 {
+	unsigned video_flags = SDL_SWSURFACE;
+
+	if (options.want_fullscreen)
+		video_flags |= SDL_FULLSCREEN;
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
 		/* ERROR */ fprintf(stderr, "SDL_Init error\n");
@@ -258,7 +263,7 @@ av_setup(void)
 		have_audio = 1;
 	}
 
-	if ((display = SDL_SetVideoMode(640, 400, 24, SDL_SWSURFACE)) == NULL)
+	if ((display = SDL_SetVideoMode(640, 400, 24, video_flags)) == NULL)
 	{
 		/* ERROR */ fprintf(stderr, "error in SDL_SetVideoMode: %s\n",
                 SDL_GetError());
@@ -857,3 +862,5 @@ av_need_update_xy(int x1, int y1, int x2, int y2)
     SDL_Rect r = {x1, y1, x2-x1+1, y2-y1+1};
     av_need_update(&r);
 }
+
+/* vim: set noet ts=4 sw=4 tw=77: */

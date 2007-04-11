@@ -88,12 +88,14 @@ static struct {
 		"Set to 1 if you want every mission step check to succeeed." },
 	{"intro", &options.want_intro, "%d", 0,
 		"Set to 0 if do not want intro displayed at startup." },
+	{"fullscreen", &options.want_fullscreen, "%d", 0,
+		"Set to 1 if you want (ugly) full screen game." },
 };
 
 static void
 usage (int fail)
 {
-	fprintf(stderr, "usage: raceintospace [-i] [-n] [-a]\n");
+	fprintf(stderr, "usage: raceintospace [-i] [-n] [-a] [-f]\n");
 	exit((fail) ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
@@ -308,7 +310,6 @@ setup_options(int argc, char *argv[])
 		else if (strcmp(env_vars[i].name, ENVIRON_SAVEDIR) == 0
 			&& (str = get_homedir()))
 		{
-
 			size_t len = strlen(str) + strlen(PACKAGE_TARNAME) + 3;
 
 			*env_vars[i].dest = xmalloc(len);
@@ -322,6 +323,7 @@ setup_options(int argc, char *argv[])
 	options.want_audio = 1;
 	options.want_intro = 1;
 	options.want_cheats = 0;
+	options.want_fullscreen = 0;
 
 	fixpath_options();
 
@@ -359,6 +361,8 @@ setup_options(int argc, char *argv[])
 				options.want_cheats = 1;
 			else if (*str == 'a')
 				options.want_audio = 0;
+			else if (*str == 'f')
+				options.want_fullscreen = 1;
 			else
 			{
 				/* ERROR */ fprintf(stderr, "unknown option -%c\n", *str);

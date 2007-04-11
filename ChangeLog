@@ -1,3 +1,13 @@
+2007-04-11  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V158
+
+	* options.c, options.h (usage, setup_options): added fullscreen mode as
+	an option.
+
+	* fs.c (fix_pathsep): removed changes from V153. Stdlib should translate
+	path separators on its own. Maybe we need this for messages?
+
 2007-03-21  Michael McCarty <mkmccarty@raceintospace.org>
 
 	* V157

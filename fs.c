@@ -78,9 +78,11 @@ static DIR *save_dir;
 void
 fix_pathsep(char *name)
 {
+#if 0
 	for (; *name; ++name)
 		if (*name == '/')
 			*name = PATHSEP;
+#endif
 }
 
 static FILE*
