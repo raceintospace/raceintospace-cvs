@@ -1,3 +1,13 @@
+2007-04-12  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V159
+
+	* sdl.c (av_setup): Info message about fullscreen mode.
+
+	* sdl.c (av_process_event): Translate mouse wheel to arrow keys.
+
+	* budget.c: Decrease scroll button delays in the viewing stand.
+
 2007-04-11  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V158

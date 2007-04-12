@@ -26,7 +26,7 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 
-#define DELAYCNT 55
+#define DELAYCNT 10
 
 extern struct mStr Mis;
 

@@ -229,9 +229,6 @@ av_setup(void)
 {
 	unsigned video_flags = SDL_SWSURFACE;
 
-	if (options.want_fullscreen)
-		video_flags |= SDL_FULLSCREEN;
-
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
 		/* ERROR */ fprintf(stderr, "SDL_Init error\n");
@@ -261,6 +258,12 @@ av_setup(void)
 	{
 		/* INFO */ fprintf(stderr, "sdl: audio initialized\n");
 		have_audio = 1;
+	}
+
+	if (options.want_fullscreen)
+	{
+		video_flags |= SDL_FULLSCREEN;
+		/* INFO */ fprintf(stderr, "sdl: fullscreen mode\n");
 	}
 
 	if ((display = SDL_SetVideoMode(640, 400, 24, video_flags)) == NULL)
@@ -407,6 +410,30 @@ av_process_event(SDL_Event * evp)
 
 		case SDL_MOUSEBUTTONUP:
 			av_mouse_pressed_cur = 0;
+
+			/* if we get a mouse wheel event then translate it to arrow keypress */
+			if (evp->button.button == SDL_BUTTON_WHEELUP
+					|| evp->button.button == SDL_BUTTON_WHEELDOWN)
+			{
+				SDL_Event ev;
+				int up = evp->button.button == SDL_BUTTON_WHEELUP;
+				SDLMod mod = SDL_GetModState();
+				SDLKey key;
+				
+				if (mod & KMOD_SHIFT)
+					key = up ? SDLK_LEFT : SDLK_RIGHT;
+				else
+					key = up ? SDLK_UP : SDLK_DOWN;
+
+				ev.type = SDL_KEYDOWN;
+				ev.key.type = SDL_KEYDOWN;
+				ev.key.state = SDL_RELEASED;
+				ev.key.keysym.scancode = 0;
+				ev.key.keysym.mod = mod;
+				ev.key.keysym.unicode = 0;
+				ev.key.keysym.sym = key;
+				av_process_event(&ev);
+			}
 			break;
 
 		case SDL_MOUSEMOTION:
