@@ -114,13 +114,15 @@ int NMod(int p,int prog,int type,int per) // type= 1:postive -1:negative search
   
   lo=(prog>0) ? (prog-1)*7 : 0;   hi=(prog>0) ? lo+7 : 28;
   if (prog==1) hi=lo+3;
-  for (i=0;i<25;i++)
+  /* drvee: this loop was going to 25, not 28 */
+  for (i=0;i<(int)ARRAY_LENGTH(Eptr);i++)
    {
+       /* XXX: Mismatch between data.h(250) and this code here */
     Eptr[i]=(Equipment *) &Data->P[p].Probe[i];
     save[i]= ((Eptr[i]->Safety+per*type)<=(Eptr[i]->MaxSafety)&& Eptr[i]->Num>=0) ? Eptr[i]->Safety+per*type : 0;
     if (Eptr[i]->Num<0) save[i]=0;
    };
-  for(i=0;i<28;i++) if (save[i]<0) save[i]=0;
+  for(i=0;i<(int)ARRAY_LENGTH(save);i++) if (save[i]<0) save[i]=0;
   save[11]=save[25]=save[26]=save[27]=save[12]=save[13]=save[3]=save[4]=save[5]=save[6]=0;  
   for (i=lo;i<hi;i++) if (save[i]>0) j++; // Check if event is good.
   if (j==0) return 0;           

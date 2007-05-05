@@ -688,20 +688,12 @@ av_sync(void)
     }
     if (news_rect.h && news_rect.w)
     {
-        static int warned = 0;
         av_need_update(&news_rect);
         r.h = 2 * news_rect.h;
         r.w = 2 * news_rect.w;
         r.x = 2 * news_rect.x;
         r.y = 2 * news_rect.y;
-        if (!SDL_DisplayYUVOverlay(news_overlay, &r))
-        {
-            if (!warned)
-            {
-                warned = 1;
-                printf("Err: %s\n", SDL_GetError());
-            }
-        }
+        SDL_DisplayYUVOverlay(news_overlay, &r);
     }
     num_rect = get_dirty_rect_list();
     SDL_UpdateRects(display, num_rect, dirty_rect_list);

@@ -1,5 +1,13 @@
 2007-05-05  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V161
+
+	* news_sup.c (NMod): Partial fix for uninitialized vars.
+
+	* sdl.c (av_sync): Removed warning code.
+
+2007-05-05  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V160
 
 	* mc.c (Launch): Bugfix #1711284, reversed array indices.

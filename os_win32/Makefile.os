@@ -1,5 +1,5 @@
 CFLAGS += -O2 -DNDEBUG
-#CFLAGS += -g
+# CFLAGS += -g
 
 DOCFILES = $(addsuffix .txt,AUTHORS COPYING README DEVELOPER)
 

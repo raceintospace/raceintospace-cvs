@@ -246,9 +246,9 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char FuturePlans;                // Special future mission
 	char DurLevel;			            // Current Duration Level
 	char LMpts;                      // Accumulation of any LM Test points
-	#if 0
+#if 0
 	Equipment Hardware[4][7];
-	#else
+#else
 	Equipment Probe[7];       // 0 = Orbital
 					                     // 1 = Inter Planetary
 					                     // 2 = Lunar Probe
