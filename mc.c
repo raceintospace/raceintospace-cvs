@@ -111,7 +111,7 @@ int Launch(char plr,char mis)
    MANNED[0]=Data->P[plr].Mission[mis].Men;
    MANNED[1]= (Data->P[plr].Mission[mis].Joint==1) ? Data->P[plr].Mission[mis+1].Men : 0;
 
-   JOINT=Data->P[plr].Mission[mis].Joint;
+   JOINT = Data->P[plr].Mission[mis].Joint ? 0 : 1;
 
    temp=CheckCrewOK(plr,mis);
    if (temp==1) //found mission no crews
@@ -268,14 +268,20 @@ int Launch(char plr,char mis)
    MissionPast(plr,mis,total);
    // Update the Astro's
 
-   for (i=0;i<(1+JOINT);i++) {
-      for (j=0;j<(MANNED[i]+1);j++) {
-         if (MA[j][i].A!=NULL) {
-            if (FINAL>=100) MA[j][i].A->Mis=1;                  // Successful
-            else if (Data->P[plr].Other & 4) MA[j][i].A->Mis=2; // Failure
-	 }
-      }
-   }
+	for (i = 0; i < 1 + JOINT; i++)
+	{
+		/* XXX: was MANNED[i]+1, but why? */
+		for (j = 0; j < MANNED[i]; j++)
+		{
+			if (MA[i][j].A)
+			{
+				if (FINAL >= 100)
+					MA[i][j].A->Mis = 1;	// Successful
+				else if (Data->P[plr].Other & 4)
+					MA[i][j].A->Mis = 2;	// Failure
+			}
+		}
+	}
    BIG=0;
    return total;
 };

@@ -1,3 +1,9 @@
+2007-05-05  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V160
+
+	* mc.c (Launch): Bugfix #1711284, reversed array indices.
+
 2007-04-12  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V159
