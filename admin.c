@@ -29,6 +29,7 @@
 #include "externs.h"
 #include "av.h"
 #include "utils.h"
+#include "logging.h"
 
 #define MODEM_ERROR 4
 #define NOTSAME 2
@@ -36,6 +37,8 @@
 #define SAME_ABORT 0
 #define YES 1
 #define NO 0
+
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
 
 extern char Sounds,Option,MAIL;
 extern int fOFF;
@@ -844,8 +847,7 @@ save_game (char *name)
 	EndOfTurnSave((char *) Data, sizeof ( struct Players));
 
     if ((inf = sOpen("ENDTURN.TMP","rb",1)) == NULL) {
-		/* WARN */ fprintf (stderr,
-				"save_game: can't open ENDTURN.TMP\n");
+		WARNING1("can't read ENDTURN.TMP");
 		return;
 	}
 
@@ -865,7 +867,7 @@ save_game (char *name)
 	hdr.compSize = 0; //filelength (fileno (inf));
 	   
 	if ((outf = sOpen (name, "wb", 1)) == NULL) {
-		/* WARN */ fprintf (stderr, "save_game: can't create %s\n", name);
+		WARNING2("can't save to file `%s'", name);
 		goto cleanup;
 	}
 
@@ -873,7 +875,7 @@ save_game (char *name)
     fclose(inf);
     inf = NULL;
     if (size < 0) {
-        perror("save_game");
+        WARNING1("read error in ENDTURN.TMP");
         goto cleanup;
     }
     hdr.compSize = size;
@@ -887,7 +889,7 @@ save_game (char *name)
             fwrite(buf, size, 1, outf);
         else
         {
-            perror("save_game");
+            WARNING1("read error in REPLAY.DAT");
             goto cleanup;
         }
         fclose(inf);
@@ -900,12 +902,14 @@ save_game (char *name)
             fwrite(buf, size, 1, outf);
         else
         {
-            perror("save_game");
+            WARNING1("read error in EVENT.TMP");
             goto cleanup;
         }
         fclose(inf);
         inf = NULL;
 	}
+    else
+        WARNING1("can't read EVENT.TMP");
 
 cleanup:
     if (outf)

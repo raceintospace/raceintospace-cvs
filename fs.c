@@ -20,6 +20,7 @@
 #include "options.h"
 #include "pace.h"
 #include "utils.h"
+#include "logging.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -69,6 +70,8 @@
 # endif
 #endif
 
+LOG_DEFAULT_CATEGORY(filesys);
+
 static DIR *save_dir;
 
 /*
@@ -91,8 +94,7 @@ try_fopen(const char *fname, const char *mode)
 	FILE* fp = NULL;
 	assert(fname);
 	assert(mode);
-	/* DEBUG */ /* fprintf(stderr, "fs: trying to fopen(\"%s\", \"%s\")\n",
-	cooked, mode); */
+	TRACE3("trying to open `%s' (mode %s)", fname, mode);
 
 	fp = fopen(fname, mode);
 
@@ -100,8 +102,7 @@ try_fopen(const char *fname, const char *mode)
 	if (!fp && errno != ENOENT)
 	{
 		int esave = errno;
-		/* WARN */ fprintf(stderr, "fs: can't open %s: %s\n",
-				fname, strerror(errno));
+		WARNING3("can't access file `%s': %s", fname, strerror(errno));
 		errno = esave;
 	}
 
@@ -128,6 +129,7 @@ s_open_helper(const char *base, const char *name, const char *mode, ...)
 	for (p = va_arg(ap, char *); p; p = va_arg(ap, char *))
 	{
 		char *s = NULL;
+		int was_upper = 0;
 		size_t len_p = strlen(p);
 
 		len2 = len_base + len_name + len_p + 3;
@@ -144,14 +146,20 @@ s_open_helper(const char *base, const char *name, const char *mode, ...)
 		/* try lowercase version */
 		for (s = cooked + len_base + len_p + 2; *s; ++s)
 			if (isupper(*s))
+			{
+				was_upper += 1;
 				*s = tolower(*s);
+			}
 
-		f = try_fopen(cooked, mode);
+		if (was_upper)
+			f = try_fopen(cooked, mode);
 		if (f)
 			break;
 	}
 	serrno = errno;
 	va_end(ap);
+	if (f)
+		INFO3("opened file `%s' (mode %s)", cooked, mode);
 	free(cooked);
 	errno = serrno;
 	return f;
@@ -212,8 +220,8 @@ sOpen(const char *name, const char *mode, int type)
 	if (!f)
 	{
 		int serrno = errno;
-		/* WARN */ fprintf(stderr, "can't %s file %s in %s dir(s).\n",
-			strchr(mode, 'w') ? "create" : "access", name, where);
+		WARNING4("can't %s file `%s' in %s dir(s)",
+			strchr(mode, 'w') ? "write" : "open", name, where);
 		errno = serrno;
 	}
 	return f;
@@ -228,8 +236,12 @@ remove_savedat(const char *name)
 	int rv = 0;
 
 	sprintf(cooked, "%s/%s", options.dir_savegame, name);
+	INFO2("removing save game file `%s'", cooked);
 	fix_pathsep(cooked);
 	rv = remove(cooked);
+	if (rv < 0)
+		WARNING3("failed to remove save game file `%s': %s",
+				cooked, strerror(errno));
 	free(cooked);
 	return rv;
 }
@@ -262,7 +274,7 @@ slurp_gamedat(const char *name)
 
 	if (len < 0)
 	{
-		/* ERROR */ perror("slurp_gamedat");
+		CRITICAL2("could not read file `%s'", name);
 		exit(EXIT_FAILURE);
 	}
 
@@ -274,8 +286,11 @@ slurp_gamedat(const char *name)
 int
 create_save_dir(void)
 {
-	if (mkdir(options.dir_savegame, 0777) < 0 && errno != EEXIST)
+	if (mkdir(options.dir_savegame, 0777) < 0 && errno != EEXIST) {
+		WARNING3("can't create savegame directory `%s': %s",
+				options.dir_savegame, strerror(errno));
 		return -1;
+	}
 	return 0;
 }
 
@@ -323,4 +338,3 @@ next_saved_game(struct ffblk *ffblk)
 }
 
 /* vim: set noet ts=4 sw=4 tw=77: */
-

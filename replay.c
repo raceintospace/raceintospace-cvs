@@ -28,6 +28,7 @@
 #include <assert.h>
 #include "mmfile.h"
 #include "av.h"
+#include "logging.h"
 
 #ifdef DEADCODE
 
@@ -45,6 +46,8 @@ extern GXHEADER dply;
 extern struct AnimType AHead;
 extern struct BlockHead BHead;
 #endif
+
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
 
 #if 0
 void
@@ -190,14 +193,10 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 	WaitForMouseUp();
 
-#if 0
-	/* DEBUG */ fprintf(stderr, "******\n");
-	/* DEBUG */ fprintf(stderr, "%d segments\n", Rep.Qty);
-#endif
+    DEBUG2("video sequence: %d segments", Rep.Qty);
 	for (kk = 0; kk < Rep.Qty; kk++)
 	{
-		/* DEBUG */ /* fprintf(stderr, "segment %d: %d\n", kk, Rep.Off[kk]);
-		 */
+		DEBUG3("playing segment %d: %d", kk, Rep.Off[kk]);
 		UpdateMusic();
 		if (Rep.Off[kk] < 1000)	   //Specs: success seq
 		{
@@ -249,7 +248,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 			snprintf(fname, sizeof(fname), "%s.ogg", seq_fname);
 
-			/* DEBUG */ /* fprintf(stderr, "mm_open(%s)\n", fname); */
+			INFO2("opening video file `%s'", fname);
 
 			if (mm_open_fp(&vidfile, sOpen(fname, "rb", FT_VIDEO)) <= 0)
 				goto done;
@@ -364,7 +363,7 @@ AbzFrame(char plr, int num, int dx, int dy, int width, int height,
 	/* XXX use a generic function */
 	snprintf(fname, sizeof(fname), "%s.ogg", seq_filename(idx, mode));
 
-	/* DEBUG */ /* fprintf(stderr, "mm_open(%s)\n", fname); */
+	INFO2("opening video file `%s'", fname);
 	if (mm_open_fp(&vidfile, sOpen(fname, "rb", FT_VIDEO)) <= 0)
 		return;
 

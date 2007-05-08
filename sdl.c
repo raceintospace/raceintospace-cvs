@@ -12,10 +12,13 @@
 #include "macros.h"
 #include "options.h"
 #include "utils.h"
+#include "logging.h"
 
 #include "av.h"
 #define MAX_X	320
 #define MAX_Y	200
+
+LOG_DEFAULT_CATEGORY(sdl);
 
 int av_mouse_cur_x, av_mouse_cur_y;
 int av_mouse_pressed_x, av_mouse_pressed_y;
@@ -169,7 +172,7 @@ play(struct audio_chunk *new_chunk, int channel)
 
 	chp = &Channels[channel];
 
-	if (have_audio == 0)
+	if (!have_audio)
 		return;
 
 	SDL_LockAudio();
@@ -177,9 +180,7 @@ play(struct audio_chunk *new_chunk, int channel)
 	{
 		if (cp == new_chunk)
 		{
-#if 0
-			/* DEBUG */ fprintf(stderr, "play: attempt to do duplicate chunk add\n");
-#endif
+			DEBUG1("attempt to do add duplicate chunk");
 			av_silence(channel);
 			break;
 		}
@@ -231,46 +232,53 @@ av_setup(void)
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
-		/* ERROR */ fprintf(stderr, "SDL_Init error\n");
-		exit(1);
+		CRITICAL2("SDL_Init error: %s", SDL_GetError());
+		exit(EXIT_FAILURE);
 	}
 
 	atexit(SDL_Quit);
 
-#ifdef CONFIG_WIN32
-	/*
-	 * default direct-audio-something has got unreasonably long audio buffers,
-	 * but if user knows what he's doing then no problemo...
-	 */
-	if (!SDL_getenv("SDL_AUDIODRIVER"))
-			SDL_putenv("SDL_AUDIODRIVER=waveout");
-	/*
-	 * also some sources mention that on win audio needs to be initialised
-	 * together with video. Maybe, it works for me as it is now.
-	 */
-#endif
-
-	if (!options.want_audio || SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+	if (options.want_audio)
 	{
-		/* INFO */ fprintf(stderr, "sdl: no audio\n");
+#ifdef CONFIG_WIN32
+		/*
+		 * default direct-audio-something has got unreasonably long audio buffers,
+		 * but if user knows what he's doing then no problemo...
+		 */
+		if (!SDL_getenv("SDL_AUDIODRIVER"))
+		{
+			INFO1("fixing WIN32 audio driver setup");
+			SDL_putenv("SDL_AUDIODRIVER=waveout");
+		}
+		/*
+		 * also some sources mention that on win audio needs to be initialised
+		 * together with video. Maybe, it works for me as it is now.
+		 */
+#endif
+		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+		{
+			ERROR2("audio initialization failed: %s",
+					SDL_GetError());
+		}
+		else 
+		{
+			NOTICE1("audio subsystem initialized");
+			have_audio = 1;
+		}
 	}
 	else
-	{
-		/* INFO */ fprintf(stderr, "sdl: audio initialized\n");
-		have_audio = 1;
-	}
+		NOTICE1("no audio");
 
 	if (options.want_fullscreen)
 	{
 		video_flags |= SDL_FULLSCREEN;
-		/* INFO */ fprintf(stderr, "sdl: fullscreen mode\n");
+		NOTICE1("fullscreen mode enabled");
 	}
 
 	if ((display = SDL_SetVideoMode(640, 400, 24, video_flags)) == NULL)
 	{
-		/* ERROR */ fprintf(stderr, "error in SDL_SetVideoMode: %s\n",
-                SDL_GetError());
-		exit(1);
+		CRITICAL2("SDL_SetVideoMode failed: %s", SDL_GetError());
+		exit(EXIT_FAILURE);
 	}
 
 	screen = xcalloc(MAX_X * MAX_Y, 1);
@@ -278,16 +286,14 @@ av_setup(void)
 		MAX_X, 0, 0, 0, 0);
     if (!screen_surf)
     {
-        /* ERROR */ fprintf(stderr, "can't create screen surface: %s\n",
-                SDL_GetError());
+        CRITICAL2("can't create screen surface: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 	screen_surf2x = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 400, 8,
 		~0, ~0, ~0, 0);
     if (!screen_surf2x)
     {
-        /* ERROR */ fprintf(stderr, "can't create screen_2x surface: %s\n",
-                SDL_GetError());
+        CRITICAL2("can't create screen_2x surface: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -295,16 +301,14 @@ av_setup(void)
     video_overlay = SDL_CreateYUVOverlay(160, 100, SDL_YV12_OVERLAY, display);
     if (!video_overlay)
     {
-        /* ERROR */ fprintf(stderr, "can't create video_overlay: %s\n",
-                SDL_GetError());
+        CRITICAL2("can't create video_overlay: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
     news_overlay = SDL_CreateYUVOverlay(312, 106, SDL_YV12_OVERLAY, display);
     /* XXX: Hardcoded video width & height */
     if (!news_overlay)
     {
-        /* ERROR */ fprintf(stderr, "can't create news_overlay: %s\n",
-                SDL_GetError());
+        CRITICAL2("can't create news_overlay: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -343,12 +347,12 @@ av_setup(void)
 		/* we don't care what we got, library will convert for us */
 		if (SDL_OpenAudio(&audio_desired, NULL) < 0)
 		{
-			/* ERROR */ fprintf(stderr, "error in SDL_OpenAudio: %s\n",
-					SDL_GetError());
-			exit(1);
+			ERROR2("SDL_OpenAudio error: %s", SDL_GetError());
+			NOTICE1("disabling audio");
+			have_audio = 0;
 		}
-
-		SDL_PauseAudio(0);
+		else
+			SDL_PauseAudio(0);
 	}
 
 	SDL_AddTimer(30, sdl_timer_callback, NULL);
@@ -403,9 +407,8 @@ av_process_event(SDL_Event * evp)
 			av_mouse_pressed_latched = 1;
 			av_mouse_pressed_x = evp->button.x;
 			av_mouse_pressed_y = evp->button.y;
-			/* DEBUG2 */ /*printf("mouseclick(%d,%d) b = %d\n",
-				av_mouse_pressed_x, av_mouse_pressed_y, evp->button.button);
-				*/
+			TRACE4("mouseclick(%d, %d) b = %d", av_mouse_pressed_x,
+					av_mouse_pressed_y, evp->button.button);
 			break;
 
 		case SDL_MOUSEBUTTONUP:
@@ -446,7 +449,7 @@ av_process_event(SDL_Event * evp)
 		case SDL_ACTIVEEVENT:
 			break;
 		default:
-			/* DEBUG */ /* fprintf(stderr, "got uknown event %d\n", evp->type); */
+			DEBUG2("got uknown event %d", evp->type);
 			break;
 	}
 }
@@ -701,7 +704,7 @@ av_sync(void)
     for (i = 0; i < num_rect; ++i)
         tot_area += dirty_rect_list[i].w * dirty_rect_list[i].h;
     tot_area = tot_area * 100 / (2*MAX_X) / (2*MAX_Y);
-    /* DEBUG2 */ fprintf(stderr, "av_sync: %3d rect(s) (%6.2f%%) updated in ~%3ums\n",
+    TRACE4("%3d rects (%6.2f%%) updated in ~%3ums\n",
             num_rect, tot_area, SDL_GetTicks() - ticks);
 #endif
 	screen_dirty = 0;

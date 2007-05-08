@@ -21,6 +21,7 @@
 #include "pace.h"
 #include "fs.h"
 #include "utils.h"
+#include "logging.h"
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
@@ -63,6 +64,8 @@
 
 game_options options;
 
+LOG_DEFAULT_CATEGORY(config);
+
 /*set-up array for environment vars */
 static struct {
     char *name;
@@ -82,20 +85,23 @@ static struct {
 } config_strings[] = {
 	{"datadir", &options.dir_gamedata, "%1024[^\n\r]", 1025,
 		"Path to directory with game data files." },
-	{"audio", &options.want_audio, "%d", 0,
+	{"audio", &options.want_audio, "%u", 0,
 		"Set to 0 if you don't want audio in game." },
-	{"nofail",  &options.want_cheats, "%d", 0,
+	{"nofail",  &options.want_cheats, "%u", 0,
 		"Set to 1 if you want every mission step check to succeeed." },
-	{"intro", &options.want_intro, "%d", 0,
+	{"intro", &options.want_intro, "%u", 0,
 		"Set to 0 if do not want intro displayed at startup." },
-	{"fullscreen", &options.want_fullscreen, "%d", 0,
+	{"fullscreen", &options.want_fullscreen, "%u", 0,
 		"Set to 1 if you want (ugly) full screen game." },
+	{"debuglevel", &options.want_debug, "%u", 0,
+		"Set to positive values to increase debugging verbosity" },
 };
 
 static void
 usage (int fail)
 {
-	fprintf(stderr, "usage: raceintospace [-i] [-n] [-a] [-f]\n");
+	fprintf(stderr, "usage:   raceintospace [options...]\n"
+			        "options: -a -i -f -v -n\n" );
 	exit((fail) ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
@@ -158,7 +164,10 @@ read_config_file(void)
 	char c[2];
 
 	if (!f)
+	{
+		WARNING1("could not open config file");
 		return -1;
+	}
 
 	while (1)
 	{
@@ -184,9 +193,8 @@ read_config_file(void)
 						goto skip_newline;
 					else if (res != 0)
 					{
-						/* WARN */ fprintf(stderr,
-							"config: wrong value type for variable '%s'\n",
-							config_word);
+						NOTICE2("wrong value type for variable `%s'",
+								config_word);
 						goto skip_newline;
 					}
 					else
@@ -197,8 +205,7 @@ read_config_file(void)
 			/* none matched */
 			if (i == (int) ARRAY_LENGTH(config_strings))
 			{
-				/* WARN */
-				fprintf(stderr, "config: unknown variable '%s'\n",
+				NOTICE2("unknown variable in file `%s'",
 						config_word);
 				goto skip_newline;
 			}
@@ -207,8 +214,7 @@ read_config_file(void)
 			break;
 		else
 		{
-			/* WARN */ fprintf(stderr,
-				"config: expecting variable name!\n");
+			NOTICE1("expected variable name");
 			goto skip_newline;
 		}
 
@@ -235,14 +241,12 @@ write_default_config(void)
 	f = open_savedat("config", "wt");
 	if (!f)
 	{
-		/* WARN */ fprintf(stderr,
-				"can't write default configuration to %s/%s: %s\n",
+		WARNING4("can't write defaults to file `%s/%s': %s\n",
 				options.dir_savegame, "config", strerror(errno));
 		return -1;
 	}
 	else
-		/* INFO */ fprintf(stderr,
-				"writing default configuration file to %s/%s\n",
+		NOTICE3("written defaults to file `%s/%s'",
 				options.dir_savegame, "config");
 
 	fprintf(f, "# This is template configuration file for %s\n",
@@ -254,6 +258,8 @@ write_default_config(void)
 		fprintf(f, "# %s\n# %s\n\n",
 			config_strings[i].comment, config_strings[i].name);
 	err = ferror(f);
+	if (err)
+		WARNING2("read error: %s", strerror(errno));
 	fclose(f);
 	return err;
 }
@@ -363,9 +369,11 @@ setup_options(int argc, char *argv[])
 				options.want_audio = 0;
 			else if (*str == 'f')
 				options.want_fullscreen = 1;
+			else if (*str == 'v')
+				options.want_debug++;
 			else
 			{
-				/* ERROR */ fprintf(stderr, "unknown option -%c\n", *str);
+				ERROR2("unknown option -%c", *str);
 				usage(1);
 			}
 		}
@@ -403,8 +411,7 @@ setup_options(int argc, char *argv[])
 		}
 
 		if (i == (int) ARRAY_LENGTH(env_vars))
-			/* WARN */ fprintf(stderr,
-				"unsupported command line variable %s\n", name);
+			WARNING2("unsupported command line variable `%s'", name);
 
 		/* remove matched string from argv */
 		shift_argv(argv + pos, argc - pos, 1);

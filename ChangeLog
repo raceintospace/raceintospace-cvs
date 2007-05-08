@@ -1,3 +1,9 @@
+2007-05-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V162
+
+	* New logging framework - tweaked log4c lite. 
+
 2007-05-05  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V161

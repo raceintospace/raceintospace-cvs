@@ -1,5 +1,7 @@
 #include "utils.h"
+#include "logging.h"
 #include <assert.h>
+#include <errno.h>
 #include <ctype.h>
 #include <memory.h>
 #include <string.h>
@@ -18,6 +20,8 @@
 #   include <fcntl.h>
 #   include <sys/time.h>
 #endif
+
+LOG_DEFAULT_CATEGORY(utils);
 
 double
 get_time (void)
@@ -64,10 +68,11 @@ xstrncasecmp (const char *a, const char *b, size_t n)
 void *
 xmalloc (size_t n)
 {
-	void *p;
+	void *p = malloc(n);
 
-	if ((p = malloc (n)) == NULL) {
-		perror("malloc");
+	if (!p)
+	{
+		CRITICAL2("allocation failure: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
@@ -77,10 +82,11 @@ xmalloc (size_t n)
 void *
 xcalloc (size_t a, size_t b)
 {
-	void *p;
+	void *p = calloc(a, b);
 
-	if ((p = calloc (a, b)) == NULL) {
-		perror("calloc");
+	if (!p)
+	{
+		CRITICAL2("callocation failure: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
@@ -115,7 +121,7 @@ xrealloc(void *ptr, size_t size)
 
 	if (!p)
     {
-		perror("realloc");
+		CRITICAL2("reallocation failure: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
@@ -142,7 +148,10 @@ fread_dyn(char **destp, size_t *n, FILE *stream)
             if (feof(stream))
                 return total+cnt;
             else if (ferror(stream))
+			{
+				CWARNING3(filesys, "read error: %s", strerror(errno));
                 return -1;
+			}
         }
         total += cnt;
 

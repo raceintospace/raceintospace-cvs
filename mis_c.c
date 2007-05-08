@@ -30,6 +30,7 @@
 #include "av.h"
 #include "mmfile.h"
 #include "utils.h"
+#include "logging.h"
 
 #define FRM_Delay 22
 
@@ -37,6 +38,8 @@
 #define CLIF_TABLE 240
 #define ANIM_PARTS 297
 #define SCND_TABLE 486
+
+LOG_DEFAULT_CATEGORY(mission);
 
  struct NTable {
   char ID[8];
@@ -402,7 +405,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		snprintf(name, sizeof(name), "%s.ogg", seq_name);
 		mmfp = sOpen(name, "rb", FT_VIDEO);
 
-        /* INFO */ /* fprintf(stderr, "mm_open(%s)\n", name); */
+        INFO2("opening video file `%s'", name);
         if (mm_open_fp(&vidfile, mmfp) <= 0)
             break;
 
@@ -426,11 +429,6 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 				screen_dirty = 1;
 
-				if (j == 0)
-				{
-					/* DEBUG */ /* fprintf(stderr, "frame rate %g\n", fps); */
-				}
-
             /* XXX I don't get the fancy "hold thing so I left it out */
 
 			} else if (hold_count < 8) {
@@ -444,7 +442,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 				idle_loop (FRM_Delay);
 				hold_count++;
 			} else {
-				/* WARN */ fprintf (stderr, "**** need to come out of hold\n");
+				DEBUG1("need to come out of hold");
 			}
 
             video_rect.w = 160;
@@ -949,10 +947,10 @@ FILE *OpenAnim(char *fname)
       long size;
       } AIndex;
 
-   fin=open_gamedat("LIFTOFF.ABZ");
+    fin=open_gamedat("LIFTOFF.ABZ");
 	if (!fin)
 	{								   
-	/* ERROR */ fprintf(stderr, "File Error on File: %s\n", fname);
+	    WARNING1("can't access file LIFTOFF.ABZ");
 		return fin;
 	}
    fread(&AIndex,sizeof AIndex,1,fin);

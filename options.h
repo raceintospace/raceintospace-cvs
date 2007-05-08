@@ -8,6 +8,7 @@ typedef struct {
     int want_fullscreen;
     int want_intro;
     int want_cheats;
+    int want_debug;
 } game_options;
 
 extern game_options options;

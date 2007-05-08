@@ -26,7 +26,10 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "utils.h"
+#include "logging.h"
 GXHEADER local2;
+
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
 
 struct CREDIT {
   char page;
@@ -193,7 +196,7 @@ read_img_frame (FILE *inf, struct intro_image *ip)
 	Swap32bit(len);
 
 	if (len > sizeof compressed) {
-		fprintf (stderr, "frame too big\n");
+		WARNING1("frame too big");
 		goto bad;
 	}
 
@@ -205,8 +208,9 @@ read_img_frame (FILE *inf, struct intro_image *ip)
 	return (0);
 
 bad:
-	fprintf (stderr, "bad img file\n");
-	exit (1);
+	CRITICAL1("corrupted image file");
+	/* XXX: quite drastic */
+	exit(EXIT_FAILURE);
 }
 
 void
@@ -221,8 +225,9 @@ read_intro_images (void)
 
 	for (i = 0; i < 15; i++) {
 		if (read_img_frame (fin, &intro_images[i]) < 0) {
-			fprintf (stderr, "error reading first.img\n");
-			exit (1);
+			CRITICAL1("error reading first.img");
+			/* XXX: quite drastic */
+			exit(EXIT_FAILURE);
 		}
 	}
 

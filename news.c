@@ -30,6 +30,10 @@
 #include "macros.h"
 #include "av.h"
 #include "mmfile.h"
+#include "logging.h"
+
+/* LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT); */
+
 static char *news_shots[] = { "angle", "opening", "closing" };
 
 double load_news_anim_start;
@@ -928,7 +932,7 @@ PlayNewsAnim(mm_file * fp)
 		to_sleep = (Frame - delta * fps) / fps - diff;
 		idle_loop_secs(to_sleep);
 		diff = get_time() - t1 - to_sleep;
-		/* DEBUG2 *///printf("sleep % 4.3f, drift % 4.3f\n", to_sleep, diff);
+		CTRACE4(video, "sleep % 4.3f, drift % 4.3f", to_sleep, diff);
 	}
 	Frame += 1;
 

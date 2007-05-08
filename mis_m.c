@@ -11,8 +11,11 @@
 #include "mis.h"
 #include "utils.h"
 #include "options.h"
+#include "logging.h"
 
 #define MIS_SET 0             // FAILURES ON
+
+LOG_DEFAULT_CATEGORY(mission);
 
 extern struct MisAst MA[2][4];
 extern Equipment *MH[2][8];
@@ -260,8 +263,8 @@ void MisCheck(char plr,char mpad)
     if (!AI[plr] && options.want_cheats)
 	    PROBLEM = 0;
 
-    /* DEBUG */ /* fprintf (stderr, "SAFETY: %2d %2d%s\n",
-			val, safety, PROBLEM ? " PROBLEM" : ""); */
+    DEBUG4("safety %3d %3d%s", val, safety,
+            PROBLEM ? " PROBLEM" : (options.want_cheats ? " CHEATING" : ""));
 
     if (!AI[plr] && BIG==0) 
       if (!(fEarly && STEP!=0))

@@ -17,6 +17,9 @@
 */
 #include "records.h"
 #include "externs.h"
+#include "logging.h"
+
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
 
 #define MLL(a,b) (Data->P[a].History[b].MissionCode>=53 && Data->P[a].History[b].MissionCode<=56)
 
@@ -43,8 +46,9 @@ void MakeRecords(void)
    {
     file=sOpen("RECORDS.DAT","wb",1);
     if (file == NULL) {
-	    fprintf (stderr, "can't create RECORDS.DAT\n");
-	    exit (1);
+        /* XXX: very drastic */
+	    CRITICAL1("can't create required file RECORDS.DAT");
+	    exit(EXIT_FAILURE);
     }
     for (i=0;i<56;i++)
      {

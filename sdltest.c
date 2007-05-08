@@ -37,9 +37,11 @@ get_music_file (char *name)
 
 	sprintf (fullname, "/home/pace/ogg/%s.ogg", name);
 
-	if ((inf = fopen (fullname, "rb")) == NULL) {
-		printf ("can't open music file %s\n", fullname);
-		return (NULL);
+    fprintf (stderr, "opening music file `%s'", fullname);
+
+	if ((inf = fopen(fullname, "rb")) == NULL) {
+		fprintf(stderr, "can't open music file `%s'", fullname);
+		return NULL;
 	}
 
 	if ((mp = calloc (1, sizeof *mp)) == NULL) {
@@ -151,7 +153,6 @@ audio_callback (void *userdata, Uint8 *stream, int len)
 					cur_chunk_tailp = &cur_chunk;
 			}
 			cur_offset = 0;
-			printf ("next\n");
 		}
 	}
 

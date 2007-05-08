@@ -5,6 +5,9 @@
 #include "av.h"
 #include "options.h"
 #include "utils.h"
+#include "logging.h"
+
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
 
 extern GXHEADER vhptr;
 
@@ -13,7 +16,7 @@ void seq_init (void);
 char
 DoModem(int sel)
 {
-	printf ("DoModem not implemented\n");
+	NOTICE1("DoModem not implemented");
 	return (0);
 }
 
@@ -318,7 +321,7 @@ seq_filename (int seq, int mode)
 		tp = &frm_ftbl;
 
 	if (seq < 0 || seq >= tp->count)
-		return (NULL);
+		return NULL;
 
 	return (tp->strings[seq]);
 }
@@ -405,15 +408,14 @@ load_audio_file(const char *name, char **data, size_t *size)
 
     if (mm_audio_info(&mf, &channels, &rate) < 0)
     {
-		/* WARN */ fprintf(stderr, "no audio data in file '%s'\n", name);
+		CWARNING3(audio, "no audio data in file `%s'", name);
         mm_close(&mf);
         return -1;
     }
 
 	if (channels != 1 || rate != 11025)
 	{
-		/* WARN */ fprintf(stderr,
-				"file '%s' is not mono, 11025Hz\n", name);
+		CERROR3(audio, "file `%s' should be mono, 11025Hz", name);
 		mm_close(&mf);
 		return -1;
 	}
@@ -431,10 +433,8 @@ load_audio_file(const char *name, char **data, size_t *size)
 
     mm_close(&mf);
 
-#if 0
-    /* DEBUG */ fprintf(stderr, "load_audio_file(%s) took %5.4f sec.\n",
+    CDEBUG4(audio, "loading file `%s' took %5.4f seconds",
             name, get_time() - start);
-#endif
 
     return offset;
 }
@@ -497,10 +497,18 @@ getch (void)
 void
 play_audio (int sidx, int mode)
 {
-	char filename[1000];
+	char filename[40];
 	ssize_t size;
+    char * name = seq_filename(sidx,mode);
 
-    sprintf(filename, "%s.ogg", seq_filename(sidx,mode));
+    if (!name)
+    {
+        CWARNING4(audio, "failed request for sound idx %d, mode %d",
+                sidx, mode);
+        return;
+    }
+    snprintf(filename, sizeof(filename), "%s.ogg", name);
+    CINFO3(audio, "play sound file `%s'", filename);
     size = load_audio_file(filename, &soundbuf, &soundbuf_size);
 	soundbuf_used = (size > 0) ? size : 0;
     PlayVoice ();

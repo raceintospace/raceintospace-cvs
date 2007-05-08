@@ -20,6 +20,7 @@
 #include "int_types.h"
 #include "macros.h"
 #include "utils.h"
+#include "logging.h"
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
@@ -30,6 +31,8 @@
 #include <vorbis/codec.h>
 #include <theora/theora.h>
 #include <SDL.h>
+
+LOG_DEFAULT_CATEGORY(multimedia);
 
 /* return -1 on error, 0 on end of file, 1 on successful page read */
 static int
@@ -47,7 +50,7 @@ get_page(mm_file * mf, ogg_page * pg)
 		p = ogg_sync_buffer(&mf->sync, bufsize);
 		if (!p)
 		{
-			/* ERROR */ printf("ogg_sync_buffer\n");
+			ERROR1("ogg buffer synchronization failed");
 			return -1;
 		}
 
@@ -56,7 +59,7 @@ get_page(mm_file * mf, ogg_page * pg)
 
 		if (ogg_sync_wrote(&mf->sync, n))
 		{
-			/* ERROR */ printf("ogg_sync_wrote, buffer overflow\n");
+			ERROR1("buffer overflow in ogg_sync_wrote");
 			return -1;
 		}
 	}
@@ -91,7 +94,7 @@ get_packet(mm_file * mf, ogg_packet * pkt, enum stream_type type)
 			other_type = MEDIA_VIDEO;
 			break;
 		default:
-			 /*ERROR*/ printf("bad stream type\n");
+			WARNING2("bad stream type: %d", type);
 			return -1;
 	}
 	if (mf->end_of_stream & type)
@@ -120,9 +123,8 @@ get_packet(mm_file * mf, ogg_packet * pkt, enum stream_type type)
 			}
 			else
 			{
-				/* DEBUG */
-					printf("got page not associated with any stream, "
-					"serial %x\n", ogg_page_serialno(&pg));
+				INFO2("got page not associated with any stream, "
+					"serial 0x%x", ogg_page_serialno(&pg));
 				/*
 				 * drop page. Ogg source code says ogg_page member pointers are
 				 * initialized to static buffers, so there is no need to free
@@ -178,7 +180,7 @@ init_theora(mm_file * mf, ogg_page * pg)
 				break;
 			case OC_VERSION:
 			case OC_NEWPACKET:
-				/* DEBUG */ fprintf(stderr, "incompatible theora file\n");
+				INFO1("incompatible theora file");
 				/* fall through */
 			case OC_BADHEADER:
 			default:
@@ -253,6 +255,7 @@ init_vorbis(mm_file * mf, ogg_page * pg)
 			case 0:
 				break;
 			case OV_EBADHEADER:
+				INFO1("bad vorbis header");
 			case OV_ENOTVORBIS:
 			default:
 				goto end;
@@ -309,8 +312,7 @@ yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv, SDL_Overlay * ovl)
 			vp = yuv->u;
 			break;
 		default:
-			/* DEBUG */ printf("only IYUV and YV12 SDL overlay"
-				" formats supported\n");
+			WARNING1("only IYUV and YV12 SDL overlay formats supported");
 			return -1;
 	}
 	yp = yuv->y;
@@ -322,13 +324,13 @@ yuv_to_overlay(const mm_file * mf, const yuv_buffer * yuv, SDL_Overlay * ovl)
 		case OC_PF_422:
 		case OC_PF_444:
 		default:
-			/* DEBUG */ printf("unknown/unsupported theora pixelformat!\n");
+			WARNING1("unknown/unsupported theora pixel format");
 			return -1;
 	}
 
 	if (SDL_LockYUVOverlay(ovl) < 0)
 	{
-		/* DEBUG */ printf("unable to lock overlay!\n");
+		WARNING1("unable to lock overlay");
 		return -1;
 	}
 	/* luna goes first */
@@ -376,20 +378,35 @@ mm_open_fp(mm_file * mf, FILE * file)
 	if (get_page(mf, &pg) <= 0)
 		goto err;
 
+	DEBUG1("trying theora decoder...");
 	res = init_theora(mf, &pg);
 	if (res < 0)
 		goto err;
 	else
 		have_theora = !!res * MEDIA_VIDEO;
 
+	DEBUG1("trying vorbis decoder...");
 	res = init_vorbis(mf, &pg);
 	if (res < 0)
 		goto err;
 	else
 		have_vorbis = !!res * MEDIA_AUDIO;
 
+	if (have_vorbis)
+	{
+		unsigned c, r;
+		mm_audio_info(mf, &c, &r);
+		INFO3("audio %u channel(s) at %u Hz", c, r);
+	}
+	if (have_theora)
+	{
+		unsigned w, h; float fps;
+		mm_video_info(mf, &w, &h, &fps);
+		INFO4("video %ux%u pixels at %g fps", w, h, fps);
+	}
 	return have_vorbis | have_theora;
   err:
+	WARNING1("unable to decode stream");
 	mm_close(mf);
 	return retval;
 }
@@ -399,6 +416,7 @@ mm_open(mm_file * mf, const char *fname)
 {
 	assert(mf);
 	assert(fname);
+	INFO2("opening file `%s'", fname);
 	return mm_open_fp(mf, fopen(fname, "rb"));
 }
 
@@ -508,8 +526,7 @@ mm_decode_video(mm_file * mf, SDL_Overlay * ovl)
 		return -1;
 	if (mf->drop_packets & MEDIA_VIDEO)
 	{
-		/* WARNING */
-		printf("requested decode but MEDIA_VIDEO is set to ignore\n");
+		WARNING1("requested decode but MEDIA_VIDEO is set to ignore");
 		return -1;
 	}
 	for (;;)
@@ -522,7 +539,7 @@ mm_decode_video(mm_file * mf, SDL_Overlay * ovl)
 			break;
 		else
 		{
-			/* DEBUG */ printf("packet does not contain theora frame!\n");
+			WARNING1("packet does not contain theora frame");
 			/* get next packet */
 		}
 	}
@@ -549,8 +566,7 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 		return -1;
 	if (mf->drop_packets & MEDIA_AUDIO)
 	{
-		/* WARNING */
-		printf("requested decode but MEDIA_AUDIO is set to ignore\n");
+		WARNING1("requested decode but MEDIA_AUDIO is set to ignore");
 		return -1;
 	}
 
@@ -609,8 +625,7 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 			}
 			else
 			{
-				/* DEBUG */
-				printf("packet does not a valid vorbis frame!\n");
+				WARNING1("packet does not contain a valid vorbis frame");
 				/* get next packet */
 			}
 		}

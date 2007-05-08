@@ -29,6 +29,7 @@
 #include "Buzz_inc.h"
 #include "options.h"
 #include "utils.h"
+#include "logging.h"
 #include <ctype.h>
 
 #ifdef CONFIG_MACOSX
@@ -110,34 +111,37 @@ static char BUZZ_DIR[32];
 void Plop(char plr,char mode);
 #endif
 
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
+
 int main(int argc, char *argv[])
 {
   int i,cdstat;
   FILE *fin;
-  const char * see_readme = "look for further instructions in the README file.";
+  const char * see_readme = "look for further instructions in the README file";
 
   char AName[6][22]={"NEW GAME","OLD GAME","MODEM","PLAY BY MAIL","CREDITS","EXIT TO DOS"};
   char ex;
 
   argc = setup_options(argc, argv);
+  /* hacking... */
+  log_setThreshold(&_LOGV(LOG_ROOT_CAT), max(0, LP_NOTICE-options.want_debug));
 
   fin = open_gamedat("USA_PORT.DAT");
   if (fin == NULL)
   {
-      /* ERROR */ fprintf(stderr,
-              "can't find game data files!\n"
-              "set environment variable BARIS_DATA or edit config file.\n"
-              "%s\n", see_readme);
+      CRITICAL1("can't find game data files");
+      NOTICE1("set environment variable BARIS_DATA or edit config file");
+      NOTICE2("%s", see_readme);
       exit(EXIT_FAILURE);
   }
   fclose(fin);
 
   if (create_save_dir() != 0)
   {
-      /* ERROR */ fprintf(stderr,
-              "can't create save directory %s: %s!\n"
-              "set environment variable BARIS_SAVE to a writable dir.\n"
-              "%s\n", options.dir_savegame, strerror(errno), see_readme);
+      CRITICAL3("can't create save directory `%s': %s",
+              options.dir_savegame, strerror(errno));
+      NOTICE1("set environment variable BARIS_SAVE to a writable directory");
+      NOTICE2("%s", see_readme);
       exit(EXIT_FAILURE);
   }
 
@@ -154,7 +158,7 @@ int main(int argc, char *argv[])
   Data = xmalloc(sizeof (struct Players) + 1);
   buffer = xmalloc(BUFFER_SIZE);
 
-  /* DEBUG */ //fprintf (stderr, "main buffer %p (%d)\n", buffer, BUFFER_SIZE);
+  DEBUG3("main buffer %p (%d)", buffer, BUFFER_SIZE);
 
   memset(buffer,0x00,BUFFER_SIZE);
 
@@ -173,15 +177,15 @@ int main(int argc, char *argv[])
     i=fread(buffer,1,BUFFER_SIZE,fin); 
     fclose(fin);
 
-    /* DEBUG */ /* fprintf (stderr, "reading Players: size = %d\n",
-		(int)sizeof (struct Players)); */
+    DEBUG2("reading Players: size = %d", (int)sizeof (struct Players));
     RLED(buffer,(char *)Data,i);
 #ifdef __BIG_ENDIAN__
 		SwapGameDat();	// Take care of endian read
 #endif
     if (Data->Checksum!=(sizeof (struct Players))) {
-      /* ERROR */ fprintf(stderr, "BARIS Error: Wrong version of Data File.\n");
-      CloseEmUp(0,0);
+        /* XXX: too drastic */
+      CRITICAL1("wrong version of data file");
+      exit(EXIT_FAILURE);
     }
 
     gxClearDisplay(0,0);
@@ -238,7 +242,7 @@ tommy:
           {
            if (Option==-1 && MAIL==-1) MainLoop(); //Regular game
             else { //Modem game
-		    printf ("can't do modem games\n");
+		    WARNING1("can't do modem games");
 		    break;
 	    }
           }
@@ -1123,7 +1127,6 @@ Plop(char plr, char mode)
 	return;
 #   else
 	sprintf(fname, "%s/%s", movies_dir, sName);
-	/* INFO */ /* fprintf(stderr, "mm_open('%s')\n", fname);*/
 	if (mm_open(&vidfile, fname) <= 0)
 		return;
 	if (mm_video_info(&vidfile, NULL, NULL, NULL) <= 0)

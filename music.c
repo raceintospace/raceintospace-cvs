@@ -3,7 +3,9 @@
 #include "mmfile.h"
 #include "pace.h"
 #include "utils.h"
+#include "logging.h"
 
+LOG_DEFAULT_CATEGORY(music);
 
 struct music_file {
 	struct music_file *next;
@@ -21,6 +23,7 @@ get_music_file (char *name)
 	int chop;
     ssize_t bytes;
 
+    INFO2("requested file `%s'", name);
 	for (mp = music_files; mp; mp = mp->next) {
 		if (xstrcasecmp (name, mp->name) == 0)
 			return (mp);
@@ -31,6 +34,7 @@ get_music_file (char *name)
 	mp = xcalloc(1, sizeof *mp);
     mp->size = 0;
 
+    INFO2("need to load `%s'", fname);
     bytes = load_audio_file(fname, &mp->buf, &mp->size);
 
     if (bytes < 0)
@@ -108,11 +112,9 @@ PreLoadMusic(char val)
 	}
 
 	if (dp->name == NULL) {
-		/* WARN */ fprintf (stderr, "PreLoadMusic: unknown idx %d\n", val);
+		WARNING2("unknown id: %d", val);
 		return;
 	}
-
-	/* DEBUG */ /* printf ("PreLoadMusic(%s)\n", dp->name); */
 
 	mf = get_music_file (dp->name);
 
