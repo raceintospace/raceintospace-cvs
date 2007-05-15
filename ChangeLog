@@ -1,3 +1,9 @@
+2007-05-15  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V163
+
+	* sdl.c (av_process_event): handling for F1, F2, F3 keys.
+
 2007-05-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V162

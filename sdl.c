@@ -391,6 +391,15 @@ av_process_event(SDL_Event * evp)
 				case SDLK_LEFT:
 					c = 0x4B00;
 					break;
+				case SDLK_F1:
+					c = 0x3B00;
+					break;
+				case SDLK_F2:
+					c = 0x3C00;
+					break;
+				case SDLK_F3:
+					c = 0x3D00;
+					break;
 				default:
 					c = evp->key.keysym.unicode;
 					break;
