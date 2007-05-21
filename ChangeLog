@@ -1,3 +1,12 @@
+2007-05-21  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V164
+
+	* fs.c (locate_file): new function
+	(try_find_file): this is the old sOpen
+
+	* sdl.c (av_setup): added game icon
+
 2007-05-15  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V163

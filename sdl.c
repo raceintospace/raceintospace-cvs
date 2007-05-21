@@ -229,6 +229,7 @@ void
 av_setup(void)
 {
 	unsigned video_flags = SDL_SWSURFACE;
+	char *icon_path = NULL;
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
@@ -274,6 +275,18 @@ av_setup(void)
 		video_flags |= SDL_FULLSCREEN;
 		NOTICE1("fullscreen mode enabled");
 	}
+
+	if ((icon_path = locate_file("moon_32x32.bmp", FT_IMAGE)))
+	{
+		SDL_Surface *icon = SDL_LoadBMP(icon_path);
+		if (icon != NULL)
+			SDL_WM_SetIcon(icon, NULL);
+		else
+			INFO2("setting icon failed: %s\n", SDL_GetError());
+		free(icon_path);
+	}
+
+	SDL_WM_SetCaption(PACKAGE_STRING, NULL);
 
 	if ((display = SDL_SetVideoMode(640, 400, 24, video_flags)) == NULL)
 	{
@@ -321,7 +334,6 @@ av_setup(void)
 	SDL_EnableUNICODE(1);
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
             SDL_DEFAULT_REPEAT_INTERVAL);
-	SDL_WM_SetCaption(PACKAGE_STRING, NULL);
 
 	if (have_audio)
 	{

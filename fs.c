@@ -74,6 +74,12 @@ LOG_DEFAULT_CATEGORY(filesys);
 
 static DIR *save_dir;
 
+/* used internally to find and open files */
+typedef struct file {
+	FILE *handle;
+	char *path;
+} file;
+
 /*
  * gamedata & savedata access functions
  */
@@ -110,10 +116,11 @@ try_fopen(const char *fname, const char *mode)
 }
 
 /* try to open base/xxx/name for xxx = arg4 ... */
-static FILE *
+static file
 s_open_helper(const char *base, const char *name, const char *mode, ...)
 {
-	FILE *f = NULL;
+	FILE *fh = NULL;
+	file f = {NULL, NULL};
 	int serrno;
 	char *p = NULL;
 	char *cooked = xmalloc(1024);
@@ -139,39 +146,44 @@ s_open_helper(const char *base, const char *name, const char *mode, ...)
 		sprintf(cooked, "%s/%s/%s", base, p, name);
 		fix_pathsep(cooked);
 
-		f = try_fopen(cooked, mode);
-		if (f)
+		fh = try_fopen(cooked, mode);
+		if (fh)
 			break;
 
 		/* try lowercase version */
 		for (s = cooked + len_base + len_p + 2; *s; ++s)
 			if (isupper(*s))
 			{
-				was_upper += 1;
+				was_upper |= 1;
 				*s = tolower(*s);
 			}
 
 		if (was_upper)
-			f = try_fopen(cooked, mode);
-		if (f)
+			fh = try_fopen(cooked, mode);
+		if (fh)
 			break;
 	}
 	serrno = errno;
 	va_end(ap);
-	if (f)
-		INFO3("opened file `%s' (mode %s)", cooked, mode);
-	free(cooked);
+	if (fh)
+	{
+		f.handle = fh;
+		f.path = cooked;
+	} else
+		free(cooked);
 	errno = serrno;
 	return f;
 }
 
-FILE *
-sOpen(const char *name, const char *mode, int type)
+static file
+try_find_file(const char *name, const char *mode, int type)
 {
-	FILE *f = NULL;
+	file f = {NULL, NULL};
 	char *gd = options.dir_gamedata;
 	char *sd = options.dir_savegame;
 	char *where = "";
+
+	DEBUG2("looking for file `%s'", name);
 
 	/* allow write access only to savegame files */
 	if (type != FT_SAVE)
@@ -213,18 +225,50 @@ sOpen(const char *name, const char *mode, int type)
 					NULL);
 			where = "video";
 			break;
+		case FT_IMAGE:
+			f = s_open_helper(gd, name, mode,
+					"images",
+					NULL);
+			where = "image";
+			break;
 		default:
 			assert("Unknown FT_* specified");
 	}
 
-	if (!f)
+	if (f.handle == NULL)
 	{
 		int serrno = errno;
-		WARNING4("can't %s file `%s' in %s dir(s)",
-			strchr(mode, 'w') ? "write" : "open", name, where);
+		WARNING3("can't find file `%s' in %s dir(s)", name, where);
 		errno = serrno;
 	}
 	return f;
+}
+
+FILE*
+sOpen(const char *name, const char *mode, int type)
+{
+	file f = try_find_file(name, mode, type);
+	if (f.path)
+	{
+		INFO3("opened file `%s' (mode %s)", f.path, mode);
+		free(f.path);
+	}
+	return f.handle;
+}
+
+/* Find and open file, if found return full path.
+ * Caller is responsible for freeing the memory.
+ */
+char*
+locate_file(const char *name, int type)
+{
+	file f = try_find_file(name, "rb", type);
+	if (f.handle)
+	{
+		INFO2("found file `%s'", f.path);
+		fclose(f.handle);
+	}
+	return f.path;
 }
 
 int

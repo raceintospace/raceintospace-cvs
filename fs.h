@@ -10,6 +10,7 @@ enum {
     FT_SAVE = 1,
     FT_AUDIO,
     FT_VIDEO,
+    FT_IMAGE,
 };
 
 /* used for saved games */
@@ -20,6 +21,7 @@ struct ffblk {
 };
 
 extern FILE* sOpen(const char *name, const char *mode, int type);
+extern char* locate_file(const char *name, int type);
 extern FILE* open_gamedat(const char *name);
 extern FILE* open_savedat(const char *name, const char *mode);
 extern char *slurp_gamedat(const char *name);
