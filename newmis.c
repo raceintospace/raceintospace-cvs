@@ -110,6 +110,7 @@ void MisAnn(char plr,char pad)
   int i,j,bud;
   struct mStr Mis2;
   char k,hold,Digit[4],HelpFlag=0;
+  char pad_str[2] = {'A'+pad, '\0'};
   
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
@@ -124,7 +125,7 @@ void MisAnn(char plr,char pad)
   PrintAt(127,40,"LAUNCH FACILITY: ");
   grSetColor(1);
   PrintAt(0,0,"PAD ");
-  PrintAt(0,0,"A"+pad);
+  PrintAt(0,0,pad_str);
   grSetColor(34);
   PrintAt(127,47,"DATE: ");
   grSetColor(1);
@@ -167,8 +168,8 @@ void MisAnn(char plr,char pad)
     else 
      {
       PrintAt(129,91,"JOINT LAUNCH");
-      PrintAt(49,101,"PART: ONE");
-      PrintAt(102,101,"PAD: ");
+      PrintAt(49,101,"PART ONE");
+      PrintAt(102,101,"PAD ");
       //DispNum(0,0,pad);
       switch(pad) {
 	      case 0: PrintAt(0,0,"A");break;
@@ -176,8 +177,8 @@ void MisAnn(char plr,char pad)
 	      case 2: PrintAt(0,0,"C");break;
       };
 
-      PrintAt(160,101,"PART: TWO");
-      PrintAt(213,101,"PAD: ");
+      PrintAt(160,101,"PART TWO");
+      PrintAt(213,101,"PAD ");
       //DispNum(0,0,pad+1);
       switch(pad+1) {
 	      case 0: PrintAt(0,0,"A");break;

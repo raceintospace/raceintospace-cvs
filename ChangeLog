@@ -1,3 +1,16 @@
+2007-06-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V165
+
+	* mc.c (Launch): Bugfix #1732034, fixed JOINT flag assignment
+
+	* mis_c.c (GuyDisp): added assertion
+
+	* newmis.c (MisAnn): fixed pad string calculation
+
+	* Makefile.in: moved includes to the end so default targets
+	won't change
+
 2007-05-21  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V164

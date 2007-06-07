@@ -109,9 +109,9 @@ int Launch(char plr,char mis)
    if (Data->P[plr].Mission[mis].MissionCode==2) Data->P[plr].Mission[mis].Duration=1;
 
    MANNED[0]=Data->P[plr].Mission[mis].Men;
-   MANNED[1]= (Data->P[plr].Mission[mis].Joint==1) ? Data->P[plr].Mission[mis+1].Men : 0;
+   MANNED[1]=Data->P[plr].Mission[mis].Joint ? Data->P[plr].Mission[mis+1].Men : 0;
 
-   JOINT = Data->P[plr].Mission[mis].Joint ? 0 : 1;
+   JOINT = Data->P[plr].Mission[mis].Joint;
 
    temp=CheckCrewOK(plr,mis);
    if (temp==1) //found mission no crews

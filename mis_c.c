@@ -32,6 +32,8 @@
 #include "utils.h"
 #include "logging.h"
 
+#include <assert.h>
+
 #define FRM_Delay 22
 
 #define NORM_TABLE 397
@@ -740,7 +742,8 @@ void InRFBox(int a, int b, int c, int d, int col)
 void GuyDisp(int xa,int ya,struct Astros *Guy)
 {
    grSetColor(1);
-   PrintAt(xa,ya,&Guy->Name[0]);
+   assert(Guy != NULL);
+   PrintAt(xa,ya,Guy->Name);
    switch(Guy->Status) {
       case 1: grSetColor(9);PrintAt(0,0," : DEAD");break;
       case 2: grSetColor(12);PrintAt(0,0," : INJ");break;

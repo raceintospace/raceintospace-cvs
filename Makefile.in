@@ -33,9 +33,6 @@ EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
 	-Wno-char-subscripts -Wno-deprecated-declarations \
 	-Werror
 
-# Personal Makefile
--include Makefile.$(LOGNAME)
-
 PROGS = $(addsuffix @EXEEXT@, \
 	imgsplit vtest decode getport getvab mtest sdltest vtest2)
 
@@ -166,6 +163,9 @@ datatar:
 datazip:
 	rm -f $(PACKAGE_TARNAME)-data.zip
 	zip -r ${PACKAGE_TARNAME}-data.zip audio video gamedata
+
+# Personal Makefile
+-include Makefile.$(LOGNAME)
 
 # Os makefile
 -include Makefile.os
