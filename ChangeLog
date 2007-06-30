@@ -1,3 +1,9 @@
+2007-06-30  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V166
+
+	* mis_m.c (MisCheck): More verbose debug statement
+
 2007-06-08  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V165

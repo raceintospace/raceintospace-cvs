@@ -258,19 +258,20 @@ void MisCheck(char plr,char mpad)
     if (safety>=100) safety=99;
     save=(Mev[STEP].E->SaveCard==1)? 1 : 0;
 
-    PROBLEM=(val>safety) ? 1: 0;
+    PROBLEM = val > safety;
 
     if (!AI[plr] && options.want_cheats)
 	    PROBLEM = 0;
 
-    DEBUG4("safety %3d %3d%s", val, safety,
-            PROBLEM ? " PROBLEM" : (options.want_cheats ? " CHEATING" : ""));
+    DEBUG6("step %c:%s safety %d rolled %d%s", Mev[STEP].Name[0], S_Name[Mev[STEP].loc],
+            safety, val,
+            PROBLEM ? " problem" : (options.want_cheats ? " cheating" : ""));
 
     if (!AI[plr] && BIG==0) 
       if (!(fEarly && STEP!=0))
         lc=MCGraph(plr,lc,maxx(0,safety),maxx(0,val),PROBLEM);  // Graph Chart
 
-    if (val>safety && save==1) {    // Failure Saved
+    if (PROBLEM && save==1) {    // Failure Saved
       Mev[STEP].E->SaveCard--;    // Deduct SCard
       PROBLEM=0;   // Fix problem
       }
