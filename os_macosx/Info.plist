@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>RiSP</string>
 	<key>CFBundleVersion</key>
-	<string>0.2</string>
+	<string>0.4</string>
 	<key>NSMainNibFile</key>
 	<string>SDLMain</string>
 	<key>NSPrincipalClass</key>
