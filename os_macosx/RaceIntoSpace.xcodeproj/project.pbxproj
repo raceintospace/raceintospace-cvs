@@ -64,11 +64,9 @@
 		9848ADFF0B55849A00A82E45 /* review.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADC80B55849A00A82E45 /* review.c */; };
 		9848AE000B55849A00A82E45 /* rush.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADC90B55849A00A82E45 /* rush.c */; };
 		9848AE010B55849A00A82E45 /* sdl.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADCA0B55849A00A82E45 /* sdl.c */; };
-		9848AE020B55849A00A82E45 /* soundfx.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADCB0B55849A00A82E45 /* soundfx.h */; };
 		9848AE030B55849A00A82E45 /* soundint.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 9848ADCC0B55849A00A82E45 /* soundint.h */; };
 		9848AE040B55849A00A82E45 /* start.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADCD0B55849A00A82E45 /* start.c */; };
 		9848AE070B55849A00A82E45 /* vab.c in Sources */ = {isa = PBXBuildFile; fileRef = 9848ADD00B55849A00A82E45 /* vab.c */; };
-		9853C70A0B71475E005568E2 /* raceintospace.1 in Resources */ = {isa = PBXBuildFile; fileRef = 9853C7080B71475E005568E2 /* raceintospace.1 */; };
 		9853C70B0B71475E005568E2 /* raceintospace.spec in Resources */ = {isa = PBXBuildFile; fileRef = 9853C7090B71475E005568E2 /* raceintospace.spec */; };
 		9853C7130B714784005568E2 /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 9853C7100B714784005568E2 /* ChangeLog */; };
 		9853C7140B714784005568E2 /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 9853C7110B714784005568E2 /* COPYING */; };
@@ -80,6 +78,9 @@
 		9853C71F0B7147A6005568E2 /* WHO_SPOT in Resources */ = {isa = PBXBuildFile; fileRef = 9853C71A0B7147A6005568E2 /* WHO_SPOT */; };
 		98C017C80B5D49EB0080F98E /* RaceIntoSpace.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98C017C70B5D49EB0080F98E /* RaceIntoSpace.icns */; };
 		98DC49DF0B71D40B007A82EE /* gamedata.c in Sources */ = {isa = PBXBuildFile; fileRef = 98DC49DE0B71D40B007A82EE /* gamedata.c */; };
+		98F42D340C4D275E00720D25 /* logging.c in Sources */ = {isa = PBXBuildFile; fileRef = 98F42D330C4D275E00720D25 /* logging.c */; };
+		98F42D360C4D276C00720D25 /* logging.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 98F42D350C4D276C00720D25 /* logging.h */; };
+		98F42D380C4D277400720D25 /* log_default.c in Sources */ = {isa = PBXBuildFile; fileRef = 98F42D370C4D277400720D25 /* log_default.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -99,8 +100,8 @@
 				9848ADF20B55849A00A82E45 /* pace.h in Copy Frameworks into .app bundle */,
 				9848ADF70B55849A00A82E45 /* proto.h in Copy Frameworks into .app bundle */,
 				9848ADFC0B55849A00A82E45 /* records.h in Copy Frameworks into .app bundle */,
-				9848AE020B55849A00A82E45 /* soundfx.h in Copy Frameworks into .app bundle */,
 				9848AE030B55849A00A82E45 /* soundint.h in Copy Frameworks into .app bundle */,
+				98F42D360C4D276C00720D25 /* logging.h in Copy Frameworks into .app bundle */,
 			);
 			name = "Copy Frameworks into .app bundle";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -168,11 +169,9 @@
 		9848ADC80B55849A00A82E45 /* review.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = review.c; sourceTree = "<group>"; };
 		9848ADC90B55849A00A82E45 /* rush.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = rush.c; sourceTree = "<group>"; };
 		9848ADCA0B55849A00A82E45 /* sdl.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = sdl.c; sourceTree = "<group>"; };
-		9848ADCB0B55849A00A82E45 /* soundfx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = soundfx.h; sourceTree = "<group>"; };
 		9848ADCC0B55849A00A82E45 /* soundint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = soundint.h; sourceTree = "<group>"; };
 		9848ADCD0B55849A00A82E45 /* start.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = start.c; sourceTree = "<group>"; };
 		9848ADD00B55849A00A82E45 /* vab.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = vab.c; sourceTree = "<group>"; };
-		9853C7080B71475E005568E2 /* raceintospace.1 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.man; path = raceintospace.1; sourceTree = "<group>"; };
 		9853C7090B71475E005568E2 /* raceintospace.spec */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = raceintospace.spec; sourceTree = "<group>"; };
 		9853C7100B714784005568E2 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 		9853C7110B714784005568E2 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
@@ -184,6 +183,9 @@
 		9853C71A0B7147A6005568E2 /* WHO_SPOT */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = WHO_SPOT; sourceTree = "<group>"; };
 		98C017C70B5D49EB0080F98E /* RaceIntoSpace.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = RaceIntoSpace.icns; sourceTree = SOURCE_ROOT; };
 		98DC49DE0B71D40B007A82EE /* gamedata.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = gamedata.c; sourceTree = "<group>"; };
+		98F42D330C4D275E00720D25 /* logging.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = logging.c; sourceTree = "<group>"; };
+		98F42D350C4D276C00720D25 /* logging.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
+		98F42D370C4D277400720D25 /* log_default.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = log_default.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +288,9 @@
 				9848ADA80B55849A00A82E45 /* hardef.c */,
 				9848ADA90B55849A00A82E45 /* intel.c */,
 				9848ADAA0B55849A00A82E45 /* intro.c */,
+				98F42D370C4D277400720D25 /* log_default.c */,
+				98F42D350C4D276C00720D25 /* logging.h */,
+				98F42D330C4D275E00720D25 /* logging.c */,
 				002F3A3E09D088BA00EBEB88 /* main.c */,
 				9848ADAB0B55849A00A82E45 /* mc.c */,
 				9848ADAC0B55849A00A82E45 /* mc2.c */,
@@ -314,7 +319,6 @@
 				9848ADC80B55849A00A82E45 /* review.c */,
 				9848ADC90B55849A00A82E45 /* rush.c */,
 				9848ADCA0B55849A00A82E45 /* sdl.c */,
-				9848ADCB0B55849A00A82E45 /* soundfx.h */,
 				9848ADCC0B55849A00A82E45 /* soundint.h */,
 				9848ADCD0B55849A00A82E45 /* start.c */,
 				9848ADD00B55849A00A82E45 /* vab.c */,
@@ -327,7 +331,6 @@
 		98C017AF0B5D48430080F98E /* Documents */ = {
 			isa = PBXGroup;
 			children = (
-				9853C7080B71475E005568E2 /* raceintospace.1 */,
 				9853C7090B71475E005568E2 /* raceintospace.spec */,
 				9853C7100B714784005568E2 /* ChangeLog */,
 				9853C7110B714784005568E2 /* COPYING */,
@@ -386,7 +389,6 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				98C017C80B5D49EB0080F98E /* RaceIntoSpace.icns in Resources */,
-				9853C70A0B71475E005568E2 /* raceintospace.1 in Resources */,
 				9853C70B0B71475E005568E2 /* raceintospace.spec in Resources */,
 				9853C7130B714784005568E2 /* ChangeLog in Resources */,
 				9853C7140B714784005568E2 /* COPYING in Resources */,
@@ -452,6 +454,8 @@
 				9848AE040B55849A00A82E45 /* start.c in Sources */,
 				9848AE070B55849A00A82E45 /* vab.c in Sources */,
 				98DC49DF0B71D40B007A82EE /* gamedata.c in Sources */,
+				98F42D340C4D275E00720D25 /* logging.c in Sources */,
+				98F42D380C4D277400720D25 /* log_default.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,11 +499,23 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
+					/Library/Frameworks/SDL.framework/Headers,
+					"$(HEADER_SEARCH_PATHS)",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					/opt/local/lib,
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = (
+					"-logg",
+					"-lvorbis",
+					"-lm",
+					"-ltheora",
 				);
 				PRODUCT_NAME = RaceIntoSpace;
 				WRAPPER_EXTENSION = app;
@@ -536,8 +552,14 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					/opt/local/lib,
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = (
+					"-logg",
+					"-lvorbis",
+					"-lm",
+					"-ltheora",
 				);
 				PRODUCT_NAME = RaceIntoSpace;
 				WRAPPER_EXTENSION = app;
@@ -557,11 +579,21 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
 					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
 					/Library/Frameworks/SDL.framework/Headers,
 					"$(HEADER_SEARCH_PATHS)",
 				);
-				OTHER_LDFLAGS = "";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = (
+					"-lm",
+					"-logg",
+					"-lvorbis",
+					"-ltheora",
+				);
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -583,7 +615,16 @@
 					/Library/Frameworks/SDL.framework/Headers,
 					"$(HEADER_SEARCH_PATHS)",
 				);
-				OTHER_LDFLAGS = "";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = (
+					"-lm",
+					"-logg",
+					"-lvorbis",
+					"-ltheora",
+				);
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
