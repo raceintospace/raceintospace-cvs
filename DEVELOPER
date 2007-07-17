@@ -45,8 +45,14 @@
 
     1)  Use Darwin Ports to get the development libraries:
         # port install libsdl libtheora libogg libvorbis
-    2)  $ ./configure --with-OGG=/opt/local --with-theora=/opt/local
+    2)  $ ./configure --with-ogg=/opt/local --with-theora=/opt/local
     3)  $ make
+
+    Notes: I needed to do these extra things before ./configure:
+
+        # cp m4/theora.m4 /usr/share/aclocal/.
+        $ aclocal -I m4
+        $ autoconf
 
 4. Making RPM's (THIS SECTION NEEDS UPDATING)
 
