@@ -1,4 +1,4 @@
-/* $Id: log_default.c,v 1.2 2007/07/17 16:31:51 k6mmc Exp $
+/* $Id: log_default.c,v 1.3 2007/07/18 23:54:11 drvee Exp $
  * Copyright (c) 2001, Bit Farm, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -69,9 +69,9 @@ static void doAppend(struct LogAppender* this0, struct LogEvent* ev) {
     else if ((size_t)ev->priority < sizeof(priorityNames)) {
         pn = priorityNames[ev->priority];
     } else {
-        sprintf(buf, "%s+%ld",
+        sprintf(buf, "%s+%d",
                 priorityNames[sizeof(priorityNames)-1],
-                ev->priority - sizeof(priorityNames) + 1);
+                ev->priority - (int) sizeof(priorityNames) + 1);
     }
     fprintf(this->file, "%-7s ", pn);
     if (this->printLoc)

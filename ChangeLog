@@ -1,4 +1,10 @@
-2007-07-171  Michael McCarty <mkmccarty@raceintospace.org>
+2007-07-19  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V168
+
+	* log_default.c (doAppend): Reverted format to %d, added cast to int
+
+2007-07-17  Michael McCarty <mkmccarty@raceintospace.org>
 
 	* V167
 
