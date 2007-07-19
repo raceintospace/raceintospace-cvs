@@ -1,0 +1,23 @@
+# $Id: Portfile,v 1.1 2007/07/19 06:52:13 k6mmc Exp $
+
+PortSystem 1.0
+
+name		raceintospace
+version		0.4.5
+categories	games
+platforms	darwin
+maintainers	nomaintainer@macports.org
+
+description	Open Source version of old MS-DOS game Buzz Aldrin's Race Into Space
+long_description	${description}
+
+homepage	http://raceintospace.sourceforge.net
+master_sites	sourceforge:raceintospace
+checksums	md5 801921ddfe19f5e2130c487e9c78389b
+
+depends_lib	bin:sdl-config:libsdl \
+						port:libogg \
+						port:libtheora
+
+#configure.env LDFLAGS="-L$(prefix}/lib" CPPFLAGS="-I${prefix}/include"
+
