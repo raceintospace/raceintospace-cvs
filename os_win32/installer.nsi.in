@@ -136,6 +136,7 @@ Section "Uninstall"
   RMDir /r "$INSTDIR\gamedata"
   RMDir /r "$INSTDIR\audio"
   RMDir /r "$INSTDIR\video"
+  RMDir /r "$INSTDIR\images"
   RMDir "$INSTDIR"
 
   DeleteRegKey /ifempty HKCU "Software\${PNAME}"

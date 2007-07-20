@@ -1,5 +1,11 @@
 2007-07-20  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V171
+
+	* os_win32/installer.nsi.in: one missing change
+
+2007-07-20  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V170
 
 	* Bumped up version to 0.4.5
