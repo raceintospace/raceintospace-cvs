@@ -1,7 +1,7 @@
 #! /bin/sh
 
-name=raceintospace
-ver=0.4
+name=@PACKAGE_TARNAME@
+ver=@PACKAGE_VERSION@
 
 name_ver=${name}-${ver}
 
@@ -9,7 +9,7 @@ make tar
 cp ${name_ver}.tar.gz ~/rpmbuild/SOURCES/.
 
 (
-    sed "s/@VER@/$ver/" < $name.spec
+    cat ${name}.spec
     find /usr/local/share/raceintospace -type f -print | sed 's:/local::'
 ) > ~/rpmbuild/SPECS/$name.spec
 

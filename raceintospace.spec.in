@@ -1,5 +1,5 @@
-Name:           raceintospace
-Version:        @VER@
+Name:           @PACKAGE_TARNAME@
+Version:        @PACKAGE_VERSION@
 Release:        1%{?dist}
 Summary:        A strategy game
 

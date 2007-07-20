@@ -38,7 +38,8 @@ PROGS = $(addsuffix @EXEEXT@, \
 
 EXTRA_SOURCES = AUTHORS README COPYING DEVELOPER TODO ChangeLog \
 				raceintospace.6 \
-				configure Makefile.in race.h.in \
+				configure Makefile.in race.h.in mkrpm.in \
+				raceintospace.spec.in \
 				$(wildcard m4/*.m4) \
 				$(shell find os_macosx -name CVS -prune -o -type f -print) \
 				os_win32/configure.mingw os_win32/Shuttle.ico \
@@ -137,6 +138,7 @@ clean:
 
 distclean: clean
 	rm -f config.log config.cache config.status Makefile
+	rm -f mkrpm raceintospace.spec
 	rm -f int_types.h race.h
 	rm -f configure
 	rm -rf autom4te.cache
