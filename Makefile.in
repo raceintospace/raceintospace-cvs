@@ -160,11 +160,11 @@ tar: $(EXTRA_SOURCES)
 
 datatar:
 	rm -f $(PACKAGE_TARNAME)-data.tar.gz
-	tar -czhvf ${PACKAGE_TARNAME}-data.tar.gz audio video gamedata
+	tar -czhvf ${PACKAGE_TARNAME}-data.tar.gz audio video gamedata images
 
 datazip:
 	rm -f $(PACKAGE_TARNAME)-data.zip
-	zip -r ${PACKAGE_TARNAME}-data.zip audio video gamedata
+	zip -r ${PACKAGE_TARNAME}-data.zip audio video gamedata images
 
 # Personal Makefile
 -include Makefile.$(LOGNAME)

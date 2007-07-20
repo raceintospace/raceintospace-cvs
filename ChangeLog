@@ -1,3 +1,17 @@
+2007-07-20  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V170
+
+	* Bumped up version to 0.4.5
+
+	* gx.c (gxDisplayVirtual): bugfix
+
+	* Makefile.in: include new images data directory
+
+	* raceintospace.spec.in: changed descriptions (please check)
+
+	* os_win32/installer.nsi.in: update to current version, change icon
+
 2007-07-20  Pace Willisson  <pace@rhino.pacew.com>
 	
 	* V169

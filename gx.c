@@ -165,12 +165,15 @@ gxDisplayVirtual (int from_x0, int from_y0,
 	int width, height;
 
 	assert(hp);
+	assert(always_zero == 0);
 	assert(0 <= from_x0 && from_x0 < MAX_X);
 	assert(0 <= from_x1 && from_x1 < MAX_X);
 	assert(0 <= from_y0 && from_y0 < MAX_Y);
 	assert(0 <= from_y1 && from_y1 < MAX_Y);
 	assert(from_x0 <= from_x1);
 	assert(from_y0 <= from_y0);
+	assert(0 <= to_x && to_x < hp->w);
+	assert(0 <= to_y && to_y < hp->h);
 
 	width  = from_x1 - from_x0 + 1;
 	height = from_y1 - from_y0 + 1;
@@ -179,7 +182,7 @@ gxDisplayVirtual (int from_x0, int from_y0,
 	assert(height <= hp->w);
 
 	for (row = 0; row < height; row++) {
-		from_idx = (from_y0 + MAX_X) * hp->w + from_x0;
+		from_idx = (from_y0 + row) * MAX_X + from_x0;
 		to_idx = (to_y + row) * hp->w + to_x;
 		memcpy(&hp->vptr[to_idx], &screen[from_idx], width);
 	}

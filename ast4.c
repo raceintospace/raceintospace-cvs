@@ -791,7 +791,7 @@ void Programs(char plr,char prog)
        if (Data->P[plr].Pool[tst].Prime>0)
 	     {
 	      OutBox(245,106,314,118);
-    	   gxDisplayVirtual(75,43,244,173,0,&vhptr,75,43);
+	      gxDisplayVirtual(75,43,244,173,0,&vhptr,75,43);
 	      ShBox(75,43,244,173);IOBox(81,152,238,167);
 	      InBox(81,70,238,113);
 	      RectFill(82,71,237,112,7+3*plr);grSetColor(1);

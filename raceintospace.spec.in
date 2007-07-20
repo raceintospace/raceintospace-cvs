@@ -1,7 +1,7 @@
 Name:           @PACKAGE_TARNAME@
 Version:        @PACKAGE_VERSION@
 Release:        1%{?dist}
-Summary:        A strategy game
+Summary:        A turn based space race strategy game
 
 Group:          Games
 License:        GPL
@@ -10,7 +10,10 @@ Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
-A strategy game for going to the moon
+Open-source version of the Liftoff! board game by Fritz Bronner. It is
+based on the code from original "BARIS" that was developed by Strategic
+Visions and published by Interplay in as a disk based game in 1992 and a
+cd-rom in 1994.
 
 %prep
 %setup -q
