@@ -42,7 +42,7 @@ EXTRA_SOURCES = AUTHORS README COPYING DEVELOPER TODO ChangeLog \
 				raceintospace.spec.in \
 				$(wildcard m4/*.m4) \
 				$(shell find os_macosx -name CVS -prune -o -type f -print) \
-				os_win32/configure.mingw os_win32/Shuttle.ico \
+				os_win32/configure.mingw os_win32/Moon.ico \
 				os_win32/installer.nsi.in os_win32/Makefile.os
 
 BARIS_HFILES = av.h Buzz_inc.h data.h endianness.h externs.h gamedata.h \
