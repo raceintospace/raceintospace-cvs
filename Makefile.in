@@ -5,9 +5,12 @@ LIBS=@LIBS@ @OGG_LIBS@ @VORBIS_LIBS@ @THEORA_LIBS@ @SDL_LIBS@
 CPPFLAGS=@CPPFLAGS@ @OGG_CFLAGS@ @VORBIS_CFLAGS@ @THEORA_CFLAGS@ \
 		 @SDL_CFLAGS@ -DCONFIG_DATADIR=\"${DATA_DIR}\"
 PACKAGE_TARNAME=@PACKAGE_TARNAME@
+VERSION=@PACKAGE_VERSION@
 PROG_NAME=${PACKAGE_TARNAME}@EXEEXT@
 CFLAGS =-g -Wall -std=c99 @CFLAGS@
-TAR_NAME=@PACKAGE_TARNAME@-@PACKAGE_VERSION@
+TAR_NAME=$(PACKAGE_TARNAME)-$(VERSION)
+DATA_NAME=$(PACKAGE_TARNAME)-data
+DATA_TARNAME=$(DATA_NAME)-$(VERSION)
 
 # rpmbuild uses DESTDIR to stage the compilation output
 DESTDIR=
@@ -78,6 +81,7 @@ rpm_install: install
 	cp -pr /usr/local/share/raceintospace/audio $(DATA_DIR)
 	cp -pr /usr/local/share/raceintospace/video $(DATA_DIR)
 	cp -pr /usr/local/share/raceintospace/gamedata $(DATA_DIR)
+	cp -pr /usr/local/share/raceintospace/images $(DATA_DIR)
 	find $(DATA_DIR) -type f -print | xargs chmod a-x+r
 
 uninstall:
@@ -159,12 +163,12 @@ tar: $(EXTRA_SOURCES)
 	tar -zchC .temp --exclude CVS -f $(TAR_NAME).tar.gz $(TAR_NAME)
 
 datatar:
-	rm -f $(PACKAGE_TARNAME)-data.tar.gz
-	tar -czhvf ${PACKAGE_TARNAME}-data.tar.gz audio video gamedata images
+	rm -f $(DATA_TARNAME).tar.gz
+	tar -czhvf $(DATA_TARNAME).tar.gz audio video gamedata images
 
 datazip:
-	rm -f $(PACKAGE_TARNAME)-data.zip
-	zip -r ${PACKAGE_TARNAME}-data.zip audio video gamedata images
+	rm -f $(DATA_TARNAME).zip
+	zip -r $(DATA_TARNAME).zip audio video gamedata images
 
 # Personal Makefile
 -include Makefile.$(LOGNAME)

@@ -1,5 +1,11 @@
 2007-07-27  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V174
+
+	* Makefile.in: added version numbers to all archives
+
+2007-07-27  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V173
 
 	* gx.c (gxVirtualVirtual): fixed assertions
