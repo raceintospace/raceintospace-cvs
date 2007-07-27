@@ -1,5 +1,14 @@
 2007-07-27  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V173
+
+	* gx.c (gxVirtualVirtual): fixed assertions
+	(gxDestroyVirtual): set pointer to NULL
+
+	* vab.c (DispVA): comments, formatting and bugfix for #1759035
+
+2007-07-27  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V172
 
 	* Makefile.in: changed icon to Moon.ico

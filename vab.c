@@ -29,6 +29,8 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "utils.h"
+#include "logging.h"
+
 extern char AI[2];
 
   struct VInfo VAS[7][4];
@@ -369,114 +371,184 @@ void ShowRkt(char *Name,int sf,int qty,char mode)
 
 void DispVA(char plr,char f)
 {
-  int i,TotY,IncY;
-  int w,h,x1,y1,x2,y2,w2,h2,cx,off=0;
-  unsigned char *spix, *dpix, wh;
-  GXHEADER local,local2;
+	int i, TotY, IncY;
+	int w, h, x1, y1, x2, y2, w2, h2, cx, off = 0;
+	unsigned char *spix, *dpix, wh;
+	GXHEADER local, local2;
 
-  cx=0;
-  for (i=0;i<4;i++) if (VAS[f][i].img>0) cx++;
-  wh=((cx==1 && VAS[f][3].img>0) || cx==0) ? 7 : 8;
-  if (VAS[f][0].img==13 && plr==0) wh=7;
-  TotY=0;
-  for (i=0;i<4;i++)
-    if (VAS[f][i].img>1) TotY+=MI[plr*28+VAS[f][i].img].y2-MI[plr*28+VAS[f][i].img].y1+1;
-                                                                     
-    // Load Proper Background into Buffer
-    x1=MI[plr*28+wh].x1;y1=MI[plr*28+wh].y1;
-    x2=MI[plr*28+wh].x2;y2=MI[plr*28+wh].y2;
-    w=x2-x1+1;h=y2-y1+1;
+	/* cx: number of pictures */
+	cx = 0;
+	for (i = 0; i < 4; i++)
+		if (VAS[f][i].img > 0)
+			cx++;
 
-    if (plr==0 && VAS[f][0].img==13) {h+=13;off=13;};
+	/* wh: 7 - casing small, 8 - casing large */
+	wh = ((cx == 1 && VAS[f][3].img > 0) || cx == 0) ? 7 : 8;
+	if (VAS[f][0].img == 13 && plr == 0)
+		wh = 7;
 
-    GV(&local,w,h);gxClearVirtual(&local,0);
-    gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local,0,0+off,gxSET);
-    spix=local.vptr;
+	/* TotY: sum of height of all images (?) */
+	TotY = 0;
+	for (i = 0; i < 4; i++)
+		if (VAS[f][i].img > 1)
+			TotY +=
+				MI[plr * 28 + VAS[f][i].img].y2 - MI[plr * 28 +
+				VAS[f][i].img].y1 + 1;
 
-    GV(&local2,w,h);
-    
-    RectFill(178,29,243,179,3);
-    gxGetImage(&local2,210-w/2,103-h/2,210-w/2+w-1,103-h/2+h-1,0);
-    
+	/* Load proper (casing) background into buffer */
+	x1 = MI[plr * 28 + wh].x1;
+	y1 = MI[plr * 28 + wh].y1;
+	x2 = MI[plr * 28 + wh].x2;
+	y2 = MI[plr * 28 + wh].y2;
+	w = x2 - x1 + 1;
+	h = y2 - y1 + 1;
 
-    for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
-      if (local.vptr[i]==0x00) local.vptr[i]=local2.vptr[i];
-    };
-    DV(&local2);
+	if (plr == 0 && VAS[f][0].img == 13)
+	{
+		h += 13;
+		off = 13;
+	};
 
+	GV(&local, w, h);
+	gxClearVirtual(&local, 0);
+	gxVirtualVirtual(&vhptr, x1, y1, x2, y2, &local, 0, 0 + off, gxSET);
+	spix = local.vptr;
 
-    //for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
-    //  if (*spix==0x00) *spix=0x03;
-    //  spix++;
-    //};
+	GV(&local2, w, h);
 
+	/* TODO: magic numbers */
+	RectFill(178, 29, 243, 179, 3);
+	gxGetImage(&local2, 210 - w / 2, 103 - h / 2, 210 - w / 2 + w - 1,
+		103 - h / 2 + h - 1, 0);
 
-    GV(&local2,w,h);gxClearVirtual(&local2,0);
+	/* local <- local with background from local2 */
+	for (i = 0; i < gxVirtualSize(gxVGA_13, w, h); i++)
+	{
+		if (local.vptr[i] == 0x00)
+			local.vptr[i] = local2.vptr[i];
+	};
 
-    cx=0;
-    IncY=(h-TotY)/2;
-    if (VAS[f][0].img>0) {
-      if (!(VAS[f][0].img==13 && plr==0)) IncY=MI[plr*28+VAS[f][0].img].o;
-      else IncY=0;
-     }
+	//for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
+	//	if (*spix==0x00) *spix=0x03;
+	//	spix++;
+	//};
 
-    for (i=0;i<4;i++) {
-      if (VAS[f][i].img>0) {
-	wh=VAS[f][i].img;
-	x1=MI[plr*28+wh].x1;y1=MI[plr*28+wh].y1;
-	x2=MI[plr*28+wh].x2;y2=MI[plr*28+wh].y2;
-	w2=x2-x1+1;h2=y2-y1+1;
-	cx=w/2-w2/2-1;
-	gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local2,cx,IncY,gxSET);
-	IncY+=h2+1;
-      }
-    }
-    spix=local.vptr; dpix=local2.vptr;
+	gxClearVirtual(&local2, 0);
 
-    for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
-      if (*dpix!=0x00) *spix=*dpix;
-      spix++;dpix++;
-    };
+	cx = 0;
+	IncY = (h - TotY) / 2;
+	if (VAS[f][0].img > 0)
+	{
+		if (VAS[f][0].img == 13 && plr == 0)
+			IncY = 0;
+		else
+			IncY = MI[plr * 28 + VAS[f][0].img].o;
+	}
 
-    //spotxx
+	for (i = 0; i < 4; i++)
+	{
+		if (VAS[f][i].img > 0)
+		{
+			wh = VAS[f][i].img;
+			x1 = MI[plr * 28 + wh].x1;
+			y1 = MI[plr * 28 + wh].y1;
+			x2 = MI[plr * 28 + wh].x2;
+			y2 = MI[plr * 28 + wh].y2;
+			w2 = x2 - x1 + 1;
+			h2 = y2 - y1 + 1;
+			cx = w / 2 - w2 / 2 - 1;
+			if (cx + w2 > w || IncY + h2 > h)
+			{
+				CWARNING3(graphic, "can't fit %s image into spaceship casing!",
+						VAS[f][i].name);
+				continue;
+			}
+			else
+				gxVirtualVirtual(&vhptr, x1, y1, x2, y2,
+						&local2, cx, IncY, gxSET);
+			IncY += h2 + 1;
+		}
+	}
+	spix = local.vptr;
+	dpix = local2.vptr;
 
-  cx=0;
-  for (i=0;i<4;i++) if (VAS[f][i].img>0) cx++;
-  wh=((cx==1 && VAS[f][3].img>0) || cx==0) ? 7 : 8;
-  if (VAS[f][0].img==13 && plr==0) wh=7;
+	for (i = 0; i < gxVirtualSize(gxVGA_13, w, h); i++)
+	{
+		if (*dpix != 0x00)
+			*spix = *dpix;
+		spix++;
+		dpix++;
+	};
 
+	//spotxx
 
-  if (wh==8) {
-    x1=MI[plr*28+25].x1;y1=MI[plr*28+25].y1;x2=MI[plr*28+25].x2;y2=MI[plr*28+25].y2;
-    y2=y1+TotY-IncY-1;
-    w2=x2-x1+1;h2=y2-y1+1;cx=w/2-w2/2-1;
-    gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local2,cx,IncY,gxSET);
+	cx = 0;
+	for (i = 0; i < 4; i++)
+		if (VAS[f][i].img > 0)
+			cx++;
+	wh = ((cx == 1 && VAS[f][3].img > 0) || cx == 0) ? 7 : 8;
+	if (VAS[f][0].img == 13 && plr == 0)
+		wh = 7;
 
-    spix=local.vptr;  dpix=local2.vptr;
-    for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
-      if (*dpix!=0x00) *spix=*dpix;
-      spix++;dpix++;
-    };
+	if (wh == 8)
+	{
+		x1 = MI[plr * 28 + 25].x1;
+		y1 = MI[plr * 28 + 25].y1;
+		x2 = MI[plr * 28 + 25].x2;
+		y2 = MI[plr * 28 + 25].y2;
+		y2 = y1 + TotY - IncY - 1;
+		w2 = x2 - x1 + 1;
+		h2 = y2 - y1 + 1;
+		cx = w / 2 - w2 / 2 - 1;
+		gxVirtualVirtual(&vhptr, x1, y1, x2, y2, &local2, cx, IncY, gxSET);
 
-    x1=MI[plr*28+27].x1;y1=MI[plr*28+27].y1;x2=MI[plr*28+27].x2;y2=MI[plr*28+27].y2;
-    w2=x2-x1+1;h2=y2-y1+1;
-    gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local2,0,h-h2,gxSET);
-    spix=local.vptr;  dpix=local2.vptr;
-    for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
-      if (*dpix!=0x00) *spix=*dpix;
-      spix++;dpix++;
-    };
-  } else {
-    x1=MI[plr*28+26].x1;y1=MI[plr*28+26].y1;x2=MI[plr*28+26].x2;y2=MI[plr*28+26].y2;
-    w2=x2-x1+1;h2=y2-y1+1;
-    gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local2,0,h-h2,gxSET);
-    spix=local.vptr;  dpix=local2.vptr;
-    for (i=0;i<gxVirtualSize(gxVGA_13,w,h);i++) {
-      if (*dpix!=0x00) *spix=*dpix;
-      spix++;dpix++;
-    };
-  }
-  
+		spix = local.vptr;
+		dpix = local2.vptr;
+		for (i = 0; i < gxVirtualSize(gxVGA_13, w, h); i++)
+		{
+			if (*dpix != 0x00)
+				*spix = *dpix;
+			spix++;
+			dpix++;
+		};
+
+		x1 = MI[plr * 28 + 27].x1;
+		y1 = MI[plr * 28 + 27].y1;
+		x2 = MI[plr * 28 + 27].x2;
+		y2 = MI[plr * 28 + 27].y2;
+		w2 = x2 - x1 + 1;
+		h2 = y2 - y1 + 1;
+		gxVirtualVirtual(&vhptr, x1, y1, x2, y2, &local2, 0, h - h2, gxSET);
+		spix = local.vptr;
+		dpix = local2.vptr;
+		for (i = 0; i < gxVirtualSize(gxVGA_13, w, h); i++)
+		{
+			if (*dpix != 0x00)
+				*spix = *dpix;
+			spix++;
+			dpix++;
+		};
+	}
+	else
+	{
+		x1 = MI[plr * 28 + 26].x1;
+		y1 = MI[plr * 28 + 26].y1;
+		x2 = MI[plr * 28 + 26].x2;
+		y2 = MI[plr * 28 + 26].y2;
+		w2 = x2 - x1 + 1;
+		h2 = y2 - y1 + 1;
+		gxVirtualVirtual(&vhptr, x1, y1, x2, y2, &local2, 0, h - h2, gxSET);
+		spix = local.vptr;
+		dpix = local2.vptr;
+		for (i = 0; i < gxVirtualSize(gxVGA_13, w, h); i++)
+		{
+			if (*dpix != 0x00)
+				*spix = *dpix;
+			spix++;
+			dpix++;
+		};
+	}
+
   DV(&local2);
   gxPutImage(&local,gxSET,210-w/2,103-h/2,0);
   
@@ -989,4 +1061,4 @@ void VVals(char plr,char tx,Equipment *EQ,char v4,char v5)
   return;
 }
 
-// EOF
+/* vim: set noet ts=4 sw=4 tw=77: */

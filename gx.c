@@ -20,7 +20,7 @@ gxCreateVirtual (int mode, GXHEADER *hp,
 		 int gxVGA_mode, int w, int h)
 {
 	assert(hp);
-	memset (hp, 0, sizeof *hp);
+	memset(hp, 0, sizeof *hp);
 	hp->w = w;
 	hp->h = h;
 	hp->vptr = xmalloc(w * h);
@@ -32,7 +32,8 @@ gxDestroyVirtual (GXHEADER *hp)
 {
 	assert(hp);
 	assert(hp->vptr);
-	free (hp->vptr);
+	free(hp->vptr);
+	hp->vptr = NULL;
 }
 
 void
@@ -211,12 +212,14 @@ gxVirtualVirtual (GXHEADER *from,
 	assert(0 <= from_y1 && from_y1 < from->h);
 	assert(0 <= from_x2 && from_x2 < from->w);
 	assert(0 <= from_y2 && from_y2 < from->h);
+	assert(0 <= to_x	&& to_x	   < to->w);
+	assert(0 <= to_y	&& to_y	   < to->h);
 
 	w = from_x2 - from_x1 + 1;
 	h = from_y2 - from_y1 + 1;
 
-	assert(w <= to->w);
-	assert(h <= to->h);
+	assert(w <= to->w - to_x);
+	assert(h <= to->h - to_y);
 
 	for (row = 0; row < h; row++) {
 		from_idx = (from_y1 + row) * from->w + from_x1;
@@ -253,3 +256,4 @@ gxVirtualScale (GXHEADER *src, GXHEADER *dest)
 	}
 }
 
+/* vim: set noet ts=4 sw=4 tw=77: */
