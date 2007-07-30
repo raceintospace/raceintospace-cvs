@@ -1,4 +1,4 @@
-# $Id: Portfile,v 1.1 2007/07/19 06:52:13 k6mmc Exp $
+# $Id: Portfile,v 1.2 2007/07/30 17:32:00 k6mmc Exp $
 
 PortSystem 1.0
 
@@ -13,10 +13,11 @@ long_description	${description}
 
 homepage	http://raceintospace.sourceforge.net
 master_sites	sourceforge:raceintospace
-checksums	md5 801921ddfe19f5e2130c487e9c78389b
+checksums	md5 e7987f9a26c61fc0fe50833fdd41ffa1
 
 depends_lib	bin:sdl-config:libsdl \
 						port:libogg \
+						port:libvorbis \
 						port:libtheora
 
 #configure.env LDFLAGS="-L$(prefix}/lib" CPPFLAGS="-I${prefix}/include"
