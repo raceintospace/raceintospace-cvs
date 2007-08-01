@@ -1,4 +1,4 @@
-# $Id: Portfile,v 1.3 2007/07/30 17:37:15 k6mmc Exp $
+# $Id: Portfile,v 1.4 2007/08/01 23:48:02 k6mmc Exp $
 
 PortSystem 1.0
 
@@ -6,19 +6,40 @@ name		raceintospace
 version		0.4.5
 categories	games
 platforms	darwin
-maintainers	mkmccarty@raceintospace.org
+maintainers	raceintospace.org:mkmccarty
 
 description	Open Source version of old MS-DOS game Buzz Aldrin's Race Into Space
 long_description	${description}
 
 homepage	http://raceintospace.sourceforge.net
 master_sites	sourceforge:raceintospace
-checksums	md5 e7987f9a26c61fc0fe50833fdd41ffa1
+
+set source_file ${distname}${extract.suffix}
+set data_file ${name}-data-${version}${extract.suffix}
+
+checksums	\
+  ${source_file} md5 e7987f9a26c61fc0fe50833fdd41ffa1 \
+  ${source_file} sha1 abe71d9ee14254662fd671cb9a5479df298a934f \
+  ${source_file} rmd160 d5cca12d65a8b6b998186c310bac51da0987f6ce \
+  ${data_file} md5 618f3d68f6d2d49567b34e09c143221b \
+  ${data_file} sha1 4d8866239be5319f6a77e276c42bac0b0f1ff764 \
+  ${data_file} rmd160 2865debe15e60ee1870eee78e625a4b9e082b869
+
+distfiles ${source_file} ${data_file}
 
 depends_lib	bin:sdl-config:libsdl \
 						port:libogg \
 						port:libvorbis \
 						port:libtheora
 
-#configure.env LDFLAGS="-L$(prefix}/lib" CPPFLAGS="-I${prefix}/include"
-
+post-destroot {
+  # move the game data into the destroot directory:
+  set share ${destroot}${prefix}/share/raceintospace
+  file copy ${workpath}/audio ${share}/audio
+  file copy ${workpath}/gamedata ${share}/gamedata
+  file copy ${workpath}/images ${share}/images
+  file copy ${workpath}/video ${share}/video
+  # add the data directory to the config file to allow direct usage of the game
+  system "mkdir -p ~/.raceintospace"
+  system "echo 'datadir ${prefix}/share/raceintospace' >> ~/.raceintospace/config"
+}
