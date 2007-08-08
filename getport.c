@@ -204,7 +204,7 @@ main (int argc, char **argv)
 	int idx;
 
 	filename = "/l/baris/gamedat/usa_port.dat";
-	screen = xmalloc(64 * 1024);
+	screen = (unsigned_char *)xmalloc(64 * 1024);
 
 	while ((c = getopt (argc, argv, "vw:h:")) != EOF) {
 		switch (c) {

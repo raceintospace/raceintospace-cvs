@@ -6,7 +6,6 @@
 #include "utils.h"
 #include <SDL.h>
 
-extern unsigned char *screen;
 extern GXHEADER vhptr;
 
 int

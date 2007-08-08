@@ -9,9 +9,9 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string>RaceIntoSpace</string>
+	<string>moon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.RaceIntoSpaceProject.RaceIntoSpace</string>
+	<string>org.raceintospace.RaceIntoSpace</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

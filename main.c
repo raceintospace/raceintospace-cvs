@@ -30,6 +30,7 @@
 #include "options.h"
 #include "utils.h"
 #include "logging.h"
+#include "externs.h"
 #include <ctype.h>
 
 #ifdef CONFIG_MACOSX
@@ -43,9 +44,8 @@
   char Name[20];
   struct Players *Data;
   int x,y,mousebuttons,key,oldx,oldy;
-  unsigned char *screen;
   unsigned char LOAD,QUIT,HARD1,UNIT1,BUTLOAD,FADE,AL_CALL,XMAS;
-  char pal[768],plr[NUM_PLAYERS],IDT[5],IKEY[5],df,IDLE[2];
+  char plr[NUM_PLAYERS],IDT[5],IKEY[5],df,IDLE[2];
   char *buffer;
   GXHEADER vhptr,vhptr2;
   char * oldpal,pNeg[NUM_PLAYERS][MAX_MISSIONS];
@@ -270,7 +270,7 @@ tommy:
   }
 
   CloseEmUp(0,0);  // Normal Exit
-  exit(1);
+  exit(EXIT_SUCCESS);
 }
 
 // utility fn for AI to see if it should scrub the mission

@@ -1,3 +1,26 @@
+2007-08-07  Will Glynn <will@lerjfhax.com>
+
+	* V175
+	
+	* os_macosx: Re-worked OS X port: now builds straight from Xcode
+	(longer dependent on autoconf), supports Fink and DarwinPorts, uses
+	Cocoa to bootstrap SDL, embeds the data files inside the .app, and has
+	a build target to generate a .dmg for distribution
+
+	* AUTHORS: added self
+
+	* DEVELOPER: updated OS X instructions
+
+	* getport.c: added cast on xmalloc
+
+	* gx.c: added extern reference to * screen
+
+	* main.c: added externs.h, removed declaration of palette, and changed
+	normal exit code to EXIT_SUCCESS
+	
+	* sdl.c: removed SDL icon calls under OS X, define surfaces in
+	multiples of MAX_X/MAX_Y
+
 2007-07-27  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V174

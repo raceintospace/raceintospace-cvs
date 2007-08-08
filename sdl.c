@@ -13,7 +13,6 @@
 #include "options.h"
 #include "utils.h"
 #include "logging.h"
-
 #include "av.h"
 #define MAX_X	320
 #define MAX_Y	200
@@ -24,6 +23,8 @@ int av_mouse_cur_x, av_mouse_cur_y;
 int av_mouse_pressed_x, av_mouse_pressed_y;
 int av_mouse_pressed_cur;
 int av_mouse_pressed_latched;
+
+unsigned char *screen;
 
 SDL_Surface *display;
 SDL_Overlay *video_overlay;
@@ -36,8 +37,6 @@ static SDL_Surface *screen_surf2x;
 static SDL_Color pal_colors[256];
 
 static struct audio_channel Channels[AV_NUM_CHANNELS];
-
-unsigned char *screen;
 
 // unsigned char* screen_2;
 
@@ -229,7 +228,10 @@ void
 av_setup(void)
 {
 	unsigned video_flags = SDL_SWSURFACE;
+
+#ifndef CONFIG_MACOSX
 	char *icon_path = NULL;
+#endif
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
@@ -276,6 +278,7 @@ av_setup(void)
 		NOTICE1("fullscreen mode enabled");
 	}
 
+#ifndef CONFIG_MACOSX
 	if ((icon_path = locate_file("moon_32x32.bmp", FT_IMAGE)))
 	{
 		SDL_Surface *icon = SDL_LoadBMP(icon_path);
@@ -285,24 +288,25 @@ av_setup(void)
 			INFO2("setting icon failed: %s\n", SDL_GetError());
 		free(icon_path);
 	}
+#endif
 
 	SDL_WM_SetCaption(PACKAGE_STRING, NULL);
 
-	if ((display = SDL_SetVideoMode(640, 400, 24, video_flags)) == NULL)
+	if ((display = SDL_SetVideoMode(MAX_X * 2, MAX_Y * 2, 24, video_flags)) == NULL)
 	{
 		CRITICAL2("SDL_SetVideoMode failed: %s", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
 
 	screen = xcalloc(MAX_X * MAX_Y, 1);
-	screen_surf = SDL_CreateRGBSurfaceFrom(screen, 320, 200, 8,
+	screen_surf = SDL_CreateRGBSurfaceFrom(screen, MAX_X, MAX_Y, 8,
 		MAX_X, 0, 0, 0, 0);
     if (!screen_surf)
     {
         CRITICAL2("can't create screen surface: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
-	screen_surf2x = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 400, 8,
+	screen_surf2x = SDL_CreateRGBSurface(SDL_SWSURFACE, MAX_X * 2, MAX_Y * 2, 8,
 		~0, ~0, ~0, 0);
     if (!screen_surf2x)
     {
@@ -470,7 +474,7 @@ av_process_event(SDL_Event * evp)
 		case SDL_ACTIVEEVENT:
 			break;
 		default:
-			DEBUG2("got uknown event %d", evp->type);
+			DEBUG2("got unknown event %d", evp->type);
 			break;
 	}
 }

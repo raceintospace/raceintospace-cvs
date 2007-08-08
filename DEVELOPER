@@ -43,16 +43,16 @@
 
 3. Building on Mac OS X
 
-    1)  Use Darwin Ports to get the development libraries:
-        # port install libsdl libtheora libogg libvorbis
-    2)  $ ./configure --with-ogg=/opt/local --with-theora=/opt/local
-    3)  $ make
-
-    Notes: I needed to do these extra things before ./configure:
-
-        # cp m4/theora.m4 /usr/share/aclocal/.
-        $ aclocal -I m4
-        $ autoconf
+    1)  Use Darwin Ports or Fink to get the development libraries:
+        # port install libogg libvorbis libtheora
+        - or -
+        # fink install libogg libvorbis0 libtheora0
+    2)  Download and install the Mac OS X version of SDL from libsdl.org
+    3)  Unpack the data and music to race-data/ in the same directory that
+        holds the race/ source tree. Ensure that it contains audio/,
+        gamedata/, images/, music/, and video/. These are embedded in the
+        executable under OS X, so they are required at build time.
+    4)  Open os_macosx/RaceIntoSpace.xcodeproj and compile.
 
 4. Making RPM's (THIS SECTION NEEDS UPDATING)
 
