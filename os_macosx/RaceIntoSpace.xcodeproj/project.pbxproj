@@ -13,9 +13,6 @@
 			buildPhases = (
 				7CCAA9910C6927530043DD17 /* ShellScript */,
 			);
-			buildSettings = {
-				PRODUCT_NAME = RaceIntoSpace.dmg;
-			};
 			dependencies = (
 				7CCAA9960C69275A0043DD17 /* PBXTargetDependency */,
 			);
@@ -93,17 +90,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
-		4A9504CCFFE6A4B311CA0CBA /* Debug */ = {
+		7CF3904B0C6A95100086E543 /* Development */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 			};
-			name = Debug;
+			name = Development;
 		};
-		4A9504CDFFE6A4B311CA0CBA /* Release */ = {
+		7CF3904C0C6A95100086E543 /* Deployment */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
+				COPY_PHASE_STRIP = YES;
 			};
-			name = Release;
+			name = Deployment;
 		};
 /* End PBXBuildStyle section */
 
@@ -112,7 +111,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8D1107260486CEB800E47090 /* Race Into Space */;
+			remoteGlobalIDString = 8D1107260486CEB800E47090;
 			remoteInfo = "Race Into Space";
 		};
 /* End PBXContainerItemProxy section */
@@ -221,6 +220,15 @@
 		7C94F2300C68C4CA00D047AD /* music */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = music; path = "../../race-data/music"; sourceTree = SOURCE_ROOT; };
 		7C94F2550C68C4CA00D047AD /* video */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = video; path = "../../race-data/video"; sourceTree = SOURCE_ROOT; };
 		7CCAA9D30C6946E10043DD17 /* moon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = moon.icns; sourceTree = "<group>"; };
+		7CF391080C6A998C0086E543 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = AUTHORS; path = ../AUTHORS; sourceTree = SOURCE_ROOT; };
+		7CF391090C6A998C0086E543 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = SOURCE_ROOT; };
+		7CF3910A0C6A998C0086E543 /* DEVELOPER */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = DEVELOPER; path = ../DEVELOPER; sourceTree = SOURCE_ROOT; };
+		7CF3910B0C6A998C0086E543 /* PLAN */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = PLAN; path = ../PLAN; sourceTree = SOURCE_ROOT; };
+		7CF3910C0C6A998C0086E543 /* QUESTIONS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = QUESTIONS; path = ../QUESTIONS; sourceTree = SOURCE_ROOT; };
+		7CF3910D0C6A998C0086E543 /* raceintospace.6 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = raceintospace.6; path = ../raceintospace.6; sourceTree = SOURCE_ROOT; };
+		7CF3910E0C6A998C0086E543 /* README */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = README; path = ../README; sourceTree = SOURCE_ROOT; };
+		7CF3910F0C6A998C0086E543 /* TODO */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = TODO; path = ../TODO; sourceTree = SOURCE_ROOT; };
+		7CF391100C6A998C0086E543 /* WHO_SPOT */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = WHO_SPOT; path = ../WHO_SPOT; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Race Into Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Race Into Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -267,6 +275,7 @@
 		29B97314FDCFA39411CA2CEA /* Race Into Space */ = {
 			isa = PBXGroup;
 			children = (
+				7CF391070C6A996F0086E543 /* Documents */,
 				7C94E0B40C68BE6300D047AD /* Common Sources */,
 				29B97315FDCFA39411CA2CEA /* OS X Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -392,6 +401,22 @@
 			name = "Common Sources";
 			sourceTree = "<group>";
 		};
+		7CF391070C6A996F0086E543 /* Documents */ = {
+			isa = PBXGroup;
+			children = (
+				7CF391080C6A998C0086E543 /* AUTHORS */,
+				7CF391090C6A998C0086E543 /* ChangeLog */,
+				7CF3910A0C6A998C0086E543 /* DEVELOPER */,
+				7CF3910B0C6A998C0086E543 /* PLAN */,
+				7CF3910C0C6A998C0086E543 /* QUESTIONS */,
+				7CF3910D0C6A998C0086E543 /* raceintospace.6 */,
+				7CF3910E0C6A998C0086E543 /* README */,
+				7CF3910F0C6A998C0086E543 /* TODO */,
+				7CF391100C6A998C0086E543 /* WHO_SPOT */,
+			);
+			name = Documents;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -399,6 +424,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Race Into Space" */;
 			buildPhases = (
+				7CF390DA0C6A95440086E543 /* ShellScript */,
 				7CCA9BB30C691D6B0043DD17 /* ShellScript */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -407,8 +433,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-			};
 			dependencies = (
 			);
 			name = "Race Into Space";
@@ -426,8 +450,8 @@
 			buildSettings = {
 			};
 			buildStyles = (
-				4A9504CCFFE6A4B311CA0CBA /* Debug */,
-				4A9504CDFFE6A4B311CA0CBA /* Release */,
+				7CF3904B0C6A95100086E543 /* Development */,
+				7CF3904C0C6A95100086E543 /* Deployment */,
 			);
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Race Into Space */;
@@ -485,7 +509,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Derived from http://qwan.org/2007/05/22/using-xcode-to-build-a-disk-image-and-upload-a-web-site/\n\n[ \"$ACTION\" = build ] || exit 0\n[ \"$BUILD_VARIANTS\" = \"normal\" ] || exit 0\n[ \"$BUILD_STYLE\" = \"Release\" ] || { echo \"Unwilling to produce $BUILD_STYLE disk image. Switch to Release.\"; exit 1; }\n\ndir=\"$TEMP_FILES_DIR/disk\"\n\nversion=`egrep PACKAGE_VERSION \"$DERIVED_FILES/version.h\" | awk -F'\"' '{ print $2 }'`\nvolume=\"Race Into Space $version\"\n\ntmpdmg=\"$TEMP_FILES_DIR/$volume.dmg\"\ndmg=\"$BUILT_PRODUCTS_DIR/$volume.dmg\"\n\n# Prepare the staging area\nrm -rf \"$dir\"\nmkdir \"$dir\"\ncp -R \"$BUILT_PRODUCTS_DIR/Race Into Space.app\" \"$dir\"\ncp -R ../AUTHORS ../COPYING ../DEVELOPER ../QUESTIONS ../README \"$dir\" \n\n# Make the initial DMG\nrm -f \"$tmpdmg\"\nhdiutil create -srcfolder \"$dir\" -volname \"$volume\" \"$tmpdmg\"\nrm -rf \"$dir\"\n\n# Compress it\nrm -f \"$dmg\"\nhdiutil convert \"$tmpdmg\" -format UDZO -imagekey zlib-level=9 -o \"$dmg\"\nrm -f \"$tmpdmg\"\n\n# Internet-enable the DMG (see `man hdiutil`)\nhdiutil internet-enable -yes \"$dmg\"\n";
+			shellScript = "# Derived from http://qwan.org/2007/05/22/using-xcode-to-build-a-disk-image-and-upload-a-web-site/\n\n[ \"$ACTION\" = build ] || exit 0\n[ \"$BUILD_VARIANTS\" = \"normal\" ] || exit 0\n[ \"$BUILD_STYLE\" = \"Release\" ] || { echo \"Unwilling to produce $BUILD_STYLE disk image. Switch to Release.\"; exit 1; }\n\ndir=\"$TEMP_FILES_DIR/disk\"\n\nversion=`egrep '^AC_INIT' ../configure.in | awk -F '[,()]' '{ print $3 }'`\nvolume=\"Race Into Space $version\"\n\ntmpdmg=\"$TEMP_FILES_DIR/$volume.dmg\"\ndmg=\"$BUILT_PRODUCTS_DIR/$volume.dmg\"\n\n# Prepare the staging area\nrm -rf \"$dir\"\nmkdir \"$dir\"\ncp -R \"$BUILT_PRODUCTS_DIR/Race Into Space.app\" \"$dir\"\ncp -R ../AUTHORS ../COPYING ../DEVELOPER ../QUESTIONS ../README \"$dir\" \n\n# Make the initial DMG\nrm -f \"$tmpdmg\"\nhdiutil create -srcfolder \"$dir\" -volname \"$volume\" \"$tmpdmg\"\nrm -rf \"$dir\"\n\n# Compress it\nrm -f \"$dmg\"\nhdiutil convert \"$tmpdmg\" -format UDZO -imagekey zlib-level=9 -o \"$dmg\"\nrm -f \"$tmpdmg\"\n\n# Internet-enable the DMG (see `man hdiutil`)\nhdiutil internet-enable -yes \"$dmg\"\n";
+		};
+		7CF390DA0C6A95440086E543 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Check that our build-time requirements are set\n\ncontainer=`dirname \\`dirname \\\\\\`pwd\\\\\\`\\``\n\n[ -d ../../xiph ] || { echo \"Please check out the 'xiph' module from CVS to $container\"; exit 1; }\n[ -d ../../xiph/build ] || { echo \"Please build the 'xiph' module in both Debug and Release before proceeding\"; exit 1; }\n[ -d ../../xiph/build/Debug ] || { echo \"Please build the 'xiph' module in Debug mode\"; exit 1; }\n[ -d ../../xiph/build/Release ] || { echo \"Please build the 'xiph' module in Release mode\"; exit 1; }\n\n[ -d ../../race-data ] || { echo \"Please download the data tarball and unpack to $container/race-data\"; exit 1; }\n[ -d ../../race-data/audio ] || { echo \"Your race-data/ is missing the audio/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/gamedata ] || { echo \"Your race-data/ is missing the gamedata/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/images ] || { echo \"Your race-data/ is missing the images/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/music ] || { echo \"Your race-data/ is missing the music/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/video ] || { echo \"Your race-data/ is missing the video/ directory. Correct this before proceeding.\"; exit 1; }\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -638,18 +675,13 @@
 					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
 					/Library/Frameworks/SDL.framework/Headers,
 					"$(HEADER_SEARCH_PATHS)",
-					/sw/include,
-					/opt/local/include,
+					../../xiph/libogg/include,
+					../../xiph/libvorbis/include,
+					../../xiph/libtheora/include,
+					../../xiph/extra,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/sw/lib,
-					/opt/local/lib,
-				);
-				OTHER_LDFLAGS = (
-					"-logg",
-					"-ltheora",
-					"-lvorbis",
-				);
+				LIBRARY_SEARCH_PATHS = "../../xiph/build/$(BUILD_STYLE)/";
+				OTHER_LDFLAGS = "-lxiph";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				USER_HEADER_SEARCH_PATHS = ". $(DERIVED_FILE_DIR)";
@@ -674,18 +706,13 @@
 					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
 					/Library/Frameworks/SDL.framework/Headers,
 					"$(HEADER_SEARCH_PATHS)",
-					/sw/include,
-					/opt/local/include,
+					../../xiph/libogg/include,
+					../../xiph/libvorbis/include,
+					../../xiph/libtheora/include,
+					../../xiph/extra,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/sw/lib,
-					/opt/local/lib,
-				);
-				OTHER_LDFLAGS = (
-					"-logg",
-					"-ltheora",
-					"-lvorbis",
-				);
+				LIBRARY_SEARCH_PATHS = "../../xiph/build/$(BUILD_STYLE)/";
+				OTHER_LDFLAGS = "-lxiph";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				USER_HEADER_SEARCH_PATHS = ". $(DERIVED_FILE_DIR)";

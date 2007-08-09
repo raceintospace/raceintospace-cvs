@@ -242,7 +242,9 @@ void Introd(void)
 
   read_intro_images ();
 
-  for (k=0;k<INTRO_IMAGE_COUNT;k++) {
+  /* Frame 0 is Interplay, and frame 1 is Strategic Visions */
+  /* These are both defunct, so start at frame 2 instead */
+  for (k=2;k<INTRO_IMAGE_COUNT;k++) {
     ip = &intro_images[k];
 
     gr_set_color_map (ip->map);

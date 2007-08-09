@@ -43,16 +43,14 @@
 
 3. Building on Mac OS X
 
-    1)  Use Darwin Ports or Fink to get the development libraries:
-        # port install libogg libvorbis libtheora
-        - or -
-        # fink install libogg libvorbis0 libtheora0
-    2)  Download and install the Mac OS X version of SDL from libsdl.org
-    3)  Unpack the data and music to race-data/ in the same directory that
-        holds the race/ source tree. Ensure that it contains audio/,
-        gamedata/, images/, music/, and video/. These are embedded in the
-        executable under OS X, so they are required at build time.
-    4)  Open os_macosx/RaceIntoSpace.xcodeproj and compile.
+    1)  Download and install the Mac OS X version of SDL from libsdl.org
+    2)  Unpack the data and music to race-data/ in the same directory that
+        holds the race/ source tree. The data is embedded in the .app in
+		the OS X version, so it is required at build time.
+	3)  Checkout the 'xiph' module to the same place as race/ and
+		race-data/. Open the Xcode project, and build for both Debug and
+		Release.
+    4)  Open race/os_macosx/RaceIntoSpace.xcodeproj and compile.
 
 4. Making RPM's (THIS SECTION NEEDS UPDATING)
 

@@ -1,3 +1,14 @@
+2007-08-08	Will Glynn <will@lerfjhax.com>
+
+	* V177
+	
+	* intro.c: skips first two frames of intro, as neither company exists
+	
+	* os_macosx: now statically links against the new 'xiph' module -- output binaries
+	now have no outside dependencies (i.e. MacPorts/Fink)
+	
+	* DEVELOPER: updated OS X instructions to reflect 'xiph' module
+
 2007-08-07  Will Glynn <will@lerjhax.com>
 
 	* V176
