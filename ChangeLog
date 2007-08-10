@@ -1,3 +1,12 @@
+2007-08-10  Michael McCarty <mkmccarty@raceintospace.org>
+
+	* V179
+
+	* Changed the catastrophic failure hardware safety resets back to what
+	the original Disk based version had.  On the easy level the hardware safety
+	is only halved, on all other levels the hardware safety is reset to the base
+	level.
+
 2007-08-09	Will Glynn <will@lerfjhax.com>
 
 	* V178

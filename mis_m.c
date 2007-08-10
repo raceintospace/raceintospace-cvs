@@ -557,41 +557,44 @@ int MCGraph(char plr,int lc,int safety,int val,char prob)
 
 void F_KillCrew(char mode,struct Astros *Victim)
 {
-   int k=0;
-   struct Astros *Guy;
+  int k=0, p = 0;
+  struct Astros *Guy;
 
-   Guy = NULL; /* XXX check uninitialized */
+  Guy = NULL; /* XXX check uninitialized */
 
-   // Reset Hardware
-   if (PUSSY) Mev[STEP].E->Safety/=2;
-   else Mev[STEP].E->Safety=Mev[STEP].E->Base;
+  // Reset Hardware
+  if (Victim >= &Data->P[1].Pool[0]) p = 1;
 
-   if (mode==F_ALL) {
-      for(k=0;k<MANNED[Mev[STEP].pad];k++) {  // should work in news
-         Guy=MA[Mev[STEP].pad][k].A;
-         if (Guy!=NULL) {
-          Guy->Status=1;
-          Guy->Special=3;
-          Guy->RetReas=8;
-          Guy->Assign=Guy->Moved=Guy->Crew=Guy->Task=Guy->Una=0;
-          tMen++;
-          death=1;
-          }
-		   }
-      }
-   else if (mode==F_ONE) {  // should work in news
-      if (Victim==NULL) return;
-      Victim->Status=1;
-      Victim->Special=3;
-      Victim->RetReas=8;
-      Victim->Assign=Victim->Moved=Victim->Crew=Victim->Task=0;
+  if ( (Data->Def.Lev1 == 0 && p == 0 ) || ( Data->Def.Lev2 == 0 && p == 1) )
+	Mev[STEP].E->Safety/=2;
+  else Mev[STEP].E->Safety=Mev[STEP].E->Base;
 
-      /* XXX this code was here, but Guy wsa not initialized */
-      // Guy->Una=0;
+  if (mode==F_ALL) {
+	for(k=0;k<MANNED[Mev[STEP].pad];k++) {  // should work in news
+	  Guy=MA[Mev[STEP].pad][k].A;
+	  if (Guy!=NULL) {
+		Guy->Status=1;
+		Guy->Special=3;
+		Guy->RetReas=8;
+		Guy->Assign=Guy->Moved=Guy->Crew=Guy->Task=Guy->Una=0;
+		tMen++;
+		death=1;
+	  }
+	}
+  }
+  else if (mode==F_ONE) {  // should work in news
+	if (Victim==NULL) return;
+	Victim->Status=1;
+	Victim->Special=3;
+	Victim->RetReas=8;
+	Victim->Assign=Victim->Moved=Victim->Crew=Victim->Task=0;
 
-      tMen++;
-      //death=1;
-      }
+	/* XXX this code was here, but Guy wsa not initialized */
+	// Guy->Una=0;
+
+	tMen++;
+	//death=1;
+  }
 }
 
 
