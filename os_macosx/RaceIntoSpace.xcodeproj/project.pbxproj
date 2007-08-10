@@ -220,6 +220,7 @@
 		7C94F2300C68C4CA00D047AD /* music */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = music; path = "../../race-data/music"; sourceTree = SOURCE_ROOT; };
 		7C94F2550C68C4CA00D047AD /* video */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = video; path = "../../race-data/video"; sourceTree = SOURCE_ROOT; };
 		7CCAA9D30C6946E10043DD17 /* moon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = moon.icns; sourceTree = "<group>"; };
+		7CE9C5F90C6BF01F0020F23F /* version.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = version.c; path = ../version.c; sourceTree = SOURCE_ROOT; };
 		7CF391080C6A998C0086E543 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = AUTHORS; path = ../AUTHORS; sourceTree = SOURCE_ROOT; };
 		7CF391090C6A998C0086E543 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = SOURCE_ROOT; };
 		7CF3910A0C6A998C0086E543 /* DEVELOPER */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = DEVELOPER; path = ../DEVELOPER; sourceTree = SOURCE_ROOT; };
@@ -404,6 +405,7 @@
 		7CF391070C6A996F0086E543 /* Documents */ = {
 			isa = PBXGroup;
 			children = (
+				7CE9C5F90C6BF01F0020F23F /* version.c */,
 				7CF391080C6A998C0086E543 /* AUTHORS */,
 				7CF391090C6A998C0086E543 /* ChangeLog */,
 				7CF3910A0C6A998C0086E543 /* DEVELOPER */,
@@ -489,13 +491,14 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/../configure.in",
+				"$(SRCROOT)/../version.c",
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/version.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Generates a version.h based on configure.in, creating autoconf-like defines\negrep '^AC_INIT' ../configure.in | awk -F '[,()]' '{\nprint \"#define PACKAGE_BUGREPORT \\\"\" $4 \"\\\"\"\nprint \"#define PACKAGE_NAME \\\"\" $2 \"\\\"\"\nprint \"#define PACKAGE_STRING \\\"\" $2 \" \" $3 \"\\\"\"\nprint \"#define PACKAGE_TARNAME \\\"\" $5 \"\\\"\"\nprint \"#define PACKAGE_VERSION \\\"\" $3 \"\\\"\"\n}' > \"$DERIVED_FILE_DIR/version.h\"\n";
+			shellScript = "# Generates a version.h based on configure.in, creating autoconf-like defines\negrep '^AC_INIT' ../configure.in | awk -F '[,()]' '{\nprint \"#define PACKAGE_BUGREPORT \\\"\" $4 \"\\\"\"\nprint \"#define PACKAGE_NAME \\\"\" $2 \"\\\"\"\nprint \"#define PACKAGE_STRING \\\"\" $2 \" \" $3 \"\\\"\"\nprint \"#define PACKAGE_TARNAME \\\"\" $5 \"\\\"\"\nprint \"#define PACKAGE_VERSION \\\"\" $3 \"\\\"\"\n}' > \"$DERIVED_FILE_DIR/version.h\"\n\n# Add an additional define for version.c\negrep '^[0-9]+$' ../version.c | sed -e 's/^/#define PACKAGE_BUILD \"/' -e 's/$/\"/' >> \"$DERIVED_FILE_DIR/version.h\"\n";
 		};
 		7CCAA9910C6927530043DD17 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -694,6 +697,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(HOME)/Library/Frameworks",
 					/Library/Frameworks,

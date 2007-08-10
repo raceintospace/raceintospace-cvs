@@ -1,3 +1,14 @@
+2007-08-09	Will Glynn <will@lerfjhax.com>
+
+	* V178
+	
+	* admin/main.c: fixed references to P[plr[n]], which can go out of bounds and crash
+	
+	* os_macosx/: project now builds Release as Universal Binaries (ppc/i386) and copies
+	version.c to a #define PACKAGE_BUILD
+	
+	* sdl.c: includes the build number in the title bar if defined
+
 2007-08-08	Will Glynn <will@lerfjhax.com>
 
 	* V177

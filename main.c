@@ -400,9 +400,9 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
        NextTurn(plr[i]);
        VerifySF(plr[i]);
        News(plr[i]);                  // EVENT FOR PLAYER
-       if ((Data->P[plr[i]].Mission[0].MissionCode>6 ||
-           Data->P[plr[i]].Mission[1].MissionCode>6 ||
-           Data->P[plr[i]].Mission[2].MissionCode>6) &&
+       if ((Data->P[plr[i] % 2].Mission[0].MissionCode>6 ||
+           Data->P[plr[i] % 2].Mission[1].MissionCode>6 ||
+           Data->P[plr[i] % 2].Mission[2].MissionCode>6) &&
            (NOCOPRO && !PUSSY ))
           xMODE &= ~xMODE_NOCOPRO;
        VerifyCrews(plr[i]);
@@ -515,8 +515,8 @@ for (i = 0; i < kik; i++)
 
     if (Data->Season==1) {
       for (i=0;i<NUM_PLAYERS;i++) {
-	Data->P[plr[i]-AI[i]*2].Cash+=Data->P[plr[i]-AI[i]*2].Budget;
-	if (Data->P[plr[i]-AI[i]*2].Cash > 999) Data->P[plr[i]-AI[i]*2].Cash=900;
+	Data->P[plr[i] % 2].Cash+=Data->P[plr[i]-AI[i] % 2].Budget;
+	if (Data->P[plr[i] % 2].Cash > 999) Data->P[plr[i]-AI[i] % 2].Cash=900;
       }
 	Data->Season=0;
 	Data->Year++;

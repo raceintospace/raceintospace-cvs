@@ -290,7 +290,11 @@ av_setup(void)
 	}
 #endif
 
+#ifdef PACKAGE_BUILD
+	SDL_WM_SetCaption(PACKAGE_NAME " " PACKAGE_VERSION " build " PACKAGE_BUILD, NULL);
+#else
 	SDL_WM_SetCaption(PACKAGE_STRING, NULL);
+#endif
 
 	if ((display = SDL_SetVideoMode(MAX_X * 2, MAX_Y * 2, 24, video_flags)) == NULL)
 	{

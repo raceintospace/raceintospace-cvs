@@ -522,8 +522,8 @@ void FileAccess(char mode)
 
 	      if (done==YES) {
 	         i--;  // decrement to correct for the FOR loop
-	         strcpy(SaveHdr->PName[0],Data->P[plr[0]].Name);
-	         strcpy(SaveHdr->PName[1],Data->P[plr[1]].Name);
+	         strcpy(SaveHdr->PName[0],Data->P[plr[0] % 2].Name);
+	         strcpy(SaveHdr->PName[1],Data->P[plr[1] % 2].Name);
            //modem save game hack
            if (Option!=-1)
             {
@@ -621,8 +621,8 @@ void FileAccess(char mode)
 	  if (done==YES)
       {
 	    i--;  // decrement to correct for the FOR loop
-	    strcpy(SaveHdr->PName[0],Data->P[plr[0]].Name);
-	    strcpy(SaveHdr->PName[1],Data->P[plr[1]].Name);
+	    strcpy(SaveHdr->PName[0],Data->P[plr[0] % 2].Name);
+	    strcpy(SaveHdr->PName[1],Data->P[plr[1] % 2].Name);
 
         // play-by-mail save game hack
         // starts US side
@@ -857,8 +857,8 @@ save_game (char *name)
 	strcpy (hdr.Name, "AUTOSAVE");
 	hdr.Name[sizeof hdr.Name - 1] = 0x1a;
 
-	strcpy(hdr.PName[0], Data->P[plr[0]].Name);
-	strcpy(hdr.PName[1], Data->P[plr[1]].Name);
+	strcpy(hdr.PName[0], Data->P[plr[0] % 2].Name);
+	strcpy(hdr.PName[1], Data->P[plr[1] % 2].Name);
 	hdr.Country[0] = Data->plr[0];
 	hdr.Country[1] = Data->plr[1];
 	hdr.Season = Data->Season;
@@ -1293,8 +1293,8 @@ void SaveMail(void)
   if (done==YES)
    {
 	 i--;  // decrement to correct for the FOR loop
-	 strcpy(SaveHdr->PName[0],Data->P[plr[0]].Name);
-	 strcpy(SaveHdr->PName[1],Data->P[plr[1]].Name);
+	 strcpy(SaveHdr->PName[0],Data->P[plr[0] % 2].Name);
+	 strcpy(SaveHdr->PName[1],Data->P[plr[1] % 2].Name);
 
     // play-by-mail save game hack
     // switch sides
