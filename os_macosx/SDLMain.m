@@ -10,6 +10,8 @@
 #import <sys/param.h> /* for MAXPATHLEN */
 #import <unistd.h>
 
+#import "SmartCrashReportsInstall.h"
+
 /* Portions of CPS.h */
 typedef struct CPSProcessSerNum
 {
@@ -54,6 +56,47 @@ static BOOL   gCalledAppMainline = FALSE;
 	/* TODO */
 }
 
+- (IBAction)enableCrashReporting:(id)sender
+{
+	if (UnsanitySCR_InstalledVersion(NULL) < UnsanitySCR_InstallableVersion()) {
+		BOOL retry;
+		do {
+			retry = FALSE;
+			
+			switch (UnsanitySCR_Install(0)) {
+				case kUnsanitySCR_Install_NoError:
+					NSRunInformationalAlertPanel(@"Crash Reporting Enabled", @"The crash reporting tool was installed successfully. If Race Into Space crashes, please click the Report... button to submit a detailed crash report.", @"Great!", nil, nil);
+					break;
+					
+				case kUnsanitySCR_Install_InstalledGlobally:
+					NSRunCriticalAlertPanel(@"Crash Reporting Problem", @"An earlier version of SmartCrashReports was installed into /Library manually or by another application. Please upgrade this by hand, by downloading the latest version from http://www.smartcrashreports.com/ and running the installer.", @"All right", nil, nil);
+					break;
+					
+				case kUnsanitySCR_Install_UserCancelled:
+					// The user cancelled in a dialog already, so we can silently eat this without further bothering them
+					break;
+					
+				case kUnsanitySCR_Install_NoPermissions:
+					NSRunAlertPanel(@"Crash Reporting Problem", @"The crash reporter installer failed because of a permissions error, but was not any more specific. If it happens persistently, please contact the Race Into Space developers.", @"All right", nil, nil);
+					
+				case kUnsanitySCR_Install_AuthFailure:
+					if (NSRunAlertPanel(@"Crash Reporting Problem", @"Enabling crash reporting requires you to authenticate yourself.", @"Authenticate again", @"Give up", nil) == 1)
+						retry = TRUE;
+					else
+						retry = FALSE;
+					break;
+					
+				case kUnsanitySCR_Install_WillNotInstall:
+				case kUnsanitySCR_Install_OutOfMemory:
+				default:
+					NSRunCriticalAlertPanel(@"Crash Reporting Problem", @"Something unusual happened that prevented installing the crash reporter. If it happens persistently, please contact the Race Into Space developers.", @"All right", nil, nil);
+					break;
+			}			
+		} while (retry);
+	} else {
+		NSRunInformationalAlertPanel(@"Crash Reporting Enabled", @"The crash reporting tool is installed. If Race Into Space crashes, please click the Report... button to submit a detailed crash report.", @"Great!", nil, nil);
+	}
+}
 
 /* Set the working directory to the .app directory */
 - (void) setupWorkingDirectory

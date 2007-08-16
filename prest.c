@@ -604,9 +604,17 @@ int AllotPrest(char plr,char mis)
    for (i=0;i<STEPnum;i++) {
       ival=abs(Mev[i].Prest);
       cval=Mev[i].PComp;
-      if (Mev[i].StepInfo==0 && PVal[ival]==0) cval=4;
-      if (PVal[ival]!=4) PVal[ival]=cval;
-      }
+			
+			// ival of 100 seems to mean "don't record this in PVal[]"
+			// Regardless of intention, it's out of bounds, so don't access or overwrite it
+			if (ival != 100) {
+				if (Mev[i].StepInfo==0 && PVal[ival]==0)
+					cval=4;
+				
+				if (PVal[ival]!=4)
+					PVal[ival]=cval;
+			}
+	 }
 
    // EVA FIX FOR ALTERNATE STEPS LATER IN MISSION
    if (Mis.EVA==1 && (PVal[26]==0 || PVal[26]==5)) PVal[26]=4;

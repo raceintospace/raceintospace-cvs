@@ -10,4 +10,5 @@
 @interface SDLMain : NSObject
 - (IBAction)prefsMenu:(id)sender;
 - (IBAction)help:(id)sender;
+- (IBAction)enableCrashReporting:(id)sender;
 @end

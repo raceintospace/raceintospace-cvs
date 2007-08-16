@@ -1,3 +1,20 @@
+2007-08-09	Will Glynn <will@lerfjhax.com>
+
+	* V180
+	
+	* os_macosx/: project now bundles Sparkle for automatic updates. Framework is
+	downloaded and extracted into os_macosx/vendor/ automatically as required.
+	Appcast-related scripts and documentation for distributing updates are accessible
+	in the Sourceforge group space.
+	
+	* os_macosx/: project now bundles SmartCrashReports. As with Sparkle, it's downloaded
+	and extracted automatically. Crash reports are collected and stored in the SF.net
+	_crash database, though nothing is done with them at the moment.
+	
+	* prest.c: fixed crash bug -- on OS X Intel, anyway -- where manned missions would
+	frequently overrun an array on the stack. This affected all platforms, and I don't
+	really know why it didn't crash on others.
+
 2007-08-10  Michael McCarty <mkmccarty@raceintospace.org>
 
 	* V179
