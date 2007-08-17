@@ -1,5 +1,9 @@
 2007-08-17  Will Glynn <will@lerfjhax.com>
 
+	* V184
+	
+	* endgame.c: victory music fixes
+
 	* V183
 	
 	* os_macosx/: build process now confirms the existence of midi/ in the data

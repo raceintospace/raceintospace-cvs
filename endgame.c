@@ -377,6 +377,8 @@ void Draw_NewEnd(char win)
  long size;
  FILE *in;
  
+ music_start(M_VICTORY);
+
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
  in=sOpen("WINNER.BUT","rb",0);
@@ -400,8 +402,8 @@ void NewEnd(char win,char loc)
  GXHEADER local;
  int i,Re_Draw=0,cdstat;
  char R_V=0;
- 
- CDAccess(cdROM,3,1); //PLAY CD victory
+
+ music_start(M_VICTORY);
  EndGame(win,loc);
  Draw_NewEnd(win);
  grSetMousePos(159,181);
@@ -411,15 +413,11 @@ void NewEnd(char win,char loc)
  GV(&local,162,92);gxClearVirtual(&local,0);
 
  while (i==0)
-  {
-	key=0;GetMouse();
+ {
+	 key=0;GetMouse();
    strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
-
-   cdstat=CDAccess(cdROM,3,3);  // CD STATUS
-   if (!(cdstat&0x02)) {
-    CDAccess(cdROM,3,2); // STOP CD
-    CDAccess(cdROM,3,1); // PLAY CD
-   }
+	 
+	 music_start(M_VICTORY);
 
    if (((key=='P' || key=='M' || key=='H' || key=='S') || mousebuttons>0) || R_V==0)
     if (Re_Draw==1)
@@ -442,6 +440,7 @@ void NewEnd(char win,char loc)
      }
    if (((x>=14 && y>=182 && x<=65 && y<=190 && mousebuttons>0) || key=='H') || R_V==1)
     {
+		 // History box
      InBox(14,182,65,190);
      WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
@@ -455,8 +454,8 @@ void NewEnd(char win,char loc)
     }
    if (((x>=74 && y>=182 && x<=125 && y<=190 && mousebuttons>0) || key=='S') || R_V==2)
     {
-     cdstat=CDAccess(cdROM,3,3);
-     if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
+		 // Stats box
+		 music_stop();
      InBox(74,182,125,190);
      WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
@@ -464,16 +463,15 @@ void NewEnd(char win,char loc)
      OutBox(74,182,125,190);
      music_start(M_THEME);
      Stat(win);Draw_NewEnd(win);
-     music_stop(); 
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
      grSetMousePos(159,181);
      R_V=0;
      R_V=Burst(win);
     }
 	if (((x>=134 && y>=182 && x<=185 && y<=190 && mousebuttons>0) || key=='P') || R_V==3)
-    {
-     cdstat=CDAccess(cdROM,3,3);
-     if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
+	{
+		 // Parade
+		 music_stop();
      InBox(134,182,185,190);
      WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
@@ -485,13 +483,13 @@ void NewEnd(char win,char loc)
      ShBox(149,9,309,100);InBox(153,13,305,96);
      music_start(M_PRGMTRG);
      Replay(win,0,154,14,149,82,(win==0)?"UPAR":"SPAR");
-     music_stop();
+		 music_stop();
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
     }
    if (((x>=194 && y>=182 && x<=245 && y<=190 && mousebuttons>0) || key=='M') || R_V==4)
     {
-     cdstat=CDAccess(cdROM,3,3);
-     if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
+		 // Moon EVA
+		 music_stop();
      InBox(194,182,245,190);
      WaitForMouseUp();
      if (key>0 || R_V>0) delay(150);
@@ -503,13 +501,11 @@ void NewEnd(char win,char loc)
      ShBox(149,9,309,100);InBox(153,13,305,96);
      music_start(M_MISSPLAN);
      Replay(win,0,154,14,149,82,(win==0) ? "PUM3C6":"PSM3C6");
-     music_stop();
+		 music_stop();
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
     }
    if (((x>=254 && y>=182 && x<=305 && y<=190 && mousebuttons>0) || key==K_ENTER) || R_V==5)
     {
-     cdstat=CDAccess(cdROM,3,3);
-     if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
      music_stop();
      InBox(254,182,305,190);
      WaitForMouseUp();
@@ -518,7 +514,7 @@ void NewEnd(char win,char loc)
      OutBox(254,182,305,190);
     };
   }
- DV(&local);  //music_stop();
+ DV(&local);
  return;
 }
 

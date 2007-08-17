@@ -534,7 +534,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Remove music\n[ -d \"$BUILT_PRODUCTS_DIR/Race Into Space.app/Contents/Resources/audio/music\" ] && rm -r \"$BUILT_PRODUCTS_DIR/Race Into Space.app/Contents/Resources/audio/music\"";
+			shellScript = "# Remove music\n[ -d \"$BUILT_PRODUCTS_DIR/Race Into Space.app/Contents/Resources/audio/music\" ] && rm -r \"$BUILT_PRODUCTS_DIR/Race Into Space.app/Contents/Resources/audio/music\"\n\nexit 0";
 		};
 		7CCA9BB30C691D6B0043DD17 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
