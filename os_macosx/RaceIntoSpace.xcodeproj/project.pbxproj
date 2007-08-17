@@ -241,7 +241,7 @@
 		7CF3910F0C6A998C0086E543 /* TODO */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = TODO; path = ../TODO; sourceTree = SOURCE_ROOT; };
 		7CF391100C6A998C0086E543 /* WHO_SPOT */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = WHO_SPOT; path = ../WHO_SPOT; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Race Into Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Race Into Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Race Into Space.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Race Into Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,6 +475,7 @@
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				002F39FD09D0883400EBEB88 /* Copy Frameworks into .app bundle */,
+				7C272F580C75CBC90053CAC0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -522,6 +523,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		7C272F580C75CBC90053CAC0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Remove music\n[ -d \"$BUILT_PRODUCTS_DIR/Race Into Space.app/Contents/Resources/audio/music\" ] && rm -r \"$BUILT_PRODUCTS_DIR/Race Into Space.app/Contents/Resources/audio/music\"";
+		};
 		7CCA9BB30C691D6B0043DD17 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -564,7 +578,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Check that our build-time requirements are set\n\ncontainer=`dirname \\`dirname \\\\\\`pwd\\\\\\`\\``\n\n[ -d ../../xiph ] || { echo \"Please check out the 'xiph' module from CVS to $container\"; exit 1; }\n[ -d ../../xiph/build ] || { echo \"Please build the 'xiph' module in both Debug and Release before proceeding\"; exit 1; }\n[ -d ../../xiph/build/Debug ] || { echo \"Please build the 'xiph' module in Debug mode\"; exit 1; }\n[ -d ../../xiph/build/Release ] || { echo \"Please build the 'xiph' module in Release mode\"; exit 1; }\n\n[ -d ../../race-data ] || { echo \"Please download the data tarball and unpack to $container/race-data\"; exit 1; }\n[ -d ../../race-data/audio ] || { echo \"Your race-data/ is missing the audio/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/gamedata ] || { echo \"Your race-data/ is missing the gamedata/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/images ] || { echo \"Your race-data/ is missing the images/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/music ] || { echo \"Your race-data/ is missing the music/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/video ] || { echo \"Your race-data/ is missing the video/ directory. Correct this before proceeding.\"; exit 1; }\n\n# Make sure os_macosx/vendor/ exists\n[ -d vendor ] || { mkdir vendor || exit 1; }\n\n# Download and unpack Sparkle if necessary, making sure to use the Apple-supplied unzip, even if the user has their own\n[ -d vendor/Sparkle.framework ] || {\n\tcd vendor && \\\n\tcurl -O http://sparkle.andymatuschak.org/files/Sparkle-1.1.zip && \\\n\tmkdir Sparkle-1.1 && \\\n\t/usr/bin/unzip Sparkle-1.1.zip -d Sparkle-1.1 && \\\n\tmv Sparkle-1.1/Extras/English-Only\\ Framework/Sparkle.framework . && \\\n\trm -r Sparkle-1.1.zip Sparkle-1.1 && \\\n\tcd ..\n}\n\n# Download and unpack SmartCrashReports if necessary\n[ -d vendor/Smart\\ Crash\\ Reports\\ SDK ] || {\n\tcd vendor && \\\n\tcurl -O http://unsanity.net/smartcrashreports-121.dmg && \\\n\thdiutil attach -quiet -private smartcrashreports-121.dmg && \\\n\trsync -a /Volumes/Smart\\ Crash\\ Reports\\ 1.2.1/Smart\\ Crash\\ Reports\\ 1.2.1\\ Installer.app/Contents/Resources/ui/Smart\\ Crash\\ Reports\\ SDK . && \\\n\thdiutil detach /Volumes/Smart\\ Crash\\ Reports\\ 1.2.1/ &&\n\trm smartcrashreports-121.dmg && \\\n\tcd ..\n}\n";
+			shellScript = "# Check that our build-time requirements are set\n\ncontainer=`dirname \\`dirname \\\\\\`pwd\\\\\\`\\``\n\n[ -d ../../xiph ] || { echo \"Please check out the 'xiph' module from CVS to $container\"; exit 1; }\n[ -d ../../xiph/build ] || { echo \"Please build the 'xiph' module in both Debug and Release before proceeding\"; exit 1; }\n[ -d ../../xiph/build/Debug ] || { echo \"Please build the 'xiph' module in Debug mode\"; exit 1; }\n[ -d ../../xiph/build/Release ] || { echo \"Please build the 'xiph' module in Release mode\"; exit 1; }\n\n[ -d ../../race-data ] || { echo \"Please download the data tarball and unpack to $container/race-data\"; exit 1; }\n[ -d ../../race-data/audio ] || { echo \"Your race-data/ is missing the audio/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/gamedata ] || { echo \"Your race-data/ is missing the gamedata/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/images ] || { echo \"Your race-data/ is missing the images/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/midi ] || { echo \"Your race-data/ is missing the midi/ directory. Correct this before proceeding.\"; exit 1; }\n[ -d ../../race-data/video ] || { echo \"Your race-data/ is missing the video/ directory. Correct this before proceeding.\"; exit 1; }\n\n# Make sure os_macosx/vendor/ exists\n[ -d vendor ] || { mkdir vendor || exit 1; }\n\n# Download and unpack Sparkle if necessary, making sure to use the Apple-supplied unzip, even if the user has their own\n[ -d vendor/Sparkle.framework ] || {\n\tcd vendor && \\\n\tcurl -O http://sparkle.andymatuschak.org/files/Sparkle-1.1.zip && \\\n\tmkdir Sparkle-1.1 && \\\n\t/usr/bin/unzip Sparkle-1.1.zip -d Sparkle-1.1 && \\\n\tmv Sparkle-1.1/Extras/English-Only\\ Framework/Sparkle.framework . && \\\n\trm -r Sparkle-1.1.zip Sparkle-1.1 && \\\n\tcd ..\n}\n\n# Download and unpack SmartCrashReports if necessary\n[ -d vendor/Smart\\ Crash\\ Reports\\ SDK ] || {\n\tcd vendor && \\\n\tcurl -O http://unsanity.net/smartcrashreports-121.dmg && \\\n\thdiutil attach -quiet -private smartcrashreports-121.dmg && \\\n\trsync -a /Volumes/Smart\\ Crash\\ Reports\\ 1.2.1/Smart\\ Crash\\ Reports\\ 1.2.1\\ Installer.app/Contents/Resources/ui/Smart\\ Crash\\ Reports\\ SDK . && \\\n\thdiutil detach /Volumes/Smart\\ Crash\\ Reports\\ 1.2.1/ &&\n\trm smartcrashreports-121.dmg && \\\n\tcd ..\n}\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

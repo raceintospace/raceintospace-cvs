@@ -1,3 +1,10 @@
+2007-08-17  Will Glynn <will@lerfjhax.com>
+
+	* V183
+	
+	* os_macosx/: build process now confirms the existence of midi/ in the data
+	directory, and excludes audio/music/ if present from the resulting .app
+
 2007-08-16	Will Glynn <will@lerfjhax.com>
 
 	* V182
