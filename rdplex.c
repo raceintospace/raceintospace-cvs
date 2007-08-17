@@ -212,13 +212,11 @@ char RD(char plr)
   if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
   else {InBox(165,184,315,194);};
   strcpy(IDT,"i009");strcpy(IKEY,"k009");
-  PreLoadMusic(M_HARDWARE);
   FadeIn(2,pal,10,0,0);
-  PlayMusic(0);
+  music_start(M_HARDWARE);
   WaitForMouseUp();
   while (1)
   {
-    UpdateMusic();
     key=0;GetMouse();
     if (mousebuttons>0 || key>0)
      {
@@ -371,7 +369,7 @@ char RD(char plr)
 	    InBox(245,5,314,17);
    	 WaitForMouseUp();
 	    for(i=0;i<4;i++) for(j=0;j<7;j++) Data->P[plr].Buy[i][j]=buy[i][j];
-       KillMusic();
+       music_stop();
 	    Del_RD_BUT();
 	    call=0;
 	    HARD1=1;UNIT1=1;
@@ -384,7 +382,7 @@ char RD(char plr)
 	    HARD1=hardware;UNIT1=unit;
 	    for(i=0;i<4;i++) for(j=0;j<7;j++)
          Data->P[plr].Buy[i][j]=buy[i][j];
-       KillMusic();
+       music_stop();
       if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
 	    if (call==1) return 1;        // go back through gateway
 	    call=1;
@@ -400,10 +398,9 @@ char RD(char plr)
 	    RDButTxt(0,buy[hardware-1][unit-1],plr);
        if (buy[hardware-1][unit-1]==0) QUnit(hardware,unit,plr);
        else {InBox(165,184,315,194);};
-       PreLoadMusic(M_HARDWARE);
 
 	    FadeIn(2,pal,10,0,0);
-       PlayMusic(1);
+			music_start(M_HARDWARE);
 	    WaitForMouseUp();
       };
     };
@@ -664,13 +661,11 @@ char HPurc(char plr)
   //memset(vhptr.vptr,0x00,64000);
   //memcpy(vhptr.vptr,Data,sizeof(struct Players));
 
-  PreLoadMusic(M_FILLER);
   FadeIn(2,pal,10,0,0);
-  PlayMusic(1);
+  music_start(M_FILLER);
   WaitForMouseUp();
   while (1)
   {
-    UpdateMusic();
     key=0;GetMouse();
     if ((x>266 && y>164 && x<314 && y<174 && mousebuttons>0) || key=='Z') {
       InBox(266,164,314,174);
@@ -773,7 +768,7 @@ char HPurc(char plr)
        {
      	  InBox(245,5,314,17);
 				WaitForMouseUp();
-        KillMusic();
+        music_stop();
         Del_RD_BUT(); call=0;
         HARD1=1;UNIT1=1;
         remove_savedat("UNDO.TMP");
@@ -785,7 +780,7 @@ char HPurc(char plr)
     	 InBox(5,73,152,83);
 			 WaitForMouseUp();
     	 HARD1=hardware; UNIT1=unit;
-       KillMusic();
+       music_stop();
        remove_savedat("UNDO.TMP");
       if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
     	 if (call==1) return 1;
@@ -805,9 +800,8 @@ char HPurc(char plr)
      fwrite(Data,sizeof (struct Players),1,undo);
      fclose(undo);
 
-       PreLoadMusic(M_FILLER);
    	 FadeIn(2,pal,10,0,0);
-       PlayMusic(1);
+       music_start(M_FILLER);
    	 WaitForMouseUp();
       };
   };

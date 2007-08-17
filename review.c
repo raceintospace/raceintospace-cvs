@@ -149,9 +149,8 @@ if (Data->P[plr].PresRev[0]!=0x7F) FadeOut(2,pal,10,0,0);
 
 void Review(char plr)
 {
-PreLoadMusic((plr==0)?M_PRES:M_RD);
 DrawReview(plr);
-PlayMusic(0);
+music_start((plr==0)?M_PRES:M_RD);
 WaitForMouseUp();
  while (1)
   {
@@ -162,7 +161,7 @@ WaitForMouseUp();
 	    {
 	     InBox(245,5,314,17);
 	     WaitForMouseUp();
-       KillMusic();
+       music_stop();
 	     return;  /* Done */
        };
      }
@@ -173,7 +172,7 @@ WaitForMouseUp();
 
 void MisRev(char plr,int pres)
 {
-  if (!AI[plr]) PreLoadMusic( (pres>0) ? M_SUCCESS:M_UNSUCC);
+  if (!AI[plr]) music_start((pres>0) ? M_SUCCESS: M_UNSUCC);
   
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);

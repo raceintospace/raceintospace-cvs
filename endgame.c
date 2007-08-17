@@ -462,10 +462,9 @@ void NewEnd(char win,char loc)
      if (key>0 || R_V>0) delay(150);
      i=0;key=0;
      OutBox(74,182,125,190);
-     PreLoadMusic(M_THEME);
-     PlayMusic(1);
+     music_start(M_THEME);
      Stat(win);Draw_NewEnd(win);
-     KillMusic(); 
+     music_stop(); 
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
      grSetMousePos(159,181);
      R_V=0;
@@ -484,10 +483,9 @@ void NewEnd(char win,char loc)
      FadeOut(1,pal,40,128,1);RectFill(195,0,319,172,0);
      gxGetImage(&local,149,9,309,100,0);
      ShBox(149,9,309,100);InBox(153,13,305,96);
-     PreLoadMusic(M_PRGMTRG);
-     PlayMusic(1);
+     music_start(M_PRGMTRG);
      Replay(win,0,154,14,149,82,(win==0)?"UPAR":"SPAR");
-     KillMusic();
+     music_stop();
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
     }
    if (((x>=194 && y>=182 && x<=245 && y<=190 && mousebuttons>0) || key=='M') || R_V==4)
@@ -503,17 +501,16 @@ void NewEnd(char win,char loc)
      FadeOut(1,pal,40,128,1);RectFill(195,0,319,172,0);
      gxGetImage(&local,149,9,309,100,0);
      ShBox(149,9,309,100);InBox(153,13,305,96);
-     PreLoadMusic(M_MISSPLAN);
-     PlayMusic(1);
+     music_start(M_MISSPLAN);
      Replay(win,0,154,14,149,82,(win==0) ? "PUM3C6":"PSM3C6");
-     KillMusic();
+     music_stop();
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
     }
    if (((x>=254 && y>=182 && x<=305 && y<=190 && mousebuttons>0) || key==K_ENTER) || R_V==5)
     {
      cdstat=CDAccess(cdROM,3,3);
      if (cdstat&0x02) CDAccess(cdROM,3,2); // STOP CD
-     KillMusic();
+     music_stop();
      InBox(254,182,305,190);
      WaitForMouseUp();
      if (key>0) delay(150);
@@ -521,7 +518,7 @@ void NewEnd(char win,char loc)
      OutBox(254,182,305,190);
     };
   }
- DV(&local);  //KillMusic();
+ DV(&local);  //music_stop();
  return;
 }
 
@@ -530,7 +527,6 @@ void FakeWin(char win)
  int i,r;
  char miss,prog,man1,man2,man3,man4,bud,yr;
  
- PreLoadMusic(M_INTERLUD);
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
  ShBox(0,0,319,22);InBox(3,3,30,19);
@@ -629,7 +625,7 @@ void FakeWin(char win)
 	 }
  grSetColor(6);
  FakeHistory(win,yr);
- PlayMusic(0);
+ music_start(M_INTERLUD);
  FadeIn(2,pal,10,0,0);
  
  WaitForMouseUp();
@@ -646,7 +642,7 @@ void FakeWin(char win)
 	   OutBox(244,5,313,17);
 	  };
   }
- KillMusic();
+ music_stop();
  return;
 }
 
@@ -719,8 +715,7 @@ void AltHistory(char plr)  // holds the winning player
 void SpecialEnd(void)
 {
  char i;
- PreLoadMusic(M_BADNEWS);
- PlayMusic(1);
+ music_start(M_BADNEWS);
  
  gxClearDisplay(0,0);
  ShBox(0,0,319,24);DispBig(5,5,"FAILED OBJECTIVE",1,-1);
@@ -754,7 +749,7 @@ void SpecialEnd(void)
 	   i=1;key=0;
 	  };
   }
- KillMusic();
+ music_stop();
  return;
 }
 
@@ -830,8 +825,7 @@ void PlayFirst(char plr,char first)
 
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
- PreLoadMusic(M_LIFTOFF);
- PlayMusic(1);
+ music_start(M_LIFTOFF);
  ShBox(80,18,240,39);DispBig(92,22,"PRESTIGE FIRST",0,-1);
  ShBox(80,41,240,132);InBox(84,45,236,128);RectFill(85,46,235,127,0);
  ShBox(80,134,240,189); //77 first parameter
@@ -876,7 +870,7 @@ void PlayFirst(char plr,char first)
  PauseMouse();
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
- KillMusic();
+ music_stop();
  return;
 }
 

@@ -115,7 +115,7 @@ LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
 
 int main(int argc, char *argv[])
 {
-  int i,cdstat;
+  int i;
   FILE *fin;
   const char * see_readme = "look for further instructions in the README file";
 
@@ -194,6 +194,8 @@ int main(int argc, char *argv[])
     df=1;
 
 tommy:
+		music_start(M_LIFTOFF);
+			
     i=99;
     while (i == 99)
      {
@@ -203,14 +205,8 @@ tommy:
       if (i==99) {Introd();PortPal(0);}
      }
 
-    if (i!=5) {  //except for credits
-     cdstat=CDAccess(cdROM,2,3);
-     if (cdstat&0x02) CDAccess(cdROM,2,2); // STOP CD track 2 Buzz Opening
-    }
-
     switch(i) {
       case 1:  // New Game
-         //KillMusic();
 	      LOAD=QUIT=0,BUTLOAD=0;
 	      HARD1=UNIT1=1;
          MAIL=-1;Option=-1;
@@ -227,12 +223,8 @@ tommy:
 	      InitData();                   // PICK EVENT CARDS N STUFF
 	      MainLoop();                   // PLAY GAME
             gxClearDisplay(0,0);
-
-         //PreLoadMusic(M_LIFTOFF);
-         //PlayMusic(1);
 	      break;
       case 2: // Play Old Game
-          //KillMusic();
 	       LOAD=QUIT=BUTLOAD=0;
 	       HARD1=UNIT1=1;
           MAIL=-1;Option=-1;
@@ -249,8 +241,6 @@ tommy:
          else if (!QUIT) FadeOut(2,pal,10,0,0);
          QUIT=0;
         gxClearDisplay(0,0);
-         //PreLoadMusic(M_LIFTOFF);
-         //PlayMusic(1);
 	      break;
       case 3:
          break;

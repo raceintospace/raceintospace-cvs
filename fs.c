@@ -231,6 +231,14 @@ try_find_file(const char *name, const char *mode, int type)
 					NULL);
 			where = "image";
 			break;
+		case FT_MIDI:
+			f = s_open_helper(gd, name, mode,
+					"audio/midi",
+					"midi",
+					"audio/music",
+					NULL);
+			where = "midi";
+			break;
 		default:
 			assert("Unknown FT_* specified");
 	}

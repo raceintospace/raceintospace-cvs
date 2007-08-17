@@ -620,15 +620,14 @@ void VAB(char plr)
 }
 #endif
 
-  PreLoadMusic(M_HARDWARE);
-  PlayMusic(0);
+  music_start(M_HARDWARE);
   CV=0;
 begvab:
   mis=FutureCheck(plr,1);
   if (mis==5)
   {
      Vab_Spot = (Data->P[plr].Mission[0].Hard[Mission_PrimaryBooster] > 0) ? 1 : 0;
-     KillMusic();
+     music_stop();
      free(MI); 
      return;
   };

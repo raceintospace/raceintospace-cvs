@@ -257,8 +257,7 @@ void PadPict(char poff)
 void ShowPad(char plr,char pad)
 {
   char temp;
-  PreLoadMusic((plr==1)?M_USMIL:M_USSRMIL);
-  PlayMusic(0);
+  music_start((plr==1)?M_USMIL:M_USSRMIL);
   PadDraw(plr,pad);
   temp=CheckCrewOK(plr,pad);
    if (temp==1) //found mission no crews

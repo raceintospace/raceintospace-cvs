@@ -38,10 +38,13 @@ void Intel(char plr)
   char IImg[3]={15,17,0};
   int i,beg;
 
-	if (plr==1) {PreLoadMusic(M_INTELLEG);strncpy((char *)&IName[1],"KGB",3);}
-  else PreLoadMusic(M_INTEL);
   // FadeOut(2,pal,10,0,0);
-  PlayMusic(0);
+	if (plr==1) {
+		music_start(M_INTELLEG);
+		strncpy((char *)&IName[1],"KGB",3);
+	} else {
+		music_start(M_INTEL);
+	}
   beg=1;
 
   do {
@@ -75,7 +78,7 @@ void Intel(char plr)
   } while (i==1 || i==2);      
 
   remove_savedat("PORT.TMP"); // remove temp file
-  KillMusic();
+  music_stop();
 }
 
 

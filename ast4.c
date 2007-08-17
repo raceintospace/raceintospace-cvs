@@ -459,13 +459,12 @@ void Programs(char plr,char prog)
   char ksel=0;
   strcpy(IDT,"i036");strcpy(IKEY,"k036");
   
-  PreLoadMusic(M_PRGMTRG);
   for (i=0;i<100;i++) M[i]=-1;
   max=prog;
   if (max>4) max=4;
   if (prog==4) max=3;
   now2=0;BarA=count=grp=0;
-  PlayMusic(0);
+  music_start(M_PRGMTRG);
   DrawProgs(plr,prog);
   Flts(0,0);
   for (i=0;i<8;i++) {
@@ -487,7 +486,7 @@ void Programs(char plr,char prog)
   FadeIn(2,pal,10,0,0);
   chk=CheckProgram(plr,prog);
   
-  if (chk==0) {if (plr==0) Help("i113");else Help("i114");KillMusic();return;}
+  if (chk==0) {if (plr==0) Help("i113");else Help("i114");music_stop();return;}
   WaitForMouseUp();
   while (1)
   {
@@ -868,7 +867,7 @@ void Programs(char plr,char prog)
 	  for(i=0;i<count;i++) {
 	    Data->P[plr].Pool[M[i]].Assign=0;
 	 };
-    KillMusic();
+    music_stop();
 	 return;  /* Done */
    };
   }

@@ -125,9 +125,8 @@ void Museum(char plr)
   else if (plr==1) strncpy(&AName[5][0],"COSMO",5);
 
   AImg[3]+=plr;
-  PreLoadMusic(M_THEME);
   // FadeOut(2,pal,10,0,0);
-  PlayMusic(1);
+  music_start(M_THEME);
   beg=0;
 
   do {
@@ -190,7 +189,7 @@ void Museum(char plr)
      strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
   } while (i!=beg);
   remove_savedat("PORT.TMP"); // remove temp file
-  KillMusic();
+  music_stop();
 	return;
 }
 

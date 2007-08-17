@@ -25,6 +25,13 @@
 		002F39FA09D0881F00EBEB88 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F39F909D0881F00EBEB88 /* SDL.framework */; };
 		002F3A0009D0884600EBEB88 /* SDL.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 002F39F909D0881F00EBEB88 /* SDL.framework */; };
 		002F3A2E09D0888800EBEB88 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 002F3A2C09D0888800EBEB88 /* SDLMain.m */; };
+		7C2729E20C74F18B0053CAC0 /* fs.h in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7C94E1430C68C00600D047AD /* fs.h */; };
+		7C272F1D0C7521E70053CAC0 /* music_osx.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C56E77B0C74966A00B3B6C1 /* music_osx.c */; };
+		7C56E8F90C74A0D000B3B6C1 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C56E8F80C74A0D000B3B6C1 /* CoreMIDI.framework */; };
+		7C56E8FB0C74A0DA00B3B6C1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C56E8FA0C74A0DA00B3B6C1 /* CoreAudio.framework */; };
+		7C56E9030C74A0EE00B3B6C1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C56E9010C74A0EE00B3B6C1 /* AudioToolbox.framework */; };
+		7C56E9040C74A0EE00B3B6C1 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C56E9020C74A0EE00B3B6C1 /* AudioUnit.framework */; };
+		7C56E92C0C74A11100B3B6C1 /* midi in Resources */ = {isa = PBXBuildFile; fileRef = 7C56E9070C74A11100B3B6C1 /* midi */; };
 		7C9403B70C68C7C000D047AD /* sdl.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C9403B60C68C7C000D047AD /* sdl.c */; };
 		7C942C560C6912E600D047AD /* SDLMain.nib in Resources */ = {isa = PBXBuildFile; fileRef = 7C942C4F0C6912E600D047AD /* SDLMain.nib */; };
 		7C94E17E0C68C00600D047AD /* admin.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E12F0C68C00600D047AD /* admin.c */; };
@@ -59,7 +66,6 @@
 		7C94E1A90C68C00600D047AD /* mis_m.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E15A0C68C00600D047AD /* mis_m.c */; };
 		7C94E1AB0C68C00600D047AD /* mmfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E15C0C68C00600D047AD /* mmfile.c */; };
 		7C94E1AE0C68C00600D047AD /* museum.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E15F0C68C00600D047AD /* museum.c */; };
-		7C94E1AF0C68C00600D047AD /* music.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E1600C68C00600D047AD /* music.c */; };
 		7C94E1B10C68C00600D047AD /* newmis.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E1620C68C00600D047AD /* newmis.c */; };
 		7C94E1B20C68C00600D047AD /* news_sup.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E1630C68C00600D047AD /* news_sup.c */; };
 		7C94E1B30C68C00600D047AD /* news_suq.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C94E1640C68C00600D047AD /* news_suq.c */; };
@@ -82,7 +88,6 @@
 		7C94F48C0C68C4CA00D047AD /* audio in Resources */ = {isa = PBXBuildFile; fileRef = 7C94F0130C68C4C900D047AD /* audio */; };
 		7C94F48D0C68C4CA00D047AD /* gamedata in Resources */ = {isa = PBXBuildFile; fileRef = 7C94F1E40C68C4CA00D047AD /* gamedata */; };
 		7C94F48E0C68C4CA00D047AD /* images in Resources */ = {isa = PBXBuildFile; fileRef = 7C94F22D0C68C4CA00D047AD /* images */; };
-		7C94F48F0C68C4CA00D047AD /* music in Resources */ = {isa = PBXBuildFile; fileRef = 7C94F2300C68C4CA00D047AD /* music */; };
 		7C94F4900C68C4CA00D047AD /* video in Resources */ = {isa = PBXBuildFile; fileRef = 7C94F2550C68C4CA00D047AD /* video */; };
 		7CC7BC3C0C7134F4004B3053 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC7BC3B0C7134F4004B3053 /* libz.dylib */; };
 		7CC7C1DA0C713F0D004B3053 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
@@ -116,6 +121,7 @@
 			files = (
 				7CD223D20C712DD4000C0DC5 /* Sparkle.framework in Copy Frameworks into .app bundle */,
 				002F3A0009D0884600EBEB88 /* SDL.framework in Copy Frameworks into .app bundle */,
+				7C2729E20C74F18B0053CAC0 /* fs.h in Copy Frameworks into .app bundle */,
 			);
 			name = "Copy Frameworks into .app bundle";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,6 +136,13 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* race.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = race.h; sourceTree = "<group>"; };
+		7C56D7D00C73E3B300B3B6C1 /* music_vorbis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = music_vorbis.c; path = ../music_vorbis.c; sourceTree = "<group>"; };
+		7C56E77B0C74966A00B3B6C1 /* music_osx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = music_osx.c; sourceTree = "<group>"; };
+		7C56E8F80C74A0D000B3B6C1 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
+		7C56E8FA0C74A0DA00B3B6C1 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
+		7C56E9010C74A0EE00B3B6C1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		7C56E9020C74A0EE00B3B6C1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
+		7C56E9070C74A11100B3B6C1 /* midi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = midi; path = "../../race-data/midi"; sourceTree = SOURCE_ROOT; };
 		7C5E89350C68B7A20074F164 /* RaceIntoSpace.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = RaceIntoSpace.icns; sourceTree = "<group>"; };
 		7C9403520C68C61400D047AD /* int_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = int_types.h; sourceTree = "<group>"; };
 		7C9403B60C68C7C000D047AD /* sdl.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sdl.c; path = ../sdl.c; sourceTree = SOURCE_ROOT; };
@@ -178,7 +191,6 @@
 		7C94E15C0C68C00600D047AD /* mmfile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mmfile.c; path = ../mmfile.c; sourceTree = SOURCE_ROOT; };
 		7C94E15D0C68C00600D047AD /* mmfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mmfile.h; path = ../mmfile.h; sourceTree = SOURCE_ROOT; };
 		7C94E15F0C68C00600D047AD /* museum.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = museum.c; path = ../museum.c; sourceTree = SOURCE_ROOT; };
-		7C94E1600C68C00600D047AD /* music.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = music.c; path = ../music.c; sourceTree = SOURCE_ROOT; };
 		7C94E1610C68C00600D047AD /* music.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = music.h; path = ../music.h; sourceTree = SOURCE_ROOT; };
 		7C94E1620C68C00600D047AD /* newmis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = newmis.c; path = ../newmis.c; sourceTree = SOURCE_ROOT; };
 		7C94E1630C68C00600D047AD /* news_sup.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = news_sup.c; path = ../news_sup.c; sourceTree = SOURCE_ROOT; };
@@ -209,7 +221,6 @@
 		7C94F0130C68C4C900D047AD /* audio */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = audio; path = "../../race-data/audio"; sourceTree = SOURCE_ROOT; };
 		7C94F1E40C68C4CA00D047AD /* gamedata */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = gamedata; path = "../../race-data/gamedata"; sourceTree = SOURCE_ROOT; };
 		7C94F22D0C68C4CA00D047AD /* images */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = images; path = "../../race-data/images"; sourceTree = SOURCE_ROOT; };
-		7C94F2300C68C4CA00D047AD /* music */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = music; path = "../../race-data/music"; sourceTree = SOURCE_ROOT; };
 		7C94F2550C68C4CA00D047AD /* video */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; name = video; path = "../../race-data/video"; sourceTree = SOURCE_ROOT; };
 		7CC7BC3B0C7134F4004B3053 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		7CCAA9D30C6946E10043DD17 /* moon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = moon.icns; sourceTree = "<group>"; };
@@ -246,6 +257,10 @@
 				7CD2243F0C7133CF000C0DC5 /* Carbon.framework in Frameworks */,
 				7CD224440C7133D9000C0DC5 /* CoreFoundation.framework in Frameworks */,
 				7CC7BC3C0C7134F4004B3053 /* libz.dylib in Frameworks */,
+				7C56E8F90C74A0D000B3B6C1 /* CoreMIDI.framework in Frameworks */,
+				7C56E8FB0C74A0DA00B3B6C1 /* CoreAudio.framework in Frameworks */,
+				7C56E9030C74A0EE00B3B6C1 /* AudioToolbox.framework in Frameworks */,
+				7C56E9040C74A0EE00B3B6C1 /* AudioUnit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,12 +326,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7C56E9070C74A11100B3B6C1 /* midi */,
 				7CCAA9D30C6946E10043DD17 /* moon.icns */,
 				7C942C4F0C6912E600D047AD /* SDLMain.nib */,
 				7C94F0130C68C4C900D047AD /* audio */,
 				7C94F1E40C68C4CA00D047AD /* gamedata */,
 				7C94F22D0C68C4CA00D047AD /* images */,
-				7C94F2300C68C4CA00D047AD /* music */,
 				7C94F2550C68C4CA00D047AD /* video */,
 				7C5E89350C68B7A20074F164 /* RaceIntoSpace.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -327,6 +342,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7C56E9010C74A0EE00B3B6C1 /* AudioToolbox.framework */,
+				7C56E9020C74A0EE00B3B6C1 /* AudioUnit.framework */,
+				7C56E8FA0C74A0DA00B3B6C1 /* CoreAudio.framework */,
+				7C56E8F80C74A0D000B3B6C1 /* CoreMIDI.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -336,6 +355,7 @@
 		7C94E0B40C68BE6300D047AD /* Common Sources */ = {
 			isa = PBXGroup;
 			children = (
+				7C56E77B0C74966A00B3B6C1 /* music_osx.c */,
 				7C9403B60C68C7C000D047AD /* sdl.c */,
 				7C94E12F0C68C00600D047AD /* admin.c */,
 				7C94E1300C68C00600D047AD /* aimast.c */,
@@ -381,7 +401,6 @@
 				7C94E15C0C68C00600D047AD /* mmfile.c */,
 				7C94E15D0C68C00600D047AD /* mmfile.h */,
 				7C94E15F0C68C00600D047AD /* museum.c */,
-				7C94E1600C68C00600D047AD /* music.c */,
 				7C94E1610C68C00600D047AD /* music.h */,
 				7C94E1620C68C00600D047AD /* newmis.c */,
 				7C94E1630C68C00600D047AD /* news_sup.c */,
@@ -409,6 +428,7 @@
 				7C94E17A0C68C00600D047AD /* utils.h */,
 				7C94E17B0C68C00600D047AD /* vab.c */,
 				7C94E17C0C68C00600D047AD /* valgrind.h */,
+				7C56D7D00C73E3B300B3B6C1 /* music_vorbis.c */,
 			);
 			indentWidth = 2;
 			name = "Common Sources";
@@ -490,12 +510,12 @@
 				7C94F48C0C68C4CA00D047AD /* audio in Resources */,
 				7C94F48D0C68C4CA00D047AD /* gamedata in Resources */,
 				7C94F48E0C68C4CA00D047AD /* images in Resources */,
-				7C94F48F0C68C4CA00D047AD /* music in Resources */,
 				7C94F4900C68C4CA00D047AD /* video in Resources */,
 				7C942C560C6912E600D047AD /* SDLMain.nib in Resources */,
 				7CCAA97C0C6922FE0043DD17 /* RaceIntoSpace.icns in Resources */,
 				7CCAA9D40C6946E10043DD17 /* moon.icns in Resources */,
 				7CC7C1DA0C713F0D004B3053 /* Info.plist in Resources */,
+				7C56E92C0C74A11100B3B6C1 /* midi in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,7 +551,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Derived from http://qwan.org/2007/05/22/using-xcode-to-build-a-disk-image-and-upload-a-web-site/\n\n[ \"$ACTION\" = build ] || exit 0\n[ \"$BUILD_VARIANTS\" = \"normal\" ] || exit 0\n[ \"$BUILD_STYLE\" = \"Release\" ] || { echo \"Unwilling to produce $BUILD_STYLE disk image. Switch to Release.\"; exit 1; }\n\ndir=\"$TEMP_FILES_DIR/disk\"\n\nversion=`egrep '^AC_INIT' ../configure.in | awk -F '[,()]' '{ print $3 }'`\nvolume=\"Race_Into_Space_$version\"\n\ntmpdmg=\"$TEMP_FILES_DIR/$volume.dmg\"\ndmg=\"$BUILT_PRODUCTS_DIR/$volume.dmg\"\n\n# Prepare the staging area\nrm -rf \"$dir\"\nmkdir \"$dir\"\ncp -R \"$BUILT_PRODUCTS_DIR/Race Into Space.app\" \"$dir\"\ncp -R ../AUTHORS ../COPYING ../DEVELOPER ../QUESTIONS ../README \"$dir\" \n\n# Make the initial DMG\nrm -f \"$tmpdmg\"\nhdiutil create -srcfolder \"$dir\" -volname \"$volume\" \"$tmpdmg\"\nrm -rf \"$dir\"\n\n# Compress it\nrm -f \"$dmg\"\nhdiutil convert \"$tmpdmg\" -format UDZO -imagekey zlib-level=9 -o \"$dmg\"\nrm -f \"$tmpdmg\"\n\n# Internet-enable the DMG (see `man hdiutil`)\nhdiutil internet-enable -yes \"$dmg\"\n";
+			shellScript = "# Derived from http://qwan.org/2007/05/22/using-xcode-to-build-a-disk-image-and-upload-a-web-site/\n\n[ \"$ACTION\" = build ] || exit 0\n[ \"$BUILD_VARIANTS\" = \"normal\" ] || exit 0\n[ \"$BUILD_STYLE\" = \"Release\" ] || { echo \"Unwilling to produce $BUILD_STYLE disk image. Switch to Release.\"; exit 1; }\n\ndir=\"$TEMP_FILES_DIR/disk\"\n\nversion=`grep -A1 CFBundleVersion \"$BUILT_PRODUCTS_DIR/Race Into Space.app/Contents/Info.plist\" | tail -n 1 | egrep -o '[0-9\\.]+'`\nvolume=\"Race_Into_Space_$version\"\n\ntmpdmg=\"$TEMP_FILES_DIR/$volume.dmg\"\ndmg=\"$BUILT_PRODUCTS_DIR/$volume.dmg\"\n\n# Prepare the staging area\nrm -rf \"$dir\"\nmkdir \"$dir\"\ncp -R \"$BUILT_PRODUCTS_DIR/Race Into Space.app\" \"$dir\"\ncp -R ../AUTHORS ../COPYING ../DEVELOPER ../QUESTIONS ../README \"$dir\" \n\n# Make the initial DMG\nrm -f \"$tmpdmg\"\nhdiutil create -srcfolder \"$dir\" -volname \"$volume\" \"$tmpdmg\"\nrm -rf \"$dir\"\n\n# Compress it\nrm -f \"$dmg\"\nhdiutil convert \"$tmpdmg\" -format UDZO -imagekey zlib-level=9 -o \"$dmg\"\nrm -f \"$tmpdmg\"\n\n# Internet-enable the DMG (see `man hdiutil`)\nhdiutil internet-enable -yes \"$dmg\"\n";
 		};
 		7CF390DA0C6A95440086E543 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -586,7 +606,6 @@
 				7C94E1A90C68C00600D047AD /* mis_m.c in Sources */,
 				7C94E1AB0C68C00600D047AD /* mmfile.c in Sources */,
 				7C94E1AE0C68C00600D047AD /* museum.c in Sources */,
-				7C94E1AF0C68C00600D047AD /* music.c in Sources */,
 				7C94E1B10C68C00600D047AD /* newmis.c in Sources */,
 				7C94E1B20C68C00600D047AD /* news_sup.c in Sources */,
 				7C94E1B30C68C00600D047AD /* news_suq.c in Sources */,
@@ -607,6 +626,7 @@
 				7C94E1C80C68C00600D047AD /* utils.c in Sources */,
 				7C94E1CA0C68C00600D047AD /* vab.c in Sources */,
 				7C9403B70C68C7C000D047AD /* sdl.c in Sources */,
+				7C272F1D0C7521E70053CAC0 /* music_osx.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

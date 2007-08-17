@@ -197,7 +197,6 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	for (kk = 0; kk < Rep.Qty; kk++)
 	{
 		DEBUG3("playing segment %d: %d", kk, Rep.Off[kk]);
-		UpdateMusic();
 		if (Rep.Off[kk] < 1000)	   //Specs: success seq
 		{
 			fseek(seqf, Rep.Off[kk] * sizeof_oGROUP, SEEK_SET);
@@ -232,8 +231,6 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 			char *seq_fname = NULL;
 			char fname[20];
 
-			UpdateMusic();
-
 			if (mode == 1)		   /* failure */
 				frm_idx = fgroup.oLIST[i].aIdx;
 			else
@@ -261,8 +258,6 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 			while (keep_going)
 			{
-				UpdateMusic();
-
 				video_rect.x = dx;
 				video_rect.y = dy;
 				video_rect.w = width;

@@ -632,9 +632,7 @@ News(char plr)
 	fclose(fout);
 
     /* XXX there is also M_NEW1950, why it is unused? */
-	PreLoadMusic(M_NEW1970);
-
-	PlayMusic(0);
+	music_start(M_NEW1970);
 
 	/* Tom's News kludge, also open and load first anim */
     fp = LoadNewsAnim(plr, BW, NEWS_ANGLE, TOMS_BUGFIX, fp);
@@ -804,7 +802,7 @@ News(char plr)
 			WaitForMouseUp();
 			key = 0;
 			i = 0;
-			KillMusic();
+			music_stop();
 			KillVoice();
 			break;
 		}

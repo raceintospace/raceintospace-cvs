@@ -36,7 +36,6 @@ void Moon(char plr)
   FILE *in;
   GXHEADER local;
   long size;
-  PreLoadMusic(M_HISTORY);
   strcpy(IDT,"i029");strcpy(IKEY,"k029");
   val=Data->P[plr].Misc[5].Safety;
   FadeOut(2,pal,0,0,0);
@@ -73,7 +72,7 @@ void Moon(char plr)
   grSetColor(1);PrintAt(144,159,"CONTINUE");
   FlagSm(plr,114,43);
   
-  PlayMusic(0);
+  music_start(M_HISTORY);
   FadeIn(2,pal,0,0,0);
   WaitForMouseUp();
   while (1)
@@ -83,7 +82,7 @@ void Moon(char plr)
 	   InBox(115,152,216,162);
 	   WaitForMouseUp();
 	   if (key>0) delay(150);
-      KillMusic();
+      music_stop();
 	   key=0;return; // Continue
 	  }
   }
@@ -393,8 +392,7 @@ void LMPict(char poff)
 
 void LMBld(char plr)
 {
- int i,m;
-  PreLoadMusic(M_DRUMSM);
+	int i,m;
   LMDraw(plr);
   
   ShBox(1,120,157,168);InBox(4,122,154,166);
@@ -418,7 +416,7 @@ void LMBld(char plr)
    grSetColor(6);PrintAt(m,162,"SUCCESSFUL ATTEMPTS: ");grSetColor(1);DispNum(0,0,Data->P[plr].Manned[5+i].Steps-Data->P[plr].Manned[5+i].Failures);
 	}
   
-  PlayMusic(0);
+  music_start(M_HISTORY);
   FadeIn(2,pal,0,0,0);
   WaitForMouseUp();
   while (1)
@@ -428,7 +426,7 @@ void LMBld(char plr)
 	   InBox(245,5,314,17);
 	   WaitForMouseUp();
 	   if (key>0) delay(150);
-     KillMusic();
+     music_stop();
 	   key=0;return; // Continue
 	  }
   }
@@ -438,12 +436,11 @@ void SatBld(char plr)
 {
   int plan;
   plan=0;
-  PreLoadMusic(M_HISTORY);
   SatDraw(plr);
   SatText(plr);
   strcpy(IDT,"i019");strcpy(IKEY,"k019");
   if (Data->P[plr].Probe[1].Num>=0) PlanText(plr,plan);
-  PlayMusic(0);
+  music_start(M_HISTORY);
   FadeIn(2,pal,0,0,0);
 
   key=0;
@@ -456,7 +453,7 @@ void SatBld(char plr)
 	   WaitForMouseUp();
 	   if (key>0) delay(150);
 	  // OutBox(245,5,314,17);
-      KillMusic();
+      music_stop();
 	   key=0;return; // Continue
 	  }
 	else if (Data->P[plr].Probe[1].Num>=0 && ((x>=166 && y>=60 && x<=199 && y<=66 && mousebuttons>0) || key==LT_ARROW)) { 

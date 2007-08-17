@@ -239,12 +239,11 @@ int i,R1,R2,R3,oR1,oR2,oR3,dgflag[3]={0,0,0};
 char pRush=0;
 
   R1=R2=R3=oR1=oR2=oR3=0;fCsh=0;
-  PreLoadMusic((plr==1)?M_USMIL:M_USSRMIL);
   DrawRush(plr);
   pRush=(Data->P[plr].Cash>=3) ? 1 : 0;
   fCsh=Data->P[plr].Cash;
   grSetColor(1);
-  PlayMusic(0);
+  music_start((plr==1)?M_USMIL:M_USSRMIL);
   FadeIn(2,pal,10,0,0);
   WaitForMouseUp();
   while (1)
@@ -437,7 +436,7 @@ char pRush=0;
 	   Data->P[plr].Mission[2].Month-=R3;
 	   Data->P[plr].Mission[2].Rushing=R3;
 	  }
-    KillMusic();
+    music_stop();
 	 return;  // Done
    };
   }

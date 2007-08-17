@@ -488,6 +488,9 @@ void
 av_step(void)
 {
 	SDL_Event ev;
+	
+	// Have the music system update itself as required
+	music_pump();
 
 	while (SDL_PollEvent(&ev))
 		av_process_event(&ev);

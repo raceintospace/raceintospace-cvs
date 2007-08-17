@@ -229,8 +229,7 @@ void AstSel(char plr)
 char i,j,k,BarA,BarB,MaxMen,Index,now,now2,max,min,count,fem=0,ksel=0;
 FILE *fin;
 i=j=k=BarA=BarB=MaxMen=Index=now=now2=max=min=count=0;
-PreLoadMusic(M_DRUMSM);
-PlayMusic(0);
+music_start(M_DRUMSM);
 DrawAstCheck(plr);
   WaitForMouseUp();
   i=0;
@@ -258,7 +257,7 @@ DrawAstCheck(plr);
       i=2;OutBox(168,135,216,147);
      }
   };
-  if (i==2) {KillMusic();return;} /* too poor for astronauts or NO */
+  if (i==2) {music_stop();return;} /* too poor for astronauts or NO */
   BarA=0;BarB=0;
   DrawAstSel(plr);
   
@@ -654,7 +653,7 @@ DrawAstCheck(plr);
 	     case 5: Data->P[plr].AstroDelay=99;break;
 	  };
 	 OutBox(245,5,314,17);
-    KillMusic();
+    music_stop();
 	 return;  /* Done */
        };
       };

@@ -63,7 +63,7 @@ void DrawPrefs(int where,char a1,char a2)
    else if (where==3) where=mode=2; //play-by-mail
 
   if (where==0 || where==2) {
-    PreLoadMusic(M_SOVTYP);
+    music_start(M_SOVTYP);
     IOBox(6,105,83,140);IOBox(6,158,83,193);
     IOBox(236,105,313,140);IOBox(236,158,313,193);
     InBox(6,52,83,87);InBox(236,52,313,87);
@@ -73,7 +73,7 @@ void DrawPrefs(int where,char a1,char a2)
     BinT(8,54,1);BinT(238,54,1);    // No select Buttons
     RectFill(237,35,312,41,0);RectFill(7,35,82,41,0);
   } else {
-    PreLoadMusic(M_DRUMSM);
+    music_start(M_DRUMSM);
     InBox(8,107,81,138);InBox(8,160,81,191);
     InBox(238,107,311,138);InBox(238,160,311,191);
 	  InBox(8,77,18,85);InBox(238,77,248,85);
@@ -113,8 +113,6 @@ void DrawPrefs(int where,char a1,char a2)
   gxVirtualDisplay(&vhptr,72*(Data->Def.Anim),90,147,71,218,100,0);
   HModel(Data->Def.Input,1);
 
-  
-  PlayMusic(0);
   // if (where==0 || where==2) 
   FadeIn(2,pal,10,0,0);
   return;
@@ -312,7 +310,7 @@ long size;
 	         size=fread(buffer,1,BUFFER_SIZE,fin);fclose(fin);
 	         fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
 	        }
-         KillMusic();
+         music_stop();
 	       return;
 	     };
       }
@@ -344,13 +342,12 @@ long size;
 	     
 	     gxGetImage(&local2,0,0,319,199,0);
 	     
-        KillMusic();
-        PreLoadMusic(M_FILLER);PlayMusic(0);
+        music_stop();
+        music_start(M_FILLER);
 	     EditAst();
        strcpy(IDT,"i013");strcpy(IKEY,"K013");
-        KillMusic();
-        PreLoadMusic( (where==0 || where==3)? M_SOVTYP :M_DRUMSM);
-        PlayMusic(0);
+        music_stop();
+        music_start((where==0 || where==3) ? M_SOVTYP : M_DRUMSM);
 	     
 	     gxPutImage(&local2,gxSET,0,0,0);
 	     
@@ -386,7 +383,7 @@ long size;
 	     WaitForMouseUp();
         Data->Def.Music = !Data->Def.Music;
         // SetMusicVolume((Data->Def.Music==1)?100:0);
-		MuteChannel(AV_MUSIC_CHANNEL, !Data->Def.Music);
+				music_set_mute(!Data->Def.Music);
         gxVirtualDisplay(&vhptr,153+34*(Data->Def.Music),0,101,31,134,60,0);
 	     OutBox(100,30,135,61);
 	     /* Music Level */

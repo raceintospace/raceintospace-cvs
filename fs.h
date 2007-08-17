@@ -11,6 +11,7 @@ enum {
     FT_AUDIO,
     FT_VIDEO,
     FT_IMAGE,
+		FT_MIDI
 };
 
 /* used for saved games */

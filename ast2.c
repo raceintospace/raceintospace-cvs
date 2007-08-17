@@ -113,9 +113,8 @@ void Limbo(char plr)
 {
   int i,M[100],BarA,count,now2,tag=0;
   memset(M,-1,sizeof M);
-  PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);
   DrawLimbo(plr);
-  PlayMusic(0);
+  music_start((plr==0)?M_ASTTRNG:M_ASSEMBLY);
   
   now2=BarA=count=0;
   ShBox(26,130+BarA*8,152,138+BarA*8);
@@ -258,7 +257,7 @@ void Limbo(char plr)
       WaitForMouseUp();
       if (key>0) delay(150);
       OutBox(245,5,314,17);
-      KillMusic();
+      music_stop();
 	   return; 
       };
 
@@ -318,11 +317,10 @@ void Limbo(char plr)
     if (key>0) delay(140);
 	 WaitForMouseUp();key=0;
 	 OutBox(167,95+21*i,236,109+21*i);
-         KillMusic();
+         music_stop();
 	      Programs(plr,i+1);
-         PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);
 	      DrawLimbo(plr);
-         PlayMusic(0);
+				music_start((plr==0)?M_ASTTRNG:M_ASSEMBLY);
 	 
 	 InBox(241,48,313,65);OutBox(167,48,239,65);
 	 RectFill(166,78,314,88,10);
@@ -379,11 +377,10 @@ void Limbo(char plr)
     if (key>0) delay(140);
 	 WaitForMouseUp();key=0;
 	 OutBox(244,95+21*i,313,109+21*i);
-         KillMusic();
+         music_stop();
 	      Train(plr,i+1);
-         PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);
 	      DrawLimbo(plr);
-         PlayMusic(0);
+         music_start((plr==0)?M_ASTTRNG:M_ASSEMBLY);
 	 
 	 RectFill(166,78,314,88,10);
 	 grSetColor(11);PrintAt(203,85,"VISIT LOCATION");

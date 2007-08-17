@@ -160,8 +160,6 @@ void Train(char plr,int level)
   int now2,BarA,count,i,M[100];
   char temp,Train[10];
   static int m=1;
-  if (level==0) PreLoadMusic((plr==0)?M_ASTTRNG:M_ASSEMBLY);
-  else PreLoadMusic((plr==0)?M_DRUMSM:M_DRUMSM);
   for (i=0;i<100;i++) M[i]=-1;
   now2=BarA=count=0;
   DrawTrain(plr,level);
@@ -184,8 +182,13 @@ void Train(char plr,int level)
     level=m;
    }
   memset(Train,0x00,sizeof(Train));
-  PlayMusic(0);
-  switch(level) {
+
+	if (level==0)
+		music_start((plr==0)?M_ASTTRNG:M_ASSEMBLY);
+  else
+		music_start(M_DRUMSM);
+	
+	switch(level) {
 	case 1:strcpy(Train,(plr==0)?"UTCP":"STCP");
          Replay(plr,0,4,28,149,82,Train);break;
 	case 2:strcpy(Train,(plr==0)?"UTLM":"STLM");
@@ -374,7 +377,7 @@ void Train(char plr,int level)
 	    WaitForMouseUp();
        if (key>0) delay(150);
 	    OutBox(245,5,314,17);
-       KillMusic();
+       music_stop();
 	    return;  /* Done */
       }; /* end x-y if */
 	} /* end mouse if */
@@ -450,12 +453,12 @@ void Hospital(char plr,int sel)
 
   grSetColor(1);
   if (plr==0) {
-    if (sel==0) {DispBig(40,5,"US HOSPITAL",0,-1);PreLoadMusic(M_BADNEWS);}
-    else {DispBig(37,5,"ARLINGTON CEMETERY",0,-1);PreLoadMusic(M_USFUN);}
+    if (sel==0) {DispBig(40,5,"US HOSPITAL",0,-1);music_start(M_BADNEWS);}
+    else {DispBig(37,5,"ARLINGTON CEMETERY",0,-1);music_start(M_USFUN);}
   };
   if (plr==1) {
-    if (sel==0) {DispBig(40,5,"SOVIET INFIRMARY",0,-1);PreLoadMusic(M_INTERLUD);}
-    else {DispBig(40,5,"KREMLIN WALL",0,-1);PreLoadMusic(M_SVFUN);}
+    if (sel==0) {DispBig(40,5,"SOVIET INFIRMARY",0,-1);music_start(M_INTERLUD);}
+    else {DispBig(40,5,"KREMLIN WALL",0,-1);music_start(M_SVFUN);}
   }
   grSetColor(1);
   PrintAt(257,13,"CONTINUE");
@@ -472,7 +475,6 @@ void Hospital(char plr,int sel)
     };
   DispLeft(plr,BarA,count,now2,&M[0]);
   FadeIn(2,pal,10,0,0);
-  PlayMusic(0);
   WaitForMouseUp();
   while (1)
   {
@@ -536,7 +538,7 @@ void Hospital(char plr,int sel)
     {
 	  InBox(245,5,314,17);
 	  WaitForMouseUp();
-    KillMusic();
+    music_stop();
 	  return;  /* Done */
     }; /* end x-y if */
   };  /* end while */

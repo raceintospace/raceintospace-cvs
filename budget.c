@@ -489,7 +489,6 @@ int RetFile(char plr,int card)
 void Viewing(char plr)
 {
   int ctop,bline=0,oset,maxcard;
-  PreLoadMusic(M_SOVTYP);
   DrawViewing(plr);
   maxcard=oset=Data->P[plr].eCount-1;
   bline=RetFile(plr,oset);
@@ -497,7 +496,7 @@ void Viewing(char plr)
   DrawVText(ctop);
 	InBox(244,184,313,194);
   FadeIn(2,pal,10,0,0);
-  PlayMusic(0);
+  music_start(M_SOVTYP);
   WaitForMouseUp();
   while (1)
   {
@@ -555,7 +554,7 @@ void Viewing(char plr)
 	     InBox(245,5,314,17);
         if (key>0) delay(150);
 	     //OutBox(245,5,314,17);
-        KillMusic();
+        music_stop();
 	     return;  // Continue
        };
   }

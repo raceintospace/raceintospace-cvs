@@ -938,7 +938,7 @@ ui16 Count,*bone;
 
   pKey=0;
   
-  PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);PlayMusic(0);
+  music_start((plr==0)?M_USPORT:M_SVPORT);
   kMode=kPad=kEnt=0;
   last_secs = get_time ();
 	i = 0; // this is used to loop through all the selection regions on the port
@@ -1057,7 +1057,7 @@ ui16 Count,*bone;
 #if SPOT_ON
                        SpotCrap(0,SPOT_KILL);  // remove spots
 #endif
-                       KillMusic();
+                       music_stop();
                     }
                   else SUSPEND=1;
 
@@ -1087,8 +1087,8 @@ ui16 Count,*bone;
                       case pNOFADE:
                           if (res != pNOFADE)
                           {
-                              PreLoadMusic((plr==0)?M_USPORT:M_SVPORT);
-                              PlayMusic(0);
+															music_stop();
+                              music_start((plr==0)?M_USPORT:M_SVPORT);
                           }
 
                           SpotCrap(0,SPOT_KILL);  // remove spots
@@ -1151,7 +1151,7 @@ ui16 Count,*bone;
                           if (i==28 || i==29) SUSPEND=0;
                         #endif
                           SpotCrap(0,SPOT_KILL);  // remove spots
-                          KillMusic();
+                          music_stop();
 			  save_game ("AUTOSAVE.SAV");
                           return;
 	                  case pQUIT:
@@ -1161,7 +1161,7 @@ ui16 Count,*bone;
                            if (i==28 || i==29) SUSPEND=0;
                          #endif
                           SpotCrap(0,SPOT_KILL);  // remove spots
-                          KillMusic();
+                          music_stop();
                			  return;
 	                  } // switch
                   kMode=good=SUSPEND=0;

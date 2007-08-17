@@ -354,15 +354,14 @@ void AI_Begin(char plr)
   gxVirtualDisplay(&vhptr,1+110*plr,1,30,85,30+107,85+93,0);
   grSetColor(11);
   PrintAt(60,58,"COMPUTER TURN:  THINKING...");
-  PreLoadMusic(M_SOVTYP);
-  PlayMusic(0);
+  music_start(M_SOVTYP);
   FadeIn(2,pal,10,0,0);
   colss=0;
 }
 
 void AI_Done(void)
 {
-  KillMusic();
+  music_stop();
   FadeOut(2,pal,10,0,0);
   memset(screen,0x00,64000);
   

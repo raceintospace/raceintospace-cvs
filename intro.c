@@ -241,6 +241,8 @@ void Introd(void)
   double start;
 
   read_intro_images ();
+	
+	music_start(M_LIFTOFF);
 
   /* Frame 0 is Interplay, and frame 1 is Strategic Visions */
   /* These are both defunct, so start at frame 2 instead */
@@ -301,14 +303,13 @@ void NextTurn(char plr)
   gxVirtualDisplay(&vhptr,110*plr,0,30,85,31+107,85+94,0);
   
   FadeIn(2,pal,10,0,0);
-  PreLoadMusic( (plr==0) ? M_GOOD : M_FUTURE );
-  PlayMusic(1);
-  
+  music_start((plr==0) ? M_GOOD : M_FUTURE);
+ 
   WaitForMouseUp();
   WaitForKeyOrMouseDown();
   key = 0;
 
-  KillMusic();
+  music_stop();
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   return;

@@ -1,4 +1,38 @@
-2007-08-09	Will Glynn <will@lerfjhax.com>
+2007-08-16	Will Glynn <will@lerfjhax.com>
+
+	* V182
+	
+	* music.h, music_vorbis.c, music_osx.c: Added music_set_mute()
+	
+	* prefs.c: calls music_set_mute() on mute change, rather than toggling the channel
+	directly
+
+	* V181
+	
+	* configure.in: bump to 0.4.6
+	
+	* music.h: replaced music API. music_start(track), music_stop() are the key calls.
+	No more preloading; computers are fast these days, and one call is cleaner than two.
+	
+	* music.c: removed
+	
+	* music_vorbis.c: plays Vorbis via SDL like music.c did, but with the new API, and
+	cleaner internals
+	
+	* music_osx.c: CoreMIDI implementation of common music API
+	
+	* sdl.c: now calls music_pump() in av_sync()
+	
+	* Makefile.in: reflects change from music to music_vorbis
+	
+	* os_macosx/: reflects change from music to music_osx, bundles race-data/midi/, and
+	builds .dmg files with the build number in the filename (e.g. 0.4.6.181.dmg)
+	
+	* introd.c, main.c: M_LIFTOFF now plays on game start or return to main menu
+	
+	* others: updated to use the new music API
+	
+2007-08-15	Will Glynn <will@lerfjhax.com>
 
 	* V180
 	

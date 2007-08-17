@@ -15,38 +15,59 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// #define listings for the music
 
-#define M_ASSEMBLY    0
-#define M_ASTTRNG     1
-#define M_BADNEWS     2
-#define M_DRUMSM      3
-#define M_ELEPHANT    4
-#define M_FILLER      5
-#define M_FUTURE      6
-#define M_GOOD        7
-#define M_HARDWARE    8
-#define M_HISTORY     9
-#define M_INTEL      10
-#define M_INTELLEG   11
-#define M_INTERLUD   12
-#define M_LIFTOFF    13
-#define M_MISSPLAN   14
-#define M_NEW1950    15
-#define M_NEW1970    16
-#define M_PRES       17
-#define M_PRGMTRG    18
-#define M_RD         19
-#define M_SOVTYP     20
-#define M_SUCCESS    21
-#define M_SVFUN      22
-#define M_SVLOGO     23
-#define M_SVPORT     24
-#define M_THEME      25
-#define M_UNSUCC     26
-#define M_USFUN      27
-#define M_USMIL      28
-#define M_USPORT     29
-#define M_USSRMIL    30
-#define M_VICTORY    31
+enum music_track {
+	M_ASSEMBLY,
+	M_ASTTRNG,
+	M_BADNEWS,
+	M_DRUMSM,
+	M_ELEPHANT,
+	M_FILLER,
+	M_FUTURE,
+	M_GOOD,
+	M_HARDWARE,
+	M_HISTORY,
+	M_INTEL,
+	M_INTELLEG,
+	M_INTERLUD,
+	M_LIFTOFF,
+	M_MISSPLAN,
+	M_NEW1950,
+	M_NEW1970,
+	M_PRES,
+	M_PRGMTRG,
+	M_RD,
+	M_SOVTYP,
+	M_SUCCESS,
+	M_SVFUN,
+	M_SVLOGO,
+	M_SVPORT,
+	M_THEME,
+	M_UNSUCC,
+	M_USFUN,
+	M_USMIL,
+	M_USPORT,
+	M_USSRMIL,
+	M_VICTORY,
+	M_MAX_MUSIC
+};
 
+// Start a given track, and indicate if the track should loop when complete
+#define music_start(track) music_start_loop(track, 1)
+#define music_start_once(track) music_start_loop(track, 0)
+void music_start_loop(enum music_track track, int loop);
+
+// Stop a given track from playing, or all playing tracks
+void music_stop();
+void music_stop_all();
+
+// Checks to see if a particular track_name is playing, or if any track is playing
+int music_is_playing();
+int music_is_track_playing(enum music_track track);
+
+// Do any periodic work that the music system might need
+// Called at least 20 times per second
+void music_pump();
+
+// Toggle muting of the music system
+void music_set_mute(int muted);

@@ -707,7 +707,6 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 
   if (mode==1) {
      FadeIn(2,pal,10,0,0);
-     if (!AI[plr]) PlayMusic(0);
   };
 
 	WaitForMouseUp();
@@ -728,7 +727,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 	      WaitForMouseUp();
         if (key>0) delay(150);
 	      OutBox(245,5,314,17);delay(10);
-        if (!AI[plr]) KillMusic();
+        if (!AI[plr]) music_stop();
         FadeOut(2,pal,10,0,0);
         key=0;
 	      break;

@@ -62,7 +62,6 @@ void Admin(char plr)
   i=0;beg=1;
   
   do {
-     PreLoadMusic(M_GOOD);
      if (beg) beg=0;
      else {
         
@@ -81,7 +80,7 @@ void Admin(char plr)
         FadeIn(2,pal,10,0,0);
      }
 
-     PlayMusic(0);
+     music_start(M_GOOD);
 
      strncpy(IDT,(plr==0) ?"i702":"i703",4);
      strncpy(IKEY,(plr==0) ? "k601":"k602",4);
@@ -89,33 +88,31 @@ void Admin(char plr)
      i=BChoice(plr,7,(char *)AName,(char *) AImg);
 
      switch(i) {
-        case 1: KillMusic();
-              PreLoadMusic(M_DRUMSM);
-              PlayMusic(0);
+        case 1: music_stop();
+              music_start(M_DRUMSM);
               strcpy(IDT,"i007");strcpy(IKEY,"k007");
               Budget(plr);key=0;
-              KillMusic();
+              music_stop();
               break;
 
-        case 2: KillMusic();
+        case 2: music_stop();
               strcpy(IDT,"i008");
               HPurc(plr);key=0;
               break;
 
         case 3: strcpy(IDT,"i010");strcpy(IKEY,"k010");
-              KillMusic();
-              PreLoadMusic(M_MISSPLAN);
-              PlayMusic(0);
+              music_stop();
+              music_start(M_MISSPLAN);
               Future(plr);
-              KillMusic();key=0;
+              music_stop();key=0;
               break;
 
-        case 4: KillMusic();
+        case 4: music_stop();
               strcpy(IDT,"i012");strcpy(IKEY,"k012");
               AstSel(plr);key=0;
               break;
 
-        case 5: KillMusic();
+        case 5: music_stop();
               strcpy(IDT,"i013");strcpy(IKEY,"k013");
               Prefs(1);key=0;
               break;
@@ -133,7 +130,7 @@ void Admin(char plr)
   } while (!(i==7 || (i==6 && (QUIT || LOAD)) ));
 
   remove_savedat("PORT.TMP"); // remove temp file
-  KillMusic();
+  music_stop();
   strcpy(IDT,"i000");strcpy(IKEY,"k000");
   WaitForMouseUp();
 }
