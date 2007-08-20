@@ -58,7 +58,7 @@ Burst(char win)
 		float psn[2];
 		i16 per;
 	} Bomb[NUM_LIGHTS];
-	int lp1, lp2, Region, xx, yy, cdstat;
+	int lp1, lp2, Region, xx, yy;
 	float Ang, Spd, InitSpd;
 	char clr = 1;
 
@@ -68,12 +68,6 @@ Burst(char win)
 	gxGetImage(&vhptr, 0, 0, 319, 199, 0);
 	while (1)
 	{
-		cdstat = CDAccess(cdROM, 3, 3);	// CD STATUS
-		if (!(cdstat & 0x02))
-		{
-			CDAccess(cdROM, 3, 2); // STOP CD
-			CDAccess(cdROM, 3, 1); // PLAY CD
-		}
 		Region = random(100);
 		if (Region < 60)
 		{
@@ -200,7 +194,7 @@ Burst(char win)
 
 void EndGame(char win,char pad)
 {
- int i=0,r,gork,cdstat;
+ int i=0,r,gork;
  char miss,prog,man1,man2,man3,man4,bud;
 
  
@@ -330,11 +324,6 @@ void EndGame(char win,char pad)
 	   i=1;key=0;
 	   OutBox(244,5,313,17);
 	  };
-   cdstat=CDAccess(cdROM,3,3);  // CD STATUS
-   if (!(cdstat&0x02)) {
-    CDAccess(cdROM,3,2); // STOP CD
-    CDAccess(cdROM,3,1); // PLAY CD
-   }
   }
  return;
 }
@@ -400,7 +389,7 @@ void Draw_NewEnd(char win)
 void NewEnd(char win,char loc)
 {
  GXHEADER local;
- int i,Re_Draw=0,cdstat;
+ int i,Re_Draw=0;
  char R_V=0;
 
  music_start(M_VICTORY);
