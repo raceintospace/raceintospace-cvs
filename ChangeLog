@@ -1,3 +1,9 @@
+2007-08-20  Will Glynn <will@raceintospace.org>
+
+	* V186
+
+	* fs.c: don't warn that deleting a non-existent temp file failed (#1776921)
+
 2007-08-20  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V185

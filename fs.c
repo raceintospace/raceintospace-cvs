@@ -291,7 +291,7 @@ remove_savedat(const char *name)
 	INFO2("removing save game file `%s'", cooked);
 	fix_pathsep(cooked);
 	rv = remove(cooked);
-	if (rv < 0)
+	if (rv < 0 && errno != ENOENT)
 		WARNING3("failed to remove save game file `%s': %s",
 				cooked, strerror(errno));
 	free(cooked);
