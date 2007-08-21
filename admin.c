@@ -129,7 +129,6 @@ void Admin(char plr)
      if (Data->P[plr].AstroDelay>0) AImg[3]=5;
   } while (!(i==7 || (i==6 && (QUIT || LOAD)) ));
 
-  remove_savedat("PORT.TMP"); // remove temp file
   music_stop();
   strcpy(IDT,"i000");strcpy(IKEY,"k000");
   WaitForMouseUp();

@@ -1,3 +1,9 @@
+2007-08-21  Will Glynn <will@raceintospace.org>
+
+	* V187
+
+	* museum.c, admin.c, intel.c: remove references to the long-unused PORT.TMP
+
 2007-08-20  Will Glynn <will@raceintospace.org>
 
 	* V186

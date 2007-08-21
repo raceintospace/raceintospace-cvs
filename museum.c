@@ -147,26 +147,6 @@ void Museum(char plr)
         FadeIn(2,pal,10,0,0);
      }
 
-#if 0
-     if (beg==0) {
-        beg=(Data->P[plr].AstroCount>0)? 7 : 6;  // mods for astros
-        
-        fin=sOpen("PORT.TMP","wb",1); // Create temp image file
-        fwrite(screen,64000,1,fin);
-        fclose(fin);
-        
-     }
-     else {
-        
-        FadeOut(2,pal,10,0,0);
-        fin=sOpen("PORT.TMP","rb",1);  // replad temp image file
-        fread(screen,64000,fin);
-        close(fin);
-        PortPal(plr);
-        
-     }
-#endif
-
      strncpy(IDT,(plr==0) ?"i700":"i701",4);
      strncpy(IKEY,(plr==0) ? "k603":"k604",4);
      i=BChoice(plr,tots,&AName[0][0],&AImg[0]);
@@ -188,7 +168,6 @@ void Museum(char plr)
 	   }
      strncpy(IDT,"i000",4);strncpy(IKEY,"k000",4);
   } while (i!=beg);
-  remove_savedat("PORT.TMP"); // remove temp file
   music_stop();
 	return;
 }

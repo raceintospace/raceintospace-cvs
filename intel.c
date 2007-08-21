@@ -77,7 +77,6 @@ void Intel(char plr)
 	   }
   } while (i==1 || i==2);      
 
-  remove_savedat("PORT.TMP"); // remove temp file
   music_stop();
 }
 
