@@ -99,404 +99,573 @@ void SetEvents(void)
   return;
 }
 
-void AstroTurn(void)
+/** @TODO: This code must be split... it's cluttered beyond hope */
+void
+AstroTurn(void)
 {
-	int i,j,k,l,num,temp,ActTotal[2],cnt,Compat[5];
-	ActTotal[0]=0;ActTotal[1]=0;cnt=0;
+	int i, j, k, l, num, temp, cnt, Compat[5];
+	int ActTotal[2];			/* Count of active astronauts per player */
 
-	for (j=0;j<NUM_PLAYERS;j++)
-		for (i=0;i<Data->P[j].AstroCount;i++)
-			if (Data->P[j].Pool[i].Status==0)  ActTotal[j]++;
+	ActTotal[0] = 0;
+	ActTotal[1] = 0;
+	cnt = 0;
+
+	/* Count total number of active astronauts */
+	for (j = 0; j < NUM_PLAYERS; j++)
+		for (i = 0; i < Data->P[j].AstroCount; i++)
+			if (Data->P[j].Pool[i].Status == 0)
+				ActTotal[j]++;
 
 	/* Update All Astronauts */
-	for (j=0;j<NUM_PLAYERS;j++)
-		if (MAIL==-1 || (MAIL==j))
-			for (i=0;i<Data->P[j].AstroCount;i++) {
+	for (j = 0; j < NUM_PLAYERS; j++)
+		if (MAIL == -1 || (MAIL == j))
+			for (i = 0; i < Data->P[j].AstroCount; i++)
+			{
 
-				if (Data->P[j].Pool[i].Moved==0)  /* Moved to better prog */
-					if (Data->P[j].Pool[i].oldAssign < Data->P[j].Pool[i].Assign)
-						Data->P[j].Pool[i].Mood+=5;
+				if (Data->P[j].Pool[i].Moved == 0)	/* Moved to better prog */
+					if (Data->P[j].Pool[i].oldAssign <
+						Data->P[j].Pool[i].Assign)
+						Data->P[j].Pool[i].Mood += 5;
 
-				if (Data->P[j].Pool[i].Status==0 || Data->P[j].Pool[i].Status>2) 
+				/* 1 = dead, 2 = retired */
+				if (Data->P[j].Pool[i].Status == 0
+					|| Data->P[j].Pool[i].Status > 2)
 					Data->P[j].Pool[i].Active++;
 
 				/* Move All unassign astros to limbo */
-				if (Data->P[j].Pool[i].Una==0 && Data->P[j].Pool[i].Status==0 &&
-						Data->P[j].Pool[i].Assign!=0) {
-					Data->P[j].Pool[i].Assign=0;
-					Data->P[j].Pool[i].Moved=0;
-					Data->P[j].Pool[i].Special=11+j;
+				if (Data->P[j].Pool[i].Una == 0
+					&& Data->P[j].Pool[i].Status == 0
+					&& Data->P[j].Pool[i].Assign != 0)
+				{
+					Data->P[j].Pool[i].Assign = 0;
+					Data->P[j].Pool[i].Moved = 0;
+					Data->P[j].Pool[i].Special = 11 + j;
 				};
 
-				if (Data->P[j].Pool[i].Status==6) { /* Basic */
-					Data->P[j].Pool[i].Special=7;
-					Data->P[j].Pool[i].TrainingLevel=Data->P[j].Pool[i].Status;
-					Data->P[j].Pool[i].Status=0;  /* Make Active */
-					Data->P[j].Pool[i].Assign=0; /* Put in Limbo */
-					temp=0;
-					if (random(100) > 70) k=2; else k=1;
-					while (temp==0) {
-						switch(random(5))
-						{
-							case 0: if (Data->P[j].Pool[i].Cap==4) break;
-												else Data->P[j].Pool[i].Cap+=k;
-												if (Data->P[j].Pool[i].Cap>4)Data->P[j].Pool[i].Cap=4;
-												temp=1;
-												break;
-							case 1: if (Data->P[j].Pool[i].LM==4) break;
-												else Data->P[j].Pool[i].LM+=k;
-												if (Data->P[j].Pool[i].LM>4)Data->P[j].Pool[i].LM=4;
-												temp=1;
-												break;
-							case 2: if (Data->P[j].Pool[i].EVA==4) break;
-												else Data->P[j].Pool[i].EVA+=k;
-												if (Data->P[j].Pool[i].EVA>4)Data->P[j].Pool[i].EVA=4;
-												temp=1;
-												break;
-							case 3: if (Data->P[j].Pool[i].Docking==4) break;
-												else Data->P[j].Pool[i].Docking+=k;
-												if (Data->P[j].Pool[i].Docking>4)Data->P[j].Pool[i].Docking=4;
-												temp=1;
-												break;
-							case 4: if (Data->P[j].Pool[i].Endurance==4) break;
-												else Data->P[j].Pool[i].Endurance+=k;
-												if (Data->P[j].Pool[i].Endurance>4)Data->P[j].Pool[i].Endurance=4;
-												temp=1;
-												break;
-						}
-					}
-					if (Data->P[j].Pool[i].Cap<0) Data->P[j].Pool[i].Endurance=0;
-					if (Data->P[j].Pool[i].LM<0) Data->P[j].Pool[i].LM=0;
-					if (Data->P[j].Pool[i].EVA<0) Data->P[j].Pool[i].EVA=0;
-					if (Data->P[j].Pool[i].Docking<0) Data->P[j].Pool[i].Docking=0;
-					if (Data->P[j].Pool[i].Endurance<0) Data->P[j].Pool[i].Endurance=0;
-
-				}
-				else if (Data->P[j].Pool[i].Status==10) {   /* Advanced Graduation*/
-					Data->P[j].Pool[i].Special=8;
-					Data->P[j].Pool[i].TrainingLevel=Data->P[j].Pool[i].Status;
-					Data->P[j].Pool[i].Status=0;  /* Make Active */
-					Data->P[j].Pool[i].Assign=0; /* Put in Limbo */
-					switch(Data->P[j].Pool[i].Focus-1)
+				if (Data->P[j].Pool[i].Status == 6)
+				{				   /* Basic */
+					Data->P[j].Pool[i].Special = 7;
+					Data->P[j].Pool[i].TrainingLevel =
+						Data->P[j].Pool[i].Status;
+					Data->P[j].Pool[i].Status = 0;	/* Make Active */
+					Data->P[j].Pool[i].Assign = 0;	/* Put in Limbo */
+					temp = 0;
+					if (random(100) > 70)
+						k = 2;
+					else
+						k = 1;
+					while (temp == 0)
 					{
-						case 0: Data->P[j].Pool[i].Cap+=2;
-										if (Data->P[j].Pool[i].Cap>4)
-											Data->P[j].Pool[i].Cap=4;
-										break;
-						case 1: Data->P[j].Pool[i].LM+=2;
-										if (Data->P[j].Pool[i].LM>4)
-											Data->P[j].Pool[i].LM=4;
-										break;
-						case 2: Data->P[j].Pool[i].EVA+=2;
-										if (Data->P[j].Pool[i].EVA>4)
-											Data->P[j].Pool[i].EVA=4;
-										break;
-						case 3: Data->P[j].Pool[i].Docking+=2;
-										if (Data->P[j].Pool[i].Docking>4)
-											Data->P[j].Pool[i].Docking=4;
-										break;
-						case 4: Data->P[j].Pool[i].Endurance+=2;
-										if (Data->P[j].Pool[i].Endurance>4)
-											Data->P[j].Pool[i].Endurance=4;
-										break;
+						switch (random(5))
+						{
+							case 0:
+								if (Data->P[j].Pool[i].Cap == 4)
+									break;
+								else
+									Data->P[j].Pool[i].Cap += k;
+								if (Data->P[j].Pool[i].Cap > 4)
+									Data->P[j].Pool[i].Cap = 4;
+								temp = 1;
+								break;
+							case 1:
+								if (Data->P[j].Pool[i].LM == 4)
+									break;
+								else
+									Data->P[j].Pool[i].LM += k;
+								if (Data->P[j].Pool[i].LM > 4)
+									Data->P[j].Pool[i].LM = 4;
+								temp = 1;
+								break;
+							case 2:
+								if (Data->P[j].Pool[i].EVA == 4)
+									break;
+								else
+									Data->P[j].Pool[i].EVA += k;
+								if (Data->P[j].Pool[i].EVA > 4)
+									Data->P[j].Pool[i].EVA = 4;
+								temp = 1;
+								break;
+							case 3:
+								if (Data->P[j].Pool[i].Docking == 4)
+									break;
+								else
+									Data->P[j].Pool[i].Docking += k;
+								if (Data->P[j].Pool[i].Docking > 4)
+									Data->P[j].Pool[i].Docking = 4;
+								temp = 1;
+								break;
+							case 4:
+								if (Data->P[j].Pool[i].Endurance == 4)
+									break;
+								else
+									Data->P[j].Pool[i].Endurance += k;
+								if (Data->P[j].Pool[i].Endurance > 4)
+									Data->P[j].Pool[i].Endurance = 4;
+								temp = 1;
+								break;
+						}
+					}
+					if (Data->P[j].Pool[i].Cap < 0)
+						Data->P[j].Pool[i].Endurance = 0;
+					if (Data->P[j].Pool[i].LM < 0)
+						Data->P[j].Pool[i].LM = 0;
+					if (Data->P[j].Pool[i].EVA < 0)
+						Data->P[j].Pool[i].EVA = 0;
+					if (Data->P[j].Pool[i].Docking < 0)
+						Data->P[j].Pool[i].Docking = 0;
+					if (Data->P[j].Pool[i].Endurance < 0)
+						Data->P[j].Pool[i].Endurance = 0;
+
+				}
+				else if (Data->P[j].Pool[i].Status == 10)
+				{				   /* Advanced Graduation */
+					Data->P[j].Pool[i].Special = 8;
+					Data->P[j].Pool[i].TrainingLevel =
+						Data->P[j].Pool[i].Status;
+					Data->P[j].Pool[i].Status = 0;	/* Make Active */
+					Data->P[j].Pool[i].Assign = 0;	/* Put in Limbo */
+					switch (Data->P[j].Pool[i].Focus - 1)
+					{
+						case 0:
+							Data->P[j].Pool[i].Cap += 2;
+							if (Data->P[j].Pool[i].Cap > 4)
+								Data->P[j].Pool[i].Cap = 4;
+							break;
+						case 1:
+							Data->P[j].Pool[i].LM += 2;
+							if (Data->P[j].Pool[i].LM > 4)
+								Data->P[j].Pool[i].LM = 4;
+							break;
+						case 2:
+							Data->P[j].Pool[i].EVA += 2;
+							if (Data->P[j].Pool[i].EVA > 4)
+								Data->P[j].Pool[i].EVA = 4;
+							break;
+						case 3:
+							Data->P[j].Pool[i].Docking += 2;
+							if (Data->P[j].Pool[i].Docking > 4)
+								Data->P[j].Pool[i].Docking = 4;
+							break;
+						case 4:
+							Data->P[j].Pool[i].Endurance += 2;
+							if (Data->P[j].Pool[i].Endurance > 4)
+								Data->P[j].Pool[i].Endurance = 4;
+							break;
 					}
 
 				}
-				else if (Data->P[j].Pool[i].Status==4 || Data->P[j].Pool[i].Status==5) {
-					Data->P[j].Pool[i].TrainingLevel=Data->P[j].Pool[i].Status;
+				else if (Data->P[j].Pool[i].Status == 4
+					|| Data->P[j].Pool[i].Status == 5)
+				{
+					Data->P[j].Pool[i].TrainingLevel =
+						Data->P[j].Pool[i].Status;
 					Data->P[j].Pool[i].Status++;
-					temp=0;
-					if (random(10) > 70) k=2; else k=1;
-					while (temp==0) {
-						switch(random(5))
+					temp = 0;
+					if (random(10) > 70)
+						k = 2;
+					else
+						k = 1;
+					while (temp == 0)
+					{
+						switch (random(5))
 						{
-							case 0: if (Data->P[j].Pool[i].Cap==4) break;
-												else Data->P[j].Pool[i].Cap+=k;
-												temp=1;
-												break;
-							case 1: if (Data->P[j].Pool[i].LM==4) break;
-												else Data->P[j].Pool[i].LM+=k;
-												temp=1;
-												break;
-							case 2: if (Data->P[j].Pool[i].EVA==4) break;
-												else Data->P[j].Pool[i].EVA+=k;
-												temp=1;
-												break;
-							case 3: if (Data->P[j].Pool[i].Docking==4) break;
-												else Data->P[j].Pool[i].Docking+=k;
-												temp=1;
-												break;
-							case 4: if (Data->P[j].Pool[i].Endurance==4) break;
-												else Data->P[j].Pool[i].Endurance+=k;
-												temp=1;
-												break;
+							case 0:
+								if (Data->P[j].Pool[i].Cap == 4)
+									break;
+								else
+									Data->P[j].Pool[i].Cap += k;
+								temp = 1;
+								break;
+							case 1:
+								if (Data->P[j].Pool[i].LM == 4)
+									break;
+								else
+									Data->P[j].Pool[i].LM += k;
+								temp = 1;
+								break;
+							case 2:
+								if (Data->P[j].Pool[i].EVA == 4)
+									break;
+								else
+									Data->P[j].Pool[i].EVA += k;
+								temp = 1;
+								break;
+							case 3:
+								if (Data->P[j].Pool[i].Docking == 4)
+									break;
+								else
+									Data->P[j].Pool[i].Docking += k;
+								temp = 1;
+								break;
+							case 4:
+								if (Data->P[j].Pool[i].Endurance == 4)
+									break;
+								else
+									Data->P[j].Pool[i].Endurance += k;
+								temp = 1;
+								break;
 						}
 					}
 				}
-				else if (Data->P[j].Pool[i].Status==7 || Data->P[j].Pool[i].Status==8 ||
-						Data->P[j].Pool[i].Status==9 ) {
-					Data->P[j].Pool[i].TrainingLevel=Data->P[j].Pool[i].Status;
+				else if (Data->P[j].Pool[i].Status == 7
+					|| Data->P[j].Pool[i].Status == 8
+					|| Data->P[j].Pool[i].Status == 9)
+				{
+					Data->P[j].Pool[i].TrainingLevel =
+						Data->P[j].Pool[i].Status;
 					Data->P[j].Pool[i].Status++;
 				};
 			};
 
-
-	for (j=0;j<NUM_PLAYERS;j++)  /* Player Analysis */
+	for (j = 0; j < NUM_PLAYERS; j++)	/* Player Analysis */
 	{
-		if (MAIL==-1 || (MAIL==j))
-			for (i=0;i<Data->P[j].AstroCount;i++) {
-
+		if (MAIL == -1 || (MAIL == j))
+			for (i = 0; i < Data->P[j].AstroCount; i++)
+			{
 
 				/* Injury Resolution */
-				if (Data->P[j].Pool[i].Status==3) {
+				if (Data->P[j].Pool[i].Status == 3)
+				{
 					Data->P[j].Pool[i].IDelay--;
-					if (Data->P[j].Pool[i].IDelay==0) {
-						Data->P[j].Pool[i].Status=0;
-						Data->P[j].Pool[i].Assign=0;
-						Data->P[j].Pool[i].Special=5;
+					if (Data->P[j].Pool[i].IDelay == 0)
+					{
+						Data->P[j].Pool[i].Status = 0;
+						Data->P[j].Pool[i].Assign = 0;
+						Data->P[j].Pool[i].Special = 5;
 					}
 				}
 				/* Mustering Out - even seasons after 8 */
-				if ((Data->P[j].Pool[i].Active>=8) && Data->P[j].Pool[i].Status==0 &&
-						Data->P[j].Pool[i].RDelay==0) {
-					num=random(100);
-					if (num>89) {  /* Guy retires */
-						if (j==0) {
-							Data->P[j].Pool[i].RDelay=3;  /* US Guy Retires in 2 */
-							Data->P[j].Pool[i].Special=1;
+				if ((Data->P[j].Pool[i].Active >= 8)
+					&& Data->P[j].Pool[i].Status == 0
+					&& Data->P[j].Pool[i].RDelay == 0)
+				{
+					num = random(100);
+					if (num > 89)
+					{			   /* Guy retires */
+						if (j == 0)
+						{
+							Data->P[j].Pool[i].RDelay = 3;	/* US Guy Retires in 2 */
+							Data->P[j].Pool[i].Special = 1;
 						};
-						if (j==1) {
-							Data->P[j].Pool[i].RDelay=2;  /* URS Guy Retires in 1 */
-							Data->P[j].Pool[i].Special=1;
+						if (j == 1)
+						{
+							Data->P[j].Pool[i].RDelay = 2;	/* URS Guy Retires in 1 */
+							Data->P[j].Pool[i].Special = 1;
 						};
-						Data->P[j].Pool[i].RetReas=random(6)+1;  /* Reason for Retirement */
+						Data->P[j].Pool[i].RetReas = random(6) + 1;	/* Reason for Retirement */
 					}
 				}
 
-				if (Data->P[j].Other & 1 && Data->P[j].Pool[i].RDelay==0 &&
-						Data->P[j].Pool[i].Status==0) { /* Catastrophic Failure */
-					num=random(100);
-					if (j==1) temp=89; else temp=79;
-					if (num>temp && cnt<(ActTotal[j]*.4)) {  /* Guy retires due to being scared */
-						if (j==0) {
-							Data->P[j].Pool[i].RDelay=3;  /* US Guy Retires in 2 */
-							Data->P[j].Pool[i].Special=1;
+				if (Data->P[j].Other & 1 && Data->P[j].Pool[i].RDelay == 0 &&
+					Data->P[j].Pool[i].Status == 0)
+				{				   /* Catastrophic Failure */
+					num = random(100);
+					if (j == 1)
+						temp = 89;
+					else
+						temp = 79;
+					if (num > temp && cnt < (ActTotal[j] * .4))
+					{			   /* Guy retires due to being scared */
+						if (j == 0)
+						{
+							Data->P[j].Pool[i].RDelay = 3;	/* US Guy Retires in 2 */
+							Data->P[j].Pool[i].Special = 1;
 						};
-						if (j==1) {
-							Data->P[j].Pool[i].RDelay=2;  /* URS Guy Retires Now */
-							Data->P[j].Pool[i].Special=1;
+						if (j == 1)
+						{
+							Data->P[j].Pool[i].RDelay = 2;	/* URS Guy Retires Now */
+							Data->P[j].Pool[i].Special = 1;
 						};
-						Data->P[j].Pool[i].RetReas=11;  /* Reason=Scared */
+						Data->P[j].Pool[i].RetReas = 11;	/* Reason=Scared */
 						cnt++;
 					};
-					cnt=0;
+					cnt = 0;
 				};
 				/* Training Washout */
-				if (Data->P[j].Pool[i].Status>=4 && Data->P[j].Pool[i].Status<=6
-						&& strncmp(Data->P[j].Pool[i].Name,"ALDRIN",6)!=0) {
-					num=random(100);
-					if (num>94) {
-						num=random(100);
-						if (num>74) {
-							Data->P[j].Pool[i].Status=3;
-							Data->P[j].Pool[i].IDelay=2;
-							Data->P[j].Pool[i].Special=9;
-						} else {
-							Data->P[j].Pool[i].Status=2;
-							Data->P[j].Pool[i].Special=10;
-							Data->P[j].Pool[i].RetReas=12; /* Washout */
+				if (Data->P[j].Pool[i].Status >= 4
+					&& Data->P[j].Pool[i].Status <= 6
+					&& strncmp(Data->P[j].Pool[i].Name, "ALDRIN", 6) != 0)
+				{
+					num = random(100);
+					if (num > 94)
+					{
+						num = random(100);
+						if (num > 74)
+						{
+							Data->P[j].Pool[i].Status = 3;
+							Data->P[j].Pool[i].IDelay = 2;
+							Data->P[j].Pool[i].Special = 9;
 						}
-						if (Data->P[j].Pool[i].Cap<0) Data->P[j].Pool[i].Endurance=0;
-						if (Data->P[j].Pool[i].LM<0) Data->P[j].Pool[i].LM=0;
-						if (Data->P[j].Pool[i].EVA<0) Data->P[j].Pool[i].EVA=0;
-						if (Data->P[j].Pool[i].Docking<0) Data->P[j].Pool[i].Docking=0;
-						if (Data->P[j].Pool[i].Endurance<0) Data->P[j].Pool[i].Endurance=0;
+						else
+						{
+							Data->P[j].Pool[i].Status = 2;
+							Data->P[j].Pool[i].Special = 10;
+							Data->P[j].Pool[i].RetReas = 12;	/* Washout */
+						}
+
+						/** @TODO: This is probably a bug! Should be Cap == 0 ?? */
+						if (Data->P[j].Pool[i].Cap < 0)
+							Data->P[j].Pool[i].Endurance = 0;
+						if (Data->P[j].Pool[i].LM < 0)
+							Data->P[j].Pool[i].LM = 0;
+						if (Data->P[j].Pool[i].EVA < 0)
+							Data->P[j].Pool[i].EVA = 0;
+						if (Data->P[j].Pool[i].Docking < 0)
+							Data->P[j].Pool[i].Docking = 0;
+						if (Data->P[j].Pool[i].Endurance < 0)
+							Data->P[j].Pool[i].Endurance = 0;
 					}
 				}
 
-				if (Data->P[j].Pool[i].RDelay>=1 && (Data->P[j].Pool[i].Status>3 ||
-							Data->P[j].Pool[i].Status==0)) {   /* Actual retirement */
+				if (Data->P[j].Pool[i].RDelay >= 1
+					&& (Data->P[j].Pool[i].Status > 3
+						|| Data->P[j].Pool[i].Status == 0))
+				{				   /* Actual retirement */
 					Data->P[j].Pool[i].RDelay--;
-					if (Data->P[j].Pool[i].RDelay==0) {
-						Data->P[j].Pool[i].Status=2;
-						Data->P[j].Pool[i].Assign=0;
-						Data->P[j].Pool[i].Special=2;
+					if (Data->P[j].Pool[i].RDelay == 0)
+					{
+						Data->P[j].Pool[i].Status = 2;
+						Data->P[j].Pool[i].Assign = 0;
+						Data->P[j].Pool[i].Special = 2;
 					}
 				}
 				/* END OF SEASON - Positive */
-				if (Data->P[j].Other & 4) {  /* Program First */
-					Data->P[j].Pool[i].Mood+=5;
-					if (Data->P[j].Pool[i].Mis==2) Data->P[j].Pool[i].Mood+=20; /* Self */
+				if (Data->P[j].Other & 4)
+				{				   /* Program First */
+					Data->P[j].Pool[i].Mood += 5;
+					if (Data->P[j].Pool[i].Mis == 2)
+						Data->P[j].Pool[i].Mood += 20;	/* Self */
 				}
 
-				if (Data->P[j].Pool[i].Mis==1) {
-					if (j==0 && Data->Def.Ast1==0) Data->P[j].Pool[i].Mood+=20; 
-					else Data->P[j].Pool[i].Mood+=15;
-					if (j==1 && Data->Def.Ast2==0) Data->P[j].Pool[i].Mood+=20; 
-					else Data->P[j].Pool[i].Mood+=15;
+				if (Data->P[j].Pool[i].Mis == 1)
+				{
+					if (j == 0 && Data->Def.Ast1 == 0)
+						Data->P[j].Pool[i].Mood += 20;
+					else
+						Data->P[j].Pool[i].Mood += 15;
+					if (j == 1 && Data->Def.Ast2 == 0)
+						Data->P[j].Pool[i].Mood += 20;
+					else
+						Data->P[j].Pool[i].Mood += 15;
 				}
 
-				if (Data->Season==1) {  /* End of turn what the hell 5% happy */
-					num=random(100);
-					if (num>94) Data->P[j].Pool[i].Mood+=5;
+				if (Data->Season == 1)
+				{				   /* End of turn what the hell 5% happy */
+					num = random(100);
+					if (num > 94)
+						Data->P[j].Pool[i].Mood += 5;
 				}
 
-				temp=0;
-				cnt=Data->P[j].Pool[i].Crew; /* Crew in */
-				l=Data->P[j].Pool[i].Assign; /* Prog in */
+				temp = 0;
+				cnt = Data->P[j].Pool[i].Crew;	/* Crew in */
+				l = Data->P[j].Pool[i].Assign;	/* Prog in */
 
-				for (k=0; k<ASTRONAUT_FLT_CREW_MAX; k++)
-					if (Data->P[j].Pool[Data->P[j].Crew[l][cnt][k]-1].Hero==1) temp++;
-				if (temp>1) Data->P[j].Pool[i].Mood+=5;   /* Hero Mod */
+				for (k = 0; k < ASTRONAUT_FLT_CREW_MAX; k++)
+					if (Data->P[j].Pool[Data->P[j].Crew[l][cnt][k] -
+							1].Hero == 1)
+						temp++;
+				if (temp > 1)
+					Data->P[j].Pool[i].Mood += 5;	/* Hero Mod */
 
 				/* END OF SEASON - Negative */
 
 				/* In Merc for too long */
-				if (Data->P[j].Pool[i].Assign==1 && Data->P[j].Pool[i].Moved>=6) Data->P[j].Pool[i].Mood-=4;
+				if (Data->P[j].Pool[i].Assign == 1
+					&& Data->P[j].Pool[i].Moved >= 6)
+					Data->P[j].Pool[i].Mood -= 4;
 
 				/* Moved Around */
-				if (Data->P[j].Pool[i].Moved==0) Data->P[j].Pool[i].Mood-=4;
+				if (Data->P[j].Pool[i].Moved == 0)
+					Data->P[j].Pool[i].Mood -= 4;
 
 				// Mission Stuff
-				if (Data->P[j].Pool[i].Prime==3 || Data->P[j].Pool[i].Prime==1)
-					Data->P[j].Pool[i].Prime=0;
-				if (Data->P[j].Pool[i].Prime==4 || Data->P[j].Pool[i].Prime==2)
+				if (Data->P[j].Pool[i].Prime == 3
+					|| Data->P[j].Pool[i].Prime == 1)
+					Data->P[j].Pool[i].Prime = 0;
+				if (Data->P[j].Pool[i].Prime == 4
+					|| Data->P[j].Pool[i].Prime == 2)
 					Data->P[j].Pool[i].Prime--;
 
-				if (Data->P[j].Pool[i].Status!=3) {
-					if (Data->P[j].Pool[i].Prime==0) Data->P[j].Pool[i].Mood-=6;
-					if (Data->P[j].Pool[i].Prime>0) Data->P[j].Pool[i].Mood-=3;
+				if (Data->P[j].Pool[i].Status != 3)
+				{
+					if (Data->P[j].Pool[i].Prime == 0)
+						Data->P[j].Pool[i].Mood -= 6;
+					if (Data->P[j].Pool[i].Prime > 0)
+						Data->P[j].Pool[i].Mood -= 3;
 
 					/* scrubbed mission */
-					if (Data->P[j].Pool[i].Mis==3) Data->P[j].Pool[i].Mood-=5;
+					if (Data->P[j].Pool[i].Mis == 3)
+						Data->P[j].Pool[i].Mood -= 5;
 					/* successful mission */
-				} else Data->P[j].Pool[i].Mood-=4;
+				}
+				else
+					Data->P[j].Pool[i].Mood -= 4;
 
 				/* catastrophic death */
-				if (Data->P[j].Other & 1) Data->P[j].Pool[i].Mood-=5;
+				if (Data->P[j].Other & 1)
+					Data->P[j].Pool[i].Mood -= 5;
 
 				/* card death */
-				if (Data->P[j].Other & 2) Data->P[j].Pool[i].Mood-=random(2)+1;
+				if (Data->P[j].Other & 2)
+					Data->P[j].Pool[i].Mood -= random(2) + 1;
 
 				/* Compatability */
-				for (k=0;k<5;k++) Compat[k]=0;
-				cnt=0;
-				if (Data->P[j].Pool[i].Compat==1) {
-					if (Data->P[j].Pool[i].CL==2) Compat[cnt++]=9;
-					Compat[cnt++]=10;
-					Compat[cnt++]=1;
-					Compat[cnt++]=2;
-					if (Data->P[j].Pool[i].CR==2) Compat[cnt++]=3;
-				}
-				if (Data->P[j].Pool[i].Compat==2) 
+				for (k = 0; k < 5; k++)
+					Compat[k] = 0;
+				cnt = 0;
+				if (Data->P[j].Pool[i].Compat == 1)
 				{
-					if (Data->P[j].Pool[i].CL==2) Compat[cnt++]=10;
-					Compat[cnt++]=1;
-					Compat[cnt++]=2;
-					Compat[cnt++]=3;
-					if (Data->P[j].Pool[i].CR==2) Compat[cnt++]=4;
+					if (Data->P[j].Pool[i].CL == 2)
+						Compat[cnt++] = 9;
+					Compat[cnt++] = 10;
+					Compat[cnt++] = 1;
+					Compat[cnt++] = 2;
+					if (Data->P[j].Pool[i].CR == 2)
+						Compat[cnt++] = 3;
 				}
-				if (Data->P[j].Pool[i].Compat>=3 && Data->P[j].Pool[i].Compat<=8) 
+				if (Data->P[j].Pool[i].Compat == 2)
 				{
-					if (Data->P[j].Pool[i].CL==2) Compat[cnt++]=Data->P[j].Pool[i].Compat-2;
-					Compat[cnt++]=Data->P[j].Pool[i].Compat-1;
-					Compat[cnt++]=Data->P[j].Pool[i].Compat;
-					Compat[cnt++]=Data->P[j].Pool[i].Compat+1;
-					if (Data->P[j].Pool[i].CR==2) Compat[cnt++]=Data->P[j].Pool[i].Compat+2;
+					if (Data->P[j].Pool[i].CL == 2)
+						Compat[cnt++] = 10;
+					Compat[cnt++] = 1;
+					Compat[cnt++] = 2;
+					Compat[cnt++] = 3;
+					if (Data->P[j].Pool[i].CR == 2)
+						Compat[cnt++] = 4;
 				}
-				if (Data->P[j].Pool[i].Compat==9) 
+				if (Data->P[j].Pool[i].Compat >= 3
+					&& Data->P[j].Pool[i].Compat <= 8)
 				{
-					if (Data->P[j].Pool[i].CL==2) Compat[cnt++]=7;
-					Compat[cnt++]=8;
-					Compat[cnt++]=9;
-					Compat[cnt++]=10;
-					if (Data->P[j].Pool[i].CR==2) Compat[cnt++]=1;
+					if (Data->P[j].Pool[i].CL == 2)
+						Compat[cnt++] = Data->P[j].Pool[i].Compat - 2;
+					Compat[cnt++] = Data->P[j].Pool[i].Compat - 1;
+					Compat[cnt++] = Data->P[j].Pool[i].Compat;
+					Compat[cnt++] = Data->P[j].Pool[i].Compat + 1;
+					if (Data->P[j].Pool[i].CR == 2)
+						Compat[cnt++] = Data->P[j].Pool[i].Compat + 2;
 				}
-				if (Data->P[j].Pool[i].Compat==10) 
+				if (Data->P[j].Pool[i].Compat == 9)
 				{
-					if (Data->P[j].Pool[i].CL==2) Compat[cnt++]=8;
-					Compat[cnt++]=9;
-					Compat[cnt++]=10;
-					Compat[cnt++]=1;
-					if (Data->P[j].Pool[i].CR==2) Compat[cnt++]=2;
+					if (Data->P[j].Pool[i].CL == 2)
+						Compat[cnt++] = 7;
+					Compat[cnt++] = 8;
+					Compat[cnt++] = 9;
+					Compat[cnt++] = 10;
+					if (Data->P[j].Pool[i].CR == 2)
+						Compat[cnt++] = 1;
 				}
-				temp=0;
-				for (k=0; k<ASTRONAUT_FLT_CREW_MAX; k++)
+				if (Data->P[j].Pool[i].Compat == 10)
 				{
-					for (l=0;l<cnt;l++)
+					if (Data->P[j].Pool[i].CL == 2)
+						Compat[cnt++] = 8;
+					Compat[cnt++] = 9;
+					Compat[cnt++] = 10;
+					Compat[cnt++] = 1;
+					if (Data->P[j].Pool[i].CR == 2)
+						Compat[cnt++] = 2;
+				}
+				temp = 0;
+				for (k = 0; k < ASTRONAUT_FLT_CREW_MAX; k++)
+				{
+					for (l = 0; l < cnt; l++)
 					{
-						if (Compat[l]==Data->P[j].Crew[ Data->P[j].Pool[i].Assign ] [Data->P[j].Pool[i].Crew] [k]) 
+						if (Compat[l] ==
+							Data->P[j].Crew[Data->P[j].Pool[i].Assign][Data->
+								P[j].Pool[i].Crew][k])
 							temp++;
 					}
 				}
 
-				if (temp>0) Data->P[j].Pool[i].Mood-=4;
+				if (temp > 0)
+					Data->P[j].Pool[i].Mood -= 4;
 
 				/* Final record updating */
 
-				if (Data->P[j].Pool[i].Mood>100) Data->P[j].Pool[i].Mood=100;
-				if (Data->P[j].Pool[i].Mood<0) Data->P[j].Pool[i].Mood=0;
+				if (Data->P[j].Pool[i].Mood > 100)
+					Data->P[j].Pool[i].Mood = 100;
+				if (Data->P[j].Pool[i].Mood < 0)
+					Data->P[j].Pool[i].Mood = 0;
 				Data->P[j].Pool[i].Moved++;
 
 				/* Retirement stuff */
 
-				if (Data->P[j].Pool[i].Mood<20 && Data->P[j].Pool[i].RDelay==0 &&
-						Data->P[j].Pool[i].Status==0) {
-					if (j==0) {
-						Data->P[j].Pool[i].RDelay=2;  /* US Guy Retires in 2 */
-						Data->P[j].Pool[i].Special=1;
+				if (Data->P[j].Pool[i].Mood < 20
+					&& Data->P[j].Pool[i].RDelay == 0
+					&& Data->P[j].Pool[i].Status == 0)
+				{
+					if (j == 0)
+					{
+						Data->P[j].Pool[i].RDelay = 2;	/* US Guy Retires in 2 */
+						Data->P[j].Pool[i].Special = 1;
 					};
-					if (j==1) {
-						Data->P[j].Pool[i].Status=2;  /* URS Guy Retires Now */
-						Data->P[j].Pool[i].Special=2;
+					if (j == 1)
+					{
+						Data->P[j].Pool[i].Status = 2;	/* URS Guy Retires Now */
+						Data->P[j].Pool[i].Special = 2;
 					};
-					Data->P[j].Pool[i].RetReas=13;  /* Reason=Unhappy */
+					Data->P[j].Pool[i].RetReas = 13;	/* Reason=Unhappy */
 				}
-				Data->P[j].Pool[i].Mis=0;
+				Data->P[j].Pool[i].Mis = 0;
 			}
-		Data->P[j].Other=0;
+		Data->P[j].Other = 0;
 	}
 
 	//      break all groups with dead, injured or retired folks.
-	for (j=0;j<NUM_PLAYERS;j++) 	// for each player
+	for (j = 0; j < NUM_PLAYERS; j++)	// for each player
 	{
-		if (MAIL==-1 || (MAIL==j))
-			for (k=0;k<ASTRONAUT_POOLS;k++) 
+		if (MAIL == -1 || (MAIL == j))
+			for (k = 0; k < ASTRONAUT_POOLS; k++)
 			{
-				for (l=0;l<ASTRONAUT_CREW_MAX;l++) 
+				for (l = 0; l < ASTRONAUT_CREW_MAX; l++)
 				{
-					temp=0;
-					if (Data->P[j].Gcnt[k][l]>0) 
+					temp = 0;
+					if (Data->P[j].Gcnt[k][l] > 0)
 					{
-						for (i=0;i<Data->P[j].Gcnt[k][l];i++) 
+						for (i = 0; i < Data->P[j].Gcnt[k][l]; i++)
 						{
-							if (Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Status==1 ||
-									Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Status==2 ||
-									Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Status==3)
+							if (Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Status == 1
+								|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Status == 2
+								|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Status == 3)
 								temp++;
-						} /* for i */
-						if (temp>0) {
-							for (i=0;i<Data->P[j].Gcnt[k][l];i++) {
-								Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].oldAssign=
-									Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Assign;
-								Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Assign=0;
-								Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Prime=0;
-								Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Crew=0;
-								Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Task=0;
-								Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Moved=0;
-								if (Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Special==0)
-									Data->P[j].Pool[Data->P[j].Crew[k][l][i]-1].Special=6;
-								Data->P[j].Crew[k][l][i]=0;
-							}                        /* for i */
-							Data->P[j].Gcnt[k][l]=0;
-						}                          /* it temp */
-					}                            /* if Gcnt */
-				}                              /* for l */
-			}                                /* for k */
-	}                                  /* for j */
+						}		   /* for i */
+						if (temp > 0)
+						{
+							for (i = 0; i < Data->P[j].Gcnt[k][l]; i++)
+							{
+								Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].oldAssign =
+									Data->P[j].Pool[Data->P[j].
+									Crew[k][l][i] - 1].Assign;
+								Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Assign = 0;
+								Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Prime = 0;
+								Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Crew = 0;
+								Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Task = 0;
+								Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
+									1].Moved = 0;
+								if (Data->P[j].Pool[Data->P[j].
+										Crew[k][l][i] - 1].Special == 0)
+									Data->P[j].Pool[Data->P[j].
+										Crew[k][l][i] - 1].Special = 6;
+								Data->P[j].Crew[k][l][i] = 0;
+							}	   /* for i */
+							Data->P[j].Gcnt[k][l] = 0;
+						}		   /* it temp */
+					}			   /* if Gcnt */
+				}				   /* for l */
+			}					   /* for k */
+	}							   /* for j */
 
-	if (MAIL==-1 || MAIL==0) UpdateHardTurn(0);
-	if (MAIL==-1 || MAIL==1) UpdateHardTurn(1);
+	if (MAIL == -1 || MAIL == 0)
+		UpdateHardTurn(0);
+	if (MAIL == -1 || MAIL == 1)
+		UpdateHardTurn(1);
 
 	return;
 }
@@ -801,42 +970,57 @@ void UpdAll(char side)
  return;
 }
 
-void TestFMis(int j,int i)
+void
+TestFMis(int j, int i)
 {
-  int k;
-  if (Data->P[j].History[i].Saf==0) return;
-  if (Data->P[j].History[i].Event>0) {
-     Data->P[j].History[i].Event--;
-     if (random(100)>Data->P[j].History[i].Saf) {  // Failed Mission
-        k=Data->P[j].History[i].MissionCode;
-        Data->P[j].History[i].Event=Data->P[j].History[i].Saf=0;
-        Data->P[j].History[i].Prestige=PrestNeg(j,(k==10)?4:(k==12)?5:6);
-        Data->P[j].Plans|=(k==10)?0x01:(k==12)?0x02:0x04;
-        Data->P[j].History[i].spResult=5000;
-     }
-     if (Data->P[j].History[i].Event==0 && Data->P[j].History[i].Prestige==0) { 
-        k=Data->P[j].History[i].MissionCode;
-        Data->P[j].History[i].Prestige=Set_Goal(j,(k==10)?4:(k==12)?5:6,3);
-        Data->P[j].Plans|=(k==10)?0x10:(k==12)?0x20:0x40;
-        Data->P[j].History[i].spResult=1;
-        Data->P[j].History[i].Saf=0;
-     }
-  };
+	int k;
+
+	if (Data->P[j].History[i].Saf == 0)
+		return;
+	if (Data->P[j].History[i].Event > 0)
+	{
+		Data->P[j].History[i].Event--;
+		if (random(100) > Data->P[j].History[i].Saf)
+		{						   /* Failed Mission */
+			k = Data->P[j].History[i].MissionCode;
+			Data->P[j].History[i].Event = Data->P[j].History[i].Saf = 0;
+			Data->P[j].History[i].Prestige =
+				PrestNeg(j, (k == 10) ? 4 : (k == 12) ? 5 : 6);
+			Data->P[j].Plans |= (k == 10) ? 0x01 : (k == 12) ? 0x02 : 0x04;
+			Data->P[j].History[i].spResult = 5000;
+		}
+		if (Data->P[j].History[i].Event == 0
+			&& Data->P[j].History[i].Prestige == 0)
+		{
+			k = Data->P[j].History[i].MissionCode;
+			Data->P[j].History[i].Prestige =
+				Set_Goal(j, (k == 10) ? 4 : (k == 12) ? 5 : 6, 3);
+			Data->P[j].Plans |= (k == 10) ? 0x10 : (k == 12) ? 0x20 : 0x40;
+			Data->P[j].History[i].spResult = 1;
+			Data->P[j].History[i].Saf = 0;
+		}
+	};
 }
 
-void UpdateHardTurn(char plr)
+/** Update equipment
+ * @TODO: limit of hardcoded 28 hardware types
+ * @TODO: Should this not handle all four types of hardware?
+ */
+void
+UpdateHardTurn(char plr)
 {
-  int i;
-  Equipment *px;
+	int i;
+	Equipment *px;
 
-  for (i=0;i<28;i++) {
-    px=(Equipment *) &Data->P[plr].Probe[i];
-    if (px->Delay>0) px->Delay--;
-    if (px->Num>=0) px->Seas++;
-    px->Spok=0;
-  }
+	for (i = 0; i < 28; i++)
+	{
+		px = (Equipment *) & Data->P[plr].Probe[i];
+		if (px->Delay > 0)
+			px->Delay--;
+		if (px->Num >= 0)
+			px->Seas++;
+		px->Spok = 0;
+	}
 }
 
-
-
-// EOF
+/* vim: set noet ts=4 sw=4 tw=77: */

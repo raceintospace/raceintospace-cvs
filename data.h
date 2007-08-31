@@ -57,6 +57,18 @@ Astronaut.TrainingLevel:    0 = None
 			    6 = Advanced Training III
 			    7 = Advanced Training IV
 
+Astronauts.Special:
+                News specials
+                1 = Retirement announcement
+                2 = Actual retirement
+                3 = ??? unused ???
+                4 = ??? unused ???
+                5 = Injury resolution
+                6 = ??? Breaking Group/Replacing Astronaut ???
+                7 = Finished Training
+                8 = Finished Advanced
+                9 = Injury during training
+                10 = Retirement after training
 */
 
 // BARIS program definitions
@@ -564,8 +576,4 @@ typedef struct {
 
 #endif // __DATA_H__
 
-// Editor settings {{{
-// ex: ts=4 noet sw=2 
-// ex: foldmethod=marker
-// }}}
-
+/* vim: set noet ts=4 sw=4 tw=77: */

@@ -1,3 +1,9 @@
+2007-08-31  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V188
+
+	* data.h, start.c: comments, TODOs and formatting
+
 2007-08-21  Will Glynn <will@raceintospace.org>
 
 	* V187
