@@ -1,14 +1,16 @@
+/** \page qa Questions
 
-The frame rate in the FRM files seems to be 8, which means 8 frames
+\li The frame rate in the FRM files seems to be 8, which means 8 frames
 per second, right?
 - I think this is right.
 
-RLE bug
--What's this?  I'm sending you a link to SV_LIB source that has a commented RLED
+\li RLE bug
+- What's this?  I'm sending you a link to SV_LIB source that has a commented RLED
 
-how fast is BzTimer?
--It's 5000 ms, or 5 seconds.  That stuff was handled by the Miles audio library to keep the audio buffer full.
+\li how fast is BzTimer?
+- It's 5000 ms, or 5 seconds.  That stuff was handled by the Miles audio library to keep the audio buffer full.
 
-what is DoCycle supposed to do?
+\li what is DoCycle supposed to do?
 - This is a little bit of color cycling on the space ports.  It's just shuffling some colors around
 
+*/

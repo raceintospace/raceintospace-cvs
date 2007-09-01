@@ -1,10 +1,17 @@
-0. License
+/**
+\mainpage Race into Space
+
+Race into Space is the free software version of Interplay's Buzz Aldrin's Race into Space. This is the reworked version following the source release for the computer version of the Liftoff! board game by Fritz Bronner. This was developed by Strategic Visions and published by Interplay in as a disk based game in 1992 and a cd-rom in 1994.
+
+\page readme README
+
+\section license 0. License
 
     Race  Into Space  is distributed  under GNU  General Public  License
     (GPL)  version 2. You  can find  the  terms and  conditions in  file
     COPYING.
 
-1. Running the game
+\section running 1. Running the game
 
     If you  have downloaded the  source distribution then  see DEVELOPER
     file.  Follow on once you have the game executables ready.
@@ -30,7 +37,7 @@
 
     Good luck on your way to the Moon!
 
-1a. Running on Microsoft Windows platforms.
+\subsection runningwin 1a. Running on Microsoft Windows platforms.
 
     On Windows  error messages  will go to  the stderr.txt  file created
     in  the working  directory  (usually the  directory  where the  main
@@ -49,7 +56,7 @@
     "BARIS_DATA=c:\program files\raceintospace"
     "BARIS_SAVE=c:\program files\raceintospace\saves"
     
-2. Troubleshooting
+\section troubleshooting 2. Troubleshooting
 
     Probably you will run into some bugs,  at least if you play the game
     long enough. To help  us improve raceintospace please try  to find a
@@ -58,4 +65,6 @@
     game  file  and  your  system information  (os  version,  libraries,
     environment variables, command line arguments, etc.)
 
-3. Development: see file DEVELOPER.
+\section development 3. Development: see file DEVELOPER.
+
+*/

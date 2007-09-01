@@ -1,9 +1,9 @@
+/** \page SPOT SPOT_ANIMATIONS REFERENCE
 
 
+\section ref SPOT_ANIMATIONS REFERENCE
 
-SPOT_ANIMATIONS REFERENCE
-_________________________
-
+\verbatim
 Index   Spot Description
 
  0      USA LM TEST
@@ -26,3 +26,5 @@ Index   Spot Description
  17     SOV Tracking Station (double)
  18     SOV new plane with landing gear
  19     USA Rotating Crane
+\endverbatim
+*/

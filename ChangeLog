@@ -1,5 +1,17 @@
 2007-08-31  Fabian S. <fabguy@users.sourceforge.net>
 
+	* V189
+
+	* Doxyfile.extended, Doxyfile.quick: new files for documentation
+	  generation
+
+	* AUTHORS, DEVELOPER, PLAN, QUESTIONS, README, TODO, WHO_SPOT:
+	  transformed to doxygen style pages
+
+	* Makefile.in: introduced "doc" and "extendeddoc" targets
+
+2007-08-31  Fabian S. <fabguy@users.sourceforge.net>
+
 	* V188
 
 	* data.h, start.c: comments, TODOs and formatting

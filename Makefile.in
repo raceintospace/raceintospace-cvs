@@ -152,6 +152,16 @@ configure: configure.in $(wildcard m4/*.m4)
 	-aclocal $(ACLOCAL_FLAGS)
 	autoconf
 
+doc: Doxyfile.quick
+	-rm Doxyfile
+	cp Doxyfile.quick Doxyfile
+	doxygen
+
+extendeddoc: Doxyfile.extended
+	-rm Doxyfile
+	cp Doxyfile.extended Doxyfile
+	doxygen
+
 race.h.in: configure.in
 	autoheader
 
