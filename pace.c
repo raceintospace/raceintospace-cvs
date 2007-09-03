@@ -149,7 +149,7 @@ RLED_img (void *src_raw, void *dest_raw, unsigned int src_size, int w, int h)
 	return (w * h);
 }
 
-/*
+/**
  * Original sources say:
  * @param wh = 0 - fade colors from 0 to val,
  *           = 1 - fade colors from val to 3*256,
@@ -356,6 +356,12 @@ randomize (void)
 	srand (get_time() * 1000);
 }
 
+/** do nothing for a few seconds.
+ * 
+ * The function will wait a number of seconds but will call av_block() in the meantime.
+ * 
+ * \param secs Number of seconds to wait.
+ */
 void
 idle_loop_secs (double secs)
 {
@@ -373,6 +379,10 @@ idle_loop_secs (double secs)
 	}
 }
 
+/** wait a number of ticks
+ * 
+ * \param ticks Number of ticks to wait.
+ */
 void
 idle_loop (int ticks)
 {

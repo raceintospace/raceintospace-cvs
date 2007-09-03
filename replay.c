@@ -103,7 +103,7 @@ RLEF(char *dest, char *src, unsigned int src_size)
 }
 #endif
 
-/* find and fill REPLAY structure and return 0, or -1 if failed.
+/** find and fill REPLAY structure and return 0, or -1 if failed.
  * if grp != NULL and oGROUP at offset rep->off[0] is found, then fill grp too
  */
 static int
@@ -127,7 +127,7 @@ find_replay(REPLAY * rep, struct oGROUP *grp, char player, int num,
 
 		offset = (player * 100) + num;
 		fseek(f, offset * (sizeof *rep), SEEK_SET);
-		/* TODO: fread_REPLAY(&Rep, 1, f); */
+		/** \todo fread_REPLAY(&Rep, 1, f); */
 		fread(rep, (sizeof *rep), 1, f);
 		fclose(f);
 		if (grp && fseek(fseq, sizeof_oGROUP * rep->Off[0], SEEK_SET) == 0)

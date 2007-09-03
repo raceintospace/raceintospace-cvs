@@ -1,75 +1,76 @@
 /** \page developers DEVELOPER NOTES
-\section dependencies 0. Dependencies:
+\verbatim
+0. Dependencies:
 
-    \li libSDL      http://www.libsdl.org/
-    \li libogg      
-    \li libvorbis
-    \li libtheora   all available at http://xiph.org/downloads/
+    libSDL      http://www.libsdl.org/
+    libogg      
+    libvorbis
+    libtheora   all available at http://xiph.org/downloads/
 
-\section buildlinux 1. Building on Linux - easy
+1. Building on Linux - easy
 
-    \note Notes: This requires autoconf, you may need to install this too.
+    Notes: This requires autoconf, you may need to install this too.
 
-    \li 1)  Use your favorite package manager to get development libraries, ie:
+    1)  Use your favorite package manager to get development libraries, ie:
         # apt-get install libsdl-dev libtheora-dev libogg-dev libvorbis-dev
-    \li 2)  $ ./configure
-    \li 3)  $ make
+    2)  $ ./configure
+    3)  $ make
 
-    \note Notes: I needed to do these extra things before ./configure:
+    Notes: I needed to do these extra things before ./configure:
 
-        \li # cp m4/theora.m4 /usr/share/aclocal/.
-        \li $ aclocal -I m4
-        \li $ autoconf
+        # cp m4/theora.m4 /usr/share/aclocal/.
+        $ aclocal -I m4
+        $ autoconf
 
-    \attention autoconf prints one error:
+    autoconf prints one error:
 
-        \li configure.in:51: error: possibly undefined macro: AC_TYPE_SSIZE_T
+        configure.in:51: error: possibly undefined macro: AC_TYPE_SSIZE_T
 
     which can be ignored
 
-\section crosscompile 2. Cross compiling: Linux - Windows: tested
+2. Cross compiling: Linux - Windows: tested
 
-    \li 1)  install the cross compiler as described at:
+    1)  install the cross compiler as described at:
         http://www.libsdl.org/extras/win32/cross/README.txt
-    \li 2)  download SDL, development version for mingw32
-    \li 3)  copy SDL-xxx/lib/* from this tar file into your directory
+    2)  download SDL, development version for mingw32
+    3)  copy SDL-xxx/lib/* from this tar file into your directory
         of choice
-    \li 4)  download SDL runtime for win32 and put SDL.dll into
+    4)  download SDL runtime for win32 and put SDL.dll into
         os_win32 directory.
-    \li 5)  download and cross-compile required libraries, put the dlls into
+    5)  download and cross-compile required libraries, put the dlls into
         os_win32 directory, static versions and C headers into directories
         you were using in step 3)
-    \li 6)  edit os_win32/configure.mingw, run it
-    \li 7)  make
-    \li 8)  to build an installer you will need makensis tool, get it from
+    6)  edit os_win32/configure.mingw, run it
+    7)  make
+    8)  to build an installer you will need makensis tool, get it from
         http://nsis.sourceforge.net/, it is also available in debian (nsis)
 
-\section buildmac 3. Building on Mac OS X
+3. Building on Mac OS X
 
-    \li 1)  Download and install the Mac OS X version of SDL from libsdl.org
-    \li 2)  Unpack the data and music to race-data/ in the same directory that
+    1)  Download and install the Mac OS X version of SDL from libsdl.org
+    2)  Unpack the data and music to race-data/ in the same directory that
         holds the race/ source tree. The data is embedded in the .app in
 		the OS X version, so it is required at build time.
-	\li 3)  Checkout the 'xiph' module to the same place as race/ and
+	3)  Checkout the 'xiph' module to the same place as race/ and
 		race-data/. Open the Xcode project, and build for both Debug and
 		Release.
-    \li 4)  Open race/os_macosx/RaceIntoSpace.xcodeproj and compile.
+    4)  Open race/os_macosx/RaceIntoSpace.xcodeproj and compile.
 
-\section buildrpm 4. Making RPM's 
+4. Making RPM's 
 
-\todo THIS SECTION (Making RPMs) NEEDS UPDATING
+THIS SECTION (Making RPMs) NEEDS UPDATING
 
-    \li 1)  useful instructions:
+    1)  useful instructions:
         https://pmc.ucsc.edu/~dmk/notes/RPMs/Creating_RPMs.html
-    \li 2)  install rpmdevtools from fedora
-    \li 3)  run rpmdev-setuptree to make a build environment in your home
+    2)  install rpmdevtools from fedora
+    3)  run rpmdev-setuptree to make a build environment in your home
         directory
-    \li 4)  create ~/.rpmmacros as:
+    4)  create ~/.rpmmacros as:
         %_topdir /home/race/rpmbuild
         %_tmppath /home/race/rpmbuild/tmp
-    \li 5)  run the script "mkrpm"
+    5)  run the script "mkrpm"
 
-\section buildwin 5. Building on Windows using mingw32
+5. Building on Windows using mingw32
 
     This method was used in early testing, but may no longer work.  Give
     it  a shot  if  you like.   You will  need  development versions  of
@@ -77,14 +78,24 @@
     http://libsdl.org, other ones  would probably have to  be built from
     source.
 
-    \li 1)  cd os_win32/
-    \li 2)  Edit file configure.mingw32
-    \li 3)  run ./configure.mingw32
-    \li 4)  make
+    1)  cd os_win32/
+    2)  Edit file configure.mingw32
+    3)  run ./configure.mingw32
+    4)  make
 
-\section cvs 6. CVS access
+6. CVS access
 
     You can  get the  most recent  version of  the game  using anonymous
     CVS   access. See  http://sourceforge.net/cvs/?group_id=129186   for
     instructions.
+
+7. CVS Commiting
+
+    1) write the new code
+    2) update ChangeLog
+    3) run "make clean && make" to check for errors
+    4) update version.c - adding one to the current versionnumber
+    5) call "./checkin3" which will guide you through the actual commit
+
+\endverbatim
 */

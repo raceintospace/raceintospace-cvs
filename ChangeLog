@@ -1,3 +1,15 @@
+2007-09-03  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V190
+
+	* Doxyfile.extended, Doxyfile.quick: doc/ will be a dir in the current tree
+
+	* sdl.c, pace.c, replay.c: minimal documentation
+
+	* Makefile.in: added PHONY-targets
+
+	* DEVELOPER: changed back to more plain text, added section about CVS committing
+
 2007-08-31  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V189

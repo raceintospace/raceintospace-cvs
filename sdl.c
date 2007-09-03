@@ -496,17 +496,17 @@ av_step(void)
 		av_process_event(&ev);
 }
 
+/**
+ * block until an event comes in
+ *
+ * we have a 30ms timer going, so that is the
+ * maximum wait time
+ */
 void
 av_block(void)
 {
 	SDL_Event ev;
 
-	/* 
-	 * block until an event comes in
-	 *
-	 * we have a 30ms timer going, so that is the
-	 * maximum wait time
-	 */
 	if (SDL_WaitEvent(&ev))
 	{
 		av_process_event(&ev);
@@ -799,7 +799,7 @@ av_set_fading(int type, int from, int to, int steps, int preserve)
     av_sync();
 }
 
-/* compute area of intersection of rectangles */
+/** compute area of intersection of rectangles */
 inline static int
 intersect_area(SDL_Rect *first, SDL_Rect *second)
 {

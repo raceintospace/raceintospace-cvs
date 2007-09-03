@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 PROJECT_NAME           = raceintospace
 PROJECT_NUMBER         = 
-OUTPUT_DIRECTORY       = ../doc/
+OUTPUT_DIRECTORY       = ./doc/
 CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -28,7 +28,7 @@ FULL_PATH_NAMES        = YES
 STRIP_FROM_PATH        = ./
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
 MULTILINE_CPP_IS_BRIEF = NO
 DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
@@ -58,7 +58,7 @@ HIDE_SCOPE_NAMES       = NO
 SHOW_INCLUDE_FILES     = YES
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
-SORT_BRIEF_DOCS        = NO
+SORT_BRIEF_DOCS        = YES
 SORT_BY_SCOPE_NAME     = NO
 GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
@@ -124,13 +124,17 @@ FILE_PATTERNS          = *.c \
                          *.M \
                          *.MM \
                          *.PY \
-                         DEVELOPER \
-                         AUTHORS \
-                         QUESTIONS \
-                         WHO_STOP \
-                         TODO
+						 DEVELOPER \
+						 AUTHORS \
+						 QUESTIONS \
+						 WHO_SPOT \
+						 TODO \
+						 COPYING \
+						 PLAN \
+						 README
 RECURSIVE              = YES
-EXCLUDE                = 
+EXCLUDE                = ./doc/* \
+                         ./.temp/*
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = 
@@ -250,7 +254,7 @@ PERL_PATH              = /usr/bin/perl
 #---------------------------------------------------------------------------
 # Configuration options related to the dot tool   
 #---------------------------------------------------------------------------
-CLASS_DIAGRAMS         = NO
+CLASS_DIAGRAMS         = YES
 HIDE_UNDOC_RELATIONS   = NO
 HAVE_DOT               = YES
 CLASS_GRAPH            = YES

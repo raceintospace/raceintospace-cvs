@@ -60,6 +60,8 @@ BARIS_OBJS = $(addsuffix .@OBJEXT@, \
 	utils logging log4c log_default \
 )
 
+.PHONY: clean doc extendeddoc
+
 all: $(PROG_NAME)
 
 extra: all $(PROGS)
