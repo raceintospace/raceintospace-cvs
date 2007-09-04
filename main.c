@@ -1046,10 +1046,17 @@ void VerifyCrews(char plr)
   }
 }
 
+/** Opens "MISSION.DAT" to find mission data
+ * 
+ * \param mcode Code of the mission - works as index for the file
+ * 
+ * \todo This is highly coupled to game logic 
+ * and size of internal structures.
+ */
 void GetMisType(char mcode)
 {
   FILE *fin;
-
+	/** \todo Missing assert for opening file? */
   fin=sOpen("MISSION.DAT","rb",0);
   fseek(fin,mcode*(sizeof Mis),SEEK_SET); // Find Mission Type
   fread(&Mis,sizeof Mis,1,fin);            // Get new Mission Info

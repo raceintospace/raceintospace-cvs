@@ -1,3 +1,9 @@
+2007-09-04  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V191
+
+	* data.h, fs.c, main.c, mis_c.c, proto.h: doc, doc, doc
+
 2007-09-03  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V190

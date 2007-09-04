@@ -18,71 +18,84 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
-//---------------Event Card Structure --------------
-/* Sample Work for Data File Saving and Loading
-
-MissionCode: x = Mission Type.
-
-TurnOnly :  1 = No new astronauts
-	    2 = No manned missions this year
-	    3 = Hardware 50% off this season
-	    4 = Hardware 50% off next season
-	    5 = 50% chance of explosion on pad
-	    6 = Only one launch this turn
-
-FuturePlans:  1 = Multi-Manned Mission
-	      2 = Satellite
-	      3 = Manned Launch
-	      4 = Joint Mission
-
-Astronaut.Status:  0 = Active
-		   1 = Dead
-		   2 = Retired
-		   3 = Injured
-		   4 = Training Season I
-		   5 = Training Season II
-		   6 = Training Season III
-		   7 = Advanced Training I
-		   8 = Advanced Training II
-		   9 = Advanced Training III
-		  10 = Advanced Training IV
-
-Astronaut.TrainingLevel:    0 = None
-			    1 = Basic Training I
-			    2 = Basic Training II
-			    3 = Basic Training III
-			    4 = Advanced Training I
-			    5 = Advanced Training II
-			    6 = Advanced Training III
-			    7 = Advanced Training IV
-
-Astronauts.Special:
-                News specials
-                1 = Retirement announcement
-                2 = Actual retirement
-                3 = ??? unused ???
-                4 = ??? unused ???
-                5 = Injury resolution
-                6 = ??? Breaking Group/Replacing Astronaut ???
-                7 = Finished Training
-                8 = Finished Advanced
-                9 = Injury during training
-                10 = Retirement after training
+/**
+\page eventcards Event Card Structure
+ * 
+ * \section datafile Sample Work for Data File Saving and Loading
+ * 
+ * \subsection missioncode MissionCode
+ *         x = Mission Type.
+ * 
+ * \todo A load of code uses these number directly.
+ * We should fix this and attach propper attributes to 
+ * the missions or keep lists of missions having these attributes.
+ * 
+ * \subsection turnonly TurnOnly
+ * \li 1 = No new astronauts
+ * \li 2 = No manned missions this year
+ * \li 3 = Hardware 50% off this season
+ * \li 4 = Hardware 50% off next season
+ * \li 5 = 50% chance of explosion on pad
+ * \li 6 = Only one launch this turn
+ * 
+ * \section futureplans FuturePlans
+ * \li  1 = Multi-Manned Mission
+ * \li  2 = Satellite
+ * \li  3 = Manned Launch
+ * \li  4 = Joint Mission
+ * 
+ * \section astronautstatus Astronaut.Status
+ * \li   0 = Active
+ * \li   1 = Dead
+ * \li   2 = Retired
+ * \li   3 = Injured
+ * \li   4 = Training Season I
+ * \li   5 = Training Season II
+ * \li   6 = Training Season III
+ * \li   7 = Advanced Training I
+ * \li   8 = Advanced Training II
+ * \li   9 = Advanced Training III
+ * \li  10 = Advanced Training IV
+ * 
+ * \section astronauttraininglevel Astronaut.TrainingLevel:
+ * \li   0 = None
+ * \li   1 = Basic Training I
+ * \li   2 = Basic Training II
+ * \li   3 = Basic Training III
+ * \li   4 = Advanced Training I
+ * \li   5 = Advanced Training II
+ * \li   6 = Advanced Training III
+ * \li   7 = Advanced Training IV
+ * 
+ * \section astronautspecial Astros::Special
+ *                 News specials
+ * \li   1 = Retirement announcement
+ * \li   2 = Actual retirement
+ * \li   3 = ??? unused ???
+ * \li   4 = ??? unused ???
+ * \li   5 = Injury resolution
+ * \li   6 = ??? Breaking Group/Replacing Astronaut ???
+ * \li   7 = Finished Training
+ * \li   8 = Finished Advanced
+ * \li   9 = Injury during training
+ * \li  10 = Retirement after training
 */
 
 // BARIS program definitions
 
-#define NUM_PLAYERS					2
-#define MAX_LAUNCHPADS			3
-#define MAX_MISSIONS			3
+#define NUM_PLAYERS				2 /**< number of players */
+#define MAX_LAUNCHPADS			3 /**< number of launchpads available */
+#define MAX_MISSIONS			3 /**< number of concurrent missions available */
 
-// Astronaut related
-#define ASTRONAUT_POOLS					5
+/** \name Astronaut related
+ *@{
+ */
+#define ASTRONAUT_POOLS				5
 #define ASTRONAUT_CREW_MAX			8
-#define ASTRONAUT_FLT_CREW_MAX	4
+#define ASTRONAUT_FLT_CREW_MAX		4
 
 #define ASTRONAUT_MOOD_THRESHOLD	40
+/*@}*/
 
 #pragma pack (1)
 
@@ -96,72 +109,79 @@ struct Prest_Upd {
 
 struct Defl {char Plr1,Plr2,Lev1,Lev2,Ast1,Ast2,Input,Anim,Music,Sound;};
 
+/** The Prestige for any achievement is stored in this.
+*/
 struct PrestType {
-  char Add[4];     // 4&5 used for qty completed
-  char Goal[2];    // Goal steps used for prest calculations
-  int16_t Points[2];   // Total points earned
-  char Indec;      // the index for the first into .History[]
-  char Place;      // Who got the prestige first.
-  char mPlace;     // If you've done it at all
-  char Month,Year; // Date of the First
+	char Add[4];		/**< 4&5 used for qty completed */
+	char Goal[2];		/**< Goal steps used for prest calculations */
+	int16_t Points[2];	/**< Total points earned */
+	char Indec;			/**< the index for the first into .History[] */
+						/**< \bug Indec is probably a typo. Should be Index. */
+	char Place;			/**< Who got the prestige first. */
+	char mPlace;		/**< If you've done it at all */
+	char Month;			/**< Date of the First */
+	char Year;			/**< Date of the First */
 };
 
 enum EquipmentIndex {
-	EQUIP_PROBE = 0,
-	EQUIP_ROCKET = 1,
-	EQUIP_MANNED = 2,
-	EQUIP_TECH = 3,
+	EQUIP_PROBE = 0,	/**< unmanned satelite */
+	EQUIP_ROCKET = 1,	/**< propulsion system */
+	EQUIP_MANNED = 2,	/**< vehicle to transport humans */
+	EQUIP_TECH = 3,		/**< piece of hardware to support other stuff */
 };
 
 typedef struct _Equipment {
-  char Name[20];     // Name of Hardware
-  char ID[2];        // EquipID "C0 C1 C2 C3 : Acts as Index
-	int16_t  Safety;        // current safety factor
-  int16_t  MisSaf;        // Safety During Mission
-	int16_t  MSF;           // used only to hold safety for docking kludge
-	char Base;         // initial safety factor
-	int16_t  InitCost;    // Startup Cost of Unit
-	char UnitCost;     // Individual Cost
-	int16_t  UnitWeight;    // Weight of the Item
-	int16_t  MaxPay;        // Maximum payload
-	char RDCost;       // Cost of R&D per roll
-	char Code;         // Equipment Code for qty scheduled
-	char Num;          // quantity in inventory
-  char Spok;         // qty being used on missions
-  char Seas;         // Seasons Program is Active
-	char Used;         // total number used in space
-  char IDX[2];       // EquipID "C0 C1 C2 C3 : Acts as Index
-  int16_t  Steps;        // Program Steps Used
-	int16_t  Failures;     // number of program failures
-	char MaxRD;        // maximum R & D
-	char MaxSafety;    // maximum safety factor
-	char SMods;        // safety factor mods for next launch
-	char SaveCard;     // counter next failure in this prog
-	char Delay;        // delay in purchase - in seasons
-	char Duration;     // Days it can last in space
-	char Damage;       // Damage percent for next launch
-	char DCost;        // Cost to repair damage
-  char MisSucc;      // Mission Successes
-  char MisFail;      // Mission Failures
+	char Name[20];		/**< Name of Hardware */
+	char ID[2];			/**< EquipID "C0 C1 C2 C3 : Acts as Index */
+	int16_t Safety;		/**< current safety factor */
+	int16_t MisSaf;		/**< Safety During Mission */
+	int16_t MSF;		/**< used only to hold safety for docking kludge */
+	char Base;			/**< initial safety factor */
+	int16_t InitCost;	/**< Startup Cost of Unit */
+	char UnitCost;		/**< Individual Cost */
+	int16_t UnitWeight;	/**< Weight of the Item */
+	int16_t MaxPay;		/**< Maximum payload */
+	char RDCost;		/**< Cost of R&D per roll */
+	char Code;			/**< Equipment Code for qty scheduled */
+	char Num;			/**< quantity in inventory */
+	char Spok;			/**< qty being used on missions */
+	char Seas;			/**< Seasons Program is Active */
+	char Used;			/**< total number used in space */
+	char IDX[2];		/**< EquipID "C0 C1 C2 C3 : Acts as Index */
+	int16_t Steps;		/**< Program Steps Used */
+	int16_t Failures;	/**< number of program failures */
+	char MaxRD;			/**< maximum R & D */
+	char MaxSafety;		/**< maximum safety factor */
+	char SMods;			/**< safety factor mods for next launch */
+	char SaveCard;		/**< counter next failure in this prog */
+	char Delay;			/**< delay in purchase - in seasons */
+	char Duration;		/**< Days it can last in space */
+	char Damage;		/**< Damage percent for next launch */
+	char DCost;			/**< Cost to repair damage */
+	char MisSucc;		/**< Mission Successes */
+	char MisFail;		/**< Mission Failures */
 } Equipment;
 
 struct MissionType {
-	char Name[25];          // name of mission
-	char MissionCode;       // internal code of mission type
-	char Patch;             // Patch Used on this Mission
-	char part;              // primary/secondary portion
-	char Hard[6];           // Prime,Kick,LEM,PayLoad,Rocket
-	char Joint;             // Joint Mission flag
-	char Rushing;           // rushing time 0-3
-	char Month;             // Month of Launch
-	char Duration;          // Duration time
-	char Men;               // Qty of men used in mission
-	char Prog;              // Hardware program used
-	char PCrew;             // Primary Crew
-	char BCrew;             // Backup Crew
-	char Crew;              // Actual Mission Crew
+	char Name[25];		/**< name of mission */
+	char MissionCode;	/**< internal code of mission type */
+	char Patch;			/**< Patch Used on this Mission */
+	char part;			/**< primary/secondary portion */
+	char Hard[6];		/**< Prime,Kick,LEM,PayLoad,Rocket */
+	char Joint;			/**< Joint Mission flag */
+	char Rushing;		/**< rushing time 0-3 */
+	char Month;			/**< Month of Launch */
+	char Duration;		/**< Duration time */
+	char Men;			/**< Qty of men used in mission */
+	char Prog;			/**< Hardware program used */
+	char PCrew;			/**< Primary Crew */
+	char BCrew;			/**< Backup Crew */
+	char Crew;			/**< Actual Mission Crew */
 };
 
+/**
+ * \brief Number of astronauts to recruit in each level
+*/
 enum AstronautPoolClass
 {
 	ASTRO_POOL_LVL1	= 7,
@@ -171,69 +191,78 @@ enum AstronautPoolClass
 	ASTRO_POOL_LVL5 = 14
 };
 
-struct Astros {
-	char Name[14];       // Astronaut Name
-	char Face;           // Code for Astronaut Face
-	char Sex;            // Male or Female
-	char Compat;         // Compatability Code
-	char CR;             // Range of Compatability Right
-	char CL;             // Range of Compatability Left
-	char Moved;          // if 0 Astro Moved around this turn
-	char Mis;            // Successful Mission this Turn
-	char Happy;          // Happy within group
-			               // 1 = Successful Mission
-			               // 2 = Personal First
-	char Prime;          // 2 = Primary Crew Member
-			               // 1 = Backup Crew Member
-			               // 0 = Not selected
-	char Active;         // Seasons Active
-	char AISpecial;      // AI Special Astro Note
-	char Service;        // Service of Origination
-	char Status;         // Current status of Astronaut
-	char Focus;          // Focus of Advanced Training 0-4
-	char IDelay;         // Injury Delay - Ok if 0
-	char RDelay;         // Retire Delay - Retire if 0
-	char RetReas;        // Retire Reason flag
-	char Special;        // Special for announcements
-	char Assign;         // Location of Astro 0=limbo
-	char oldAssign;      // program of last turn
-	char Una;            // Unassigned flag
-	char Crew;           // Crew Assiciated in prog Assigm
-	char Task;           // What his job is in Flt Crew
-	int16_t  Prestige;       // Prestige Earned
-	char Days;           // Days in Space
-	char Medals;         // Medals Earned
-	char Save;           // Astro Saving Roll Percent
-	char Missions;       // Number of Missions Flown
-	char MissionNum[10]; // Mission numbers participated
-	char Cap;            // Capsule Pilot Skills
-	char LM;             // LEM Pilot Skills
-	char EVA;            // EVA Skills
-	char Docking;        // Docking Skills
-	char Endurance;      // Constitution Skills
-	char TrainingLevel;  // Level of Schooling
-	char Group;          // Group Entered with
-	char Mood;           // Mood of Astronaut
-	char Pool;           // Temp Storage for Astros
-	char Hero;           // Hero Status
+/**
+\brief This is a structure representing astronauts/cosmonauts.
+*/
+struct Astros
+{
+	char Name[14];	   /**< Astronaut Name */
+	char Face;		   /**< Code for Astronaut Face */
+	char Sex;		   /**< Male or Female */
+	char Compat;	   /**< Compatability Code */
+	char CR;		   /**< Range of Compatability Right */
+	char CL;		   /**< Range of Compatability Left */
+	char Moved;		   /**< if 0 Astro Moved around this turn */
+	char Mis;		   /**< Successful Mission this Turn */
+	char Happy;		   /**< \brief Happy within group */
+					   /**< \li 1 = Successful Mission */
+					   /**< \li 2 = Personal First */
+	char Prime;		   /**< \brief indicates the type of crew s/he's in */
+					   /**< \li 2 = Primary Crew Member */
+					   /**< \li 1 = Backup Crew Member */
+					   /**< \li 0 = Not selected */
+	char Active;	   /**< Seasons Active */
+	char AISpecial;	   /**< AI Special Astro Note */
+	char Service;	   /**< Service of Origination */
+	char Status;	   /**< Current status of Astronaut */
+	char Focus;		   /**< Focus of Advanced Training 0-4 */
+	char IDelay;	   /**< Injury Delay - Ok if 0 */
+	char RDelay;	   /**< Retire Delay - Retire if 0 */
+	char RetReas;	   /**< Retire Reason flag */
+	char Special;	   /**< Special for announcements */
+	char Assign;	   /**< Location of Astro 0=limbo */
+	char oldAssign;	   /**< program of last turn */
+	char Una;		   /**< Unassigned flag */
+	char Crew;		   /**< Crew Assiciated in prog Assigm */
+	char Task;		   /**< What his job is in Flt Crew */
+	int16_t Prestige;  /**< Prestige Earned */
+	char Days;		   /**< Days in Space */
+	char Medals;	   /**< Medals Earned */
+	char Save;		   /**< Astro Saving Roll Percent */
+	char Missions;	   /**< Number of Missions Flown */
+	char MissionNum[10];	   /**< Mission numbers participated */
+	char Cap;		   /**< Capsule Pilot Skills */
+	char LM;		   /**< LEM Pilot Skills */
+	char EVA;		   /**< EVA Skills */
+	char Docking;	   /**< Docking Skills */
+	char Endurance;	   /**< Constitution Skills */
+	char TrainingLevel;/**< Level of Schooling */
+	char Group;		   /**< Group Entered with */
+	char Mood;		   /**< Mood of Astronaut */
+	char Pool;		   /**< Temp Storage for Astros */
+	char Hero;		   /**< Hero Status */
 };
 
-struct PastInfo {  // For Records of Missions
-	char MissionName[2][25];         // Name of Mission
-	char Patch[2];                   // Patch Type
-	char MissionCode;                // Type of Mission
-	char MissionYear;                // Year Mission Took Place
-	char Month;                      // Month of Launch
-	char Time;                       // Early / Late Flag
-	char Man[2][4];			         // Astros # involved in Mis
-	char Hard[2][5];                 // Set of hardware
-	uint16_t result;             // Success / Failure
-	uint16_t spResult;           // Actual deciding Result
-	char Event;                      // Single event code
-  char Saf;                        // Safety of the Equipment for delays
-	char Part;                       // Participant in event code
-	int16_t  Prestige;			            // Prestige Earned on this Mission
-	char Duration;			            // Length of Mission (units:ABCDEF)
+/**
+ * \brief For Records of Missions
+*/
+struct PastInfo
+{
+	char MissionName[2][25];	   /**< Name of Mission */
+	char Patch[2];				   /**< Patch Type */
+	char MissionCode;			   /**< Type of Mission */
+	char MissionYear;			   /**< Year Mission Took Place */
+	char Month;					   /**< Month of Launch */
+	char Time;					   /**< Early / Late Flag */
+	char Man[2][4];				   /**< Astros # involved in Mis */
+	char Hard[2][5];			   /**< Set of hardware */
+	uint16_t result;			   /**< Success / Failure */
+	uint16_t spResult;			   /**< Actual deciding Result */
+	char Event;					   /**< Single event code */
+	char Saf;					   /**< Safety of the Equipment for delays */
+	char Part;					   /**< Participant in event code */
+	int16_t Prestige;			   /**< Prestige Earned on this Mission */
+	char Duration;				   /**< Length of Mission (units:ABCDEF) */
 };
 
 struct BuzzData {                   // master data list for Buzz Aldrin's
@@ -437,24 +466,24 @@ struct BlockHead {
 };
 
 struct mStr {
-  char Index;         // Mission Index Number
-  char Name[50];      // Name of Mission
-  char Abbr[24];      // Name of Mission Abbreviated
-  char Code[62];      // Mission Coding String
-  char Alt[36];       // Alternate Sequence
-  char AltD[36];      // Alternate Sequence for Deaths (Jt Missions Only)
-  char Days,          // Duration Level
-       Dur,         // Duration Mission
-       Doc,         // Docking Mission
-       EVA,         // EVA Mission
-       LM,          // LM Mission
-       Jt,          // Joint Mission
-       Lun,         // Lunar Mission
-       mEq,           // Minimum Equipment
-       mCrew;         // Useful for Morgans Code
-  uint8_t mVab[2];       // Hardware Requirements
-  char PCat[5],       // Prestige Category List
-       LMAd;          // LM Addition Points
+	char Index;		  /**< Mission Index Number */
+	char Name[50];	  /**< Name of Mission */
+	char Abbr[24];	  /**< Name of Mission Abbreviated */
+	char Code[62];	  /**< Mission Coding String */
+	char Alt[36];	  /**< Alternate Sequence */
+	char AltD[36];	  /**< Alternate Sequence for Deaths (Jt Missions Only) */
+	char Days,		  /**< Duration Level */
+	Dur,			  /**< Duration Mission */
+	Doc,			  /**< Docking Mission */
+	EVA,			  /**< EVA Mission */
+	LM,				  /**< LM Mission */
+	Jt,				  /**< Joint Mission */
+	Lun,			  /**< Lunar Mission */
+	mEq,			  /**< Minimum Equipment */
+	mCrew;			  /**< Useful for Morgans Code */
+	uint8_t mVab[2];  /**< Hardware Requirements */
+	char PCat[5],	  /**< Prestige Category List */
+	LMAd;			  /**< LM Addition Points */
 };
 
 struct MXM {

@@ -128,6 +128,10 @@ bot:                          // bottom of routine
 }
 #endif
 
+/**
+ * 
+ * \param mode Female or other (2 = female)
+ */
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
 	int keep_going;

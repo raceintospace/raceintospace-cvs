@@ -16,6 +16,11 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+/** \file fs.c
+ * Implementation of filesystem access functions.
+ * 
+ */
+
 #include "fs.h"
 #include "options.h"
 #include "pace.h"
@@ -29,7 +34,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-/* path separator setup */
+/** path separator setup */
 #ifndef PATHSEP
 # if CONFIG_WIN32
 #  define PATHSEP '\\'
@@ -38,7 +43,7 @@
 # endif
 #endif
 
-/* see how do we call mkdir */
+/** see how do we call mkdir */
 #if HAVE_MKDIR
 # if MKDIR_TAKES_ONE_ARG
    /* MinGW32 */
@@ -74,13 +79,13 @@ LOG_DEFAULT_CATEGORY(filesys);
 
 static DIR *save_dir;
 
-/* used internally to find and open files */
+/** used internally to find and open files */
 typedef struct file {
-	FILE *handle;
-	char *path;
+	FILE *handle;	/**< standard filehandle */
+	char *path;		/**< path to file */
 } file;
 
-/*
+/** 
  * gamedata & savedata access functions
  */
 
@@ -104,7 +109,7 @@ try_fopen(const char *fname, const char *mode)
 
 	fp = fopen(fname, mode);
 
-	/* TODO: ENOENT is POSIX, ANSI equivalent for file does not exist??? */
+	/** \todo ENOENT is POSIX, ANSI equivalent for file does not exist??? */
 	if (!fp && errno != ENOENT)
 	{
 		int esave = errno;
@@ -115,7 +120,7 @@ try_fopen(const char *fname, const char *mode)
 	return fp;
 }
 
-/* try to open base/xxx/name for xxx = arg4 ... */
+/** try to open base/xxx/name for xxx = arg4 ... */
 static file
 s_open_helper(const char *base, const char *name, const char *mode, ...)
 {
@@ -175,6 +180,19 @@ s_open_helper(const char *base, const char *name, const char *mode, ...)
 	return f;
 }
 
+/** tries to find a file and open it
+ * 
+ * The function knows about the relative 
+ * position of certain filetypes. It retrieves 
+ * the position savegamedir and gamedatadir from
+ * options.
+ * 
+ * \param name Name of the file to open
+ * \param mode mode to file should be opened in
+ * \param type Type of the file eg. FT_SAVE, FT_DATA, ...
+ * 
+ * \return fileinformation including opened filehandle
+ */
 static file
 try_find_file(const char *name, const char *mode, int type)
 {
@@ -185,7 +203,7 @@ try_find_file(const char *name, const char *mode, int type)
 
 	DEBUG2("looking for file `%s'", name);
 
-	/* allow write access only to savegame files */
+	/** \note allows write access only to savegame files */
 	if (type != FT_SAVE)
 	{
 		if (strchr(mode, 'b'))
@@ -264,7 +282,7 @@ sOpen(const char *name, const char *mode, int type)
 	return f.handle;
 }
 
-/* Find and open file, if found return full path.
+/** Find and open file, if found return full path.
  * Caller is responsible for freeing the memory.
  */
 char*
