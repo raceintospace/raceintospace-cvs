@@ -109,10 +109,10 @@ static void
 shift_argv(char ** argv, int len, int shift)
 {
     int i = 0;
+
     assert(shift >= 0);
     assert(len >= 0);
-    if (!shift)
-        return;
+
     for (i = shift; i < len; ++i)
     {
         argv[i - shift] = argv[i];
@@ -338,53 +338,49 @@ setup_options(int argc, char *argv[])
 		/* if not, then write default config template */
 		write_default_config();
 
-	/* now check cmdline arguments */
+	/* first pass: command line options */
 	for (pos = 1; pos < argc; ++pos)
 	{
 		str = argv[pos];
 
-		if (*str != '-')
-			break;
+		if (str[0] != '-')
+			continue;
 
-		str++;
+		if (!str[1])
+			continue;
 
-		if (*str == '-')
+		if (strcmp(str, "--") == 0)
 		{
-			pos++;
+			shift_argv(argv + pos, argc - pos, 1);
+			argc--;
 			break;
 		}
 
-		if (!*str)
-			break;
-
-		for (; *str; ++str)
+		/* check what option matches */
+		if (strcmp(str, "-h") == 0)
+			usage(0);
+		else if (strcmp(str, "-i") == 0)
+			options.want_intro = 0;
+		else if (strcmp(str, "-n") == 0)
+			options.want_cheats = 1;
+		else if (strcmp(str, "-a") == 0)
+			options.want_audio = 0;
+		else if (strcmp(str, "-f") == 0)
+			options.want_fullscreen = 1;
+		else if (strcmp(str, "-v") == 0)
+			options.want_debug++;
+		else
 		{
-			if (*str == 'h')
-				usage(0);
-			else if (*str == 'i')
-				options.want_intro = 0;
-			else if (*str == 'n')
-				options.want_cheats = 1;
-			else if (*str == 'a')
-				options.want_audio = 0;
-			else if (*str == 'f')
-				options.want_fullscreen = 1;
-			else if (*str == 'v')
-				options.want_debug++;
-			else
-			{
-				ERROR2("unknown option -%c", *str);
-				usage(1);
-			}
+			ERROR2("unknown option %s", str);
+			usage(1);
 		}
+
+		shift_argv(argv + pos, argc - pos, 1);
+		argc--;
+		pos--; /* for loop will advance it again */
 	}
 
-	/* delete options from list */
-	shift_argv(argv + 1, argc - 1, pos - 1);
-	argc -= (pos - 1);
-
-	/* filter the non-option arguments for variable assignments */
-	/* pos contains index of first non-option element, if any */
+	/* second pass: variable assignments */
 	for (pos = 1; pos < argc; ++pos)
 	{
 		/* TODO should use PATH_MAX or something similar here */

@@ -1,3 +1,9 @@
+2007-09-17	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V192
+
+	* options.c (setup_options): fix processing of option switches
+
 2007-09-04  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V191
