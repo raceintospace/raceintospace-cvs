@@ -315,7 +315,8 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 	char ZCost;                      // Cost for Zond upgrade 10-20
 	char ZFlag;                      // Flag for Zond program
 	char DMod;                       // Docking Module in Orbit
-	char LaunchFacility[MAX_LAUNCHPADS];          // Cost to repair (-1=none)
+  /** \todo what is LaunchFacility == 1? */
+    char LaunchFacility[MAX_LAUNCHPADS];    /**< Cost to repair (-1=no facility; 0 = all okay) */
 	char AstroCount;                 // Current # in Program
 	char AstroLevel;                 // Level of selection
 	char AstroDelay;                 // Wait until next selection

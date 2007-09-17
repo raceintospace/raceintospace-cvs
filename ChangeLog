@@ -1,3 +1,18 @@
+2007-09-17  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V194
+
+	* data.h: minor docu LaunchFacility
+
+	* gr.c, fs.c, futbub.c, mis_m.c, mmfile.c: docu
+
+	* gamedata.h: set to verbatim documentation
+
+	* mis_c.c, replay.c: reformatted the todos to display in Doxygen
+
+	* mis_m.c: added missing Copyright stuff
+
+
 2007-09-17  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V193

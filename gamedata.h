@@ -64,13 +64,15 @@ struct oGROUP {
 #define sizeof_oGROUP (10 + 5*sizeof_oLIST)
 extern size_t fread_oGROUP(struct oGROUP *dst, size_t num, FILE *f);
 
-/*
+/** \page datafiles Datafiles
+ * \verbatim
  * File: FSEQ.DAT
  * Desc: Indexes to video and audio files for failed mission stages.
  * Structure:
  *       50 Table structures
  *       sequence of oFGROUP structures,
  *       each containing ID sequence string and oLIST structures.
+ * \endverbatim
  */
 
 struct Table {

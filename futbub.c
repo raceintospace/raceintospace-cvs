@@ -15,6 +15,14 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+/** \file futbub.c Draw future bubbles
+ * 
+ * The code in this file will create 
+ * the various bubbles in the "future missions" screen.
+ * 
+ * It also draws the splines.
+ */
+
 #include  "Buzz_inc.h"
 #include "externs.h"
 

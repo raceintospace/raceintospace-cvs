@@ -1,3 +1,20 @@
+/*
+    Copyright (C) 2005 Michael K. McCarty & Fritz Bronner
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 // Interplay's BUZZ ALDRIN's RACE into SPACE
 //
 // Formerly -=> LiftOff : Race to the Moon :: IBM version MCGA
@@ -28,7 +45,7 @@ extern struct mStr Mis;
 
 extern ui16 MisStat;
 extern char pCnt,tMen,BIG;            // Counter for pAry
-extern i16 pAry[15];         // Array for Presige Firsts compelted
+extern i16 pAry[15];         /**< Array for Presige Firsts compelted */
 extern REPLAY Rep;
 
 void Tick(char);

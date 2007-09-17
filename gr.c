@@ -2,12 +2,18 @@
 #include "externs.h"
 #include <assert.h>
 
+/** Unknown function
+ * \deprecated This function is probably depricated
+ */
 int
 grInitMouse (void)
 {
 	return gxSUCCESS;
 }
 
+/** Unknown function
+ * \deprecated This function is probably depricated
+ */
 void
 grSetMousePos (int x, int y)
 {
@@ -39,8 +45,8 @@ grGetMouseCurPos (int *xp, int *yp)
 	return (0);
 }
 
-static int gr_fg_color;
-static int gr_bg_color;
+static int gr_fg_color; /**< current foreground color to use */
+static int gr_bg_color; /**< current background color to use */
 
 void
 gr_set_color_map (unsigned char *map)
@@ -61,12 +67,20 @@ gr_maybe_sync (void)
 		av_sync ();
 }
 
+/** set foreground color
+ * 
+ * \param color the color code to use
+ */
 void
 grSetColor (int color)
 {
 	gr_fg_color = color;
 }
 
+/** set background color
+ * 
+ * \param color the color code to use
+ */
 void
 grSetBkColor (int color)
 {

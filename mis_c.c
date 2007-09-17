@@ -134,6 +134,7 @@ bot:                          // bottom of routine
  */
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
+    DEBUG3("->PlaySequence(plr, step %d, Seq, mode %s)", step, mode);
 	int keep_going;
 	int wlen,i,j;
 	unsigned int fres,max;
@@ -415,7 +416,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
         if (mm_open_fp(&vidfile, mmfp) <= 0)
             break;
 
-        /* TODO do not ignore width/height */
+        /** \todo do not ignore width/height */
         if (mm_video_info(&vidfile, NULL, NULL, &fps) <= 0)
             break;
 
@@ -429,7 +430,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 			if (hold_count == 0) {
 
-				/* TODO track decoding time and adjust delays */
+				/** \todo track decoding time and adjust delays */
 				if (mm_decode_video(&vidfile, video_overlay) <= 0)
 					break;
 
@@ -467,7 +468,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
                 video_rect.w = MAX_X / 2;
             }
 
-            /* TODO idle_loop is too inaccurate for this */
+            /** \todo idle_loop is too inaccurate for this */
             idle_loop_secs(1.0 / fps);
 			if (sts<23) {
 				if (BABY==0 && BIG==0) DoPack(plr,ffin,(AEPT && !mode) ? 1 : 0,Seq,seq_name);
@@ -518,6 +519,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
     mm_close(&vidfile);
     video_rect.h = 0;
     video_rect.w = 0;
+    DEBUG1("<-PlaySequence()");
 }
 
 void Tick(char plr)

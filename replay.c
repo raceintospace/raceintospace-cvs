@@ -105,6 +105,9 @@ RLEF(char *dest, char *src, unsigned int src_size)
 
 /** find and fill REPLAY structure and return 0, or -1 if failed.
  * if grp != NULL and oGROUP at offset rep->off[0] is found, then fill grp too
+ * 
+ * \return -1 on bad sequence
+ * \return  0 in all other cases
  */
 static int
 find_replay(REPLAY * rep, struct oGROUP *grp, char player, int num,
@@ -117,6 +120,7 @@ find_replay(REPLAY * rep, struct oGROUP *grp, char player, int num,
 
 	assert(rep);
 
+	/** \note uses SEQ.DAT */
 	fseq = sOpen("SEQ.DAT", "rb", 0);
 	if (!fseq)
 		return -1;
@@ -127,7 +131,7 @@ find_replay(REPLAY * rep, struct oGROUP *grp, char player, int num,
 
 		offset = (player * 100) + num;
 		fseek(f, offset * (sizeof *rep), SEEK_SET);
-		/** \todo fread_REPLAY(&Rep, 1, f); */
+		/** \todo Uses fread() here - should be fread_REPLAY(&Rep, 1, f); */
 		fread(rep, (sizeof *rep), 1, f);
 		fclose(f);
 		if (grp && fseek(fseq, sizeof_oGROUP * rep->Off[0], SEEK_SET) == 0)
@@ -161,6 +165,11 @@ find_replay(REPLAY * rep, struct oGROUP *grp, char player, int num,
 	return retval;
 }
 
+/**
+ * 
+ * \returns nothing if find_replay() fails
+ * \returns nothing if it can't open the [f]seq.dat file
+ */
 void
 Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 {
@@ -179,6 +188,9 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 	if (find_replay(&Rep, NULL, plr, num, Type) < 0)
 		return;
 
+	/** \note uses SEQ.DAT
+	 *  \note uses FSEQ.DAT
+	 */
 	seqf = sOpen("SEQ.DAT", "rb", 0);
 	fseqf = sOpen("FSEQ.DAT", "rb", 0);
 
@@ -243,6 +255,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 			if (!seq_fname)
 				seq_fname = "(unknown)";
 
+			/** \todo assumption on file extension */
 			snprintf(fname, sizeof(fname), "%s.ogg", seq_fname);
 
 			INFO2("opening video file `%s'", fname);
@@ -250,7 +263,7 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 			if (mm_open_fp(&vidfile, sOpen(fname, "rb", FT_VIDEO)) <= 0)
 				goto done;
 
-			/* TODO do not ignore width/height */
+			/** \todo do not ignore width/height */
 			if (mm_video_info(&vidfile, NULL, NULL, &fps) <= 0)
 				goto done;
 
@@ -265,14 +278,14 @@ Replay(char plr, int num, int dx, int dy, int width, int height, char *Type)
 
 				screen_dirty = 1;
 
-				/* TODO track decoding time and adjust delays */
+				/** \todo track decoding time and adjust delays */
 				if (mm_decode_video(&vidfile, video_overlay) <= 0)
 					break;
 
 				if (bioskey(0) || grGetMouseButtons())
 					keep_going = 0;
 
-				/* TODO idle_loop is too inaccurate for this */
+				/** \todo idle_loop is too inaccurate for this */
 				idle_loop_secs(1.0 / fps);
 			}
 

@@ -58,6 +58,7 @@
 # endif
 #endif
 
+/** see how we get the length of a directory's name */
 #if HAVE_DIRENT_H
 # include <dirent.h>
 # define NAMLEN(dirent) strlen((dirent)->d_name)
@@ -353,6 +354,15 @@ slurp_gamedat(const char *name)
 	return p;
 }
 
+/** Create the savegame directory
+ * 
+ * The directory will be created as defined in options.dir_savegame.
+ * 
+ * \note The access will be set to 0777 (worldwritable)
+ * 
+ * \return -1 on error
+ * \return 0 on success
+ */
 int
 create_save_dir(void)
 {

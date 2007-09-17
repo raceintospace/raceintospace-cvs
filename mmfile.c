@@ -34,7 +34,12 @@
 
 LOG_DEFAULT_CATEGORY(multimedia);
 
-/* return -1 on error, 0 on end of file, 1 on successful page read */
+/** --
+ * 
+ * \return -1 on error
+ * \return  0 on end of file
+ * \return  1 on successful page read
+ */
 static int
 get_page(mm_file * mf, ogg_page * pg)
 {
@@ -482,7 +487,9 @@ mm_close(mm_file * mf)
 	return 0;
 }
 
-/* rval < 0: no video in file */
+/** 
+ * \return rval < 0: no video in file 
+ */
 int
 mm_video_info(const mm_file * mf, unsigned *width, unsigned *height,
 	float *fps)
@@ -500,7 +507,9 @@ mm_video_info(const mm_file * mf, unsigned *width, unsigned *height,
 	return 1;
 }
 
-/* rval < 0: no audio in file */
+/**
+ * \return rval < 0: no audio in file
+ **/
 int
 mm_audio_info(const mm_file * mf, unsigned *channels, unsigned *rate)
 {
