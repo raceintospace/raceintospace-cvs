@@ -1,4 +1,11 @@
-2007-09-17	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+2007-09-17  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V193
+
+	* mc2.c (MissionSteps): fix out of bounds array access
+	(MissionParse): reorganize
+
+2007-09-17  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V192
 

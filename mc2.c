@@ -50,46 +50,57 @@ void MissionCodes(char plr,char val,char pad)
   return;
 }
 
-void MissionParse(char plr,char *MCode,char *LCode,char pad)
+void
+MissionParse(char plr, char *MCode, char *LCode, char pad)
 {
-  int i=0,loc,j;
-  STEP=0;loc=pad;
-  while(strncmp(&MCode[i],"|",1)!=0)
-  {
-    switch(MCode[i])
-    {
-      case '@': i++;
-        MCode[i]='b';  // duration step
-		   MissionSteps(plr,MCode[i],LCode[STEP],STEP,loc-pad);
-		   break;
+	int i, loc, j;
 
-      case '~': //printf("      :Delay of %d seasons\n",MCode[i+1]-0x30);
-        for (j=0;j<(MCode[i+1]-0x30);j++)
-          MissionSteps(plr,MCode[i+2],LCode[STEP],STEP,loc-pad);
-        i+=2;
-        break;
-
-      case '+': i++;loc=MCode[i]-0x30+pad-1;break;
-      case '^': loc=pad+1;break;
-      case '&': loc=pad;break;
-      case '%': i++;
-		   MCode[i]='c';
-		   MissionSteps(plr,MCode[i],LCode[STEP],STEP,loc-pad);
-		   break;
-      case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-      case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':
-      case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R':
-      case 'S': case 'T': case 'U': case 'V': case 'W': case 'X':
-      case 'Y': case 'Z': case 'a': case 'b': case 'c': case 'd':
-      case 'e': case 'f': case 'g': case '!':
-		if (MCode[i]=='I') loc=pad;
-		MissionSteps(plr,MCode[i],LCode[STEP],STEP,loc-pad);
-		break;
-      default:  break;
-    };  /* End of Switch */
-    i++;
-  };
-  return;
+	STEP = 0;
+	loc = pad;
+	for (i = 0; MCode[i] != '|'; ++i)
+	{
+		switch (MCode[i])
+		{
+			case '@':
+				i++;
+				MCode[i] = 'b';	   // duration step
+				MissionSteps(plr, MCode[i], LCode[STEP], STEP, loc - pad);
+				break;
+			case '~':			   //printf("      :Delay of %d seasons\n",MCode[i+1]-0x30);
+				for (j = 0; j < (MCode[i + 1] - 0x30); j++)
+					MissionSteps(plr, MCode[i + 2], LCode[STEP], STEP,
+						loc - pad);
+				i += 2;
+				break;
+			case '+':
+				i++;
+				loc = MCode[i] - 0x30 + pad - 1;
+				break;
+			case '^':
+				loc = pad + 1;
+				break;
+			case '&':
+				loc = pad;
+				break;
+			case '%':
+				i++;
+				MCode[i] = 'c';
+				MissionSteps(plr, MCode[i], LCode[STEP], STEP, loc - pad);
+				break;
+			case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
+			case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
+			case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
+			case 'V': case 'W': case 'X': case 'Y': case 'Z': case 'a': case 'b':
+			case 'c': case 'd': case 'e': case 'f': case 'g': case '!':
+				if (MCode[i] == 'I')
+					loc = pad;
+				MissionSteps(plr, MCode[i], LCode[STEP], STEP, loc - pad);
+				break;
+			default:
+				break;
+		};						   /* End of Switch */
+	};
+	return;
 }
 
 
@@ -322,11 +333,19 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
     if (mcode=='H'&& Data->P[plr].Mission[pad].MissionCode==50 ) strcpy(Mev[step].Name,"HMOON\0");
     if (mcode=='H'&& PastBANG==1) strcpy(Mev[step].Name,"HMOON\0");
 
-    if (mcode=='!' || mcode=='|') {Mev[step].loc=0x7f;Mev[step-1].sgoto=100;PastBANG=1;}
-    else {
-      Mev[step].loc=mcode-65;
-      if (Mev[step].loc>25) Mev[step].loc-=6;
-    }
+	if (mcode == '!' || mcode == '|')
+	{
+		Mev[step].loc = 0x7f;
+		if (step > 0)
+			Mev[step - 1].sgoto = 100;
+		PastBANG = 1;
+	}
+	else
+	{
+		Mev[step].loc = mcode - 65;
+		if (Mev[step].loc > 25)
+			Mev[step].loc -= 6;
+	}
   }
 
   // name the mission step for failures.
