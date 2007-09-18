@@ -1,4 +1,4 @@
-/* $Id: log_default.c,v 1.3 2007/07/18 23:54:11 drvee Exp $
+/* $Id: log_default.c,v 1.4 2007/09/18 06:05:10 fabguy Exp $
  * Copyright (c) 2001, Bit Farm, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ static struct DefaultLogAppender {
     struct LogAppender appender;
     FILE *file;
     int printLoc;
-} defaultLogAppender = { { doAppend }, NULL, 0 } ;
+} defaultLogAppender = { { doAppend }, NULL, 1 } ;
 
 struct LogAppender* log_defaultLogAppender  = &defaultLogAppender.appender;
 
@@ -75,7 +75,7 @@ static void doAppend(struct LogAppender* this0, struct LogEvent* ev) {
     }
     fprintf(this->file, "%-7s ", pn);
     if (this->printLoc)
-        fprintf(this->file, "%s:%d:%s\n\t",
+        fprintf(this->file, "%s:%d:%s\t",
                 ev->fileName, ev->lineNum, ev->functionName);
     else
         fprintf(this->file, "%s: ",

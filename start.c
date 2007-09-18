@@ -99,7 +99,7 @@ void SetEvents(void)
   return;
 }
 
-/** @TODO: This code must be split... it's cluttered beyond hope */
+/** \todo: This code must be split... it's cluttered beyond hope */
 void
 AstroTurn(void)
 {
@@ -403,7 +403,7 @@ AstroTurn(void)
 							Data->P[j].Pool[i].RetReas = 12;	/* Washout */
 						}
 
-						/** @TODO: This is probably a bug! Should be Cap == 0 ?? */
+						/** \todo: This is probably a bug! Should be Cap == 0 ?? */
 						if (Data->P[j].Pool[i].Cap < 0)
 							Data->P[j].Pool[i].Endurance = 0;
 						if (Data->P[j].Pool[i].LM < 0)
@@ -1003,8 +1003,9 @@ TestFMis(int j, int i)
 }
 
 /** Update equipment
- * @TODO: limit of hardcoded 28 hardware types
- * @TODO: Should this not handle all four types of hardware?
+ * \todo limit of hardcoded 28 hardware types
+ * 
+ * \todo Should this not handle all four types of hardware?
  */
 void
 UpdateHardTurn(char plr)

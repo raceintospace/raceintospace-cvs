@@ -1,3 +1,15 @@
+2007-09-18  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V195
+
+	* future.c: lots of doc, some DEBUG info
+
+	* log_default.c: added sourcefile and line to output
+
+	* logging.c, logging.h: added "future" subcategory in logging
+
+	* options.c: doc, added some more explaination to the console help
+
 2007-09-17  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V194

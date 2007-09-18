@@ -77,11 +77,11 @@ static struct {
 };
 
 static struct {
-	char *name;
-	void *dest;
-	char *type;
-	int need_alloc;
-	char *comment;
+    char *name; /**< name of option */
+    void *dest; /**< pointer to the variable to hold the content  */
+    char *type; /**< type of the data we get */
+    int need_alloc; /**< max size of the data in byte ??? */
+    char *comment; /**< a note to the user */
 } config_strings[] = {
 	{"datadir", &options.dir_gamedata, "%1024[^\n\r]", 1025,
 		"Path to directory with game data files." },
@@ -97,11 +97,18 @@ static struct {
 		"Set to positive values to increase debugging verbosity" },
 };
 
+/** prints the minimal usage information to stderr
+ * 
+ * \param fail sets the exit code
+ */
 static void
 usage (int fail)
 {
 	fprintf(stderr, "usage:   raceintospace [options...]\n"
-			        "options: -a -i -f -v -n\n" );
+			        "options: -a -i -f -v -n\n"
+                    "\t-v verbose mode\n\t\tadd this several times to get to DEBUG level\n"
+                    "\t-f fullscreen mode\n\t\tugly\n"
+	       );
 	exit((fail) ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
@@ -155,6 +162,12 @@ parse_var_value(FILE * f, int index)
 	return 0;
 }
 
+/** read the config file 
+ * 
+ * 
+ * 
+ * \return -1 if the config file is unavailable
+ */
 static int
 read_config_file(void)
 {
@@ -179,6 +192,7 @@ read_config_file(void)
 			break;
 
 		/* get configuration variable name */
+        /** \note config variables may be 32 characters of alphas plus dash and underscore */
 		res = fscanf(f, "%32[a-zA-Z_-]", config_word);
 
 		/* do we have a match? */
@@ -300,8 +314,12 @@ fixpath_options(void)
 	fix_pathsep(options.dir_gamedata);
 }
 
-/* returns length of modified argv */
-/* TODO: possibly maintain a list of dirs to search?? */
+/** read the commandline options
+ * 
+ * \return length of modified argv 
+ *
+ * \todo possibly maintain a list of dirs to search?? 
+ */
 int
 setup_options(int argc, char *argv[])
 {
@@ -383,7 +401,7 @@ setup_options(int argc, char *argv[])
 	/* second pass: variable assignments */
 	for (pos = 1; pos < argc; ++pos)
 	{
-		/* TODO should use PATH_MAX or something similar here */
+		/** \todo should use PATH_MAX or something similar here */
 		char name[32 + 1], *value;
 		int offset = 0;
 		int fields = 0;

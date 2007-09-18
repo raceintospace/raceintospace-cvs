@@ -17,6 +17,10 @@
 */
 #include "Buzz_inc.h"
 #include "externs.h"
+#include <assert.h>
+#include "logging.h"
+
+LOG_DEFAULT_CATEGORY(future);
 
   char status[5],lck[5],F1,F2,F3,F4,FMen,F5,Pad;
   char JointFlag,MarFlag,JupFlag,SatFlag,MisType;
@@ -28,13 +32,13 @@
   } StepBub[MAXBUB];
 
   struct Parameter {
-    char A:2;  /* DOCKING */
-    char B:2;  /* EVA */
-    char C:2;  /* LEM */
-    char D:2;  /* JOINT */
-    char E;  /* MANNED/UNMANNED/Duration 0==unmanned 1-6==duration */
-    char X; /* the type of mission for assign crew and hardware */
-    char Z:2; /* A duaration mission only */
+    char A:2;   /**< DOCKING */
+    char B:2;   /**< EVA */
+    char C:2;   /**< LEM */
+    char D:2;   /**< JOINT */
+    char E;     /**< MANNED/UNMANNED/Duration 0==unmanned 1-6==duration */
+    char X;     /**< the type of mission for assign crew and hardware */
+    char Z:2;   /**< A duaration mission only */
   } V[62];
 
 extern int Bub_Count;
@@ -77,7 +81,7 @@ void DrawFuture(char plr,int mis,char pad)
     if (pad==2) JointFlag=0; // third pad automatic no joint mission
     else
       if (Data->P[plr].LaunchFacility[pad+1] == 1)
-       {
+      {
        if (Data->P[plr].Future[pad+1].MissionCode==0) JointFlag=1; // if no mission then set joint flag
 	  else if (Data->P[plr].Future[pad+1].part==1) // check if the part of that second mission is set
 		 {
@@ -85,13 +89,14 @@ void DrawFuture(char plr,int mis,char pad)
 		  Data->P[plr].Future[pad+1].MissionCode=0; // clear mission
 		  Data->P[plr].Future[pad+1].part=0;
 		 };
-  };
+      };
 
   if (pad==1 || pal==0) {
     if (Data->P[plr].LaunchFacility[pad+1]==1) JointFlag=1;
   }
 
   i=Data->Year;j=Data->Season;
+  DEBUG3("--- Setting i=Year (%d), j=Season (%d)", i, j);
   if ((i==60 && j==0) || (i==62 && j==0) || (i==64 && j==0) ||
       (i==66 && j==0) || (i==69 && j==1) || (i==71 && j==1) ||
       (i==73 && j==1)) {
@@ -126,15 +131,19 @@ void DrawFuture(char plr,int mis,char pad)
   ShBox(203,33,238,47);
   InBox(205,35,236,45);
   UPArrow(8,95);DNArrow(8,157);
-
+  
   gxVirtualDisplay(&vh,140,5,5,132,15,146,0);
   Toggle(5,1);draw_Pie(0);OutBox(5,49,53,72);
   Toggle(1,1);TogBox(55,49,0);
   Toggle(2,1);TogBox(92,49,0);
   Toggle(3,1);TogBox(129,49,0);
 
-	 FMen=F1=F2=F3=F4=F5=0;
-	 for (i=1;i<4;i++) if (status[i]!=0) Toggle(i,1);
+  FMen=F1=F2=F3=F4=F5=0;
+  for (i=1;i<4;i++){
+    if (status[i]!=0) {
+      Toggle(i,1);
+    }
+  };
 	 if (JointFlag==0) {
       F4=2;lck[4]=1;
       Toggle(4,1);
@@ -151,7 +160,7 @@ void DrawFuture(char plr,int mis,char pad)
       TogBox(166,49,0);
     };
 
-	 gr_sync ();
+  gr_sync ();
   Missions(plr,8,37,mis,1);
   GetMinus(plr);
   grSetColor(5);
@@ -224,8 +233,15 @@ void DrawLocks(void)
  return;
 }
 
-void Toggle(int wh,int i) //wh - the button i = in or out
+
+/** set the toggles???
+ * 
+ * \param wh the button 
+ * \param i in or out
+ */
+void Toggle(int wh,int i) 
 {
+ DEBUG3("->Toggle(wh %d, i %d)", wh, i);
  switch(wh)
    {
     case 1:if (i==1) gxVirtualDisplay(&vh,1,21,55,49,89,81,0);else
@@ -245,11 +261,13 @@ void Toggle(int wh,int i) //wh - the button i = in or out
 
   default:break;
  }
+ DEBUG1("<-Toggle()");
  return;
 }
 
 void TogBox(int x,int y,int st)
  {
+  DEBUG4("->TogBox(x %d, y %d, st %d)", x, y, st);
   char sta[2][2]={{2,4},{4,2}};
   
   grSetColor(sta[st][0]);
@@ -258,11 +276,13 @@ void TogBox(int x,int y,int st)
   grMoveTo(x+0,y+33);grLineTo(23+x,y+33);grLineTo(23+x,y+23);
   grLineTo(x+35,y+23);grLineTo(x+35,y+0);
   
+  DEBUG1("<-TogBox()");
   return;
 }
 
 void PianoKey(int X)
 {
+ DEBUG2("->PianoKey(X %d)", X);
  int t;
  if (F1==0) {
    if (V[X].A==1) {Toggle(1,1);status[1]=1;}
@@ -285,13 +305,23 @@ void PianoKey(int X)
  else
   {
    Toggle(5,1);
-   t=(F5==0) ? V[X].E : F5;draw_Pie(t);
+   t=(F5==0) ? V[X].E : F5;
+   assert(0 <= t);
+   draw_Pie(t);
    status[0]=t;
   }
+ 
  DrawLocks();
+ DEBUG1("<-PianoKey()");
  return;
 }
 
+/** draw a piechart
+ * 
+ * The piechart is indicating the number of astronauts on this mission.
+ * 
+ * \param s something of an offset...
+ */
 void draw_Pie(int s)
 {
  int off;
@@ -427,6 +457,8 @@ int DownSearchRout(int num,char plr)
 void
 Future(char plr)
 {
+    /** \todo the whole Future()-function is 500 >lines and unreadable */
+    DEBUG1("->Future(plr)");
 	int MisNum = 0, DuraType = 0, MaxDur = 6, i, ii;
 	int setting = -1, prev_setting = -1;
 	int Ok, NewType;
@@ -456,6 +488,7 @@ Future(char plr)
 	ClrFut(plr, MisNum);
 	DrawFuture(plr, MisType, MisNum);
 begfut_noredraw:
+  
 //  for (i=0;i<5;i++) ClearRX(i+1);
 	while (1)
 	{
@@ -890,7 +923,7 @@ begfut_noredraw:
 				key = 0;
 				GetMouse();
 			}
-			Missions(plr, 8, 37, MisType, 3);
+            Missions(plr, 8, 37, MisType, 3);
 			DuraType = status[0];
 			OutBox(5, 84, 16, 130);
 			key = 0;
@@ -902,11 +935,14 @@ begfut_noredraw:
 			InBox(5, 132, 16, 146);
 			WaitForMouseUp();
 			delay(50);
-			MisType = Data->P[plr].Future[MisNum].MissionCode;
-			if (MisType != 0)
-				Missions(plr, 8, 37, MisType, 1);
-			else
-				Missions(plr, 8, 37, MisType, 3);
+  		    MisType = Data->P[plr].Future[MisNum].MissionCode;
+  		    assert(0 <= MisType);
+			if (MisType != 0){
+                Missions(plr, 8, 37, MisType, 1);
+			}
+			else{
+                Missions(plr, 8, 37, MisType, 3);
+			}
 			OutBox(5, 132, 16, 146);
 			key = 0;
 		}
@@ -931,13 +967,13 @@ begfut_noredraw:
 			{
 				MisType = DownSearchRout(MisType, plr);
 				Data->P[plr].Future[MisNum].MissionCode = MisType;
-				Missions(plr, 8, 37, MisType, 3);
+                Missions(plr, 8, 37, MisType, 3);
 				DuraType = status[0];
 				delay(100);
 				key = 0;
 				GetMouse();
 			}
-			Missions(plr, 8, 37, MisType, 3);
+            Missions(plr, 8, 37, MisType, 3);
 			DuraType = status[0];
 			OutBox(5, 148, 16, 194);
 			key = 0;
@@ -945,12 +981,15 @@ begfut_noredraw:
 
 		};
 	}							   // while
+  DEBUG1("<-Future()");
 }
 
-
-/* draws the bubble on the screen,
-   starts with upper left coor */
-
+/** draws the bubble on the screen,
+ * starts with upper left coor
+ * 
+ * \param x x-coord of the upper left corner of the bubble
+ * \param y y-coord of the upper left corner of the bubble
+ */
 void Bd(int x,int y)
 {
  int x1,y1,x2,y2;
@@ -959,6 +998,7 @@ void Bd(int x,int y)
  RectFill(x2,y2,x2+6,y2+6,21);
  grSetColor(1);
  grMoveTo(x,y+4);
+ /** \note references Bub_Count to determine the number of the character to draw in the bubble */
  DispChr(65+Bub_Count);
  StepBub[Bub_Count].x_cor=x1;
  StepBub[Bub_Count].y_cor=y1;
@@ -966,6 +1006,12 @@ void Bd(int x,int y)
  return;
 }
 
+/** Print the duration of a mission
+ * 
+ * \param x duration code
+ * 
+ * \todo Link this at whatever place the duration is actually defined
+ */
 void DurPri(int x) 
 {
  grSetColor(5);
@@ -986,6 +1032,7 @@ void DurPri(int x)
 
 void MissionName(int val,int xx,int yy,int len)
 {
+  DEBUG5("->MissionName(val %d, xx %d, yy %d, len %d)", val, xx, yy, len);
   int i,j=0;
 
   GetMisType(val);
@@ -996,11 +1043,23 @@ void MissionName(int val,int xx,int yy,int len)
     else DispChr(Mis.Name[i]);
     j++;if (Mis.Name[i]=='\0') break;
   };
+  DEBUG1("<-MissionName");
   return;
 }
 
+/** Missions() will draw the future missions among other things
+ * 
+ * 
+ * 
+ * \param plr Player
+ * \param X ???
+ * \param Y ???
+ * \param val ???
+ * \param bub if set to 0 or 3 the function will not draw stuff
+ */
 void Missions(char plr,int X,int Y,int val,char bub)
 {
+  DEBUG5("->Missions(plr, X %d, Y %d, val %d, bub %c)", X, Y, val, bub);
   
   if (bub==1 || bub==3) {
     PianoKey(val);
@@ -1018,6 +1077,10 @@ void Missions(char plr,int X,int Y,int val,char bub)
   MissionName(val,X,Y,24);
   if (bub==3) GetMinus(plr);
   if (bub==0 || bub==3) {return;}
+  
+  /**
+   * \todo This mapping of val -> drawing of missions steps should be more variable
+   */
   switch(val)
   {
     case 0: break;
@@ -1201,9 +1264,13 @@ void Missions(char plr,int X,int Y,int val,char bub)
   }  // end switch
   gr_sync ();
   MissionCodes(plr,MisType,Pad);
-  }  // end function missions
+  DEBUG1("<-Missions()");
+}  // end function missions
 
-
+/** Draws stuff about choosing a program and having < 2 groups available
+ * 
+ * \deprecated This function appears to be depricated. 
+ */
 char FutBad(void)
 {
   char i;
