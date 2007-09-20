@@ -134,7 +134,7 @@ bot:                          // bottom of routine
  */
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
-    DEBUG3("->PlaySequence(plr, step %d, Seq, mode %s)", step, mode);
+    DEBUG4("->PlaySequence(plr, step %d, Seq %c, mode %s)", step, Seq, mode);
 	int keep_going;
 	int wlen,i,j;
 	unsigned int fres,max;

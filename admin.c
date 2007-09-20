@@ -23,7 +23,9 @@
 // Programmed by Michael K McCarty
 //
 // All Administration Main Files
-
+/** \file admin.c Responsible for the Administration office.
+ * 
+ */
 
 #include "Buzz_inc.h"
 #include "externs.h"
@@ -146,7 +148,7 @@ int GenerateTables(SaveGameType saveType)
 
   memset(buffer,0x00,20480);
 
-  // old code lacked parans, so pointed FList off into space - pace
+  /** \note old code lacked parans, so pointed FList off into space - pace */
   FList=(SFInfo *)(buffer+5000);
   SaveHdr=(SaveFileHdr *) buffer;
 

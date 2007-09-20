@@ -4,7 +4,11 @@
 #include "race.h"
 #include <stdio.h>
 
-/* types of files - they have different locations in filesystem */
+/** \file fs.h Definitions for filesystem
+ * 
+ */
+
+/** types of files - they have different locations in filesystem */
 enum {
     FT_DATA = 0,
     FT_SAVE = 1,
@@ -14,7 +18,7 @@ enum {
 		FT_MIDI
 };
 
-/* used for saved games */
+/** used for saved games */
 struct ffblk {
 	char ff_name[64];
 	int ff_ftime;

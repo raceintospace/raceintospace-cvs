@@ -22,7 +22,8 @@
 // Designed by Fritz Bronner
 // Programmed by Michael K McCarty
 //
-// AI Purchasing Routines
+/** \file aipur.c AI Purchasing Routines
+ */
 
 #include "Buzz_inc.h"
 #include "externs.h"
@@ -220,7 +221,8 @@ void Stat(char Win)
  return;
 }
 
-// AI Wants to purchase Astronauts
+/** AI Wants to purchase Astronauts
+ */
 void AIAstroPur(char plr)
 {
 	int cost;
@@ -249,7 +251,8 @@ void AIAstroPur(char plr)
 }
 
 
-// Select the best crew for the mission
+/** Select the best crew for the mission
+ */
 void SelectBest(char plr,int pos)
 {
  int count=0,now,MaxMen = 0,Index,AIMaxSel=0,i,j,k;
@@ -503,7 +506,8 @@ void CheckAdv(char plr)
 
 
 
-// Remove unhappy astro's
+/** Remove unhappy astro's
+ */
 void RemoveUnhappy(char plr)
 {
 	int i,l,astroClass=0,fltCrew=0;

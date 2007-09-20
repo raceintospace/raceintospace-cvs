@@ -22,7 +22,10 @@
 extern char AI[2];
 extern struct mStr Mis;
 
-//return true if need to scrub mission because of crews
+/**
+ * 
+ * \return true (1) if need to scrub mission because of crews
+ */
 char CheckCrewOK(char plr,char pad)
 {
  char RT_value=0;

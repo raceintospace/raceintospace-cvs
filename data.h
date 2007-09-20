@@ -374,24 +374,25 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 };
 
 struct Players {
-	char BUZZ[4];                    // Save Version Marker
-	uint32_t Checksum;                   // Checksum of Data
-	char plr[NUM_PLAYERS];                     // Order of Turns
-	struct Defl Def;                 // Defaults
-	char Year;                       // Game Turn
-	char Season;                     // Season of Year
-	struct PrestType Prestige[28];   // Definitions of Prest Vals
-	struct BuzzData P[NUM_PLAYERS];            // Player Game Data
-	char EMark[4];                   // Event Marker
-	char Events[100];                // History of Event Cards
-	char Count;                      // Number of Events Picked
-   char PD[NUM_PLAYERS][28];
-	char Mile[NUM_PLAYERS][10];                // MileStone Calcs
+    char BUZZ[4];                    /**< Save Version Marker */
+    uint32_t Checksum;               /**< Checksum of Data */
+    char plr[NUM_PLAYERS];           /**< Order of Turns */
+    struct Defl Def;                 /**< Defaults */
+    char Year;                       /**< Game Turn */
+    char Season;                     /**< Season of Year */
+    struct PrestType Prestige[28];   /**< Definitions of Prest Vals */
+    struct BuzzData P[NUM_PLAYERS];  /**< Player Game Data */
+    char EMark[4];                   /**< Event Marker */
+    char Events[100];                /**< History of Event Cards */
+    char Count;                      /**< Number of Events Picked */
+    char PD[NUM_PLAYERS][28];
+    char Mile[NUM_PLAYERS][10];      /**< MileStone Calcs */
 };
 
 
 
-/* MissionHard Descriptions
+/** MissionHard Descriptions
+ * \verbatim
    0=Capsule
    1=Kicker
    2=LM
@@ -400,8 +401,8 @@ struct Players {
    5=EVA
    6=Photo Recon
    7=Secondary Booster
+ * \endverbatim
 */
-
 enum MissionHardwareType
 {
 	Mission_Capsule = 0,			// 0

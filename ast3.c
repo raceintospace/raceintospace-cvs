@@ -22,6 +22,8 @@
 // Designed by Fritz Bronner
 // Programmed by Michael K McCarty
 //
+/** \file ast3.c Training and Hospital code
+ */
 
 #include "Buzz_inc.h"
 #include "externs.h"

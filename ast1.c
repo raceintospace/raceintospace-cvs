@@ -22,6 +22,8 @@
 // Designed by Fritz Bronner
 // Programmed by Michael K McCarty
 //
+/** \file ast1.c Astronaut Recruitment
+ */
 
 #include "Buzz_inc.h"
 #include "externs.h"

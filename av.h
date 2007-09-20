@@ -46,9 +46,9 @@ struct audio_channel {
     unsigned                fade;            /* actual fade value */
     int                     fade_inc;        /* fade inc or dec */
 #endif
-    struct audio_chunk*     chunk;           /* played chunk */
-    struct audio_chunk**    chunk_tailp;     /* tail of chunk list? */
-    unsigned                offset;          /* data offset in chunk */
+    struct audio_chunk*     chunk;           /**< played chunk */
+    struct audio_chunk**    chunk_tailp;     /**< tail of chunk list? */
+    unsigned                offset;          /**< data offset in chunk */
 };
 
 extern char AnimSoundCheck(void);

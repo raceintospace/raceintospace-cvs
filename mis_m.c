@@ -40,7 +40,8 @@ extern struct MisEval Mev[60];
 extern char MANNED[2],STEP,pal2[768],STEPnum,FINAL,AI[2],CAP[2],LM[2],DOC[2],EVA[2],fEarly,mcc,JOINT;
 extern char DMFake;
 extern int AUDIO;
-char MFlag,death,durx,MPad,Unm,Dock_Skip,SCRUBS,noDock,InSpace;
+char MFlag,death,durx,MPad,Unm,SCRUBS,noDock,InSpace;
+char Dock_Skip; /**< used for mission branching */
 extern struct mStr Mis;
 
 extern ui16 MisStat;
@@ -54,6 +55,7 @@ void Tick(char);
 
 void GetFailStat(struct XFails *Now,char *FName,int rnum)
 {
+  DEBUG2("->GetFailStat(struct XFails *Now,char *FName,int rnum %d)", rnum);
   int i;
   FILE *fin;
   long count;
@@ -100,6 +102,7 @@ void GetFailStat(struct XFails *Now,char *FName,int rnum)
 	};
 
   fclose(fin);
+  DEBUG1("<-GetFailStat()");
 }
 
 void MisCheck(char plr,char mpad)

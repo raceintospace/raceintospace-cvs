@@ -1,3 +1,15 @@
+2007-09-20  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V195
+
+	* admin.c, aipur.c, ast1.c, ast3.c: documentation
+
+	* av.h, data.h, endgame.c, fs.h: documentation
+
+	* future.c, main.c, mis_c.c, mis_m.c: documentation
+
+	* news_sup.c, news_suq.c, port.c, vab.c: documentation
+
 2007-09-18  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V195

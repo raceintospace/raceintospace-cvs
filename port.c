@@ -36,7 +36,7 @@
 #define LET_V   0x0C
 #define LET_R   0x08
 
-#define SPOT_ON 1 /* turn off until everything else works - pace */
+#define SPOT_ON 1 /**< turn off until everything else works - pace */
 #define BABYSND 1
 #define pNOREDRAW 0
 #define pREDRAW 1
@@ -60,14 +60,14 @@ typedef struct portoutlinerestore {
 PORTOUTLINE *pPortOutlineRestore;
 
 struct FHead {
-   char Text[28];  // File Copyright Notice
-   long oMObj;   // Offset to MObj data table
-   long oTab;    // Offset to Table of data
-   long oPal;    // Offset to Palette
-   long oPort;   // Offset to start of Port Images
-   long oMse;    // Offset to Mouse Objects
-   long oOut;    // Offset to port Outlines
-   long oAnim;   // Offset to start of Port Anims
+  char Text[28];  /**< File Copyright Notice */
+  long oMObj;     /**< Offset to MObj data table */
+  long oTab;      /**< Offset to Table of data */
+  long oPal;      /**< Offset to Palette */
+  long oPort;     /**< Offset to start of Port Images */
+  long oMse;      /**< Offset to Mouse Objects */
+  long oOut;      /**< Offset to port Outlines */
+  long oAnim;     /**< Offset to start of Port Anims */
    } PHead;
 
 typedef struct cBoxx {
@@ -75,36 +75,35 @@ typedef struct cBoxx {
    } BOUND;
 
 typedef struct Img {
-   long Size;         // Size of Image (bytes)
-   char Comp;         // Type of Compression Used
-   i16 Width;         // Width of Image
-   i16 Height;        // Height of Image
-   i16 PlaceX;        // Where to Place Img:X
-   i16 PlaceY;        // Where to Place Img:Y
+  long Size;         /**<  Size of Image (bytes) */
+  char Comp;         /**<  Type of Compression Used */
+  i16 Width;         /**<  Width of Image */
+  i16 Height;        /**<  Height of Image */
+  i16 PlaceX;        /**<  Where to Place Img:X */
+  i16 PlaceY;        /**<  Where to Place Img:Y */
    } IMG;
 
 typedef struct region {
-   char qty;          // number of BOUNDS
-   BOUND CD[4];       // boundry coords for mouse location
-   char iNum;         // 
-   char sNum;         // value for surround box
-   char PreDraw;      // Code of Special to Draw first
+  char qty;          /**< number of BOUNDS */
+  BOUND CD[4];       /**< boundry coords for mouse location */
+  char iNum;         
+  char sNum;         /**< value for surround box */
+  char PreDraw;      /**< Code of Special to Draw first */
    } REGION;
 
 
-typedef struct mobj
-   {
-   char Name[30];       // Name of region
-   char qty;            // Nunber of regions
-   char Help[3];       // Help Box Stuff
-   REGION Reg[4];       // At Max 4 regions
+typedef struct mobj {
+  char Name[30];       /**< Name of region */
+  char qty;            /**< Nunber of regions */
+  char Help[3];        /**< Help Box Stuff */
+  REGION Reg[4];       /**< At Max 4 regions */
    } MOBJ;
 
 #define S_QTY 43
 
 MOBJ MObj[35];
 
-// These are the valid hotkeys
+/** These are the valid hotkeys */
 char HotKeyList[]="AIMRPVCQETB\0";
 
 int FCtr;
@@ -112,13 +111,12 @@ GXHEADER flaggy;
 
 #define SPOTS 100
 
-// SPOT structures and data structure variables
-
-struct mSPOT {    // Main SPOT Header
-  uint8_t ID[40];    // Copyright notice
-  uint8_t Qty;       // Number of Paths
-  uint32_t sOff;      // Spot Offsets
-  uint32_t pOff;      // Path Offsets
+/** SPOT structures and data structure variables */
+struct mSPOT {        // Main SPOT Header
+  uint8_t ID[40];     /**< Copyright notice */
+  uint8_t Qty;        /**< Number of Paths */
+  uint32_t sOff;      /**< Spot Offsets */
+  uint32_t pOff;      /**< Path Offsets */
 } MSPOT;
 
 struct sPATH {       // Spot Anim Path Struct
@@ -341,8 +339,8 @@ void WaveFlagDel(void)
 }
 
 /* pace */
-/*
- * this isn't needed now that RLED automatically chops the right column
+/**
+ * \note this isn't needed now that RLED automatically chops the right column
  * when the data is bigger than needed.  there's still a bug somewhere,
  * so this table is a useful list of funny images to check later
  */
@@ -799,7 +797,9 @@ DoCycle(void)					// Three ranges of color cycling
     }
 }
 
-// mode...  0 = ?   1 = copy stored outline ?
+/** ???
+ * \param mode...  0 = ?   1 = copy stored outline ?
+ */
 void
 PortOutLine(unsigned int Count, ui16 * outline, char mode)
 {
@@ -851,7 +851,8 @@ PortRestore(unsigned int Count)
 }
 
 
-// Map a keypress to a spaceport building selection
+/** Map a keypress to a spaceport building selection
+ */
 int MapKey(char plr,int key,int old) 
 {
   int val,j,found=0;
@@ -1187,9 +1188,10 @@ ui16 Count,*bone;
 }
 
 
-// This is the code that controls the jump off point from the Space Ports to the
-// various areas.  It basically assigns a help message then makes a call into
-// the module which would have it's own event loop
+/** This is the code that controls the jump off point from the Space Ports to the
+ * various areas.  It basically assigns a help message then makes a call into
+ * the module which would have it's own event loop
+ */
 char PortSel(char plr,char loc)
 {
   int i,MisOK=0;

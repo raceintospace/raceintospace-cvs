@@ -27,7 +27,11 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 
-int Steal(int p,int prog,int type) // type= 1:postive -1:negative search
+/** ???
+ * 
+ * \param type 1:postive -1:negative search
+ */
+int Steal(int p,int prog,int type) 
 {
  int i=0,j=0,k=0,save[28],lo=0,hi=28;
  if (prog)EMPTY_BODY;
@@ -106,8 +110,12 @@ int Steal(int p,int prog,int type) // type= 1:postive -1:negative search
  return save[j];
 }
 
-
-int NMod(int p,int prog,int type,int per) // type= 1:postive -1:negative search
+/** ???
+ * 
+ * \param type 1:postive -1:negative search
+ * \param per Amount of modification in percent
+ */
+int NMod(int p,int prog,int type,int per)
 {
   int i=0,j=0,save[28],lo=0,hi=28;
   Equipment *Eptr[28];
@@ -117,7 +125,7 @@ int NMod(int p,int prog,int type,int per) // type= 1:postive -1:negative search
   /* drvee: this loop was going to 25, not 28 */
   for (i=0;i<(int)ARRAY_LENGTH(Eptr);i++)
    {
-       /* XXX: Mismatch between data.h(250) and this code here */
+       /** \bug Mismatch between data.h(250) and this code here */
     Eptr[i]=(Equipment *) &Data->P[p].Probe[i];
     save[i]= ((Eptr[i]->Safety+per*type)<=(Eptr[i]->MaxSafety)&& Eptr[i]->Num>=0) ? Eptr[i]->Safety+per*type : 0;
     if (Eptr[i]->Num<0) save[i]=0;

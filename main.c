@@ -58,7 +58,7 @@
   struct cdtable *cdt;
   long PalOff;
   ui16 LetHand;
-  char BIG;
+  char BIG;         /**< 1 for fullscreen mission playback, 0 otherwise */
 
 char *S_Name[] = {
    "LAUNCH",
@@ -263,18 +263,27 @@ tommy:
   exit(EXIT_SUCCESS);
 }
 
-// utility fn for AI to see if it should scrub the mission
+/** utility fn for AI to see if it should scrub the mission
+ * 
+ * Rules are:
+ * - always do unmanned missions
+ * - Safety must be within 15 of R&D-Safety
+ * 
+ * \param plr Playerdata
+ * \param launchIdx ID of the launch
+ */
 int CheckIfMissionGo(char plr,char launchIdx)
 {
   char idx,mcode;
   struct MissionType *pMission;
-  Equipment *E = NULL;	// Pointer to Equipment we're looking at
+  Equipment *E = NULL;	/* Pointer to Equipment we're looking at */
 
 	// Grab the Mission Code from the current Launch Index
   mcode=Data->P[plr].Mission[launchIdx].MissionCode;
   pMission=&Data->P[plr].Mission[launchIdx];
 
 	// Always a go for Unmanned missions
+  /** \todo introduce mission attribute "manned vs. unmanned" */
   if (mcode==1 || mcode==3 || mcode==5 || (mcode>=7 && mcode<=13) || mcode==15)
      return 1;
 
@@ -549,7 +558,13 @@ void FreePadMen(char plr,struct MissionType *XMis)
 }
 
 
-// Destroy Pad and Reset any Crews affected
+/** Destroy Pad and Reset any Crews affected
+ * 
+ * \param cost amount of MB to pay for repairs
+ * \param pad number of the launch facility destroyed
+ * \param plr Player data
+ * \param mode 0 if future mission, 1 is current mission
+ */
 void DestroyPad(char plr,char pad,int cost,char mode)
 {
    struct MissionType *BMis=NULL,*AMis=NULL;

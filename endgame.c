@@ -15,7 +15,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// End Game Routines
+/** \file endgame.c End Game Routines
+ */
 
 #include "Buzz_inc.h"
 #include "externs.h"
