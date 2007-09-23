@@ -1,3 +1,9 @@
+2007-09-23  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V198
+
+	* pace.c: documented audio/video sequence tables
+
 2007-09-23  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V197

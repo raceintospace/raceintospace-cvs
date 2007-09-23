@@ -313,7 +313,11 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 	fclose (fin);
 }
 
-struct tblinfo frm_tbl, frm_ftbl;
+/** Mapping from success sequence numbers to audio/video filenames. */
+static struct tblinfo frm_tbl;
+
+/** Mapping from failure sequence numbers to audio/video filenames. */
+static struct tblinfo frm_ftbl;
 
 /** Initialize the sequence keymaps
  * 
