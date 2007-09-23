@@ -258,11 +258,18 @@ CloseEmUp (unsigned char error,unsigned int value)
 	exit(EXIT_SUCCESS);
 }
 
+/** Structure to save the sequence number to name mapping
+ */
 struct tblinfo {
-	int count;
-	char **strings;
+  int count; /**< number of sequences in this array */
+  char **strings; /**< array of strings. Keys are sequence numbers, values are sequence names */
 };
 
+/** Read sequence name array from file
+ * 
+ * \param keyname Name of the file to read from
+ * \param tblinfo Pointer to the tblinfo to fill
+ */
 void
 frm_read_tbl (char *keyname, struct tblinfo *tbl)
 {
@@ -270,15 +277,19 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 	int lo, hi;
 	int idx;
     char *p;
-	char name[100];
+    char name[100]; /** \todo Assumption about the size of name is too high, right? */
 
-	if ((fin = sOpen (keyname, "rb", 0)) == NULL)
-		return;
+	if ((fin = sOpen (keyname, "rb", 0)) == NULL){
+        WARNING2("Unable to open file '%s'.", keyname);
+        return;
+	}
 
+    /* get number of sequence keys */
 	lo = getc (fin);
 	hi = getc (fin);
 	tbl->count = (hi << 8) | lo;
 	
+    /* alloc enough memory for all the sequence names */
 	tbl->strings = xcalloc(tbl->count, sizeof *tbl->strings);
 
 	idx = 0;
@@ -289,7 +300,8 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
             if (*p == '#')
                 *p = '_';
         }
-		tbl->strings[idx++] = xstrdup (name);
+        DEBUG4("Found name '%s' at position %d in file %s.",name, idx, keyname);
+        tbl->strings[idx++] = xstrdup (name);
 	}
 
 	/* now idx is number of read strings */
@@ -303,6 +315,10 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 
 struct tblinfo frm_tbl, frm_ftbl;
 
+/** Initialize the sequence keymaps
+ * 
+ * Reads success and failure sequences
+ */
 void
 seq_init (void)
 {
@@ -310,6 +326,15 @@ seq_init (void)
 	frm_read_tbl ("FSEQ.KEY", &frm_ftbl);
 }
 
+/** Get sequence filename by sequence number
+ * 
+ * \param seq Index number of sequence
+ * \param mode 0=success, other is failure
+ * 
+ * \return NULL if the sequence number is out of bound
+ * \return name of the sequence file as string
+ * 
+ */
 char *
 seq_filename (int seq, int mode)
 {

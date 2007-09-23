@@ -22,7 +22,8 @@
 // Designed by Fritz Bronner
 // Programmed by Michael K McCarty
 //
-// Research and Development Complex
+/** \file rdplex.c Research and Development Complex
+ */
 
 #include "Buzz_inc.h"
 #include "externs.h"

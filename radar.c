@@ -141,10 +141,10 @@ void PadDraw(char plr,char pad)
 }
 
 
-// ClrMiss NOTES
-// pad is +3 for compatability with News so that it will go ahead and
-// scrub the mission automatically
-
+/** pad is +3 for compatability with News so that 
+ * it will go ahead and scrub the mission automatically
+ * 
+ */
 void ClrMiss(char plr,char pad)
 {
  char prime,back,men,i,prg,temp=0,padd;

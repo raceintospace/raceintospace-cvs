@@ -25,14 +25,20 @@ extern size_t fwrite_int8_t(const int8_t *src, size_t nelem, FILE *file);
 extern size_t fwrite_int16_t(const int16_t *src, size_t nelem, FILE *file);
 extern size_t fwrite_int32_t(const int32_t *src, size_t nelem, FILE *file);
 
-/*
+/** \defgroup datafiles Datafile descriptions
+ * 
+ * \addtogroup datafiles
+ * \@{
+ * 
  *  Document every game data file: name, structures, layout.
  *  Each structure that can exist in a file should define total
  *  size in bytes. Also declare functions for reading/writing
  *  from/to stdio streams, if necessary.
  */
 
-/*
+/** \addtogroup datafiles
+ * \@{
+ * \verbatim
  * File: SEQ.KEY, FSEQ.KEY
  * Desc: Names of movie & audio files, each name 8 bytes long.
  *       Successful mission video sequences are stored in SEQ,
@@ -40,31 +46,38 @@ extern size_t fwrite_int32_t(const int32_t *src, size_t nelem, FILE *file);
  * Structure:
  *      u16 - number of subsequent filenames
  *      u8[8]* - filenames, each should be 0 terminated
+ * \endverbatim
  */
 
-/*
+/** \addtogroup datafiles
+ * \@{ 
+ * \verbatim 
  * File: SEQ.DAT
  * Desc: Indexes to video and audio files for successful mission stages.
  * Structure:
  *       sequence of oGROUP structures,
  *       each containing ID sequence string and oLIST structures.
+ * \endverbatim
  */
 
-struct oLIST {
-    int16_t aIdx;   /* index of video filename in {SEQ,FSEQ}.KEY */
-    int16_t sIdx;   /* index of audio filename in {SEQ,FSEQ}.KEY */
-};
-#define sizeof_oLIST 4
-extern size_t fread_oLIST(struct oLIST *dst, size_t num, FILE *f);
+/** \addtogroup datafiles
+ * \@{
+ * \verbatim
+ * VAB.IMG is
+ *  ** Player 0 image
+ *   char[768]   -- palette
+ *   uint16_t    -- length of following PCX compressed image
+ *   image_data[] --
+ *  ** Player 1 image
+ *   char[768]   -- palette
+ *   uint16_t    -- length of following PCX compressed image
+ *   image_data[]
+ * 
+ * \endverbatim
+ */
 
-struct oGROUP {
-    char ID[10];            /* Sequence identifier */
-    struct oLIST oLIST[5];  /* Audio/video file indexes */
-};
-#define sizeof_oGROUP (10 + 5*sizeof_oLIST)
-extern size_t fread_oGROUP(struct oGROUP *dst, size_t num, FILE *f);
-
-/** \page datafiles Datafiles
+/** \addtogroup datafiles
+ * \@{
  * \verbatim
  * File: FSEQ.DAT
  * Desc: Indexes to video and audio files for failed mission stages.
@@ -75,6 +88,20 @@ extern size_t fread_oGROUP(struct oGROUP *dst, size_t num, FILE *f);
  * \endverbatim
  */
 
+struct oLIST {
+    int16_t aIdx;   /**< index of video filename in {SEQ,FSEQ}.KEY */
+    int16_t sIdx;   /**< index of audio filename in {SEQ,FSEQ}.KEY */
+};
+#define sizeof_oLIST 4
+extern size_t fread_oLIST(struct oLIST *dst, size_t num, FILE *f);
+
+struct oGROUP {
+    char ID[10];            /**< Sequence identifier */
+    struct oLIST oLIST[5];  /**< Audio/video file indexes */
+};
+#define sizeof_oGROUP (10 + 5*sizeof_oLIST)
+extern size_t fread_oGROUP(struct oGROUP *dst, size_t num, FILE *f);
+
 struct Table {
     char fname[8];          /* XXX: File name? */
     int32_t foffset;        /* XXX: Offset in file? */
@@ -84,8 +111,8 @@ struct Table {
 extern size_t fread_Table(struct Table *dst, size_t num, FILE *f);
 
 struct oFGROUP {
-    char ID[15];            /* Sequence identifier */
-    struct oLIST oLIST[5];  /* Audio/video file indexes */
+    char ID[15];            /**< Sequence identifier */
+    struct oLIST oLIST[5];  /**< Audio/video file indexes */
 };
 #define sizeof_oFGROUP (15 + 5*sizeof_oLIST)
 extern size_t fread_oFGROUP(struct oFGROUP *dst, size_t num, FILE *f);
@@ -99,12 +126,15 @@ typedef struct {
 #define sizeof_SimpleHdr (2+4)
 extern size_t fread_SimpleHdr(SimpleHdr *dst, size_t num, FILE *f);
 
-/*
+/** \addtogroup datafiles
+ * \@{
+ * \verbatim
  * File: REPLAY.DAT
  * Desc: Contains indices to animation sequences of past player missions.
  * Structure:
  *       sequence of ReplayItem structures,
  *       each containing offsets to animations.
+ * \endverbatim
  */
 
 #if 0

@@ -131,6 +131,7 @@ bot:                          // bottom of routine
 /**
  * 
  * \param mode Female or other (2 = female)
+ * \param Seq Sequence-Code for the movies (?)
  */
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
@@ -171,21 +172,29 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 	//Specs: Lem Activities Klugge
 	if (Seq[0]=='h') {
-		if (Mev[STEP-1].Name[0]=='S') Seq[0]='Q';
-		else {Seq[0]='i';strncpy(Mev[step].FName,"F034",4);}
+        if (Mev[STEP-1].Name[0]=='S'){
+          Seq[0]='Q';
+        } else {
+          Seq[0]='i';
+          strncpy(Mev[step].FName,"F034",4);
+        }
 	};
 
 	if (Seq[0]=='Q') {
 		if (Mev[STEP-1].Name[0]!='S') {
-			if (mode==0) Seq[0]='i';
-			else if (mode==1) {
+  		    if (mode==0){ 
+    		    Seq[0]='i';
+  		    } else if (mode==1) {
 				Seq[0]='i';
 				strncpy(Mev[step].FName,"F034",4);
 			}
 		}
 		if ((Seq[1]=='U' || Seq[1]=='S') && Seq[2]=='C') {
-			if (Seq[3]=='5') Seq[3]='6';
-			else if (Seq[3]=='6') Seq[3]='5';
+  		    if (Seq[3]=='5'){ 
+    		    Seq[3]='6';
+  		    } else if (Seq[3]=='6'){ 
+    		    Seq[3]='5';
+  		    }
 		}
 	};
 
@@ -390,7 +399,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	while (keep_going && i<(int)max) {
 		int aidx, sidx;
 		char *seq_name = NULL;
-		char name[20]; /* XXX: assumption about seq_filename len */
+		char name[20]; /** \todo assumption about seq_filename len */
 
 		if (mode==0) {
 			aidx = aSeq.oLIST[i].aIdx;

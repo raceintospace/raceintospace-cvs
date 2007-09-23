@@ -93,6 +93,8 @@ xcalloc (size_t a, size_t b)
 	return (p);
 }
 
+/** duplicates a string and returns a pointer to the new string
+ */
 char *
 xstrdup (const char *s)
 {

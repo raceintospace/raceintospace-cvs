@@ -159,6 +159,9 @@ void DrawAstCheck(char plr)
   return;
 }
 
+/** Draw selection screen for Astronaut recruitment
+ * 
+ */
 void DrawAstSel(char plr)
 {
   

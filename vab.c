@@ -129,20 +129,6 @@ void DispVAB(char plr,char pad)
   
   FadeOut(2,pal,10,0,0);
 
-/** \page datafileVAB Datafiles VAB
- * \section VAB.IMG
- * \verbatim
-// VAB.IMG is
-//  ** Player 0 image
-//   char[768]   -- palette
-//   uint16_t    -- length of following PCX compressed image
-//   image_data[] --
-//  ** Player 1 image
-//   char[768]   -- palette
-//   uint16_t    -- length of following PCX compressed image
-//   image_data[]
- * \endverbatim
- */
   fp = sOpen("VAB.IMG","rb",0);
   fread(pal,768,1,fp);
   fread_uint16_t(&image_len, 1, fp);

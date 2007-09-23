@@ -39,7 +39,8 @@
   int pAry[15]; // Array for Presige Firsts compelted
 
   char MANNED[2],CAP[2],LM[2],DOC[2],EVA[2],STEP,FINAL,JOINT,pal2[768],PastBANG,mcc;
-  char fEarly,hero,DMFake;
+  char fEarly; /**< kind of a boolean indicating early missions */
+  char hero,DMFake;
   extern char STEPnum;
   extern char pNeg[NUM_PLAYERS][MAX_MISSIONS];
   extern char AI[2];
@@ -196,6 +197,7 @@ int Launch(char plr,char mis)
 //  if (mcode>15 && NOCOPRO && !AI[plr]) MisPrt();
 
   // Exit missions early
+  /** \todo The "early" missions should be defined in a file */
   fEarly=(!Mis.Days && !(mcode==1 || mcode==7 || mcode==8 || mcode==9 || mcode==11));
 
   STEPnum=STEP;

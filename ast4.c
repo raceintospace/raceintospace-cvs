@@ -244,12 +244,15 @@ void DrawProgs(char plr,char prog)
   return;
 }
 
+/** need to check programs to see if there is adequate astronauts there
+ * check any assigned groups yes then return
+ * check how many astronauts assigned to current prog
+ * 
+ * 
+ */
 int CheckProgram(char plr,char prog)
 {
  int check,i;
- // need to check programs to see if there is adequate astronauts there
- // check any assigned groups yes then return
- // check how many astronauts assigned to current prog
  check=0;
  for (i=0;i<Data->P[plr].AstroCount;i++)
     if (Data->P[plr].Pool[i].Crew!=0)
@@ -874,8 +877,10 @@ void Programs(char plr,char prog)
  };
 }
 
+/** clears the screen
+ */
 void ClearIt(void)
-{ // clears the screen
+{
  
  RectFill(16,87,75,91,3);RectFill(5,87,11,91,3);
  RectFill(16,96,75,100,3);RectFill(5,96,11,100,3);
@@ -916,6 +921,9 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
   return;
 }
 
+/** Draws Astronaut attributes
+ * 
+ */
 void AstStats(char plr,char man,char num)
 {
   int y;

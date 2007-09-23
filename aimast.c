@@ -22,7 +22,8 @@
 // Designed by Fritz Bronner
 // Programmed by Michael K McCarty and Morgan Roarty
 //
-// AI Master Routines
+/** \file aimast.c AI Master Routines
+ */
 
 #include "Buzz_inc.h"
 #include "externs.h"

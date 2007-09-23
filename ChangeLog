@@ -1,3 +1,17 @@
+2007-09-23  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V197
+
+	* vab.c: moved documentation to other file
+
+	* utils.c, rdplex.c, radar.c, mc.c, gr.c, ast4.c, ast1.c, aimast.c: some doc
+
+	* prest.c, pace.c, gamedata.h: lots of documentation
+
+	* port.c: doc error fix
+
+	* mis_c.c: doc and some restructured code
+
 2007-09-20  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V195

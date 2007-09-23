@@ -798,7 +798,8 @@ DoCycle(void)					// Three ranges of color cycling
 }
 
 /** ???
- * \param mode...  0 = ?   1 = copy stored outline ?
+ * 
+ * \param mode ...  0 = ?   1 = copy stored outline ?
  */
 void
 PortOutLine(unsigned int Count, ui16 * outline, char mode)

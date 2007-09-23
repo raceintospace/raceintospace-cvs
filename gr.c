@@ -70,6 +70,9 @@ gr_maybe_sync (void)
 /** set foreground color
  * 
  * \param color the color code to use
+ * 
+ * \li 6 = red
+ * \li 1 = white
  */
 void
 grSetColor (int color)

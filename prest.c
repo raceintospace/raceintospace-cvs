@@ -15,6 +15,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+/** \file prest.c Handles all the prestige related code.
+ */
+
 #include "Buzz_inc.h"
 #include "externs.h"
 
@@ -149,8 +152,11 @@ char PrestMin(char plr)      // Call only after a Mis Struct is filled
 }
 
 
-// Returns the amount of prestige added
-int PrestCheck(char plr)  // Assumes that the Mis Structure is Loaded
+/** Returns the amount of prestige added
+ * 
+ * \note Assumes that the Mis Structure is Loaded
+ */
+int PrestCheck(char plr)
 {
  int i,total=0; char prg,tm;
 
@@ -216,9 +222,14 @@ int PrestCheck(char plr)  // Assumes that the Mis Structure is Loaded
 }
 
 
-// Requires MEV to be packed
-// Only checks goal steps :: returns GOAL value
-// Does not check if entire mission is a success
+/** ???
+ * 
+ * \note Requires MEV to be packed 
+ * Only checks goal steps :: 
+ * returns GOAL value 
+ * Does not check if entire mission is a success
+ * 
+ */
 char Was_Goal(char total,char which)
 {
    char i,val,x=10;
@@ -276,10 +287,11 @@ char HeroCheck(int which)
       }
 }
 
-// Sets Goal Values and Sums into Data Structure
-// control should be always called with a value of 0
-// Successful Steps Only
-// Requires MEV to be packed
+/** Sets Goal Values and Sums into Data Structure
+ * control should be always called with a value of 0
+ * Successful Steps Only
+ * Requires MEV to be packed
+ */
 char Set_Goal(char plr,char which,char control)
 {
   char sum,pd,qt;
@@ -462,9 +474,10 @@ char Set_Goal(char plr,char which,char control)
   }
 }
 
-// Only sets negative for highest failed goal step
-
-// checks if entire mission was a failure
+/** Only sets negative for highest failed goal step
+ * 
+ * checks if entire mission was a failure
+ */
 char Did_Fail(void)
 {
    char i,bra;
