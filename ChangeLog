@@ -1,5 +1,11 @@
 2007-09-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V200
+
+	* utils/sync_docs.sh: sorry for the noise, 200th commit ;)
+
+2007-09-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V199
 
 	* Doxyfile.*: transparent png images

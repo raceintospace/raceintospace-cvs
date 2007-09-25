@@ -16,9 +16,9 @@ user=${2:?"arg 2 required: remote username"}
 cd $dir
 if cvs diff -NauR >/dev/null ; then exit ; fi
 cvs update -R >/dev/null
-doxygen Doxyfile.extended >/dev/null
+doxygen Doxyfile.quick >/dev/null
 chmod a+r -R "$DOC_DIR"
 rsync --archive --quiet \
-	--exclude-cvs --exclude '*.md5'	--exclude '*.map' \
+	--cvs-exclude --exclude '*.md5'	--exclude '*.map' \
 	--delete-after --delete-excluded \
 	"$DOC_DIR" "$user@$REMOTE_HOST:$REMOTE_DIR"
