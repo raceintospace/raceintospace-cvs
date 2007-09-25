@@ -1,3 +1,11 @@
+2007-09-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V199
+
+	* Doxyfile.*: transparent png images
+
+	* utils/sync_docs.sh: new script for updating web documentation
+
 2007-09-23  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V198
