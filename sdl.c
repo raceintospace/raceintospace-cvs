@@ -19,6 +19,10 @@
 
 LOG_DEFAULT_CATEGORY(sdl);
 
+#define KEYBUF_SIZE 256
+static int keybuf[KEYBUF_SIZE];
+static int keybuf_in_idx, keybuf_out_idx;
+
 int av_mouse_cur_x, av_mouse_cur_y;
 int av_mouse_pressed_x, av_mouse_pressed_y;
 int av_mouse_pressed_cur;
@@ -38,11 +42,10 @@ static SDL_Color pal_colors[256];
 
 static struct audio_channel Channels[AV_NUM_CHANNELS];
 
-// unsigned char* screen_2;
-
+/** RGB color palette. */
 unsigned char pal[3 * 256];
 
-/* data about current fading operation */
+/* information about current fading operation */
 static struct fade_information {
     unsigned from;
     unsigned to;
@@ -53,14 +56,8 @@ static struct fade_information {
     unsigned end;
 } fade_info;
 
+/** Indicates that screen redraw is required. */
 int screen_dirty;
-
-void
-intr(int sig)
-{
-	SDL_Quit();
-	exit(0);
-}
 
 static int have_audio;
 
@@ -78,6 +75,7 @@ alloc_dirty_tree(void)
     int depth = AV_DTREE_DEPTH + 1;
     int ratio = 1;
     int bytes = 0;
+
     /* use power series formula, S = (1 - q**(n+1))/(1 - q) */
     while (depth--)
         ratio *= 4;
@@ -141,7 +139,10 @@ audio_callback(void *userdata, Uint8 * stream, int len)
 	}
 }
 
-/* 0 means busy playing audio; 1 means idle */
+/** Check if animation sound playback is in progress.
+ * Currently #AV_SOUND_CHANNEL is used only for animation sounds.
+ * \return 0 means busy playing audio; 1 means idle
+ */
 char
 AnimSoundCheck(void)
 {
@@ -156,8 +157,8 @@ int
 IsChannelMute(int channel)
 {
 	assert(channel >= 0 && channel < AV_NUM_CHANNELS);
-    if (!have_audio)
-        return 1;
+	if (!have_audio)
+		return 1;
 	return Channels[channel].mute;
 }
 
@@ -224,6 +225,9 @@ sdl_timer_callback(Uint32 interval, void *param)
 	return (interval);
 }
 
+/**
+ * Setup SDL audio, video and window subsystems.
+ */
 void
 av_setup(void)
 {
@@ -260,10 +264,9 @@ av_setup(void)
 #endif
 		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 		{
-			ERROR2("audio initialization failed: %s",
-					SDL_GetError());
+			ERROR2("audio initialization failed: %s", SDL_GetError());
 		}
-		else 
+		else
 		{
 			NOTICE1("audio subsystem initialized");
 			have_audio = 1;
@@ -282,6 +285,7 @@ av_setup(void)
 	if ((icon_path = locate_file("moon_32x32.bmp", FT_IMAGE)))
 	{
 		SDL_Surface *icon = SDL_LoadBMP(icon_path);
+
 		if (icon != NULL)
 			SDL_WM_SetIcon(icon, NULL);
 		else
@@ -291,57 +295,59 @@ av_setup(void)
 #endif
 
 #ifdef PACKAGE_BUILD
-	SDL_WM_SetCaption(PACKAGE_NAME " " PACKAGE_VERSION " build " PACKAGE_BUILD, NULL);
+	SDL_WM_SetCaption(PACKAGE_NAME " " PACKAGE_VERSION
+			" build " PACKAGE_BUILD, NULL);
 #else
 	SDL_WM_SetCaption(PACKAGE_STRING, NULL);
 #endif
 
-	if ((display = SDL_SetVideoMode(MAX_X * 2, MAX_Y * 2, 24, video_flags)) == NULL)
+	if ((display = SDL_SetVideoMode(MAX_X * 2, MAX_Y * 2, 24, video_flags))
+			== NULL)
 	{
 		CRITICAL2("SDL_SetVideoMode failed: %s", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
 
 	screen = xcalloc(MAX_X * MAX_Y, 1);
-	screen_surf = SDL_CreateRGBSurfaceFrom(screen, MAX_X, MAX_Y, 8,
-		MAX_X, 0, 0, 0, 0);
-    if (!screen_surf)
-    {
-        CRITICAL2("can't create screen surface: %s", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-	screen_surf2x = SDL_CreateRGBSurface(SDL_SWSURFACE, MAX_X * 2, MAX_Y * 2, 8,
-		~0, ~0, ~0, 0);
-    if (!screen_surf2x)
-    {
-        CRITICAL2("can't create screen_2x surface: %s", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
+	screen_surf = SDL_CreateRGBSurfaceFrom(screen, MAX_X, MAX_Y, 8, MAX_X,
+			0, 0, 0, 0);
+	if (!screen_surf)
+	{
+		CRITICAL2("can't create screen surface: %s", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	screen_surf2x = SDL_CreateRGBSurface(SDL_SWSURFACE, MAX_X * 2, MAX_Y * 2,
+			8, ~0, ~0, ~0, 0);
+	if (!screen_surf2x)
+	{
+		CRITICAL2("can't create screen_2x surface: %s", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 
-    /* XXX: Hardcoded video width & height */
-    video_overlay = SDL_CreateYUVOverlay(160, 100, SDL_YV12_OVERLAY, display);
-    if (!video_overlay)
-    {
-        CRITICAL2("can't create video_overlay: %s", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-    news_overlay = SDL_CreateYUVOverlay(312, 106, SDL_YV12_OVERLAY, display);
-    /* XXX: Hardcoded video width & height */
-    if (!news_overlay)
-    {
-        CRITICAL2("can't create news_overlay: %s", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
+	/* XXX: Hardcoded video width & height */
+	video_overlay = SDL_CreateYUVOverlay(160, 100, SDL_YV12_OVERLAY, display);
+	if (!video_overlay)
+	{
+		CRITICAL2("can't create video_overlay: %s", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	news_overlay = SDL_CreateYUVOverlay(312, 106, SDL_YV12_OVERLAY, display);
+	/* XXX: Hardcoded video width & height */
+	if (!news_overlay)
+	{
+		CRITICAL2("can't create news_overlay: %s", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 
-    fade_info.step = 1;
-    fade_info.steps = 1;
-    do_fading = 1;
+	fade_info.step = 1;
+	fade_info.steps = 1;
+	do_fading = 1;
 
-    alloc_dirty_tree();
+	alloc_dirty_tree();
 
 	SDL_EnableUNICODE(1);
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
-            SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
+		SDL_DEFAULT_REPEAT_INTERVAL);
 
 	if (have_audio)
 	{
@@ -351,7 +357,7 @@ av_setup(void)
 		audio_desired.format = AUDIO_U8;
 		audio_desired.channels = 1;
 		/* audio was unresponsive on win32 so let's use shorter buffer */
-		audio_desired.samples = 2048; /* was 8192 */
+		audio_desired.samples = 2048;	/* was 8192 */
 		audio_desired.callback = audio_callback;
 
 		/* initialize audio channels */
@@ -378,11 +384,7 @@ av_setup(void)
 	SDL_AddTimer(30, sdl_timer_callback, NULL);
 }
 
-#define KEYBUF_SIZE 256
-int keybuf[KEYBUF_SIZE];
-int keybuf_in_idx, keybuf_out_idx;
-
-void
+static void
 av_process_event(SDL_Event * evp)
 {
 	int c;
@@ -489,7 +491,7 @@ av_step(void)
 {
 	SDL_Event ev;
 	
-	// Have the music system update itself as required
+	/* Have the music system update itself as required */
 	music_pump();
 
 	while (SDL_PollEvent(&ev))
@@ -497,10 +499,10 @@ av_step(void)
 }
 
 /**
- * block until an event comes in
+ * Block until an SDL event comes in.
  *
- * we have a 30ms timer going, so that is the
- * maximum wait time
+ * We have a 30ms timer going, so that is the
+ * maximum wait time.
  */
 void
 av_block(void)
@@ -647,7 +649,7 @@ SDL_Scale2x(SDL_Surface * src, SDL_Surface * dst)
 	return dst;
 }
 
-void
+static void
 transform_palette(void)
 {
     unsigned i, j, step, steps;
@@ -699,45 +701,45 @@ void
 av_sync(void)
 {
 	int num_rect = 0;
-    SDL_Rect r;
+	SDL_Rect r;
 
 #ifdef PROFILE_GRAPHICS
-    float tot_area = 0;
-    int i = 0;
+	float tot_area = 0;
+	int i = 0;
 	Uint32 ticks = SDL_GetTicks();
 #endif
 
 	SDL_Scale2x(screen_surf, screen_surf2x);
 	/* copy palette and handle fading! */
-    transform_palette();
+	transform_palette();
 	SDL_SetColors(screen_surf2x, pal_colors, 0, 256);
 	SDL_BlitSurface(screen_surf2x, NULL, display, NULL);
-    if (video_rect.h && video_rect.w)
-    {
-        av_need_update(&video_rect);
-        r.h = 2 * video_rect.h;
-        r.w = 2 * video_rect.w;
-        r.x = 2 * video_rect.x;
-        r.y = 2 * video_rect.y;
-        SDL_DisplayYUVOverlay(video_overlay, &r);
-    }
-    if (news_rect.h && news_rect.w)
-    {
-        av_need_update(&news_rect);
-        r.h = 2 * news_rect.h;
-        r.w = 2 * news_rect.w;
-        r.x = 2 * news_rect.x;
-        r.y = 2 * news_rect.y;
-        SDL_DisplayYUVOverlay(news_overlay, &r);
-    }
-    num_rect = get_dirty_rect_list();
-    SDL_UpdateRects(display, num_rect, dirty_rect_list);
+	if (video_rect.h && video_rect.w)
+	{
+		av_need_update(&video_rect);
+		r.h = 2 * video_rect.h;
+		r.w = 2 * video_rect.w;
+		r.x = 2 * video_rect.x;
+		r.y = 2 * video_rect.y;
+		SDL_DisplayYUVOverlay(video_overlay, &r);
+	}
+	if (news_rect.h && news_rect.w)
+	{
+		av_need_update(&news_rect);
+		r.h = 2 * news_rect.h;
+		r.w = 2 * news_rect.w;
+		r.x = 2 * news_rect.x;
+		r.y = 2 * news_rect.y;
+		SDL_DisplayYUVOverlay(news_overlay, &r);
+	}
+	num_rect = get_dirty_rect_list();
+	SDL_UpdateRects(display, num_rect, dirty_rect_list);
 #ifdef PROFILE_GRAPHICS
-    for (i = 0; i < num_rect; ++i)
-        tot_area += dirty_rect_list[i].w * dirty_rect_list[i].h;
-    tot_area = tot_area * 100 / (2*MAX_X) / (2*MAX_Y);
-    TRACE4("%3d rects (%6.2f%%) updated in ~%3ums\n",
-            num_rect, tot_area, SDL_GetTicks() - ticks);
+	for (i = 0; i < num_rect; ++i)
+		tot_area += dirty_rect_list[i].w * dirty_rect_list[i].h;
+	tot_area = tot_area * 100 / (2 * MAX_X) / (2 * MAX_Y);
+	TRACE4("%3d rects (%6.2f%%) updated in ~%3ums\n",
+		num_rect, tot_area, SDL_GetTicks() - ticks);
 #endif
 	screen_dirty = 0;
 }
@@ -759,8 +761,19 @@ MuteChannel(int channel, int mute)
 	}
 }
 
+/**
+ * Set up screen fade effect.  Fading applies only to a range of palette
+ * color indexes. Rest of colors in the palette can be preserved or
+ * forced to black.
+ *
+ * \param type #AV_FADE_IN or #AV_FADE_OUT
+ * \param from index of first affected color
+ * \param to index of last affected color
+ * \param steps how many color change steps to perform
+ * \param preserve whether preserve rest of palette colors or not
+ */
 /* 
- * A hack, but hey, it works :)
+ * \note A hack, but hey, it works :)
  * Adding periodic timer won't work, because we can't call av_sync from timer.
  * The only thing allowed is SDL_PushEvent, and we don't have event-driven
  * setup. So for now either this or nothing.
@@ -902,7 +915,10 @@ get_dirty_rect_list(void)
     return len;
 }
 
-/* Public interface to dirty rectangle tree */
+/**
+ * Notify graphic subsystem that rectangle has to be redrawn.
+ * \param r rectangle coordinates
+ */
 void
 av_need_update(SDL_Rect *r)
 {
@@ -910,11 +926,17 @@ av_need_update(SDL_Rect *r)
     screen_dirty = 1;
 }
 
+/**
+ * Notify graphic subsystem that rectangle has to be redrawn.
+ * \param x1 screen coord. of upper left corner
+ * \param y1 screen coord. of upper left corner
+ * \param x2 screen coord. of bottom right corner
+ * \param y2 screen coord. of bottom right corner
+ */
 void
 av_need_update_xy(int x1, int y1, int x2, int y2)
 {
-    SDL_Rect r = {x1, y1, x2-x1+1, y2-y1+1};
-    av_need_update(&r);
+	SDL_Rect r = { x1, y1, x2 - x1 + 1, y2 - y1 + 1 };
+	av_need_update(&r);
 }
-
 /* vim: set noet ts=4 sw=4 tw=77: */

@@ -1,3 +1,9 @@
+2007-09-28  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V201
+
+	* sdl.c: documentation and formatting
+
 2007-09-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V200
