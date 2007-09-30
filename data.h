@@ -421,24 +421,24 @@ struct MisAst {  // This struct will be -1's if empty
 };
 
 struct MisEval {
-  char step;             // actual step id number
-  char loc;              // Mission Step Name Index
-  uint16_t StepInfo; // ID of step success  1=succ   !1=fail
-  Equipment *E;   // Pointer into equipment`
-  char Prest;            // Prestige Step #  (-1 for none)
-  char PComp;            // PComp will be set to amt of prest to be awarded.
-  char pad;              // pad location  (Index into First Part of MH[x][]
-  char Class;            // VAB Order index into Class types MH[][x]
-  char fgoto;            // goto on failure
-  char sgoto;            // goto on success
-  char dgoto;            // where to branch on deaths
-  char trace;            // allow tracing of mission (for prest)
-  char dice;             // Die roll to check safety against
-  int16_t rnum;              // Random number holder for failure type
-  char ast;              // Astro specialist num
-  char asf;              // Astro specialist safety addition
-  char FName[5];         // Name of Failure File (without .DAT)
-  char Name[10];         // Name of Anim Code
+  char step;              /**< actual step id number */
+  char loc;               /**< Mission Step Name Index */
+  uint16_t StepInfo;      /**< ID of step success  1=succ   !1=fail */
+  Equipment *E;           /**< Pointer into equipment */
+  char Prest;             /**< Prestige Step #  (-1 for none) */
+  char PComp;             /**< PComp will be set to amt of prest to be awarded. */
+  char pad;               /**< pad location  (Index into First Part of MH[x][] */
+  char Class;             /**< VAB Order index into Class types MH[][x] */
+  char fgoto;             /**< goto on failure */
+  char sgoto;             /**< goto on success */
+  char dgoto;             /**< where to branch on deaths */
+  char trace;             /**< allow tracing of mission (for prest) */
+  char dice;              /**< Die roll to check safety against */
+  int16_t rnum;           /**< Random number holder for failure type */
+  char ast;               /**< Astro specialist num */
+  char asf;               /**< Astro specialist safety addition */
+  char FName[5];          /**< Name of Failure File (without .DAT) */
+  char Name[10];          /**< Name of Anim Code */
 };
 
 struct XFails {

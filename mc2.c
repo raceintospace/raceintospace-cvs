@@ -214,8 +214,12 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
    if (PastBANG==1 && Mev[step].PComp>0) Mev[step].PComp=5;
 
    if (mcode=='d') {
-     if (Mgoto==0) Mev[step-1].sgoto=Mev[step-1].fgoto=100;
-     else Mev[step-1].sgoto=Mev[step-1].fgoto=Mgoto;
+     // Alternative path Mission.Alt
+     if (Mgoto==0) {
+          Mev[step-1].sgoto=Mev[step-1].fgoto=100;
+     } else {
+          Mev[step-1].sgoto=Mev[step-1].fgoto=Mgoto;
+     }
    }
    else {
       Mev[step].asf=0;

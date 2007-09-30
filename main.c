@@ -840,6 +840,15 @@ void IOBox(int x1, int y1, int x2, int y2)
   OutBox(x1+2,y1+2,x2-2,y2-2);
 }
 
+/** draw a rectangle
+ * 
+ * \param x1
+ * \param y1
+ * \param x2
+ * \param y2
+ * \param col Color code of the rectangle
+ * 
+ */
 void RectFill(int x1,int y1,int x2,int y2,char col)
 {
   grSetBkColor(col);

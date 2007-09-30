@@ -631,7 +631,7 @@ News(char plr)
 	fwrite(&oNews, sizeof(struct oldNews), 1, fout);
 	fclose(fout);
 
-    /* XXX there is also M_NEW1950, why it is unused? */
+    /** \todo there is also M_NEW1950, why it is unused? */
 	music_start(M_NEW1970);
 
 	/* Tom's News kludge, also open and load first anim */

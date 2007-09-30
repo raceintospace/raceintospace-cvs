@@ -102,10 +102,13 @@ struct oGROUP {
 #define sizeof_oGROUP (10 + 5*sizeof_oLIST)
 extern size_t fread_oGROUP(struct oGROUP *dst, size_t num, FILE *f);
 
+/** Lookup table for filename to offsets
+ * 
+ */
 struct Table {
-    char fname[8];          /* XXX: File name? */
-    int32_t foffset;        /* XXX: Offset in file? */
-    uint16_t size;          /* XXX: Data size? */
+    char fname[8];          /**< File name */
+    int32_t foffset;        /**< Offset for starting position in the file */
+    uint16_t size;          /**< Data size */
 };
 #define sizeof_Table (8 + 4 + 2)
 extern size_t fread_Table(struct Table *dst, size_t num, FILE *f);

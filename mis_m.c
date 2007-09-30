@@ -36,8 +36,9 @@ LOG_DEFAULT_CATEGORY(mission);
 
 extern struct MisAst MA[2][4];
 extern Equipment *MH[2][8];
-extern struct MisEval Mev[60]; 
-extern char MANNED[2],STEP,pal2[768],STEPnum,FINAL,AI[2],CAP[2],LM[2],DOC[2],EVA[2],fEarly,mcc,JOINT;
+extern struct MisEval Mev[60];
+extern char MANNED[2],pal2[768],STEPnum,FINAL,AI[2],CAP[2],LM[2],DOC[2],EVA[2],fEarly,mcc,JOINT;
+extern char STEP; /**< Index of current mission step */
 extern char DMFake;
 extern int AUDIO;
 char MFlag,death,durx,MPad,Unm,SCRUBS,noDock,InSpace;
@@ -123,27 +124,27 @@ void MisCheck(char plr,char mpad)
 
    
 
-   if (!AI[plr] && BIG==0) {
-      //FadeOut(1,pal,100,128,1);
-      if (plr==1) {
-         RectFill(189,173,249,196,55);
-         for (i=190;i<250;i+=2) {
-            grPutPixel(i,178,61);
-            grPutPixel(i,184,61);
-            grPutPixel(i,190,61);
-            }
-         lc=191;
-         }
-      else if (plr==0) {
-         RectFill(73,173,133,196,55);
-         for (i=73;i<133;i+=2) {
-            grPutPixel(i,178,61);
-            grPutPixel(i,184,61);
-            grPutPixel(i,190,61);
-            }
-         lc=76;
-         }
-      } // END if (!AI[plr])
+  if (!AI[plr] && BIG==0) {
+    //FadeOut(1,pal,100,128,1);
+    if (plr==1) {
+        RectFill(189,173,249,196,55);
+        for (i=190;i<250;i+=2) {
+          grPutPixel(i,178,61);
+          grPutPixel(i,184,61);
+          grPutPixel(i,190,61);
+          }
+        lc=191;
+        }
+    else if (plr==0) {
+        RectFill(73,173,133,196,55);
+        for (i=73;i<133;i+=2) {
+          grPutPixel(i,178,61);
+          grPutPixel(i,184,61);
+          grPutPixel(i,190,61);
+          }
+        lc=76;
+        }
+  } // END if (!AI[plr])
 
   if (!AI[plr] && BIG==0) Tick(2);
   Mev[0].trace=0;
@@ -359,8 +360,13 @@ void MisCheck(char plr,char mpad)
 
 // *********** TOM's FAIL HMOON KLUDGE
 
-      if (tomflag) GetFailStat(&Now,Mev[STEP].FName,7595); // if HMOON FAILURE
-        else GetFailStat(&Now,Mev[STEP].FName,Mev[STEP].rnum);       // all others
+      // if HMOON FAILURE
+      if (tomflag) {
+        GetFailStat(&Now,Mev[STEP].FName,7595);
+      } else {
+        DEBUG3("Failing !tomflag - calling GetFailStat(&Now, Mev[STEP].FName %s, MEV[STEP].rnum %d))", Mev[STEP].FName, Mev[STEP].rnum);
+        GetFailStat(&Now,Mev[STEP].FName,Mev[STEP].rnum);       // all others
+      }
 
 
       VerifyData();
@@ -476,7 +482,7 @@ void MisCheck(char plr,char mpad)
 //  if (Mev[STEP].trace==0x7f && InSpace>0) Mev[STEP].trace=STEP+1;
 
  } while(Mev[STEP].trace!=0x7f);            // End mission
-  
+  //end do
   if (!AI[plr] && death==0) delay(1000);
 
   if ((MA[0][0].A!=NULL && MA[0][0].A->Status==1)
@@ -509,20 +515,38 @@ void MisCheck(char plr,char mpad)
   return;
 }
 
+/** Draw mission step rectangle
+ * 
+ * The rectangle represents the success or failure rate.
+ * 
+ * \param plr Player data
+ * \param lc ??? maybe location of the chart
+ * \param safety Safety factor in percent
+ * \param val value of the dice checked against safety
+ * \param prob is this a problem or not?
+ * 
+ * \return new value of lc
+ */
 int MCGraph(char plr,int lc,int safety,int val,char prob)
 {
-   int i;
-   if (plr==1 && !AI[plr]) {
-      RectFill(lc-2,195,lc,195-safety*22/100,11);
-      RectFill(lc-2,195,lc,195-(safety-Mev[STEP].asf)*22/100,6);
-      for (i=195;i>195-val*22/100;i--) {
-         RectFill(lc-2,195,lc,i,21);
-         delay(15);
-         }
-      if (val>safety && prob==0) {RectFill(lc-2,195,lc,195-val*22/100,9);lc=191;}
-      else if (val>safety) {RectFill(lc-2,195,lc,195-val*22/100,9);lc+=5;}
-       else
-       {  
+    int i;
+    DEBUG5("->MCGraph(plr, lc %d, safety %d, val %d, prob %c)", lc, safety, val, prob);
+    RectFill(lc-2,195,lc,195-safety*22/100,11);
+    RectFill(lc-2,195,lc,195-(safety-Mev[STEP].asf)*22/100,6);
+    for (i=195;i>195-val*22/100;i--) {
+        RectFill(lc-2,195,lc,i,21);
+        delay(15);
+    }
+  
+  
+  if (plr==1 && !AI[plr]) {
+      if (val>safety && prob==0) {
+        RectFill(lc-2,195,lc,195-val*22/100,9);
+        lc=191;
+      } else if (val>safety) {
+        RectFill(lc-2,195,lc,195-val*22/100,9);
+        lc+=5;
+      } else {  
         if (lc>=241) {
           grSetColor(55);RectFill(189,173,249,196,55);
           for (i=190;i<250;i+=2) {
@@ -536,40 +560,40 @@ int MCGraph(char plr,int lc,int safety,int val,char prob)
           if (Mev[STEP].asf>0) RectFill(189,195-safety*22/100,191,195-safety*22/100,11);
 
           lc=196;
-         }
-        else lc+=5;
-       }
-      }
-   else if (plr==0 && !AI[plr]) {
-      RectFill(lc-2,195,lc,195-safety*22/100,11);
-      RectFill(lc-2,195,lc,195-(safety-Mev[STEP].asf)*22/100,6);
-      for (i=195;i>195-val*22/100;i--) {
-         RectFill(lc-2,195,lc,i,21);
-         delay(15);
-         }
-      if (val>safety && prob==0) {RectFill(lc-2,195,lc,195-val*22/100,9);lc=76;}
-      else if (val>safety) {RectFill(lc-2,195,lc,195-val*22/100,9);lc+=5;}
-       else
-       {
-        if (lc>=126)
-         {
+          /* lc > 241 */
+        } else {
+          lc+=5;
+        }
+      } /* check safety and problem */
+    } else if (plr==0 && !AI[plr]) {
+      if (val>safety && prob==0) {
+        RectFill(lc-2,195,lc,195-val*22/100,9);
+        lc=76;
+      } else if (val>safety) {
+        RectFill(lc-2,195,lc,195-val*22/100,9);
+        lc+=5;
+      } else {
+        if (lc>=126) {
           RectFill(73,173,133,196,55);
-          for (i=73;i<133;i+=2)
-           {
+          for (i=73;i<133;i+=2) {
             grPutPixel(i,178,61);
             grPutPixel(i,184,61);
             grPutPixel(i,190,61);
-           }
-           RectFill(74,195,76,195-safety*22/100,11);
-           RectFill(74,195,76,195-(safety-Mev[STEP].asf)*22/100,6);
-           RectFill(74,195,76,195-val*22/100,21);
-           if (Mev[STEP].asf>0) RectFill(74,195-safety*22/100,76,195-safety*22/100,11);
-           lc=81;
-         }
-        else lc+=5;
-       }
-      }               
-   return lc;
+          }
+          RectFill(74,195,76,195-safety*22/100,11);
+          RectFill(74,195,76,195-(safety-Mev[STEP].asf)*22/100,6);
+          RectFill(74,195,76,195-val*22/100,21);
+          if (Mev[STEP].asf>0) {
+            RectFill(74,195-safety*22/100,76,195-safety*22/100,11);
+          }
+          lc=81;
+        } else {
+          lc+=5;
+        }
+      }
+    }
+    DEBUG1("<-MCGraph()");
+    return lc;
 }
 
 #define F_ALL 0

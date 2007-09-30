@@ -29,6 +29,17 @@ extern struct mStr Mis;
 extern char dg[62][6];
 extern char Option,MAIL,BIG;
 
+/** Function to compare two Missions
+ * 
+ * Orders by date and budget
+ * 
+ * \param
+ * \param
+ * 
+ * \return -1 if first date earlier than second
+ * \return 0 if date and budget are the same
+ * \return 1 if first budget is lower than second
+ */
 static int
 cmp_order(const void *p1, const void *p2)
 {

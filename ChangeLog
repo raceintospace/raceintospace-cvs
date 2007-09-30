@@ -1,3 +1,26 @@
+2007-09-30  Fabian S. <fabguy@users.sourceforge.net>
+
+	* V202
+
+	* data.h: MisEval documented
+
+	* gamedata.h: Table documented
+
+	* main.c: documentation added
+
+	* mc2.c: re-formatting
+
+	* mis_c.c: doc of PlaySequence() corrected, plus re-formatting,
+	  there's a problem with the debug info in PlaySequence - had to
+	  remove the parameter printing
+
+	* mis_m.c: re-formatting and debug-info, documentation, moved some
+	  code out of if _and_ else part
+
+	* newmis.c: some doc to mission compare function
+
+	* news.c: minor doc re-formatting
+
 2007-09-28  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V201

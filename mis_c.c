@@ -128,14 +128,20 @@ bot:                          // bottom of routine
 }
 #endif
 
-/**
+/** Finds the video fitting to the current mission step and plays it.
  * 
- * \param mode Female or other (2 = female)
+ * The function does handles variations for the videos 
+ * and also finds the proper babypics to display.
+ * 
+ * \param plr Player structure
+ * \param step Missions step ID
  * \param Seq Sequence-Code for the movies (?)
+ * \param mode mode 1 branches to fseq.dat so it's probably failure. However mode 2 is defined by a female 'naut's presence
  */
 void PlaySequence(char plr,int step,char *Seq,char mode)
 {
-    DEBUG4("->PlaySequence(plr, step %d, Seq %c, mode %s)", step, Seq, mode);
+    DEBUG1("->PlaySequence()");
+  //DEBUG4("->PlaySequence(plr, step %d, Seq %s, mode %s)", step, Seq, mode);
 	int keep_going;
 	int wlen,i,j;
 	unsigned int fres,max;
@@ -245,6 +251,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 		err=0;  //Specs: reset error
 
+        /* Search for the proper animation */
 		for (i=0;i<50;i++) {
 			if (strncmp(F[i].fname,Mev[step].FName,4)==0)
 				break;
@@ -956,39 +963,45 @@ char FailureMode(char plr,int prelim,char *text)
   };
 }
 
+/** open the animations file and seek the proper animation
+ * 
+ * \param fname Name of the Animation to search for
+ */
 FILE *OpenAnim(char *fname)
 {
-   FILE  *fin;
-   struct TM {
-      char ID[4];
-      long offset;
-      long size;
-      } AIndex;
-
+    DEBUG2("->OpenAnim(fname %s)", fname);
+    FILE  *fin;
+    struct TM {
+        char ID[4];
+        long offset;
+        long size;
+    } AIndex;
+    
     fin=open_gamedat("LIFTOFF.ABZ");
-	if (!fin)
-	{								   
-	    WARNING1("can't access file LIFTOFF.ABZ");
-		return fin;
-	}
-   fread(&AIndex,sizeof AIndex,1,fin);
-   while (strncmp(AIndex.ID,fname,4)!=0) {
+    if (!fin)
+    {								   
+        WARNING1("can't access file LIFTOFF.ABZ");
+        return fin;
+    }
+    fread(&AIndex,sizeof AIndex,1,fin);
+    while (strncmp(AIndex.ID,fname,4)!=0) {
       fread(&AIndex,sizeof AIndex,1,fin);
-      }
-			Swap32bit(AIndex.offset);
-			Swap32bit(AIndex.size);
-   fseek(fin,AIndex.offset,SEEK_SET);
-
-      fread(&AHead,sizeof AHead,1,fin);
-			Swap16bit(AHead.w);
-			Swap16bit(AHead.h);
-      fread(&pal[AHead.cOff*3],AHead.cNum*3,1,fin);
-      aLoc=ftell(fin);
-      tFrames=AHead.fNum;
-      cFrame=0;
-
-   GV(&dply,AHead.w,AHead.h);
-   return fin;
+    }
+    Swap32bit(AIndex.offset);
+    Swap32bit(AIndex.size);
+    fseek(fin,AIndex.offset,SEEK_SET);
+    
+    fread(&AHead,sizeof AHead,1,fin);
+    Swap16bit(AHead.w);
+    Swap16bit(AHead.h);
+    fread(&pal[AHead.cOff*3],AHead.cNum*3,1,fin);
+    aLoc=ftell(fin);
+    tFrames=AHead.fNum;
+    cFrame=0;
+    
+    GV(&dply,AHead.w,AHead.h);
+    DEBUG1("<-OpenAnim");
+    return fin;
 }
 
 int CloseAnim(FILE *fin)
