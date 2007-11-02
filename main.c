@@ -538,7 +538,8 @@ void DockingKludge(void)
   return;
 }
 
-// Reset Crews on a particular Mission
+/** Reset Crews on a particular Mission
+ */
 void FreePadMen(char plr,struct MissionType *XMis)
 {
    int i,c;
@@ -669,6 +670,19 @@ void PauseMouse(void)
 	GetMouse ();
 }
 
+/** Print string at specific position
+ * 
+ * The function will print a string at a certain position.
+ * If both the x and y coordinate are zero (0) the position is "current position".
+ * The area will be marked as "needs update" to the graphics handler.
+ * 
+ * \note Will not print anything if length of string exceeds 100 characters
+ * 
+ * \param x x-coordinate of the start of the string
+ * \param y y-coordinate of the start of the string
+ * \param s pointer to char-array (string) to print
+ * 
+ */
 void PrintAt(int x,int y,char *s)
 {
   short i;
@@ -942,7 +956,12 @@ void Flag(int x,int y,char plr)
   return;
 }
 
-
+/** Prints a character at current position of graphics handler.
+ * 
+ * \note The function converts all characters to upper case before printing.
+ * 
+ * \param chr Character to be printed
+ */
 void DispChr(char chr)
 {
   switch(toupper(chr))

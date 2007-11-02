@@ -31,6 +31,9 @@
 extern char MCol[110],sel[30],MaxSel;
 extern struct ManPool *Men;
 
+/** display list of 'naut names
+ * 
+ */
 void DispEight(char now,char loc)
 {
   int i,start;
