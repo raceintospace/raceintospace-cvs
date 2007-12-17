@@ -48,6 +48,7 @@ typedef int32_t i32;
 #include <winsock2.h>
 #endif
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>

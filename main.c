@@ -512,14 +512,23 @@ for (i = 0; i < kik; i++)
   };
    Data->P[0].Prestige=Data->P[1].Prestige=0;
 
-    if (Data->Season==1) {
-      for (i=0;i<NUM_PLAYERS;i++) {
-	Data->P[plr[i] % 2].Cash+=Data->P[plr[i]-AI[i] % 2].Budget;
-	if (Data->P[plr[i] % 2].Cash > 999) Data->P[plr[i]-AI[i] % 2].Cash=900;
-      }
-	Data->Season=0;
-	Data->Year++;
-    } else Data->Season++;
+	if (Data->Season == 1)
+	{
+		for (i = 0; i < NUM_PLAYERS; i++)
+		{
+			int p = plr[i] % NUM_PLAYERS;
+			int pi = plr[i] - 2*AI[i];
+
+			assert(0 <= pi && pi <= NUM_PLAYERS);
+			Data->P[p].Cash += Data->P[pi].Budget;
+			if (Data->P[p].Cash > 999)
+				Data->P[pi].Cash = 900;
+		}
+		Data->Season = 0;
+		Data->Year++;
+	}
+	else
+		Data->Season++;
   };
   FadeOut(2,pal,10,0,0);
   Museum(0);

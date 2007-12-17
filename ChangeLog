@@ -1,3 +1,11 @@
+2007-12-17	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V204
+
+	* Buzz_inc.h: added assert.h header
+	
+	* main.c: bugfix for #1817223, reverted changes from V178
+
 2007-11-02  Fabian S. <fabguy@users.sourceforge.net>
 
 	* V203
