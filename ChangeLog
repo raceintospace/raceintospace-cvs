@@ -1,5 +1,13 @@
 2007-12-17	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V205
+
+	* ast0.c (Moon): fixed #1816886 introduced in V126
+
+	* main.c: rest of changes missed in V204
+
+2007-12-17	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V204
 
 	* Buzz_inc.h: added assert.h header

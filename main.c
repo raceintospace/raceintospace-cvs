@@ -399,9 +399,9 @@ restart:                              // ON A LOAD PROG JUMPS TO HERE
        NextTurn(plr[i]);
        VerifySF(plr[i]);
        News(plr[i]);                  // EVENT FOR PLAYER
-       if ((Data->P[plr[i] % 2].Mission[0].MissionCode>6 ||
-           Data->P[plr[i] % 2].Mission[1].MissionCode>6 ||
-           Data->P[plr[i] % 2].Mission[2].MissionCode>6) &&
+       if ((Data->P[plr[i] % NUM_PLAYERS].Mission[0].MissionCode>6 ||
+           Data->P[plr[i] % NUM_PLAYERS].Mission[1].MissionCode>6 ||
+           Data->P[plr[i] % NUM_PLAYERS].Mission[2].MissionCode>6) &&
            (NOCOPRO && !PUSSY ))
           xMODE &= ~xMODE_NOCOPRO;
        VerifyCrews(plr[i]);

@@ -51,7 +51,7 @@ void Moon(char plr)
   if (size>13) size=13;
 
   in=sOpen("MOON.BUT","rb",0);
-  fseek(in,sizeof_SimpleHdr * plr,SEEK_SET);
+  fseek(in,sizeof_SimpleHdr * size,SEEK_SET);
   fread_SimpleHdr(&table,1,in);
   fseek(in,table.offset,SEEK_SET);
   GV(&local,104,82);
