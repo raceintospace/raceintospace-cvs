@@ -808,206 +808,237 @@ char HPurc(char plr)
   };
 }
 
-void BuyUnit(char hw2,char un2,char plr)
+/**
+ * Record purchase of a hardware unit.
+ * @param category index of hardware category
+ * @param unit index of specific unit in the category
+ * @param plr player doing the purchase
+ */
+
+void
+BuyUnit(char category, char unit, char plr)
 {
-  short n1,n2,n3,n4,n5,n6,n7;
-  char newf=0;
-  int Init_Cost,Unit_Cost;
+	short n1, n2, n3, n4, n5, n6, n7;
+	char new_program = 0;
+	int Init_Cost, Unit_Cost;
+	Equipment* unit_ptr = NULL;
+	Unit_Cost = Init_Cost = 0;
 
-  Unit_Cost = Init_Cost = 0; /* XXX check uninitialized */
+	assert(1 <= category && category <= 4);
 
-  switch(hw2)
-  {
-   case 1:Init_Cost=Data->P[plr].Probe[un2-1].InitCost;
-          Unit_Cost=Data->P[plr].Probe[un2-1].UnitCost;
-          break;
-   case 2:Init_Cost=Data->P[plr].Rocket[un2-1].InitCost;
-          Unit_Cost=Data->P[plr].Rocket[un2-1].UnitCost;
-          break;
-   case 3:Init_Cost=Data->P[plr].Manned[un2-1].InitCost;
-          Unit_Cost=Data->P[plr].Manned[un2-1].UnitCost;
-          break;
-   case 4:Init_Cost=Data->P[plr].Misc[un2-1].InitCost;
-          Unit_Cost=Data->P[plr].Misc[un2-1].UnitCost;
-          break;
-   default:break;
-  }
-  if (Data->P[plr].TurnOnly==3)
-   {
-    Init_Cost/=2;Init_Cost=maxx(1,Init_Cost);
-    Unit_Cost/=2;Unit_Cost=maxx(1,Unit_Cost);
-   }           
-  if (hw2==1) {
-	if (Data->P[plr].Probe[un2-1].Num==-1 &&
-	Data->P[plr].Cash>=Init_Cost) {
-	  Data->P[plr].Cash-=Init_Cost;
-	  Data->P[plr].Probe[un2-1].Num=1;
-		newf=1;
-		Data->P[plr].Spend[0][hw2-1] += Init_Cost;
+	switch (category)
+	{
+		case 1:
+			assert(1 <= unit && unit <= 3);
+			unit_ptr = &(Data->P[plr].Probe[unit - 1]);
+			break;
+		case 2:
+			assert(1 <= unit && unit <= 5);
+			unit_ptr = &(Data->P[plr].Rocket[unit - 1]);
+			break;
+		case 3:
+			assert(1 <= unit && unit <= 7);
+			unit_ptr = &(Data->P[plr].Manned[unit - 1]);
+			break;
+		case 4:
+			assert(1 <= unit && unit <= 5);
+			unit_ptr = &(Data->P[plr].Misc[unit - 1]);
+			break;
 	}
-	else if (Data->P[plr].Probe[un2-1].Num>=0 &&
-		 Data->P[plr].Probe[un2-1].Num<6 &&
-		 Data->P[plr].Cash>=Unit_Cost) {
-	  Data->P[plr].Cash-=Unit_Cost;
-		Data->P[plr].Probe[un2-1].Num+=1;
-		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
+
+	Init_Cost = unit_ptr->InitCost;
+	Unit_Cost = unit_ptr->UnitCost;
+
+	/* this is the "half-off" sale */
+	if (Data->P[plr].TurnOnly == 3)
+	{
+		/* make sure changes do not affect items that are already free */
+		if (Init_Cost)
+			Init_Cost = maxx(1, Init_Cost/2);
+		if (Unit_Cost)
+			Unit_Cost = maxx(1, Unit_Cost/2);
+	}
+
+	if (unit_ptr->Num == -1 && Data->P[plr].Cash >= Init_Cost)
+	{
+		Data->P[plr].Cash -= Init_Cost;
+		unit_ptr->Num = 1;
+		new_program = 1;
+		Data->P[plr].Spend[0][category - 1] += Init_Cost;
+	}
+	else if (unit_ptr->Num >= 0 && unit_ptr->Num < 6
+			&& Data->P[plr].Cash >= Unit_Cost)
+	{
+		Data->P[plr].Cash -= Unit_Cost;
+		unit_ptr->Num += 1;
+		Data->P[plr].Spend[0][category - 1] += Unit_Cost;
+	}
+
+	/* compute technology transfer for Probe category */
+	if (new_program && category == 1)
+	{
+		n1 = Data->P[plr].Probe[0].Safety;
+		n2 = Data->P[plr].Probe[1].Safety;
+		n3 = Data->P[plr].Probe[2].Safety;
+		switch (unit - 1)
+		{
+			case 0:
+				if (n2 >= 75)
+					Data->P[plr].Probe[0].Safety = 50;
+				if (n3 >= 75)
+					Data->P[plr].Probe[0].Safety = 60;
+				break;
+			case 1:
+				if (n1 >= 75)
+					Data->P[plr].Probe[1].Safety = 45;
+				if (n3 >= 75)
+					Data->P[plr].Probe[1].Safety = 50;
+				break;
+			case 2:
+				if (n1 >= 75)
+					Data->P[plr].Probe[2].Safety = 45;
+				if (n2 >= 75)
+					Data->P[plr].Probe[2].Safety = 50;
+				break;
+		}
+	}
+
+	/* compute technology transfer for Rocket category */
+	if (new_program && category == 2)
+	{
+		n1 = Data->P[plr].Rocket[0].Safety; /* One - A	   */
+		n2 = Data->P[plr].Rocket[1].Safety; /* Two - B	   */
+		n3 = Data->P[plr].Rocket[2].Safety; /* Three - C   */
+		n4 = Data->P[plr].Rocket[3].Safety; /* Mega - G    */
+		n5 = Data->P[plr].Rocket[4].Safety; /* Booster - D */
+		switch (unit - 1)
+		{
+			case 0:
+				if (n2 >= 75 || n3 >= 75 || n4 >= 75 || n5 >= 75)
+					Data->P[plr].Rocket[0].Safety = 35;
+				break;
+			case 1:
+				if (n1 >= 75 || n5 >= 75)
+					Data->P[plr].Rocket[1].Safety = 25;
+				if (n3 >= 75 || n4 >= 75)
+					Data->P[plr].Rocket[1].Safety = 40;
+				if ((n1 >= 75 || n5 >= 75) && (n3 >= 75 || n4 >= 75))
+					Data->P[plr].Rocket[1].Safety = 65;
+				break;
+			case 2:
+				if (n1 >= 75 || n5 >= 75)
+					Data->P[plr].Rocket[2].Safety = 15;
+				if (n2 >= 75 || n4 >= 75)
+					Data->P[plr].Rocket[2].Safety = 35;
+				if ((n1 >= 75 || n5 >= 75) && (n2 >= 75 || n4 >= 75))
+					Data->P[plr].Rocket[2].Safety = 60;
+				break;
+			case 3:
+				if (n1 >= 75 || n5 >= 75)
+					Data->P[plr].Rocket[3].Safety = 10;
+				if (n2 >= 75 || n3 >= 75)
+					Data->P[plr].Rocket[3].Safety = 25;
+				if ((n1 >= 75 || n5 >= 75) && (n2 >= 75 || n3 >= 75))
+					Data->P[plr].Rocket[3].Safety = 35;
+				break;
+			case 4:
+				if (n1 >= 75 || n2 >= 75 || n3 >= 75 || n4 >= 75)
+					Data->P[plr].Rocket[4].Safety = 30;
+				break;
+		};
 	};
-  }
-  if (hw2==2) {
-	if (Data->P[plr].Rocket[un2-1].Num==-1 &&
-	Data->P[plr].Cash>=Init_Cost) {
-	  Data->P[plr].Cash-=Init_Cost;
-	  Data->P[plr].Rocket[un2-1].Num=1;
-		newf=1;
-		Data->P[plr].Spend[0][hw2-1] += Init_Cost;
-	 }
-	 else if (Data->P[plr].Rocket[un2-1].Num>=0 &&
-		  Data->P[plr].Rocket[un2-1].Num<6 &&
-		  Data->P[plr].Cash>=Unit_Cost) {
-		Data->P[plr].Cash-=Unit_Cost;
-		Data->P[plr].Rocket[un2-1].Num+=1;
-		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
-	 };
-  }
-  if (hw2==3) {
-	 if (Data->P[plr].Manned[un2-1].Num==-1 &&
-	Data->P[plr].Cash>=Init_Cost) {
-		Data->P[plr].Cash-=Init_Cost;
-		Data->P[plr].Manned[un2-1].Num=1;
-		newf=1;
-		Data->P[plr].Spend[0][hw2-1] += Init_Cost;
-	 }
-	 else if (Data->P[plr].Manned[un2-1].Num>=0 &&
-		  Data->P[plr].Manned[un2-1].Num<6 &&
-		  Data->P[plr].Cash>=Unit_Cost) {
-		Data->P[plr].Cash-=Unit_Cost;
-		Data->P[plr].Manned[un2-1].Num+=1;
-		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
-	 };
-  }
-  if (hw2==4) {
-	 if (Data->P[plr].Misc[un2-1].Num==-1 &&
-	Data->P[plr].Cash>=Init_Cost) {
-		Data->P[plr].Cash-=Init_Cost;
-		Data->P[plr].Misc[un2-1].Num=1;
-		newf=1;
-		Data->P[plr].Spend[0][hw2-1] += Init_Cost;
-	 }
-	 else if (Data->P[plr].Misc[un2-1].Num>=0 &&
-		  Data->P[plr].Misc[un2-1].Num<6 &&
-		  Data->P[plr].Cash>=Unit_Cost) {
-		Data->P[plr].Cash-=Unit_Cost;
-		Data->P[plr].Misc[un2-1].Num+=1;
-		Data->P[plr].Spend[0][hw2-1] += Unit_Cost;
-    };
-  }
-/* Figure out any starting bonus for existing programs */
-  if (hw2==1 && newf==1) {
-    n1=Data->P[plr].Probe[0].Safety;
-    n2=Data->P[plr].Probe[1].Safety;
-    n3=Data->P[plr].Probe[2].Safety;
-    switch(un2-1) {
-      case 0: if (n2>=75) Data->P[plr].Probe[0].Safety=50;
-	      if (n3>=75) Data->P[plr].Probe[0].Safety=60;
-	      break;
-      case 1: if (n1>=75) Data->P[plr].Probe[1].Safety=45;
-	      if (n3>=75) Data->P[plr].Probe[1].Safety=50;
-	      break;
-      case 2: if (n1>=75) Data->P[plr].Probe[2].Safety=45;
-	      if (n2>=75) Data->P[plr].Probe[2].Safety=50;
-	      break;
-    };
-    Data->P[plr].Probe[un2-1].Base=Data->P[plr].Probe[un2-1].Safety;
-  };
-  if (hw2==2 && newf==1) {
-    n1=Data->P[plr].Rocket[0].Safety; /* One - A     */
-    n2=Data->P[plr].Rocket[1].Safety; /* Two - B     */
-    n3=Data->P[plr].Rocket[2].Safety; /* Three - C   */
-    n4=Data->P[plr].Rocket[3].Safety; /* Mega - G    */
-    n5=Data->P[plr].Rocket[4].Safety; /* Booster - D */
-    switch(un2-1) {
-      case 0: if (n2>=75 || n3>=75 || n4>=75 || n5>=75)
-		Data->P[plr].Rocket[0].Safety=35;
-	      break;
-      case 1: if (n1>=75 || n5>=75) Data->P[plr].Rocket[1].Safety=25;
-	      if (n3>=75 || n4>=75) Data->P[plr].Rocket[1].Safety=40;
-	      if ((n1>=75 || n5>=75) && (n3>=75 || n4>=75))
-		Data->P[plr].Rocket[1].Safety=65;
-	      break;
-      case 2: if (n1>=75 || n5>=75) Data->P[plr].Rocket[2].Safety=15;
-	      if (n2>=75 || n4>=75) Data->P[plr].Rocket[2].Safety=35;
-	      if ((n1>=75 || n5>=75) && (n2>=75 || n4>=75))
-		Data->P[plr].Rocket[2].Safety=60;
-	      break;
-      case 3: if (n1>=75 || n5>=75) Data->P[plr].Rocket[3].Safety=10;
-	      if (n2>=75 || n3>=75) Data->P[plr].Rocket[3].Safety=25;
-	      if ((n1>=75 || n5>=75) && (n2>=75 || n3>=75))
-		Data->P[plr].Rocket[3].Safety=35;
-	      break;
-      case 4: if (n1>=75 || n2>=75 || n3>=75 || n4>=75)
-		Data->P[plr].Rocket[4].Safety=30;
-	      break;
-    };
-    Data->P[plr].Rocket[un2-1].Base=Data->P[plr].Rocket[un2-1].Safety;
-  };
-  if (hw2==3 && newf==1) {
-    n1=Data->P[plr].Manned[0].Safety; /* One - a         */
-    n2=Data->P[plr].Manned[1].Safety; /* Two - b         */
-    n3=Data->P[plr].Manned[2].Safety; /* Three - c       */
-    n4=Data->P[plr].Manned[3].Safety; /* Minishuttle - f */
-    n5=Data->P[plr].Manned[4].Safety; /* cap/mod - h     */
-    n6=Data->P[plr].Manned[5].Safety; /* 2 mod - d       */
-    n7=Data->P[plr].Manned[6].Safety; /* 1 mod - e       */
-    switch(un2-1) {
-      case 0: if (n2>=75 || n3>=75 || n5>=75)
-		Data->P[plr].Manned[0].Safety=40;
-	      break;
-      case 1: if (n1>=75) Data->P[plr].Manned[1].Safety=20;
-	      if (n3>=75 || n5>=75) Data->P[plr].Manned[1].Safety=40;
-	      break;
-      case 2: if (n1>=75 || n5>=75) Data->P[plr].Manned[2].Safety=20;
-	      if (n2>=75 || n4>=75) Data->P[plr].Manned[2].Safety=30;
-	      if ((n1>=75 || n5>=75) && (n2>=75 || n4>=75))
-		Data->P[plr].Manned[2].Safety=40;
-	      break;
-      case 3: break;
-      case 4: if (n1>=75) Data->P[plr].Manned[4].Safety=10;
-	      if (n2>=75) Data->P[plr].Manned[4].Safety=15;
-	      if (n3>=75) Data->P[plr].Manned[4].Safety=25;
-	      if ((n1>=75 || n2>=75 || n3>=75) && (n6>=75 || n7>=75))
-		 Data->P[plr].Manned[4].Safety=35;
-	      break;
-      case 5: if (n7>=75) Data->P[plr].Manned[5].Safety=30;
-	      if (n5>=75) Data->P[plr].Manned[5].Safety=40;
-	      break;
-      case 6: if (n6>=75) Data->P[plr].Manned[6].Safety=30;
-	      if (n5>=75) Data->P[plr].Manned[6].Safety=40;
-	      break;
-    };
-    Data->P[plr].Manned[un2-1].Base=Data->P[plr].Manned[un2-1].Safety;
 
-  };
+	/* compute technology transfer for Manned category */
+	if (new_program && category == 3)
+	{
+		n1 = Data->P[plr].Manned[0].Safety; /* One - a		   */
+		n2 = Data->P[plr].Manned[1].Safety; /* Two - b		   */
+		n3 = Data->P[plr].Manned[2].Safety; /* Three - c	   */
+		n4 = Data->P[plr].Manned[3].Safety; /* Minishuttle - f */
+		n5 = Data->P[plr].Manned[4].Safety; /* cap/mod - h	   */
+		n6 = Data->P[plr].Manned[5].Safety; /* 2 mod - d	   */
+		n7 = Data->P[plr].Manned[6].Safety; /* 1 mod - e	   */
+		switch (unit - 1)
+		{
+			case 0:
+				if (n2 >= 75 || n3 >= 75 || n5 >= 75)
+					Data->P[plr].Manned[0].Safety = 40;
+				break;
+			case 1:
+				if (n1 >= 75)
+					Data->P[plr].Manned[1].Safety = 20;
+				if (n3 >= 75 || n5 >= 75)
+					Data->P[plr].Manned[1].Safety = 40;
+				break;
+			case 2:
+				if (n1 >= 75 || n5 >= 75)
+					Data->P[plr].Manned[2].Safety = 20;
+				if (n2 >= 75 || n4 >= 75)
+					Data->P[plr].Manned[2].Safety = 30;
+				if ((n1 >= 75 || n5 >= 75) && (n2 >= 75 || n4 >= 75))
+					Data->P[plr].Manned[2].Safety = 40;
+				break;
+			case 3:
+				break;
+			case 4:
+				if (n1 >= 75)
+					Data->P[plr].Manned[4].Safety = 10;
+				if (n2 >= 75)
+					Data->P[plr].Manned[4].Safety = 15;
+				if (n3 >= 75)
+					Data->P[plr].Manned[4].Safety = 25;
+				if ((n1 >= 75 || n2 >= 75 || n3 >= 75) && (n6 >= 75
+						|| n7 >= 75))
+					Data->P[plr].Manned[4].Safety = 35;
+				break;
+			case 5:
+				if (n7 >= 75)
+					Data->P[plr].Manned[5].Safety = 30;
+				if (n5 >= 75)
+					Data->P[plr].Manned[5].Safety = 40;
+				break;
+			case 6:
+				if (n6 >= 75)
+					Data->P[plr].Manned[6].Safety = 30;
+				if (n5 >= 75)
+					Data->P[plr].Manned[6].Safety = 40;
+				break;
+		}
+	}
 
-  if (hw2==4 && newf==1) {
-    n1=Data->P[plr].Rocket[0].Safety; /* One - A     */
-    n2=Data->P[plr].Rocket[1].Safety; /* Two - B     */
-    n3=Data->P[plr].Rocket[2].Safety; /* Three - C   */
-    n4=Data->P[plr].Rocket[3].Safety; /* Mega - G    */
-    n5=Data->P[plr].Rocket[4].Safety; /* Booster - D */
-    switch(un2-1) {
-      case 0: if (n2>=75)
-		Data->P[plr].Misc[0].Safety=40;
-	      break;
-      case 1: if (n1>=75) Data->P[plr].Misc[1].Safety=35;
-	      break;
-      case 2: if (n1>=75 || n2>=75) Data->P[plr].Misc[2].Safety=25;
-	      break;
-      default: break;
-    };
-    Data->P[plr].Misc[un2-1].Base=Data->P[plr].Misc[un2-1].Safety;
+	/* compute technology transfer for Misc category */
+	if (new_program && category == 4)
+	{
+		n1 = Data->P[plr].Rocket[0].Safety; /* One - A	   */
+		n2 = Data->P[plr].Rocket[1].Safety; /* Two - B	   */
+		n3 = Data->P[plr].Rocket[2].Safety; /* Three - C   */
+		n4 = Data->P[plr].Rocket[3].Safety; /* Mega - G    */
+		n5 = Data->P[plr].Rocket[4].Safety; /* Booster - D */
+		switch (unit - 1)
+		{
+			case 0:
+				if (n2 >= 75)
+					Data->P[plr].Misc[0].Safety = 40;
+				break;
+			case 1:
+				if (n1 >= 75)
+					Data->P[plr].Misc[1].Safety = 35;
+				break;
+			case 2:
+				if (n1 >= 75 || n2 >= 75)
+					Data->P[plr].Misc[2].Safety = 25;
+				break;
+			default:
+				break;
+		}
+	}
 
-  };
+	/* update safety that could have changed */
+	if (new_program)
+		unit_ptr->Base = unit_ptr->Safety;
 
-   ShowUnit(hw2,un2,plr);
-   return;
+	ShowUnit(category, unit, plr);
+	return;
 }
+
+/* vim: set noet ts=4 sw=4 tw=77 */

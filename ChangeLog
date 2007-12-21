@@ -1,3 +1,9 @@
+2007-12-21	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V206
+
+	* rdplex.c (BuyUnit): fixed #1833898, rewrite, reformat
+
 2007-12-17	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V205
