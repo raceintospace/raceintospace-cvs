@@ -94,7 +94,7 @@ void DrawFuture(char plr,int mis,char pad)
 		 };
       };
 
-  if (pad==1 || pal==0) {
+  if (pad==1 || pad==0) {
     if (Data->P[plr].LaunchFacility[pad+1]==1) JointFlag=1;
   }
 

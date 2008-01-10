@@ -1,3 +1,15 @@
+2008-01-10	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V207
+
+	* sdl.c (av_process_event): debugging, mapping keycodes
+
+	* ast4.c (Programs): reformat, fixed #1868187 (HOME, END keys)
+
+	* aimast.c: remove FindNext (unused)
+
+	* future.c (DrawFuture): typo
+
 2007-12-21	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V206

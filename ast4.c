@@ -456,425 +456,536 @@ void DrawPosition(char prog,int pos)
 }
 
 
-void Programs(char plr,char prog)
+void
+Programs(char plr, char prog)
 {
-  int now2,BarA,count,i,M[100],grp,Gcnt[8],max,chk,tst;
-  char ksel=0;
-  strcpy(IDT,"i036");strcpy(IKEY,"k036");
-  
-  for (i=0;i<100;i++) M[i]=-1;
-  max=prog;
-  if (max>4) max=4;
-  if (prog==4) max=3;
-  now2=0;BarA=count=grp=0;
-  music_start(M_PRGMTRG);
-  DrawProgs(plr,prog);
-  Flts(0,0);
-  for (i=0;i<8;i++) {
-    Gcnt[i]=Data->P[plr].Gcnt[prog][i];
-    if (Gcnt[i]==0) FltsTxt(i,8);
-    if (Gcnt[i]<max && Gcnt[i]!=0) FltsTxt(i,9);
-    if (Gcnt[i]==max) FltsTxt(i,1);
-  };
-  for (i=0;i<Data->P[plr].AstroCount;i++)
-    if (Data->P[plr].Pool[i].Assign==prog && Data->P[plr].Pool[i].Crew==0) {
-      M[count++]=i;
-    };
-  ShBox(26,130+BarA*8,152,138+BarA*8);
-  DispLeft(plr,BarA,count,now2,&M[0]);
-  NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-  FadeIn(2,pal,10,0,0);
-  chk=CheckProgram(plr,prog);
-  
-  if (chk==0) {if (plr==0) Help("i113");else Help("i114");music_stop();return;}
-  WaitForMouseUp();
-  while (1)
-  {
-    key=0;GetMouse();
-    for (i=0;i<8;i++) {  // Right Select Box
-      if (x>=27 && y>=(131+i*8) && x<=151 && y<=(137+i*8) && mousebuttons>0 && (now2-BarA+i)<=(count-1)) { // Left
-	 
-	 now2-=BarA; now2+=i; BarA=i;
-	 RectFill(26,129,153,195,0);
-	 DispLeft(plr,BarA,count,now2,&M[0]);
-	 ShBox(26,130+BarA*8,152,138+BarA*8);
-	 BarSkill(plr,BarA,now2,&M[0]);
-	 WaitForMouseUp();
-	 ShBox(26,130+BarA*8,152,138+BarA*8);
-	 DispLeft(plr,BarA,count,now2,&M[0]);
-	 
-      }
-    }  
-    if (mousebuttons > 0 || key>0)  /* Game Play */
-    {
-     if (((x>=6 && y>=130 && x<=18 && y<=161 && mousebuttons>0) || key==UP_ARROW) && count>0)
-      { /* Lft Up */
-	    InBox(6,130,18,161);
-       for (i=0;i<50;i++)
-       {
-	     key=0;
-	     GetMouse();
-	     delay(10);
-	     if (mousebuttons==0) {
-        
-	     if (BarA==0)
- 	      if (now2>0) {
-	       now2--;
-	       RectFill(26,129,153,195,0);
-	       ShBox(26,130+BarA*8,152,138+BarA*8);
-	       DispLeft(plr,BarA,count,now2,&M[0]);
-	      };
-	     if (BarA>0) {
-	      RectFill(26,129,153,195,0);
-	      BarA--;now2--;
-	      ShBox(26,130+BarA*8,152,138+BarA*8);
-	      DispLeft(plr,BarA,count,now2,&M[0]);
-	     };
-	     
-        i=51;
-	    }
-	   }
-      while (mousebuttons==1 || key==UP_ARROW)
-       {
-        delay(100);
-        
-	     if (BarA==0)
-	      if (now2>0) {
-	       now2--;
-	       RectFill(26,129,153,195,0);
-	       ShBox(26,130+BarA*8,152,138+BarA*8);
-	       DispLeft(plr,BarA,count,now2,&M[0]);
-	      };
-	     if (BarA>0) {
-	      RectFill(26,129,153,195,0);
-	      BarA--;now2--;
-	      ShBox(26,130+BarA*8,152,138+BarA*8);
-	      DispLeft(plr,BarA,count,now2,&M[0]);
-	     };
- 	     
-        key=0;
-        GetMouse();
-       }
-	   OutBox(6,130,18,161);delay(10);
-     }
-    else
-    if (key=='S')
-      { // Show Skill
-       
-       ShBox(26,130+BarA*8,152,138+BarA*8);
-       BarSkill(plr,BarA,now2,&M[0]);
-       
-      }
-    else
-    if (((x>=6 && y>=163 && x<=18 && y<=194 && mousebuttons>0) || key==DN_ARROW) && count>0)
-     { /* Lft Dwn */
-	   InBox(6,163,18,194);
-      for (i=0;i<50;i++)
-       {
-	     key=0;
-	     GetMouse();
-	     delay(10);
-	     if (mousebuttons==0) {
-        
- 	     if (BarA==7)
-	      if (now2 < count-1) {
-	       now2++;
-	       RectFill(26,129,153,195,0);
-	       ShBox(26,130+BarA*8,152,138+BarA*8);
-	       DispLeft(plr,BarA,count,now2,&M[0]);
-	      };
-	     if (BarA<7)
-	      if (now2<count-1) {
-	       RectFill(26,129,153,195,0);
-	       BarA++;now2++;
-	       ShBox(26,130+BarA*8,152,138+BarA*8);
-	       DispLeft(plr,BarA,count,now2,&M[0]);
-	      };
-	     
-        i=51;
-	    }
-	   }
-      while (mousebuttons==1 || key==DN_ARROW)
-       {
-        delay(100);
-        
-  	     if (BarA==7)
-	      if (now2 < count-1) {
-	       now2++;
-	       RectFill(26,129,153,195,0);
-	       ShBox(26,130+BarA*8,152,138+BarA*8);
-	       DispLeft(plr,BarA,count,now2,&M[0]);
-	      };
-	     if (BarA<7)
-	      if (now2<count-1) {
-	       RectFill(26,129,153,195,0);
-	       BarA++;now2++;
-	       ShBox(26,130+BarA*8,152,138+BarA*8);
-	       DispLeft(plr,BarA,count,now2,&M[0]);
-	      };
-	     
-        key=0;
-        GetMouse();
-       }
-	    //WaitForMouseUp();
-	    OutBox(6,163,18,194);
-      }
-     else
-     if (((x>=4 && y>=86 && x<=12 && y<=92 && mousebuttons>0) || key=='1') && Gcnt[grp]>=1)
-      {  /* Display Man 1 */
-    	 InBox(4,86,12,92);
-       AstLevel(plr,prog,grp,0);
-   	 OutBox(4,86,12,92);
-      }
-     else
-     if (((x>=4 && y>=95 && x<=12 && y<=101 && mousebuttons>0) || key=='2') && prog>=2 && Gcnt[grp]>=2)
-      {  /* Display Man 2 */
-    	 InBox(4,95,12,101);
-       AstLevel(plr,prog,grp,1);
-    	 OutBox(4,95,12,101);
-      }
-     else
-     if (((x>=4 && y>=104 && x<=12 && y<=110 && mousebuttons>0) || key=='3') && prog>=3 && Gcnt[grp]>=3)
-      {  /* Display Man 3 */
-     	 InBox(4,104,12,110);
-       AstLevel(plr,prog,grp,2);
-	    OutBox(4,104,12,110);
-      }
-     else
-     if (((x>=4 && y>=113 && x<=12 && y<=119 && mousebuttons>0) || key=='4') && prog>=5 && Gcnt[grp]>=4)
-      {  /* Display Man 4 */
-    	 InBox(4,113,12,119);
-       AstLevel(plr,prog,grp,3);
-	    OutBox(4,113,12,119);
-      }
-     else
-     if (key=='C')
-      {
-       ClearIt();
-       ksel=grp; //save old flt crew
-       if (grp==7) grp=0;
-        else ++grp;
-       Flts(ksel,grp);
-	     NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		  Data->P[plr].Crew[prog][grp][1],
-		  Data->P[plr].Crew[prog][grp][2],
-		  Data->P[plr].Crew[prog][grp][3]);
-       if (key>0) delay(150);
-      }
-     else
-     if (x>=164 && y>=139 && x<=238 && y<=151 && mousebuttons>0)
-      {  /* Flt Crew I */
-	    ClearIt();
-	    Flts(grp,0);grp=0;
-	    NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-	    WaitForMouseUp();
-      }
-      else
-      if (x>=164 && y>=154 && x<=238 && y<=166 && mousebuttons>0)
-       {  /* Flt Crew II */
-        ClearIt();
-	     Flts(grp,1);grp=1;
-	     NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-	    WaitForMouseUp();
-      }
-      else
-      if (x>=164 && y>=169 && x<=238 && y<=181 && mousebuttons>0)
-       {  /* Flt Crew III */
-	     ClearIt();
-    	  Flts(grp,2);grp=2;
-    	  NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-	    WaitForMouseUp();
-      }
-      else
-      if (x>=164 && y>=184 && x<=238 && y<=196 && mousebuttons>0)
-      {  /* Flt Crew IV */
-	    ClearIt();
-	    Flts(grp,3);grp=3;
-	    NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-	    WaitForMouseUp();
-      }
-      else
-      if (x>=241 && y>=139 && x<=315 && y<=151 && mousebuttons>0)
-       {  /* Flt Crew V */
-	     ClearIt();
-	     Flts(grp,4);grp=4;
-	     NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-	     WaitForMouseUp();
-      }
-      else
-      if (x>=241 && y>=154 && x<=315 && y<=166 && mousebuttons>0)
-       {  /* Flt Crew VI */
-	     ClearIt();
-	     Flts(grp,5);grp=5;
-	     NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-	     WaitForMouseUp();
-       }
-      else
-      if (x>=241 && y>=169 && x<=315 && y<=181 && mousebuttons>0)
-       {  /* Flt Crew VII */
-	     ClearIt();
-	     Flts(grp,6);grp=6;
-	     NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-		    Data->P[plr].Crew[prog][grp][3]);
-	     WaitForMouseUp();
-      }
-      else
-      if (x>=241 && y>=184 && x<=315 && y<=196 && mousebuttons>0)
-       {  /* Flt Crew VIII */
-	     ClearIt();
-	     Flts(grp,7);grp=7;
-	     NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-		    Data->P[plr].Crew[prog][grp][1],
-		    Data->P[plr].Crew[prog][grp][2],
-	       Data->P[plr].Crew[prog][grp][3]);
-	     WaitForMouseUp();
-      }
-      else
-      if (((x>=245 && y>=88 && x<=314 && y<=100 && mousebuttons>0) || key=='A') && Gcnt[grp]<max)
-       {  /* Assign 'Naut */
-   	if (Data->P[plr].Crew[prog][grp][Gcnt[grp]]==0 && count>0) {
-    	 InBox(245,88,314,100);
-    	 Data->P[plr].Crew[prog][grp][Gcnt[grp]]=M[now2]+1;
-      
-    	 AstNames(Gcnt[grp],&Data->P[plr].Pool[M[now2]].Name[0],Data->P[plr].Pool[M[now2]].Mood);
-    	 Data->P[plr].Pool[M[now2]].Crew=grp+1;
-    	 Data->P[plr].Pool[M[now2]].Task=Gcnt[grp];
-   	 Data->P[plr].Pool[M[now2]].Una=1;
-   	 for (i=now2;i<count;i++) M[i]=M[i+1];
-   	 M[i]=-1;count--;
-   	 if (now2==count) {
-   	   if (now2>0) now2--;
-   	   if (BarA>0) BarA--;
-   	 };
-   	 RectFill(26,129,153,195,0);
-   	 ShBox(26,130+BarA*8,152,138+BarA*8);
-   	 DispLeft(plr,BarA,count,now2,&M[0]);
-      
-   	 Gcnt[grp]++;
-       Data->P[plr].Gcnt[prog][grp]=Gcnt[grp];
-   	 if (Gcnt[grp]==max) FltsTxt(grp,1);
-      	 else FltsTxt(grp,9);
-   	 NewAstList(plr,prog,Data->P[plr].Crew[prog][grp][0],
-   		    Data->P[plr].Crew[prog][grp][1],
-   		    Data->P[plr].Crew[prog][grp][2],
-   		    Data->P[plr].Crew[prog][grp][3]);
-   	 WaitForMouseUp();
-       if (key>0) delay(150);
-   	 OutBox(245,88,314,100);
-	   }; /* End outer if */
-     }
-     else
-     if ((x>=245 && y>=106 && x<=314 && y<=118 && mousebuttons>0) || key=='B')
-      {  /* Break Group */
-       tst=Data->P[plr].Crew[prog][grp][0]-1;
-       if (Data->P[plr].Pool[tst].Prime>0)
-	     {
-	      OutBox(245,106,314,118);
-	      gxDisplayVirtual(75,43,244,173,0,&vhptr,75,43);
-	      ShBox(75,43,244,173);IOBox(81,152,238,167);
-	      InBox(81,70,238,113);
-	      RectFill(82,71,237,112,7+3*plr);grSetColor(1);
-	      DispBig(122,50,"PROBLEM",0,-1);PrintAt(136,162,"CONTINUE");
-	      grSetColor(11);
-	      PrintAt(88,80,"FLIGHT CREW ");DispNum(0,0,grp+1);PrintAt(0,0," IS ALREADY");
-	      PrintAt(88,88,"ASSIGNED TO THE ");
-	      if (Data->P[plr].Pool[tst].Prime==4 || Data->P[plr].Pool[tst].Prime==3)
-    	      PrintAt(0,0,"PRIMARY"); else PrintAt(0,0,"BACKUP");
-	      PrintAt(88,96,"CREW OF A CURRENT MISSION,");
-	      PrintAt(88,104,"CANNOT BREAK THIS CREW.");
-	      
-	      WaitForMouseUp();
-	      i=1;
-	      while(i==1)
-	       {
-	        key=0;GetMouse();
-	        if (mousebuttons>0 || key>0)
-		      {
-		       if ((x>=83 && y>=154 && x<=236 && y<=165 && mousebuttons!=0) || key==K_ENTER)
-		        {
-		         InBox(83,154,236,165);
-		         WaitForMouseUp();
-		         OutBox(83,154,236,165);
-		         gxVirtualDisplay(&vhptr,75,43,75,43,244,173,0);
-		         i=2;
-		        }  
-	   	   }
-	       }
-	    }
-	    else if (Data->P[plr].Crew[prog][grp][0]!=0)
-	     {
-    	 InBox(245,106,314,118);
-    	 while (Gcnt[grp]>0) {
-    	   M[count]=Data->P[plr].Crew[prog][grp][Gcnt[grp]-1]-1;
-   	   Data->P[plr].Crew[prog][grp][Gcnt[grp]-1]=0;
-    	   Data->P[plr].Pool[M[count]].Crew=0;
-	      Data->P[plr].Pool[M[count]].Moved=0;
-	      Data->P[plr].Pool[M[now2]].Una=0;
-	      Gcnt[grp]--;
-	      count++;
-        };
-    	 ClearIt();
-   	 RectFill(26,129,153,195,0);
-   	 FltsTxt(grp,8);
-    	 ShBox(26,130+BarA*8,152,138+BarA*8);
-    	 DispLeft(plr,BarA,count,now2,&M[0]);
-    	 for (i=1;i<5;i++)
-    	   DrawPosition(prog,i);
-       
-	    WaitForMouseUp();
-	    OutBox(245,106,314,118);
-	   };
-    }
-   else
-   if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER)
-    {     /* Exit */
-	  InBox(245,5,314,17);
-	  WaitForMouseUp();
-     if (key>0) delay(150);
-	  OutBox(245,5,314,17);delay(10);
-	  for (i=0;i<8;i++) {
-	    if (Gcnt[i]<max)
-	      while (Gcnt[i]>0) {
-	        M[count]=Data->P[plr].Crew[prog][i][Gcnt[i]-1]-1;
-	        Data->P[plr].Crew[prog][i][Gcnt[i]-1]=0;
-	        Data->P[plr].Pool[M[count]].Crew=0;
-	        Data->P[plr].Gcnt[prog][i]=0;
-	        Gcnt[i]--;
-	        count++;
-	       };
-	    Data->P[plr].Gcnt[prog][i]=Gcnt[i];
-	   };
-	  for(i=0;i<count;i++) {
-	    Data->P[plr].Pool[M[i]].Assign=0;
-	 };
-    music_stop();
-	 return;  /* Done */
-   };
-  }
- };
+	int i, max, chk, tst;
+	int now2 = 0, count = 0, grp = 0, BarA = 0;
+	int M[100], Gcnt[8];
+	char ksel = 0;
+
+	strcpy(IDT, "i036");
+	strcpy(IKEY, "k036");
+
+	for (i = 0; i < 100; i++)
+		M[i] = -1;
+
+	if (prog > 4)
+		max = 4;
+	else if (prog == 4)
+		max = 3;
+	else
+		max = prog;
+
+	music_start(M_PRGMTRG);
+	DrawProgs(plr, prog);
+	Flts(0, 0);
+
+	for (i = 0; i < 8; i++)
+	{
+		Gcnt[i] = Data->P[plr].Gcnt[prog][i];
+		if (Gcnt[i] == 0)
+			FltsTxt(i, 8);
+		if (Gcnt[i] < max && Gcnt[i] != 0)
+			FltsTxt(i, 9);
+		if (Gcnt[i] == max)
+			FltsTxt(i, 1);
+	}
+
+	for (i = 0; i < Data->P[plr].AstroCount; i++)
+		if (Data->P[plr].Pool[i].Assign == prog
+			&& Data->P[plr].Pool[i].Crew == 0)
+		{
+			M[count++] = i;
+		}
+
+	ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+	DispLeft(plr, BarA, count, now2, &M[0]);
+	NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+		Data->P[plr].Crew[prog][grp][1],
+		Data->P[plr].Crew[prog][grp][2], Data->P[plr].Crew[prog][grp][3]);
+	FadeIn(2, pal, 10, 0, 0);
+
+	chk = CheckProgram(plr, prog);
+	if (chk == 0)
+	{
+		if (plr == 0)
+			Help("i113");
+		else
+			Help("i114");
+		music_stop();
+		return;
+	}
+
+	WaitForMouseUp();
+	while (1)
+	{
+		key = 0;
+		GetMouse();
+		for (i = 0; i < 8; i++)
+		{						   // Right Select Box
+			if (x >= 27 && y >= (131 + i * 8) && x <= 151
+				&& y <= (137 + i * 8) && mousebuttons > 0
+				&& (now2 - BarA + i) <= (count - 1))
+			{					   // Left
+				now2 -= BarA;
+				now2 += i;
+				BarA = i;
+				RectFill(26, 129, 153, 195, 0);
+				DispLeft(plr, BarA, count, now2, &M[0]);
+				ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+				BarSkill(plr, BarA, now2, &M[0]);
+				WaitForMouseUp();
+				ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+				DispLeft(plr, BarA, count, now2, &M[0]);
+			}
+		}
+		if (mousebuttons > 0 || key > 0)	/* Game Play */
+		{
+			if (((x >= 6 && y >= 130 && x <= 18 && y <= 161
+						&& mousebuttons > 0) || key == UP_ARROW)
+				&& count > 0)
+			{					   /* Lft Up */
+				InBox(6, 130, 18, 161);
+				for (i = 0; i < 50; i++)
+				{
+					key = 0;
+					GetMouse();
+					delay(10);
+					if (mousebuttons == 0)
+					{
+
+						if (BarA == 0)
+							if (now2 > 0)
+							{
+								now2--;
+								RectFill(26, 129, 153, 195, 0);
+								ShBox(26, 130 + BarA * 8, 152,
+									138 + BarA * 8);
+								DispLeft(plr, BarA, count, now2, &M[0]);
+							};
+						if (BarA > 0)
+						{
+							RectFill(26, 129, 153, 195, 0);
+							BarA--;
+							now2--;
+							ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+							DispLeft(plr, BarA, count, now2, &M[0]);
+						};
+
+						i = 51;
+					}
+				}
+				while (mousebuttons == 1 || key == UP_ARROW)
+				{
+					delay(100);
+
+					if (BarA == 0)
+						if (now2 > 0)
+						{
+							now2--;
+							RectFill(26, 129, 153, 195, 0);
+							ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+							DispLeft(plr, BarA, count, now2, &M[0]);
+						};
+					if (BarA > 0)
+					{
+						RectFill(26, 129, 153, 195, 0);
+						BarA--;
+						now2--;
+						ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+						DispLeft(plr, BarA, count, now2, &M[0]);
+					};
+
+					key = 0;
+					GetMouse();
+				}
+				OutBox(6, 130, 18, 161);
+				delay(10);
+			}
+			else if (((x >= 6 && y >= 163 && x <= 18 && y <= 194
+						&& mousebuttons > 0) || key == DN_ARROW)
+				&& count > 0)
+			{					   /* Lft Dwn */
+				InBox(6, 163, 18, 194);
+				for (i = 0; i < 50; i++)
+				{
+					key = 0;
+					GetMouse();
+					delay(10);
+					if (mousebuttons == 0)
+					{
+
+						if (BarA == 7)
+							if (now2 < count - 1)
+							{
+								now2++;
+								RectFill(26, 129, 153, 195, 0);
+								ShBox(26, 130 + BarA * 8, 152,
+									138 + BarA * 8);
+								DispLeft(plr, BarA, count, now2, &M[0]);
+							};
+						if (BarA < 7)
+							if (now2 < count - 1)
+							{
+								RectFill(26, 129, 153, 195, 0);
+								BarA++;
+								now2++;
+								ShBox(26, 130 + BarA * 8, 152,
+									138 + BarA * 8);
+								DispLeft(plr, BarA, count, now2, &M[0]);
+							};
+
+						i = 51;
+					}
+				}
+				while (mousebuttons == 1 || key == DN_ARROW)
+				{
+					delay(100);
+
+					if (BarA == 7)
+						if (now2 < count - 1)
+						{
+							now2++;
+							RectFill(26, 129, 153, 195, 0);
+							ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+							DispLeft(plr, BarA, count, now2, &M[0]);
+						};
+					if (BarA < 7)
+						if (now2 < count - 1)
+						{
+							RectFill(26, 129, 153, 195, 0);
+							BarA++;
+							now2++;
+							ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+							DispLeft(plr, BarA, count, now2, &M[0]);
+						};
+
+					key = 0;
+					GetMouse();
+				}
+				//WaitForMouseUp();
+				OutBox(6, 163, 18, 194);
+			}
+			else if (key == K_HOME)
+			{
+				RectFill(26, 129, 153, 195, 0);
+				BarA = 0;
+				now2 = 0;
+				ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+				DispLeft(plr, BarA, count, now2, &M[0]);
+			}
+			else if (key == K_END)
+			{
+				RectFill(26, 129, 153, 195, 0);
+				BarA = minn(count - 1, 7);
+				now2 = count - 1;
+				ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+				DispLeft(plr, BarA, count, now2, &M[0]);
+			}
+			else if (key == 'S')
+			{					   // Show Skill
+				ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+				BarSkill(plr, BarA, now2, &M[0]);
+			}
+			else if (((x >= 4 && y >= 86 && x <= 12 && y <= 92
+						&& mousebuttons > 0) || key == '1')
+				&& Gcnt[grp] >= 1)
+			{					   /* Display Man 1 */
+				InBox(4, 86, 12, 92);
+				AstLevel(plr, prog, grp, 0);
+				OutBox(4, 86, 12, 92);
+			}
+			else if (((x >= 4 && y >= 95 && x <= 12 && y <= 101
+						&& mousebuttons > 0) || key == '2') && prog >= 2
+				&& Gcnt[grp] >= 2)
+			{					   /* Display Man 2 */
+				InBox(4, 95, 12, 101);
+				AstLevel(plr, prog, grp, 1);
+				OutBox(4, 95, 12, 101);
+			}
+			else if (((x >= 4 && y >= 104 && x <= 12 && y <= 110
+						&& mousebuttons > 0) || key == '3') && prog >= 3
+				&& Gcnt[grp] >= 3)
+			{					   /* Display Man 3 */
+				InBox(4, 104, 12, 110);
+				AstLevel(plr, prog, grp, 2);
+				OutBox(4, 104, 12, 110);
+			}
+			else if (((x >= 4 && y >= 113 && x <= 12 && y <= 119
+						&& mousebuttons > 0) || key == '4') && prog >= 5
+				&& Gcnt[grp] >= 4)
+			{					   /* Display Man 4 */
+				InBox(4, 113, 12, 119);
+				AstLevel(plr, prog, grp, 3);
+				OutBox(4, 113, 12, 119);
+			}
+			else if (key == 'C')
+			{
+				ClearIt();
+				ksel = grp;		   //save old flt crew
+				if (grp == 7)
+					grp = 0;
+				else
+					++grp;
+				Flts(ksel, grp);
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				if (key > 0)
+					delay(150);
+			}
+			else if (x >= 164 && y >= 139 && x <= 238 && y <= 151
+				&& mousebuttons > 0)
+			{					   /* Flt Crew I */
+				ClearIt();
+				Flts(grp, 0);
+				grp = 0;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (x >= 164 && y >= 154 && x <= 238 && y <= 166
+				&& mousebuttons > 0)
+			{					   /* Flt Crew II */
+				ClearIt();
+				Flts(grp, 1);
+				grp = 1;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (x >= 164 && y >= 169 && x <= 238 && y <= 181
+				&& mousebuttons > 0)
+			{					   /* Flt Crew III */
+				ClearIt();
+				Flts(grp, 2);
+				grp = 2;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (x >= 164 && y >= 184 && x <= 238 && y <= 196
+				&& mousebuttons > 0)
+			{					   /* Flt Crew IV */
+				ClearIt();
+				Flts(grp, 3);
+				grp = 3;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (x >= 241 && y >= 139 && x <= 315 && y <= 151
+				&& mousebuttons > 0)
+			{					   /* Flt Crew V */
+				ClearIt();
+				Flts(grp, 4);
+				grp = 4;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (x >= 241 && y >= 154 && x <= 315 && y <= 166
+				&& mousebuttons > 0)
+			{					   /* Flt Crew VI */
+				ClearIt();
+				Flts(grp, 5);
+				grp = 5;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (x >= 241 && y >= 169 && x <= 315 && y <= 181
+				&& mousebuttons > 0)
+			{					   /* Flt Crew VII */
+				ClearIt();
+				Flts(grp, 6);
+				grp = 6;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (x >= 241 && y >= 184 && x <= 315 && y <= 196
+				&& mousebuttons > 0)
+			{					   /* Flt Crew VIII */
+				ClearIt();
+				Flts(grp, 7);
+				grp = 7;
+				NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+					Data->P[plr].Crew[prog][grp][1],
+					Data->P[plr].Crew[prog][grp][2],
+					Data->P[plr].Crew[prog][grp][3]);
+				WaitForMouseUp();
+			}
+			else if (((x >= 245 && y >= 88 && x <= 314 && y <= 100
+						&& mousebuttons > 0) || key == 'A')
+				&& Gcnt[grp] < max)
+			{					   /* Assign 'Naut */
+				if (Data->P[plr].Crew[prog][grp][Gcnt[grp]] == 0
+					&& count > 0)
+				{
+					InBox(245, 88, 314, 100);
+					Data->P[plr].Crew[prog][grp][Gcnt[grp]] = M[now2] + 1;
+
+					AstNames(Gcnt[grp], &Data->P[plr].Pool[M[now2]].Name[0],
+						Data->P[plr].Pool[M[now2]].Mood);
+					Data->P[plr].Pool[M[now2]].Crew = grp + 1;
+					Data->P[plr].Pool[M[now2]].Task = Gcnt[grp];
+					Data->P[plr].Pool[M[now2]].Una = 1;
+					for (i = now2; i < count; i++)
+						M[i] = M[i + 1];
+					M[i] = -1;
+					count--;
+					if (now2 == count)
+					{
+						if (now2 > 0)
+							now2--;
+						if (BarA > 0)
+							BarA--;
+					};
+					RectFill(26, 129, 153, 195, 0);
+					ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+					DispLeft(plr, BarA, count, now2, &M[0]);
+
+					Gcnt[grp]++;
+					Data->P[plr].Gcnt[prog][grp] = Gcnt[grp];
+					if (Gcnt[grp] == max)
+						FltsTxt(grp, 1);
+					else
+						FltsTxt(grp, 9);
+					NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
+						Data->P[plr].Crew[prog][grp][1],
+						Data->P[plr].Crew[prog][grp][2],
+						Data->P[plr].Crew[prog][grp][3]);
+					WaitForMouseUp();
+					if (key > 0)
+						delay(150);
+					OutBox(245, 88, 314, 100);
+				};				   /* End outer if */
+			}
+			else if ((x >= 245 && y >= 106 && x <= 314 && y <= 118
+					&& mousebuttons > 0) || key == 'B')
+			{					   /* Break Group */
+				tst = Data->P[plr].Crew[prog][grp][0] - 1;
+				if (Data->P[plr].Pool[tst].Prime > 0)
+				{
+					OutBox(245, 106, 314, 118);
+					gxDisplayVirtual(75, 43, 244, 173, 0, &vhptr, 75, 43);
+					ShBox(75, 43, 244, 173);
+					IOBox(81, 152, 238, 167);
+					InBox(81, 70, 238, 113);
+					RectFill(82, 71, 237, 112, 7 + 3 * plr);
+					grSetColor(1);
+					DispBig(122, 50, "PROBLEM", 0, -1);
+					PrintAt(136, 162, "CONTINUE");
+					grSetColor(11);
+					PrintAt(88, 80, "FLIGHT CREW ");
+					DispNum(0, 0, grp + 1);
+					PrintAt(0, 0, " IS ALREADY");
+					PrintAt(88, 88, "ASSIGNED TO THE ");
+					if (Data->P[plr].Pool[tst].Prime == 4
+						|| Data->P[plr].Pool[tst].Prime == 3)
+						PrintAt(0, 0, "PRIMARY");
+					else
+						PrintAt(0, 0, "BACKUP");
+					PrintAt(88, 96, "CREW OF A CURRENT MISSION,");
+					PrintAt(88, 104, "CANNOT BREAK THIS CREW.");
+
+					WaitForMouseUp();
+					i = 1;
+					while (i == 1)
+					{
+						key = 0;
+						GetMouse();
+						if (mousebuttons > 0 || key > 0)
+						{
+							if ((x >= 83 && y >= 154 && x <= 236 && y <= 165
+									&& mousebuttons != 0) || key == K_ENTER)
+							{
+								InBox(83, 154, 236, 165);
+								WaitForMouseUp();
+								OutBox(83, 154, 236, 165);
+								gxVirtualDisplay(&vhptr, 75, 43, 75, 43, 244,
+									173, 0);
+								i = 2;
+							}
+						}
+					}
+				}
+				else if (Data->P[plr].Crew[prog][grp][0] != 0)
+				{
+					InBox(245, 106, 314, 118);
+					while (Gcnt[grp] > 0)
+					{
+						M[count] =
+							Data->P[plr].Crew[prog][grp][Gcnt[grp] - 1] - 1;
+						Data->P[plr].Crew[prog][grp][Gcnt[grp] - 1] = 0;
+						Data->P[plr].Pool[M[count]].Crew = 0;
+						Data->P[plr].Pool[M[count]].Moved = 0;
+						Data->P[plr].Pool[M[now2]].Una = 0;
+						Gcnt[grp]--;
+						count++;
+					};
+					ClearIt();
+					RectFill(26, 129, 153, 195, 0);
+					FltsTxt(grp, 8);
+					ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+					DispLeft(plr, BarA, count, now2, &M[0]);
+					for (i = 1; i < 5; i++)
+						DrawPosition(prog, i);
+
+					WaitForMouseUp();
+					OutBox(245, 106, 314, 118);
+				};
+			}
+			else if ((x >= 245 && y >= 5 && x <= 314 && y <= 17
+					&& mousebuttons > 0) || key == K_ENTER)
+			{					   /* Exit */
+				InBox(245, 5, 314, 17);
+				WaitForMouseUp();
+				if (key > 0)
+					delay(150);
+				OutBox(245, 5, 314, 17);
+				delay(10);
+				for (i = 0; i < 8; i++)
+				{
+					if (Gcnt[i] < max)
+						while (Gcnt[i] > 0)
+						{
+							M[count] =
+								Data->P[plr].Crew[prog][i][Gcnt[i] - 1] - 1;
+							Data->P[plr].Crew[prog][i][Gcnt[i] - 1] = 0;
+							Data->P[plr].Pool[M[count]].Crew = 0;
+							Data->P[plr].Gcnt[prog][i] = 0;
+							Gcnt[i]--;
+							count++;
+						};
+					Data->P[plr].Gcnt[prog][i] = Gcnt[i];
+				};
+				for (i = 0; i < count; i++)
+				{
+					Data->P[plr].Pool[M[i]].Assign = 0;
+				};
+				music_stop();
+				return;			   /* Done */
+			};
+		}
+	};
 }
 
 /** clears the screen
@@ -1023,11 +1134,4 @@ void FltsTxt(char nw,char col)
   return;
 } /* End of FltsTxt */
 
-
-
-
-
-
-
-
-
+/* vi: set noet ts=4 sw=4 tw=78: */

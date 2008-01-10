@@ -30,7 +30,6 @@
 
 extern char Month[12][11];
 extern char AI[2];
-char G[3];
 char Level_Check;
 extern char Nums[30][7];
 enum Opponent_Status Cur_Status;
@@ -486,16 +485,6 @@ void PickModule(char plr)
  return;
 }
 
-int FindNext(int x)
-{
- int i,k=1;
- for (i=0;i<4;i++)
-  if (G[i]!=-1 && k==x)
-	return(G[i]);
-	 else if (G[i]!=-1 && k<x) k=k+1;
- return(G[i]);
-}
-                               
 void MoonVoting(char plr)
 {
  int high=-1,val;

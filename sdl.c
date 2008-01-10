@@ -1,3 +1,29 @@
+/*
+    Copyright (C) 2007 Pace Willison
+    Copyright (C) 2007 Krzysztof Kosciuszkiewicz
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+/**
+ * \file sdl.c Simple DirectMedia Layer subsystem.
+ *
+ * Low-level event processing, graphic, audio and video routines.
+ * For API and general overview visit http://www.libsdl.org/.
+ */
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -392,40 +418,32 @@ av_process_event(SDL_Event * evp)
 	switch (evp->type)
 	{
 		case SDL_QUIT:
+			TRACE2("event %04x", evp->type);
 			exit(0);
 			break;
 
 		case SDL_USEREVENT:
+			/* TRACE2("event %04x", evp->type); */
 			break;
 
 		case SDL_KEYDOWN:
 			switch (evp->key.keysym.sym)
 			{
-				case SDLK_UP:
-					c = 0x4800;
-					break;
-				case SDLK_DOWN:
-					c = 0x5000;
-					break;
-				case SDLK_RIGHT:
-					c = 0x4D00;
-					break;
-				case SDLK_LEFT:
-					c = 0x4B00;
-					break;
-				case SDLK_F1:
-					c = 0x3B00;
-					break;
-				case SDLK_F2:
-					c = 0x3C00;
-					break;
-				case SDLK_F3:
-					c = 0x3D00;
-					break;
+				case SDLK_UP:    c = UP_ARROW; break;
+				case SDLK_DOWN:  c = DN_ARROW; break;
+				case SDLK_RIGHT: c = RT_ARROW; break;
+				case SDLK_LEFT:  c = LT_ARROW; break;
+				case SDLK_HOME:  c = K_HOME;   break;
+				case SDLK_END :  c = K_END;    break;
+				case SDLK_F1:    c = 0x3B00;   break;
+				case SDLK_F2:    c = 0x3C00;   break;
+				case SDLK_F3:    c = 0x3D00;   break;
 				default:
 					c = evp->key.keysym.unicode;
 					break;
 			}
+			TRACE4("event %04x %04x %04x", evp->type,
+					evp->key.keysym.sym, evp->key.keysym.unicode);
 			if (c)
 			{
 				keybuf[keybuf_in_idx] = c;
@@ -438,11 +456,13 @@ av_process_event(SDL_Event * evp)
 			av_mouse_pressed_latched = 1;
 			av_mouse_pressed_x = evp->button.x;
 			av_mouse_pressed_y = evp->button.y;
-			TRACE4("mouseclick(%d, %d) b = %d", av_mouse_pressed_x,
-					av_mouse_pressed_y, evp->button.button);
+			TRACE5("event %04x %04x %04x %04x", evp->type,
+					evp->button.x, evp->button.y, evp->button.button);
 			break;
 
 		case SDL_MOUSEBUTTONUP:
+			TRACE5("event %04x %04x %04x %04x", evp->type,
+					evp->button.x, evp->button.y, evp->button.button);
 			av_mouse_pressed_cur = 0;
 
 			/* if we get a mouse wheel event then translate it to arrow keypress */
