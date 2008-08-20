@@ -513,7 +513,7 @@ int Help(char *FName)
       }
    else if (Help[i]==0x2e) {  // Period
       i++;
-      NTxt[j++]=0xcc;
+      NTxt[j++]=(char) 0xcc;
       NTxt[j++]=(Help[i]-0x30)*100+(Help[i+1]-0x30)*10+(Help[i+2]-0x30);
       i+=5;
       }

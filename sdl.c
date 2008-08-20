@@ -43,7 +43,7 @@
 #define MAX_X	320
 #define MAX_Y	200
 
-LOG_DEFAULT_CATEGORY(sdl);
+LOG_DEFAULT_CATEGORY(sdl)
 
 #define KEYBUF_SIZE 256
 static int keybuf[KEYBUF_SIZE];
@@ -139,7 +139,7 @@ audio_callback(void *userdata, Uint8 * stream, int len)
 				 * 2 channels, BUT SDL_mixer library just does that for each
 				 * stream! Anyway, we have 2 channels so no worries ;)
 				 */
-				SDL_MixAudio(stream + pos, ac->data + chp->offset,
+				SDL_MixAudio(stream + pos, ((Uint8 *)ac->data) + chp->offset,
 						bytes, chp->volume);
 
 				pos += bytes;

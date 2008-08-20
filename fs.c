@@ -76,7 +76,7 @@
 # endif
 #endif
 
-LOG_DEFAULT_CATEGORY(filesys);
+LOG_DEFAULT_CATEGORY(filesys)
 
 static DIR *save_dir;
 

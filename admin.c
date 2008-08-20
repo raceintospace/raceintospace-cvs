@@ -40,7 +40,7 @@
 #define YES 1
 #define NO 0
 
-LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)
 
 extern char Sounds,Option,MAIL;
 extern int fOFF;
@@ -1215,7 +1215,7 @@ int FutureCheck(char plr,char type)
      };
    };
   return pad;
-};
+}
 
 char RequestX(char *s,char md)
 {

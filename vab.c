@@ -1003,7 +1003,7 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
     // EVA Check
   }
   return;
-};
+}
 
 
 void LMAdd(char plr,char prog,char kic,char part)

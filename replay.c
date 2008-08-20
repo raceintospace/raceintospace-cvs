@@ -47,7 +47,7 @@ extern struct AnimType AHead;
 extern struct BlockHead BHead;
 #endif
 
-LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)
 
 #if 0
 void

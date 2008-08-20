@@ -401,13 +401,20 @@ extern struct LogAppender *log_defaultLogAppender;
  * code. 
  * Setting the LogEvent's valist member is done inside _log_logEvent.
  * UPDATE: we set va_list to 0 to shut up the compiler.
+ * UPDATE2: we don't set va_list at all to shut up the compiler :)
  */
 //@{
-#define _LOG_PRE(catv, priority, fmt) do {                              \
-     if (_LOG_ISENABLEDV(catv, priority)) {                             \
-         struct LogEvent _log_ev =                                      \
-             {&(catv),priority,__FILE__,(char *)__func__,__LINE__,fmt,0};    \
+#define _LOG_PRE(catv, prio, format) do {                                  \
+     if (_LOG_ISENABLEDV(catv, prio)) {                                 \
+         struct LogEvent _log_ev;                                       \
+         _log_ev.cat = &(catv);                                         \
+         _log_ev.priority = (prio);                                     \
+         _log_ev.fileName = __FILE__;                                   \
+         _log_ev.functionName = (char *)__func__;                       \
+         _log_ev.lineNum = __LINE__;                                    \
+         _log_ev.fmt = (format);                                           \
          _log_logEvent(&(catv), &_log_ev
+
 #define _LOG_POST                               \
                         );                      \
      } } while(0)

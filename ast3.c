@@ -145,7 +145,7 @@ void TrainText(char plr,int astro,int cnt)
   DispNum(215,174,Data->P[plr].Pool[astro].Endurance);
   AstFaces(plr,203,29,Data->P[plr].Pool[astro].Face);
   return;
-};
+}
 
 
 /* level is as follows
@@ -544,7 +544,7 @@ void Hospital(char plr,int sel)
 	  return;  /* Done */
     }; /* end x-y if */
   };  /* end while */
-};
+}
 
 
 

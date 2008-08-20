@@ -32,7 +32,7 @@
 #include <theora/theora.h>
 #include <SDL.h>
 
-LOG_DEFAULT_CATEGORY(multimedia);
+LOG_DEFAULT_CATEGORY(multimedia)
 
 /** --
  * 

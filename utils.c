@@ -21,7 +21,7 @@
 #   include <sys/time.h>
 #endif
 
-LOG_DEFAULT_CATEGORY(utils);
+LOG_DEFAULT_CATEGORY(utils)
 
 double
 get_time (void)

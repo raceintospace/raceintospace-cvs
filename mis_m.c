@@ -32,7 +32,7 @@
 
 #define MIS_SET 0             // FAILURES ON
 
-LOG_DEFAULT_CATEGORY(mission);
+LOG_DEFAULT_CATEGORY(mission)
 
 extern struct MisAst MA[2][4];
 extern Equipment *MH[2][8];

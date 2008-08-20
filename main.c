@@ -111,7 +111,7 @@ static char BUZZ_DIR[32];
 void Plop(char plr,char mode);
 #endif
 
-LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)
 
 int main(int argc, char *argv[])
 {
@@ -819,7 +819,7 @@ void UPArrow(int x1,int y1)
   grSetColor(4);grDrawLine(x1,y1,x1,25+y1);grDrawLine(3+x1,11+y1,5+x1,11+y1);
   grSetColor(2);grDrawLine(1+x1,y1,6+x1,11+y1);grDrawLine(3+x1,12+y1,3+x1,25+y1);
   return;
-};
+}
 
 void RTArrow(int x1,int y1)
 {
@@ -840,7 +840,7 @@ void DNArrow(int x1,int y1)
   grSetColor(4);grDrawLine(x1,y1,x1,25+y1);grDrawLine(3+x1,14+y1,5+x1,14+y1);
   grSetColor(2);grDrawLine(3+x1,y1,3+x1,13+y1);grDrawLine(6+x1,14+y1,1+x1,25+y1);
   return;
-};
+}
 
 void InBox(int x1,int y1,int x2,int y2)
 {

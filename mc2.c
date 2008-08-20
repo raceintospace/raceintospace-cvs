@@ -416,7 +416,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
   //if (mcode!='d') 
   STEP++;
   return;
-};
+}
 
 void MisPrt(void)
 {
@@ -426,7 +426,7 @@ void MisPrt(void)
     Mev[0].rnum=9999;
   } 
   return;
-};
+}
 
 void MissionSetup(char plr,char mis)
 {

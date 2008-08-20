@@ -23,7 +23,7 @@
 #include <assert.h>
 #include "logging.h"
 
-LOG_DEFAULT_CATEGORY(future);
+LOG_DEFAULT_CATEGORY(future)
 
   char status[5],lck[5],F1,F2,F3,F4,FMen,F5,Pad;
   char JointFlag,MarFlag,JupFlag,SatFlag,MisType;
@@ -35,13 +35,13 @@ LOG_DEFAULT_CATEGORY(future);
   } StepBub[MAXBUB];
 
   struct Parameter {
-    char A:2;   /**< DOCKING */
-    char B:2;   /**< EVA */
-    char C:2;   /**< LEM */
-    char D:2;   /**< JOINT */
+    char A;   /**< DOCKING */
+    char B;   /**< EVA */
+    char C;   /**< LEM */
+    char D;   /**< JOINT */
     char E;     /**< MANNED/UNMANNED/Duration 0==unmanned 1-6==duration */
     char X;     /**< the type of mission for assign crew and hardware */
-    char Z:2;   /**< A duaration mission only */
+    char Z;   /**< A duaration mission only */
   } V[62];
 
 extern int Bub_Count;

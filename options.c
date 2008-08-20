@@ -57,14 +57,14 @@
 #  if HAVE_SDL_GETENV
 #    define getenv SDL_getenv
 #  else
-#    warn I don't know a way to read environment on this system
+#    warn I dont know a way to read environment on this system
 #    define getenv(a) (NULL)
 #  endif
 #endif
 
 game_options options;
 
-LOG_DEFAULT_CATEGORY(config);
+LOG_DEFAULT_CATEGORY(config)
 
 /*set-up array for environment vars */
 static struct {

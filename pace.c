@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "logging.h"
 
-LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)
 
 extern GXHEADER vhptr;
 
@@ -98,9 +98,9 @@ RLED (void *src_raw, void *dest_raw, unsigned int src_size)
 	}
 
 	if (0)
-		printf ("total bytes %d\n", (void *)dest - (void *)dest_raw);
+		printf ("total bytes %d\n", (char *)dest - (char *)dest_raw);
 
-	return ((void *)dest - (void *)dest_raw);
+	return ((char *)dest - (char *)dest_raw);
 }
 
 int

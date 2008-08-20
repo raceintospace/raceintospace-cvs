@@ -124,7 +124,7 @@ grMoveTo (int x, int y)
 	gr_cur_y = y;
 }
 
-inline void
+void
 grPutPixel (int x, int y, int color)
 {
 	screen[y * MAX_X + x] = color;
@@ -227,7 +227,7 @@ grDrawLine (int x1, int y1, int x2, int y2)
 	grLineTo (x2, y2);
 }
 
-inline int
+int
 grGetPixel (int x, int y)
 {
 	assert(x >= 0 && x < MAX_X);

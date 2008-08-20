@@ -19,7 +19,7 @@
 #include "externs.h"
 #include "logging.h"
 
-LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT);
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)
 
 #define MLL(a,b) (Data->P[a].History[b].MissionCode>=53 && Data->P[a].History[b].MissionCode<=56)
 

@@ -41,7 +41,7 @@
 #define ANIM_PARTS 297
 #define SCND_TABLE 486
 
-LOG_DEFAULT_CATEGORY(mission);
+LOG_DEFAULT_CATEGORY(mission)
 
  struct NTable {
   char ID[8];

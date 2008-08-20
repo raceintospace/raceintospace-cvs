@@ -286,7 +286,7 @@ int Launch(char plr,char mis)
 	}
    BIG=0;
    return total;
-};
+}
 
 
 void MissionPast(char plr,char pad,int prest)
@@ -379,7 +379,7 @@ void MissionPast(char plr,char pad,int prest)
   Rep.Qty=0;
   fout=sOpen("REPLAY.TMP","rt",1);
   while (!feof(fout)) {
-     fscanf(fout,"%d\n",&num);
+     fscanf(fout,"%u\n",&num);
      Rep.Off[Rep.Qty++]=num;
   };
   fclose(fout);
