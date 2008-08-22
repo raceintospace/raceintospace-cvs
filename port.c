@@ -203,12 +203,7 @@ void SpotCrap(char loc,char mode)
 			Swap16bit(sPath.xPut);
 			Swap16bit(sPath.yPut);
 			Swap16bit(sPath.iHold);
-			
-#ifdef __BIG_ENDIAN__
-			xx = *(ui32*)(&sPath.Scale);	
-			Swap32bit(xx);
-			*((ui32*) &sPath.Scale) = xx;
-#endif
+			SwapFloat(sPath.Scale);
 
       pLoc=ftell(sFin);                 // Path Update Locations
 
