@@ -4,11 +4,11 @@
 typedef struct {
     char *dir_savegame;
     char *dir_gamedata;
-    int want_audio;
-    int want_fullscreen;
-    int want_intro;
-    int want_cheats;
-    int want_debug;
+    unsigned want_audio;
+    unsigned want_fullscreen;
+    unsigned want_intro;
+    unsigned want_cheats;
+    unsigned want_debug;
 } game_options;
 
 extern game_options options;

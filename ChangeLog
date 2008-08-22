@@ -1,5 +1,13 @@
 2008-08-23	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V210
+
+	* options.h: make some fields of game_options unsigned
+
+	* options.c (parse_var_value): bugfix for case need_alloc == 0
+
+2008-08-23	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V209
 
 	* endianness.c (SwapGameDat): use internal _SwapXXX functions

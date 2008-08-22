@@ -78,9 +78,9 @@ static struct {
 
 static struct {
     char *name; /**< name of option */
-    void *dest; /**< pointer to the variable to hold the content  */
-    char *type; /**< type of the data we get */
-    int need_alloc; /**< max size of the data in byte ??? */
+    void *dest; /**< pointer to the variable holding the content */
+    char *format; /**< scanf format of the data we get */
+    int need_alloc; /**< max memory size to be allocated for value */
     char *comment; /**< a note to the user */
 } config_strings[] = {
 	{"datadir", &options.dir_gamedata, "%1024[^\n\r]", 1025,
@@ -140,24 +140,36 @@ parse_var_value(FILE * f, int index)
 	char format[128];
 	int need_alloc;
 	int res = 0, chars = 0, i = index;
-	void **target;
 
 	assert(f);
-	assert(i >= 0 && i < (int) ARRAY_LENGTH(config_strings));
+	assert(i >= 0 && i < (int)ARRAY_LENGTH(config_strings));
 
-	target = config_strings[i].dest;
 	need_alloc = config_strings[i].need_alloc;
-	if (need_alloc)
+	sprintf(format, " %s%%n", config_strings[i].format);
+
+	if (need_alloc > 0)
+	{
+		/* config_strings[].dest points to a pointer */
+		void **target = config_strings[i].dest;
+
 		*target = xrealloc(*target, need_alloc);
 
-	sprintf(format, " %s%%n", config_strings[i].type);
-	res = fscanf(f, format, *target, &chars);
+		res = fscanf(f, format, *target, &chars);
+		if (res < 1)
+			return -1;
 
-	if (res < 1)
-		return -1;
+		if (chars < need_alloc)
+			*target = xrealloc(*target, chars + 1);
+	}
+	else
+	{
+		/* config_strings[].dest points to a value */
+		void *target = config_strings[i].dest;
 
-	if (need_alloc && chars < need_alloc)
-		*target = xrealloc(*target, chars + 1);
+		res = fscanf(f, format, target, &chars);
+		if (res < 1)
+			return -1;
+	}
 
 	return 0;
 }
