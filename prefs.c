@@ -500,57 +500,56 @@ long size;
      else
      if ((x>=6 && y>=34 && x<=83 && y<=42 && (where==3 || where==0) && mousebuttons>0) ||
        ((where==3 || where==0) && ksel==0 && key=='N'))
-      {
-	    RectFill(7,35,82,41,0);
-	    for (i=0;i<20;i++) Data->P[0].Name[i]=0x00;
-	    num=0;ch=0;
-	    grSetColor(1);grMoveTo(8,40);DispChr(0x14);
-	    while(ch!=K_ENTER)
-        {
-	      ch=getch();
-        if (ch!=(ch&0xff)) ch=0x00;
-        if (ch>='a' && ch<='z') ch-=0x20;
-	      if (ch==0x08 && num>0) Data->P[0].Name[--num]=0x00;
-	      else if (num<12 && ( isupper(ch) || isdigit(ch) || ch==0x20))
-           Data->P[0].Name[num++]=ch;
-	      RectFill(7,35,82,41,0);
-	      grSetColor(1);PrintAt(8,40,&Data->P[0].Name[0]);
-	      DispChr(0x14);
-	      av_sync ();
-	   }
-	   Data->P[0].Name[num]=0x00;
-	   RectFill(7,35,82,41,0);
-	   grSetColor(1);PrintAt(8,40,&Data->P[0].Name[0]);
-	   
-	   av_sync ();
-	   /* P1: Director Name */
+     {
+         RectFill(7,35,82,41,0);
+         for (i=0;i<20;i++) Data->P[0].Name[i]=0x00;
+         num=0;ch=0;
+         grSetColor(1);grMoveTo(8,40);DispChr(0x14);av_sync();
+         while(ch!=K_ENTER)
+         {
+             ch=getch();
+             if (ch!=(ch&0xff)) ch=0x00;
+             if (ch>='a' && ch<='z') ch-=0x20;
+             if (ch==0x08 && num>0) Data->P[0].Name[--num]=0x00;
+             else if (num<12 && ( isupper(ch) || isdigit(ch) || ch==0x20))
+                 Data->P[0].Name[num++]=ch;
+             RectFill(7,35,82,41,0);
+             grSetColor(1);PrintAt(8,40,&Data->P[0].Name[0]);
+             DispChr(0x14);
+             av_sync();
+         }
+         Data->P[0].Name[num]=0x00;
+         RectFill(7,35,82,41,0);
+         grSetColor(1);PrintAt(8,40,&Data->P[0].Name[0]);
+         av_sync();
+         /* P1: Director Name */
      }
      else
 	  if ((x>=236 && y>=34 && x<=313 && y<=42 && (where==3 || where==0) && mousebuttons>0) ||
          ((where==3 || where==0) && ksel==1 && key=='N'))
       {
-	    RectFill(237,35,312,41,0);
-	    for (i=0;i<20;i++) Data->P[1].Name[i]=0x00;
-	    num=0;ch=0;
-	    grSetColor(1); grMoveTo(238,40);DispChr(0x14);
-	    while(ch!=K_ENTER) {
-        ch=getch();
-        if (ch!=(ch&0xff)) ch=0x00;
-        if (ch>='a' && ch<='z') ch-=0x20;
-	      if (ch==0x08 && num>0) Data->P[1].Name[--num]=0x00;
-	      else if (num<12 && ( isupper(ch) || isdigit(ch) || ch==0x20))
-           Data->P[1].Name[num++]=ch;
-	      RectFill(237,35,312,41,0);
-	      grSetColor(1);PrintAt(238,40,&Data->P[1].Name[0]);
-	      av_sync ();
-	   }
-
-	  Data->P[1].Name[num]=0x00;
-	  RectFill(237,35,312,41,0);
-	  grSetColor(1);PrintAt(238,40,&Data->P[1].Name[0]);
-	  
-	  av_sync ();
-	  /* P2: Director Name */
+          RectFill(237,35,312,41,0);
+          for (i=0;i<20;i++) Data->P[1].Name[i]=0x00;
+          num=0;ch=0;
+          grSetColor(1);grMoveTo(238,40);DispChr(0x14);av_sync();
+          while(ch!=K_ENTER)
+          {
+              ch=getch();
+              if (ch!=(ch&0xff)) ch=0x00;
+              if (ch>='a' && ch<='z') ch-=0x20;
+              if (ch==0x08 && num>0) Data->P[1].Name[--num]=0x00;
+              else if (num<12 && ( isupper(ch) || isdigit(ch) || ch==0x20))
+                  Data->P[1].Name[num++]=ch;
+              RectFill(237,35,312,41,0);
+              grSetColor(1);PrintAt(238,40,&Data->P[1].Name[0]);
+              DispChr(0x14);
+              av_sync();
+          }
+          Data->P[1].Name[num]=0x00;
+          RectFill(237,35,312,41,0);
+          grSetColor(1);PrintAt(238,40,&Data->P[1].Name[0]);
+          av_sync();
+          /* P2: Director Name */
     };
    }
   };

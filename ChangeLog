@@ -1,5 +1,11 @@
 2008-08-23	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V212
+
+	* prefs.c (Prefs): implemented #1870178
+
+2008-08-23	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V211
 
 	* future.c (Missions): fixed #1935737, documentation
