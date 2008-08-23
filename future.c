@@ -1052,12 +1052,10 @@ void MissionName(int val,int xx,int yy,int len)
 
 /** Missions() will draw the future missions among other things
  * 
- * 
- * 
  * \param plr Player
- * \param X ???
- * \param Y ???
- * \param val ???
+ * \param X screen coord for mission name string
+ * \param Y screen coord for mission name string
+ * \param val mission number
  * \param bub if set to 0 or 3 the function will not draw stuff
  */
 void Missions(char plr,int X,int Y,int val,char bub)
@@ -1136,7 +1134,7 @@ void Missions(char plr,int X,int Y,int val,char bub)
     case 25: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);LefEarth(0,0);
 	     OrbMid(0,0,1,0);LefOrb(0,1,1,1);break;
     case 26: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,1,0);
-	     LefEarth(1,0);OrbMid(0,0,0,0);LefOrb(1,1,1,1);break;
+	     LefEarth(1,0);OrbMid(0,0,0,0);LefOrb(0,1,1,1);break;
     case 27: Draw_IJ(1);Draw_IJV(1);OrbMid(0,1,0,1);
 	     LefEarth(0,0);OrbMid(0,0,0,0);LefOrb(0,1,1,1);break;
     case 28: Draw_IJ(1);Draw_IJV(1);OrbOut(0,0,0);

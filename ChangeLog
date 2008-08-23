@@ -1,5 +1,11 @@
 2008-08-23	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V211
+
+	* future.c (Missions): fixed #1935737, documentation
+
+2008-08-23	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V210
 
 	* options.h: make some fields of game_options unsigned
