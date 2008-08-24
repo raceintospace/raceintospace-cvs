@@ -1,5 +1,11 @@
 2008-08-24	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V214
+
+	* Makefile.in: create dependency files for each object file
+
+2008-08-24	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V213
 
 	* endianness.c: fix bugs introduced in V209

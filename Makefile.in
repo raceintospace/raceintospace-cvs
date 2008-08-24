@@ -97,9 +97,10 @@ $(PROG_NAME): $(BARIS_OBJS)
 	@echo "$(LD) ...flags... -o $@ ...libs..."
 	@$(CC) $(CFLAGS) -o $(PROG_NAME) $(BARIS_OBJS) $(LIBS)
 
-.c.@OBJEXT@:
+%.@OBJEXT@: %.c
 	@echo "$(CC) ...flags... -c $<"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) $(EXTRA_WARNINGS) -c $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) $(EXTRA_WARNINGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -MM -MP -MT $*.@OBJEXT@ $< > $*.d
 
 vtest2@EXEEXT@: $(addsuffix .@OBJEXT@, vtest2 mmfile utils)
 	$(CC) $(CFLAGS) -o $@ $^ @OGG_LIBS@ @VORBIS_LIBS@ @THEORA_LIBS@ @SDL_LIBS@
@@ -137,7 +138,7 @@ cscope: FORCE
 	cscope -b
 
 clean:
-	rm -f *.@OBJEXT@ *~ diffs
+	rm -f *.@OBJEXT@ *.d
 	rm -f $(PROG_NAME)
 	rm -f $(PROGS)
 	rm -f $(TAR_NAME).*
@@ -181,6 +182,9 @@ datatar:
 datazip:
 	rm -f $(DATA_TARNAME).zip
 	zip -r $(DATA_TARNAME).zip audio video gamedata images
+
+# dependencies
+-include $(BARIS_OBJS:.@OBJEXT@=.d)
 
 # Personal Makefile
 -include Makefile.$(LOGNAME)
