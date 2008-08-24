@@ -359,7 +359,7 @@ void FileAccess(char mode)
 		   // Swap Players Data
 		   if (endianSwap)
 		   {
-			 SwapGameDat();
+			 _SwapGameDat();
 		   }
 		   
 		// Read the Replay Data

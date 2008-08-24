@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
   argc = setup_options(argc, argv);
   /* hacking... */
-  log_setThreshold(&_LOGV(LOG_ROOT_CAT), max(0, LP_NOTICE-options.want_debug));
+  log_setThreshold(&_LOGV(LOG_ROOT_CAT), maxx(0, LP_NOTICE-(int)options.want_debug));
 
   fin = open_gamedat("USA_PORT.DAT");
   if (fin == NULL)
@@ -179,9 +179,7 @@ int main(int argc, char *argv[])
 
     DEBUG2("reading Players: size = %d", (int)sizeof (struct Players));
     RLED(buffer,(char *)Data,i);
-#ifdef __BIG_ENDIAN__
-		SwapGameDat();	// Take care of endian read
-#endif
+    SwapGameDat();	// Take care of endian read
     if (Data->Checksum!=(sizeof (struct Players))) {
         /* XXX: too drastic */
       CRITICAL1("wrong version of data file");

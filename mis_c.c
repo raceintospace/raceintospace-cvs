@@ -363,36 +363,35 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		if ((nfin=open_gamedat("BABYCLIF.CDR"))==NULL) return;
 		fread(Mob,CLIF_TABLE*(sizeof (struct Infin)),1,nfin); //Specs: First Table
 
-#ifdef __BIG_ENDIAN__
+        // Endianness swap
 		for (i=0;i<CLIF_TABLE;i++)	{
             int ii;
 			for (ii=0;ii<10;ii++)
 				Swap16bit(Mob[i].List[ii]);
 		}
-#endif
+
 		Mob2=(struct OF *)&buffer[15000];
 		fseek(nfin,7200,SEEK_SET);
 		fread(Mob2,SCND_TABLE*(sizeof (struct OF)),1,nfin);   //Specs: Second Table
 		fclose(nfin);
 
-#ifdef __BIG_ENDIAN__
+        // Endianness swap
 		for (i=0;i<SCND_TABLE;i++) 
 			Swap16bit(Mob2[i].idx);
-#endif
 
 		for (i=0;i<SCND_TABLE;i++) Mob2[i].Name[strlen(Mob2[i].Name)-3]='_'; // patch
 	} else {
 		nfin=open_gamedat("BABYNORM.CDR");
 		fread(Mob,NORM_TABLE*(sizeof (struct Infin)),1,nfin);
 		fclose(nfin);
-#ifdef __BIG_ENDIAN__
+        
+        // Endianness swap
 		for (i = 0; i< NORM_TABLE; i++)
 		{
 			int j;
 			for (j=0;j<10;j++)
 				Swap16bit(Mob[i].List[j]);
 		}
-#endif
 	}
 
 	// Plop(plr,1); //Specs: random single frame for sound buffering

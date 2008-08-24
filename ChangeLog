@@ -1,3 +1,11 @@
+2008-08-24	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V213
+
+	* endianness.c: fix bugs introduced in V209
+
+	* admin.c, main.c, mis_c.c, port.c, vab.c: remove __BIG_ENDIAN__
+
 2008-08-23	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V212

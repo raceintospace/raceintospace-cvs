@@ -418,9 +418,7 @@ void DrawSpaceport(char plr)
   FILE *fin;
   GXHEADER local,local2;
   IMG Img;
-#ifdef __BIG_ENDIAN__
-	int k,j;
-#endif
+  int k,j;
 
   fin=sOpen((plr==0) ?"USA_PORT.DAT":"SOV_PORT.DAT","rb",0);
 
@@ -434,7 +432,8 @@ void DrawSpaceport(char plr)
 	Swap32bit(PHead.oAnim);
 
   fread(&MObj[0],sizeof MObj,1,fin);
-#ifdef __BIG_ENDIAN__
+
+  // Endianness swap
 	for (i = 0; i < (int)(sizeof(MObj)/sizeof(MOBJ)); i++)
 	{
 		for (j = 0; j < 4; j++)
@@ -448,13 +447,12 @@ void DrawSpaceport(char plr)
 			}
 		}
 	}
-#endif
 	
   fread(&table[0],sizeof table,1,fin);
-#ifdef __BIG_ENDIAN__
+
+  // Endianness swap
 	for (i = 0; i< S_QTY; i++)
 		Swap32bit(table[i]);
-#endif
 
   fseek(fin,PHead.oPal,SEEK_SET);
   fread(&pal[0],768,1,fin);

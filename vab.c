@@ -600,16 +600,15 @@ void VAB(char plr)
   fread(MI, MI_size, 1, file);
   fclose(file);
 
-#ifdef __BIG_ENDIAN__
+  // Endianness swap
 	for (i = 0; i< 2*28; i++)
-{
+	{
 		Swap16bit(MI[i].x1);
 		Swap16bit(MI[i].y1);
 		Swap16bit(MI[i].x2);
 		Swap16bit(MI[i].y2);
 		Swap16bit(MI[i].o);
-}
-#endif
+	}
 
   music_start(M_HARDWARE);
   CV=0;
