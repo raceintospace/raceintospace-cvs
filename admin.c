@@ -1265,6 +1265,7 @@ char RequestX(char *s,char md)
 }
 
 
+#ifdef DEAD_CODE
 void SaveMail(void)
 {
  long size;
@@ -1360,6 +1361,7 @@ void SaveMail(void)
 	  fclose(fin);
     }	 
 }
+#endif
 
 // Save Game related functions
 void EndOfTurnSave(char *inData, int dataLen)

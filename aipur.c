@@ -505,43 +505,51 @@ void CheckAdv(char plr)
 }
 
 
-
+#ifdef DEAD_CODE
 /** Remove unhappy astro's
  */
 void RemoveUnhappy(char plr)
 {
 	int i,l,astroClass=0,fltCrew=0;
+    int foundClass = 0, foundCrew = 0;
 
 	for (i=0;i<Data->P[plr].AstroCount;i++)
 	{
-		// Find an Astronaut with in a bad mood
 		if (Data->P[plr].Pool[i].Mood < ASTRONAUT_MOOD_THRESHOLD)
 			if (Data->P[plr].Pool[i].Assign!=0 && Data->P[plr].Pool[i].Status==0)
 			{
 				Data->P[plr].Pool[i].Assign=0; // back to limbo
 				Data->P[plr].Pool[i].Una=0;
+
+                // find the crew astronaut is in
 				for (astroClass=0; astroClass<ASTRONAUT_POOLS; astroClass++)
 				{
 					for (fltCrew=0; fltCrew<ASTRONAUT_CREW_MAX; fltCrew++)
 					{
 						for (l=0; l<ASTRONAUT_FLT_CREW_MAX; l++)
 						{
-							if (Data->P[plr].Crew[astroClass][fltCrew][l]==i)
-								break;
+							if (Data->P[plr].Crew[astroClass][fltCrew][l]==i) 
+                            {
+                                foundClass = astroClass;
+                                foundCrew = fltCrew;
+								goto endLoop;
+                            }
 						}
 					}
 				}
 
+            endLoop:
 				for (l=0; l<ASTRONAUT_FLT_CREW_MAX; l++)
 				{
-					Data->P[plr].Crew[astroClass][fltCrew][l]=0;
-					Data->P[plr].Pool[Data->P[plr].Crew[astroClass][fltCrew][l]].Assign=0;
-					Data->P[plr].Pool[Data->P[plr].Crew[astroClass][fltCrew][l]].Una=0;
+					Data->P[plr].Pool[Data->P[plr].Crew[foundClass][foundCrew][l]].Assign=0;
+					Data->P[plr].Pool[Data->P[plr].Crew[foundClass][foundCrew][l]].Una=0;
+					Data->P[plr].Crew[foundClass][foundCrew][l]=0;
 				}
 			}
 	}
 	return;
 }
+#endif
 
 void RDafford(char plr,int class,int index)
 {
@@ -574,6 +582,7 @@ void RDafford(char plr,int class,int index)
  return;
 }
 
+#ifdef DEAD_CODE
 int CheckMax(char plr,int m)
 {
  switch(m)
@@ -591,7 +600,9 @@ int CheckMax(char plr,int m)
    default:return 0;
   }
 }
+#endif
 
+#ifdef DEAD_CODE
 char SF(char plr,char m)
 {
  char num=0;
@@ -606,7 +617,9 @@ char SF(char plr,char m)
   }
  return(num);
 }
+#endif
 
+#ifdef DEAD_CODE
 char SN(char plr,char m)
 {
  char num=0;
@@ -621,6 +634,7 @@ char SN(char plr,char m)
   }
  return(num);
 }
+#endif
 
 void AIPur(char plr)
 {

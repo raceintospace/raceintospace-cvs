@@ -31,11 +31,13 @@ struct Prest_Upd MP[3];
 int put_serial(unsigned char n) {return 0;}
 void MesCenter(void){}
 
+#ifdef DEAD_CODE
 int
 AquireDrive (void)
 {
 	return 'K' - 'A';
 }
+#endif
 
 char *letter_dat;
 
@@ -200,11 +202,13 @@ bzdelay (int ticks)
 	idle_loop_secs (ticks / 100.0);
 }
 
+#ifdef DEAD_CODE
 int
 CDAccess (int drive,int track,char op)
 {
 	return (0);
 }
+#endif
 
 int
 brandom (int limit)

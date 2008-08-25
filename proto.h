@@ -142,7 +142,9 @@ void BadFileType(void);
 void FileText(char *name);
 int FutureCheck(char plr,char type);
 char RequestX(char *s,char md);
+#ifdef DEAD_CODE
 void SaveMail(void);
+#endif
 void EndOfTurnSave(char *inData, int dataLen); 	// Create ENDTURN.TMP
 
 // AIMAST.C
@@ -152,9 +154,10 @@ void RDPrograms(char plr);
 void CheckVoting(char plr);
 void KeepRD(char plr,int m);
 void PickModule(char plr);
-int FindNext(int x);
 void MoonVoting(char plr);
+#ifdef DEAD_CODE
 int CheckLimit(char plr,char m);
+#endif
 int CheckSafety(char plr,char m);
 void MoonProgram(char plr,char m);
 void ProgramVoting(char plr);
@@ -168,12 +171,13 @@ void CalcSaf(char plr,char vs);
 char Panic_Level(char plr,int *m_1,int *m_2);
 void NewAI(char plr,char frog);
 void AIFuture(char plr,char mis,char pad,char *prog);
+#ifdef DEAD_CODE
 char Search(char plr,char m);
 void GetHard(char plr);
 char BoostCheck(char plr);
 void Scheduler(char plr);
+#endif
 void AILaunch(char plr);
-void GetMisData(char which);
 
 // AIPUR.C
 void DrawStatistics(char Win);
@@ -184,21 +188,17 @@ void DumpAstro(char plr,int inx);
 char Skill(char plr,char type);
 void TransAstro(char plr,int inx);
 void CheckAdv(char plr);
+#ifdef DEAD_CODE
 void RemoveUnhappy(char plr);
+#endif
 void RDafford(char plr,int Class,int index);
+#ifdef DEAD_CODE
 int CheckMax(char plr,int m);
 char SF(char plr,char m);
 char SN(char plr,char m);
+#endif
 void AIPur(char plr);
 int GenPur(char plr,int hardware_index,int unit_index);
-
-// ASM.C
-void toGrey(int start);
-int PCX_D (void *src,void *dest,unsigned src_size);
-long RLEC (char *src, char *dest, unsigned int src_size);
-void FadeIn(char wh,char *palx,int steps,int val,char mode);
-void FadeOut(char wh,char *palx,int steps,int val,char mode);
-int RLED (void *src, void *dest, unsigned int src_size);
 
 // AST0.C
 void Moon(char plr);
@@ -236,14 +236,18 @@ void Hospital(char plr,int sel);
 
 
 // AST4.C
+#ifdef DEAD_CODE
 int ALSpec(int att);
+#endif
 void AstLevel(char plr,char prog,char crew,char ast);
 void PlaceEquip(char plr,char prog);
 void DrawProgs(char plr,char prog);
 int CheckProgram(char plr,char prog);
 void FixPrograms(char plr);
 void DamProb(char plr,char prog,int chk);
+#ifdef DEAD_CODE
 void CrewProb(char plr,char prog);
+#endif
 void DrawPosition(char prog,int pos);
 void Programs(char plr,char prog);
 void ClearIt(void);
@@ -343,7 +347,9 @@ void Bd(int x,int y);
 void DurPri(int x) ;
 void MissionName(int val,int xx,int yy,int len);
 void Missions(char plr,int X,int Y,int val,char bub);
+#ifdef DEAD_CODE
 char FutBad(void);
+#endif
 
 // HARDEF.C
 void DrawHardef(char plr);
@@ -364,7 +370,9 @@ void BackIntel(char p,char year);
 void HarIntel(char p,char acc);
 void TopSecret(char plr,char poff);
 void SaveIntel(char p,char prg,char ind);
+#ifdef DEAD_CODE
 void Bad(char plr,char pt);
+#endif
 void ImpHard(char plr,char hd,char dx);
 void UpDateTable(char plr);
 void IntelPhase(char plr,char pt);
@@ -406,11 +414,15 @@ void WaitForKeyOrMouseDown(void) ;
 void PauseMouse(void);
 void PrintAt(int x,int y,char *s);
 void PrintAtKey(int x,int y,char *s,char val);
+#ifdef DEAD_CODE
 void DrawLED(int x,int y,char st);
+#endif
 void DispBig(int x,int y,char *txt,char mode,char te);
 void DispNum(int xx,int yy,int num);
 void DispMB(int x,int y,int val);
+#ifdef DEAD_CODE
 void Gl(int x1,int x2,int y,char t);
+#endif
 void ShBox(int x1,int y1,int x2,int y2);
 void UPArrow(int x1,int y1);
 void RTArrow(int x1,int y1);
@@ -510,19 +522,25 @@ void AI_Begin(char plr);
 void AI_Done(void);
 
 // NEWS.C
+#ifdef DEAD_CODE
 void NFrame(int x1, int y1, int x2, int y2);
+#endif
 void GoNews(char plr);
 void OpenNews(char plr,char *buf,int bud);
 void DispNews(char plr,char *src,char *dest);
 FILE* PreLoadAnim(char plr,char mode);
 void CloseNewsAnim(void);
+#ifdef DEAD_CODE
 void DrawNews(char plr);
+#endif
 void DrawNText(char plr,char got);
 void News(char plr);
 void DeAlloc(BYTE Page);
 void AIEvent(char plr);
 char ResolveEvent(char plr);
+#ifdef DEAD_CODE
 void Breakgrp(char plr);
+#endif
 int PlayNewsAnim(mm_file *);
 mm_file *LoadNewsAnim(int plr, int bw, int type, int Mode, mm_file * fp);
 void ShowEvt(char plr,char crd);
@@ -540,6 +558,12 @@ char CheckCrewOK(char plr,char pad);
 char REvent(char plr);
 void Replace_Snaut(char plr);
 
+// PACE.C
+int PCX_D (void *src,void *dest,unsigned src_size);
+long RLEC (char *src, char *dest, unsigned int src_size);
+void FadeIn(char wh,char *palx,int steps,int val,char mode);
+void FadeOut(char wh,char *palx,int steps,int val,char mode);
+int RLED (void *src, void *dest, unsigned int src_size);
 
 // PLACE.C
 void BCDraw(int y);

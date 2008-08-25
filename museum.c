@@ -69,11 +69,12 @@ char tame[29][40]={
 i16 TPoints[2];
 extern char Mon[12][4];
 
+#ifdef DEAD_CODE
 void BigArrowLt(int,int);
 void BigArrowRt(int,int);
 void EndRt(int,int);
 void EndLt(int,int);
-void Display_ARROW(char,int,int);
+#endif
 
 void Display_ARROW(char num,int x,int y) 
 {
@@ -282,7 +283,6 @@ void ForOne(char plr, char *pos,char *pos2)
    DPrest(plr,pos,pos2);
    return;
 }
-
 
 void DPrest(char plr,char *pos,char *pos2)
 {
@@ -534,7 +534,6 @@ void RewindOne(char plr, int *where)
   return;
 }
 
-
 void FullFast(char plr, int *where)
 {
     if (Data->P[plr].PastMis == 0) return;
@@ -683,6 +682,7 @@ void DrawMisHist(char plr,int *where)
  return;
 }
 
+#ifdef DEAD_CODE
 void BigArrowLt(int a,int b)
 {
  grSetColor(4);
@@ -692,7 +692,9 @@ void BigArrowLt(int a,int b)
  grMoveTo(a+10,b);grLineTo(a+17,b+6);grMoveTo(a+10,b+13);grLineTo(a+17,b+7);
  return;
 }
+#endif
 
+#ifdef DEAD_CODE
 void BigArrowRt(int a,int b)
 {
  grSetColor(4);
@@ -702,7 +704,9 @@ void BigArrowRt(int a,int b)
  grMoveTo(a+8,b);grLineTo(a+1,b+6);grMoveTo(a+8,b+13);grLineTo(a+1,b+7);
  return;
 }
+#endif
 
+#ifdef DEAD_CODE
 void EndLt(int a,int b)
 {
  grSetColor(4);
@@ -716,7 +720,9 @@ void EndLt(int a,int b)
  //grMoveTo(a+8,b+12);grLineTo(a+1,b+6);
  return;
 }
+#endif
 
+#ifdef DEAD_CODE
 void EndRt(int a,int b)
 {
  grSetColor(4);
@@ -726,6 +732,7 @@ void EndRt(int a,int b)
  grMoveTo(a+1,b);grLineTo(a+8,b+6);grMoveTo(a+1,b+13);grLineTo(a+8,b+7);
  return;
 }
+#endif
 
 void ShowAstrosHist(char plr)
 {

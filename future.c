@@ -1268,6 +1268,7 @@ void Missions(char plr,int X,int Y,int val,char bub)
   DEBUG1("<-Missions()");
 }  // end function missions
 
+#ifdef DEAD_CODE
 /** Draws stuff about choosing a program and having < 2 groups available
  * 
  * \deprecated This function appears to be depricated. 
@@ -1300,5 +1301,6 @@ char FutBad(void)
   }; /* End while */
   return (i);
 }
+#endif
 
 /* vim: set noet ts=4 sw=4 tw=77: */

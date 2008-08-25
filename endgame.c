@@ -396,7 +396,6 @@ void NewEnd(char win,char loc)
  music_start(M_VICTORY);
  EndGame(win,loc);
  Draw_NewEnd(win);
- grSetMousePos(159,181);
  R_V=Burst(win);
  WaitForMouseUp();
  i=0;key=0;
@@ -437,7 +436,6 @@ void NewEnd(char win,char loc)
      i=0;key=0;
      OutBox(14,182,65,190);
      EndGame(win,loc);Draw_NewEnd(win);
-     grSetMousePos(159,181);
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
      R_V=0;
      R_V=Burst(win);
@@ -454,7 +452,6 @@ void NewEnd(char win,char loc)
      music_start(M_THEME);
      Stat(win);Draw_NewEnd(win);
      strncpy(IDT,"i144",4);strncpy(IKEY,"k044",4);
-     grSetMousePos(159,181);
      R_V=0;
      R_V=Burst(win);
     }

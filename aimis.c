@@ -721,11 +721,14 @@ void AIFuture(char plr,char mis,char pad,char *prog)
  return;
 }
 
+#ifdef DEAD_CODE
 char Search(char plr,char m)
 {
   return (Data->P[plr].M[m]);
 }
+#endif
 
+#ifdef DEAD_CODE
 void GetHard(char plr)
 {
  int bwgt[7],prwt[8],i;
@@ -743,7 +746,9 @@ void GetHard(char plr)
    else {i=GenPur(plr,1,4);i=GenPur(plr,1,rck-4);}
  return;
 }
+#endif
 
+#ifdef DEAD_CODE
 char BoostCheck(char plr)
 {
  char check = 0; /* XXX check unintialized */
@@ -757,7 +762,9 @@ char BoostCheck(char plr)
 	}
  return(check);
 }
+#endif
 
+#ifdef DEAD_CODE
 void Scheduler(char plr)
 {
  char mis,prim,z,i,tmoon[4][2];
@@ -800,6 +807,7 @@ void Scheduler(char plr)
  for (i=0;i<3;i++) if (Data->P[plr].Future[i].MissionCode==0) AIFuture(plr,1,i,0);
  return;
 }
+#endif
 
 void AILaunch(char plr)
 {

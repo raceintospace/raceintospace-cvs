@@ -486,6 +486,7 @@ void SaveIntel(char p,char prg,char ind)
  if (prg!=5) Data->P[p].Table[prg][ind]=sf;
 }
 
+#ifdef DEAD_CODE
 void Bad(char plr,char pt)
 {
  
@@ -500,6 +501,7 @@ void Bad(char plr,char pt)
  if (pt==0) Data->P[plr].PastIntel[Data->Year-58].prog=-1;
  
 }
+#endif
 
 void ImpHard(char plr,char hd,char dx)
 { // based on the hardware improve safety factor

@@ -171,9 +171,7 @@ int main(int argc, char *argv[])
 
     MakeRecords();
 
-	// ReadInitialGameData((HIST)?"HIST.DAT":"RAST.DAT");
-    if (HIST) fin=sOpen("HIST.DAT","rb",0);
-    else fin=sOpen("RAST.DAT","rb",0);
+    fin=sOpen("RAST.DAT","rb",0);
     i=fread(buffer,1,BUFFER_SIZE,fin); 
     fclose(fin);
 
@@ -709,7 +707,7 @@ void PrintAtKey(int x,int y,char *s,char val)
   return;
 }
 
-
+#ifdef DEAD_CODE
 void DrawLED(int x,int y,char st)
 {
   int i,j;
@@ -721,6 +719,7 @@ void DrawLED(int x,int y,char st)
     grPutPixel(x+i,y+j,Dots[st][i][j]);
   return;
 }
+#endif
 
 void DispBig(int x,int y,char *txt,char mode,char te)
 {
@@ -792,6 +791,7 @@ void DispMB(int x,int y,int val)
   return;
 }
 
+#ifdef DEAD_CODE
 // Place a glimmer on a box
 void Gl(int x1,int x2,int y,char t)
 {
@@ -804,6 +804,7 @@ void Gl(int x1,int x2,int y,char t)
   for (i=0;i<13;i++) grPutPixel(x1+nx+i,y,Glim[i]);
   return;
 }
+#endif
 
 void ShBox(int x1,int y1,int x2,int y2)
 {

@@ -974,7 +974,6 @@ ui16 Count,*bone;
       if (key>0) // this was only looking for the low byte
        {
         i=MapKey(plr,key,i);	// Get Port offset for keyboard input
-        grSetMousePos(319,199);x=319;y=199;
         if (key==K_ESCAPE) {kMode=0;i=0;}
          else {kMode=1;}
         if (MObj[i].Reg[Data->P[plr].Port[i]].sNum>0)

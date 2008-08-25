@@ -29,6 +29,7 @@
 
 #define Guy(a,b,c,d) (Data->P[a].Crew[b][c][d]-1)
 
+#ifdef DEAD_CODE
 int ALSpec(int att)
 {
   int col=0;
@@ -39,6 +40,7 @@ int ALSpec(int att)
   if (att==0) col=3;
   return col;
 }
+#endif
 
 void AstLevel(char plr,char prog,char crew,char ast)
 {
@@ -395,6 +397,7 @@ void DamProb(char plr,char prog,int chk)
 }
 
 
+#ifdef DEAD_CODE
 void CrewProb(char plr,char prog)
 {
  if (prog)EMPTY_BODY;
@@ -426,6 +429,7 @@ void CrewProb(char plr,char prog)
      }
   }
 }
+#endif
 
 void DrawPosition(char prog,int pos)
 {

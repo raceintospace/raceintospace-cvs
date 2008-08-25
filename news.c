@@ -77,6 +77,7 @@ struct rNews
 	char chrs;
 };
 
+#ifdef DEAD_CODE
 void
 NFrame(int x1, int y1, int x2, int y2)
 {
@@ -88,6 +89,7 @@ NFrame(int x1, int y1, int x2, int y2)
 	Box(x1 + 2, y1 + 2, x2 - 2, y2 - 2);
 	InBox(x1 + 3, y1 + 3, x2 - 3, y2 - 3);
 }
+#endif
 
 void
 GoNews(char plr)
@@ -442,6 +444,7 @@ PreLoadAnim(char plr, char bw)
 }
 #endif
 
+#ifdef DEAD_CODE
 void
 DrawNews(char plr)
 {
@@ -471,6 +474,7 @@ DrawNews(char plr)
 	DNArrow(305, 163);
 
 }
+#endif
 
 void
 DrawNText(char plr, char got)
@@ -856,6 +860,7 @@ ResolveEvent(char plr)
 	return bad;					   // zero if card is good
 }
 
+#ifdef DEAD_CODE
 void
 Breakgrp(char plr)
 {
@@ -898,6 +903,7 @@ Breakgrp(char plr)
 			};					   /* for l */
 		};						   /* for k */
 }
+#endif
 
 /* modified to return true if end of anim */
 int

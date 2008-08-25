@@ -518,6 +518,7 @@ if (val<70) high=0;
  return;
 }
 
+#ifdef DEAD_CODE
 int CheckLimit(char plr,char m)
 {
  switch(m)
@@ -531,6 +532,7 @@ int CheckLimit(char plr,char m)
 	 }
  return 0;
 }
+#endif
 
 int CheckSafety(char plr,char m)
 {

@@ -1,14 +1,23 @@
-2008-08-15  Michael McCarty <mkmccarty@raceintospace.org>
+2008-08-25	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V217
+
+	* admin.c, aimast.c, aimis.c, aipur.c, ast4.c, endgame.c, future.c, gr.c,
+	intel.c, main.c, museum.c, news.c, pace.c, port.c, proto.h: DEAD_CODE
+
+	* log_default.c: fix OOB array access
+
+2008-08-25	Michael McCarty <mkmccarty@raceintospace.org>
 
 	* V216
 
-	* macros.h: Added PROGRAM_NOT_STARTED define
-		    Added IsHumanPlayer() macro
+	* macros.h: Added PROGRAM_NOT_STARTED define Added IsHumanPlayer() macro
 
 	* proto.h: Removed AIQUnit, renamed QUnit to QueryUnit
 
-	* rdplex.c: Renamed QUnit to QueryUnit, made this function more readable ,added logic to not draw for AI players so I could remove AIQunit()
-		    Using PROGRAM_NOT_STARTED during Equipment[].Num tests
+	* rdplex.c: Renamed QUnit to QueryUnit, made this function more readable,
+	added logic to not draw for AI players so I could remove AIQunit()
+	Using PROGRAM_NOT_STARTED during Equipment[].Num tests
 
 	* aipur.c: Removed AIQUnit, changed hwx and unx to something understandable
 
