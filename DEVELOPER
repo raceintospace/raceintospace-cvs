@@ -48,13 +48,17 @@
 3. Building on Mac OS X
 
     1)  Download and install the Mac OS X version of SDL from libsdl.org
-    2)  Unpack the data and music to race-data/ in the same directory that
+    2)  Download and install Sparkle's Sparkle.framework in os_macosx/vendors
+    3)  Download and install Smart Crash Reports SDK into os_macosx/vendors
+    4)  Use MacPorts to unstall libogg libvorbis and libtheora, use +universal
+        if you plan on building full release builds
+    5)  Unpack the data and music to race-data/ in the same directory that
         holds the race/ source tree. The data is embedded in the .app in
-		the OS X version, so it is required at build time.
-	3)  Checkout the 'xiph' module to the same place as race/ and
-		race-data/. Open the Xcode project, and build for both Debug and
-		Release.
-    4)  Open race/os_macosx/RaceIntoSpace.xcodeproj and compile.
+        the OS X version, so it is required at build time
+    6)  Checkout the 'xiph' module to the same place as race/ and
+        race-data/. Open the Xcode project, and build for both Debug and
+        Release.
+    7)  Open race/os_macosx/RaceIntoSpace.xcodeproj and compile.
 
 4. Making RPM's 
 

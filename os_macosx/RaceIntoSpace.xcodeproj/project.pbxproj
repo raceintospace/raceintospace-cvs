@@ -90,7 +90,6 @@
 		7C94F48E0C68C4CA00D047AD /* images in Resources */ = {isa = PBXBuildFile; fileRef = 7C94F22D0C68C4CA00D047AD /* images */; };
 		7C94F4900C68C4CA00D047AD /* video in Resources */ = {isa = PBXBuildFile; fileRef = 7C94F2550C68C4CA00D047AD /* video */; };
 		7CC7BC3C0C7134F4004B3053 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC7BC3B0C7134F4004B3053 /* libz.dylib */; };
-		7CC7C1DA0C713F0D004B3053 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D1107310486CEB800E47090 /* Info.plist */; };
 		7CCAA97C0C6922FE0043DD17 /* RaceIntoSpace.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7C5E89350C68B7A20074F164 /* RaceIntoSpace.icns */; };
 		7CCAA9D40C6946E10043DD17 /* moon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7CCAA9D30C6946E10043DD17 /* moon.icns */; };
 		7CD223BC0C712DC3000C0DC5 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD223BB0C712DC3000C0DC5 /* Sparkle.framework */; };
@@ -100,6 +99,9 @@
 		7CD2243F0C7133CF000C0DC5 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD2243E0C7133CF000C0DC5 /* Carbon.framework */; };
 		7CD224440C7133D9000C0DC5 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD224430C7133D9000C0DC5 /* CoreFoundation.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		987973FC0E630ABD00C74DF4 /* libogg.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 987973FB0E630ABD00C74DF4 /* libogg.dylib */; };
+		987973FF0E630ADB00C74DF4 /* libtheora.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 987973FE0E630ADB00C74DF4 /* libtheora.dylib */; };
+		987974010E630AE500C74DF4 /* libvorbis.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 987974000E630AE500C74DF4 /* libvorbis.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -242,6 +244,9 @@
 		7CF391100C6A998C0086E543 /* WHO_SPOT */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = WHO_SPOT; path = ../WHO_SPOT; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Race Into Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Race Into Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		987973FB0E630ABD00C74DF4 /* libogg.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.dylib; path = /opt/local/lib/libogg.dylib; sourceTree = "<absolute>"; };
+		987973FE0E630ADB00C74DF4 /* libtheora.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtheora.dylib; path = /opt/local/lib/libtheora.dylib; sourceTree = "<absolute>"; };
+		987974000E630AE500C74DF4 /* libvorbis.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.dylib; path = /opt/local/lib/libvorbis.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +266,9 @@
 				7C56E8FB0C74A0DA00B3B6C1 /* CoreAudio.framework in Frameworks */,
 				7C56E9030C74A0EE00B3B6C1 /* AudioToolbox.framework in Frameworks */,
 				7C56E9040C74A0EE00B3B6C1 /* AudioUnit.framework in Frameworks */,
+				987973FC0E630ABD00C74DF4 /* libogg.dylib in Frameworks */,
+				987973FF0E630ADB00C74DF4 /* libtheora.dylib in Frameworks */,
+				987974010E630AE500C74DF4 /* libvorbis.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +278,9 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				987973FB0E630ABD00C74DF4 /* libogg.dylib */,
+				987974000E630AE500C74DF4 /* libvorbis.dylib */,
+				987973FE0E630ADB00C74DF4 /* libtheora.dylib */,
 				7CC7BC3B0C7134F4004B3053 /* libz.dylib */,
 				7CD224430C7133D9000C0DC5 /* CoreFoundation.framework */,
 				7CD2243E0C7133CF000C0DC5 /* Carbon.framework */,
@@ -493,9 +504,11 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RaceIntoSpace" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Race Into Space */;
 			projectDirPath = "";
+			projectRoot = ..;
 			targets = (
 				8D1107260486CEB800E47090 /* Race Into Space */,
 				7CCAA9920C6927530043DD17 /* RaceIntoSpace.dmg */,
@@ -515,7 +528,6 @@
 				7C942C560C6912E600D047AD /* SDLMain.nib in Resources */,
 				7CCAA97C0C6922FE0043DD17 /* RaceIntoSpace.icns in Resources */,
 				7CCAA9D40C6946E10043DD17 /* moon.icns in Resources */,
-				7CC7C1DA0C713F0D004B3053 /* Info.plist in Resources */,
 				7C56E92C0C74A11100B3B6C1 /* midi in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -702,6 +714,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib/,
+					"../../xiph/build/$(BUILD_STYLE)/",
+				);
 				PRODUCT_NAME = "Race Into Space";
 				WRAPPER_EXTENSION = app;
 			};
@@ -718,6 +734,10 @@
 				GCC_MODEL_TUNING = G5;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib/,
+					"../../xiph/build/$(BUILD_STYLE)/",
+				);
 				PRODUCT_NAME = "Race Into Space";
 				WRAPPER_EXTENSION = app;
 			};
@@ -746,7 +766,10 @@
 					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "vendor/Smart\\ Crash\\ Reports\\ SDK";
-				LIBRARY_SEARCH_PATHS = "../../xiph/build/$(BUILD_STYLE)/";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"../../xiph/build/$(BUILD_STYLE)/",
+				);
 				OTHER_LDFLAGS = "-lxiph";
 				PREBINDING = NO;
 				PRODUCT_NAME = "Race Into Space";
@@ -784,7 +807,10 @@
 					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "vendor/Smart\\ Crash\\ Reports\\ SDK";
-				LIBRARY_SEARCH_PATHS = "../../xiph/build/$(BUILD_STYLE)/";
+				LIBRARY_SEARCH_PATHS = (
+					/opt/local/lib,
+					"../../xiph/build/$(BUILD_STYLE)/",
+				);
 				OTHER_LDFLAGS = "-lxiph";
 				PREBINDING = NO;
 				PRODUCT_NAME = "Race Into Space";
