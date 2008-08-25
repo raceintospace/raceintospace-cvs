@@ -760,8 +760,8 @@ begvab:
 	  if (((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) && ccc!=0 && ButOn==1 && cwt<=pay[rk])
 	   {
 	    j=0;
-      if (Mis.EVA==1 && Data->P[plr].Misc[3].Num==-1) Help("i118");
-      else if (Mis.Doc==1 && Data->P[plr].Misc[4].Num==-1) Help("i119");
+      if (Mis.EVA==1 && Data->P[plr].Misc[3].Num == PROGRAM_NOT_STARTED) Help("i118");
+      else if (Mis.Doc==1 && Data->P[plr].Misc[4].Num == PROGRAM_NOT_STARTED) Help("i119");
       else
       {
       if ((Mis.mVab[0]&0x10)==0x10 && Data->P[plr].DMod<=0)

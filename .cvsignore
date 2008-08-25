@@ -30,3 +30,4 @@ Makefile
 aclocal.m4
 int_types.h
 *.tar.gz
+*.d

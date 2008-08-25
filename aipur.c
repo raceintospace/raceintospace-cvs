@@ -543,16 +543,6 @@ void RemoveUnhappy(char plr)
 	return;
 }
 
-int AIQUnit(short hwx,short unx,char plr)
-{
-  int b=0;
-  if (hwx==0) b=(Data->P[plr].Probe[unx].Num==-1) ? 0:1;
-  if (hwx==1) b=(Data->P[plr].Rocket[unx].Num==-1) ? 0:1;
-  if (hwx==2) b=(Data->P[plr].Manned[unx].Num==-1) ? 0:1;
-  if (hwx==3) b=(Data->P[plr].Misc[unx].Num==-1) ? 0:1;
-  return(b);
-}
-
 void RDafford(char plr,int class,int index)
 {
  i16 b=0,roll=0,ok=0;
@@ -572,7 +562,7 @@ void RDafford(char plr,int class,int index)
  if (Data->P[plr].Buy[class][index]>0) return;
    while (ok==0 && roll!=0)
 	 {
-	  if ( (b*roll <= Data->P[plr].Cash) && AIQUnit(class,index,plr)==1
+	  if ( (b*roll <= Data->P[plr].Cash) && QueryUnit(class,index,plr)==1
 		&& MaxChk(class+1,index+1,plr))
 		{
 		 Data->P[plr].Buy[class][index]=RDUnit(class+1,index+1,roll,plr);
@@ -653,142 +643,142 @@ void AIPur(char plr)
  return;
 }
 
-int GenPur(char plr,int hwx,int unx)
+int GenPur(char plr,int hardware_index,int unit_index)
 {
  char RT_value=0,newf,n1,n2,n3,n4,n5,n6,n7;
 
  newf=0; // reinitialize
  //special case DM before Kickers
- if (hwx==3 && unx<=1 && Data->P[plr].Misc[4].Num==-1)
+ if (hardware_index==3 && unit_index<=1 && Data->P[plr].Misc[4].Num == PROGRAM_NOT_STARTED)
   {
-   hwx=3;unx=4;
+   hardware_index=3;unit_index=4;
   };
- switch(hwx)
+ switch(hardware_index)
  {
-  case 0: if (Data->P[plr].Probe[unx].Num<2)
+  case 0: if (Data->P[plr].Probe[unit_index].Num<2)
 		{ // Probe Programs
-		 if (Data->P[plr].Probe[unx].Num==-1)
+		 if (Data->P[plr].Probe[unit_index].Num == PROGRAM_NOT_STARTED)
 		   {
-			if (Data->P[plr].Probe[unx].InitCost < Data->P[plr].Cash)
+			if (Data->P[plr].Probe[unit_index].InitCost < Data->P[plr].Cash)
 			  {
-			   Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Probe[unx].InitCost;
-			   if (Data->P[plr].Probe[unx].Num==-1) Data->P[plr].Probe[unx].Num=1;
-				else Data->P[plr].Probe[unx].Num = Data->P[plr].Probe[unx].Num = 1;
+			   Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Probe[unit_index].InitCost;
+			   if (Data->P[plr].Probe[unit_index].Num == PROGRAM_NOT_STARTED) Data->P[plr].Probe[unit_index].Num=1;
+				else Data->P[plr].Probe[unit_index].Num = Data->P[plr].Probe[unit_index].Num = 1;
 			   RT_value=1;newf=1;
 			  }
 		   }
 		 else
 			{
-			 if (Data->P[plr].Probe[unx].UnitCost < Data->P[plr].Cash)
+			 if (Data->P[plr].Probe[unit_index].UnitCost < Data->P[plr].Cash)
 			   {
-				Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Probe[unx].UnitCost;
-				Data->P[plr].Probe[unx].Num = Data->P[plr].Probe[unx].Num + 1;
+				Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Probe[unit_index].UnitCost;
+				Data->P[plr].Probe[unit_index].Num = Data->P[plr].Probe[unit_index].Num + 1;
 				RT_value=1;
 			   }
           else {
-             RT_value=1;++Data->P[plr].Probe[unx].Num;
+             RT_value=1;++Data->P[plr].Probe[unit_index].Num;
             }
 			}
 	   }; // end case 1
 	 break;
-  case 1:if (Data->P[plr].Rocket[unx].Num<2)
+  case 1:if (Data->P[plr].Rocket[unit_index].Num<2)
 		    { // Rocket Programs Purchasing
-	        if (Data->P[plr].Rocket[unx].Num==-1)
+	        if (Data->P[plr].Rocket[unit_index].Num == PROGRAM_NOT_STARTED)
 		      {
-		       if (Data->P[plr].Rocket[unx].InitCost < Data->P[plr].Cash)
+		       if (Data->P[plr].Rocket[unit_index].InitCost < Data->P[plr].Cash)
 		        { 
-		         Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Rocket[unx].InitCost;
-		         if (Data->P[plr].Rocket[unx].Num==-1) Data->P[plr].Rocket[unx].Num=1;
-		          else ++Data->P[plr].Rocket[unx].Num;
+		         Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Rocket[unit_index].InitCost;
+		         if (Data->P[plr].Rocket[unit_index].Num == PROGRAM_NOT_STARTED) Data->P[plr].Rocket[unit_index].Num=1;
+		          else ++Data->P[plr].Rocket[unit_index].Num;
 		         RT_value=1;newf=1;
 		        }
 		      }
 	    	  else
 		      {
-		       if (Data->P[plr].Rocket[unx].Num==1 && (Data->P[plr].Rocket[unx].Safety<Data->P[plr].Rocket[unx].MaxRD-15))
+		       if (Data->P[plr].Rocket[unit_index].Num==1 && (Data->P[plr].Rocket[unit_index].Safety<Data->P[plr].Rocket[unit_index].MaxRD-15))
 			     {
-			      RDafford(plr,1,unx);
-               Data->P[plr].Buy[1][unx]=0;
+			      RDafford(plr,1,unit_index);
+               Data->P[plr].Buy[1][unit_index]=0;
 			      RT_value=1;
 			     }
              else
-		       if (Data->P[plr].Rocket[unx].Num>=0)
+		       if (Data->P[plr].Rocket[unit_index].Num>=0)
 			     {
-			      if (Data->P[plr].Rocket[unx].UnitCost < Data->P[plr].Cash)
+			      if (Data->P[plr].Rocket[unit_index].UnitCost < Data->P[plr].Cash)
 			       {
-				     Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Rocket[unx].UnitCost;
-				     ++Data->P[plr].Rocket[unx].Num;
+				     Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Rocket[unit_index].UnitCost;
+				     ++Data->P[plr].Rocket[unit_index].Num;
 				     RT_value=1;
 			       }
                else
                 { 
-                 RT_value=1;++Data->P[plr].Rocket[unx].Num;
+                 RT_value=1;++Data->P[plr].Rocket[unit_index].Num;
                 }
 			     }
 		      }
 	   }; // end case 2
 	 break;
-   case 2:if (unx==3 && Data->P[plr].Manned[3].Num==1) return(1);
+   case 2:if (unit_index==3 && Data->P[plr].Manned[3].Num==1) return(1);
 			else
-			  if (Data->P[plr].Manned[unx].Num<2)
+			  if (Data->P[plr].Manned[unit_index].Num<2)
 				{ // Manned Programs
-				 if (Data->P[plr].Manned[unx].Num==-1)
+				 if (Data->P[plr].Manned[unit_index].Num == PROGRAM_NOT_STARTED)
 				   {
-					if (Data->P[plr].Manned[unx].InitCost < Data->P[plr].Cash)
+					if (Data->P[plr].Manned[unit_index].InitCost < Data->P[plr].Cash)
 					  {
-					   Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Manned[unx].InitCost;
-					   if (Data->P[plr].Manned[unx].Num==-1) Data->P[plr].Manned[unx].Num=1;
-						 else ++Data->P[plr].Manned[unx].Num;
+					   Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Manned[unit_index].InitCost;
+					   if (Data->P[plr].Manned[unit_index].Num == PROGRAM_NOT_STARTED) Data->P[plr].Manned[unit_index].Num=1;
+						 else ++Data->P[plr].Manned[unit_index].Num;
 					   RT_value=1;newf=1;
 					  }
 				   }
 				 else
 				  {
-				   if (Data->P[plr].Manned[unx].Num==1 && (Data->P[plr].Manned[unx].Safety<Data->P[plr].Manned[unx].MaxRD-15))
+				   if (Data->P[plr].Manned[unit_index].Num==1 && (Data->P[plr].Manned[unit_index].Safety<Data->P[plr].Manned[unit_index].MaxRD-15))
 					 {
-					  RDafford(plr,2,unx);
-                 Data->P[plr].Buy[2][unx]=0;
+					  RDafford(plr,2,unit_index);
+                 Data->P[plr].Buy[2][unit_index]=0;
 					  RT_value=1;
 					 }
               else
-				  if (Data->P[plr].Manned[unx].Num>=0)
+				  if (Data->P[plr].Manned[unit_index].Num>=0)
 					{
-					 if (Data->P[plr].Manned[unx].UnitCost < Data->P[plr].Cash)
+					 if (Data->P[plr].Manned[unit_index].UnitCost < Data->P[plr].Cash)
 					   {
-						Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Manned[unx].UnitCost;
-						++Data->P[plr].Manned[unx].Num;
+						Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Manned[unit_index].UnitCost;
+						++Data->P[plr].Manned[unit_index].Num;
 						RT_value=1;
 					   }
                 else {
-                  RT_value=1;++Data->P[plr].Manned[unx].Num;
+                  RT_value=1;++Data->P[plr].Manned[unit_index].Num;
                   }
 					}
 				 }
 	   }; // end case 3
 	 break;
-   case 3: if (Data->P[plr].Misc[unx].Num<2) { // Misc Programs
-		  if (unx==3 && Data->P[plr].Misc[unx].Num==1) return(1);
-		if (Data->P[plr].Misc[unx].Num==-1)
+   case 3: if (Data->P[plr].Misc[unit_index].Num<2) { // Misc Programs
+		  if (unit_index==3 && Data->P[plr].Misc[unit_index].Num==1) return(1);
+		if (Data->P[plr].Misc[unit_index].Num == PROGRAM_NOT_STARTED)
 		  {
-		   if (Data->P[plr].Misc[unx].InitCost < Data->P[plr].Cash)
+		   if (Data->P[plr].Misc[unit_index].InitCost < Data->P[plr].Cash)
 			 {
-			  Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Misc[unx].InitCost;
-			  if (Data->P[plr].Misc[unx].Num==-1) Data->P[plr].Misc[unx].Num=1;
-			else ++Data->P[plr].Misc[unx].Num;
+			  Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Misc[unit_index].InitCost;
+			  if (Data->P[plr].Misc[unit_index].Num == PROGRAM_NOT_STARTED) Data->P[plr].Misc[unit_index].Num=1;
+			else ++Data->P[plr].Misc[unit_index].Num;
 			 RT_value=1;newf=1;
 			 }
 		 }
 		else
-		  if (Data->P[plr].Misc[unx].Num>=0)
+		  if (Data->P[plr].Misc[unit_index].Num>=0)
 			{
-			 if (Data->P[plr].Misc[unx].UnitCost < Data->P[plr].Cash)
+			 if (Data->P[plr].Misc[unit_index].UnitCost < Data->P[plr].Cash)
 			   {
-				Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Misc[unx].UnitCost;
-				++Data->P[plr].Misc[unx].Num;
+				Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Misc[unit_index].UnitCost;
+				++Data->P[plr].Misc[unit_index].Num;
 				RT_value=1;
 			   }
           else {
-            RT_value=1;++Data->P[plr].Misc[unx].Num;
+            RT_value=1;++Data->P[plr].Misc[unit_index].Num;
             }
 		   }
 	   }; // end case 4
@@ -797,11 +787,11 @@ int GenPur(char plr,int hwx,int unx)
    } // end switch
 
   // starting bonuses and cost bonuses
-  if (hwx==0 && newf==1) {
+  if (hardware_index==0 && newf==1) {
 	n1=Data->P[plr].Probe[0].Safety;
 	n2=Data->P[plr].Probe[1].Safety;
 	n3=Data->P[plr].Probe[2].Safety;
-	switch(unx) {
+	switch(unit_index) {
 	  case 0: if (n2>=75) Data->P[plr].Probe[0].Safety=50;
 		  if (n3>=75) Data->P[plr].Probe[0].Safety=60;
 		  break;
@@ -812,15 +802,15 @@ int GenPur(char plr,int hwx,int unx)
 		  if (n2>=75) Data->P[plr].Probe[2].Safety=50;
 		  break;
 	};
-	Data->P[plr].Probe[unx].Base=Data->P[plr].Probe[unx].Safety;
+	Data->P[plr].Probe[unit_index].Base=Data->P[plr].Probe[unit_index].Safety;
   };
-  if (hwx==1 && newf==1) {
+  if (hardware_index==1 && newf==1) {
 	n1=Data->P[plr].Rocket[0].Safety; /* One - A     */
 	n2=Data->P[plr].Rocket[1].Safety; /* Two - B     */
 	n3=Data->P[plr].Rocket[2].Safety; /* Three - C   */
 	n4=Data->P[plr].Rocket[3].Safety; /* Mega - G    */
 	n5=Data->P[plr].Rocket[4].Safety; /* Booster - D */
-	switch(unx) {
+	switch(unit_index) {
       case 0: if (n2>=75 || n3>=75 || n4>=75 || n5>=75)
 		Data->P[plr].Rocket[0].Safety=35;
 		  break;
@@ -843,9 +833,9 @@ int GenPur(char plr,int hwx,int unx)
 		Data->P[plr].Rocket[4].Safety=30;
 	      break;
     };
-	Data->P[plr].Rocket[unx].Base=Data->P[plr].Rocket[unx].Safety;
+	Data->P[plr].Rocket[unit_index].Base=Data->P[plr].Rocket[unit_index].Safety;
   };
-  if (hwx==2 && newf==1) {
+  if (hardware_index==2 && newf==1) {
 	n1=Data->P[plr].Manned[0].Safety; /* One - a         */
 	n2=Data->P[plr].Manned[1].Safety; /* Two - b         */
 	n3=Data->P[plr].Manned[2].Safety; /* Three - c       */
@@ -853,7 +843,7 @@ int GenPur(char plr,int hwx,int unx)
 	n5=Data->P[plr].Manned[4].Safety; /* cap/mod - h     */
 	n6=Data->P[plr].Manned[5].Safety; /* 2 mod - d       */
 	n7=Data->P[plr].Manned[6].Safety; /* 1 mod - e       */
-	switch(unx) {
+	switch(unit_index) {
 	  case 0: if (n2>=75 || n3>=75 || n5>=75)
 		Data->P[plr].Manned[0].Safety=40;
 		  break;
@@ -879,17 +869,17 @@ int GenPur(char plr,int hwx,int unx)
 		  if (n5>=75) Data->P[plr].Manned[6].Safety=40;
 		  break;
 	};
-	Data->P[plr].Manned[unx].Base=Data->P[plr].Manned[unx].Safety;
+	Data->P[plr].Manned[unit_index].Base=Data->P[plr].Manned[unit_index].Safety;
 
   };
 
-  if (hwx==3 && newf==1) {
+  if (hardware_index==3 && newf==1) {
 	n1=Data->P[plr].Rocket[0].Safety; /* One - A     */
 	n2=Data->P[plr].Rocket[1].Safety; /* Two - B     */
 	n3=Data->P[plr].Rocket[2].Safety; /* Three - C   */
 	n4=Data->P[plr].Rocket[3].Safety; /* Mega - G    */
 	n5=Data->P[plr].Rocket[4].Safety; /* Booster - D */
-	switch(unx) {
+	switch(unit_index) {
 	  case 0: if (n2>=75)
 		Data->P[plr].Misc[0].Safety=40;
 		  break;
@@ -899,7 +889,7 @@ int GenPur(char plr,int hwx,int unx)
 		  break;
 	  default: break;
 	};
-	Data->P[plr].Misc[unx].Base=Data->P[plr].Misc[unx].Safety;
+	Data->P[plr].Misc[unit_index].Base=Data->P[plr].Misc[unit_index].Safety;
 
   };
  return(RT_value);

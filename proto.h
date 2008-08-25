@@ -39,6 +39,7 @@
 #define MisStep(a,b,c) PrintAt((a),(b),S_Name[(c)])
 //#define VBlank() while(!(inp(0x3da)&0x08))  // the all important VBlank
 #define VBlank() do{}while(0)
+#define PROGRAM_NOT_STARTED	-1	/* Hardware program not started when Num is set to this */
 
 #define isMile(a,b)   Data->Mile[a][b]
 
@@ -184,13 +185,12 @@ char Skill(char plr,char type);
 void TransAstro(char plr,int inx);
 void CheckAdv(char plr);
 void RemoveUnhappy(char plr);
-int AIQUnit(short hwx,short unx,char plr);
 void RDafford(char plr,int Class,int index);
 int CheckMax(char plr,int m);
 char SF(char plr,char m);
 char SN(char plr,char m);
 void AIPur(char plr);
-int GenPur(char plr,int hwx,int unx);
+int GenPur(char plr,int hardware_index,int unit_index);
 
 // ASM.C
 void toGrey(int start);
@@ -637,8 +637,8 @@ void BButs(char old,char nw);
 void RDButTxt(int v1,int val,char plr);
 char RD(char plr);
 void ManSel(int mm);
-char QUnit(char hwx,char unx,char plr);
-char MaxChk(char hwx,char unx,char plr);
+char QueryUnit(char hardware_index,char unit_index,char plr);
+char MaxChk(char hardware_index,char unit_index,char plr);
 char RDUnit(char rhard,char runit,char r,char plr);
 void ShowUnit(char hw,char un,char plr);
 void OnHand(char qty);
