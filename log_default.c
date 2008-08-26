@@ -1,4 +1,4 @@
-/* $Id: log_default.c,v 1.4 2007/09/18 06:05:10 fabguy Exp $
+/* $Id: log_default.c,v 1.5 2008/08/26 13:10:25 drvee Exp $
  * Copyright (c) 2001, Bit Farm, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,6 +25,7 @@
  */
 
 #include "log4c.h"
+#include "macros.h"
 #include <stdio.h>
 
 /**
@@ -66,11 +67,11 @@ static void doAppend(struct LogAppender* this0, struct LogEvent* ev) {
     if (ev->priority < 0) {
         pn = "???";
     }
-    else if ((size_t)ev->priority < sizeof(priorityNames)) {
+    else if ((size_t)ev->priority < ARRAY_LENGTH(priorityNames)) {
         pn = priorityNames[ev->priority];
     } else {
         sprintf(buf, "%s+%d",
-                priorityNames[sizeof(priorityNames)-1],
+                priorityNames[ARRAY_LENGTH(priorityNames)-1],
                 ev->priority - (int) sizeof(priorityNames) + 1);
     }
     fprintf(this->file, "%-7s ", pn);

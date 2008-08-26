@@ -447,7 +447,9 @@ void FileAccess(char mode)
 	        }
           else if (Data->Def.Input==1 || Data->Def.Input==3)
            { // User Crews
-	         fin=sOpen("USER.DAT","rb",0);
+	         fin=sOpen("USER.DAT","rb",FT_SAVE);
+             if (!fin)
+                 fin=sOpen("USER.DAT", "rb", FT_DATA);
              size=fread(buffer,1,BUFFER_SIZE,fin);
              fclose(fin);
              fin=sOpen("MEN.DAT","wb",1);
@@ -481,7 +483,9 @@ void FileAccess(char mode)
              fclose(fin);
 	        }
           else if (Data->Def.Input==1 || Data->Def.Input==3) { // User Crews
-	         fin=sOpen("USER.DAT","rb",0);
+	         fin=sOpen("USER.DAT","rb",FT_SAVE);
+             if (!fin)
+                 fin=sOpen("USER.DAT", "rb", FT_DATA);
              size=fread(buffer,1,BUFFER_SIZE,fin);
              fclose(fin);
              fin=sOpen("MEN.DAT","wb",1);

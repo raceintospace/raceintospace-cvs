@@ -1,11 +1,22 @@
+2008-08-26	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V218
+
+	* admin.c, prefs.c: Fixed #2073994 - open file USER.DAT first from
+	savegame dir, if failed then from game data dir
+
+	* fs.c (try_find_file): add debug message when file mode is changed
+
+	* pace.c (frm_read_tbl): fixes and less verbose debugging
+
+	* log_default.c: fix OOB array access
+
 2008-08-25	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V217
 
 	* admin.c, aimast.c, aimis.c, aipur.c, ast4.c, endgame.c, future.c, gr.c,
 	intel.c, main.c, museum.c, news.c, pace.c, port.c, proto.h: DEAD_CODE
-
-	* log_default.c: fix OOB array access
 
 2008-08-25	Michael McCarty <mkmccarty@raceintospace.org>
 

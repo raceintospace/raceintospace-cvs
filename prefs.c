@@ -306,7 +306,9 @@ long size;
 	        }
           else if (Data->Def.Input==1 || Data->Def.Input==3)
            { // User Crews
-	         fin=sOpen("USER.DAT","rb",0);
+	         fin=sOpen("USER.DAT","rb",FT_SAVE);
+             if (!fin)
+                 fin=sOpen("USER.DAT", "rb", FT_DATA);
 	         size=fread(buffer,1,BUFFER_SIZE,fin);fclose(fin);
 	         fin=sOpen("MEN.DAT","wb",1);fwrite(buffer,size,1,fin);fclose(fin);
 	        }
@@ -599,8 +601,16 @@ void EditAst(void)
  
  temp=Help("i105");
  
- if (temp==1) fin = sOpen("CREW.DAT","rb",0);   /* Open Astronaut Data File  */
-   else fin=sOpen("USER.DAT","rb",0);
+ if (temp==1)
+ {
+     fin = sOpen("CREW.DAT","rb",FT_DATA);   /* Open Astronaut Data File  */
+ } 
+ else
+ {
+     fin=sOpen("USER.DAT","rb",FT_SAVE);
+     if (!fin)
+         fin=sOpen("USER.DAT","rb",FT_DATA);
+ }
  /* fseek(fin,((sizeof (struct ManPool))*106)*0,SEEK_SET); */
  fread(Men,(sizeof (struct ManPool))*106,1,fin);
  /* fseek(fin,((sizeof (struct ManPool))*106)*1,SEEK_SET); */
@@ -628,7 +638,7 @@ void EditAst(void)
 	  temp=Help("i106");
 	  if (temp==1)
       {
-        fin=sOpen("USER.DAT","wb",1);
+        fin=sOpen("USER.DAT","wb",FT_SAVE);
 	     fwrite(Men,(sizeof (struct ManPool))*106,1,fin);   
 	     fwrite(Sov,(sizeof (struct ManPool))*106,1,fin); 
 	     fclose(fin);

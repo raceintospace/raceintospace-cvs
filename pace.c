@@ -272,7 +272,7 @@ struct tblinfo {
 /** Read sequence name array from file
  * 
  * \param keyname Name of the file to read from
- * \param tblinfo Pointer to the tblinfo to fill
+ * \param tbl Pointer to the tblinfo to fill
  */
 void
 frm_read_tbl (char *keyname, struct tblinfo *tbl)
@@ -281,7 +281,8 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 	int lo, hi;
 	int idx;
     char *p;
-    char name[100]; /** \todo Assumption about the size of name is too high, right? */
+    size_t max_name_len = 8;
+    char name[max_name_len+1];
 
 	if ((fin = sOpen (keyname, "rb", 0)) == NULL){
         WARNING2("Unable to open file '%s'.", keyname);
@@ -297,14 +298,14 @@ frm_read_tbl (char *keyname, struct tblinfo *tbl)
 	tbl->strings = xcalloc(tbl->count, sizeof *tbl->strings);
 
 	idx = 0;
-	while (fread (name, 1, 8, fin) == 8) {
-		name[8] = '\0';
+	while (fread (name, 1, max_name_len, fin) == max_name_len) {
+		name[max_name_len] = '\0';
         for (p = name; *p; p++) {
             *p = tolower (*p);
             if (*p == '#')
                 *p = '_';
         }
-        DEBUG4("Found name '%s' at position %d in file %s.",name, idx, keyname);
+        TRACE4("Found name '%s' at position %d in file %s.", name, idx, keyname);
         tbl->strings[idx++] = xstrdup (name);
 	}
 
