@@ -1,3 +1,9 @@
+2008-08-27	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V219
+
+	* prefs.c: Fixed rendering bugs in roster edit dialog
+
 2008-08-26	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V218

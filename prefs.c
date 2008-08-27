@@ -1091,15 +1091,14 @@ ChangeStat(char mum, char Cur, char Cnt)	// Cur holds current setting
 
 		while (!(key == K_ENTER || key == K_ESCAPE))
 		{
+			DispChr(0x14);
 			gr_maybe_sync();
-			key = getch();
-			if (key >= 'a' && key <= 'z')
-				key = toupper(key);
+			key = toupper(getch());
 			if (key & 0x00ff)
 			{
-				if ((i < 13) && ((key == ' ') || ((key >= 'A' && key <= 'Z'))
-						|| (key >= '0' && key <= '9')))
+				if ((i < 13) && ((key == ' ') || isalnum(key)))
 				{				   // valid key
+					RectFill(210, 156, 307, 168, 0);
 					if (Cnt == 0)
 					{
 						Men[mum].Name[i++] = key;
@@ -1112,6 +1111,8 @@ ChangeStat(char mum, char Cur, char Cnt)	// Cur holds current setting
 						grSetColor(1);
 						PrintAt(215, 165, &Sov[mum].Name[0]);
 					}
+					DispChr(0x14);
+					av_sync();
 					key = 0;
 				}
 				if (i > 0 && key == 0x08)
@@ -1126,6 +1127,8 @@ ChangeStat(char mum, char Cur, char Cnt)	// Cur holds current setting
 						PrintAt(215, 165, &Men[mum].Name[0]);
 					else
 						PrintAt(215, 165, &Sov[mum].Name[0]);
+					DispChr(0x14);
+					av_sync();
 					key = 0;
 				}
 				if (key == K_ESCAPE)
@@ -1392,6 +1395,7 @@ void First(char now,char loc)
     else grSetColor(8);
 	PrintAt(52,55+(i-start)*8,&Men[i].Name[0]);
   };
+  av_need_update_xy(32,55,100,55+64);
   return;
 }
 
@@ -1406,6 +1410,8 @@ void Second(int nw,int lc)
     else grSetColor(8);
 	PrintAt(210,55+(i-start)*8,&Sov[i].Name[0]);
   };
+  av_need_update_xy(190,55,250,55+64);
   return;
 }
 
+/* vi: set noet ts=4 sw=4 tw=78: */
