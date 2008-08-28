@@ -149,7 +149,11 @@ s_open_helper(const char *base, const char *name, const char *mode, ...)
 		if (len2 > len)
 			cooked = xrealloc(cooked, (len = len2));
 
-		sprintf(cooked, "%s/%s/%s", base, p, name);
+		if (strlen(p))
+			sprintf(cooked, "%s/%s/%s", base, p, name);
+		else 
+			sprintf(cooked, "%s/%s", base, name);
+
 		fix_pathsep(cooked);
 
 		fh = try_fopen(cooked, mode);
@@ -201,34 +205,42 @@ try_find_file(const char *name, const char *mode, int type)
 	char *gd = options.dir_gamedata;
 	char *sd = options.dir_savegame;
 	char *where = "";
+	const char *newmode = mode;
 
 	DEBUG2("looking for file `%s'", name);
 
 	/** \note allows write access only to savegame files */
 	if (type != FT_SAVE)
 	{
-		if (strchr(mode, 'b'))
-			mode = "rb";
-		else
-			mode = "r";
+		if (strchr(mode, 'w')
+				|| strchr(mode, 'a')
+				|| strncmp(mode, "r+", 2) == 0)
+		{
+			char *newmode;
+			if (strchr(mode, 'b'))
+				newmode = "rb";
+			else
+				newmode = "r";
+			DEBUG3("access mode changed from `%s' to `%s'", mode, newmode);
+		}
 	}
 
 	switch (type)
 	{
 		case FT_DATA:
-			f = s_open_helper(gd, name, mode,
+			f = s_open_helper(gd, name, newmode,
 					"gamedata",
 					NULL);
 			where = "game data";
 			break;
 		case FT_SAVE:
-			f = s_open_helper(sd, name, mode,
-					".",
+			f = s_open_helper(sd, name, newmode,
+					"",
 					NULL);
 			where = "savegame";
 			break;
 		case FT_AUDIO:
-			f = s_open_helper(gd, name, mode,
+			f = s_open_helper(gd, name, newmode,
 					"audio/mission",
 					"audio/music",
 					"audio/news",
@@ -237,7 +249,7 @@ try_find_file(const char *name, const char *mode, int type)
 			where = "audio";
 			break;
 		case FT_VIDEO:
-			f = s_open_helper(gd, name, mode,
+			f = s_open_helper(gd, name, newmode,
 					"video/mission",
 					"video/news",
 					"video/training",
@@ -245,13 +257,13 @@ try_find_file(const char *name, const char *mode, int type)
 			where = "video";
 			break;
 		case FT_IMAGE:
-			f = s_open_helper(gd, name, mode,
+			f = s_open_helper(gd, name, newmode,
 					"images",
 					NULL);
 			where = "image";
 			break;
 		case FT_MIDI:
-			f = s_open_helper(gd, name, mode,
+			f = s_open_helper(gd, name, newmode,
 					"audio/midi",
 					"midi",
 					"audio/music",

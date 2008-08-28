@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "int_types.h"  /* auto-generated inttypes.h */
 
-/* Routines for read/write access to LITTLE ENDIAN data in game files */
+/** Routines for read/write access to LITTLE ENDIAN data in game files */
 extern size_t fread_uint8_t(uint8_t *dst, size_t nelem, FILE *file);
 extern size_t fread_uint16_t(uint16_t *dst, size_t nelem, FILE *file);
 extern size_t fread_uint32_t(uint32_t *dst, size_t nelem, FILE *file);
@@ -27,17 +27,13 @@ extern size_t fwrite_int32_t(const int32_t *src, size_t nelem, FILE *file);
 
 /** \defgroup datafiles Datafile descriptions
  * 
- * \addtogroup datafiles
- * \@{
+ * @{
  * 
  *  Document every game data file: name, structures, layout.
  *  Each structure that can exist in a file should define total
  *  size in bytes. Also declare functions for reading/writing
  *  from/to stdio streams, if necessary.
- */
-
-/** \addtogroup datafiles
- * \@{
+ *
  * \verbatim
  * File: SEQ.KEY, FSEQ.KEY
  * Desc: Names of movie & audio files, each name 8 bytes long.
@@ -47,10 +43,7 @@ extern size_t fwrite_int32_t(const int32_t *src, size_t nelem, FILE *file);
  *      u16 - number of subsequent filenames
  *      u8[8]* - filenames, each should be 0 terminated
  * \endverbatim
- */
-
-/** \addtogroup datafiles
- * \@{ 
+ *
  * \verbatim 
  * File: SEQ.DAT
  * Desc: Indexes to video and audio files for successful mission stages.
@@ -58,10 +51,7 @@ extern size_t fwrite_int32_t(const int32_t *src, size_t nelem, FILE *file);
  *       sequence of oGROUP structures,
  *       each containing ID sequence string and oLIST structures.
  * \endverbatim
- */
-
-/** \addtogroup datafiles
- * \@{
+ *
  * \verbatim
  * VAB.IMG is
  *  ** Player 0 image
@@ -74,10 +64,7 @@ extern size_t fwrite_int32_t(const int32_t *src, size_t nelem, FILE *file);
  *   image_data[]
  * 
  * \endverbatim
- */
-
-/** \addtogroup datafiles
- * \@{
+ *
  * \verbatim
  * File: FSEQ.DAT
  * Desc: Indexes to video and audio files for failed mission stages.
@@ -85,6 +72,14 @@ extern size_t fwrite_int32_t(const int32_t *src, size_t nelem, FILE *file);
  *       50 Table structures
  *       sequence of oFGROUP structures,
  *       each containing ID sequence string and oLIST structures.
+ * \endverbatim
+ *
+ * \verbatim
+ * File: REPLAY.DAT
+ * Desc: Contains indices to animation sequences of past player missions.
+ * Structure:
+ *       sequence of ReplayItem structures,
+ *       each containing offsets to animations.
  * \endverbatim
  */
 
@@ -129,17 +124,6 @@ typedef struct {
 #define sizeof_SimpleHdr (2+4)
 extern size_t fread_SimpleHdr(SimpleHdr *dst, size_t num, FILE *f);
 
-/** \addtogroup datafiles
- * \@{
- * \verbatim
- * File: REPLAY.DAT
- * Desc: Contains indices to animation sequences of past player missions.
- * Structure:
- *       sequence of ReplayItem structures,
- *       each containing offsets to animations.
- * \endverbatim
- */
-
 #if 0
 typedef struct ReplayItem {
    uint8_t Qty;             /* Number of Animated Sequences */
@@ -151,3 +135,5 @@ extern size_t fwrite_REPLAY(const REPLAY *src, size_t num, FILE *f);
 #endif
 
 #endif /* _GAMEDATA_H */
+
+/** @} */

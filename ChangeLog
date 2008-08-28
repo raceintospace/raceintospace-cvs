@@ -1,3 +1,17 @@
+2008-08-28	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V220
+
+	* future.c, mis_c.c: change logging from DEBUG to TRACE
+
+	* gametada.h: improve documentation layout
+
+	* fs.c: cleanup paths, warn when changing file access mode
+
+	* Doxygen.quick, Doxyfile.extended: cleanup
+
+	* README, AUTHORS: minor editing
+
 2008-08-27	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V219

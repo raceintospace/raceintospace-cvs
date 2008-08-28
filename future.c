@@ -99,7 +99,7 @@ void DrawFuture(char plr,int mis,char pad)
   }
 
   i=Data->Year;j=Data->Season;
-  DEBUG3("--- Setting i=Year (%d), j=Season (%d)", i, j);
+  TRACE3("--- Setting i=Year (%d), j=Season (%d)", i, j);
   if ((i==60 && j==0) || (i==62 && j==0) || (i==64 && j==0) ||
       (i==66 && j==0) || (i==69 && j==1) || (i==71 && j==1) ||
       (i==73 && j==1)) {
@@ -244,7 +244,7 @@ void DrawLocks(void)
  */
 void Toggle(int wh,int i) 
 {
- DEBUG3("->Toggle(wh %d, i %d)", wh, i);
+ TRACE3("->Toggle(wh %d, i %d)", wh, i);
  switch(wh)
    {
     case 1:if (i==1) gxVirtualDisplay(&vh,1,21,55,49,89,81,0);else
@@ -264,13 +264,13 @@ void Toggle(int wh,int i)
 
   default:break;
  }
- DEBUG1("<-Toggle()");
+ TRACE1("<-Toggle()");
  return;
 }
 
 void TogBox(int x,int y,int st)
  {
-  DEBUG4("->TogBox(x %d, y %d, st %d)", x, y, st);
+  TRACE4("->TogBox(x %d, y %d, st %d)", x, y, st);
   char sta[2][2]={{2,4},{4,2}};
   
   grSetColor(sta[st][0]);
@@ -279,13 +279,13 @@ void TogBox(int x,int y,int st)
   grMoveTo(x+0,y+33);grLineTo(23+x,y+33);grLineTo(23+x,y+23);
   grLineTo(x+35,y+23);grLineTo(x+35,y+0);
   
-  DEBUG1("<-TogBox()");
+  TRACE1("<-TogBox()");
   return;
 }
 
 void PianoKey(int X)
 {
- DEBUG2("->PianoKey(X %d)", X);
+ TRACE2("->PianoKey(X %d)", X);
  int t;
  if (F1==0) {
    if (V[X].A==1) {Toggle(1,1);status[1]=1;}
@@ -315,7 +315,7 @@ void PianoKey(int X)
   }
  
  DrawLocks();
- DEBUG1("<-PianoKey()");
+ TRACE1("<-PianoKey()");
  return;
 }
 
@@ -461,7 +461,7 @@ void
 Future(char plr)
 {
     /** \todo the whole Future()-function is 500 >lines and unreadable */
-    DEBUG1("->Future(plr)");
+    TRACE1("->Future(plr)");
 	int MisNum = 0, DuraType = 0, MaxDur = 6, i, ii;
 	int setting = -1, prev_setting = -1;
 	int Ok, NewType;
@@ -984,7 +984,7 @@ begfut_noredraw:
 
 		};
 	}							   // while
-  DEBUG1("<-Future()");
+  TRACE1("<-Future()");
 }
 
 /** draws the bubble on the screen,
@@ -1035,7 +1035,7 @@ void DurPri(int x)
 
 void MissionName(int val,int xx,int yy,int len)
 {
-  DEBUG5("->MissionName(val %d, xx %d, yy %d, len %d)", val, xx, yy, len);
+  TRACE5("->MissionName(val %d, xx %d, yy %d, len %d)", val, xx, yy, len);
   int i,j=0;
 
   GetMisType(val);
@@ -1046,7 +1046,7 @@ void MissionName(int val,int xx,int yy,int len)
     else DispChr(Mis.Name[i]);
     j++;if (Mis.Name[i]=='\0') break;
   };
-  DEBUG1("<-MissionName");
+  TRACE1("<-MissionName");
   return;
 }
 
@@ -1060,7 +1060,7 @@ void MissionName(int val,int xx,int yy,int len)
  */
 void Missions(char plr,int X,int Y,int val,char bub)
 {
-  DEBUG5("->Missions(plr, X %d, Y %d, val %d, bub %c)", X, Y, val, bub);
+  TRACE5("->Missions(plr, X %d, Y %d, val %d, bub %c)", X, Y, val, bub);
   
   if (bub==1 || bub==3) {
     PianoKey(val);
@@ -1265,7 +1265,7 @@ void Missions(char plr,int X,int Y,int val,char bub)
   }  // end switch
   gr_sync ();
   MissionCodes(plr,MisType,Pad);
-  DEBUG1("<-Missions()");
+  TRACE1("<-Missions()");
 }  // end function missions
 
 #ifdef DEAD_CODE
