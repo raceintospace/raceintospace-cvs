@@ -198,6 +198,12 @@ int Launch(char plr,char mis)
 
   // Exit missions early
   /** \todo The "early" missions should be defined in a file */
+  /* 1 = Orbital sattelite
+   * 7 = lunar flyby
+   * 8 = lunar probe landing
+   * 9 = venus flyby
+   * 11 = mercury flyby
+   */
   fEarly=(!Mis.Days && !(mcode==1 || mcode==7 || mcode==8 || mcode==9 || mcode==11));
 
   STEPnum=STEP;
@@ -207,7 +213,7 @@ int Launch(char plr,char mis)
   if (MANNED[0]>0 || MANNED[1]>0 || mcode==1 || mcode==7 || mcode==8)
     MisSkip(plr,Find_MaxGoal());
 
-  MisRush(Data->P[plr].Mission[mis].Rushing);
+  MisRush(plr, Data->P[plr].Mission[mis].Rushing);
   STEPnum=0;
 
   if (!AI[plr] && BIG==0) {

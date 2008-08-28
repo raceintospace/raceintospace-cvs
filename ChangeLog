@@ -1,8 +1,20 @@
-2008-08-28	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+2008-08-29	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V221
+
+	* mc.c, mc2.c, proto.h: change MisRush() prototype
+
+	* mc2.c: cleanup and document safety-related functions, add logging
+
+	* prest.c (PrestMap): cleanup
+
+	* mis_m.c: change logging from DEBUG to TRACE
+
+2008-08-29	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V220
 
-	* future.c, mis_c.c: change logging from DEBUG to TRACE
+	* future.c: change logging from DEBUG to TRACE
 
 	* gametada.h: improve documentation layout
 

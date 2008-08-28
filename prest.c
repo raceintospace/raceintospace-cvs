@@ -94,61 +94,79 @@ int Check_EVA(int limit)
   return 0;
 }
 
-int PrestMap(int val)
+/**
+ * Map prestige category list (mStr::PCat) to milestones.
+ */
+int
+PrestMap(int val)
 {
-   if (val==ORBSAT) return MILE_OSAT;
-   if (val==MANSPACE) return MILE_MAN;
-   if (val==EORBIT) return MILE_EORBIT;
-   if (val==LUNFLY) return MILE_LFLY;
-   if (val==PROBELAND) return MILE_LPL;
-   if (val==LPASS) return MILE_LPASS;
-   if (val==LORBIT) return MILE_LORBIT;
-   if (val==LLAND) return MILE_LLAND;
-   return -1;  // default
+	switch (val) {
+		case ORBSAT: 
+			return MILE_OSAT;
+		case MANSPACE:
+			return MILE_MAN;
+		case EORBIT:
+			return MILE_EORBIT;
+		case LUNFLY:
+			return MILE_LFLY;
+		case PROBELAND:
+			return MILE_LPL;
+		case LPASS:
+			return MILE_LPASS;
+		case LORBIT:
+			return MILE_LORBIT;
+		case LLAND:
+			return MILE_LLAND;
+		default:
+			return -1;
+	}
 }
 
-char PrestMin(char plr)      // Call only after a Mis Struct is filled
+/**
+ * Calculate mission penalty due to missed milestones and duration.
+ *
+ * \param plr current player
+ * \return penalty
+ *
+ * \note Call only when Mis is valid
+ */
+char
+PrestMin(char plr)
 {
-  int i,j,Neg=0;
-  Neg=0;
-  j=0;
-  if (Mis.Index==0) return 0;
-  for (i=0;i<5;i++)
-    j=maxx(j,PrestMap(Mis.PCat[i]));
+	int i, j, Neg = 0;
 
-  if (j>=MILE_OSAT) {
-    if (isMile(plr,MILE_OSAT)==0) Neg+=3;
-    if (j>=MILE_MAN) {
-      if (isMile(plr,MILE_MAN)==0) Neg+=3;
-      if (j>=MILE_EORBIT) {
-        if (isMile(plr,MILE_EORBIT)==0) Neg+=3;
-        if (j>=MILE_LFLY) {
-          if (isMile(plr,MILE_LFLY)==0) Neg+=3;
-          if (j>=MILE_LPL) {
-            if (isMile(plr,MILE_LPL)==0) Neg+=3;
-            if (j>=MILE_LPASS) {
-              if (isMile(plr,MILE_LPASS)==0) Neg+=3;
-              if (j>=MILE_LORBIT) {
-                if (isMile(plr,MILE_LORBIT)==0) Neg+=3;
-                if (j>=MILE_LLAND) {
-                  if (isMile(plr,MILE_LLAND)==0) Neg+=3;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+	Neg = 0;
+	j = 0;
+	if (Mis.Index == 0)
+		return 0;
+	for (i = 0; i < 5; i++)
+		j = maxx(j, PrestMap(Mis.PCat[i]));
 
-  Neg-=(2-((plr==0)?Data->Def.Lev1:Data->Def.Lev2));
-  Neg=maxx(Neg,0);
+	/* walk all milestones lower than maximum required for mission */
+	for (i = 0; i <= j; ++i)
+	{
+		/* if milestone not met, then add penalty */
+		if (Data->Mile[plr][i] == 0)
+			Neg += 3;
+	}
 
-  if( (Mis.Index!=2 && Mis.Index!=4 && Mis.Index!=6) && (Mis.Days-Data->P[plr].DurLevel) > 0 ) {
-    Neg+=5*abs(Mis.Days-Data->P[plr].DurLevel);
-  }
-  
-  return Neg;
+	Neg = Neg + (plr ? Data->Def.Lev2 : Data->Def.Lev1) - 2;
+	// Neg -= (2 - ((plr == 0) ? Data->Def.Lev1 : Data->Def.Lev2));
+	Neg = maxx(Neg, 0);
+
+	/* Index 2 = Manned suborbital
+	 * Index 4 = Manned orbital
+	 * Index 6 = Manned orbital eva
+	 */
+	if (Mis.Index != 2
+			&& Mis.Index != 4
+			&& Mis.Index != 6
+			&& (Mis.Days - Data->P[plr].DurLevel) > 0)
+	{
+		Neg += 5 * (Mis.Days - Data->P[plr].DurLevel);
+	}
+
+	return Neg;
 }
 
 
@@ -222,7 +240,10 @@ int PrestCheck(char plr)
 }
 
 
+#ifdef DEAD_CODE
 /** ???
+ *
+ * \deprecated
  * 
  * \note Requires MEV to be packed 
  * Only checks goal steps :: 
@@ -273,6 +294,7 @@ char Was_Goal(char total,char which)
     default: return -1;  // no goal step achieved
   }
 }
+#endif /* DEAD_CODE */
 
 char HeroCheck(int which)
 {
@@ -745,12 +767,18 @@ int AllotPrest(char plr,char mis)
 
 #define DNE(a,b) (Data->Prestige[b].Place==(a) || Data->Prestige[b].mPlace==(a))
 
-   if (DNE(plr,8)) Data->P[plr].DurLevel=6;
-   else if (DNE(plr,9)) Data->P[plr].DurLevel=5;
-   else if (DNE(plr,10)) Data->P[plr].DurLevel=4;
-   else if (DNE(plr,11)) Data->P[plr].DurLevel=3;
-   else if (DNE(plr,12)) Data->P[plr].DurLevel=2;
-   else if (DNE(plr,27)) Data->P[plr].DurLevel=1;
+	if (DNE(plr, DUR_F))
+		Data->P[plr].DurLevel = 6;
+	else if (DNE(plr, DUR_E))
+		Data->P[plr].DurLevel = 5;
+	else if (DNE(plr, DUR_D))
+		Data->P[plr].DurLevel = 4;
+	else if (DNE(plr, DUR_C))
+		Data->P[plr].DurLevel = 3;
+	else if (DNE(plr, DUR_B))
+		Data->P[plr].DurLevel = 2;
+	else if (DNE(plr, MANSPACE))
+		Data->P[plr].DurLevel = 1;
 
    // TOTAL ALL MISSION SUBSEQUENTS
    if (total==0) {
@@ -772,8 +800,6 @@ int AllotPrest(char plr,char mis)
 
    return total;
 }
-
-// EOF
 
 
 char PosGoal_Check(char *PVal)
@@ -874,6 +900,4 @@ int U_AllotPrest(char plr,char mis)
   return total+negs;
 }
 
-
-// EOF
-
+/* vim: set noet ts=4 sw=4 tw=77: */

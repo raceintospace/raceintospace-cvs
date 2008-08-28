@@ -462,7 +462,7 @@ void MissionSetup(char plr,char mis);
 void MissionSetDown(char plr,char mis);
 void MisDur(char plr,char dur);
 void MisSkip(char plr,char ms);
-void MisRush(char ms);
+void MisRush(char plr, char rush_level);
 
 // MIS_C.C
 void RLEE (void *dest, void *src, unsigned int src_size);

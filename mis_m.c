@@ -52,8 +52,6 @@ extern REPLAY Rep;
 
 void Tick(char);
 
-#define NowSaf MH[Mev[STEP].pad][Mev[STEP].Class]->MisSaf
-
 void GetFailStat(struct XFails *Now,char *FName,int rnum)
 {
   DEBUG2("->GetFailStat(struct XFails *Now,char *FName,int rnum %d)", rnum);
@@ -530,7 +528,7 @@ void MisCheck(char plr,char mpad)
 int MCGraph(char plr,int lc,int safety,int val,char prob)
 {
     int i;
-    DEBUG5("->MCGraph(plr, lc %d, safety %d, val %d, prob %c)", lc, safety, val, prob);
+    TRACE5("->MCGraph(plr, lc %d, safety %d, val %d, prob %c)", lc, safety, val, prob);
     RectFill(lc-2,195,lc,195-safety*22/100,11);
     RectFill(lc-2,195,lc,195-(safety-Mev[STEP].asf)*22/100,6);
     for (i=195;i>195-val*22/100;i--) {
@@ -592,7 +590,7 @@ int MCGraph(char plr,int lc,int safety,int val,char prob)
         }
       }
     }
-    DEBUG1("<-MCGraph()");
+    TRACE1("<-MCGraph()");
     return lc;
 }
 

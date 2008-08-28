@@ -26,6 +26,9 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 #include "macros.h"
+#include "logging.h"
+
+LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)
 
   extern Equipment *MH[2][8];   // Pointer to the main
   //struct MisHard *MH; //[2][7]
@@ -594,8 +597,12 @@ void MissionSetDown(char plr,char mis)
   return;
 }
 
-
-/* Add Duration Negs to All Mission Steps - struct Mis needs to be filled */
+/**
+ * Apply duration penalty to mission steps in manned missions.
+ * 
+ * \param plr current player
+ * \param dur mission duration in days
+ */
 void
 MisDur(char plr, char dur)
 {
@@ -611,65 +618,119 @@ MisDur(char plr, char dur)
 	if ((MH[0][0] && MH[0][0]->ID[0] == 'C')
 		|| (MH[1][0] && MH[1][0]->ID[0] == 'C'))
 		manned = 1;
-	if (!manned)
-		return;					   /* Don't give negs to unmanned */
-	if (Mis.Dur == 0)
+
+	/* Don't give negs to unmanned */
+	/* Don't give negs to duration missions */
+	/* ??? will handle individual durations later */
+	if (!manned || !Mis.Dur)
+		return;
+
+	if (!AI[plr])
+		INFO2("applying duration penalty %d to mission safety", -diff);
+
+	for (i = 0; i < (int) ARRAY_LENGTH(MH); i++)
+		for (j = 0; j < (int) ARRAY_LENGTH(MH[0]); j++)
+			if (MH[i][j] != NULL)
+				MH[i][j]->MisSaf -= diff;
+}
+
+// #define Coml(a,b) (!(Data->Prestige[b].Place==(a) || Data->Prestige[b].mPlace==(a)))
+
+
+/**
+ * Compute and apply safety penalties to mission steps.
+ *
+ * \param plr current player
+ */
+void
+MisSkip(char plr, char ms)
+{
+	int i, j, diff;
+
+	diff = PrestMin(plr);
+#if 0
+	nv = ms;
+
+	if (nv == 22 && Coml(plr, nv))
 	{
+		diff = 3;
+		nv = 20;
+	}
+	else
+		diff = 0;
+	if (nv == 20 && Coml(plr, nv))
+	{
+		diff += 3;
+		nv = 19;
+	}
+	if (nv == 19 && Coml(plr, nv))
+	{
+		diff += 3;
+		nv = 7;
+	}
+	if (nv == 7 && Coml(plr, nv))
+	{
+		diff += 3;
+		nv = 1;
+	}
+	if (nv == 1 && Coml(plr, nv))
+	{
+		diff += 3;
+		nv = 18;
+	}
+	if (nv == 18 && Coml(plr, nv))
+	{
+		diff += 3;
+		nv = 27;
+	}
+	if (nv == 27 && Coml(plr, nv))
+	{
+		diff += 3;
+		nv = 0;
+	}
+	if (nv == 0 && Coml(plr, nv))
+	{
+		diff += 3;
+	}
+	if (diff > 3 && AI[plr])
+		diff -= 3;
+	else if (diff > 3)
+		diff -= (2 - ((plr == 0) ? Data->Def.Lev1 : Data->Def.Lev2));	// fixed addition problem
+#endif
+
+	diff = maxx(diff, 0);
+
+	if (!AI[plr])
+		INFO2("applying general penalty %d to mission safety", -diff);
+
+	if (diff != 0)
 		for (i = 0; i < (int) ARRAY_LENGTH(MH); i++)
 			for (j = 0; j < (int) ARRAY_LENGTH(MH[0]); j++)
 				if (MH[i][j] != NULL)
-					MH[i][j]->MisSaf -= (char) diff;
-	}
-	/* will handle individual durations later */
-	return;
+					MH[i][j]->MisSaf -= diff;
 }
 
-
-#define Coml(a,b) (!(Data->Prestige[b].Place==(a) || Data->Prestige[b].mPlace==(a)))
-
-// Add SkipNegs to All Mission Steps
-void MisSkip(char plr,char ms)
+/**
+ * Apply rushing penalty to individual mission steps.
+ *
+ * \param plr current player
+ * \param rush_level
+ */
+void
+MisRush(char plr, char rush_level)
 {
-  int i,j,diff;
+	int i, j, diff;
 
-  diff=PrestMin(plr);
-#if 0
-  nv=ms;
+	diff = 3 * rush_level;
 
-  if (nv==22 && Coml(plr,nv)) {diff=3;nv=20;}
-  else diff=0;
-  if (nv==20 && Coml(plr,nv)) {diff+=3;nv=19;}
-  if (nv==19 && Coml(plr,nv)) {diff+=3;nv=7;}
-  if (nv==7  && Coml(plr,nv)) {diff+=3;nv=1;}
-  if (nv==1  && Coml(plr,nv)) {diff+=3;nv=18;}
-  if (nv==18 && Coml(plr,nv)) {diff+=3;nv=27;}
-  if (nv==27 && Coml(plr,nv)) {diff+=3;nv=0;}
-  if (nv==0  && Coml(plr,nv)) {diff+=3;}
-  if (diff>3 && AI[plr]) diff-=3;
-  else if (diff>3) diff-=(2-((plr==0)?Data->Def.Lev1:Data->Def.Lev2));  // fixed addition problem
-#endif 
+	if (!AI[plr])
+		INFO2("applying rushing penalty %d to mission safety", -diff);
 
-  diff=maxx(diff,0);
-
-  if (diff!=0)
-     for (i=0;i<2;i++)
-        for (j=0;j<8;j++)
-           if (MH[i][j]!=NULL) MH[i][j]->MisSaf-=(char) diff;
-  return;
-}
-
-void MisRush(char ms)
-{
-  int i,j,diff;
-
-  if (ms==0) return;
-  else diff=3*ms;
-
-  if (diff!=0)
-     for (i=0;i<2;i++)
-        for (j=0;j<8;j++)
-           if (MH[i][j]!=NULL) MH[i][j]->MisSaf-=(char) diff;
-  return;
+	if (diff != 0)
+		for (i = 0; i < (int) ARRAY_LENGTH(MH); i++)
+			for (j = 0; j < (int) ARRAY_LENGTH(MH[0]); j++)
+				if (MH[i][j] != NULL)
+					MH[i][j]->MisSaf -= diff;
 }
 
 /* vim: set noet ts=4 sw=4 tw=77: */
