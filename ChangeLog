@@ -1,5 +1,11 @@
 2008-09-26	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
+	* V223
+
+	* Bump version number to 0.4.7
+
+2008-09-26	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
 	* V222
 
 	* endianness.c, endianness.h: added _SwapEquipment(), fix one mistake
