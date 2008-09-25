@@ -80,51 +80,6 @@ void _SwapGameDat(void)
 				_Swap16bit(Data->P[j].BudgetHistoryF[i]);
 		}
 
-		for (i = 0; i < 3; i++)
-		{
-			Data->P[j].Probe[i].InitCost =
-				_Swap16bit(Data->P[j].Probe[i].InitCost);
-			Data->P[j].Probe[i].UnitWeight =
-				_Swap16bit(Data->P[j].Probe[i].UnitWeight);
-			Data->P[j].Probe[i].MaxPay =
-				_Swap16bit(Data->P[j].Probe[i].MaxPay);
-			Data->P[j].Probe[i].Safety =
-				_Swap16bit(Data->P[j].Probe[i].Safety);
-		};
-		for (i = 0; i < 5; i++)
-		{
-			Data->P[j].Rocket[i].InitCost =
-				_Swap16bit(Data->P[j].Rocket[i].InitCost);
-			Data->P[j].Rocket[i].UnitWeight =
-				_Swap16bit(Data->P[j].Rocket[i].UnitWeight);
-			Data->P[j].Rocket[i].MaxPay =
-				_Swap16bit(Data->P[j].Rocket[i].MaxPay);
-			Data->P[j].Rocket[i].Safety =
-				_Swap16bit(Data->P[j].Rocket[i].Safety);
-		};
-		for (i = 0; i < 7; i++)
-		{
-			Data->P[j].Manned[i].InitCost =
-				_Swap16bit(Data->P[j].Manned[i].InitCost);
-			Data->P[j].Manned[i].UnitWeight =
-				_Swap16bit(Data->P[j].Manned[i].UnitWeight);
-			Data->P[j].Manned[i].MaxPay =
-				_Swap16bit(Data->P[j].Manned[i].MaxPay);
-			Data->P[j].Manned[i].Safety =
-				_Swap16bit(Data->P[j].Manned[i].Safety);
-		};
-		for (i = 0; i < 7; i++)
-		{
-			Data->P[j].Misc[i].InitCost =
-				_Swap16bit(Data->P[j].Misc[i].InitCost);
-			Data->P[j].Misc[i].UnitWeight =
-				_Swap16bit(Data->P[j].Misc[i].UnitWeight);
-			Data->P[j].Misc[i].MaxPay =
-				_Swap16bit(Data->P[j].Misc[i].MaxPay);
-			Data->P[j].Misc[i].Safety =
-				_Swap16bit(Data->P[j].Misc[i].Safety);
-		};
-
 		for (i = 0; i < 65; i++)
 		{
 			Data->P[j].Pool[i].Prestige =
@@ -138,7 +93,66 @@ void _SwapGameDat(void)
 				_Swap16bit(Data->P[j].PastIntel[i].num);
 
 	}
+
+	_SwapEquipment();
 	// End of GameDatSwap
+}
+
+void _SwapEquipment(void)
+{
+	int plr = 0;
+	int i = 0;
+
+	for (plr = 0; plr < 2; ++plr)
+	{
+		for (i = 0; i < 3; i++)
+		{
+			Data->P[plr].Probe[i].InitCost =
+				_Swap16bit(Data->P[plr].Probe[i].InitCost);
+			Data->P[plr].Probe[i].UnitWeight =
+				_Swap16bit(Data->P[plr].Probe[i].UnitWeight);
+			Data->P[plr].Probe[i].MaxPay =
+				_Swap16bit(Data->P[plr].Probe[i].MaxPay);
+			Data->P[plr].Probe[i].Safety =
+				_Swap16bit(Data->P[plr].Probe[i].Safety);
+		}
+
+		for (i = 0; i < 5; i++)
+		{
+			Data->P[plr].Rocket[i].InitCost =
+				_Swap16bit(Data->P[plr].Rocket[i].InitCost);
+			Data->P[plr].Rocket[i].UnitWeight =
+				_Swap16bit(Data->P[plr].Rocket[i].UnitWeight);
+			Data->P[plr].Rocket[i].MaxPay =
+				_Swap16bit(Data->P[plr].Rocket[i].MaxPay);
+			Data->P[plr].Rocket[i].Safety =
+				_Swap16bit(Data->P[plr].Rocket[i].Safety);
+		}
+
+		for (i = 0; i < 7; i++)
+		{
+			Data->P[plr].Manned[i].InitCost =
+				_Swap16bit(Data->P[plr].Manned[i].InitCost);
+			Data->P[plr].Manned[i].UnitWeight =
+				_Swap16bit(Data->P[plr].Manned[i].UnitWeight);
+			Data->P[plr].Manned[i].MaxPay =
+				_Swap16bit(Data->P[plr].Manned[i].MaxPay);
+			Data->P[plr].Manned[i].Safety =
+				_Swap16bit(Data->P[plr].Manned[i].Safety);
+		}
+
+		for (i = 0; i < 7; i++)
+		{
+			Data->P[plr].Misc[i].InitCost =
+				_Swap16bit(Data->P[plr].Misc[i].InitCost);
+			Data->P[plr].Misc[i].UnitWeight =
+				_Swap16bit(Data->P[plr].Misc[i].UnitWeight);
+			Data->P[plr].Misc[i].MaxPay =
+				_Swap16bit(Data->P[plr].Misc[i].MaxPay);
+			Data->P[plr].Misc[i].Safety =
+				_Swap16bit(Data->P[plr].Misc[i].Safety);
+		}
+	}
 }
 
 void _SwapPatchHdr(PatchHdr* hdr)
