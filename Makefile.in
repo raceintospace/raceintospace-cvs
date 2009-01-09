@@ -33,8 +33,7 @@ vpath %.h ../
 ACLOCAL_FLAGS = -I m4
 
 EXTRA_WARNINGS =  -Wextra -Wno-unused-parameter \
-	-Wno-char-subscripts -Wno-deprecated-declarations \
-	-Werror
+	-Wno-char-subscripts -Wno-deprecated-declarations
 
 PROGS = $(addsuffix @EXEEXT@, \
 	imgsplit vtest decode getport getvab mtest sdltest vtest2)

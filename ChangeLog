@@ -1,3 +1,9 @@
+2009-01-09  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V224
+
+	* Makefile.in: remove -Werror from EXTRA_WARNINGS
+
 2008-09-26	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V223
