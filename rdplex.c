@@ -32,6 +32,52 @@ int call,wh;
 GXHEADER but,mans;
 extern char HARD1,UNIT1,BUTLOAD;
 
+/* We need to mask number of rolls into R&D history for current turn
+ * Max number rolled on 5 dice with mods is 5*7 = 35
+ * To keep binary compatibility we use 8 bits for value
+ * 35 + 5*40 == 235 < 255, so fits within single byte and is unambiguous.
+ */
+enum {
+	NUM_ROLLS_MULT = 40,
+};
+
+/**
+ * Extract number of rolls from encoded value.
+ * @param encoded
+ * @return number of rolls
+ */
+static inline
+uint8_t
+decodeNumRolls(uint8_t encoded)
+{
+	return encoded / NUM_ROLLS_MULT;
+}
+
+/**
+ * Extract sum of dice rolls from encoded value.
+ * @param encoded
+ * @return sum of dice rolls
+ */
+static inline
+uint8_t
+decodeRollValue(uint8_t encoded)
+{
+	return encoded % NUM_ROLLS_MULT;
+}
+
+/**
+ * Encode number of dice and total rolled value.
+ * @param nRolls nubmer of dice
+ * @param value sum of rolled dice
+ * @return encoded value
+ */
+static inline
+uint8_t
+encodeRolls(uint8_t nRolls, uint8_t value)
+{
+	return nRolls * NUM_ROLLS_MULT + value;
+}
+
 void SRPrintAt(int x, int y, char *text,char fgd,char bck)
 {
    grSetColor(bck);PrintAt(x+1,y+1,text);
@@ -177,28 +223,37 @@ void BButs(char old,char nw)
   return;
 }
 
-void RDButTxt(int v1,int val,char player_index)
+void
+RDButTxt(int cost, int encodedRolls, char playerIndex)
 {
-  RectFill(166,185,314,193,3);
-  grSetColor(1);
-  if (val==0) {
-    PrintAt(169,191,"RESEARCH PROGRAM FOR ");
-    grSetColor(9);DispNum(0,0,v1);
-    grSetColor(1);PrintAt(0,0," MB");
-  } else {
-    grSetColor(11);PrintAt(195,191,"R&D ");
-    DispNum(0,0,val);
-    PrintAt(0,0,"% IMPROVEMENT");
-    if (Data->P[player_index].RDMods>0) PrintAt(0,0,"+");
-  }
-  
-  return;
+	RectFill(166, 185, 314, 193, 3);
+	grSetColor(1);
+
+	int diceRoll = decodeRollValue(encodedRolls);
+
+	if (diceRoll == 0)
+	{
+		PrintAt(169, 191, "RESEARCH PROGRAM FOR ");
+		grSetColor(9);
+		DispNum(0, 0, cost);
+		grSetColor(1);
+		PrintAt(0, 0, " MB");
+	}
+	else
+	{
+		grSetColor(11);
+		PrintAt(195, 191, "R&D ");
+		DispNum(0, 0, diceRoll);
+		PrintAt(0, 0, "% IMPROVEMENT");
+		if (Data->P[playerIndex].RDMods > 0)
+			PrintAt(0, 0, "+");
+	}
 }
 
 
 char RD(char player_index)
 {
-  short hardware=1,roll=0,unit=1,buy[4][10],i,j,b;
+  short hardware=1,roll=0,unit=1,buy[4][7],i,j,b;
 
   b = 0; /* XXX check uninitialized */
 
@@ -212,6 +267,7 @@ char RD(char player_index)
   RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
   if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
   else {InBox(165,184,315,194);};
+  ManSel(decodeNumRolls(buy[hardware-1][unit-1]));
   strcpy(IDT,"i009");strcpy(IKEY,"k009");
   FadeIn(2,pal,10,0,0);
   music_start(M_HARDWARE);
@@ -230,7 +286,7 @@ char RD(char player_index)
 	      hardware=1;unit=1;
 	      if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	       else {InBox(165,184,315,194);};
-	      ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,player_index);
+	      ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	      b=Data->P[player_index].Probe[unit-1].RDCost;
 	      RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
 	     }
@@ -242,7 +298,7 @@ char RD(char player_index)
 	     hardware=2;unit=1;
 	     if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	      else {InBox(165,184,315,194);};
-	     ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,player_index);
+	     ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	     b=Data->P[player_index].Rocket[unit-1].RDCost;
 	     RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
 	    }
@@ -254,7 +310,7 @@ char RD(char player_index)
 	     hardware=3;unit=1;
 	     if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	      else {InBox(165,184,315,194);};
-	     ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,player_index);
+	     ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	     b=Data->P[player_index].Manned[unit-1].RDCost;
 	     RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
 	    }
@@ -266,7 +322,7 @@ char RD(char player_index)
 	      hardware=4;unit=1;
 	      if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	        else {InBox(165,184,315,194);};
-	      ManSel(buy[hardware-1][unit-1]);ShowUnit(hardware,unit,player_index);
+	      ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	      b=Data->P[player_index].Misc[unit-1].RDCost;
 	      RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
 	     }
@@ -303,7 +359,7 @@ char RD(char player_index)
          default:break;
 	     };
 	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
-	    ManSel(buy[hardware-1][unit-1]);
+	    ManSel(decodeNumRolls(buy[hardware-1][unit-1]));
 	    if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	      else {InBox(165,184,315,194);};
 	    ShowUnit(hardware,unit,player_index);
@@ -324,7 +380,7 @@ char RD(char player_index)
          default:break;
 	     };
 	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
-	    ManSel(buy[hardware-1][unit-1]);
+	    ManSel (decodeNumRolls(buy[hardware-1][unit-1]));
 	    if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	      else {InBox(165,184,315,194);};
 	    ShowUnit(hardware,unit,player_index);
@@ -391,7 +447,7 @@ char RD(char player_index)
 	    if (call==0) return 0;
 	    hardware=HARD1;unit=UNIT1;
 	    call=0; 
-	    for(i=0;i<4;i++) for(j=0;j<10;j++) buy[i][j]=Data->P[player_index].Buy[i][j];
+	    for(i=0;i<4;i++) for(j=0;j<7;j++) buy[i][j]=Data->P[player_index].Buy[i][j];
 	    DrawRD(player_index);
       if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
 	    BButs(1,hardware);
@@ -409,14 +465,19 @@ char RD(char player_index)
   };
 }
 
-void ManSel(int mm)
+/**
+ * Draw proper outlines on active/inactive research team buttons.
+ *
+ * @param activeButtonIndex
+ */
+void ManSel(int activeButtonIndex)
 {
     int dx = 26;
     int i;
 
     for (i = 0; i < 6; ++i)
     {
-        if (i == mm)
+        if (i == activeButtonIndex)
             InBox(165+i*dx, 157, 185+i*dx, 175);
         else
             OutBox(165+i*dx, 157, 185+i*dx, 175);
@@ -456,33 +517,42 @@ char MaxChk(char hardware_index,char unit_index,char player_index)
   return(0);
 }
 
-char RDUnit(char rhard,char runit,char r,char player_index)
+/**
+ * Roll dice and improve R&D value of a given hardware.
+ *
+ * HACK: need to store number of dices rolled in return value
+ *
+ * @param[in] hardwareTypeIndex
+ * @param[in] hardwareIndex
+ * @param[in] nRolls
+ * @param[in] playerIndex
+ * @return encoded number of dice and sum of rolls
+ */
+uint8_t
+RDUnit(char hardwareTypeIndex, char hardwareIndex, char nRolls, char playerIndex)
 {
-  int dice,i;
-  dice=0;
-  for (i=0;i<r;i++) dice+=rand()%(6+Data->P[player_index].RDMods)+1;
-  if (rhard==1) {
-    Data->P[player_index].Probe[runit-1].Safety+=dice;
-    if (Data->P[player_index].Probe[runit-1].Safety > Data->P[player_index].Probe[runit-1].MaxRD)
-	Data->P[player_index].Probe[runit-1].Safety=Data->P[player_index].Probe[runit-1].MaxRD;
-  }; // End if
-  if (rhard==2) {
-    Data->P[player_index].Rocket[runit-1].Safety+=dice;
-    if (Data->P[player_index].Rocket[runit-1].Safety > Data->P[player_index].Rocket[runit-1].MaxRD)
-	Data->P[player_index].Rocket[runit-1].Safety=Data->P[player_index].Rocket[runit-1].MaxRD;
-  }; // End if
-  if (rhard==3) {
-    Data->P[player_index].Manned[runit-1].Safety+=dice;
-    if (Data->P[player_index].Manned[runit-1].Safety > Data->P[player_index].Manned[runit-1].MaxRD)
-	Data->P[player_index].Manned[runit-1].Safety=Data->P[player_index].Manned[runit-1].MaxRD;
-  }; // End if
-  if (rhard==4) {
-    Data->P[player_index].Misc[runit-1].Safety+=dice;
-    if (Data->P[player_index].Misc[runit-1].Safety > Data->P[player_index].Misc[runit-1].MaxRD)
-	Data->P[player_index].Misc[runit-1].Safety=Data->P[player_index].Misc[runit-1].MaxRD;
-  }; // End if
+	int diceRoll = 0;
+	int i;
+	struct BuzzData* p = &Data->P[playerIndex];
+	Equipment* eqArr[4] = {p->Probe, p->Rocket, p->Manned, p->Misc};
+	Equipment* eq;
 
-  return dice;
+	assert (hardwareTypeIndex >= 1);
+	assert (hardwareTypeIndex <= 4);
+	assert (hardwareIndex >= 1);
+	assert (hardwareIndex <= 8);
+   
+	eq = &eqArr[hardwareTypeIndex - 1][hardwareIndex - 1];
+
+	diceRoll = 0;
+	for (i = 0; i < nRolls; i++)
+		diceRoll += rand() % (6 + p->RDMods) + 1;
+
+	eq->Safety += diceRoll;
+	if (eq->Safety > eq->MaxRD)
+		eq->Safety = eq->MaxRD;
+
+	return encodeRolls(nRolls, diceRoll);
 }
 
 void ShowUnit(char hw,char un,char player_index)

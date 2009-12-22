@@ -1,3 +1,17 @@
+2009-12-23  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V225
+
+	* rdplex.c (RD): fix for #1816887: researcher buttons staying depressed
+
+	* rdplex.c, proto.h: Reformat & document RDUnit and ManSel
+
+	* data.h: encode number of researchers (rolls) in Buy array
+	
+	* rdplex.c: add inline functions for encoding/decoding rolls
+
+	* news_suq.c (REvent): reformat code for "launch blocked" event
+
 2009-01-09  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V224

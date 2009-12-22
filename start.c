@@ -34,6 +34,8 @@ char Nums[30][7]={"I","II","III","IV","V","VI","VII","VIII","IX","X",
    "XX","XXI","XXII","XXIII","XXIV","XXV","XXVI","XXVII",
    "XXVIII","XXIX","XXX"};
 
+/** \todo This function fills Data->Events, but how it's a mystery... */
+ 
 void SetEvents(void)
 {
   int i,j,k,rans,tag,mx=2;

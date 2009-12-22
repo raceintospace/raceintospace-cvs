@@ -259,28 +259,23 @@ char REvent(char plr)
 	      break;
 
      case 10: /* Launch window for Launch #x is blocked */
-	      evflag=0;
-	      if (Data->P[plr].Mission[0].MissionCode > 0) evflag+=1;
-	      if (Data->P[plr].Mission[1].MissionCode > 0) evflag+=2;
-	      if (Data->P[plr].Mission[2].MissionCode > 0) evflag+=3;
-	      if (evflag==0) return 1;
-	      switch (evflag)
-	      {
-		    case 1: evflag=0;break;
-	       case 2: evflag=1;break;
-		    case 3: evflag=random(2);break;
-	     	 case 4: evflag=2;break;
+          { 
+              int choice[3] = {0,0,0};
 
-        
-        
-        case 5: evflag=random(2);if (evflag==1) evflag=2;break;
-		    case 6: evflag=random(2);break;
-		    case 7: evflag=random(3);break;
-         };
-         xMODE |= xMODE_CLOUDS;
-         ClrMiss(plr,evflag+3);
-	      break;
-
+              evflag=0;
+              if (Data->P[plr].Mission[0].MissionCode > 0)
+                  choice[evflag++] = 1;
+              if (Data->P[plr].Mission[1].MissionCode > 0)
+                  choice[evflag++] = 2;
+              if (Data->P[plr].Mission[2].MissionCode > 0)
+                  choice[evflag++] = 3;
+              if (evflag==0)
+                  return 1;
+              evflag = choice[random(evflag)] - 1;
+              xMODE |= xMODE_CLOUDS;
+              ClrMiss(plr,evflag+3);
+          }
+          break;
      case 35: // may launch only one mission this year ??? Season?!?
          evflag=0;
          if (Data->P[plr].Mission[0].Joint==1 ||

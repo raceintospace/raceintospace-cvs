@@ -345,7 +345,7 @@ struct BuzzData {                   // master data list for Buzz Aldrin's
 					 // 1 = Cat Failure
 					 // 2 = Program Death
 					 // 3 = Program First
-	char Buy[4][7];                  // Record of R&D for Turn
+	uint8_t Buy[4][7];	// Record of R&D for Turn - encoded dices & rolls
   char eCount;
 	struct Intelligence {
 	  char code;
