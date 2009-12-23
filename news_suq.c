@@ -540,12 +540,14 @@ char REvent(char plr)
 
      case 57:
           for (i=0;i<3;i++) {
-	         if (i==0 && plr==0) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"REEVES");
-	         else if (i==1 && plr==0) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"CHAMBERLAIN");
+	         if (i==0 && plr==0) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"MANKE");
+	         else if (i==1 && plr==0) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"POWELL");
 	         else if (i==2 && plr==0) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"YEAGER");
-	         else if (i==0 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"STIPPOV");
-	         else if (i==1 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"SCHLICKBERND");
-	         else if (i==2 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"FARGOV");
+	         else if (i==0 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"ILYUSHIN");
+	         else if (i==1 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"DOLGOV");
+	         else if (i==2 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"SHIBORIN");
+		 /* The original bonus astronauts & cosmonauts were:
+		    REEVES, CHAMBERLAIN, YEAGER & STIPPOV, SCHLICKBERND, FARGOV -Leon */
 
             Data->P[plr].Pool[Data->P[plr].AstroCount].Status=4;
             Data->P[plr].Pool[Data->P[plr].AstroCount].Face=random(10)+1;
@@ -570,7 +572,7 @@ char REvent(char plr)
            if (Data->P[plr].LaunchFacility[i]==1 && Data->P[plr].Mission[i].MissionCode==0) break;
           }
          if (j==20) return 1;
-	      /* get which of three facilitys damaged */
+	      /* get which of three facilities damaged */
 	      Data->P[plr].LaunchFacility[i]=10;
 	      break;
 
