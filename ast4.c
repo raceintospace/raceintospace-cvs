@@ -42,6 +42,8 @@ int ALSpec(int att)
 }
 #endif
 
+char program;
+
 void AstLevel(char plr,char prog,char crew,char ast)
 {
    GXHEADER local;
@@ -223,7 +225,7 @@ void DrawProgs(char plr,char prog)
   if (prog==2) PrintAt(152,43,"TWO");
   if (prog==3 || prog==4) PrintAt(152,43,"THREE");
   if (prog==5) PrintAt(152,43,"FOUR");
-  PrintAt(0,0," PERSON CAPACITY");
+  PrintAt(0,0,"-PERSON CAPACITY");
   grSetColor(7);
   PrintAt(152,51,"SAFETY FACTOR: ");
   grSetColor(11);
@@ -1009,6 +1011,8 @@ void ClearIt(void)
 void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
 {
   
+  program=prog;  /* Sets capsule/program for "Draws Astronaut attributes" section -Leon */
+
   RectFill(13,86,231,122,3);  /* Clear Astro Area */
   grSetColor(1);
   if (M1>0)
@@ -1044,11 +1048,19 @@ void AstStats(char plr,char man,char num)
   int y;
   grSetColor(1);
   y=91+man*9;
-  PrintAt(113,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);
-  PrintAt(137,y,"LM:");DispNum(0,0,Data->P[plr].Pool[num].LM);
-  PrintAt(161,y,"EV:");DispNum(0,0,Data->P[plr].Pool[num].EVA);
-  PrintAt(186,y,"DO:");DispNum(0,0,Data->P[plr].Pool[num].Docking);
-  PrintAt(211,y,"EN:");DispNum(0,0,Data->P[plr].Pool[num].Endurance);
+  if (man==0) {grSetColor(11);}
+   PrintAt(113,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);
+  grSetColor(1);
+  if (man==1 && program>1) {grSetColor(11);}
+   PrintAt(137,y,"LM:");DispNum(0,0,Data->P[plr].Pool[num].LM);
+  grSetColor(1);
+  if (program==1 || ((program==2 || program==3 || program==4) && man==1) || (program==5 && man>1)) {grSetColor(11);}
+   PrintAt(161,y,"EV:");DispNum(0,0,Data->P[plr].Pool[num].EVA);
+  grSetColor(1);
+  if ((program==2 && man==0) || ((program==3 || program==4) && man==2)) {grSetColor(11);}
+   PrintAt(186,y,"DO:");DispNum(0,0,Data->P[plr].Pool[num].Docking);
+  grSetColor(1);
+   PrintAt(211,y,"EN:");DispNum(0,0,Data->P[plr].Pool[num].Endurance);
   return;
 }
 
