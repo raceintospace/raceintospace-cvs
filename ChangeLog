@@ -1,3 +1,13 @@
+2010-02-09/10 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V226
+
+	* ast4.c: in the screen where a program's crews are displayed, the skills 
+	needed by each crew member are now highlighted: the command pilot's CA 
+	skill is now yellow instead of white, etc.
+
+	* ast4.c: corrected typo "COMPATABILITY"
+
 2009-12-23  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V225

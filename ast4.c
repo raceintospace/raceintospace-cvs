@@ -42,7 +42,7 @@ int ALSpec(int att)
 }
 #endif
 
-char program;
+static char program;  /* Variable to store prog data for "Draws Astronaut attributes" section: 1=Mercury/Vostok...5=Jupiter/Kvartet */
 
 void AstLevel(char plr,char prog,char crew,char ast)
 {
@@ -1011,7 +1011,9 @@ void ClearIt(void)
 void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
 {
   
-  program=prog;  /* Sets capsule/program for "Draws Astronaut attributes" section -Leon */
+  program=prog;  /* Sets capsule/shuttle program for "Draws Astronaut attributes" section -Leon */
+                 /* 1=Mercury/Vostok, 2=Gemini/Voskhod, 3=Apollo/Soyuz, 4=XMS-2/Lapot, 5=Jupiter/Kvartet */
+				 /* This will be used to highlight the skills for each crew member's role */
 
   RectFill(13,86,231,122,3);  /* Clear Astro Area */
   grSetColor(1);
@@ -1048,18 +1050,18 @@ void AstStats(char plr,char man,char num)
   int y;
   grSetColor(1);
   y=91+man*9;
-  if (man==0) {grSetColor(11);}
+  if (man==0) {grSetColor(11);}  /* Highlight CA for command pilot */
    PrintAt(113,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);
   grSetColor(1);
-  if (man==1 && program>1) {grSetColor(11);}
+  if (man==1 && program>1) {grSetColor(11);}  /* Highlight LM for LM pilot */
    PrintAt(137,y,"LM:");DispNum(0,0,Data->P[plr].Pool[num].LM);
   grSetColor(1);
-  if (program==1 || ((program==2 || program==3 || program==4) && man==1) || (program==5 && man>1)) {grSetColor(11);}
+  if (program==1 || ((program==2 || program==3 || program==4) && man==1) || (program==5 && man>1)) {grSetColor(11);}  /* Highlight EV for EVA specialist */
    PrintAt(161,y,"EV:");DispNum(0,0,Data->P[plr].Pool[num].EVA);
   grSetColor(1);
-  if ((program==2 && man==0) || ((program==3 || program==4) && man==2)) {grSetColor(11);}
+  if ((program==2 && man==0) || ((program==3 || program==4) && man==2)) {grSetColor(11);}  /* Highlight DO for docking specialist */
    PrintAt(186,y,"DO:");DispNum(0,0,Data->P[plr].Pool[num].Docking);
-  grSetColor(1);
+  grSetColor(1);  /* Never highlight EN skill */
    PrintAt(211,y,"EN:");DispNum(0,0,Data->P[plr].Pool[num].Endurance);
   return;
 }
