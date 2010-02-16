@@ -174,6 +174,12 @@ void DrawRD(char player_index)
   grSetColor(1);
   DispBig(50,5,"RESEARCH",0,-1);
   grSetColor(11);
+
+  if (Data->Season==0) PrintAt(158,8,"SPRING");
+  else PrintAt(162,8,"FALL");
+  PrintAt(163,15,"19");
+  DispNum(0,0,Data->Year);
+
   PrintAt(200,8,"CASH:");
   DispMB(201,15,Data->P[player_index].Cash);
 
@@ -709,6 +715,12 @@ void DrawHPurc(char player_index)
 
   grSetColor(11);
   PrintAt(195,190,"PURCHASE EQUIPMENT");
+
+  if (Data->Season==0) PrintAt(158,8,"SPRING");
+  else PrintAt(162,8,"FALL");
+  PrintAt(163,15,"19");
+  DispNum(0,0,Data->Year);
+
   PrintAt(200,8,"CASH:");
   DispMB(201,15,Data->P[player_index].Cash);
 

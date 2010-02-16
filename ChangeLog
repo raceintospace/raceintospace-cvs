@@ -1,3 +1,9 @@
+2010-02-15 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V227
+
+	* rdplex.c: now displays the season and year
+
 2010-02-09/10 Leon Baradat <peyre@users.sourceforge.net>
 
 	* V226
