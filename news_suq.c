@@ -544,8 +544,8 @@ char REvent(char plr)
 	         else if (i==1 && plr==0) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"POWELL");
 	         else if (i==2 && plr==0) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"YEAGER");
 	         else if (i==0 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"ILYUSHIN");
-	         else if (i==1 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"DOLGOV");
-	         else if (i==2 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"SHIBORIN");
+	         else if (i==1 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"SHIBORIN");
+	         else if (i==2 && plr==1) strcpy(&Data->P[plr].Pool[Data->P[plr].AstroCount].Name[0],"DOLGOV");
 		 /* The original bonus astronauts & cosmonauts were:
 		    REEVES, CHAMBERLAIN, YEAGER & STIPPOV, SCHLICKBERND, FARGOV -Leon */
 

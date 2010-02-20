@@ -184,7 +184,7 @@ void DrawRush(char plr)
   ShBox(0,0,319,23);
   IOBox(243,3,316,19);
   InBox(3,3,30,19);
-  grSetColor(1);PrintAt(258,13,"ASSIGN");
+  grSetColor(1);PrintAt(263,13,"ASSIGN");
   FlagSm(plr,4,4);
   for (i=0;i<3;i++) {
     if (Data->P[plr].Mission[i].MissionCode>0 &&

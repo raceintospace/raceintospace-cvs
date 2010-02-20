@@ -163,7 +163,7 @@ void DispVAB(char plr,char pad)
   PrintAt(13,92,"AUTO PURCHASE");
   PrintAt(198,192,"EXIT");
   PrintAt(268,192,"SCRUB");
-  PrintAt(264,13,"ASSIGN");
+  PrintAt(263,13,"ASSIGN");
   PrintAt(16,136,"PRIMARY:");
   PrintAt(24,148,"KICKER:");
   PrintAt(43,160,"L.M.:");

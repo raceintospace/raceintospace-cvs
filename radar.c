@@ -117,7 +117,8 @@ void PadDraw(char plr,char pad)
   l=Data->P[plr].Mission[pad].BCrew-1;
 
   // Crews
-  grSetColor(7);PrintAt(13,107,"PRIMARY CREW");PrintAt(13,145,"BACKUP CREW");
+  grSetColor(7);PrintAt(13,107,"PRIMARY CREW  (CREW P[plr].Crew[i][j][k]-1].[grp]");
+  PrintAt(13,145,"BACKUP CREW");
   grSetColor(11);
   if (j>=0) {
     for (k=0;k<Data->P[plr].Gcnt[i][j];k++) {

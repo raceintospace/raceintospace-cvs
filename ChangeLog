@@ -1,3 +1,18 @@
+2010-02-20 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V228
+
+	* ast0.c: Added AVOID FAILURE: YES/NO to the Lunar Module building
+
+	* rush.c: Centered the word ASSIGN in its button
+
+	* vab.c: Slightly centered the word ASSIGN in its button (moved it one unit 
+		 to the left to put it in same coordinates as the one in rush.c)
+
+	* news_suq.c: Cosmetic change--it seemed more appropriate to replace 
+		      SCHLICKBERND with SHIBORIN and FARGOV with DOLGOV, rather than 
+		      SCHLICKBERND with DOLGOV and FARGOV with SHIBORIN
+
 2010-02-15 Leon Baradat <peyre@users.sourceforge.net>
 
 	* V227

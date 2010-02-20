@@ -101,7 +101,7 @@ void AstLevel(char plr,char prog,char crew,char ast)
    ShBox(94,38,236,95);
    InBox(98,41,232,61);RectFill(99,42,231,60,7+plr*3);
 
-   grSetColor(12);PrintAt(115,48,"COMPATABILITY");
+   grSetColor(12);PrintAt(115,48,"COMPATIBILITY");
 
    over=0;val=0;
    for (i=0;i<Data->P[plr].Gcnt[prog][crew];i++) {
