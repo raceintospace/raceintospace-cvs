@@ -160,7 +160,8 @@ void DispVAB(char plr,char pad)
   IOBox(4,84,165,96);
 
   grSetColor(1);
-  PrintAt(13,92,"AUTO PURCHASE");
+  PrintAt(13,92,"AUTOPURCHASE    CASH: ");
+    DispMB(127,92,Data->P[plr].Cash);
   PrintAt(198,192,"EXIT");
   PrintAt(268,192,"SCRUB");
   PrintAt(263,13,"ASSIGN");

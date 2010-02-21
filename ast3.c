@@ -119,9 +119,9 @@ void TrainText(char plr,int astro,int cnt)
 
   switch(Data->P[plr].Pool[astro].Status) {
 	case 0:PrintAt(0,0,"ACTIVE");break;
-	case 4:strcat(Fritz,"I");PrintAt(0,0,&Fritz[0]);break;
-	case 5:strcat(Fritz,"II");PrintAt(0,0,&Fritz[0]);break;
-	case 6:strcat(Fritz,"III");PrintAt(0,0,&Fritz[0]);break;
+	case 4:strcat(Fritz," I");PrintAt(0,0,&Fritz[0]);break;
+	case 5:strcat(Fritz," II");PrintAt(0,0,&Fritz[0]);break;
+	case 6:strcat(Fritz," III");PrintAt(0,0,&Fritz[0]);break;
 	case 7:PrintAt(0,0,"ADV TRAINING I");break;
 	case 8:PrintAt(0,0,"ADV TRAINING II");break;
 	case 9:PrintAt(0,0,"ADV TRAINING III");break;

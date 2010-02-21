@@ -407,10 +407,10 @@ void LMBld(char plr)
 	 if (i==0) m=172; else m=12;
 	 grSetColor(8);PrintAt(m,130,&Data->P[plr].Manned[5+i].Name[0]);grSetColor(9);
 	 grSetColor(6);
-	 PrintAt(m+50,130,"AVOID FAILURE: ");
+	 PrintAt(m+48,130,"AVOID FAILURE: ");
          grSetColor(11);
-	 if (Data->P[plr].Manned[5+i].SaveCard>0) PrintAt(m+127,130,"YES");
-   	   else PrintAt(m+127,130,"NO");
+	 if (Data->P[plr].Manned[5+i].SaveCard>0) PrintAt(m+124,130,"YES");
+   	   else PrintAt(m+125,130,"NO");
 	 grSetColor(6);PrintAt(m,138,"SAFETY FACTOR: ");
     grSetColor(1);DispNum(0,0,(Data->P[plr].Manned[5+i].Num>=0) ? Data->P[plr].Manned[5+i].Safety : 0 );
     PrintAt(0,0,"%");

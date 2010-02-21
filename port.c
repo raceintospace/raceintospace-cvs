@@ -929,7 +929,7 @@ ui16 Count,*bone;
 	}
   if (plr==0 && Data->Year>65) PortText(5,196,"CAPE KENNEDY",12);
   else if (plr==0) PortText(5,196,"THE CAPE",12);
-  else PortText(5,196,"BAIKONOUR",12);
+  else PortText(5,196,"BAIKONUR",12);
 
   pKey=0;
   
@@ -1171,7 +1171,7 @@ ui16 Count,*bone;
                 } //while
                if (plr==0 && Data->Year>65) PortText(5,196,"CAPE KENNEDY",12);
                else if (plr==0) PortText(5,196,"THE CAPE",12);
-               else PortText(5,196,"BAIKONOUR",12);
+               else PortText(5,196,"BAIKONUR",12);
                PortRestore(Count);Count=0;
                strcpy(IDT,"i043");strcpy(IKEY,"k043");
           } // if

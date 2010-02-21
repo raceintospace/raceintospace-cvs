@@ -1,5 +1,22 @@
 2010-02-20 Leon Baradat <peyre@users.sourceforge.net>
 
+	* V229
+
+	* ast0.c: Refined AVOID FAILURE: YES/NO in the LM Program building
+
+	* ast3.c: Added a space between "BASIC TRAINING" and the level of training the 
+		  'nauts are currently in; it used to say "BASIC TRAININGI" and so on.
+
+	* vab.c: Updated VAB/VIB to show player's cash on hand
+
+	* port.c: Changed Soviet spaceport name from "BAIKONOUR" to "BAIKONUR", in line 
+		  with transliteration changes made to 'naut roster
+
+	* radar.c: Corrected change I uploaded accidentally earlier today--set this file 
+		   back the way it was before
+
+2010-02-20 Leon Baradat <peyre@users.sourceforge.net>
+
 	* V228
 
 	* ast0.c: Added AVOID FAILURE: YES/NO to the Lunar Module building
@@ -35,7 +52,7 @@
 
 	* rdplex.c (RD): fix for #1816887: researcher buttons staying depressed
 
-	* rdplex.c, proto.h: Reformat & document RDUnit and ManSel
+	* rdplex.c, proto.h: Reformat & document RDUnit and ManSelport.c: Changed Soviet spaceport name from "BAIKONOUR" to "BAIKONUR", in line with transliteration changes made to 'naut roster
 
 	* data.h: encode number of researchers (rolls) in Buy array
 	
