@@ -1,3 +1,11 @@
+2010-02-21 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V230
+
+	* vab.c: When you click AUTOPURCHASE in VAB/VIB, it now updates the amount of cash
+		 the player has (i.e., it acknowledges that a purchase has been made). 
+		 Also a few tiny changes to make things slightly better centered.
+
 2010-02-20 Leon Baradat <peyre@users.sourceforge.net>
 
 	* V229

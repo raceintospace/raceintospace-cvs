@@ -162,19 +162,19 @@ void DispVAB(char plr,char pad)
   grSetColor(1);
   PrintAt(13,92,"AUTOPURCHASE    CASH: ");
     DispMB(127,92,Data->P[plr].Cash);
-  PrintAt(198,192,"EXIT");
+  PrintAt(200,192,"EXIT");
   PrintAt(268,192,"SCRUB");
   PrintAt(263,13,"ASSIGN");
-  PrintAt(16,136,"PRIMARY:");
+  PrintAt(18,136,"PRIMARY:");
   PrintAt(24,148,"KICKER:");
-  PrintAt(43,160,"L.M.:");
-  PrintAt(15,172,"PAYLOAD:");
-  PrintAt(23,188,"ROCKET:     ");
+  PrintAt(42,160,"L.M.:");
+  PrintAt(16,172,"PAYLOAD:");
+  PrintAt(22,188,"ROCKET:     ");
 
   Name[0]='A'+pad; Name[1]=0x00;
   InBox(4,27,166,37);RectFill(5,28,165,36,10);
   grSetColor(11);
-  PrintAt(42,34,"LAUNCH FACILITY: ");PrintAt(0,0,Name);
+  PrintAt(38,34,"LAUNCH FACILITY: ");PrintAt(0,0,Name);
   grSetColor(1);
   if (plr==0) DispBig(42,4,"VEHICLE ASSEMBLY",0,-1);
   else DispBig(37,4,"VEHICLE INTEGRATION",0,-1);
@@ -194,7 +194,7 @@ void DispVAB(char plr,char pad)
 
   RectFill(5,105,165,122,7+plr*3);
   grSetColor(11);
-  PrintAt(35,111,"MISSION HARDWARE:");
+  PrintAt(40,111,"MISSION HARDWARE:");
   PrintAt(10,119,"SELECT PAYLOADS AND BOOSTER");
 
   grSetColor(1);
@@ -624,7 +624,7 @@ begvab:
   };
 
   temp=CheckCrewOK(plr,mis);
-   if (temp==1) //found mission no crews
+   if (temp==1) // found mission no crews
    {
     ClrMiss(plr,mis+3);
     goto begvab;
@@ -694,7 +694,7 @@ begvab:
     if (mousebuttons > 0 || key>0)  /* Game Play */
     {
 
-      // AUTO PURCHASE
+      // AUTOPURCHASE
       if ((x>=6 && y>=86 && x<=163 && y<=94 && mousebuttons>0) || key=='A')
       {
         InBox(6,86,163,94);
@@ -729,9 +729,12 @@ begvab:
 	      pay[i]=Data->P[plr].Rocket[i].MaxPay;
 	     }
 	    }
+		RectFill(127,88,160,92,3);
+		grSetColor(1);
+		DispMB(127,92,Data->P[plr].Cash);
 	   }
 	   else if (ac==0) Help("i135");  // delay on purchase
-	    else Help("i137");  //not enough money
+	    else Help("i137");  // not enough money
      ShowVA(ccc);ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);
      OutBox(6,86,163,94);
     }
@@ -856,7 +859,7 @@ begvab:
 }
 
 
-// VAB Auto Build Functions
+// VAB Autobuild Functions
 
 void BuildVAB(char plr,char mis,char ty,char pa,char pr)
 {
