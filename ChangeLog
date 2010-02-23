@@ -1,3 +1,11 @@
+2010-02-22 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V231
+
+	* crew.c: When you're assigning crews to a mission, the crew members now display a 
+		  morale box next to them so you can see at a glance how your available 
+		  crews are doing morality-wise.
+
 2010-02-21 Leon Baradat <peyre@users.sourceforge.net>
 
 	* V230

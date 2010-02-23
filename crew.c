@@ -185,8 +185,8 @@ int AsnCrew(char plr,char pad,char part)
   };
   FutSt(plr,prg,prime,back);
   grSetColor(1);
-  PrintAt(97,15,"CANCEL");
-  grSetColor(9);PrintAt(181,15,"A");grSetColor(1);PrintAt(0,0,"SSIGN");
+  PrintAt(100,15,"CANCEL");
+  grSetColor(9);PrintAt(184,15,"A");grSetColor(1);PrintAt(0,0,"SSIGN");
   PrintAt(86,111,"MAKE ");grSetColor(9);PrintAt(0,0,"P");grSetColor(1);PrintAt(0,0,"RIMARY");
   PrintAt(168,111,"MAKE ");grSetColor(9);PrintAt(0,0,"B");grSetColor(1);PrintAt(0,0,"ACKUP");
   grSetColor(11);
@@ -349,7 +349,17 @@ void FutAstList(char plr,char men,int M1,int M2,int M3,int M4)
   grSetColor(1);
   for (i=0;i<men;i++)
    if (m[i]>0) {
-    PrintAt(87,45+i*14,&Data->P[plr].Pool[m[i]-1].Name[0]);
+    PrintAt(100,45+i*14,&Data->P[plr].Pool[m[i]-1].Name[0]);
+      RectFill(87,39+i*14,94,39+i*14,2); // Top
+      RectFill(87,39+i*14,87,44+i*14,2); // Left
+      RectFill(87,45+i*14,94,45+i*14,3); // Bottom
+      RectFill(95,39+i*14,95,45+i*14,3); // Right
+	if (Data->P[plr].Pool[m[i]-1].Mood>=65) RectFill(88,40+i*14,94,44+i*14,16);
+	if (Data->P[plr].Pool[m[i]-1].Mood<65 && Data->P[plr].Pool[m[i]-1].Mood>=40) RectFill(88,40+i*14,94,44+i*14,11);
+	if (Data->P[plr].Pool[m[i]-1].Mood<40 && Data->P[plr].Pool[m[i]-1].Mood>=20) RectFill(88,40+i*14,94,44+i*14,8);
+	if (Data->P[plr].Pool[m[i]-1].Mood<20) RectFill(88,40+i*14,94,44+i*14,0);
+	if (Data->P[plr].Pool[m[i]-1].Mood==0) RectFill(88,40+i*14,94,44+i*14,3);
+      //87 - 169
     PrintAt(87,51+i*14,"CP:");
     DispNum(0,0,Data->P[plr].Pool[m[i]-1].Cap);
     PrintAt(0,0,"  LM:");
@@ -384,7 +394,7 @@ void DrawHard(char mode,char pad,char mis,char plr)
  PrintAt(94,126,Data->P[plr].Manned[2].Name);
  PrintAt(174,126,Data->P[plr].Manned[3].Name);
  PrintAt(137,143,Data->P[plr].Manned[4].Name);
- PrintAt(144,163,"CANCEL");
+ PrintAt(143,163,"CANCEL");
  return;
 }
 
