@@ -131,8 +131,9 @@ void MisAnn(char plr,char pad)
   ShBox(41,20,281,184);InBox(46,25,276,179);
   InBox(46,25,117,65);Flag(47,26,plr);
   InBox(122,25,276,65);
+  grSetColor(9);
+  PrintAt(127,33,"SCHEDULED LAUNCH");  //was 154,33
   grSetColor(34);
-  PrintAt(154,33,"SCHEDULED LAUNCH");
   PrintAt(127,40,"LAUNCH FACILITY: ");
   grSetColor(1);
   PrintAt(0,0,"PAD ");
@@ -163,12 +164,22 @@ void MisAnn(char plr,char pad)
   }
 
   PrintAt(127,54,Mis.Abbr);
+	switch(Data->P[plr].Mission[pad].Duration)
+	{
+	 case 1:PrintAt(0,0,"");break;
+	 case 2:PrintAt(0,0," (B)");break;
+	 case 3:PrintAt(0,0," (C)");break;
+	 case 4:PrintAt(0,0," (D)");break;
+	 case 5:PrintAt(0,0," (E)");break;
+	 case 6:PrintAt(0,0," (F)");break;
+	 default:PrintAt(0,0,"");break;
+	}   
 
   IOBox(57,68,118,84);IOBox(131,68,197,84);IOBox(205,68,266,84);
-  grSetColor(1);PrintAt(65,78,"CONTINUE");PrintAt(137,78,"PLAY FULL");
+  grSetColor(1);PrintAt(65,78,"CONTINUE");PrintAt(139,78,"PLAY FULL");
   PrintAt(221,78,"SCRUB");
   grSetColor(9);
-  PrintAt(65,78,"C");PrintAt(137,78,"P");PrintAt(221,78,"S");
+  PrintAt(65,78,"C");PrintAt(139,78,"P");PrintAt(221,78,"S");
 
   //IOBox(85,68,158,84);IOBox(172,68,245,84);
   //grSetColor(1);PrintAt(102,78,"CONTINUE");PrintAt(189,78,"SCRUB");

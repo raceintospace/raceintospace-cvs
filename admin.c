@@ -1112,7 +1112,14 @@ int FutureCheck(char plr,char type)
       if (type==1) {
         GetMisType(Data->P[plr].Mission[i].MissionCode);
         PrintAt(111,41+i*51,Mis.Abbr);
-
+	     switch(Data->P[plr].Mission[i].Duration)
+	     {
+	      case 1:PrintAt(0,0,"");break;
+	      case 2:PrintAt(0,0," (B)");break;
+	      case 3:PrintAt(0,0," (C)");break;
+	      case 4:PrintAt(0,0," (D)");break;
+	      case 5:PrintAt(0,0," (E)");break;
+	     }
 	      if (i<2)
 	         if (Data->P[plr].Mission[i+1].part==1) {
 	            PrintAt(111,61+i*51,"PRIMARY MISSION PART");
@@ -1124,6 +1131,14 @@ int FutureCheck(char plr,char type)
            GetMisType(Data->P[plr].Future[i].MissionCode);
 
            PrintAt(111,41+i*51,Mis.Abbr);
+	     switch(Data->P[plr].Future[i].Duration)
+	     {
+	      case 1:PrintAt(0,0,"");break;
+	      case 2:PrintAt(0,0," (B)");break;
+	      case 3:PrintAt(0,0," (C)");break;
+	      case 4:PrintAt(0,0," (D)");break;
+	      case 5:PrintAt(0,0," (E)");break;
+	     }
 	         if (i<2)
 	            if (Data->P[plr].Future[i+1].part==1) {
 	               PrintAt(111,61+i*51,"PRIMARY MISSION PART");

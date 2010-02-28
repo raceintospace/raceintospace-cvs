@@ -213,6 +213,16 @@ void DrawRush(char plr)
       GetMisType(Data->P[plr].Mission[i].MissionCode);
 
       PrintAt(96,48+58*i,Mis.Abbr);
+	switch(Data->P[plr].Mission[i].Duration)
+	{
+	 case 1:PrintAt(0,0,"");break;
+	 case 2:PrintAt(0,0," (B)");break;
+	 case 3:PrintAt(0,0," (C)");break;
+	 case 4:PrintAt(0,0," (D)");break;
+	 case 5:PrintAt(0,0," (E)");break;
+	 case 6:PrintAt(0,0," (F)");break;
+	 default:PrintAt(0,0,"");break;
+	}   
       if (Data->P[plr].Mission[i].Name[24]==1)
        {
         grSetColor(9);PrintAt(145,33+i*58,"DOWNGRADED MISSION");

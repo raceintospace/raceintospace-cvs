@@ -202,6 +202,16 @@ void DispVAB(char plr,char pad)
   GetMisType(Data->P[plr].Mission[pad].MissionCode);
 
   PrintAt(5,52,Mis.Abbr);
+	switch(Data->P[plr].Mission[pad].Duration)
+	{
+	 case 1:PrintAt(0,0,"");break;
+	 case 2:PrintAt(0,0," (B)");break;
+	 case 3:PrintAt(0,0," (C)");break;
+	 case 4:PrintAt(0,0," (D)");break;
+	 case 5:PrintAt(0,0," (E)");break;
+	 case 6:PrintAt(0,0," (F)");break;
+	 default:PrintAt(0,0,"");break;
+	} 
 
   FlagSm(plr,4,4);
 

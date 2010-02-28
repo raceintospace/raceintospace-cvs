@@ -1,10 +1,18 @@
+2010-02-27 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V232
+
+	* admin.c, newmis.c, rush.c, vab.c: These windows now show the Duration level of a 
+	                                    Duration mission, e.g.: ORBITAL-EX (B) instead 
+					    of just ORBITAL-EX.
+
 2010-02-22 Leon Baradat <peyre@users.sourceforge.net>
 
 	* V231
 
 	* crew.c: When you're assigning crews to a mission, the crew members now display a 
 		  morale box next to them so you can see at a glance how your available 
-		  crews are doing morality-wise.
+		  crews are doing morale-wise.
 
 2010-02-21 Leon Baradat <peyre@users.sourceforge.net>
 
