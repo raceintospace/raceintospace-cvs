@@ -185,8 +185,8 @@ int AsnCrew(char plr,char pad,char part)
   };
   FutSt(plr,prg,prime,back);
   grSetColor(1);
-  PrintAt(100,15,"CANCEL");
-  grSetColor(9);PrintAt(184,15,"A");grSetColor(1);PrintAt(0,0,"SSIGN");
+  PrintAt(100,16,"CANCEL");
+  grSetColor(9);PrintAt(184,16,"A");grSetColor(1);PrintAt(0,0,"SSIGN");
   PrintAt(86,111,"MAKE ");grSetColor(9);PrintAt(0,0,"P");grSetColor(1);PrintAt(0,0,"RIMARY");
   PrintAt(168,111,"MAKE ");grSetColor(9);PrintAt(0,0,"B");grSetColor(1);PrintAt(0,0,"ACKUP");
   grSetColor(11);
@@ -378,7 +378,7 @@ void FutAstList(char plr,char men,int M1,int M2,int M3,int M4)
 void DrawHard(char mode,char pad,char mis,char plr)
 {
  strcpy(IKEY,"k201");
- ShBox(75,43,244,173);InBox(81,60,238,95);IOBox(81,154,238,167);// continue
+ ShBox(75,43,244,173);InBox(81,60,238,95);IOBox(81,154,238,167); // continue
  InBox(81,47,238,56);RectFill(82,61,237,94,6+3*plr);
  grSetColor(11);
  if (mode==0) PrintAt(90,54,"SELECT PRIMARY VEHICLE");
@@ -387,8 +387,30 @@ void DrawHard(char mode,char pad,char mis,char plr)
  GetMisType(mis);
  PrintAt(85,70,Mis.Abbr);
  //Missions(plr,85,70,mis,0);
+      int MisCod; 
+      MisCod=Data->P[plr].Future[pad].MissionCode; 
+      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+	// Show duration level only on missions with a Duration step - Leon
+       {
+	switch(Data->P[plr].Future[pad].Duration)
+	{
+	 case 1:PrintAt(0,0,"");break;
+	 case 2:PrintAt(0,0," (B)");break;
+	 case 3:PrintAt(0,0," (C)");break;
+	 case 4:PrintAt(0,0," (D)");break;
+	 case 5:PrintAt(0,0," (E)");break;
+	 case 6:PrintAt(0,0," (F)");break;
+	 default:PrintAt(0,0,"");break;
+	}  
+       } 
 
- PrintAt(85,85,"PAD: ");DispNum(0,0,pad+1);
+ PrintAt(85,85,"PAD: ");// Used to be followed by: DispNum(0,0,pad+1); -Leon
+ switch(pad)
+  {
+   case 0:PrintAt(0,0,"A");break;
+   case 1:PrintAt(0,0,"A");break;
+   case 2:PrintAt(0,0,"A");break;
+  }
  PrintAt(94,109,Data->P[plr].Manned[0].Name);
  PrintAt(174,109,Data->P[plr].Manned[1].Name);
  PrintAt(94,126,Data->P[plr].Manned[2].Name);

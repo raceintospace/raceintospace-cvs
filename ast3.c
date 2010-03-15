@@ -408,14 +408,14 @@ void Hospital(char plr,int sel)
   if (sel==1) {
 
     if (plr==1) {
-      fseek(fin,size,SEEK_CUR);  // place on the sov cem
+      fseek(fin,size,SEEK_CUR);  // place on the Sov cem
       fread(&pal[0],768,1,fin);
       fread(&size,4,1,fin);
 			Swap32bit(size);
       }
     }
   if (sel==0) {
-    fseek(fin,size,SEEK_CUR);  // Skip past us cem
+    fseek(fin,size,SEEK_CUR);  // Skip past US cem
     fread(&pal[0],768,1,fin);     
     fread(&size,4,1,fin);
 		Swap32bit(size);
@@ -426,7 +426,7 @@ void Hospital(char plr,int sel)
 		Swap32bit(size);
 
     if (plr==1) {
-      fseek(fin,size,SEEK_CUR);  // Skip to SOv hosp
+      fseek(fin,size,SEEK_CUR);  // Skip to Sov hosp
       fread(&pal[0],768,1,fin);
       fread(&size,4,1,fin);
 			Swap32bit(size);

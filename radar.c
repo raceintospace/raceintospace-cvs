@@ -46,6 +46,12 @@ void PadDraw(char plr,char pad)
   InBox(6,99,160,178);
   grSetColor(9);PrintAt(11,190,"SCHEDULED DURATION: ");
   grSetColor(7);
+  int MisCod; 
+  MisCod=Data->P[plr].Mission[pad].MissionCode; 
+  if ((MisCod>24 && MisCod<37) || MisCod==40 || MisCod==41 || MisCod==43 || MisCod==44 || MisCod>45) 
+   // Show Duration level for manned missions with Duration steps (the Mission[pad].Duration variable 
+   // will continue to show Duration level if mission is scrubbed or downgraded) - Leon
+  {
   switch(Data->P[plr].Mission[pad].Duration)
    {
     case 1:PrintAt(0,0,"A");break;
@@ -55,7 +61,16 @@ void PadDraw(char plr,char pad)
     case 5:PrintAt(0,0,"E");break;
     case 6:PrintAt(0,0,"F");break;
     default:PrintAt(0,0,"NONE");break;
-   }   
+   } 
+  }
+   else 
+  {
+  if (Data->P[plr].Mission[pad].PCrew-1>=0 || Data->P[plr].Mission[pad].BCrew-1>=0)
+  { PrintAt(0,0,"A"); }
+   else 
+  { PrintAt(0,0,"NONE"); }
+  }
+ 
   grSetColor(7);PrintAt(63,71,"MISSION");
   FlagSm(plr,4,4);
   if (Data->P[plr].LaunchFacility[pad]==1 && Data->P[plr].Mission[pad].MissionCode>0) PadPict(2+plr);
@@ -117,15 +132,33 @@ void PadDraw(char plr,char pad)
   l=Data->P[plr].Mission[pad].BCrew-1;
 
   // Crews
-  grSetColor(7);PrintAt(13,107,"PRIMARY CREW");PrintAt(13,145,"BACKUP CREW");
-  grSetColor(11);
+  grSetColor(7);PrintAt(13,107,"PRIMARY CREW  ");
   if (j>=0) {
+    grSetColor(6); // Now display the crew number, for player's easy reference - Leon
+    if (j==0) PrintAt(0,0,"(CREW I)");
+    if (j==1) PrintAt(0,0,"(CREW II)");
+    if (j==2) PrintAt(0,0,"(CREW III)");
+    if (j==3) PrintAt(0,0,"(CREW IV)");
+    if (j==4) PrintAt(0,0,"(CREW V)");
+    if (j==5) PrintAt(0,0,"(CREW VI)");
+    if (j==6) PrintAt(0,0,"(CREW VII)");
+    if (j==7) PrintAt(0,0,"(CREW VIII)");
     for (k=0;k<Data->P[plr].Gcnt[i][j];k++) {
 	    PrintAt(25,115+7*k,&Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Name[0]);
     }
     if (l==-1) PrintAt(25,174,"UNAVAILABLE");
   }
+  grSetColor(7);PrintAt(13,145,"BACKUP CREW  ");
   if (l>=0) {
+    grSetColor(6); // Now display the crew number, for player's easy reference - Leon
+    if (l==0) PrintAt(0,0,"(CREW I)");
+    if (l==1) PrintAt(0,0,"(CREW II)");
+    if (l==2) PrintAt(0,0,"(CREW III)");
+    if (l==3) PrintAt(0,0,"(CREW IV)");
+    if (l==4) PrintAt(0,0,"(CREW V)");
+    if (l==5) PrintAt(0,0,"(CREW VI)");
+    if (l==6) PrintAt(0,0,"(CREW VII)");
+    if (l==7) PrintAt(0,0,"(CREW VIII)");
     for (k=0;k<Data->P[plr].Gcnt[i][l];k++) {
 	    PrintAt(25,153+7*k,&Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Name[0]);
     }
@@ -141,7 +174,7 @@ void PadDraw(char plr,char pad)
 }
 
 
-/** pad is +3 for compatability with News so that 
+/** pad is +3 for compatibility with News so that 
  * it will go ahead and scrub the mission automatically
  * 
  */

@@ -61,7 +61,7 @@ char tame[29][40]={
 "ORBITING LAB",
 "MANNED DOCKING",
 "WOMAN IN SPACE",
-"SPACE WALK",
+"SPACEWALK",
 "MANNED SPACE MISSION"
 };
 #endif
@@ -114,7 +114,7 @@ void Display_ARROW(char num,int x,int y)
 void Museum(char plr)
 {
 	int i,tots=7,beg;
-  char AName[7][22]={"DIRECTORS RANKING","SPACE HISTORY","MISSION RECORDS","PRESTIGE SUMMARY",
+  char AName[7][22]={"DIRECTOR RANKING","SPACE HISTORY","MISSION RECORDS","PRESTIGE SUMMARY",
     "HARDWARE EFFICIENCY","ASTRONAUT HISTORY","EXIT THE MUSEUM"};
   char AImg[7]={8,9,10,11,13,14,0};
 
@@ -476,7 +476,7 @@ void Mission_Data_Buttons(char plr, int *where)
 {
     char index,yr,season,j,temp=0;
 
-    /* Okay, now we have to decide whether there are any missions on displayed
+    /* Okay, now we have to decide whether there are any missions displayed
     on the screen at this time. If there are any, parse the button. */ 
     if(Data->P[plr].PastMis==0) return;
     index=0;
@@ -745,8 +745,8 @@ void ShowAstrosHist(char plr)
   
   FadeOut(2,pal,5,0,0);
   RectFill(1,39,157,184,3);
-  DispBig(67,71,"NO",0,-1);
-  DispBig(41,90,"MISSION",0,-1);
+  DispBig(65,71,"NO",0,-1);
+  DispBig(42,90,"MISSION",0,-1);
   DispBig(27,109,"EXPERIENCE",0,-1);
   gxGetImage(&vhptr2,22,69,133,123,0);
   PatchMe(0,0,0,0,0,32);
@@ -870,7 +870,8 @@ void DisplAst(char plr, char *where, char *where2)
   DispNum(218,131,abuf[*where].Docking);
   DispNum(232,139,abuf[*where].Endurance);
   DispNum(173,68,abuf[*where].Active/2);
-  PrintAt(0,0,"  YEARS");
+  PrintAt(0,0,"  YEAR");
+  if (abuf[*where].Active/2!=1) PrintAt(0,0,"S");
   memset(Ast_Name,0x00,sizeof Ast_Name);
   strncpy(Ast_Name,abuf[*where].Name,10);
   PrintAt(165,39,Ast_Name);
@@ -935,7 +936,7 @@ void DispLoc(char plr,char *where)
           }
          PrintAt(216,159,Data->P[plr].Manned[ass-1].Name);
          return;
-  case 1:if (plr==0) PrintAt(216,159,"ARLINGTON CEMETARY");
+  case 1:if (plr==0) PrintAt(216,159,"ARLINGTON CEMETERY");
           else PrintAt(216,159,"KREMLIN WALL");
          return;
   case 2:PrintAt(216,159,"RETIRED");return;

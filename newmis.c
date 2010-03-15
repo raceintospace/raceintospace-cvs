@@ -164,6 +164,11 @@ void MisAnn(char plr,char pad)
   }
 
   PrintAt(127,54,Mis.Abbr);
+      int MisCod; 
+      MisCod=Data->P[plr].Mission[pad].MissionCode; 
+      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+	// Show duration level only on missions with a Duration step - Leon
+       {
 	switch(Data->P[plr].Mission[pad].Duration)
 	{
 	 case 1:PrintAt(0,0,"");break;
@@ -173,12 +178,13 @@ void MisAnn(char plr,char pad)
 	 case 5:PrintAt(0,0," (E)");break;
 	 case 6:PrintAt(0,0," (F)");break;
 	 default:PrintAt(0,0,"");break;
-	}   
+	}  
+       } 
 
   IOBox(57,68,118,84);IOBox(131,68,197,84);IOBox(205,68,266,84);
   grSetColor(1);PrintAt(65,78,"CONTINUE");PrintAt(139,78,"PLAY FULL");
   PrintAt(221,78,"SCRUB");
-  grSetColor(9);
+  grSetColor(9);MisCod=Data->P[plr].Mission[i].MissionCode;
   PrintAt(65,78,"C");PrintAt(139,78,"P");PrintAt(221,78,"S");
 
   //IOBox(85,68,158,84);IOBox(172,68,245,84);

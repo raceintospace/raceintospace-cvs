@@ -1,3 +1,29 @@
+2010-03-14 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V233
+
+	* admin.c, newmis.c, rush.c, vab.c: Fixed bug that continued to show the Duration 
+		level of a scrubbed duration mission or of a lunar mission (lunar pass, 
+		orbital, or landing).  In rush.c, also fixed a bug that continued to show 
+		the Duration level of the original mission after it had been downgraded to 
+		remove the Duration step(s).
+
+	* radar.c - Now shows the crew number, e.g., "(CREW III)" above the names of the 
+		    crew members in the launch pad screen.  Also fixed a tiny bug that 
+		    displayed duration level on scrubbed missions--and on missions that 
+		    had been downgraded to remove the duration step.  I noticed this bug 
+		    when I found the bug above.
+
+	* crew.c - Added duration level to the screen where you assign crews to a mission.
+
+	* crew.c, future.c - Changed them from showing "PAD: 1", 2, or 3 to "PAD: A", B, or C.
+
+	* ast3.c - Fixed typo "CEMETARY".
+
+	* records.h, main.c, museum.c - Esthetic changes.
+
+	* crew.dat, men.dat, user.dat - Updates to the 'naut roster.
+
 2010-02-27 Leon Baradat <peyre@users.sourceforge.net>
 
 	* V232

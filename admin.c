@@ -48,6 +48,8 @@ extern int fOFF;
 SaveFileHdr *SaveHdr;
 SFInfo *FList;
 
+int MisCod; 
+
 extern struct mStr Mis;
 
 void Admin(char plr)
@@ -458,7 +460,7 @@ void FileAccess(char mode)
 	        }
          } 
         else
-         //Modem save game LOAd
+         //Modem save game LOAD
         if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7)
          {
           //modem connect up
@@ -1112,6 +1114,10 @@ int FutureCheck(char plr,char type)
       if (type==1) {
         GetMisType(Data->P[plr].Mission[i].MissionCode);
         PrintAt(111,41+i*51,Mis.Abbr);
+	  MisCod=Data->P[plr].Mission[i].MissionCode;
+	  if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+	   // Show duration level only on missions with a Duration step - Leon
+	    {
 	     switch(Data->P[plr].Mission[i].Duration)
 	     {
 	      case 1:PrintAt(0,0,"");break;
@@ -1119,7 +1125,10 @@ int FutureCheck(char plr,char type)
 	      case 3:PrintAt(0,0," (C)");break;
 	      case 4:PrintAt(0,0," (D)");break;
 	      case 5:PrintAt(0,0," (E)");break;
+	      case 6:PrintAt(0,0," (F)");break;
+	      default:PrintAt(0,0,"");break;
 	     }
+	    }
 	      if (i<2)
 	         if (Data->P[plr].Mission[i+1].part==1) {
 	            PrintAt(111,61+i*51,"PRIMARY MISSION PART");
@@ -1131,6 +1140,10 @@ int FutureCheck(char plr,char type)
            GetMisType(Data->P[plr].Future[i].MissionCode);
 
            PrintAt(111,41+i*51,Mis.Abbr);
+	   MisCod=Data->P[plr].Future[i].MissionCode;
+	   if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+	    // Show duration level only on missions with a Duration step - Leon
+	   {
 	     switch(Data->P[plr].Future[i].Duration)
 	     {
 	      case 1:PrintAt(0,0,"");break;
@@ -1138,7 +1151,10 @@ int FutureCheck(char plr,char type)
 	      case 3:PrintAt(0,0," (C)");break;
 	      case 4:PrintAt(0,0," (D)");break;
 	      case 5:PrintAt(0,0," (E)");break;
+	      case 6:PrintAt(0,0," (F)");break;
+	      default:PrintAt(0,0,"");break;
 	     }
+	   }
 	         if (i<2)
 	            if (Data->P[plr].Future[i+1].part==1) {
 	               PrintAt(111,61+i*51,"PRIMARY MISSION PART");

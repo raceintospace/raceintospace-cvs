@@ -168,10 +168,10 @@ void DrawFuture(char plr,int mis,char pad)
   GetMinus(plr);
   grSetColor(5);
   /* lines of text are 1:8,30  2:8,37   3:8,44    */
-  switch(pad) {
-    case 0: PrintAt(8,30,"PAD 1:");break;
-    case 1: PrintAt(8,30,"PAD 2:");break;
-    case 2: PrintAt(8,30,"PAD 3:");break;
+  switch(pad) { // These used to say Pad 1, 2, 3 instead -Leon
+    case 0: PrintAt(8,30,"PAD A:");break;
+    case 1: PrintAt(8,30,"PAD B:");break;
+    case 2: PrintAt(8,30,"PAD C:");break;
     default:break;
   };
   grSetColor(1);

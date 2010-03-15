@@ -202,6 +202,11 @@ void DispVAB(char plr,char pad)
   GetMisType(Data->P[plr].Mission[pad].MissionCode);
 
   PrintAt(5,52,Mis.Abbr);
+      int MisCod; 
+      MisCod=Data->P[plr].Mission[pad].MissionCode;
+      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41) 
+	   // Show duration level only on missions with a Duration step - Leon
+       {
 	switch(Data->P[plr].Mission[pad].Duration)
 	{
 	 case 1:PrintAt(0,0,"");break;
@@ -212,6 +217,7 @@ void DispVAB(char plr,char pad)
 	 case 6:PrintAt(0,0," (F)");break;
 	 default:PrintAt(0,0,"");break;
 	} 
+       }
 
   FlagSm(plr,4,4);
 

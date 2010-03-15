@@ -213,6 +213,11 @@ void DrawRush(char plr)
       GetMisType(Data->P[plr].Mission[i].MissionCode);
 
       PrintAt(96,48+58*i,Mis.Abbr);
+      int MisCod; 
+      MisCod=Data->P[plr].Mission[i].MissionCode;
+      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+	// Show duration level only on missions with a Duration step - Leon
+       {
 	switch(Data->P[plr].Mission[i].Duration)
 	{
 	 case 1:PrintAt(0,0,"");break;
@@ -223,6 +228,7 @@ void DrawRush(char plr)
 	 case 6:PrintAt(0,0," (F)");break;
 	 default:PrintAt(0,0,"");break;
 	}   
+       }
       if (Data->P[plr].Mission[i].Name[24]==1)
        {
         grSetColor(9);PrintAt(145,33+i*58,"DOWNGRADED MISSION");
@@ -317,6 +323,19 @@ char pRush=0;
         GetMisType(dg[Data->P[plr].Mission[i].MissionCode][dgflag[i]]);
 
         PrintAt(96,48+58*i,Mis.Abbr);
+	if (Mis.Dur>=1)
+	{
+	 switch(Data->P[plr].Mission[i].Duration)
+	 {
+	  case 1:PrintAt(0,0,"");break;
+	  case 2:PrintAt(0,0," (B)");break;
+	  case 3:PrintAt(0,0," (C)");break;
+	  case 4:PrintAt(0,0," (D)");break;
+	  case 5:PrintAt(0,0," (E)");break;
+	  case 6:PrintAt(0,0," (F)");break;
+	  default:PrintAt(0,0,"");break;
+	 }  
+	} 
 
 	      //Missions(plr,96,48+58*i,dg[Data->P[plr].Mission[i].MissionCode][dgflag[i]],0);
 
@@ -333,6 +352,19 @@ char pRush=0;
         GetMisType(Data->P[plr].Mission[i].MissionCode);
 
         PrintAt(96,48+58*i,Mis.Abbr);
+	if (Mis.Dur>=1)
+	{
+	 switch(Data->P[plr].Mission[i].Duration)
+	 {
+	  case 1:PrintAt(0,0,"");break;
+	  case 2:PrintAt(0,0," (B)");break;
+	  case 3:PrintAt(0,0," (C)");break;
+	  case 4:PrintAt(0,0," (D)");break;
+	  case 5:PrintAt(0,0," (E)");break;
+	  case 6:PrintAt(0,0," (F)");break;
+	  default:PrintAt(0,0,"");break;
+	 }  
+	} 
 
 	      //Missions(plr,96,48+58*i,Data->P[plr].Mission[i].MissionCode,0);   
 	      RectFill(191,71+i*58,270,78+i*58,3);
@@ -370,7 +402,19 @@ char pRush=0;
         grSetColor(5);
         GetMisType(dg[Data->P[plr].Mission[i].MissionCode][dgflag[i]]);
         PrintAt(96,48+58*i,Mis.Abbr);
-
+	if (Mis.Dur>=1)
+	{
+	 switch(Data->P[plr].Mission[i].Duration)
+	 {
+	  case 1:PrintAt(0,0,"");break;
+	  case 2:PrintAt(0,0," (B)");break;
+	  case 3:PrintAt(0,0," (C)");break;
+	  case 4:PrintAt(0,0," (D)");break;
+	  case 5:PrintAt(0,0," (E)");break;
+	  case 6:PrintAt(0,0," (F)");break;
+	  default:PrintAt(0,0,"");break;
+	 }  
+	} 
 
 	     //Missions(plr,96,48+58*i,dg[Data->P[plr].Mission[i].MissionCode][dgflag[i]],0);
 	     dgflag[i]++;
@@ -386,7 +430,19 @@ char pRush=0;
         GetMisType(Data->P[plr].Mission[i].MissionCode);
 
         PrintAt(96,48+58*i,Mis.Abbr);
-
+	if (Mis.Dur>=1)
+	{
+	 switch(Data->P[plr].Mission[i].Duration)
+	 {
+	  case 1:PrintAt(0,0,"");break;
+	  case 2:PrintAt(0,0," (B)");break;
+	  case 3:PrintAt(0,0," (C)");break;
+	  case 4:PrintAt(0,0," (D)");break;
+	  case 5:PrintAt(0,0," (E)");break;
+	  case 6:PrintAt(0,0," (F)");break;
+	  default:PrintAt(0,0,"");break;
+	 }  
+	} 
 
 	     //Missions(plr,96,48+58*i,Data->P[plr].Mission[i].MissionCode,0);   
 	     RectFill(191,71+i*58,270,78+i*58,3);
