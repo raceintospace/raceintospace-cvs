@@ -99,7 +99,9 @@ void DispLeft(char plr,int lc,int cnt,int nw,int *ary)
   grSetColor(11);
   for (i=start;i<start+num;i++) {
     if (ary[i]>=0) {
-	    grSetColor(11+Data->P[plr].Pool[ary[i]].Sex);
+	    grSetColor(11+7*Data->P[plr].Pool[ary[i]].Sex);
+	    if (Data->P[plr].Pool[ary[i]].RDelay>0) grSetColor(7); 
+	      // Print name in purple if 'naut has announced retirement (black shows poorly here) -Leon
 	    PrintAt(28,136+(i-start)*8,&Data->P[plr].Pool[ary[i]].Name[0]);
     }
   }
@@ -109,6 +111,7 @@ void DispLeft(char plr,int lc,int cnt,int nw,int *ary)
 void BarSkill(char plr,int lc,int nw,int *ary)
 {
   grSetColor(11);
+  if (Data->P[plr].Pool[ary[nw]].Sex==1) grSetColor(18);  // Print in blue if 'naut is female
   grMoveTo(28,136+lc*8);
   // CA LM EV DO EN
   PrintAt(0,0,"CA:");DispNum(0,0,Data->P[plr].Pool[ary[nw]].Cap);
@@ -232,7 +235,7 @@ void SatText(char plr)
 		    DispNum(5+i*80,195,Data->Prestige[24].Points[plr]);
 		    break;
 
-	    case 1: PrintAt(5+i*80,80,"ORBITAL SAT");
+	    case 1: PrintAt(5+i*80,80,"ORBITAL SAT.");
 
 					if (Data->P[plr].Probe[0].Num>=0)
 		       DispNum(5+i*80,110,Data->P[plr].Probe[0].Safety);

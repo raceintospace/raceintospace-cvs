@@ -44,7 +44,7 @@ void PadDraw(char plr,char pad)
   ShBox(56,64,110,74);InBox(57,65,109,73);
   ShBox(4,180,162,195);InBox(6,182,160,193); //sched. duration
   InBox(6,99,160,178);
-  grSetColor(9);PrintAt(11,190,"SCHEDULED DURATION: ");
+  grSetColor(9);PrintAt(15,190,"SCHEDULED DURATION: ");
   grSetColor(7);
   int MisCod; 
   MisCod=Data->P[plr].Mission[pad].MissionCode; 
@@ -71,7 +71,7 @@ void PadDraw(char plr,char pad)
   { PrintAt(0,0,"NONE"); }
   }
  
-  grSetColor(7);PrintAt(63,71,"MISSION");
+  grSetColor(7);PrintAt(64,71,"MISSION");
   FlagSm(plr,4,4);
   if (Data->P[plr].LaunchFacility[pad]==1 && Data->P[plr].Mission[pad].MissionCode>0) PadPict(2+plr);
 	else if (Data->P[plr].LaunchFacility[pad]==1 && Data->P[plr].Mission[pad].MissionCode==0) PadPict(4+plr);
@@ -134,7 +134,7 @@ void PadDraw(char plr,char pad)
   // Crews
   grSetColor(7);PrintAt(13,107,"PRIMARY CREW  ");
   if (j>=0) {
-    grSetColor(6); // Now display the crew number, for player's easy reference - Leon
+    grSetColor(11); // Now display the crew number, for player's easy reference - Leon
     if (j==0) PrintAt(0,0,"(CREW I)");
     if (j==1) PrintAt(0,0,"(CREW II)");
     if (j==2) PrintAt(0,0,"(CREW III)");
@@ -144,13 +144,18 @@ void PadDraw(char plr,char pad)
     if (j==6) PrintAt(0,0,"(CREW VII)");
     if (j==7) PrintAt(0,0,"(CREW VIII)");
     for (k=0;k<Data->P[plr].Gcnt[i][j];k++) {
+	    grSetColor(1);
+	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Sex==1) grSetColor(5); // Show female 'nauts in blue
+	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].RDelay>0) grSetColor(0); // Show anyone who's announced retirement in black
+	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Sex==1 && Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].RDelay>0) grSetColor(7); 
+		// Show name in purple if 'naut is female AND has announced retirement
 	    PrintAt(25,115+7*k,&Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Name[0]);
     }
     if (l==-1) PrintAt(25,174,"UNAVAILABLE");
   }
   grSetColor(7);PrintAt(13,145,"BACKUP CREW  ");
   if (l>=0) {
-    grSetColor(6); // Now display the crew number, for player's easy reference - Leon
+    grSetColor(11); // Now display the crew number, for player's easy reference - Leon
     if (l==0) PrintAt(0,0,"(CREW I)");
     if (l==1) PrintAt(0,0,"(CREW II)");
     if (l==2) PrintAt(0,0,"(CREW III)");
@@ -160,6 +165,11 @@ void PadDraw(char plr,char pad)
     if (l==6) PrintAt(0,0,"(CREW VII)");
     if (l==7) PrintAt(0,0,"(CREW VIII)");
     for (k=0;k<Data->P[plr].Gcnt[i][l];k++) {
+	    grSetColor(1);
+	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Sex==1) grSetColor(5); // Show female 'nauts in blue
+	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].RDelay>0) grSetColor(0); // But show anyone who's announced retirement in black
+	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Sex==1 && Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].RDelay>0) grSetColor(7); 
+		// Show name in purple if 'naut is female AND has announced retirement
 	    PrintAt(25,153+7*k,&Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Name[0]);
     }
     if (j==-1) PrintAt(25,136,"UNAVAILABLE");

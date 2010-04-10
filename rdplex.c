@@ -175,7 +175,7 @@ void DrawRD(char player_index)
   DispBig(50,5,"RESEARCH",0,-1);
   grSetColor(11);
 
-  if (Data->Season==0) PrintAt(158,8,"SPRING");
+  if (Data->Season==0) PrintAt(157,8,"SPRING");
   else PrintAt(162,8,"FALL");
   PrintAt(163,15,"19");
   DispNum(0,0,Data->Year);
@@ -248,7 +248,7 @@ RDButTxt(int cost, int encodedRolls, char playerIndex)
 	else
 	{
 		grSetColor(11);
-		PrintAt(195, 191, "R&D ");
+		PrintAt(192, 191, "R&D ");
 		DispNum(0, 0, diceRoll);
 		PrintAt(0, 0, "% IMPROVEMENT");
 		if (Data->P[playerIndex].RDMods > 0)
@@ -714,7 +714,7 @@ void DrawHPurc(char player_index)
   gxVirtualDisplay(&but,214,0,246,30,312,59,0);// Misc
 
   grSetColor(11);
-  PrintAt(195,190,"PURCHASE EQUIPMENT");
+  PrintAt(191,190,"PURCHASE EQUIPMENT");
 
   if (Data->Season==0) PrintAt(158,8,"SPRING");
   else PrintAt(162,8,"FALL");

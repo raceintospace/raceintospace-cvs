@@ -87,12 +87,12 @@ void MisIntel(char plr,char acc)
  char mis,found;
  static char F[3][14] = {
   {6,1,2,3,4,5}, //58 & 59
-  {13,6,25,7,9,10,11,12,8,14,15,18,16}, //60 to 64
-  {11,43,38,48,53,54,55,56,42,49,50} // 65 and up
+  {13,6,25,7,9,10,11,12,8,14,15,18,16}, // 60 to 64
+  {11,43,38,48,53,54,55,56,42,49,50}  // 65 and up
  };
  static char W[3][16] = {
-  {11,7,3,1,1,2,2}, //58 & 59
-  {4,15,1,1,3,3,3,2,2,2,2,1,3,1,1}, //60 to 64
+  {11,7,3,1,1,2,2},  //58 & 59
+  {4,15,1,1,3,3,3,2,2,2,2,1,3,1,1}, // 60 to 64
   {5,12,3,3,3,3,2,2,1,1,1,1} // 65 and up
  };
  for (i=0;i<20;i++) save[i]=0;
@@ -174,7 +174,7 @@ void XSpec(char plr,char mis,char year)
  grSetColor(1);
  PrintAt(33,155,"THE ");if (plr==0) PrintAt(0,0,"CIA ");
  else PrintAt(0,0,"KGB ");PrintAt(0,0,"REPORTS THAT THE ");
- if (plr==0) PrintAt(0,0,"SOVIET UNION IS");else PrintAt(0,0,"UNITED STATES ARE");
+ if (plr==0) PrintAt(0,0,"SOVIET UNION IS");else PrintAt(0,0,"UNITED STATES IS");
  PrintAt(33,169,"PLANNING A ");
  grSetColor(9);MissionName(mis,93,169,30);grSetColor(1);
  PrintAt(33,183,"SOMETIME IN THE NEXT YEAR.");
@@ -202,7 +202,7 @@ void Special(char p,int ind)
  grSetColor(1);
  PrintAt(33,155,"THE ");if (p==0) PrintAt(0,0,"CIA ");
  else PrintAt(0,0,"KGB ");PrintAt(0,0,"REPORTS THAT THE ");
- if (p==0) PrintAt(0,0,"SOVIET UNION HAS ");else PrintAt(0,0,"UNITED STATES HAVE ");
+ if (p==0) PrintAt(0,0,"SOVIET UNION HAS ");else PrintAt(0,0,"UNITED STATES HAS ");
  PrintAt(33,169,"PURCHASED ");PrintAt(0,0,"A NEW");
  grSetColor(9);
  if (ind>=5)
@@ -214,7 +214,7 @@ void Special(char p,int ind)
 
    else PrintAt(0,0," LAUNCH FACILITY ");
  grSetColor(1);
- PrintAt(33,183,"FOR THEIR SPACE PROGRAM");
+ PrintAt(33,183,"FOR ITS SPACE PROGRAM");
  TopSecret(p,ind);
 }
 
@@ -244,7 +244,7 @@ void BackIntel(char p,char year)
  w=Data->P[p].PastIntel[year].cdex;
  fin=sOpen("CODENAME.DAT","rb",0);     // Get Mission DataFile
  fseek(fin,(code*6*20)+(w*20),SEEK_SET); // Find Mission Type
- fread(&Name,sizeof Name,1,fin);            // Get new Mission Info
+ fread(&Name,sizeof Name,1,fin);           // Get new Mission Info
  fclose(fin);
  PrintAt(xc,yc,&Name[0]); }
  if (prg==5) {XSpec(p,ind,year);return;}
@@ -298,7 +298,7 @@ void BackIntel(char p,char year)
  grSetColor(1);
  PrintAt(33,155,"THE ");if (p==0) PrintAt(0,0,"CIA ");
  else PrintAt(0,0,"KGB ");PrintAt(0,0,"REPORTS THAT THE ");
- if (p==0) PrintAt(0,0,"SOVIET UNION IS");else PrintAt(0,0,"UNITED STATES ARE");
+ if (p==0) PrintAt(0,0,"SOVIET UNION IS");else PrintAt(0,0,"UNITED STATES IS");
  PrintAt(33,169,"DEVELOPING THE ");
  grSetColor(9);
  switch(prg)
@@ -332,15 +332,15 @@ void HarIntel(char p,char acc)
   {5,9,10,18,12,12,12,12,12,12} //66
  };
  static char W[10][15] = {
- {9,8,3,2,1,1,3,1}, //58
- {7,11,3,1,1,2,1,1,3,1,1}, //59
- {5,13,1,1,2,2,2,2,3,2,1,2,2}, //60
- {5,12,2,2,2,2,2,1,3,2,2,2}, //61
- {5,10,3,3,2,3,2,3,2,2}, //62
- {3,14,3,3,2,3,2,2,2,2,2,2,2,3}, //63
+ {9,8,3,2,1,1,3,1}, // 58
+ {7,11,3,1,1,2,1,1,3,1,1}, // 59
+ {5,13,1,1,2,2,2,2,3,2,1,2,2}, // 60
+ {5,12,2,2,2,2,2,1,3,2,2,2}, // 61
+ {5,10,3,3,2,3,2,3,2,2}, // 62
+ {3,14,3,3,2,3,2,2,2,2,2,2,2,3}, // 63
  {3,15,3,3,2,3,3,1,2,2,2,2,1,2,3}, // 64
- {3,15,3,3,2,3,3,1,2,2,2,2,1,2,3}, //65
- {3,15,3,3,2,3,3,1,2,2,2,2,1,2,3} //66
+ {3,15,3,3,2,3,3,1,2,2,2,2,1,2,3}, // 65
+ {3,15,3,3,2,3,3,1,2,2,2,2,1,2,3} // 66
  };
  for (i=0;i<28;i++) save[i]=0;
  if (acc==0)
@@ -383,7 +383,7 @@ void HarIntel(char p,char acc)
 	  else if (save[j]==1) tot++;
 	  if (nf==0) j++;
 	};
-	if (j>0) j=j-1; //adjust
+	if (j>0) j=j-1; // adjust
 
    }
   else
@@ -579,7 +579,7 @@ void DrawBre(char plr)
   ShBox(150,29,313,133);InBox(152,31,310,131);RectFill(153,32,310,131,0);
   ShBox(132,29,148,80);
   ShBox(132,82,148,133);
-  ShBox(6,29,130,41);InBox(8,31,128,39); //code
+  ShBox(6,29,130,41);InBox(8,31,128,39); // code
   ShBox(6,43,130,63);InBox(8,45,128,61); // codename
   ShBox(6,65,130,85);InBox(8,67,128,83); // class
   ShBox(6,87,130,101);InBox(8,89,128,99); // crew
@@ -587,9 +587,9 @@ void DrawBre(char plr)
   ShBox(6,120,130,133);InBox(8,122,128,131); // duration
   IOBox(133,30,147,79);IOBox(133,83,147,132);
   ShBox(6,135,313,194);RectFill(7,136,312,193,9);InBox(11,139,308,190);RectFill(12,140,307,189,7);
-  DispBig(34,5,"INTELLIGENCE BRIEFING",1,-1);
+  DispBig(33,5,"INTELLIGENCE BRIEFING",1,-1);
   FlagSm(plr,4,4);
-  grSetColor(1);PrintAt(258,13,"CONTINUE");
+  grSetColor(1);PrintAt(256,13,"CONTINUE");
   UPArrow(137,42);DNArrow(137,95);
   
 }
@@ -605,7 +605,7 @@ void Bre(char plr)
  while (1)
   {
     key=0;GetMouse();
-    if (mousebuttons > 0 || key>0)  /* Game Play */
+    if (mousebuttons > 0 || key>0)  /* Gameplay */
      {
       if ((x>=135 && y>32 && x<=145 && y<=77 && mousebuttons>0) || key==UP_ARROW)
        {
@@ -692,12 +692,12 @@ void DrawIStat(char plr)
 	DispNum(5,123,25);PrintAt(17,123,"%");                  
 	gxVirtualDisplay(&but,0,0,8,165,74,194,0);  // Unmanned
 	gxVirtualDisplay(&but,68,0,84,165,155,194,0); // Rocket
-	gxVirtualDisplay(&but,141,0,165,165,236,194,0);// Manned
-	gxVirtualDisplay(&but,214,0,246,165,312,194,0);// Misc
+	gxVirtualDisplay(&but,141,0,165,165,236,194,0); // Manned
+	gxVirtualDisplay(&but,214,0,246,165,312,194,0); // Misc
 	grSetColor(6);
 	DispBig(40,5,"INTELLIGENCE STATS",1,-1);
 	FlagSm(plr,4,4);
-	grSetColor(1);PrintAt(258,13,"CONTINUE");
+	grSetColor(1);PrintAt(256,13,"CONTINUE");
 	FadeIn(2,pal,10,0,0);
 	
 }
@@ -707,7 +707,7 @@ void ReButs(char old,char nw)
   
   switch(old) {
     case 0:OutBox(7,164,75,195);
-	   gxVirtualDisplay(&but,0,0,8,165,74,194,0);// UnManned
+	   gxVirtualDisplay(&but,0,0,8,165,74,194,0); // Unmanned
 	   break;
     case 1:OutBox(83,164,156,195);
 	   gxVirtualDisplay(&but,68,0,84,165,155,194,0);  // Rocket
@@ -717,13 +717,13 @@ void ReButs(char old,char nw)
 	   break;
 
     case 3:OutBox(245,164,313,195);
-	   gxVirtualDisplay(&but,214,0,246,165,312,194,0);// Misc
+	   gxVirtualDisplay(&but,214,0,246,165,312,194,0); // Misc
 	   break;
     default:break;
   }
   switch(nw) {
     case 0:InBox(7,164,75,195);
-	   gxVirtualDisplay(&but,0,31,8,165,74,194,0);// UnManned
+	   gxVirtualDisplay(&but,0,31,8,165,74,194,0); // Unmanned
 	   break;
     case 1:InBox(83,164,156,195);
 	   gxVirtualDisplay(&but,68,31,84,165,155,194,0);  // Rocket
@@ -733,7 +733,7 @@ void ReButs(char old,char nw)
 	   break;
 
     case 3:InBox(245,164,313,195);
-	   gxVirtualDisplay(&but,214,31,246,165,312,194,0);// Misc
+	   gxVirtualDisplay(&but,214,31,246,165,312,194,0); // Misc
 	   break;
   }
   
@@ -748,7 +748,7 @@ int place=-1;
   while (1)
   {
 	key=0;GetMouse();
-    if (mousebuttons > 0 || key>0)  /* Game Play */
+    if (mousebuttons > 0 || key>0)  /* Gameplay */
     {
      if (((x>=7 && y>=164 && x<=75 && y<=195 && mousebuttons>0) || key=='U') && place!=0)
       {
@@ -758,7 +758,7 @@ int place=-1;
 	    ReButs(place,0);
 	    place=0;
 	    IInfo(plr,place,0);
-	    /* UnManned */
+	    /* Unmanned */
       };
       if (((x>=83 && y>=164 && x<=156 && y<=195 && mousebuttons>0) || key=='R') && place!=1)
        {

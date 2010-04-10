@@ -28,6 +28,8 @@
 
 #define DELAYCNT 10
 
+int MisCod;  // Variable to store Mission Code (for knowing when to display Duration level)
+
 extern struct mStr Mis;
 
 void DrawBudget(char player,char *pStatus)
@@ -391,8 +393,8 @@ void DrawViewing(char plr)
   ShBox(302,147,312,176);DNArrow(304,149);
 
   grSetColor(11);
-  PrintAt(79,35,"LAST THREE LAUNCHED MISSIONS");
-  PrintAt(90,108,"PAST CURRENT EVENTS");
+  PrintAt(82,35,"LAST THREE LAUNCHED MISSIONS");
+  PrintAt(106,108,"PAST CURRENT EVENTS");
 
   grSetColor(1);PrintAt(258,13,"CONTINUE");
   DispBig(45,5,"VIEWING STAND",0,-1);
@@ -406,6 +408,21 @@ void DrawViewing(char plr)
 
      PrintAt(9,49+16*misnum,Data->P[plr].History[i].MissionName[0]);
      PrintAt(9,55+16*misnum,Mis.Abbr);
+     MisCod=Data->P[plr].History[i].MissionCode;
+     if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)
+     {
+	switch(Data->P[plr].History[i].Duration)
+	{
+	 case 1:PrintAt(0,0,"");break;
+	 case 2:PrintAt(0,0," (B)");break;
+	 case 3:PrintAt(0,0," (C)");break;
+	 case 4:PrintAt(0,0," (D)");break;
+	 case 5:PrintAt(0,0," (E)");break;
+	 case 6:PrintAt(0,0," (F)");break;
+	 default:PrintAt(0,0,"");break;
+	}
+     }
+
      PrintAt(140,49+16*misnum,"PRESTIGE: ");DispNum(0,0,Data->P[plr].History[i].Prestige);
 
      PrintAt(230,49+16*misnum,Months[Data->P[plr].History[i].Month]);

@@ -764,12 +764,13 @@ void GuyDisp(int xa,int ya,struct Astros *Guy)
 {
    grSetColor(1);
    assert(Guy != NULL);
-   PrintAt(xa,ya,Guy->Name);
+   if (Guy->Sex==1) grSetColor(18);  // Display female 'nauts in blue, not white
+   PrintAt(xa,ya,Guy->Name);PrintAt(0,0,": ");
    switch(Guy->Status) {
-      case 1: grSetColor(9);PrintAt(0,0," : DEAD");break;
-      case 2: grSetColor(12);PrintAt(0,0," : INJ");break;
-      case 3: grSetColor(12);PrintAt(0,0," : INJ");break;
-      default: grSetColor(13);PrintAt(0,0," : OK");break;
+      case 1: grSetColor(9);PrintAt(0,0,"DEAD");break;
+      case 2: grSetColor(12);PrintAt(0,0,"INJ");break;
+      case 3: grSetColor(12);PrintAt(0,0,"INJ");break;
+      default: grSetColor(13);PrintAt(0,0,"OK");break;
       }
   return;
 }
@@ -841,7 +842,7 @@ char FailureMode(char plr,int prelim,char *text)
 
   // Flight Crew Info
   InRFBox(4,131,315,151,0);// Astro List/Crew
-  grSetColor(12);PrintAt(14,139,"CREW");PrintAt(9,146,"STATUS");
+  grSetColor(12);PrintAt(15,139,"CREW");PrintAt(9,146,"STATUS");
 
 
    if (MANNED[Mev[STEP].pad]>0) GuyDisp(49,138,MA[Mev[STEP].pad][0].A);
@@ -888,7 +889,7 @@ char FailureMode(char plr,int prelim,char *text)
 
   // Failure Diagram
   InRFBox(162,28,312,42,10);
-  grSetColor(11);PrintAt(181,37," EQUIPMENT DETAIL");
+  grSetColor(11);PrintAt(191,37,"EQUIPMENT DETAIL");
 
   InRFBox(162,46,312,127,0); // Image is 188,49
 

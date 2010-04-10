@@ -319,7 +319,7 @@ char REvent(char plr)
 	      if (evflag==0) return 1;
 	      break;
 
-     case 20: /* the most advanced rocket program is effected.
+     case 20: /* the most advanced rocket program is affected.
  		   drop the safety factor in half. */
 	      evflag=0;
 	      for (i=3;i>=0;i--)
@@ -335,7 +335,7 @@ char REvent(char plr)
 		    };
 	      break;
 
-     case 21: // Probes and Sat's Max SF and RD up 5% */
+     case 21: // Probes' and Sats' Max SF and RD up 5% */
 	      for (i=1;i<3;i++)
            {
 		      Data->P[plr].Probe[i].MaxRD+=5;
@@ -350,8 +350,8 @@ char REvent(char plr)
 	       };
 	      break;
 
-   case 22: case 84: /* roll six, six sided dice and add to the current safety
-		   factor the program */
+   case 22: case 84: /* roll six 6-sided dice and add to the current safety
+		   factor of the program */
 	      x=random(6)+random(6)+random(6)+random(6)+random(6)+random(6)+6;
 	      evflag=NMod(plr,3,1,x);
 	      if (evflag==0) return 1;
@@ -359,7 +359,7 @@ char REvent(char plr)
 	      break;
 
      case 23: /* this applies to the most advanced rocket program.
-	      roll six, six sided dice and add to the current
+	      roll six 6-sided dice and add to the current
 	      safety factor. */
 	      x=random(6)+random(6)+random(6)+random(6)+random(6)+random(6)+6;
 	      evflag=NMod(plr,2,1,x);
@@ -367,7 +367,7 @@ char REvent(char plr)
 	      evflag=x;
 	      break;
 
-     case 24:  /* this for most adv. satellites, roll 4, 6 sided
+     case 24:  /* this for most adv. satellites, roll four 6-sided
 	       dice and add to safety factor. */
 	      x=random(6)+random(6)+random(6)+random(6)+4;
 	      evflag=NMod(plr,1,1,x);
@@ -375,7 +375,7 @@ char REvent(char plr)
 	      evflag=x;
 	      break;
 
-     case 94:  /* this for most adv capsule, roll 4, 6 sided
+     case 94:  /* this for most adv capsule, roll four 6-sided
 	       dice and add to safety factor. */
 	      x=random(6)+random(6)+random(6)+random(6)+4;
 	      evflag=NMod(plr,3,1,x);
@@ -572,16 +572,16 @@ char REvent(char plr)
            if (Data->P[plr].LaunchFacility[i]==1 && Data->P[plr].Mission[i].MissionCode==0) break;
           }
          if (j==20) return 1;
-	      /* get which of three facilities damaged */
+	      /* get which of the three facilities damaged */
 	      Data->P[plr].LaunchFacility[i]=10;
 	      break;
 
-     case 65: // gemini spacecraft will cost additional 2MB's
+     case 65: // Gemini or Voskhod will cost additional 2MB's per spacecraft
 	      if (Data->P[plr].Manned[1].Num<0) return 1;
-	      Data->P[plr].Manned[1].InitCost+=2;
+	      Data->P[plr].Manned[1].UnitCost+=2;  // Used to say "InitCost", which effectively disabled this newscast -Leon
 	      break;
 
-     case 83: // apollo or soyuz will cost additional 3MB's per spacecraft
+     case 83: // Apollo or Soyuz will cost additional 3MB's per spacecraft
 	      if (Data->P[plr].Manned[2].Num<0) return 1;
 	      Data->P[plr].Manned[2].UnitCost+=3;
 	      break;
@@ -623,7 +623,7 @@ char REvent(char plr)
 	      Data->P[plr].FuturePlans=5;
 	      break;
 
-     case 85: // Primary Crew Scrubbed Backup Will Fly
+     case 85: // Primary Crew Scrubbed - Backup Will Fly
 	      evflag=0;
 	      for (i=0;i<3;i++)
    		if (Data->P[plr].Mission[i].MissionCode>0) evflag++;

@@ -20,6 +20,7 @@
 
 extern struct mStr Mis;
 
+int lenprogname;  // Variable to hold and manipulate length of program name
 
 int HardCrewAssign(char plr,char Pad,int MisType,char NewType)
 {
@@ -349,7 +350,10 @@ void FutAstList(char plr,char men,int M1,int M2,int M3,int M4)
   grSetColor(1);
   for (i=0;i<men;i++)
    if (m[i]>0) {
-    PrintAt(100,45+i*14,&Data->P[plr].Pool[m[i]-1].Name[0]);
+    if (Data->P[plr].Pool[m[i]-1].Sex==1) grSetColor(5);  // Print name in blue if 'naut is female
+    if (Data->P[plr].Pool[m[i]-1].RDelay>0) grSetColor(3); // Print name in gray if 'naut has announced retirement (black doesn't show well here) -Leon
+    PrintAt(100,44+i*14,&Data->P[plr].Pool[m[i]-1].Name[0]);
+    grSetColor(1);
       RectFill(87,39+i*14,94,39+i*14,2); // Top
       RectFill(87,39+i*14,87,44+i*14,2); // Left
       RectFill(87,45+i*14,94,45+i*14,3); // Bottom
@@ -404,18 +408,23 @@ void DrawHard(char mode,char pad,char mis,char plr)
 	}  
        } 
 
- PrintAt(85,85,"PAD: ");// Used to be followed by: DispNum(0,0,pad+1); -Leon
+ PrintAt(85,85,"PAD: "); // Used to be followed by: "DispNum(0,0,pad+1);"--now shows PAD: A/B/C instead of 1/2/3 -Leon
  switch(pad)
   {
    case 0:PrintAt(0,0,"A");break;
-   case 1:PrintAt(0,0,"A");break;
-   case 2:PrintAt(0,0,"A");break;
+   case 1:PrintAt(0,0,"B");break;
+   case 2:PrintAt(0,0,"C");break;
   }
- PrintAt(94,109,Data->P[plr].Manned[0].Name);
- PrintAt(174,109,Data->P[plr].Manned[1].Name);
- PrintAt(94,126,Data->P[plr].Manned[2].Name);
- PrintAt(174,126,Data->P[plr].Manned[3].Name);
- PrintAt(137,143,Data->P[plr].Manned[4].Name);
+ lenprogname=(3-strlen(Data->P[plr].Manned[0].Name))*3;
+ PrintAt(111+lenprogname,109,Data->P[plr].Manned[0].Name); //DispNum(0,0,94+18+(3-strlen(Data->P[plr].Manned[0].Name))*3);
+ lenprogname=(3-strlen(Data->P[plr].Manned[1].Name))*3;
+ PrintAt(190+lenprogname,109,Data->P[plr].Manned[1].Name); //DispNum(0,0,174+18+(3-strlen(Data->P[plr].Manned[1].Name))*3);
+ lenprogname=(3-strlen(Data->P[plr].Manned[2].Name))*3;
+ PrintAt(111+lenprogname,126,Data->P[plr].Manned[2].Name); //DispNum(0,0,94+18+(3-strlen(Data->P[plr].Manned[2].Name))*3);
+ lenprogname=(3-strlen(Data->P[plr].Manned[3].Name))*3;
+ PrintAt(190+lenprogname,126,Data->P[plr].Manned[3].Name); //DispNum(0,0,174+18+(3-strlen(Data->P[plr].Manned[3].Name))*3);
+ lenprogname=(3-strlen(Data->P[plr].Manned[4].Name))*3;
+ PrintAt(149+4+lenprogname,143,Data->P[plr].Manned[4].Name);
  PrintAt(143,163,"CANCEL");
  return;
 }
@@ -426,7 +435,7 @@ int HardRequest(char plr,char mode,char mis,char pad)
   for (i=0;i<5;i++)
 	if (Data->P[plr].Manned[i].Num>=0) {pr[i]=1;t++;}
 	  else pr[i]=0;
-  // special case 1-man capsule can't go to the moon
+  // special case: 1-man capsule can't go to the Moon
   GetMisType(mis);
   // exceptions
   if (Mis.Lun==1 || Mis.Doc==1 || Mis.mEq>1 || Mis.Days>1 ||
@@ -446,7 +455,7 @@ int HardRequest(char plr,char mode,char mis,char pad)
   
 
   DrawHard(mode,pad,mis,plr);
-   if (pr[0]==0) InBox(81,100,158,114); else IOBox(81,100,158,114);
+  if (pr[0]==0) InBox(81,100,158,114); else IOBox(81,100,158,114);
   if (pr[1]==0) InBox(161,100,238,114); else IOBox(161,100,238,114);
   if (pr[2]==0) InBox(81,117,158,131); else IOBox(81,117,158,131);
   if (pr[3]==0) InBox(161,117,238,131); else IOBox(161,117,238,131);

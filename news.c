@@ -203,14 +203,14 @@ OpenNews(char plr, char *buf, int bud)
 	if (Data->Year >= 58)
 	{
 		if (Data->Season == 1 && plr == 0)
-			strcpy(&buf[strlen(buf)], "xCHECK INTELLIGENCE, THE CIA REPORTS NEW INFORMATION.x\0");
+			strcpy(&buf[strlen(buf)], "xCHECK INTELLIGENCE: THE CIA REPORTS NEW INFORMATION.x\0");
 		else if (Data->Season == 1 && plr == 1)
-			strcpy(&buf[strlen(buf)], "xCHECK INTELLIGENCE, THE KGB REPORTS NEW INFORMATION.x\0");
+			strcpy(&buf[strlen(buf)], "xCHECK INTELLIGENCE: THE KGB REPORTS NEW INFORMATION.x\0");
 	}
 
-	//-----------------------------------------------------
-	//Specs: check tracking station for directors message |
-	//-----------------------------------------------------
+	//------------------------------------------------------
+	//Specs: check tracking station for director's message |
+	//------------------------------------------------------
 #if 1
 	if (Option != -1)
 	{
@@ -221,12 +221,12 @@ OpenNews(char plr, char *buf, int bud)
 			{
 				if (Option == 0)
 				{
-					strcpy(&buf[strlen(buf)], "xCHECK THE TRACKING STATION, THE SOVIETx");
+					strcpy(&buf[strlen(buf)], "xCHECK THE TRACKING STATION: THE SOVIETx");
 					strcpy(&buf[strlen(buf)], "DIRECTOR HAS SENT A NEW MESSAGE.x\0");
 				}
 				else if (Option == 1)
 				{
-					strcpy(&buf[strlen(buf)], "xCHECK THE TRACKING STATION, THE UNITEDx");
+					strcpy(&buf[strlen(buf)], "xCHECK THE TRACKING STATION: THE UNITEDx");
 					strcpy(&buf[strlen(buf)], "STATES DIRECTOR HAS SENT A NEW MESSAGE.x\0");
 				}
 			}
@@ -284,7 +284,7 @@ OpenNews(char plr, char *buf, int bud)
 	if (plr == 0)
 		strcpy(&buf[bufsize], "xAND THAT'S THE NEWS, I'M CARTER WALCRITE.x");
 	else
-		strcpy(&buf[bufsize], "xTHIS CONCLUDES OUR NEWS, I'M SVETLANA IZVESTIA.x");
+		strcpy(&buf[bufsize], "xTHIS CONCLUDES OUR NEWS BROADCAST. I'M SVETLANA IZVESTIA. GOOD NIGHT.x");
 }
 
 void

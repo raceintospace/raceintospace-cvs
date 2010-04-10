@@ -1,18 +1,80 @@
+2010-04-09 Leon Baradat <peyre@users.sourceforge.net>
+
+	* V234
+
+	* ast4.c, ast2.c - In capsule/shuttle screen, and Astronaut Complex / Cosmonaut  
+	Center, the name of a 'naut who's announced retirement now shows in black.  Also 
+	in the 'Naut Complex/Center, the capsule/shuttle program names, and the names of 
+	the Adv. Training programs, are better centered in their respective buttons.  In 
+	the capsule/shuttle screen, MAX DURATION now shows Duration level after the number 
+	of days: e.g., "14 DAYS (LVL E)" for Gemini.
+
+	* ast0.c, ast4.c - Female 'nauts now show in pale purple.  They used to show in  
+	that color during recruitment, then in orange in the select list in various 
+	screens (vs. the men in yellow), then in white in the capsule/shuttle window 
+	(indistinguishable from the men).  Now all three show women in pale purple.  Also 
+	in ast0.c, 'nauts who've announced retirement show in purple in the select list in 
+	various screens (black doesn't show well here).  In ast4.c, women who have announced 
+	retirement now show in black.
+
+	* crew.c - In the screen where you assign crews to a mission, the name of a 'naut
+	who's announced retirement shows in gray rather than white (black doesn't show 
+	well on a dark blue background).  Also the capsule/shuttle names are better 
+	centered in their respective buttons.
+
+	* museum.c - In Astronaut/Cosmonaut History, now displays female 'nauts in pale 
+	purple instead of white.  Also shows "ASTRONAUT COMPLEX" and "COSMONAUT CENTER" 
+	rather than just "COMPLEX" and "CENTER", and rather than just a program name 
+	(e.g., "APOLLO") it now follows that with "PROGRAM" (e.g., "APOLLO PROGRAM").
+
+	* mis_c.c - Shows names of female 'nauts in pale purple rather than white.
+
+	* place.c - Shows names of female 'nauts in pale purple rather than yellow.  Also 
+	centered YES, NO, and REPLAY MISSION inside their buttons.
+
+	* news_suq.c - Fixed bug in newscast saying that Gemini/Voskhod capsules will cost 
+	2MB extra per spacecraft.  A typo had prevented it from having an effect (though 
+	the equivalent newscast for Apollo/Soyuz did work).
+
+	* budget.c - Shows Duration level of Duration missions, and some better centerings.
+
+	* admin.c - Fixed typo "ENOUGHT".
+
+	* radar.c - Male 'nauts who have announced retirement now show in black, while women 
+	who've announced retirement now show in purple.  Also better centering of some text.
+
+	* newmis.c - Was displaying two spaces between month and year.  Also better centering 
+	of "SINGLE LAUNCH" and "JOINT LAUNCH".
+
+	* port.c - Changed it to add a question mark to "QUIT" "ARE YOU SURE" YES/NO.
+
+	* rdplex.c - Better centering of text in the "PURCHASE EQUIPMENT" and 
+	"R&D xx% IMPROVEMENT" buttons in R&D and Purchasing screens.
+
+	* prefs.c - Better centering of "COUNTRY" in the preferences screen.
+
+	* ast1.c - Better centering of text in confirmation box for recruiting 'nauts.
+
+	* ast3.c - Better centering of ASTRO/COSMONAUT SELECTION and ASTRO/COSMONAUTS IN TRAINING.
+
+	* intel.c - Better centering of "CONTINUE" in its button.
+
+	* news.c - Small esthetic changes, including making Svetlana say the same thing in print
+	that she says vocally at the end of her newscast.
+
 2010-03-14 Leon Baradat <peyre@users.sourceforge.net>
 
 	* V233
 
 	* admin.c, newmis.c, rush.c, vab.c: Fixed bug that continued to show the Duration 
-		level of a scrubbed duration mission or of a lunar mission (lunar pass, 
-		orbital, or landing).  In rush.c, also fixed a bug that continued to show 
-		the Duration level of the original mission after it had been downgraded to 
-		remove the Duration step(s).
+	level of a scrubbed duration mission or of a lunar mission (lunar pass, orbital, or 
+	landing).  In rush.c, also fixed a bug that continued to show the Duration level of 
+	the original mission after it had been downgraded to remove the Duration step(s).
 
 	* radar.c - Now shows the crew number, e.g., "(CREW III)" above the names of the 
-		    crew members in the launch pad screen.  Also fixed a tiny bug that 
-		    displayed duration level on scrubbed missions--and on missions that 
-		    had been downgraded to remove the duration step.  I noticed this bug 
-		    when I found the bug above.
+	crew members in the launch pad screen.  Also fixed a tiny bug that displayed duration 
+	level on scrubbed missions--and on missions that had been downgraded to remove the 
+	duration step.  I noticed this bug when I found the bug above.
 
 	* crew.c - Added duration level to the screen where you assign crews to a mission.
 
@@ -29,8 +91,7 @@
 	* V232
 
 	* admin.c, newmis.c, rush.c, vab.c: These windows now show the Duration level of a 
-	                                    Duration mission, e.g.: ORBITAL-EX (B) instead 
-					    of just ORBITAL-EX.
+	Duration mission, e.g.: ORBITAL-EX (B) instead of just ORBITAL-EX.
 
 2010-02-22 Leon Baradat <peyre@users.sourceforge.net>
 

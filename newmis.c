@@ -144,7 +144,7 @@ void MisAnn(char plr,char pad)
 
   PrintAt(0,0,Month[Data->P[plr].Mission[pad].Month]);
 
-  PrintAt(0,0," 19");DispNum(0,0,Data->Year);
+  PrintAt(0,0,"19");DispNum(0,0,Data->Year);
   grSetColor(1);
 
   GetMisType(Data->P[plr].Mission[pad].MissionCode);
@@ -192,10 +192,10 @@ void MisAnn(char plr,char pad)
   //grSetColor(9);
   //PrintAt(102,78,"C");PrintAt(189,78,"S");
 
-  if (Data->P[plr].Mission[pad].Joint==0) PrintAt(129,91,"SINGLE LAUNCH");
+  if (Data->P[plr].Mission[pad].Joint==0) PrintAt(128,91,"SINGLE LAUNCH");
     else 
      {
-      PrintAt(129,91,"JOINT LAUNCH");
+      PrintAt(131,91,"JOINT LAUNCH");
       PrintAt(49,101,"PART ONE");
       PrintAt(102,101,"PAD ");
       //DispNum(0,0,pad);

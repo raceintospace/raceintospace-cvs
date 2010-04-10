@@ -26,6 +26,8 @@
 #include "Buzz_inc.h"
 #include "externs.h"
 
+int lenprogname;  // Variable to hold and manipulate length of program name
+
 void DrawLimbo(char plr)
 {
    int i;
@@ -71,26 +73,28 @@ void DrawLimbo(char plr)
 	 grSetColor(17);
 	 }
       else grSetColor(11);
-      PrintAt(181,101+21*i,Data->P[plr].Manned[i].Name);
+      lenprogname=(7-strlen(Data->P[plr].Manned[i].Name))*3;
+      //lenprogname=(7-lenprogname)*2
+      PrintAt(181+lenprogname,101+21*i,Data->P[plr].Manned[i].Name);
       PrintAt(181,107+21*i,"PROGRAM");
 
       grSetColor(11);
-      PrintAt(258,107+21*i,"TRAINING");
-      grMoveTo(258,101+21*i);
+      PrintAt(256,107+21*i,"TRAINING");
+      //grMoveTo(254,101+21*i);  This remmed out to manually place the Adv. Training names so they could be centered -Leon
 
       switch(i) {
-	 case 0: PrintAt(0,0,"CAPSULE");break;
-	 case 1: PrintAt(0,0,"L.M.");break;
-	 case 2: PrintAt(0,0,"E.V.A.");break;
-	 case 3: PrintAt(0,0,"DOCKING");break;
-	 case 4: PrintAt(0,0,"ENDURANCE");break;
+	 case 0: PrintAt(257,101+21*i,"CAPSULE");break;
+	 case 1: PrintAt(270,101+21*i,"L.M.");break;
+	 case 2: PrintAt(267,101+21*i,"E.V.A.");break;
+	 case 3: PrintAt(258,101+21*i,"DOCKING");break;
+	 case 4: PrintAt(251,101+21*i,"ENDURANCE");break;
 	 default: break;
 	 }
 
 
       }
 
-   grSetColor(11);PrintAt(185,37,"OPERATION SELECTION");
+   grSetColor(11);PrintAt(187,37,"OPERATION SELECTION");
 
    grSetColor(20);
    //PrintAt(258,13,"CONTINUE");
@@ -270,7 +274,7 @@ void Limbo(char plr)
 	 
 	 }
 
-   // Select Visit to Button
+   // Select Visit To Button
       if ((mousebuttons>0 && x>=241 && y>=48 && x<=313 && y<=65) || key==RT_ARROW) {
 	 tag=1;
 	 InBox(241,48,313,65);OutBox(167,48,239,65);
@@ -413,7 +417,16 @@ void Clear(void)
 void LimboText(char plr,int astro)
 {
    RectFill(44,31,145,40,3);grSetColor(11);
+    int col;
+    if (Data->P[plr].Pool[astro].Mood>=65) col=16;
+    if (Data->P[plr].Pool[astro].Mood<65 && Data->P[plr].Pool[astro].Mood>=40) col=11;
+    if (Data->P[plr].Pool[astro].Mood<40 && Data->P[plr].Pool[astro].Mood>=20) col=8;
+    if (Data->P[plr].Pool[astro].Mood<20) col=0;
+    if (Data->P[plr].Pool[astro].Mood==0) col=3;
+    grSetColor(col);  // Print 'naut name in green/yellow/red/black depending on mood -Leon
+   if (Data->P[plr].Pool[astro].RDelay>0) grSetColor(0);  // Print name in black if 'naut has announced retirement (override mood) -Leon
    PrintAt(46,37,Data->P[plr].Pool[astro].Name);
+   grSetColor(11);
    RectFill(49,112,60,119,3);grSetColor(11);
    switch (Data->P[plr].Pool[astro].Group) {
       case 0: PrintAt(51,118,"I");break;
@@ -426,7 +439,9 @@ void LimboText(char plr,int astro)
    RectFill(128,79,145,92,3);
    RectFill(123,95,145,101,3);
    RectFill(130,54,155,61,3);
+    grSetColor(col); // Print 'naut mood in green/yellow/red/black depending on mood -Leon
    DispNum(132,60,Data->P[plr].Pool[astro].Mood);
+    grSetColor(11);
    DispNum(125,68,Data->P[plr].Pool[astro].Cap);
    DispNum(123,76,Data->P[plr].Pool[astro].LM); 
    DispNum(131,84,Data->P[plr].Pool[astro].EVA); 

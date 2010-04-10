@@ -99,7 +99,7 @@ void DrawPrefs(int where,char a1,char a2)
   PrintAt(23,30,"PLAYER 1");
   grSetColor(34);PrintAt(253,30,"PLAYER 2");
   grSetColor(5);
-  PrintAt(20,49,"COUNTRY");PrintAt(250,49,"COUNTRY");
+  PrintAt(23,49,"COUNTRY");PrintAt(254,49,"COUNTRY");
   PrintAt(17,101,"GAME LEVEL");PrintAt(247,101,"GAME LEVEL");
   PrintAt(250,148,"ASTRONAUT");PrintAt(250,155,"SELECTION");
   PrintAt(20,148,"ASTRONAUT");PrintAt(20,155,"SELECTION");

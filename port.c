@@ -94,7 +94,7 @@ typedef struct region {
 
 typedef struct mobj {
   char Name[30];       /**< Name of region */
-  char qty;            /**< Nunber of regions */
+  char qty;            /**< Number of regions */
   char Help[3];        /**< Help Box Stuff */
   REGION Reg[4];       /**< At Max 4 regions */
    } MOBJ;
@@ -657,7 +657,7 @@ void Master(char plr)
   r_value=random(1000);
   if (xMODE & xMODE_CLOUDS)
    {
-    if (plr==0 && Data->P[plr].Port[PORT_VAB]==0) SpotCrap(14,SPOT_LOAD);          //Usa Storm 
+    if (plr==0 && Data->P[plr].Port[PORT_VAB]==0) SpotCrap(14,SPOT_LOAD);          //USA Storm 
      else if (plr==1) SpotCrap(12,SPOT_LOAD);    //Sov Storm
    }
   else 
@@ -666,7 +666,7 @@ void Master(char plr)
      SpotCrap(3+(5*plr),SPOT_LOAD);
      xMODE &= ~xMODE_SPOT_ANIM;
     }
-   else if (t_value && g_value) SpotCrap(0+(5*plr),SPOT_LOAD);  //Lem
+   else if (t_value && g_value) SpotCrap(0+(5*plr),SPOT_LOAD);  //LEM
     else if (r_value<150) {
      if (plr==1 && Data->P[plr].Port[PORT_MedicalCtr]==1) SpotCrap(18,SPOT_LOAD);   
       else SpotCrap(1+(5*plr),SPOT_LOAD);
@@ -1132,7 +1132,7 @@ ui16 Count,*bone;
 #ifdef DEADCODE
 											// I'm not sure why we're redrawing the outlines here, 
 											//commenting it out for now.  if no problems are seen 
-											// with the port outlines then restore thiss
+											// with the port outlines then restore this
                        //   if (pPortOutlineRestore) 
 												//		PortOutLine(Count,bone,0);
 #endif
@@ -1181,9 +1181,9 @@ ui16 Count,*bone;
 }
 
 
-/** This is the code that controls the jump off point from the Space Ports to the
- * various areas.  It basically assigns a help message then makes a call into
- * the module which would have it's own event loop
+/** This is the code that controls the jumpoff point from the Spaceports to the
+ * various areas.  It basically assigns a help message, then makes a call into
+ * the module which would have its own event loop
  */
 char PortSel(char plr,char loc)
 {
@@ -1193,7 +1193,7 @@ char PortSel(char plr,char loc)
   switch(loc) {
    case PORT_Monument:  Help((plr==0)?"i023":"i022");
             strcpy(IKEY,"k022");
-            return pNOREDRAW;// Monuments
+            return pNOREDRAW; // Monuments
     case PORT_Pentagon: 
         if (Data->Year==57 || (Data->Year==58 && Data->Season==0)) {
            Help("i108");
@@ -1213,7 +1213,7 @@ char PortSel(char plr,char loc)
             if (LOAD==1) return pEXIT;
             else if (QUIT==1) return pQUIT;
             else {if (plr==0) Vab_Spot=4;return pNEWMUSIC;}
-    case PORT_AstroComplex: strcpy(IDT,"i039");Limbo(plr);return pREDRAW;// Astro Complex
+    case PORT_AstroComplex: strcpy(IDT,"i039");Limbo(plr);return pREDRAW; // Astro Complex
     case PORT_MedicalCtr: strcpy(IDT,"i041");Hospital(plr,0); return pREDRAW;
     case PORT_BasicTraining: strcpy(IDT,"i038");Train(plr,0);return pREDRAW;
     case PORT_Helipad: strcpy(IDT,"i037");Train(plr,2);return pREDRAW;
@@ -1222,7 +1222,7 @@ char PortSel(char plr,char loc)
     case PORT_Centrifuge: strcpy(IDT,"i037");Train(plr,5);return pREDRAW;
     case PORT_Airfield: strcpy(IDT,"i037");Train(plr,1);return pREDRAW;
     case PORT_Satellite: strcpy(IDT,"i019");SatBld(plr);return pREDRAW;
-    case PORT_LM: strcpy(IDT,"i044");strcpy(IKEY,"k209");LMBld(plr);return pREDRAW;// LM Program
+    case PORT_LM: strcpy(IDT,"i044");strcpy(IKEY,"k209");LMBld(plr);return pREDRAW; // LM Program
     case PORT_Jupiter: strcpy(IDT,"i036");Programs(plr,5);return pREDRAW;
     case PORT_XMS: strcpy(IDT,"i036");Programs(plr,4);return pREDRAW;
     case PORT_Apollo: strcpy(IDT,"i036");Programs(plr,3);return pREDRAW;
@@ -1277,7 +1277,7 @@ char PortSel(char plr,char loc)
                Help("i103");
               }
             return pNOREDRAW;
-    case PORT_Gate: // Secutity Gate : Quit
+    case PORT_Gate: // Security Gate : Quit
             QUIT=Request(plr,"QUIT",1);
 	          if(QUIT)
              {
@@ -1312,13 +1312,13 @@ char Request(char plr,char *s,char md)
   IOBox(91,103,164,130);
   InBox(92,58,243,97);
   grSetColor(1);
-  DispBig(109,110,"YES",0,0);
-  DispBig(196,110,"NO",0,0);
+  DispBig(111,110,"YES",0,0);
+  DispBig(194,110,"NO",0,0);
 
   grSetColor(11);
   if (md==6)  PrintAt(166-i*7,65,s);
   else DispBig(166-i*10,65,&s[0],0,-1);
-  PrintAt(138,94,"ARE YOU SURE");
+  PrintAt(135,94,"ARE YOU SURE?");
 
   while(1){
      if (md!=6) GetMse(plr,1);
@@ -1374,7 +1374,7 @@ char MisReq(char plr)
   } else {
     IOBox(60,141,229,155);
     grSetColor(1);
-    PrintAt(62,129,"ALL MISSIONS DO NOT HAVE");
+    PrintAt(62,129,"MISSIONS DO NOT ALL HAVE");
     PrintAt(62,136,"ASSIGNMENTS. NO COMMIT POSSIBLE");
     PrintAt(120,150,"REVIEW MISSIONS");
   };

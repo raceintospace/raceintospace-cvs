@@ -103,11 +103,11 @@ void DrawAstCheck(char plr)
   InBox(87,49,230,103);RectFill(88,50,229,102,7+plr*3);
   IOBox(98,133,150,149);IOBox(166,133,218,149);
   grSetColor(5);
-  if (plr==0) PrintAt(96,60,"ASTRONAUT");
-  else PrintAt(96,60,"COSMONAUT");
+  if (plr==0) PrintAt(99,60,"ASTRONAUT");
+  else PrintAt(99,60,"COSMONAUT");
   PrintAt(0,0," RECRUITMENT");
   grSetColor(11);
-  PrintAt(97,73,"GROUP ");
+  PrintAt(100,73,"GROUP ");
   switch (Data->P[plr].AstroLevel) {
     case 0:PrintAt(0,0,"I");pos=ASTRO_POOL_LVL1;break;
     case 1:PrintAt(0,0,"II");pos=ASTRO_POOL_LVL2;break;
@@ -115,29 +115,29 @@ void DrawAstCheck(char plr)
     case 3:PrintAt(0,0,"IV");pos=ASTRO_POOL_LVL4;break;
     case 4:PrintAt(0,0,"V");pos=ASTRO_POOL_LVL5;break;
   };
-  if (Data->Season==0) PrintAt(166,73,"SPRING 19"); else PrintAt(166,73,"FALL 19");
+  if (Data->Season==0) PrintAt(160,73,"SPRING 19"); else PrintAt(170,73,"FALL 19");
   DispNum(0,0,Data->Year);
   if (Data->P[plr].AstroLevel==0) i=20; else i=15;
   if (ad==0) {
-    DispNum(116,86,pos);
+    if (pos<10) DispNum(110,86,pos); else DispNum(108,86,pos);
     PrintAt(0,0," POSITIONS TO FILL");
-    PrintAt(135,97,"COST: ");DispNum(0,0,i);PrintAt(0,0," MB");
+    PrintAt(133,97,"COST: ");DispNum(0,0,i);PrintAt(0,0," MB");
   }else {
-    DispNum(116,86,Data->P[plr].AstroDelay);
+    if (Data->P[plr].AstroDelay!=1) DispNum(114,86,Data->P[plr].AstroDelay); else DispNum(118,86,Data->P[plr].AstroDelay);
     PrintAt(0,0," SEASON");
     if (Data->P[plr].AstroDelay!=1) PrintAt(0,0,"S");
     PrintAt(0,0," TO WAIT");
-    PrintAt(110,97,"FOR THE NEW RECRUITS");
+    PrintAt(104,97,"FOR THE NEW RECRUITS");
   }
   grSetColor(1);
 
   if (ad==1) {
-    PrintAt(99,113,"  YOU CANNOT RECRUIT");
-    if (plr==0) PrintAt(100,122,"ASTRONAUTS THIS TURN");
-    else PrintAt(100,122,"COSMONAUTS THIS TURN");
+    PrintAt(102,113,"  YOU CANNOT RECRUIT");
+    if (plr==0) PrintAt(102,122,"ASTRONAUTS THIS TURN");
+    else PrintAt(102,122,"COSMONAUTS THIS TURN");
     grSetColor(8);
-    PrintAt(113,143,"EXIT");
-    PrintAt(181,143,"EXIT");
+    PrintAt(114,143,"EXIT");
+    PrintAt(182,143,"EXIT");
   };
 
  if (ad==0) {
@@ -149,9 +149,9 @@ void DrawAstCheck(char plr)
     PrintAt(113,143,"EXIT");
     PrintAt(181,143,"EXIT");
   } else {
-    PrintAt(98,113,"DO YOU WISH TO RECRUIT");
-    if (plr==0) PrintAt(100,122,"ASTRONAUTS THIS TURN");
-    else PrintAt(100,122,"COSMONAUTS THIS TURN");
+    PrintAt(101,113,"DO YOU WISH TO RECRUIT");
+    if (plr==0) PrintAt(100,122,"ASTRONAUTS THIS TURN?");
+    else PrintAt(100,122,"COSMONAUTS THIS TURN?");
     grSetColor(6);PrintAt(116,143,"Y");grSetColor(1);PrintAt(0,0,"ES");
     grSetColor(6);PrintAt(187,143,"N");grSetColor(1);PrintAt(0,0,"O");
   };
@@ -210,7 +210,7 @@ void DrawAstSel(char plr)
 
   PrintAt(185,41,"REMAINING POSITIONS:");
 
-  if (Data->Season==0) PrintAt(86,41,"SPRING 19"); else PrintAt(86,41,"FALL 19");
+  if (Data->Season==0) PrintAt(88,41,"SPRING 19"); else PrintAt(98,41,"FALL 19");
   DispNum(0,0,Data->Year);
   grSetColor(9);
   PrintAt(12,52,"NAME:");  PrintAt(173,52,"NAME:");
@@ -226,8 +226,8 @@ void DrawAstSel(char plr)
   grSetColor(11);PrintAt(215,94,"DOCKING: ");grSetColor(1);PrintAt(0,0,"--");
   grSetColor(11);PrintAt(54,102,"ENDURANCE:");PrintAt(215,102,"ENDURANCE:");
   grSetColor(6);
-  PrintAt(38,119,"D");grSetColor(1);PrintAt(0,0,"ISMISS APPLICANT");
-  grSetColor(6);PrintAt(197,119,"R");grSetColor(1);PrintAt(0,0,"ECRUIT APPLICANT");
+  PrintAt(33,119,"D");grSetColor(1);PrintAt(0,0,"ISMISS APPLICANT");
+  grSetColor(6);PrintAt(194,119,"R");grSetColor(1);PrintAt(0,0,"ECRUIT APPLICANT");
   
   return;
 }

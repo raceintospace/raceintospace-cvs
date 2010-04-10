@@ -26,6 +26,8 @@ extern char IDT[5],IKEY[5],AL_CALL,AI[2];
 extern struct mStr Mis;
 extern char Option,MAIL;
 
+int MisCod;  // Variable to store Mission Code (for knowing when to display Duration level)
+
 void BCDraw(int y)
 {
   ShBox(23,y,54,20+y);//ShBox(56,y,296,20+y);
@@ -544,8 +546,8 @@ int Help(char *FName)
   else {
    IOBox(83,131,156,156);
    IOBox(168,131,241,156);
-   DispBig(88,137,"YES",1,0);
-   DispBig(175,137,"NO",1,0);
+   DispBig(103,137,"YES",1,0);
+   DispBig(192,137,"NO",1,0);
    }
 
   // Display Title
@@ -640,6 +642,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
   PrintAt(12,64,"MISSION TYPE:");
   grSetColor(11);
   PrintAt(15,72,Mis.Abbr);
+
   grSetColor(1);
   PrintAt(12,80,"RESULT: ");
   if(Data->P[plr].History[index].Duration!=0) {
@@ -666,7 +669,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
      if (Data->P[plr].History[index].Event>=2) PrintAt(0,0,"S");
   }
 
-  RectFill(210,30,211,168,0); // Clear any left over stuff
+  RectFill(210,30,211,168,0); // Clear any leftover stuff
   ShBox(211,30,313,168); // Right Side
   RectFill(215,34,309,44,9);InBox(214,33,310,45);
   grSetColor(11);PrintAt(225,41,"MISSION REPLAY");
@@ -674,7 +677,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 
   AbzFrame(plr,index,215,56,94,60,"OOOO",mode);
    
-  IOBox(214,134,310,148);grSetColor(1);PrintAt(223,143,"REPLAY MISSION");
+  IOBox(214,134,310,148);grSetColor(1);PrintAt(224,143,"REPLAY MISSION");
   if (mode==0) {
      IOBox(214,151,310,165);
      grSetColor(1);PrintAt(250,160,"EXIT");
@@ -689,7 +692,9 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
     if (Data->P[plr].History[index].Man[0][0]!=-1) {
 	    for(j=0;j<4;j++) {
 	      k=Data->P[plr].History[index].Man[0][j];
+	      if (Data->P[plr].Pool[k].Sex==1) grSetColor(18);  // Display women in blue, not yellow
 	      if(k!=-1) PrintAt(13,137+j*7,Data->P[plr].Pool[k].Name);
+	      grSetColor(11);
 	    }
       let=1;   // Men on Part 1
     }
@@ -698,7 +703,9 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
     if (Data->P[plr].History[index].Man[1][0]!=-1) {
 	    for(j=0;j<4;j++) {
 	      k=Data->P[plr].History[index].Man[1][j];
+	      if (Data->P[plr].Pool[k].Sex==1) grSetColor(18);  // Display women in blue, not yellow
 	      if(k!=-1) PrintAt(13+let*100,137+j*7,Data->P[plr].Pool[k].Name);
+	      grSetColor(11);
 	    }
     }
 

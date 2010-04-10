@@ -874,7 +874,8 @@ void DisplAst(char plr, char *where, char *where2)
   if (abuf[*where].Active/2!=1) PrintAt(0,0,"S");
   memset(Ast_Name,0x00,sizeof Ast_Name);
   strncpy(Ast_Name,abuf[*where].Name,10);
-  PrintAt(165,39,Ast_Name);
+  if (abuf[*where].Sex==1) grSetColor(5);
+  PrintAt(165,39,Ast_Name);  // Displays name of astronaut/cosmonaut
   grSetColor(11);
   strcat(temp,(char *)Nums[abuf[*where].Group]);
   PrintAt(165,49,temp);
@@ -930,11 +931,11 @@ void DispLoc(char plr,char *where)
   switch(abuf[*where].Status){
   case 0:if (ass==0)
           {
-	        if(plr==0) PrintAt(216,159,"COMPLEX");
-	         else PrintAt(216,159,"CENTER");
+	        if(plr==0) PrintAt(216,159,"ASTRONAUT COMPLEX");
+	         else PrintAt(216,159,"COSMONAUT CENTER");
            return;
           }
-         PrintAt(216,159,Data->P[plr].Manned[ass-1].Name);
+         PrintAt(216,159,Data->P[plr].Manned[ass-1].Name);PrintAt(0,0," PROGRAM");
          return;
   case 1:if (plr==0) PrintAt(216,159,"ARLINGTON CEMETERY");
           else PrintAt(216,159,"KREMLIN WALL");

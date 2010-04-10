@@ -43,6 +43,8 @@ int ALSpec(int att)
 #endif
 
 static char program;  /* Variable to store prog data for "Draws Astronaut attributes" section: 1=Mercury/Vostok...5=Jupiter/Kvartet */
+int retdel;  /* Variable to store whether a given 'naut has announced retirement */
+int sex;  /* Variable to store a given 'naut sex */
 
 void AstLevel(char plr,char prog,char crew,char ast)
 {
@@ -146,9 +148,9 @@ void AstLevel(char plr,char prog,char crew,char ast)
 
 
    //RectFill(113,53,119,57,i);  // shouldn't be mood
-   grSetColor(11); PrintAt(124,57,Data->P[plr].Pool[man].Name);
+   grSetColor(11); PrintAt(122,57,Data->P[plr].Pool[man].Name);
    // don't do this for level three
-   PrintAt(0,0,"  M:");DispNum(0,0,Data->P[plr].Pool[man].Mood);
+   PrintAt(0,0,"  M: ");DispNum(0,0,Data->P[plr].Pool[man].Mood);
 
 	 key=0;
 	 if (mousebuttons) WaitForMouseUp();
@@ -213,11 +215,11 @@ void DrawProgs(char plr,char prog)
   if (prog==5) ShBox(4,113,12,119);
   FlagSm(plr,4,4);
   grSetColor(1);
-  PrintAt(251,96,"ASSIGN CREW");
-  PrintAt(253,114,"BREAK CREW");
+  PrintAt(250,96,"ASSIGN CREW");
+  PrintAt(252,114,"BREAK CREW");
   PrintAt(258,13,"CONTINUE");
   grSetColor(5);
-  PrintAt(185,133,"FLIGHT CREW SELECTION");
+  PrintAt(183,133,"FLIGHT CREW SELECTION");
   grSetColor(7);
   PrintAt(152,35,&Data->P[plr].Manned[prog-1].Name[0]);
   grSetColor(9);
@@ -235,9 +237,13 @@ void DrawProgs(char plr,char prog)
   grSetColor(11);
   DispNum(0,0,Data->P[plr].Manned[prog-1].UnitWeight);
   grSetColor(7);
-  PrintAt(152,67,"DURATION: ");
+  PrintAt(152,67,"MAX DURATION: ");
   grSetColor(11);
-  DispNum(0,0,Data->P[plr].Manned[prog-1].Duration);PrintAt(0,0," DAYS");
+  DispNum(0,0,Data->P[plr].Manned[prog-1].Duration);PrintAt(0,0," DAYS (LVL ");
+   if (prog==1) PrintAt(0,0,"B)");
+   if (prog==2) PrintAt(0,0,"E)");
+   if (prog==3 || prog==5) PrintAt(0,0,"F)");
+   if (prog==4) PrintAt(0,0,"D)");
   grSetColor(7);
   PrintAt(152,75,"AVOID FAILURE: ");
   grSetColor(11);
@@ -248,7 +254,7 @@ void DrawProgs(char plr,char prog)
   return;
 }
 
-/** need to check programs to see if there is adequate astronauts there
+/** need to check programs to see if there are adequate astronauts there
  * check any assigned groups yes then return
  * check how many astronauts assigned to current prog
  * 
@@ -333,7 +339,7 @@ void DamProb(char plr,char prog,int chk)
   }
  ShBox(35,81,288,159);InBox(40,86,111,126);InBox(116,86,283,126);
  IOBox(116,130,189,155);IOBox(201,130,274,155);Flag(41,87,plr);
- DispBig(121,135,"YES",1,0);DispBig(208,135,"NO",1,0);
+ DispBig(135,136,"YES",1,0);DispBig(225,136,"NO",1,0);
  DispBig(44,135,"REPAIR",1,-1);
  grSetColor(6);
  PrintAt(121,95,"DIRECTOR: ");
@@ -413,7 +419,7 @@ void CrewProb(char plr,char prog)
  PrintAt(90,88,"ENOUGH ");
  if (plr==1) PrintAt(0,0,"COSM");
    else PrintAt(0,0,"ASTR"); PrintAt(0,0,"ONAUTS IN THE");
- PrintAt(90,96,"PROGRAM TO ASSIGN CREWS");
+ PrintAt(90,96,"PROGRAM TO ASSIGN CREWS.");
  
  WaitForMouseUp();
  while(1)
@@ -506,7 +512,7 @@ Programs(char plr, char prog)
 		}
 
 	ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
-	DispLeft(plr, BarA, count, now2, &M[0]);
+	DispLeft(plr, BarA, count, now2, &M[0]); 
 	NewAstList(plr, prog, Data->P[plr].Crew[prog][grp][0],
 		Data->P[plr].Crew[prog][grp][1],
 		Data->P[plr].Crew[prog][grp][2], Data->P[plr].Crew[prog][grp][3]);
@@ -909,7 +915,7 @@ Programs(char plr, char prog)
 						PrintAt(0, 0, "PRIMARY");
 					else
 						PrintAt(0, 0, "BACKUP");
-					PrintAt(88, 96, "CREW OF A CURRENT MISSION,");
+					PrintAt(88, 96, "CREW OF A CURRENT MISSION:");
 					PrintAt(88, 104, "CANNOT BREAK THIS CREW.");
 
 					WaitForMouseUp();
@@ -1019,23 +1025,31 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
   grSetColor(1);
   if (M1>0)
     {
+	 retdel=Data->P[plr].Pool[M1-1].RDelay;  // Sets whether 'naut has announced retirement 
+	 sex=Data->P[plr].Pool[M1-1].Sex;  // Sets whether 'naut is male or female
      AstNames(0,&Data->P[plr].Pool[M1-1].Name[0],Data->P[plr].Pool[M1-1].Mood);
      AstStats(plr,0,M1-1);
     }
   else DrawPosition(prog,1);
   if (M2>0) {
+	retdel=Data->P[plr].Pool[M2-1].RDelay;  // Sets whether 'naut has announced retirement
+	sex=Data->P[plr].Pool[M2-1].Sex;  // Sets whether 'naut is male or female
     AstNames(1,&Data->P[plr].Pool[M2-1].Name[0],Data->P[plr].Pool[M2-1].Mood);
     AstStats(plr,1,M2-1);
   }
   else DrawPosition(prog,2);
   if (M3>0) {
+	retdel=Data->P[plr].Pool[M3-1].RDelay;  // Sets whether 'naut has announced retirement
+	sex=Data->P[plr].Pool[M3-1].Sex;  // Sets whether 'naut is male or female
     AstNames(2,&Data->P[plr].Pool[M3-1].Name[0],Data->P[plr].Pool[M3-1].Mood);
     AstStats(plr,2,M3-1);
   }
   else DrawPosition(prog,3);
   if (M4>0) {
+	retdel=Data->P[plr].Pool[M4-1].RDelay;  // Sets whether 'naut has announced retirement
+	sex=Data->P[plr].Pool[M4-1].Sex;  // Sets whether 'naut is male or female
     AstNames(3,&Data->P[plr].Pool[M4-1].Name[0],Data->P[plr].Pool[M4-1].Mood);
-    AstStats(plr,3,M4-1);
+    AstStats(plr,3,M4-1); 
   }
   else DrawPosition(prog,4);
   
@@ -1085,6 +1099,9 @@ void AstNames(int man,char *name,char att)
     default: break;
   };
   grSetColor(1);
+  if (sex==1) grSetColor(18);  // Show name in blue if 'naut is female
+  if (retdel>0) grSetColor(0);  // Show name in black if 'naut has announced retirement
+  if (sex==1 && retdel>0) grSetColor(7);  // Show name in purple if 'naut is female AND has announced retirement
   switch(man) {
     case 0: PrintAt(17,91,&name[0]);break;
     case 1: PrintAt(17,100,&name[0]);break;
@@ -1097,6 +1114,7 @@ void AstNames(int man,char *name,char att)
   if (att<40 && att>=20) col=8;
   if (att<20) col=0;
   if (att==0) col=3;
+//  if (retdel>0) col=7;
   switch(man) {
     case 0: RectFill(5,87,11,91,col);break;
     case 1: RectFill(5,96,11,100,col);break;

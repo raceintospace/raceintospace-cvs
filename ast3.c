@@ -54,8 +54,8 @@ void DrawTrain(char plr,char lvl)
   InBox(3,27,154,110);
   UPArrow(9,133);DNArrow(9,166);
   grSetColor(5);
-  if (plr==0) PrintAt(17,124,"ASTRONAUTS");
-  else PrintAt(17,124,"COSMONAUTS");
+  if (plr==0) PrintAt(20,124,"ASTRONAUTS");
+  else PrintAt(20,124,"COSMONAUTS");
   PrintAt(0,0," IN TRAINING");
   memset(TrnName,0x00,sizeof(TrnName));
   switch(lvl) {
@@ -465,7 +465,7 @@ void Hospital(char plr,int sel)
   grSetColor(1);
   PrintAt(257,13,"CONTINUE");
   grSetColor(11);
-  if (plr==0) PrintAt(27,118,"ASTRONAUT"); else PrintAt(27,118,"COSMONAUT");
+  if (plr==0) PrintAt(25,118,"ASTRONAUT"); else PrintAt(25,118,"COSMONAUT");
   PrintAt(0,0," SELECTION");
   ShBox(26,130+BarA*8,152,138+BarA*8);
   

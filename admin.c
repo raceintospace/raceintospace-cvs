@@ -48,7 +48,7 @@ extern int fOFF;
 SaveFileHdr *SaveHdr;
 SFInfo *FList;
 
-int MisCod; 
+int MisCod;  // Variable to store Mission Code (for knowing when to display Duration level)
 
 extern struct mStr Mis;
 
@@ -463,7 +463,7 @@ void FileAccess(char mode)
          //Modem save game LOAD
         if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7)
          {
-          //modem connect up
+          //Modem connect up
           if (SaveHdr->Country[0]==6) {plr[0]=SaveHdr->Country[0];plr[1]=1;}
            else {plr[1]=SaveHdr->Country[1];plr[0]=0;}
           //Modem Play => reset the modem
@@ -528,7 +528,7 @@ void FileAccess(char mode)
 	         i--;  // decrement to correct for the FOR loop
 	         strcpy(SaveHdr->PName[0],Data->P[plr[0] % 2].Name);
 	         strcpy(SaveHdr->PName[1],Data->P[plr[1] % 2].Name);
-           //modem save game hack
+           //Modem save game hack
            if (Option!=-1)
             {
              if (Option==0) {plr[0]=6;plr[1]=1;}
@@ -628,7 +628,7 @@ void FileAccess(char mode)
 	    strcpy(SaveHdr->PName[0],Data->P[plr[0] % 2].Name);
 	    strcpy(SaveHdr->PName[1],Data->P[plr[1] % 2].Name);
 
-        // play-by-mail save game hack
+        // Play-By-Mail save game hack
         // starts US side
         plr[0]=0;plr[1]=9;MAIL=-1;
         Data->Def.Plr1=plr[0];Data->Def.Plr2=plr[1];
@@ -743,7 +743,7 @@ void FileAccess(char mode)
 	    OutBox(209,120,278,128);
  	    // perform quit
 	    i=RequestX("QUIT",1);
-       //Modem Play => reset the modem
+       // Modem Play => reset the modem
        if (Option!=-1 && i==1) DoModem(2);
 	    if (i==1)
          {
@@ -939,7 +939,7 @@ char GetBlockName(char *Nam)
     InBox(51,95,190,105);RectFill(52,96,189,104,0);
   } else {
     InBox(43,67,197,77);RectFill(44,68,196,76,13);
-    grSetColor(11);PrintAt(47,74,"NOT ENOUGHT DISK SPACE");
+    grSetColor(11);PrintAt(47,74,"NOT ENOUGH DISK SPACE");
     delay(2000);gxPutImage(&local,gxSET,39,50,0);DV(&local);
     
     return 0;
@@ -1103,9 +1103,9 @@ int FutureCheck(char plr,char type)
     IOBox(108,67+51*i,264,79+51*i);
     if (p[i]>1) {
       grSetColor(5);
-      PrintAt(111,50+i*51,"THIS FACILITY IS DAMAGED");
+      PrintAt(111,50+i*51,"THIS FACILITY IS DAMAGED.");
       PrintAt(111,57+i*51,"IT WILL COST ");DispNum(0,0,abs(p[i]));
-      PrintAt(0,0,"MB TO REPAIR");
+      PrintAt(0,0,"MB TO REPAIR.");
       if (type==0) PrintAt(113,75+i*51,"REPAIR LAUNCH FACILITY");
       else InBox(110,69+i*51,262,77+i*51); t=2;
     };
@@ -1273,7 +1273,7 @@ char RequestX(char *s,char md)
   DispBig(196,110,"NO",0,0);
   grSetColor(11);
   DispBig(166-i*10,65,&s[0],0,-1);
-  PrintAt(138,94,"ARE YOU SURE");
+  PrintAt(136,94,"ARE YOU SURE?");
   
   WaitForMouseUp();
   i=2;
