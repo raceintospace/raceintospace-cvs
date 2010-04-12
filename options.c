@@ -95,6 +95,8 @@ static struct {
 		"Set to 1 if you want (ugly) full screen game." },
 	{"debuglevel", &options.want_debug, "%u", 0,
 		"Set to positive values to increase debugging verbosity" },
+	{"short_training", &options.feat_shorter_advanced_training, "%u", 0,
+		"Set to non-zero to shorten Advanced Training duration from 4 to 3 seasons" },
 };
 
 /** prints the minimal usage information to stderr
@@ -356,10 +358,13 @@ setup_options(int argc, char *argv[])
 			*env_vars[i].dest = xstrdup(env_vars[i].def_val);
 	}
 
+	/* setup default values */
 	options.want_audio = 1;
 	options.want_intro = 1;
 	options.want_cheats = 0;
 	options.want_fullscreen = 0;
+	options.want_debug = 0;
+	options.feat_shorter_advanced_training = 0;
 
 	fixpath_options();
 

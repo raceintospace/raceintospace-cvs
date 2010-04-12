@@ -96,9 +96,10 @@ THIS SECTION (Making RPMs) NEEDS UPDATING
 7. CVS Commiting
 
     1) write the new code
-    2) update ChangeLog
+    2) update ChangeLog - make sure the GNU format is followed
+       http://www.gnu.org/prep/standards/html_node/Change-Logs.html
     3) run "make clean && make" to check for errors
-    4) update version.c - adding one to the current versionnumber
+    4) update version.c - adding one to the current version number
     5) call "./checkin3" which will guide you through the actual commit
 
 \endverbatim

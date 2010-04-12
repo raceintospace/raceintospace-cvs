@@ -760,21 +760,36 @@ void InRFBox(int a, int b, int c, int d, int col)
    return;
 }
 
-void GuyDisp(int xa,int ya,struct Astros *Guy)
+void
+GuyDisp(int xa, int ya, struct Astros *Guy)
 {
-   grSetColor(1);
-   assert(Guy != NULL);
-   if (Guy->Sex==1) grSetColor(18);  // Display female 'nauts in blue, not white
-   PrintAt(xa,ya,Guy->Name);PrintAt(0,0,": ");
-   switch(Guy->Status) {
-      case 1: grSetColor(9);PrintAt(0,0,"DEAD");break;
-      case 2: grSetColor(12);PrintAt(0,0,"INJ");break;
-      case 3: grSetColor(12);PrintAt(0,0,"INJ");break;
-      default: grSetColor(13);PrintAt(0,0,"OK");break;
-      }
-  return;
+	grSetColor(1);
+	assert(Guy != NULL);
+	if (Guy->Sex == 1)
+		grSetColor(18);			   // Display female 'nauts in blue, not white
+	PrintAt(xa, ya, Guy->Name);
+	PrintAt(0, 0, ": ");
+	switch (Guy->Status)
+	{
+		case AST_ST_DEAD:
+			grSetColor(9);
+			PrintAt(0, 0, "DEAD");
+			break;
+		case AST_ST_RETIRED:
+			grSetColor(12);
+			PrintAt(0, 0, "INJ");   // TODO: Why INJ not RET?
+			break;
+		case AST_ST_INJURED:
+			grSetColor(12);
+			PrintAt(0, 0, "INJ");
+			break;
+		default:
+			grSetColor(13);
+			PrintAt(0, 0, "OK");
+			break;
+	}
+	return;
 }
-
 
 char FailureMode(char plr,int prelim,char *text)
 {

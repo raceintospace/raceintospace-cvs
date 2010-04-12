@@ -483,14 +483,14 @@ void MisCheck(char plr,char mpad)
   //end do
   if (!AI[plr] && death==0) delay(1000);
 
-  if ((MA[0][0].A!=NULL && MA[0][0].A->Status==1)
-        || (MA[0][1].A!=NULL && MA[0][1].A->Status==1) 
-        || (MA[0][2].A!=NULL && MA[0][2].A->Status==1) 
-        || (MA[0][3].A!=NULL && MA[0][3].A->Status==1)
-        || (MA[1][0].A!=NULL && MA[1][0].A->Status==1)
-        || (MA[1][1].A!=NULL && MA[1][1].A->Status==1) 
-        || (MA[1][2].A!=NULL && MA[1][2].A->Status==1) 
-        || (MA[1][3].A!=NULL && MA[1][3].A->Status==1))
+  if ((MA[0][0].A!=NULL && MA[0][0].A->Status==AST_ST_DEAD)
+        || (MA[0][1].A!=NULL && MA[0][1].A->Status==AST_ST_DEAD) 
+        || (MA[0][2].A!=NULL && MA[0][2].A->Status==AST_ST_DEAD) 
+        || (MA[0][3].A!=NULL && MA[0][3].A->Status==AST_ST_DEAD)
+        || (MA[1][0].A!=NULL && MA[1][0].A->Status==AST_ST_DEAD)
+        || (MA[1][1].A!=NULL && MA[1][1].A->Status==AST_ST_DEAD) 
+        || (MA[1][2].A!=NULL && MA[1][2].A->Status==AST_ST_DEAD) 
+        || (MA[1][3].A!=NULL && MA[1][3].A->Status==AST_ST_DEAD))
   {  // Mission Death
     if (!AI[plr]) {
      if (BIG==0) {
@@ -615,7 +615,7 @@ void F_KillCrew(char mode,struct Astros *Victim)
 	for(k=0;k<MANNED[Mev[STEP].pad];k++) {  // should work in news
 	  Guy=MA[Mev[STEP].pad][k].A;
 	  if (Guy!=NULL) {
-		Guy->Status=1;
+		Guy->Status=AST_ST_DEAD;
 		Guy->Special=3;
 		Guy->RetReas=8;
 		Guy->Assign=Guy->Moved=Guy->Crew=Guy->Task=Guy->Una=0;
@@ -626,7 +626,7 @@ void F_KillCrew(char mode,struct Astros *Victim)
   }
   else if (mode==F_ONE) {  // should work in news
 	if (Victim==NULL) return;
-	Victim->Status=1;
+	Victim->Status=AST_ST_DEAD;
 	Victim->Special=3;
 	Victim->RetReas=8;
 	Victim->Assign=Victim->Moved=Victim->Crew=Victim->Task=0;
@@ -645,16 +645,16 @@ void F_KillCrew(char mode,struct Astros *Victim)
 
 void F_IRCrew(char mode,struct Astros *Guy)
 {
-   if (Guy->Status==1) return;   // guy already dead
+   if (Guy->Status==AST_ST_DEAD) return;
    if (Guy==NULL) return;  
    if (mode==F_RET) {  // should work in news
-      Guy->Status=2;
+      Guy->Status=AST_ST_RETIRED;
       Guy->RDelay=1;   // Retire begginning of next season
       Guy->RetReas=9;
       Guy->Assign=Guy->Moved=Guy->Crew=Guy->Task=Guy->Una=0;
       }
    else if (mode==F_INJ) {
-      Guy->Status=3;
+      Guy->Status=AST_ST_INJURED;
       Guy->IDelay=3;  // Injured for a year
       Guy->Special=4;
       Guy->Assign=Guy->Moved=Guy->Crew=Guy->Task=Guy->Una=0;
@@ -808,7 +808,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 		   ctr=0;
 
 		   for(k=0;k<MANNED[Mev[STEP].pad];k++) {
-		      if (Data->P[plr].Pool[temp].Status==2) {
+		      if (Data->P[plr].Pool[temp].Status==AST_ST_RETIRED) {
 		         if (random(100)>xtra) {
                   F_KillCrew(F_ONE,MA[Mev[STEP].pad][k].A);
 			         Mev[STEP].StepInfo=3100+Mev[STEP].loc;

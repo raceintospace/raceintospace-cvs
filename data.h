@@ -191,6 +191,22 @@ enum AstronautPoolClass
 	ASTRO_POOL_LVL5 = 14
 };
 
+/* WARNING: these numbers are used throughout the code, do not change! */
+enum AstronautStatus
+{
+	AST_ST_ACTIVE = 0,
+	AST_ST_DEAD = 1,
+	AST_ST_RETIRED = 2,
+	AST_ST_INJURED = 3,
+	AST_ST_TRAIN_BASIC_1 = 4,
+	AST_ST_TRAIN_BASIC_2 = 5,
+	AST_ST_TRAIN_BASIC_3 = 6,
+	AST_ST_TRAIN_ADV_1 = 7,
+	AST_ST_TRAIN_ADV_2 = 8,
+	AST_ST_TRAIN_ADV_3 = 9,
+	AST_ST_TRAIN_ADV_4 = 10,
+};
+
 /**
 \brief This is a structure representing astronauts/cosmonauts.
 */

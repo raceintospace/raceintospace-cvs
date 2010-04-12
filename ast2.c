@@ -123,7 +123,7 @@ void Limbo(char plr)
   now2=BarA=count=0;
   ShBox(26,130+BarA*8,152,138+BarA*8);
   for (i=0;i<Data->P[plr].AstroCount;i++)
-  if (Data->P[plr].Pool[i].Status==0 && Data->P[plr].Pool[i].Assign==0) {
+  if (Data->P[plr].Pool[i].Status==AST_ST_ACTIVE && Data->P[plr].Pool[i].Assign==0) {
 	  M[count++]=i;
   };
   DispLeft(plr,BarA,count,now2,&M[0]);
@@ -333,7 +333,7 @@ void Limbo(char plr)
 	now2=BarA=count=0;
 	 ShBox(26,130+BarA*8,152,138+BarA*8);
 	 for (i=0;i<Data->P[plr].AstroCount;i++)
-	    if (Data->P[plr].Pool[i].Status==0 && Data->P[plr].Pool[i].Assign==0)
+	    if (Data->P[plr].Pool[i].Status==AST_ST_ACTIVE && Data->P[plr].Pool[i].Assign==0)
 	       M[count++]=i;
 	 DispLeft(plr,BarA,count,now2,&M[0]);
 	 if (count>0) LimboText(plr,M[now2]);
@@ -354,7 +354,7 @@ void Limbo(char plr)
    if (Data->P[plr].Pool[M[now2]].TrainingLevel>6) Help("i120");
    else if (Data->P[plr].Cash<3) Help("i121");
    else {
-		 Data->P[plr].Pool[M[now2]].Status=7;
+		 Data->P[plr].Pool[M[now2]].Status=AST_ST_TRAIN_ADV_1;
 	    Data->P[plr].Cash-=3;
 	    Data->P[plr].Pool[M[now2]].Focus=i+1;
 		 Data->P[plr].Pool[M[now2]].Assign=0;
@@ -393,7 +393,7 @@ void Limbo(char plr)
 	now2=BarA=count=0;
 	 ShBox(26,130+BarA*8,152,138+BarA*8);
 	 for (i=0;i<Data->P[plr].AstroCount;i++)
-	    if (Data->P[plr].Pool[i].Status==0 && Data->P[plr].Pool[i].Assign==0)
+	    if (Data->P[plr].Pool[i].Status==AST_ST_ACTIVE && Data->P[plr].Pool[i].Assign==0)
 	       M[count++]=i;
 	 DispLeft(plr,BarA,count,now2,&M[0]);
 	 if (count>0) LimboText(plr,M[now2]);

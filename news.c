@@ -877,9 +877,9 @@ Breakgrp(char plr)
 				{
 					for (i = 0; i < Data->P[j].Gcnt[k][l]; i++)
 					{
-						if (Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Status == 1
-							|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Status == 2
-							|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Status == 3)
+						if (Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Status == AST_ST_DEAD
+							|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Status == AST_ST_RETIRED
+							|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] - 1].Status == AST_ST_INJURED)
 							temp++;
 					};			   /* for i */
 					if (temp > 0)

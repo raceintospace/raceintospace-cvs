@@ -307,7 +307,7 @@ void SelectBest(char plr,int pos)
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].EVA=Men[AIsel[i]].EVA;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Docking=Men[AIsel[i]].Docking;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Endurance=Men[AIsel[i]].Endurance;
-	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Status=0;
+	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Status=AST_ST_ACTIVE;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].oldAssign=-1;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].TrainingLevel=1;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Group=Data->P[plr].AstroLevel;
@@ -337,7 +337,8 @@ void SelectBest(char plr,int pos)
 	  };
    // remove from the bottom up out of training
    for(i=0;i<Data->P[plr].AstroCount;i++)
-	 if (Data->P[plr].Pool[i].Status==4) Data->P[plr].Pool[i].Status=0;
+	 if (Data->P[plr].Pool[i].Status==AST_ST_TRAIN_BASIC_1)
+         Data->P[plr].Pool[i].Status=AST_ST_ACTIVE;
  return;
 }
 
@@ -367,7 +368,7 @@ char Skill(char plr,char type)
  char m,hgh=0,tst,ind=0;
  for (m=0;m<Data->P[plr].AstroCount;m++)
    {
-	if (Data->P[plr].Pool[m].Status==0 && Data->P[plr].Pool[m].Assign==0 && Data->P[plr].Pool[m].Prime<1)
+	if (Data->P[plr].Pool[m].Status==AST_ST_ACTIVE && Data->P[plr].Pool[m].Assign==0 && Data->P[plr].Pool[m].Prime<1)
 	  {
 	   tst=0;
 	   switch(type)
@@ -401,9 +402,9 @@ void TransAstro(char plr,int inx)
  for (i=0;i<Data->P[plr].AstroCount;i++)
     {
      Data->P[plr].Pool[i].Mood=100;
-     if (Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2)
+     if (Data->P[plr].Pool[i].Status==AST_ST_RETIRED || Data->P[plr].Pool[i].Status==AST_ST_DEAD)
       {
-       Data->P[plr].Pool[i].Status=0;
+       Data->P[plr].Pool[i].Status=AST_ST_ACTIVE;
        Data->P[plr].Pool[i].Assign=0;
        Data->P[plr].Pool[i].Una=0;
        Data->P[plr].Pool[i].Prime=0;
@@ -412,7 +413,7 @@ void TransAstro(char plr,int inx)
       }
      Data->P[plr].Pool[i].RetReas=0;
      Data->P[plr].Pool[i].Hero=0; //clear hero flag
-   if (Data->P[plr].Pool[i].Status==0 && Data->P[plr].Pool[i].Assign==0 && Data->P[plr].Pool[i].Prime<1)
+   if (Data->P[plr].Pool[i].Status==AST_ST_ACTIVE && Data->P[plr].Pool[i].Assign==0 && Data->P[plr].Pool[i].Prime<1)
 	 ++count;
     }
  if (count<max*2) {CheckAdv(plr);return;}
@@ -431,7 +432,7 @@ void TransAstro(char plr,int inx)
 	   w=0;found=0;
 	   while (w < Data->P[plr].AstroCount && found==0)
 		 {
-		  if (Data->P[plr].Pool[w].Status==0 && Data->P[plr].Pool[w].Assign==0 && Data->P[plr].Pool[w].Prime<1)
+		  if (Data->P[plr].Pool[w].Status==AST_ST_ACTIVE && Data->P[plr].Pool[w].Assign==0 && Data->P[plr].Pool[w].Prime<1)
 			{
 			 // based on [j] an program and position pick best skill
 			 switch(inx)
@@ -485,19 +486,19 @@ void CheckAdv(char plr)
  int i,count;
  count=0;
  for (i=0;i<Data->P[plr].AstroCount;i++)
-   if (Data->P[plr].Pool[i].Status==0 && Data->P[plr].Pool[i].Assign==0)
+   if (Data->P[plr].Pool[i].Status==AST_ST_ACTIVE && Data->P[plr].Pool[i].Assign==0)
 	 ++count;
  if (count<=3)
    {
 	for (i=0;i<Data->P[plr].AstroCount;i++)
-	   if (Data->P[plr].Pool[i].Status==0 && Data->P[plr].Pool[i].Assign==0)
+	   if (Data->P[plr].Pool[i].Status==AST_ST_ACTIVE && Data->P[plr].Pool[i].Assign==0)
 	 {
 	  Data->P[plr].Pool[i].Focus=random(4)+1;
 	  if (Data->P[plr].Pool[i].Focus>0)
 	   {
 		Data->P[plr].Cash-=3;
 		Data->P[plr].Pool[i].Assign=0;
-		Data->P[plr].Pool[i].Status=7;
+		Data->P[plr].Pool[i].Status=AST_ST_TRAIN_ADV_1;
 	   }
 	 }
    }
@@ -516,7 +517,7 @@ void RemoveUnhappy(char plr)
 	for (i=0;i<Data->P[plr].AstroCount;i++)
 	{
 		if (Data->P[plr].Pool[i].Mood < ASTRONAUT_MOOD_THRESHOLD)
-			if (Data->P[plr].Pool[i].Assign!=0 && Data->P[plr].Pool[i].Status==0)
+			if (Data->P[plr].Pool[i].Assign!=0 && Data->P[plr].Pool[i].Status==AST_ST_ACTIVE)
 			{
 				Data->P[plr].Pool[i].Assign=0; // back to limbo
 				Data->P[plr].Pool[i].Una=0;

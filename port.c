@@ -653,7 +653,7 @@ void Master(char plr)
   if ((Data->P[plr].Pool[0].Active|Data->P[plr].Pool[1].Active|Data->P[plr].Pool[2].Active)>=1)
     g_value=1;
   for(i=0;i<Data->P[plr].AstroCount;i++)
-    if (Data->P[plr].Pool[i].Status>=5) t_value=1;
+    if (Data->P[plr].Pool[i].Status>=AST_ST_TRAIN_BASIC_2) t_value=1;
   r_value=random(1000);
   if (xMODE & xMODE_CLOUDS)
    {

@@ -25,6 +25,7 @@
 
 #include "Buzz_inc.h"
 #include "externs.h"
+#include "options.h"
 
 extern char pNeg[NUM_PLAYERS][MAX_MISSIONS];
 extern char MAIL;
@@ -101,223 +102,156 @@ void SetEvents(void)
   return;
 }
 
+/**
+ * Handle astronaut mood and training
+ */
+static void
+updateAstronautSkills(unsigned plr, struct Astros* astro)
+{
+	/* constants related to training */
+	const unsigned NUM_SKILLS = 5;
+	char *skills[5] =
+	{
+		&astro->Cap,
+		&astro->LM,
+		&astro->EVA,
+		&astro->Docking,
+		&astro->Endurance,
+	};
+	const char skillMax = 4;
+	const char skillMin = 0;
+		
+	if ((astro->Moved == 0)
+		&& (astro->oldAssign < astro->Assign))
+			/* Moved to better prog, increase morale */
+			astro->Mood += 5;
+	/* TODO: Moved has to be reset somewhere, right? */
+
+	/* Increase number of seasons astronaut was in active duty */
+	switch (astro->Status)
+	{
+		case AST_ST_DEAD:
+		case AST_ST_RETIRED:
+			break;
+		default:
+			astro->Active++;
+	}
+
+	/* Move All unassign astros to limbo */
+	if ((astro->Una == 0)
+		&& (astro->Status == AST_ST_ACTIVE)
+		&& (astro->Assign != 0))
+	{
+		astro->Assign = 0;
+		astro->Moved = 0;
+		astro->Special = 11 + plr;	/* WTF? */
+	};
+
+	/* Update skills after training */
+	switch (astro->Status)
+	{
+		case AST_ST_TRAIN_BASIC_1:
+		case AST_ST_TRAIN_BASIC_2:
+		case AST_ST_TRAIN_BASIC_3:
+		{
+			/* FIXME: factor out a separate function? */
+			if (astro->Status == AST_ST_TRAIN_BASIC_3)
+			{
+				astro->Special = 7;
+				astro->TrainingLevel = AST_ST_TRAIN_BASIC_3;
+				astro->Status = AST_ST_ACTIVE;
+				astro->Assign = 0;			/* Put in Limbo */
+			}
+			else
+			{
+				astro->TrainingLevel = astro->Status;
+				astro->Status++;
+			}
+
+			/* 70% for increase by 1, 30% for increase by 2 */
+			char delta = (random(100) > 70) ? 2 : 1;
+
+			/* Find skills that are below maximum */
+			unsigned choices[NUM_SKILLS];
+			unsigned i = 0;
+			unsigned j = 0;
+
+			for (i = 0; i < NUM_SKILLS; ++i)
+				if (*skills[i] < skillMax)
+					choices[j++] = i;
+
+			if (j > 0)
+			{
+				/* If found, pick one skill at random */
+				char* skill = skills[choices[random(j)]];
+				*skill = min(*skill + delta, skillMax);
+			}
+
+			/* Not sure why do it here, but let's keep it */
+			for (i = 0; i < NUM_SKILLS; ++i)
+				if (*skills[i] < skillMin)
+					*skills[i] = skillMin;
+			break;
+		}
+
+		case AST_ST_TRAIN_ADV_1:
+			astro->TrainingLevel = AST_ST_TRAIN_ADV_1;
+			astro->Status = AST_ST_TRAIN_ADV_2;
+			break;
+
+		case AST_ST_TRAIN_ADV_2:
+			astro->TrainingLevel = AST_ST_TRAIN_ADV_2;
+			if (options.feat_shorter_advanced_training)
+				astro->Status = AST_ST_TRAIN_ADV_4;
+			else
+				astro->Status = AST_ST_TRAIN_ADV_3;
+			break;
+
+		case AST_ST_TRAIN_ADV_3:
+			astro->TrainingLevel = AST_ST_TRAIN_ADV_3;
+			astro->Status = AST_ST_TRAIN_ADV_4;
+			break;
+
+		case AST_ST_TRAIN_ADV_4:
+		{
+			astro->Special = 8;
+			astro->TrainingLevel = astro->Status;
+			astro->Status = AST_ST_ACTIVE;
+			astro->Assign = 0;	/* Put in Limbo */
+
+			assert((unsigned) astro->Focus <= NUM_SKILLS);
+
+			/* Increase trained skill by 2 */
+			char* skill = skills[astro->Focus - 1];
+			*skill = min(*skill + 2, skillMax);
+
+			break;
+		}
+
+		default:
+			break;
+	}
+}
+
 /** \todo: This code must be split... it's cluttered beyond hope */
 void
 AstroTurn(void)
 {
-	int i, j, k, l, num, temp, cnt, Compat[5];
-	int ActTotal[2];			/* Count of active astronauts per player */
-
-	ActTotal[0] = 0;
-	ActTotal[1] = 0;
-	cnt = 0;
+	int i, j, k, l, num, temp, Compat[5];
+	int ActTotal[2] = {0, 0}; /* Count of active astronauts per player */
+	int cnt = 0;
 
 	/* Count total number of active astronauts */
 	for (j = 0; j < NUM_PLAYERS; j++)
 		for (i = 0; i < Data->P[j].AstroCount; i++)
-			if (Data->P[j].Pool[i].Status == 0)
+			if (Data->P[j].Pool[i].Status == AST_ST_ACTIVE)
 				ActTotal[j]++;
 
 	/* Update All Astronauts */
 	for (j = 0; j < NUM_PLAYERS; j++)
 		if (MAIL == -1 || (MAIL == j))
 			for (i = 0; i < Data->P[j].AstroCount; i++)
-			{
-
-				if (Data->P[j].Pool[i].Moved == 0)	/* Moved to better prog */
-					if (Data->P[j].Pool[i].oldAssign <
-						Data->P[j].Pool[i].Assign)
-						Data->P[j].Pool[i].Mood += 5;
-
-				/* 1 = dead, 2 = retired */
-				if (Data->P[j].Pool[i].Status == 0
-					|| Data->P[j].Pool[i].Status > 2)
-					Data->P[j].Pool[i].Active++;
-
-				/* Move All unassign astros to limbo */
-				if (Data->P[j].Pool[i].Una == 0
-					&& Data->P[j].Pool[i].Status == 0
-					&& Data->P[j].Pool[i].Assign != 0)
-				{
-					Data->P[j].Pool[i].Assign = 0;
-					Data->P[j].Pool[i].Moved = 0;
-					Data->P[j].Pool[i].Special = 11 + j;
-				};
-
-				if (Data->P[j].Pool[i].Status == 6)
-				{				   /* Basic */
-					Data->P[j].Pool[i].Special = 7;
-					Data->P[j].Pool[i].TrainingLevel =
-						Data->P[j].Pool[i].Status;
-					Data->P[j].Pool[i].Status = 0;	/* Make Active */
-					Data->P[j].Pool[i].Assign = 0;	/* Put in Limbo */
-					temp = 0;
-					if (random(100) > 70)
-						k = 2;
-					else
-						k = 1;
-					while (temp == 0)
-					{
-						switch (random(5))
-						{
-							case 0:
-								if (Data->P[j].Pool[i].Cap == 4)
-									break;
-								else
-									Data->P[j].Pool[i].Cap += k;
-								if (Data->P[j].Pool[i].Cap > 4)
-									Data->P[j].Pool[i].Cap = 4;
-								temp = 1;
-								break;
-							case 1:
-								if (Data->P[j].Pool[i].LM == 4)
-									break;
-								else
-									Data->P[j].Pool[i].LM += k;
-								if (Data->P[j].Pool[i].LM > 4)
-									Data->P[j].Pool[i].LM = 4;
-								temp = 1;
-								break;
-							case 2:
-								if (Data->P[j].Pool[i].EVA == 4)
-									break;
-								else
-									Data->P[j].Pool[i].EVA += k;
-								if (Data->P[j].Pool[i].EVA > 4)
-									Data->P[j].Pool[i].EVA = 4;
-								temp = 1;
-								break;
-							case 3:
-								if (Data->P[j].Pool[i].Docking == 4)
-									break;
-								else
-									Data->P[j].Pool[i].Docking += k;
-								if (Data->P[j].Pool[i].Docking > 4)
-									Data->P[j].Pool[i].Docking = 4;
-								temp = 1;
-								break;
-							case 4:
-								if (Data->P[j].Pool[i].Endurance == 4)
-									break;
-								else
-									Data->P[j].Pool[i].Endurance += k;
-								if (Data->P[j].Pool[i].Endurance > 4)
-									Data->P[j].Pool[i].Endurance = 4;
-								temp = 1;
-								break;
-						}
-					}
-					if (Data->P[j].Pool[i].Cap < 0)
-						Data->P[j].Pool[i].Endurance = 0;
-					if (Data->P[j].Pool[i].LM < 0)
-						Data->P[j].Pool[i].LM = 0;
-					if (Data->P[j].Pool[i].EVA < 0)
-						Data->P[j].Pool[i].EVA = 0;
-					if (Data->P[j].Pool[i].Docking < 0)
-						Data->P[j].Pool[i].Docking = 0;
-					if (Data->P[j].Pool[i].Endurance < 0)
-						Data->P[j].Pool[i].Endurance = 0;
-
-				}
-				else if (Data->P[j].Pool[i].Status == 10)
-				{				   /* Advanced Graduation */
-					Data->P[j].Pool[i].Special = 8;
-					Data->P[j].Pool[i].TrainingLevel =
-						Data->P[j].Pool[i].Status;
-					Data->P[j].Pool[i].Status = 0;	/* Make Active */
-					Data->P[j].Pool[i].Assign = 0;	/* Put in Limbo */
-					switch (Data->P[j].Pool[i].Focus - 1)
-					{
-						case 0:
-							Data->P[j].Pool[i].Cap += 2;
-							if (Data->P[j].Pool[i].Cap > 4)
-								Data->P[j].Pool[i].Cap = 4;
-							break;
-						case 1:
-							Data->P[j].Pool[i].LM += 2;
-							if (Data->P[j].Pool[i].LM > 4)
-								Data->P[j].Pool[i].LM = 4;
-							break;
-						case 2:
-							Data->P[j].Pool[i].EVA += 2;
-							if (Data->P[j].Pool[i].EVA > 4)
-								Data->P[j].Pool[i].EVA = 4;
-							break;
-						case 3:
-							Data->P[j].Pool[i].Docking += 2;
-							if (Data->P[j].Pool[i].Docking > 4)
-								Data->P[j].Pool[i].Docking = 4;
-							break;
-						case 4:
-							Data->P[j].Pool[i].Endurance += 2;
-							if (Data->P[j].Pool[i].Endurance > 4)
-								Data->P[j].Pool[i].Endurance = 4;
-							break;
-					}
-
-				}
-				else if (Data->P[j].Pool[i].Status == 4
-					|| Data->P[j].Pool[i].Status == 5)
-				{
-					Data->P[j].Pool[i].TrainingLevel =
-						Data->P[j].Pool[i].Status;
-					Data->P[j].Pool[i].Status++;
-					temp = 0;
-					if (random(10) > 70)
-						k = 2;
-					else
-						k = 1;
-					while (temp == 0)
-					{
-						switch (random(5))
-						{
-							case 0:
-								if (Data->P[j].Pool[i].Cap == 4)
-									break;
-								else
-									Data->P[j].Pool[i].Cap += k;
-								temp = 1;
-								break;
-							case 1:
-								if (Data->P[j].Pool[i].LM == 4)
-									break;
-								else
-									Data->P[j].Pool[i].LM += k;
-								temp = 1;
-								break;
-							case 2:
-								if (Data->P[j].Pool[i].EVA == 4)
-									break;
-								else
-									Data->P[j].Pool[i].EVA += k;
-								temp = 1;
-								break;
-							case 3:
-								if (Data->P[j].Pool[i].Docking == 4)
-									break;
-								else
-									Data->P[j].Pool[i].Docking += k;
-								temp = 1;
-								break;
-							case 4:
-								if (Data->P[j].Pool[i].Endurance == 4)
-									break;
-								else
-									Data->P[j].Pool[i].Endurance += k;
-								temp = 1;
-								break;
-						}
-					}
-				}
-				else if (Data->P[j].Pool[i].Status == 7
-					|| Data->P[j].Pool[i].Status == 8
-					|| Data->P[j].Pool[i].Status == 9)
-				{
-					Data->P[j].Pool[i].TrainingLevel =
-						Data->P[j].Pool[i].Status;
-					Data->P[j].Pool[i].Status++;
-				};
-			};
+				updateAstronautSkills(j, &Data->P[j].Pool[i]);
 
 	for (j = 0; j < NUM_PLAYERS; j++)	/* Player Analysis */
 	{
@@ -326,19 +260,19 @@ AstroTurn(void)
 			{
 
 				/* Injury Resolution */
-				if (Data->P[j].Pool[i].Status == 3)
+				if (Data->P[j].Pool[i].Status == AST_ST_INJURED)
 				{
 					Data->P[j].Pool[i].IDelay--;
 					if (Data->P[j].Pool[i].IDelay == 0)
 					{
-						Data->P[j].Pool[i].Status = 0;
+						Data->P[j].Pool[i].Status = AST_ST_ACTIVE;
 						Data->P[j].Pool[i].Assign = 0;
 						Data->P[j].Pool[i].Special = 5;
 					}
 				}
 				/* Mustering Out - even seasons after 8 */
 				if ((Data->P[j].Pool[i].Active >= 8)
-					&& Data->P[j].Pool[i].Status == 0
+					&& Data->P[j].Pool[i].Status == AST_ST_ACTIVE
 					&& Data->P[j].Pool[i].RDelay == 0)
 				{
 					num = random(100);
@@ -359,7 +293,7 @@ AstroTurn(void)
 				}
 
 				if (Data->P[j].Other & 1 && Data->P[j].Pool[i].RDelay == 0 &&
-					Data->P[j].Pool[i].Status == 0)
+					Data->P[j].Pool[i].Status == AST_ST_ACTIVE)
 				{				   /* Catastrophic Failure */
 					num = random(100);
 					if (j == 1)
@@ -384,8 +318,8 @@ AstroTurn(void)
 					cnt = 0;
 				};
 				/* Training Washout */
-				if (Data->P[j].Pool[i].Status >= 4
-					&& Data->P[j].Pool[i].Status <= 6
+				if (Data->P[j].Pool[i].Status >= AST_ST_TRAIN_BASIC_1
+					&& Data->P[j].Pool[i].Status <= AST_ST_TRAIN_BASIC_3
 					&& strncmp(Data->P[j].Pool[i].Name, "ALDRIN", 6) != 0)
 				{
 					num = random(100);
@@ -394,13 +328,13 @@ AstroTurn(void)
 						num = random(100);
 						if (num > 74)
 						{
-							Data->P[j].Pool[i].Status = 3;
+							Data->P[j].Pool[i].Status = AST_ST_INJURED;
 							Data->P[j].Pool[i].IDelay = 2;
 							Data->P[j].Pool[i].Special = 9;
 						}
 						else
 						{
-							Data->P[j].Pool[i].Status = 2;
+							Data->P[j].Pool[i].Status = AST_ST_RETIRED;
 							Data->P[j].Pool[i].Special = 10;
 							Data->P[j].Pool[i].RetReas = 12;	/* Washout */
 						}
@@ -420,13 +354,13 @@ AstroTurn(void)
 				}
 
 				if (Data->P[j].Pool[i].RDelay >= 1
-					&& (Data->P[j].Pool[i].Status > 3
-						|| Data->P[j].Pool[i].Status == 0))
+					&& (Data->P[j].Pool[i].Status > AST_ST_INJURED
+						|| Data->P[j].Pool[i].Status == AST_ST_ACTIVE))
 				{				   /* Actual retirement */
 					Data->P[j].Pool[i].RDelay--;
 					if (Data->P[j].Pool[i].RDelay == 0)
 					{
-						Data->P[j].Pool[i].Status = 2;
+						Data->P[j].Pool[i].Status = AST_ST_RETIRED;
 						Data->P[j].Pool[i].Assign = 0;
 						Data->P[j].Pool[i].Special = 2;
 					}
@@ -488,7 +422,7 @@ AstroTurn(void)
 					|| Data->P[j].Pool[i].Prime == 2)
 					Data->P[j].Pool[i].Prime--;
 
-				if (Data->P[j].Pool[i].Status != 3)
+				if (Data->P[j].Pool[i].Status != AST_ST_INJURED)
 				{
 					if (Data->P[j].Pool[i].Prime == 0)
 						Data->P[j].Pool[i].Mood -= 6;
@@ -593,7 +527,7 @@ AstroTurn(void)
 
 				if (Data->P[j].Pool[i].Mood < 20
 					&& Data->P[j].Pool[i].RDelay == 0
-					&& Data->P[j].Pool[i].Status == 0)
+					&& Data->P[j].Pool[i].Status == AST_ST_ACTIVE)
 				{
 					if (j == 0)
 					{
@@ -602,7 +536,7 @@ AstroTurn(void)
 					};
 					if (j == 1)
 					{
-						Data->P[j].Pool[i].Status = 2;	/* URS Guy Retires Now */
+						Data->P[j].Pool[i].Status = AST_ST_RETIRED;	/* URS Guy Retires Now */
 						Data->P[j].Pool[i].Special = 2;
 					};
 					Data->P[j].Pool[i].RetReas = 13;	/* Reason=Unhappy */
@@ -626,11 +560,11 @@ AstroTurn(void)
 						for (i = 0; i < Data->P[j].Gcnt[k][l]; i++)
 						{
 							if (Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
-									1].Status == 1
+									1].Status == AST_ST_DEAD
 								|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
-									1].Status == 2
+									1].Status == AST_ST_RETIRED
 								|| Data->P[j].Pool[Data->P[j].Crew[k][l][i] -
-									1].Status == 3)
+									1].Status == AST_ST_INJURED)
 								temp++;
 						}		   /* for i */
 						if (temp > 0)

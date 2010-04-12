@@ -744,7 +744,7 @@ void UpdateRecords(char Ty)
                    temp=0;
                    for(loop=0;loop<Data->P[i].AstroCount;loop++)
                     {
-                     if (Data->P[i].Pool[loop].Status==1) ++temp;
+                     if (Data->P[i].Pool[loop].Status==AST_ST_DEAD) ++temp;
                     }
                    if (rec[k][0].place==0) Rec_Change=0;
                     else Rec_Change=4;
@@ -756,7 +756,7 @@ void UpdateRecords(char Ty)
                   temp=0;
                   for(loop=0;loop<Data->P[i].AstroCount;loop++)
                    {
-                    if (Data->P[i].Pool[loop].Status==1) ++temp;
+                    if (Data->P[i].Pool[loop].Status==AST_ST_DEAD) ++temp;
                     if (rec[k][0].place==0) Rec_Change=0;
                      else Rec_Change=3;
                    }

@@ -618,7 +618,7 @@ DrawAstCheck(plr);
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].EVA=Men[sel[i]].EVA;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Docking=Men[sel[i]].Docking;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Endurance=Men[sel[i]].Endurance;
-	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Status=4;
+	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Status=AST_ST_TRAIN_BASIC_1;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].TrainingLevel=1;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Group=Data->P[plr].AstroLevel;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].CR=random(2)+1;

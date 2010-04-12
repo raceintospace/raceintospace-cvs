@@ -98,53 +98,90 @@ void DrawTrain(char plr,char lvl)
   return;
 }
 
-void TrainText(char plr,int astro,int cnt)
+void
+TrainText(char plr, int astro, int cnt)
 {
- char Fritz[20];
+	char Fritz[20];
 
-  RectFill(200,83,291,88,3);RectFill(202,93,220,97,3);
-  RectFill(216,102,294,106,3);RectFill(212,111,317,124,3);
-  RectFill(215,138,235,142,3);RectFill(213,145,243,150,3);
-  RectFill(221,153,241,158,3);RectFill(220,161,240,166,3);
-  RectFill(215,170,235,174,3);
-  RectFill(282,91,318,97,3);
-  if (cnt==0) return;
-  grSetColor(1);
-  PrintAt(200,88,&Data->P[plr].Pool[astro].Name[0]);
-  grMoveTo(212,115);
-  grSetColor(11);
-  memset(Fritz,0x00,sizeof(Fritz));
-  if (Data->P[plr].Pool[astro].Status>=4 && Data->P[plr].Pool[astro].Status<=6)
-   strncpy(Fritz,"BASIC TRAINING ",14);
+	RectFill(200, 83, 291, 88, 3);
+	RectFill(202, 93, 220, 97, 3);
+	RectFill(216, 102, 294, 106, 3);
+	RectFill(212, 111, 317, 124, 3);
+	RectFill(215, 138, 235, 142, 3);
+	RectFill(213, 145, 243, 150, 3);
+	RectFill(221, 153, 241, 158, 3);
+	RectFill(220, 161, 240, 166, 3);
+	RectFill(215, 170, 235, 174, 3);
+	RectFill(282, 91, 318, 97, 3);
+	if (cnt == 0)
+		return;
+	grSetColor(1);
+	PrintAt(200, 88, &Data->P[plr].Pool[astro].Name[0]);
+	grMoveTo(212, 115);
+	grSetColor(11);
+	memset(Fritz, 0x00, sizeof(Fritz));
+	if (Data->P[plr].Pool[astro].Status >= AST_ST_TRAIN_BASIC_1
+		&& Data->P[plr].Pool[astro].Status <= AST_ST_TRAIN_BASIC_3)
+		strncpy(Fritz, "BASIC TRAINING ", 14);
 
-  switch(Data->P[plr].Pool[astro].Status) {
-	case 0:PrintAt(0,0,"ACTIVE");break;
-	case 4:strcat(Fritz," I");PrintAt(0,0,&Fritz[0]);break;
-	case 5:strcat(Fritz," II");PrintAt(0,0,&Fritz[0]);break;
-	case 6:strcat(Fritz," III");PrintAt(0,0,&Fritz[0]);break;
-	case 7:PrintAt(0,0,"ADV TRAINING I");break;
-	case 8:PrintAt(0,0,"ADV TRAINING II");break;
-	case 9:PrintAt(0,0,"ADV TRAINING III");break;
-	case 10:PrintAt(0,0,"ADV TRAINING IV");break;
-	default:break;
-  };
-  grSetColor(11);
-  grMoveTo(203,97);
-  switch(Data->P[plr].Pool[astro].Group) {
-	case 0: PrintAt(0,0,"I");break;
-	case 1: PrintAt(0,0,"II");break;
-	case 2: PrintAt(0,0,"III");break;
-	case 3: PrintAt(0,0,"IV");break;
-  };
-  DispNum(282,97,Data->P[plr].Pool[astro].Active);
-  grSetColor(1);
-  DispNum(215,142,Data->P[plr].Pool[astro].Cap);
-  DispNum(213,150,Data->P[plr].Pool[astro].LM);
-  DispNum(221,158,Data->P[plr].Pool[astro].EVA);
-  DispNum(220,166,Data->P[plr].Pool[astro].Docking);
-  DispNum(215,174,Data->P[plr].Pool[astro].Endurance);
-  AstFaces(plr,203,29,Data->P[plr].Pool[astro].Face);
-  return;
+	switch (Data->P[plr].Pool[astro].Status)
+	{
+		case AST_ST_ACTIVE:
+			PrintAt(0, 0, "ACTIVE");
+			break;
+		case AST_ST_TRAIN_BASIC_1:
+			strcat(Fritz, " I");
+			PrintAt(0, 0, &Fritz[0]);
+			break;
+		case AST_ST_TRAIN_BASIC_2:
+			strcat(Fritz, " II");
+			PrintAt(0, 0, &Fritz[0]);
+			break;
+		case AST_ST_TRAIN_BASIC_3:
+			strcat(Fritz, " III");
+			PrintAt(0, 0, &Fritz[0]);
+			break;
+		case AST_ST_TRAIN_ADV_1:
+			PrintAt(0, 0, "ADV TRAINING I");
+			break;
+		case AST_ST_TRAIN_ADV_2:
+			PrintAt(0, 0, "ADV TRAINING II");
+			break;
+		case AST_ST_TRAIN_ADV_3:
+			PrintAt(0, 0, "ADV TRAINING III");
+			break;
+		case AST_ST_TRAIN_ADV_4:
+			PrintAt(0, 0, "ADV TRAINING IV");
+			break;
+		default:
+			break;
+	};
+	grSetColor(11);
+	grMoveTo(203, 97);
+	switch (Data->P[plr].Pool[astro].Group)
+	{
+		case 0:
+			PrintAt(0, 0, "I");
+			break;
+		case 1:
+			PrintAt(0, 0, "II");
+			break;
+		case 2:
+			PrintAt(0, 0, "III");
+			break;
+		case 3:
+			PrintAt(0, 0, "IV");
+			break;
+	};
+	DispNum(282, 97, Data->P[plr].Pool[astro].Active);
+	grSetColor(1);
+	DispNum(215, 142, Data->P[plr].Pool[astro].Cap);
+	DispNum(213, 150, Data->P[plr].Pool[astro].LM);
+	DispNum(221, 158, Data->P[plr].Pool[astro].EVA);
+	DispNum(220, 166, Data->P[plr].Pool[astro].Docking);
+	DispNum(215, 174, Data->P[plr].Pool[astro].Endurance);
+	AstFaces(plr, 203, 29, Data->P[plr].Pool[astro].Face);
+	return;
 }
 
 
@@ -166,12 +203,17 @@ void Train(char plr,int level)
   now2=BarA=count=0;
   DrawTrain(plr,level);
 
-  ShBox(26,130+BarA*8,152,138+BarA*8);
-  for (i=0;i<Data->P[plr].AstroCount;i++) {
-    if (Data->P[plr].Pool[i].Status>=4 && Data->P[plr].Pool[i].Status<=6 &&
-	level==0 )  M[count++]=i;
-	if (Data->P[plr].Pool[i].Status>=7 && Data->P[plr].Pool[i].Status<=10 &&
-	Data->P[plr].Pool[i].Focus==level )  M[count++]=i;
+  ShBox(26, 130 + BarA * 8, 152, 138 + BarA * 8);
+  for (i = 0; i < Data->P[plr].AstroCount; i++)
+  {
+      if (Data->P[plr].Pool[i].Status >= AST_ST_TRAIN_BASIC_1
+          && Data->P[plr].Pool[i].Status <= AST_ST_TRAIN_BASIC_3
+          && level == 0)
+              M[count++] = i;
+      if (Data->P[plr].Pool[i].Status >= AST_ST_TRAIN_ADV_1
+          && Data->P[plr].Pool[i].Status <= AST_ST_TRAIN_ADV_4
+          && Data->P[plr].Pool[i].Focus == level)
+              M[count++] = i;
   };
   
   DispLeft(plr,BarA,count,now2,&M[0]);
@@ -348,7 +390,7 @@ void Train(char plr,int level)
        if (temp==1)
         {
 	      Data->P[plr].Pool[M[now2]].TrainingLevel=Data->P[plr].Pool[M[now2]].Status;
-	      Data->P[plr].Pool[M[now2]].Status=0;
+	      Data->P[plr].Pool[M[now2]].Status=AST_ST_ACTIVE;
 	      Data->P[plr].Pool[M[now2]].Assign=0;
 	      if (Data->P[plr].Pool[M[now2]].Cap<0) Data->P[plr].Pool[M[now2]].Cap=0;
 	      if (Data->P[plr].Pool[M[now2]].LM<0) Data->P[plr].Pool[M[now2]].LM=0;
@@ -470,7 +512,7 @@ void Hospital(char plr,int sel)
   ShBox(26,130+BarA*8,152,138+BarA*8);
   
 
-  j=(sel==0) ? 3 : 1;   /* Hosp or WormFood */
+  j=(sel==0) ? AST_ST_INJURED : AST_ST_DEAD;
   for (i=0;i<Data->P[plr].AstroCount;i++)
     if (Data->P[plr].Pool[i].Status==j) {
       M[count++]=i;

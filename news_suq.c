@@ -65,9 +65,9 @@ void Replace_Snaut(char plr)
       {
 	    for (i=0;i<Data->P[plr].Gcnt[k][j]+1;i++)
         {
-	      if (Data->P[plr].Pool[Data->P[plr].Crew[k][j][i]-1].Status==1 ||
-	       Data->P[plr].Pool[Data->P[plr].Crew[k][j][i]-1].Status==2 ||
-	       Data->P[plr].Pool[Data->P[plr].Crew[k][j][i]-1].Status==3)
+	      if (Data->P[plr].Pool[Data->P[plr].Crew[k][j][i]-1].Status==AST_ST_DEAD ||
+	       Data->P[plr].Pool[Data->P[plr].Crew[k][j][i]-1].Status==AST_ST_RETIRED ||
+	       Data->P[plr].Pool[Data->P[plr].Crew[k][j][i]-1].Status==AST_ST_INJURED)
 		     temp++;
 	     }
   	    if (temp>0)
@@ -458,22 +458,22 @@ char REvent(char plr)
      case 49: /* pick random astronaut retire, budget minus 5 MB's */
 	      evflag=0;
      	      for (i=0;i<Data->P[plr].AstroCount;i++){
-		if (!(Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2))  
+		if (!(Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED))  
 		  evflag++;
      	      }
 	      if (evflag==0) return 1;
 	      Data->P[plr].Budget-=5;
 	      i=random(Data->P[plr].AstroCount);
-	      while (Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2)  
+	      while (Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED)  
 	        i=random(Data->P[plr].AstroCount);
 	      Data->P[plr].Pool[i].RDelay=2;
 	      Data->P[plr].Pool[i].Mood=10;
 	      strcpy(&Name[0],&Data->P[plr].Pool[i].Name[0]);
 	      if (plr==1) {
-	     	  Data->P[plr].Pool[i].Status=2;
+	     	  Data->P[plr].Pool[i].Status=AST_ST_RETIRED;
 		     Data->P[plr].Pool[i].RDelay=0;
 	      };
-         if (Data->P[plr].Pool[i].Status==2)
+         if (Data->P[plr].Pool[i].Status==AST_ST_RETIRED)
           Replace_Snaut(plr);
 	      break;
 
@@ -492,14 +492,14 @@ char REvent(char plr)
      case 51: /* astronaut killed delay all manned missons = 1 */
 	      evflag=0;
      	   for (i=0;i<Data->P[plr].AstroCount;i++)
-		    if (!(Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2))  evflag++;
+		    if (!(Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED))  evflag++;
 	      if (evflag==0) return 1;
 	      Data->P[plr].Budget-=5;
 	      i=random(Data->P[plr].AstroCount);
-	      while (Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2)  
+	      while (Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED)  
 	        i=random(Data->P[plr].AstroCount);
 	      strcpy(&Name[0],&Data->P[plr].Pool[i].Name[0]);
-	      Data->P[plr].Pool[i].Status=1;
+	      Data->P[plr].Pool[i].Status=AST_ST_DEAD;
 	      Data->P[plr].Other=2;
          xMODE |= xMODE_SPOT_ANIM; //trigger spot anim
          //cancel manned missions
@@ -509,26 +509,26 @@ char REvent(char plr)
      case 52: 
 	      evflag=0;
      	   for (i=0;i<Data->P[plr].AstroCount;i++)
-		    if (!(Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2))  evflag++;
+		    if (!(Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED))  evflag++;
 	      if (evflag==0) return 1;
 	      i=random(Data->P[plr].AstroCount);
-	      while (Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2)  
+	      while (Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED)  
 	        i=random(Data->P[plr].AstroCount);
          strcpy(&Name[0],&Data->P[plr].Pool[i].Name[0]);
-	      Data->P[plr].Pool[i].Status=1;
+	      Data->P[plr].Pool[i].Status=AST_ST_DEAD;
 	      Data->P[plr].Other=2;
 	      Replace_Snaut(plr);
 	      break;
 
      case 60: case 53: evflag=0;
      	   for (i=0;i<Data->P[plr].AstroCount;i++)
-		    if (!(Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2))  evflag++;
+		    if (!(Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED))  evflag++;
 	      if (evflag==0) return 1;
 	      i=random(Data->P[plr].AstroCount);
-	      while (Data->P[plr].Pool[i].Status==1 || Data->P[plr].Pool[i].Status==2)  
+	      while (Data->P[plr].Pool[i].Status==AST_ST_DEAD || Data->P[plr].Pool[i].Status==AST_ST_RETIRED)  
 	        i=random(Data->P[plr].AstroCount);
          strcpy(&Name[0],&Data->P[plr].Pool[i].Name[0]);
-	      Data->P[plr].Pool[i].Status=3;
+	      Data->P[plr].Pool[i].Status=AST_ST_INJURED;
 	      Data->P[plr].Pool[i].IDelay=2;
 	      Data->P[plr].Pool[i].Special=4;
          Replace_Snaut(plr);
@@ -549,7 +549,7 @@ char REvent(char plr)
 		 /* The original bonus astronauts & cosmonauts were:
 		    REEVES, CHAMBERLAIN, YEAGER & STIPPOV, SCHLICKBERND, FARGOV -Leon */
 
-            Data->P[plr].Pool[Data->P[plr].AstroCount].Status=4;
+            Data->P[plr].Pool[Data->P[plr].AstroCount].Status=AST_ST_TRAIN_BASIC_1;
             Data->P[plr].Pool[Data->P[plr].AstroCount].Face=random(10)+1;
 	         Data->P[plr].Pool[Data->P[plr].AstroCount].Service=1;
 	         Data->P[plr].Pool[Data->P[plr].AstroCount].Compat=random(10)+1;
@@ -637,12 +637,12 @@ char REvent(char plr)
      case 89: /* random astronaut not active */
         evflag=0;
         for (i=0;i<Data->P[plr].AstroCount;i++)
-           if (Data->P[plr].Pool[i].Status==0) evflag++;
+           if (Data->P[plr].Pool[i].Status==AST_ST_ACTIVE) evflag++;
 	      if (evflag==0) return 1;
 	      i=random(Data->P[plr].AstroCount);
-	      while(Data->P[plr].Pool[i].Status!=0) i=random(Data->P[plr].AstroCount);
+	      while(Data->P[plr].Pool[i].Status!=AST_ST_ACTIVE) i=random(Data->P[plr].AstroCount);
 	      strcpy(&Name[0],&Data->P[plr].Pool[i].Name[0]);
-	      Data->P[plr].Pool[i].Status= 3;
+	      Data->P[plr].Pool[i].Status= AST_ST_INJURED;
 	      Data->P[plr].Pool[i].IDelay=2;
 	      break;
 

@@ -104,7 +104,7 @@ if (Data->P[plr].PresRev[0]!=0x7F) FadeOut(2,pal,10,0,0);
    {
     clr=0;
     for (i=0;i<Data->P[plr].AstroCount;i++)
-     if (Data->P[plr].Pool[i].Status==1) clr++;
+     if (Data->P[plr].Pool[i].Status==AST_ST_DEAD) clr++;
     Data->P[plr].PresRev[0]= (clr>=2) ? 17 : 16; 
    }
   DrawRevText(plr,Data->P[plr].PresRev[0]);

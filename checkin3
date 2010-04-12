@@ -28,7 +28,7 @@ print "=== LOG MESSAGE ===";
 while (<IN>) {
     chomp;
     $tagname = $1 if /^\s+\*\s+([A-Z0-9-]+)\s*$/;
-    last if /^200/ and $. != 1;
+    last if /^20\d\d/ and $. != 1;
     print $logf $_ if not /^\s*$/;
     print if not /^\s*$/;
 }
