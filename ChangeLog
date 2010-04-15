@@ -1,3 +1,11 @@
+2010-04-14	Leon Baradat <peyre@users.sourceforge.net>
+
+	* V236
+
+	* first.img - Modified splash screen for copyright reasons
+
+	* ast2.c - Better centering in buttons
+
 2010-04-13	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V235

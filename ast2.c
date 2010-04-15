@@ -79,15 +79,15 @@ void DrawLimbo(char plr)
       PrintAt(181,107+21*i,"PROGRAM");
 
       grSetColor(11);
-      PrintAt(256,107+21*i,"TRAINING");
+      PrintAt(257,107+21*i,"TRAINING");
       //grMoveTo(254,101+21*i);  This remmed out to manually place the Adv. Training names so they could be centered -Leon
 
       switch(i) {
-	 case 0: PrintAt(257,101+21*i,"CAPSULE");break;
-	 case 1: PrintAt(270,101+21*i,"L.M.");break;
-	 case 2: PrintAt(267,101+21*i,"E.V.A.");break;
-	 case 3: PrintAt(258,101+21*i,"DOCKING");break;
-	 case 4: PrintAt(251,101+21*i,"ENDURANCE");break;
+	 case 0: PrintAt(258,101+21*i,"CAPSULE");break;
+	 case 1: PrintAt(271,101+21*i,"L.M.");break;
+	 case 2: PrintAt(268,101+21*i,"E.V.A.");break;
+	 case 3: PrintAt(259,101+21*i,"DOCKING");break;
+	 case 4: PrintAt(252,101+21*i,"ENDURANCE");break;
 	 default: break;
 	 }
 
