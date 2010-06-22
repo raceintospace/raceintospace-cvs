@@ -15,13 +15,13 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#include "race.h"
-#include "options.h"
-#include "macros.h"
-#include "pace.h"
-#include "fs.h"
-#include "utils.h"
-#include "logging.h"
+#include <race.h>
+#include <options.h>
+#include <macros.h>
+#include <pace.h>
+#include <fs.h>
+#include <utils.h>
+#include <logging.h>
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>

@@ -2,7 +2,7 @@ dnl ===========================
 dnl === Initialize autoconf ===
 dnl ===========================
 
-AC_INIT(Race Into Space,0.4.7,mkmccarty@raceintospace.org,raceintospace)
+AC_INIT(Race Into Space,0.4.8,mkmccarty@raceintospace.org,raceintospace)
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -99,19 +99,24 @@ dnl Get the operating system and version number...
 uname=`uname`
 
 dnl cross-compile specific configuration
-case "$host" in
-i?86-mingw32msvc)
-	dnl Windows/CygWin configuration
-	AC_DEFINE([CONFIG_WIN32], 1,
-			  [Define to 1 if building for win32 platform.])
-	build_win=yes
-	;;
-*)
-	dnl Everyone else
-	dnl PROG_NAME=raceintospace
-	dnl LIBS="`sdl-config --libs` $LIBS"
-	;;
-esac
+cross=""
+if test "x$cross_compiling" = xyes ; then
+	cross="${host}-"
+	case "$host" in
+	i?86-mingw32msvc)
+		dnl Windows/CygWin configuration
+		AC_DEFINE([CONFIG_WIN32], 1,
+				  [Define to 1 if building for win32 platform.])
+		build_win=yes
+		;;
+	*)
+		dnl Everyone else
+		dnl PROG_NAME=raceintospace
+		dnl LIBS="`sdl-config --libs` $LIBS"
+		;;
+	esac
+fi
+AC_SUBST([CROSS], $cross)
 
 dnl XXX: this gives the build configuration, not host configuration!
 if test -z "$build_win" ; then

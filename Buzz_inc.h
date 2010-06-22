@@ -15,10 +15,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#include "race.h"		// autoconf header
-#include "int_types.h"
-#include "pace.h"
-//#include "valgrind.h"
+#include <race.h>		// autoconf header
+#include <int_types.h>
+#include <pace.h>
+//#include <valgrind.h>
 
 #ifndef ui8
 typedef uint8_t ui8;
@@ -60,12 +60,12 @@ typedef int32_t i32;
 #include <sys/stat.h>
 
 // EMS Includes
-// #include "sv_lib.h"
+// #include <sv_lib.h>
 
 /* FIXME: non-portable. Used to get struct layout like in DOS days */
 #pragma pack(1)
 
-#include "data.h"     // main data structures
+#include <data.h>     // main data structures
 
 /* get the alignment back to defaults */
 /* #pragma pack() */
@@ -76,13 +76,13 @@ typedef int32_t i32;
  * code use the gamedata.c interfaces. */
 #define ALTERED_STRUCTURE_PACKING
 
-#include "proto.h"    // prototypes and general defines
-#include "music.h"    // defines for music names
+#include <proto.h>    // prototypes and general defines
+#include <music.h>    // defines for music names
 
-#include "endianness.h"
+#include <endianness.h>
 
-#include "macros.h"		// Collected Macros
+#include <macros.h>		// Collected Macros
 
-#include "fs.h"
+#include <fs.h>
 
 #define random brandom

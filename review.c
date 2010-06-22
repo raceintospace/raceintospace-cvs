@@ -24,9 +24,9 @@
 //
 // Review Main Files
 
-#include "gamedata.h"
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <gamedata.h>
+#include <Buzz_inc.h>
+#include <externs.h>
 
 extern struct MisAst MA[2][4];
 extern char AI[2];

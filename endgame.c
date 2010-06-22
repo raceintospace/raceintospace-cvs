@@ -18,8 +18,8 @@
 /** \file endgame.c End Game Routines
  */
 
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <Buzz_inc.h>
+#include <externs.h>
 
 #define NUM_LIGHTS 100
 #define FLY_TIME 20

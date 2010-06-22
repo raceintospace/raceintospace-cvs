@@ -23,9 +23,9 @@
 // Programmed by Michael K McCarty
 //
 
-#include "gamedata.h"
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <gamedata.h>
+#include <Buzz_inc.h>
+#include <externs.h>
 #include <assert.h>
 
 extern struct ManPool *Men;

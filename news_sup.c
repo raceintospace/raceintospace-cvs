@@ -24,8 +24,8 @@
 //
 // Support files for NEWS.C
 
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <Buzz_inc.h>
+#include <externs.h>
 
 /** ???
  * 

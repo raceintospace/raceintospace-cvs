@@ -23,12 +23,12 @@
 // Programmed by Michael K McCarty
 //
 
-#include "Buzz_inc.h"
-#include "externs.h"
-#include "mis.h"
-#include "utils.h"
-#include "options.h"
-#include "logging.h"
+#include <Buzz_inc.h>
+#include <externs.h>
+#include <mis.h>
+#include <utils.h>
+#include <options.h>
+#include <logging.h>
 
 #define MIS_SET 0             // FAILURES ON
 

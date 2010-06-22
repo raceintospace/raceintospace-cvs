@@ -25,8 +25,8 @@
 /** \file ast1.c Astronaut Recruitment
  */
 
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <Buzz_inc.h>
+#include <externs.h>
 
 extern char MCol[110],sel[30],MaxSel;
 extern struct ManPool *Men;

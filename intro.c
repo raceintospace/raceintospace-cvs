@@ -23,10 +23,10 @@
 // Programmed by Michael K McCarty
 //
 
-#include "Buzz_inc.h"
-#include "externs.h"
-#include "utils.h"
-#include "logging.h"
+#include <Buzz_inc.h>
+#include <externs.h>
+#include <utils.h>
+#include <logging.h>
 GXHEADER local2;
 
 LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)

@@ -34,12 +34,12 @@
 #include <signal.h>
 #include <memory.h>
 #include <SDL.h>
-#include "Buzz_inc.h"
-#include "macros.h"
-#include "options.h"
-#include "utils.h"
-#include "logging.h"
-#include "av.h"
+#include <Buzz_inc.h>
+#include <macros.h>
+#include <options.h>
+#include <utils.h>
+#include <logging.h>
+#include <av.h>
 #define MAX_X	320
 #define MAX_Y	200
 

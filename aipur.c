@@ -25,8 +25,8 @@
 /** \file aipur.c AI Purchasing Routines
  */
 
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <Buzz_inc.h>
+#include <externs.h>
 
 struct ManPool *Men;
 char AIsel[25],AIMaxSel,Obs[6]; //indexed 1 thru 5

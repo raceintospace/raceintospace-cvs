@@ -24,8 +24,8 @@
 //
 // Museum Main Files
 
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <Buzz_inc.h>
+#include <externs.h>
 extern char Month[12][11]; 
 extern char Nums[30][7],AI[2];
 extern struct mStr Mis;

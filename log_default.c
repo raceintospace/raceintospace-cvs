@@ -1,4 +1,4 @@
-/* $Id: log_default.c,v 1.5 2008/08/26 13:10:25 drvee Exp $
+/* $Id: log_default.c,v 1.6 2010/06/22 21:11:47 drvee Exp $
  * Copyright (c) 2001, Bit Farm, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,8 +24,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "log4c.h"
-#include "macros.h"
+#include <log4c.h>
+#include <macros.h>
 #include <stdio.h>
 
 /**

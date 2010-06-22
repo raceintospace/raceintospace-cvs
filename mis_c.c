@@ -23,14 +23,14 @@
 // Programmed by Michael K McCarty
 //
 
-#include "gamedata.h"
-#include "Buzz_inc.h"
-#include "externs.h"
-#include "mis.h"
-#include "av.h"
-#include "mmfile.h"
-#include "utils.h"
-#include "logging.h"
+#include <gamedata.h>
+#include <Buzz_inc.h>
+#include <externs.h>
+#include <mis.h>
+#include <av.h>
+#include <mmfile.h>
+#include <utils.h>
+#include <logging.h>
 
 #include <assert.h>
 

@@ -24,8 +24,8 @@
 //
 // AI Master Routines
 
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <Buzz_inc.h>
+#include <externs.h>
 
 struct cStr {i16 cost,sf,i;} Mew[5];
 int whe[2],rck[2];

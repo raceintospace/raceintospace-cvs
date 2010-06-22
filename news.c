@@ -24,13 +24,13 @@
 //
 // NewsCaster Main Files
 
-#include "gamedata.h"
-#include "Buzz_inc.h"
-#include "externs.h"
-#include "macros.h"
-#include "av.h"
-#include "mmfile.h"
-#include "logging.h"
+#include <gamedata.h>
+#include <Buzz_inc.h>
+#include <externs.h>
+#include <macros.h>
+#include <av.h>
+#include <mmfile.h>
+#include <logging.h>
 
 /* LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT); */
 

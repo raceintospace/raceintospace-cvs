@@ -27,11 +27,11 @@
  * 
  */
 
-#include "gamedata.h"
-#include "Buzz_inc.h"
-#include "externs.h"
-#include "utils.h"
-#include "logging.h"
+#include <gamedata.h>
+#include <Buzz_inc.h>
+#include <externs.h>
+#include <utils.h>
+#include <logging.h>
 
 extern char AI[2];
 

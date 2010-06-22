@@ -22,13 +22,13 @@
 // Designed by Fritz Bronner
 // Programmed by Michael K McCarty
 //
-#include "gamedata.h"
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <gamedata.h>
+#include <Buzz_inc.h>
+#include <externs.h>
 #include <assert.h>
-#include "mmfile.h"
-#include "av.h"
-#include "logging.h"
+#include <mmfile.h>
+#include <av.h>
+#include <logging.h>
 
 #ifdef DEADCODE
 

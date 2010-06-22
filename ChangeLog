@@ -1,3 +1,10 @@
+2010-06-22	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V237
+
+	* Recent gcc versions deprecate -I- (used from win32 cross compilation).
+	Work around this and change all includes to use <> instead of "".
+
 2010-04-14	Leon Baradat <peyre@users.sourceforge.net>
 
 	* V236

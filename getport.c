@@ -1,4 +1,4 @@
-#include "Buzz_inc.h"
+#include <Buzz_inc.h>
 
 struct FHead {
    char Text[28];  // File Copyright Notice

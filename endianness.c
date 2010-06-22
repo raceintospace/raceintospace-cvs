@@ -1,6 +1,6 @@
-#include "assert.h"
-#include "Buzz_inc.h"
-#include "externs.h"
+#include <assert.h>
+#include <Buzz_inc.h>
+#include <externs.h>
 
 // Need these functions to always exist
 uint32_t _Swap32bit(uint32_t value)

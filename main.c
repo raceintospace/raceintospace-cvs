@@ -26,11 +26,11 @@
 //*                                                              *
 //****************************************************************
 
-#include "Buzz_inc.h"
-#include "options.h"
-#include "utils.h"
-#include "logging.h"
-#include "externs.h"
+#include <Buzz_inc.h>
+#include <options.h>
+#include <utils.h>
+#include <logging.h>
+#include <externs.h>
 #include <ctype.h>
 
 #ifdef CONFIG_MACOSX
@@ -1128,8 +1128,8 @@ int MisRandom(void)
 
 #ifdef DEAD_CODE
 #   ifdef CONFIG_THEORA_VIDEO
-#      include "av.h"
-#      include "mmfile.h"
+#      include <av.h>
+#      include <mmfile.h>
 #   endif
 
 void

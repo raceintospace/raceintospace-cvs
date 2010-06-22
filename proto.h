@@ -16,8 +16,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 /* XXX clean this up */
-#include "mmfile.h"
-#include "data.h"
+#include <mmfile.h>
+#include <data.h>
 // ***************************
 //   USEFUL AND RARE DEFINES
 // ***************************

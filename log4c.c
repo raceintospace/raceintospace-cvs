@@ -31,9 +31,9 @@
  *
  * See log4c.h for documentation.
  */
-#include "logging.h"
-#include "log4c.h"
-#include "macros.h"
+#include <logging.h>
+#include <log4c.h>
+#include <macros.h>
 #include <errno.h>
 #include <stdarg.h>
 #include <stdlib.h>

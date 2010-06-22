@@ -15,12 +15,12 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#include "race.h"
-#include "gamedata.h"
-#include "Buzz_inc.h"
-#include "externs.h"
-#include "av.h"
-#include "utils.h"
+#include <race.h>
+#include <gamedata.h>
+#include <Buzz_inc.h>
+#include <externs.h>
+#include <av.h>
+#include <utils.h>
 
 extern char IDT[5],IKEY[5],AL_CALL,AI[2];
 extern struct mStr Mis;
