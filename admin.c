@@ -277,10 +277,10 @@ void FileAccess(char mode)
   PrintAt(218,42,"FUNCTIONS");
   grSetColor(1);PrintAtKey(233,56,"LOAD",0);
   grSetColor(1);PrintAtKey(233,70,"SAVE",0);
-  grSetColor(1);PrintAtKey(223,84,"MAIL SAVE",0);
-  grSetColor(1);PrintAtKey(226,98,"DELETE",0);
+  grSetColor(1);PrintAtKey(221,84,"MAIL SAVE",0);
+  grSetColor(1);PrintAtKey(227,98,"DELETE",0);
   grSetColor(1);PrintAtKey(233,112,"PLAY",0);
-  grSetColor(1);PrintAtKey(233,126,"QUIT",0);
+  grSetColor(1);PrintAtKey(234,126,"QUIT",0);
 
   done=BarB=now=0;
   ShBox(39,52+BarB*8,189,60+BarB*8);

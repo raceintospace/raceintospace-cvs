@@ -1,3 +1,23 @@
+2010-06-24	Leon Baradat <peyre@users.sourceforge.net>
+
+	* V238
+
+	* ast0.c: Satellite Building now shows current Duration level. 'Naut list in bottom left
+	  of various windows now shows how many missions each crew member has flown.
+
+	* ast4.c: Capsule/Shuttle building now shows how many missions each crew member has flown.
+
+	* crew.c: Screen where you assign 'nauts to crews now shows how many missions each crew 
+	  member has flown.
+
+	* future.c: Future Missions screen now shows the date.
+
+	* admin.c, crew.c, endgame.c, mis_c.c, prefs.c, radar.c: Better centering in buttons.
+
+	* ast2.c: Esthetic touchup of Astronaut Complex / Cosmonaut Center.
+
+	* news.dat: Esthetic change.
+
 2010-06-22	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
 	* V237

@@ -168,7 +168,7 @@ void DrawFuture(char plr,int mis,char pad)
   GetMinus(plr);
   grSetColor(5);
   /* lines of text are 1:8,30  2:8,37   3:8,44    */
-  switch(pad) { // These used to say Pad 1, 2, 3 instead -Leon
+  switch(pad) { // These used to say Pad 1, 2, 3  -Leon
     case 0: PrintAt(8,30,"PAD A:");break;
     case 1: PrintAt(8,30,"PAD B:");break;
     case 2: PrintAt(8,30,"PAD C:");break;
@@ -177,6 +177,10 @@ void DrawFuture(char plr,int mis,char pad)
   grSetColor(1);
   PrintAt(9,80,"RESET");
   PrintAt(258,13,"CONTINUE");
+   if (Data->Season==0) PrintAt(200,9,"SPRING");
+   else PrintAt(205,9,"FALL");
+   PrintAt(206,16,"19");
+   DispNum(0,0,Data->Year);
   FlagSm(plr,4,4);
   DispBig(40,5,"FUTURE MISSIONS",0,-1);
   FadeIn(2,pal,10,0,0);

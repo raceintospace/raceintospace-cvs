@@ -44,13 +44,13 @@ void PadDraw(char plr,char pad)
   ShBox(56,64,110,74);InBox(57,65,109,73);
   ShBox(4,180,162,195);InBox(6,182,160,193); //sched. duration
   InBox(6,99,160,178);
-  grSetColor(9);PrintAt(15,190,"SCHEDULED DURATION: ");
+  grSetColor(9);PrintAt(18,190,"SCHEDULED DURATION: ");
   grSetColor(7);
   int MisCod; 
   MisCod=Data->P[plr].Mission[pad].MissionCode; 
   if ((MisCod>24 && MisCod<37) || MisCod==40 || MisCod==41 || MisCod==43 || MisCod==44 || MisCod>45) 
-   // Show Duration level for manned missions with Duration steps (the Mission[pad].Duration variable 
-   // will continue to show Duration level if mission is scrubbed or downgraded) - Leon
+   // Show Duration level for manned missions with Duration steps (this keeps the Mission[pad].Duration 
+   // variable from continuing to show Duration level if mission is scrubbed or downgraded) - Leon
   {
   switch(Data->P[plr].Mission[pad].Duration)
    {
@@ -71,7 +71,7 @@ void PadDraw(char plr,char pad)
   { PrintAt(0,0,"NONE"); }
   }
  
-  grSetColor(7);PrintAt(64,71,"MISSION");
+  grSetColor(7);PrintAt(65,71,"MISSION");
   FlagSm(plr,4,4);
   if (Data->P[plr].LaunchFacility[pad]==1 && Data->P[plr].Mission[pad].MissionCode>0) PadPict(2+plr);
 	else if (Data->P[plr].LaunchFacility[pad]==1 && Data->P[plr].Mission[pad].MissionCode==0) PadPict(4+plr);
@@ -109,7 +109,7 @@ void PadDraw(char plr,char pad)
    {
     grSetColor(9);PrintAt(205,189,"F");grSetColor(1);PrintAt(0,0,"IX LAUNCH PAD");
    }
-  DispBig(35,5,"LAUNCH FACILITY",0,-1);
+  DispBig(37,5,"LAUNCH FACILITY",0,-1);
   switch(pad) {
 	 case 0: DispBig(201,5,"A",0,-1);break;
 	 case 1: DispBig(201,5,"B",0,-1);break;

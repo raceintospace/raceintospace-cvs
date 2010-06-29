@@ -28,6 +28,7 @@
 #include <externs.h>
 
 char MCol[110],sel[25],MaxSel;
+int missions;    // Variable for how many missions each 'naut has flown
 
 void Moon(char plr)
 {
@@ -103,6 +104,11 @@ void DispLeft(char plr,int lc,int cnt,int nw,int *ary)
 	    if (Data->P[plr].Pool[ary[i]].RDelay>0) grSetColor(7); 
 	      // Print name in purple if 'naut has announced retirement (black shows poorly here) -Leon
 	    PrintAt(28,136+(i-start)*8,&Data->P[plr].Pool[ary[i]].Name[0]);
+	    if (Data->P[plr].Pool[ary[i]].Missions>0)
+	     {
+	      missions=Data->P[plr].Pool[ary[i]].Missions;
+	      PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")");
+	     }
     }
   }
   return;
@@ -214,7 +220,19 @@ void SatText(char plr)
       if (i!=2) {
 	 grSetColor(11);
 	 switch(i) {
-	    case 0: PrintAt(5+i*80,80,"DOCKING");
+	    case 0: PrintAt(5+i*80,80,"DUR LVL: ");  // Show highest Duration level achieved -Leon
+		    switch(Data->P[plr].DurLevel)
+		    {
+		     case 1:PrintAt(0,0,"A");break;
+		     case 2:PrintAt(0,0,"B");break;
+		     case 3:PrintAt(0,0,"C");break;
+		     case 4:PrintAt(0,0,"D");break;
+		     case 5:PrintAt(0,0,"E");break;
+		     case 6:PrintAt(0,0,"F");break;
+		     default:PrintAt(0,0,"NONE");break;
+		    }
+
+		    PrintAt(5+i*80,94,"DOCKING");
 
 		    if (Data->P[plr].Misc[4].Num>=0)
 			   DispNum(5+i*80,110,Data->P[plr].Misc[4].Safety);
@@ -413,7 +431,7 @@ void LMBld(char plr)
 	 PrintAt(m+48,130,"AVOID FAILURE: ");
          grSetColor(11);
 	 if (Data->P[plr].Manned[5+i].SaveCard>0) PrintAt(m+124,130,"YES");
-   	   else PrintAt(m+125,130,"NO");
+   	   else PrintAt(m+126,130,"NO");
 	 grSetColor(6);PrintAt(m,138,"SAFETY FACTOR: ");
     grSetColor(1);DispNum(0,0,(Data->P[plr].Manned[5+i].Num>=0) ? Data->P[plr].Manned[5+i].Safety : 0 );
     PrintAt(0,0,"%");

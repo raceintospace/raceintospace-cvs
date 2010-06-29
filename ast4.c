@@ -42,6 +42,7 @@ int ALSpec(int att)
 }
 #endif
 
+int missions;     // Variable for how many missions each 'naut has flown
 static char program;  /* Variable to store prog data for "Draws Astronaut attributes" section: 1=Mercury/Vostok...5=Jupiter/Kvartet */
 int retdel;  /* Variable to store whether a given 'naut has announced retirement */
 int sex;  /* Variable to store a given 'naut sex */
@@ -1027,6 +1028,7 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
     {
 	 retdel=Data->P[plr].Pool[M1-1].RDelay;  // Sets whether 'naut has announced retirement 
 	 sex=Data->P[plr].Pool[M1-1].Sex;  // Sets whether 'naut is male or female
+	 missions=Data->P[plr].Pool[M1-1].Missions;
      AstNames(0,&Data->P[plr].Pool[M1-1].Name[0],Data->P[plr].Pool[M1-1].Mood);
      AstStats(plr,0,M1-1);
     }
@@ -1034,6 +1036,7 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
   if (M2>0) {
 	retdel=Data->P[plr].Pool[M2-1].RDelay;  // Sets whether 'naut has announced retirement
 	sex=Data->P[plr].Pool[M2-1].Sex;  // Sets whether 'naut is male or female
+	 missions=Data->P[plr].Pool[M2-1].Missions;
     AstNames(1,&Data->P[plr].Pool[M2-1].Name[0],Data->P[plr].Pool[M2-1].Mood);
     AstStats(plr,1,M2-1);
   }
@@ -1041,6 +1044,7 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
   if (M3>0) {
 	retdel=Data->P[plr].Pool[M3-1].RDelay;  // Sets whether 'naut has announced retirement
 	sex=Data->P[plr].Pool[M3-1].Sex;  // Sets whether 'naut is male or female
+	 missions=Data->P[plr].Pool[M3-1].Missions;
     AstNames(2,&Data->P[plr].Pool[M3-1].Name[0],Data->P[plr].Pool[M3-1].Mood);
     AstStats(plr,2,M3-1);
   }
@@ -1048,6 +1052,7 @@ void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
   if (M4>0) {
 	retdel=Data->P[plr].Pool[M4-1].RDelay;  // Sets whether 'naut has announced retirement
 	sex=Data->P[plr].Pool[M4-1].Sex;  // Sets whether 'naut is male or female
+	 missions=Data->P[plr].Pool[M4-1].Missions;
     AstNames(3,&Data->P[plr].Pool[M4-1].Name[0],Data->P[plr].Pool[M4-1].Mood);
     AstStats(plr,3,M4-1); 
   }
@@ -1065,18 +1070,18 @@ void AstStats(char plr,char man,char num)
   grSetColor(1);
   y=91+man*9;
   if (man==0) {grSetColor(11);}  /* Highlight CA for command pilot */
-   PrintAt(113,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);
+   PrintAt(117,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);
   grSetColor(1);
   if (man==1 && program>1) {grSetColor(11);}  /* Highlight LM for LM pilot */
-   PrintAt(137,y,"LM:");DispNum(0,0,Data->P[plr].Pool[num].LM);
+   PrintAt(141,y,"LM:");DispNum(0,0,Data->P[plr].Pool[num].LM);
   grSetColor(1);
   if (program==1 || ((program==2 || program==3 || program==4) && man==1) || (program==5 && man>1)) {grSetColor(11);}  /* Highlight EV for EVA specialist */
-   PrintAt(161,y,"EV:");DispNum(0,0,Data->P[plr].Pool[num].EVA);
+   PrintAt(165,y,"EV:");DispNum(0,0,Data->P[plr].Pool[num].EVA);
   grSetColor(1);
   if ((program==2 && man==0) || ((program==3 || program==4) && man==2)) {grSetColor(11);}  /* Highlight DO for docking specialist */
-   PrintAt(186,y,"DO:");DispNum(0,0,Data->P[plr].Pool[num].Docking);
+   PrintAt(190,y,"DO:");DispNum(0,0,Data->P[plr].Pool[num].Docking);
   grSetColor(1);  /* Never highlight EN skill */
-   PrintAt(211,y,"EN:");DispNum(0,0,Data->P[plr].Pool[num].Endurance);
+   PrintAt(215,y,"EN:");DispNum(0,0,Data->P[plr].Pool[num].Endurance);
   return;
 }
 
@@ -1103,10 +1108,18 @@ void AstNames(int man,char *name,char att)
   if (retdel>0) grSetColor(0);  // Show name in black if 'naut has announced retirement
   if (sex==1 && retdel>0) grSetColor(7);  // Show name in purple if 'naut is female AND has announced retirement
   switch(man) {
-    case 0: PrintAt(17,91,&name[0]);break;
-    case 1: PrintAt(17,100,&name[0]);break;
-    case 2: PrintAt(17,109,&name[0]);break;
-    case 3: PrintAt(17,118,&name[0]);break;
+    case 0: PrintAt(17,91,&name[0]);
+			if (missions>0) { PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")"); }
+			break;
+    case 1: PrintAt(17,100,&name[0]);
+			if (missions>0) { PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")"); }
+			break;
+    case 2: PrintAt(17,109,&name[0]);
+			if (missions>0) { PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")"); }
+			break;
+    case 3: PrintAt(17,118,&name[0]);
+			if (missions>0) { PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")"); }
+			break;
     default: break;
   };
   if (att>=65) col=16;

@@ -427,13 +427,13 @@ void LimboText(char plr,int astro)
    if (Data->P[plr].Pool[astro].RDelay>0) grSetColor(0);  // Print name in black if 'naut has announced retirement (override mood) -Leon
    PrintAt(46,37,Data->P[plr].Pool[astro].Name);
    grSetColor(11);
-   RectFill(49,112,60,119,3);grSetColor(11);
+   RectFill(49,112,80,119,3);grSetColor(11);
    switch (Data->P[plr].Pool[astro].Group) {
-      case 0: PrintAt(51,118,"I");break;
-      case 1: PrintAt(51,118,"II");break;
-      case 2: PrintAt(51,118,"III");break;
-      case 3: PrintAt(51,118,"IV");break;
-      case 4: PrintAt(51,118,"V");break;
+      case 0: PrintAt(53,118,"I");break;
+      case 1: PrintAt(53,118,"II");break;
+      case 2: PrintAt(53,118,"III");break;
+      case 3: PrintAt(53,118,"IV");break;
+      case 4: PrintAt(53,118,"V");break;
       }                           
    RectFill(123,62,145,77,3);
    RectFill(128,79,145,92,3);

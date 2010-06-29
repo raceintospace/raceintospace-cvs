@@ -101,8 +101,8 @@ void DrawPrefs(int where,char a1,char a2)
   grSetColor(5);
   PrintAt(23,49,"COUNTRY");PrintAt(254,49,"COUNTRY");
   PrintAt(17,101,"GAME LEVEL");PrintAt(247,101,"GAME LEVEL");
-  PrintAt(250,148,"ASTRONAUT");PrintAt(250,155,"SELECTION");
-  PrintAt(20,148,"ASTRONAUT");PrintAt(20,155,"SELECTION");
+  PrintAt(249,148,"COSMONAUT");PrintAt(250,155,"SELECTION");
+  PrintAt(19,148,"ASTRONAUT");PrintAt(20,155,"SELECTION");
   grSetColor(1);PrintAt(258,13,"CONTINUE");
   PrintAt(8,40,&Data->P[ Data->Def.Plr1 ].Name[0]);
   PrintAt(238,40,&Data->P[ Data->Def.Plr2 ].Name[0]);

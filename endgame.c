@@ -381,7 +381,7 @@ void Draw_NewEnd(char win)
  IOBox(132,180,187,192);IOBox(192,180,247,192);IOBox(252,180,307,192);
  grSetColor(1);
  PrintAt(21,188,"HISTORY");PrintAt(85,188,"STATS");PrintAt(142,188,"PARADE");
- PrintAt(198,188,"MOON EVA");PrintAt(268,188,"EXIT");
+ PrintAt(198,188,"MOON EVA");PrintAt(269,188,"EXIT");
  FadeIn(0,pal,10,128,0);
  Load_LenFlag(win);
  FadeIn(1,pal,40,128,1);
@@ -517,8 +517,8 @@ void FakeWin(char win)
  ShBox(0,24,319,199);RectFill(5,28,314,195,0);
  RectFill(5,105,239,110,3);ShBox(101,102,218,113);
  grSetColor(6);PrintAt(112,110,"ALTERNATE HISTORY");
- if (win==0) DispBig(34,5,"US WINS",1,-1);
-   else DispBig(34,5,"USSR WINS",1,-1);
+ if (win==0) DispBig(36,5,"US WINS",1,-1);
+   else DispBig(36,5,"USSR WINS",1,-1);
  FlagSm(win,4,4);
  grSetColor(1);PrintAt(258,13,"CONTINUE");
  r=random(100);

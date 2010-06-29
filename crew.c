@@ -21,6 +21,7 @@
 extern struct mStr Mis;
 
 int lenprogname;  // Variable to hold and manipulate length of program name
+int missions;     // Variable for how many missions each 'naut has flown
 
 int HardCrewAssign(char plr,char Pad,int MisType,char NewType)
 {
@@ -189,7 +190,7 @@ int AsnCrew(char plr,char pad,char part)
   PrintAt(100,16,"CANCEL");
   grSetColor(9);PrintAt(184,16,"A");grSetColor(1);PrintAt(0,0,"SSIGN");
   PrintAt(86,111,"MAKE ");grSetColor(9);PrintAt(0,0,"P");grSetColor(1);PrintAt(0,0,"RIMARY");
-  PrintAt(168,111,"MAKE ");grSetColor(9);PrintAt(0,0,"B");grSetColor(1);PrintAt(0,0,"ACKUP");
+  PrintAt(169,111,"MAKE ");grSetColor(9);PrintAt(0,0,"B");grSetColor(1);PrintAt(0,0,"ACKUP");
   grSetColor(11);
   if (part==0) PrintAt(105,31,"SELECT PRIMARY CREW");
     else PrintAt(100,31,"SELECT SECONDARY CREW");
@@ -353,6 +354,9 @@ void FutAstList(char plr,char men,int M1,int M2,int M3,int M4)
     if (Data->P[plr].Pool[m[i]-1].Sex==1) grSetColor(5);  // Print name in blue if 'naut is female
     if (Data->P[plr].Pool[m[i]-1].RDelay>0) grSetColor(3); // Print name in gray if 'naut has announced retirement (black doesn't show well here) -Leon
     PrintAt(100,44+i*14,&Data->P[plr].Pool[m[i]-1].Name[0]);
+    missions=Data->P[plr].Pool[m[i]-1].Missions;
+    grSetColor(3);
+    PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")");
     grSetColor(1);
       RectFill(87,39+i*14,94,39+i*14,2); // Top
       RectFill(87,39+i*14,87,44+i*14,2); // Left

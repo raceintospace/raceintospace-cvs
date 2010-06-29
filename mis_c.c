@@ -766,7 +766,7 @@ GuyDisp(int xa, int ya, struct Astros *Guy)
 	grSetColor(1);
 	assert(Guy != NULL);
 	if (Guy->Sex == 1)
-		grSetColor(18);			   // Display female 'nauts in blue, not white
+		grSetColor(18);	  // Display female 'nauts in blue, not white
 	PrintAt(xa, ya, Guy->Name);
 	PrintAt(0, 0, ": ");
 	switch (Guy->Status)
@@ -800,7 +800,7 @@ char FailureMode(char plr,int prelim,char *text)
 
   FadeOut(2,pal,10,0,0);
  
-  // this destroy's what's in the current page frames
+  // this destroys what's in the current page frames
   memcpy (save_screen, screen, 64000);
   memcpy (save_pal, pal, 768);
 
@@ -841,15 +841,15 @@ char FailureMode(char plr,int prelim,char *text)
   } else {
     grSetColor(9);
     switch(prelim) {
-      case 0: grSetColor(15);PrintAt(8,122,"ALL SYSTEMS ARE GO");break;
-      case 1: PrintAt(8,122,"FAILURE: USE ALTERNATE");break;
-      case 2: PrintAt(8,122,"FURTHER PROBLEMS: RECHECK");break;
-      case 4: PrintAt(8,122,"CREW STRANDED IN SPACE");break;
-      case 5: PrintAt(8,122,"MISSION FAILURE");break;
-      case 6: grSetColor(15);PrintAt(8,122,"MISSION SUCCESS");break;
-      case 7: PrintAt(8,122,"STEP FAILURE");break;
-      case 8: PrintAt(8,122,"CATASTROPHIC FAILURE");break;
-      case 9: PrintAt(8,122,"CREW INJURIES");break;
+      case 0: grSetColor(15);PrintAt(10,122,"ALL SYSTEMS ARE GO");break;
+      case 1: PrintAt(10,122,"FAILURE: USE ALTERNATE");break;
+      case 2: PrintAt(10,122,"FURTHER PROBLEMS: RECHECK");break;
+      case 4: PrintAt(10,122,"CREW STRANDED IN SPACE");break;
+      case 5: PrintAt(10,122,"MISSION FAILURE");break;
+      case 6: grSetColor(15);PrintAt(10,122,"MISSION SUCCESS");break;
+      case 7: PrintAt(10,122,"STEP FAILURE");break;
+      case 8: PrintAt(10,122,"CATASTROPHIC FAILURE");break;
+      case 9: PrintAt(10,122,"CREW INJURIES");break;
       default: break;
     };
   };
@@ -904,7 +904,7 @@ char FailureMode(char plr,int prelim,char *text)
 
   // Failure Diagram
   InRFBox(162,28,312,42,10);
-  grSetColor(11);PrintAt(191,37,"EQUIPMENT DETAIL");
+  grSetColor(11);PrintAt(194,37,"EQUIPMENT DETAIL");
 
   InRFBox(162,46,312,127,0); // Image is 188,49
 
