@@ -274,7 +274,7 @@ void FileAccess(char mode)
 
   grSetColor(11);
   PrintAt(59,42,"TIME CAPSULE REQUEST");
-  PrintAt(218,42,"FUNCTIONS");
+  PrintAt(219,42,"FUNCTIONS");
   grSetColor(1);PrintAtKey(233,56,"LOAD",0);
   grSetColor(1);PrintAtKey(233,70,"SAVE",0);
   grSetColor(1);PrintAtKey(221,84,"MAIL SAVE",0);

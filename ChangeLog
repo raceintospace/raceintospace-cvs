@@ -1,14 +1,27 @@
+2010-06-30	Leon Baradat <peyre@users.sourceforge.net>
+
+	* V239
+
+	* crew.c: Screen where you assign 'nauts to crews now shows how many missions each crew 
+	member has flown only if >0 (to match other screens).
+
+	* radar.c: Launch pad now shows how many missions each crew member has flown only if >0.
+
+	* future.c: Date in Future Missions is now yellow, to match R&D and Purchasing screens.
+
+	* admin.c: Better centering of "FUNCTIONS".
+
 2010-06-24	Leon Baradat <peyre@users.sourceforge.net>
 
 	* V238
 
 	* ast0.c: Satellite Building now shows current Duration level. 'Naut list in bottom left
-	  of various windows now shows how many missions each crew member has flown.
+	of various windows now shows how many missions each crew member has flown if >0.
 
-	* ast4.c: Capsule/Shuttle building now shows how many missions each crew member has flown.
+	* ast4.c: Capsule/Shuttle building now shows how many missions each crew member has flown if >0.
 
 	* crew.c: Screen where you assign 'nauts to crews now shows how many missions each crew 
-	  member has flown.
+	member has flown.
 
 	* future.c: Future Missions screen now shows the date.
 

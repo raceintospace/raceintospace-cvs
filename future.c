@@ -177,10 +177,12 @@ void DrawFuture(char plr,int mis,char pad)
   grSetColor(1);
   PrintAt(9,80,"RESET");
   PrintAt(258,13,"CONTINUE");
+  grSetColor(11);
    if (Data->Season==0) PrintAt(200,9,"SPRING");
    else PrintAt(205,9,"FALL");
    PrintAt(206,16,"19");
    DispNum(0,0,Data->Year);
+  grSetColor(1);
   FlagSm(plr,4,4);
   DispBig(40,5,"FUTURE MISSIONS",0,-1);
   FadeIn(2,pal,10,0,0);

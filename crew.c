@@ -356,7 +356,7 @@ void FutAstList(char plr,char men,int M1,int M2,int M3,int M4)
     PrintAt(100,44+i*14,&Data->P[plr].Pool[m[i]-1].Name[0]);
     missions=Data->P[plr].Pool[m[i]-1].Missions;
     grSetColor(3);
-    PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")");
+    if (missions>0) { PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")"); }
     grSetColor(1);
       RectFill(87,39+i*14,94,39+i*14,2); // Top
       RectFill(87,39+i*14,87,44+i*14,2); // Left

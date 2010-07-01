@@ -28,6 +28,7 @@
 #include <externs.h>
 
 extern char AI[2];
+int missions;     // Variable for how many missions each 'naut has flown
 
 void PadDraw(char plr,char pad)
 {
@@ -150,6 +151,8 @@ void PadDraw(char plr,char pad)
 	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Sex==1 && Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].RDelay>0) grSetColor(7); 
 		// Show name in purple if 'naut is female AND has announced retirement
 	    PrintAt(25,115+7*k,&Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Name[0]);
+	    missions=Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Missions;
+	    if (missions>0) { PrintAt(0,0," (");DispNum(0,0,missions);PrintAt(0,0,")"); }
     }
     if (l==-1) PrintAt(25,174,"UNAVAILABLE");
   }
