@@ -303,7 +303,7 @@ int CheckIfMissionGo(char plr,char launchIdx)
 
 				// YYY  Safety check for this is never reached
 				if (idx>Mission_PrimaryBooster)		// implies
-					E->MisSaf = (int) (E->Safety+Data->P[plr].Manned[pMission->Hard[Mission_PrimaryBooster]].Safety) >> 1;
+					E->MisSaf = (int) (E->Safety*Data->P[plr].Manned[pMission->Hard[Mission_PrimaryBooster]].Safety)/100; //Boosters Safety Mod, Nikakd,10/8/10
 				break;
 		}
 

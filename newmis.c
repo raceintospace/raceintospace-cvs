@@ -226,8 +226,9 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
       case 0:if (hold>-1) 
 	       {
 		grSetColor(7);PrintAt(bud,109+14*k,"CAPSULE: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Manned[hold].Name[0]);
-		grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-     sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety);
+		grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
+     Data->P[plr].Manned[hold].Damage != 0? grSetColor(9):grSetColor(1); //Damaged Equipment, Nikakd, 10/8/10
+     sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety+Data->P[plr].Manned[hold].Damage);  
      PrintAt(0,0,&Digit[0]);
      PrintAt(0,0,"%");
 	 //	PrintAt(144+i*111,116+14*k,"%");
@@ -237,8 +238,9 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
       case 1:if (hold>-1)
 	       {
 		grSetColor(7);PrintAt(bud,109+14*k,"KICKER: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Misc[hold].Name[0]);
-     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-     sprintf(&Digit[0],"%d",Data->P[plr].Misc[hold].Safety);
+     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
+     Data->P[plr].Misc[hold].Damage != 0? grSetColor(9):grSetColor(1);  //Damaged Equipment, Nikakd, 10/8/10
+     sprintf(&Digit[0],"%d",Data->P[plr].Misc[hold].Safety+Data->P[plr].Misc[hold].Damage);
      PrintAt(0,0,&Digit[0]);
      PrintAt(0,0,"%");
     // DispNum(0,0,Data->P[plr].Misc[hold].Safety);
@@ -249,8 +251,9 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
        case 2:if (hold>-1)          
 		{
 		 grSetColor(7);PrintAt(bud,109+14*k,"LM: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Manned[hold].Name[0]);
-		 grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-      sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety);
+		 grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
+      Data->P[plr].Manned[hold].Damage != 0? grSetColor(9):grSetColor(1);   //Damaged Equipment, Nikakd, 10/8/10
+      sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety+Data->P[plr].Manned[hold].Damage);
       PrintAt(0,0,&Digit[0]);
       PrintAt(0,0,"%");
       //DispNum(0,0,Data->P[plr].Manned[hold].Safety);
@@ -263,8 +266,9 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		  if (hold<3)
 		    {
 		     grSetColor(7);PrintAt(bud,109+14*k,"PROBE: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Probe[hold].Name[0]);
-		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-          sprintf(&Digit[0],"%d",Data->P[plr].Probe[hold].Safety);
+		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
+          Data->P[plr].Probe[hold].Damage != 0? grSetColor(9):grSetColor(1);   //Damaged Equipment, Nikakd, 10/8/10
+          sprintf(&Digit[0],"%d",Data->P[plr].Probe[hold].Safety+Data->P[plr].Probe[hold].Damage);
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Probe[hold].Safety);
@@ -274,8 +278,9 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		   else if (hold==4)
 		    {
 		     grSetColor(7);PrintAt(bud,109+14*k,"DOCKING: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Misc[hold].Name[0]);
-		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-          sprintf(&Digit[0],"%d",Data->P[plr].Misc[hold].Safety);
+		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
+          Data->P[plr].Misc[hold].Damage != 0? grSetColor(9):grSetColor(1);   //Damaged Equipment, Nikakd, 10/8/10
+          sprintf(&Digit[0],"%d",Data->P[plr].Misc[hold].Safety+Data->P[plr].Misc[hold].Damage);
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Misc[hold].Safety);
@@ -289,8 +294,9 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		  if (hold<5)
 		    {
 		     grSetColor(7);PrintAt(bud,109+14*k,"ROCKET: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Rocket[hold-1].Name[0]);
-		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-          sprintf(&Digit[0],"%d",Data->P[plr].Rocket[hold-1].Safety);
+		     grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
+          Data->P[plr].Rocket[hold-1].Damage != 0? grSetColor(9):grSetColor(1);   //Damaged Equipment, Nikakd, 10/8/10
+          sprintf(&Digit[0],"%d",Data->P[plr].Rocket[hold-1].Safety+Data->P[plr].Rocket[hold-1].Damage);
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Rocket[hold-1].Safety);
@@ -300,8 +306,9 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		  else 
 		   {
 		    grSetColor(7);PrintAt(bud,109+14*k,"ROCKET: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Rocket[hold-5].Name[0]);PrintAt(0,0," W/B");
-		    grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");grSetColor(1);
-         sprintf(&Digit[0],"%d",(Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[4].Safety)/2);
+		    grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
+         (Data->P[plr].Rocket[hold-5].Damage != 0 || Data->P[plr].Rocket[4].Damage !=0)? grSetColor(9):grSetColor(1);   //Damaged Equipment && Booster's Safety Mod, Nikakd, 10/8/10
+         sprintf(&Digit[0],"%d",((Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[hold-5].Damage)*(Data->P[plr].Rocket[4].Safety+Data->P[plr].Rocket[4].Damage))/100);
          PrintAt(0,0,&Digit[0]);
          PrintAt(0,0,"%");
         // DispNum(0,0,(Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[4].Safety)/2);

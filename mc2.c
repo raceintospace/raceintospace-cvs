@@ -537,6 +537,7 @@ char i,j,t;
             };
 
          if (MH[j][i]!=NULL) {
+	    MH[j][i]->SMods += MH[j][i]->Damage;    //Damaged Equipment, Nikakd, 10/8/10
             MH[j][i]->MisSaf=MH[j][i]->Safety+MH[j][i]->SMods;
             if (MH[j][i]->ID[1]>=0x35 && i==2 && Data->P[plr].Mission[mis].MissionCode>=53)
               switch(Data->P[plr].LMpts) {

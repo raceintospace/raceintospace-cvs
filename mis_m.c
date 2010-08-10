@@ -256,8 +256,8 @@ void MisCheck(char plr,char mpad)
 
     if ((Mev[STEP].Name[0]=='A') && MH[Mev[STEP].pad][7]!=NULL)
     {  // boosters involved
-      safety+=MH[Mev[STEP].pad][7]->Safety;
-      safety=safety/2;
+      safety*=MH[Mev[STEP].pad][7]->Safety;
+      safety=safety/100;  //Boosters Safety Mod, Nikakd,10/8/10
     }
    
     // Duration Hack Part 3 of 3

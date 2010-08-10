@@ -27,6 +27,7 @@
 
 #include <Buzz_inc.h>
 #include <externs.h>
+#include <options.h>   //Naut Randomize && Naut Compatibilit, Nikakd, 10/8/10
 
 extern char MCol[110],sel[30],MaxSel;
 extern struct ManPool *Men;
@@ -232,6 +233,17 @@ void DrawAstSel(char plr)
   return;
 }
 
+//Naut Randomize, Nikakd, 10/8/10
+void RandomizeNauts() {
+	for (int i=0;i<106;i++) {
+		Men[i].Cap = random(5);
+		Men[i].LM  = random(5);
+		Men[i].EVA = random(5);
+		Men[i].Docking = random(5);
+		Men[i].Endurance = random(5);
+		}
+}
+
 void AstSel(char plr)
 {
 char i,j,k,BarA,BarB,MaxMen,Index,now,now2,max,min,count,fem=0,ksel=0;
@@ -278,6 +290,7 @@ DrawAstCheck(plr);
   fseek(fin,((sizeof (struct ManPool))*106)*plr,SEEK_SET);
   fread(Men,(sizeof (struct ManPool))*106,1,fin);
   fclose(fin);
+  if (options.feat_random_nauts==1) RandomizeNauts();  //Naut Randomize, Nikakd, 10/8/10
   switch(Data->P[plr].AstroLevel) {
     case 0: MaxMen=10;  MaxSel=ASTRO_POOL_LVL1;  Index=0;
 	    if (Data->P[plr].Female==1) {MaxMen+=3;fem=1;}
@@ -627,7 +640,7 @@ DrawAstCheck(plr);
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Crew=0;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Una=0;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Pool=0;
-	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Compat=random(10)+1;
+	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Compat=random(options.feat_compat_nauts)+1;  //Naut Compatibility, Nikakd, 10/8/10
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Mood=85+5*random(4);
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Face=random(77);
 	   if (Data->P[plr].Pool[i+Data->P[plr].AstroCount].Sex==1) 

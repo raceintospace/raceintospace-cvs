@@ -818,7 +818,7 @@ void AILaunch(char plr)
   for (i=0;i<7;i++) {
 	bdex[i]=i;
 	boos[i]=(i>3) ?
-	   (Data->P[plr].Rocket[i-4].Safety+Data->P[plr].Rocket[4].Safety)>>1
+	   (Data->P[plr].Rocket[i-4].Safety*Data->P[plr].Rocket[4].Safety)/100  //Boosters Safety Mod, Nikakd,10/8/10
 	  : Data->P[plr].Rocket[i].Safety;
 	bwgt[i]=(i>3) ?
 	   (Data->P[plr].Rocket[i-4].MaxPay+Data->P[plr].Rocket[4].MaxPay)

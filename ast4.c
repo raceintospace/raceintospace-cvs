@@ -347,6 +347,13 @@ void DamProb(char plr,char prog,int chk)
  grSetColor(8);
  if (plr==0) PrintAt(0,0,&Data->P[Data->plr[0]].Name[0]);
    else PrintAt(0,0,&Data->P[Data->plr[1]].Name[0]);
+
+  //Cash Display in Damaged Equipment, Nikakd, 10/8/10
+ grSetColor(6);
+ PrintAt(215,95,"CASH:"); 
+ grSetColor(1);
+ DispMB (0,0,Data->P[plr].Cash);
+
  grSetColor(6);PrintAt(121,104,"DAMAGE: ");
  grSetColor(11);
  strcat((char *)Name," PROGRAM");

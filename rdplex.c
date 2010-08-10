@@ -230,12 +230,18 @@ void BButs(char old,char nw)
 }
 
 void
-RDButTxt(int cost, int encodedRolls, char playerIndex)
+RDButTxt(int cost, int encodedRolls, char playerIndex, char SpDModule) //DM Screen, Nikakd, 10/8/10
 {
 	RectFill(166, 185, 314, 193, 3);
 	grSetColor(1);
 
 	int diceRoll = decodeRollValue(encodedRolls);
+
+ 		//DM Screen, Nikakd, 10/8/10
+	if (SpDModule==1) {
+		PrintAt(169, 191,"    CANNOT BE RESEARCHED");
+		return;
+		}
 
 	if (diceRoll == 0)
 	{
@@ -270,7 +276,7 @@ char RD(char player_index)
   DrawRD(player_index);
   BButs(1,hardware);
   ShowUnit(hardware,unit,player_index);
-  RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+  RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
   if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
   else {InBox(165,184,315,194);};
   ManSel(decodeNumRolls(buy[hardware-1][unit-1]));
@@ -294,7 +300,7 @@ char RD(char player_index)
 	       else {InBox(165,184,315,194);};
 	      ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	      b=Data->P[player_index].Probe[unit-1].RDCost;
-	      RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	      RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	     }
       else
 	   if (((x>=83 && x<=156 && mousebuttons>0) || key=='R') && hardware != 2)  /* Rockets */
@@ -306,7 +312,7 @@ char RD(char player_index)
 	      else {InBox(165,184,315,194);};
 	     ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	     b=Data->P[player_index].Rocket[unit-1].RDCost;
-	     RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	     RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	    }
       else
 	   if (((x>=164 && x<=237 && mousebuttons>0) || key=='C') && hardware != 3)    /* Manned */
@@ -318,7 +324,7 @@ char RD(char player_index)
 	      else {InBox(165,184,315,194);};
 	     ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	     b=Data->P[player_index].Manned[unit-1].RDCost;
-	     RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	     RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	    }
       else
 	   if (((x>=245 && x<=313 && mousebuttons>0) || key=='M') && hardware !=4)     /* Misc */
@@ -330,7 +336,7 @@ char RD(char player_index)
 	        else {InBox(165,184,315,194);};
 	      ManSel(decodeNumRolls(buy[hardware-1][unit-1]));ShowUnit(hardware,unit,player_index);
 	      b=Data->P[player_index].Misc[unit-1].RDCost;
-	      RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	      RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	     }
       }
       else
@@ -346,7 +352,7 @@ char RD(char player_index)
        if (hardware==2) b=Data->P[player_index].Rocket[unit-1].RDCost;
        if (hardware==3) b=Data->P[player_index].Manned[unit-1].RDCost;
        if (hardware==4) b=Data->P[player_index].Misc[unit-1].RDCost;
-       RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+       RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
        ManSel(roll);
        WaitForMouseUp();
       }
@@ -361,10 +367,10 @@ char RD(char player_index)
 	      case 1: unit= (unit-1 == 0) ? 3 : unit-1;break;
 	      case 2: unit= (unit-1 == 0) ? 5 : unit-1;break;
 	      case 3: unit= (unit-1 == 0) ? 7 : unit-1;break;
-	      case 4: unit= (unit-1 == 0) ? 4 : unit-1;if (player_index==0 && unit==3) unit--;break;
+	      case 4: unit= (unit-1 == 0) ? 5 : unit-1;if (player_index==0 && unit==3) unit--;break;  //DM Screen, Nikakd, 10/8/10
          default:break;
 	     };
-	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	    ManSel(decodeNumRolls(buy[hardware-1][unit-1]));
 	    if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	      else {InBox(165,184,315,194);};
@@ -382,15 +388,15 @@ char RD(char player_index)
 	      case 1: unit = (unit+1 > 3) ? 1 : unit+1;break;
 	      case 2: unit = (unit+1 > 5) ? 1 : unit+1;break;
 	      case 3: unit = (unit+1 > 7) ? 1 : unit+1;break;
-	      case 4: unit = (unit+1 > 4) ? 1 : unit+1;if (player_index==0 && unit==3) unit++;break;
+	      case 4: unit = (unit+1 > 5) ? 1 : unit+1;if (player_index==0 && unit==3) unit++;break;   //DM Screen, Nikakd, 10/8/10
          default:break;
 	     };
-	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	    ManSel (decodeNumRolls(buy[hardware-1][unit-1]));
 	    if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
 	      else {InBox(165,184,315,194);};
 	    ShowUnit(hardware,unit,player_index);
-	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	    RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	    OutBox(83,184,152,194);
       }
       else
@@ -422,7 +428,7 @@ char RD(char player_index)
 	    case 4: Data->P[player_index].Spend[0][3] += b*roll;break;
 	  }
 	  ShowUnit(hardware,unit,player_index);
-	  RDButTxt(b*roll,buy[hardware-1][unit-1],player_index);
+	  RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
 	}
 	else QueryUnit(hardware,unit,player_index);
       }
@@ -446,7 +452,7 @@ char RD(char player_index)
 	    for(i=0;i<4;i++) for(j=0;j<7;j++)
          Data->P[player_index].Buy[i][j]=buy[i][j];
        music_stop();
-      if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
+      //DM Screen, Nikakd, 10/8/10 (Removed line)
 	    if (call==1) return 1;        // go back through gateway
 	    call=1;
 	    wh=HPurc(player_index);
@@ -455,10 +461,10 @@ char RD(char player_index)
 	    call=0; 
 	    for(i=0;i<4;i++) for(j=0;j<7;j++) buy[i][j]=Data->P[player_index].Buy[i][j];
 	    DrawRD(player_index);
-      if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
+      //DM Screen, Nikakd, 10/8/10 (Removed line)
 	    BButs(1,hardware);
 	    ShowUnit(hardware,unit,player_index);
-	    RDButTxt(0,buy[hardware-1][unit-1],player_index);
+	    RDButTxt(0,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
        if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
        else {InBox(165,184,315,194);};
 
@@ -500,7 +506,7 @@ char QueryUnit(char hardware_index,char unit_index,char player_index)
       ((hardware_index==1 && (Data->P[player_index].Probe[unit_index-1].Num != PROGRAM_NOT_STARTED)) ||
       (hardware_index==2 && (Data->P[player_index].Rocket[unit_index-1].Num != PROGRAM_NOT_STARTED)) || 
       (hardware_index==3 && (Data->P[player_index].Manned[unit_index-1].Num != PROGRAM_NOT_STARTED)) ||
-      (hardware_index==4 && (Data->P[player_index].Misc[unit_index-1].Num != PROGRAM_NOT_STARTED)));
+      (hardware_index==4 && (unit_index!=5 && Data->P[player_index].Misc[unit_index-1].Num != PROGRAM_NOT_STARTED)));   //DM Screen, Nikakd, 10/8/10
   
   if (IsHumanPlayer(player_index))
   {
@@ -872,14 +878,14 @@ char HPurc(char player_index)
     	 HARD1=hardware; UNIT1=unit;
        music_stop();
        remove_savedat("UNDO.TMP");
-      if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
+      //DM Screen, Nikakd, 10/8/10 (Removed line)
     	 if (call==1) return 1;
    	 call=1;
    	 wh=RD(player_index);
    	 if (call==0) return 0;   // Exit
    	 call=0;
    	 hardware=HARD1; unit=UNIT1;
-       if (hardware==4 && unit==5) {hardware=unit=HARD1=UNIT1=1;}
+       //DM Screen, Nikakd, 10/8/10 (Removed line)
    	 DrawHPurc(player_index);
    //    memcpy(vhptr.vptr,Data,sizeof(struct Players));
    	 ShowUnit(hardware,unit,player_index);

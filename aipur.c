@@ -27,6 +27,7 @@
 
 #include <Buzz_inc.h>
 #include <externs.h>
+#include <options.h>   //Naut Randomize && Naut Compatibility, Nikakd, 10/8/10
 
 struct ManPool *Men;
 char AIsel[25],AIMaxSel,Obs[6]; //indexed 1 thru 5
@@ -251,6 +252,18 @@ void AIAstroPur(char plr)
 }
 
 
+//Naut Randomize, Nikakd, 10/8/10
+void AIRandomizeNauts() {
+	for (int i=0;i<106;i++) {
+		Men[i].Cap = random(5);
+		Men[i].LM  = random(5);
+		Men[i].EVA = random(5);
+		Men[i].Docking = random(5);
+		Men[i].Endurance = random(5);
+		}
+}
+
+
 /** Select the best crew for the mission
  */
 void SelectBest(char plr,int pos)
@@ -267,6 +280,7 @@ void SelectBest(char plr,int pos)
  fseek(fin,((sizeof (struct ManPool))*106)*plr,SEEK_SET);
  fread(Men,(sizeof (struct ManPool)*106),1,fin); 
  fclose(fin);
+ if (options.feat_random_nauts==1) AIRandomizeNauts();   //Naut Randomize, Nikakd, 10/8/10
  switch(Data->P[plr].AstroLevel)
   {
 	case 0:MaxMen=10;AIMaxSel=ASTRO_POOL_LVL1;Index=0;
@@ -317,7 +331,7 @@ void SelectBest(char plr,int pos)
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Crew=0;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Una=0;
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Pool=0;
-	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Compat=random(10)+1;
+	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Compat=random(options.feat_compat_nauts)+1;  //Naut Compatibility, Nikakd, 10/8/10
 	   Data->P[plr].Pool[i+Data->P[plr].AstroCount].Mood=100;
       Data->P[plr].Pool[i+Data->P[plr].AstroCount].Face=random(77);
 	   if (Data->P[plr].Pool[i+Data->P[plr].AstroCount].Sex==1) 

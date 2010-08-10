@@ -17,6 +17,7 @@
 */
 #include <Buzz_inc.h>
 #include <externs.h>
+#include <options.h>  //No Capsule Training, Nikakd, 10/8/10
 
 extern struct mStr Mis;
 
@@ -158,7 +159,7 @@ int AsnCrew(char plr,char pad,char part)
    for (i=0;i<ASTRONAUT_CREW_MAX;i++)  // Flight Crew Settings
 	{
 	 stflag=0;
-	 if (Data->P[plr].Crew[prg][i][0]==0 || Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Moved==0
+	 if (Data->P[plr].Crew[prg][i][0]==0 || (options.feat_no_cTraining==0 && Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Moved==0)  //No Capsule Training, Nikakd, 10/8/10
 	     || Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Prime>0) stflag=0;
 		   else stflag=1;
 	 if (stflag==0) count++; // increment the counter
@@ -204,7 +205,7 @@ int AsnCrew(char plr,char pad,char part)
     for (i=0;i<ASTRONAUT_CREW_MAX;i++)  // Flight Crew Settings
      {
       stflag=0;
-      if (Data->P[plr].Crew[prg][i][0]==0 || Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Moved==0
+           if (Data->P[plr].Crew[prg][i][0]==0 || (options.feat_no_cTraining==0 && Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Moved==0)  //No Capsule Training, Nikakd, 10/8/10
 	     || Data->P[plr].Pool[Data->P[plr].Crew[prg][i][0]-1].Prime>0) stflag=0;
 	       else stflag=1;
       if (stflag==0) ++count; // increment the counter

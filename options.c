@@ -97,6 +97,14 @@ static struct {
 		"Set to positive values to increase debugging verbosity" },
 	{"short_training", &options.feat_shorter_advanced_training, "%u", 0,
 		"Set to non-zero to shorten Advanced Training duration from 4 to 3 seasons" },
+	{"random_nauts", &options.feat_random_nauts, "%u", 0,
+		"Set to non-zero to enable randomization of nauts" },  //Naut Randomize, Nikakd, 10/8/10
+	{"compt_nauts", &options.feat_compat_nauts, "%u", 0,
+		"Set the compatibility level of nauts (10 is default, 1 complete)" }, //Naut Compatibility, Nikakd, 10/8/10
+	{"no_c_training", &options.feat_no_cTraining, "%u", 0,
+		"Set to non-zero to enable skiping capsule training" },   //No Capsule Training, Nikakd, 10/8/10
+	{"cheat_no_damage", &options.cheat_no_damage, "%u", 0,
+		"Set to non-zero to disable damaged equipment" },    //Damaged Equipment Cheat, Nikakd, 10/8/10
 };
 
 /** prints the minimal usage information to stderr
@@ -365,6 +373,10 @@ setup_options(int argc, char *argv[])
 	options.want_fullscreen = 0;
 	options.want_debug = 0;
 	options.feat_shorter_advanced_training = 0;
+	options.feat_random_nauts =0;    //Naut Randomize, Nikakd, 10/8/10
+	options.feat_compat_nauts =10;   //Naut Compatibility, Nikakd, 10/8/10
+	options.feat_no_cTraining =0;    //No Capsule Training, Nikakd, 10/8/10
+	options.cheat_no_damage=0;       //Damaged Equipment Cheat, Nikakd, 10/8/10
 
 	fixpath_options();
 

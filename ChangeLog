@@ -1,3 +1,18 @@
+2010-08-10      Nicolas Laplume <nik_omega@hotmail.com>
+
+	*V241
+
+	*aimis.c, main.c, newmis.c, vab.c, mis_m.c: Changed booster's safety.
+
+	*mc2.c, newmis.c, ast4.c, options.h, options.c, news_sup.c: Fixed damaged equipment bug.
+
+	*rdplex.c, proto.h: Show DM in R&D, esthetic changes.
+
+	*options.h, options.c, ast1.c, aipur.c: Nauts compatiblity and randomization options.
+
+	*options.h, options.c, crew.c: Skip Capsule Training option.
+
+
 2010-08-09	Leon Baradat <peyre@users.sourceforge.net>
 
 	* V240

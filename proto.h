@@ -658,7 +658,7 @@ void Load_RD_BUT(char plr);
 void Del_RD_BUT(void);
 void DrawRD(char plr);
 void BButs(char old,char nw);
-void RDButTxt(int v1,int val,char plr);
+void RDButTxt(int v1,int val,char plr, char SpDModule);  //DM Screen, Nikakd, 10/8/10
 char RD(char plr);
 void ManSel(int activeButtonIndex);
 char QueryUnit(char hardware_index,char unit_index,char plr);
