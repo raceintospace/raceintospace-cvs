@@ -1,3 +1,11 @@
+2010-08-09	Leon Baradat <peyre@users.sourceforge.net>
+
+	* V240
+
+	* mc2.c, prest.c: Disabled Duration penalty system.
+
+	* admin.c, ast0.c, ast1.c, ast4.c, intel.c, mis_c.c: Esthetic changes.
+
 2010-06-30	Leon Baradat <peyre@users.sourceforge.net>
 
 	* V239

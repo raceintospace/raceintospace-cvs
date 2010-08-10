@@ -156,15 +156,16 @@ PrestMin(char plr)
 
 	/* Index 2 = Manned suborbital
 	 * Index 4 = Manned orbital
-	 * Index 6 = Manned orbital eva
+	 * Index 6 = Manned orbital EVA
 	 */
 	if (Mis.Index != 2
 			&& Mis.Index != 4
 			&& Mis.Index != 6
-			&& (Mis.Days - Data->P[plr].DurLevel) > 0)
+			&& (Mis.Days - Data->P[plr].DurLevel) > 1)   // Raised this from "> 0" to disable broken Duration penalty system -Leon
 	{
 		Neg += 5 * (Mis.Days - Data->P[plr].DurLevel);
 	}
+
 
 	return Neg;
 }
@@ -180,25 +181,25 @@ int PrestCheck(char plr)
 
  prg=Mis.mEq;
 
-  for (i=0;i<5;i++) {   // Sum all first/second Nation Bonus's
+  for (i=0;i<5;i++) {   // Sum all first/second Nation Bonuses
     tm=Mis.PCat[i];
     if (tm!=-1 && Data->Prestige[tm].Goal[plr]==0) { // First Mission Bonus
       if (Data->Prestige[tm].Goal[other(plr)]==0 && tm<27)
-	total+=Data->Prestige[tm].Add[0];  //your first
+	total+=Data->Prestige[tm].Add[0];     // your first
       else total+=Data->Prestige[tm].Add[1];  // your second 
     }
   }
 
   if (Mis.Doc==1 && Data->Prestige[24].Goal[plr]==0) {
     if (Data->Prestige[24].Goal[other(plr)]==0)
-      total+=Data->Prestige[24].Add[0];  // your first
-    else total+=Data->Prestige[24].Add[1];  // your second 
+      total+=Data->Prestige[24].Add[0];      // your first
+    else total+=Data->Prestige[24].Add[1];   // your second 
   }
 
   if (Mis.EVA==1 && Data->Prestige[26].Goal[plr]==0) {
     if (Data->Prestige[26].Goal[other(plr)]==0)
-      total+=Data->Prestige[26].Add[0];    // your first 
-    else total+=Data->Prestige[26].Add[1]; // your second
+      total+=Data->Prestige[26].Add[0];     // your first 
+    else total+=Data->Prestige[26].Add[1];  // your second
   }
 
   if (Mis.Days>1 && Data->P[plr].DurLevel<Mis.Days) {
@@ -217,7 +218,7 @@ int PrestCheck(char plr)
   // Hardware Checks
   if (Mis.Days>1 && Data->Prestige[12+prg].Goal[plr]==0) {
     if (Data->Prestige[12+prg].Goal[other(plr)]==0)
-      total+=Data->Prestige[12+prg].Add[0];   // your first
+      total+=Data->Prestige[12+prg].Add[0];    // your first
     else total+=Data->Prestige[12+prg].Add[1]; // your second
   }
 
@@ -225,7 +226,7 @@ int PrestCheck(char plr)
 
   // Other mission bonus
 
-   // Sum all additional Mission Bonues
+   // Sum all additional Mission Bonuses
   for (i=0;i<5;i++)
     if (Mis.PCat[i]!=-1)
       total+=Data->Prestige[Mis.PCat[i]].Add[2];
@@ -671,7 +672,7 @@ int AllotPrest(char plr,char mis)
      for (i=0;i<28;i++) if (PVal[i]>0 && PVal[i]<4) PVal[i]=4;
    }
 
-   // GOAL FILTER : MANNED
+   // GOAL FILTER: MANNED
    P_Goal=PosGoal(PVal);
    N_Goal=NegGoal(PVal);
    S_Goal=SupGoal(PVal);
@@ -880,7 +881,7 @@ int U_AllotPrest(char plr,char mis)
        } // if
       } // if
 
-     if (mcode==8 && MaxFail()==1) {  // extra 10 for landing on moon
+     if (mcode==8 && MaxFail()==1) {  // extra 10 for landing on Moon
        if (lun==1) {  // UNMANNED PHOTO RECON
          Data->P[plr].Misc[5].Safety+=10;
          Data->P[plr].Misc[5].Safety=minn(Data->P[plr].Misc[5].Safety,99);

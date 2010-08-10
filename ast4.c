@@ -149,7 +149,7 @@ void AstLevel(char plr,char prog,char crew,char ast)
 
 
    //RectFill(113,53,119,57,i);  // shouldn't be mood
-   grSetColor(11); PrintAt(122,57,Data->P[plr].Pool[man].Name);
+   grSetColor(11); PrintAt(115,57,Data->P[plr].Pool[man].Name);
    // don't do this for level three
    PrintAt(0,0,"  M: ");DispNum(0,0,Data->P[plr].Pool[man].Mood);
 
@@ -256,7 +256,7 @@ void DrawProgs(char plr,char prog)
 }
 
 /** need to check programs to see if there are adequate astronauts there
- * check any assigned groups yes then return
+ * check any assigned Cgroups yes then return
  * check how many astronauts assigned to current prog
  * 
  * 
@@ -553,7 +553,7 @@ Programs(char plr, char prog)
 				DispLeft(plr, BarA, count, now2, &M[0]);
 			}
 		}
-		if (mousebuttons > 0 || key > 0)	/* Game Play */
+		if (mousebuttons > 0 || key > 0)	/* Gameplay */
 		{
 			if (((x >= 6 && y >= 130 && x <= 18 && y <= 161
 						&& mousebuttons > 0) || key == UP_ARROW)
@@ -904,7 +904,7 @@ Programs(char plr, char prog)
 					InBox(81, 70, 238, 113);
 					RectFill(82, 71, 237, 112, 7 + 3 * plr);
 					grSetColor(1);
-					DispBig(122, 50, "PROBLEM", 0, -1);
+					DispBig(118, 50, "PROBLEM", 0, -1);
 					PrintAt(136, 162, "CONTINUE");
 					grSetColor(11);
 					PrintAt(88, 80, "FLIGHT CREW ");
@@ -1018,9 +1018,9 @@ void ClearIt(void)
 void NewAstList(char plr,char prog,int M1,int M2,int M3,int M4)
 {
   
-  program=prog;  /* Sets capsule/shuttle program for "Draws Astronaut attributes" section -Leon */
+  program=prog;  /* Sets capsule/shuttle program for "Draws Astronaut attributes" section */
                  /* 1=Mercury/Vostok, 2=Gemini/Voskhod, 3=Apollo/Soyuz, 4=XMS-2/Lapot, 5=Jupiter/Kvartet */
-				 /* This will be used to highlight the skills for each crew member's role */
+				 /* This will be used to highlight the skills for each crew member's role -Leon */
 
   RectFill(13,86,231,122,3);  /* Clear Astro Area */
   grSetColor(1);
@@ -1070,18 +1070,18 @@ void AstStats(char plr,char man,char num)
   grSetColor(1);
   y=91+man*9;
   if (man==0) {grSetColor(11);}  /* Highlight CA for command pilot */
-   PrintAt(117,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);
+   PrintAt(119,y,"CA:");DispNum(0,0,Data->P[plr].Pool[num].Cap);
   grSetColor(1);
   if (man==1 && program>1) {grSetColor(11);}  /* Highlight LM for LM pilot */
-   PrintAt(141,y,"LM:");DispNum(0,0,Data->P[plr].Pool[num].LM);
+   PrintAt(143,y,"LM:");DispNum(0,0,Data->P[plr].Pool[num].LM);
   grSetColor(1);
   if (program==1 || ((program==2 || program==3 || program==4) && man==1) || (program==5 && man>1)) {grSetColor(11);}  /* Highlight EV for EVA specialist */
-   PrintAt(165,y,"EV:");DispNum(0,0,Data->P[plr].Pool[num].EVA);
+   PrintAt(167,y,"EV:");DispNum(0,0,Data->P[plr].Pool[num].EVA);
   grSetColor(1);
   if ((program==2 && man==0) || ((program==3 || program==4) && man==2)) {grSetColor(11);}  /* Highlight DO for docking specialist */
-   PrintAt(190,y,"DO:");DispNum(0,0,Data->P[plr].Pool[num].Docking);
+   PrintAt(192,y,"DO:");DispNum(0,0,Data->P[plr].Pool[num].Docking);
   grSetColor(1);  /* Never highlight EN skill */
-   PrintAt(215,y,"EN:");DispNum(0,0,Data->P[plr].Pool[num].Endurance);
+   PrintAt(217,y,"EN:");DispNum(0,0,Data->P[plr].Pool[num].Endurance);
   return;
 }
 

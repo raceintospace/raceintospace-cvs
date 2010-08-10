@@ -157,7 +157,7 @@ int GenerateTables(SaveGameType saveType)
   if (tFiles>0) {
     tFiles=0;
     done=first_saved_game(&ffblk);
-    while(!done && tFiles<100)  // Get All Files Names And save Dates.
+    while(!done && tFiles<100)  // Get All File Names And Save Dates.
     {
      if (strlen (ffblk.ff_name) > sizeof FList[tFiles].Name - 1)
 	     goto next;
@@ -259,18 +259,18 @@ void FileAccess(char mode)
 
   if (mode==0)
    {
-    if (sc==0 || sc==2) IOBox(207,62,280,74); //Regular Save game
+    if (sc==0 || sc==2) IOBox(207,62,280,74); // Regular Save game
      else InBox(207,62,280,74); 
-    if (sc==1) IOBox(207,76,280,88); //Mail Save game
+    if (sc==1) IOBox(207,76,280,88); // Mail Save game
      else InBox(207,76,280,88);
    }   
    else {
     InBox(207,62,280,74);
     InBox(207,76,280,88); 
    }
-  if (tFiles>0) IOBox(207,90,280,102); else InBox(207,90,280,102); //Delete
-  IOBox(207,104,280,116); //Play
-  IOBox(207,118,280,130); //Quit
+  if (tFiles>0) IOBox(207,90,280,102); else InBox(207,90,280,102); // Delete
+  IOBox(207,104,280,116); // Play
+  IOBox(207,118,280,130); // Quit
 
   grSetColor(11);
   PrintAt(59,42,"TIME CAPSULE REQUEST");
@@ -358,7 +358,7 @@ void FileAccess(char mode)
  	      RLED((char *) load_buffer,(char *)Data,SaveHdr->compSize);
 		   free(load_buffer);
 		   
-		   // Swap Players Data
+		   // Swap Players' Data
 		   if (endianSwap)
 		   {
 			 _SwapGameDat();
@@ -423,9 +423,9 @@ void FileAccess(char mode)
 
         if (SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9)
          {
-          //Play-By-Mail save game LOAD
+          // Play-By-Mail save game LOAD
           Option=-1;fOFF=-1;
-          //save file offset
+          // save file offset
           fOFF=now;
 
           Data->Season=SaveHdr->Season;
@@ -460,22 +460,22 @@ void FileAccess(char mode)
 	        }
          } 
         else
-         //Modem save game LOAD
+         // Modem save game LOAD
         if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7)
          {
-          //Modem connect up
+          // Modem connect up
           if (SaveHdr->Country[0]==6) {plr[0]=SaveHdr->Country[0];plr[1]=1;}
            else {plr[1]=SaveHdr->Country[1];plr[0]=0;}
-          //Modem Play => reset the modem
+          // Modem Play => reset the modem
           if (Option!=-1) DoModem(2);
           Option=MPrefs(1);
-          //klugge
+          // klugge
           if (Option==0 || Option==2) Option=0;
            else if (Option==1 || Option==3) Option=1;
          }
         else
          {
-          //Regular save game LOAD
+          // Regular save game LOAD
           if (Data->Def.Input==0 || Data->Def.Input==2) { // Hist Crews
 	         fin=sOpen("CREW.DAT","rb",0);
              size=fread(buffer,1,BUFFER_SIZE,fin);
@@ -528,7 +528,7 @@ void FileAccess(char mode)
 	         i--;  // decrement to correct for the FOR loop
 	         strcpy(SaveHdr->PName[0],Data->P[plr[0] % 2].Name);
 	         strcpy(SaveHdr->PName[1],Data->P[plr[1] % 2].Name);
-           //Modem save game hack
+           // Modem save game hack
            if (Option!=-1)
             {
              if (Option==0) {plr[0]=6;plr[1]=1;}
@@ -829,7 +829,7 @@ void FileAccess(char mode)
 	 };
 	 
    
-	 //  WaitForMouseUp();
+	 // WaitForMouseUp();
 	 OutBox(191,89,202,126);
 	 // perform Down Button
 	 key=0;
@@ -1269,8 +1269,8 @@ char RequestX(char *s,char md)
   IOBox(91,103,164,130);
   InBox(92,58,243,97);
   grSetColor(1);
-  DispBig(109,110,"YES",0,0);
-  DispBig(196,110,"NO",0,0);
+  DispBig(111,110,"YES",0,0);
+  DispBig(193,110,"NO",0,0);
   grSetColor(11);
   DispBig(166-i*10,65,&s[0],0,-1);
   PrintAt(136,94,"ARE YOU SURE?");

@@ -130,7 +130,7 @@ bot:                          // bottom of routine
 
 /** Finds the video fitting to the current mission step and plays it.
  * 
- * The function does handles variations for the videos 
+ * The function does handle variations for the videos 
  * and also finds the proper babypics to display.
  * 
  * \param plr Player structure
@@ -176,7 +176,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		mode=0;
 	} else fem=0;
 
-	//Specs: Lem Activities Klugge
+	//Specs: LEM Activities Klugge
 	if (Seq[0]=='h') {
         if (Mev[STEP-1].Name[0]=='S'){
           Seq[0]='Q';
@@ -204,7 +204,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		}
 	};
 
-	//Specs: lm act lunar liftoff failure klugge and failed landing LPL
+	//Specs: LM act lunar liftoff failure klugge and failed landing LPL
 	if (mode==1) {
 		if (Seq[0]=='T') {
 			if (Seq[3]=='6' || Seq[3]=='5')
@@ -361,7 +361,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 	if (AEPT && !mode) {
 		if ((nfin=open_gamedat("BABYCLIF.CDR"))==NULL) return;
-		fread(Mob,CLIF_TABLE*(sizeof (struct Infin)),1,nfin); //Specs: First Table
+		fread(Mob,CLIF_TABLE*(sizeof (struct Infin)),1,nfin);  //Specs: First Table
 
         // Endianness swap
 		for (i=0;i<CLIF_TABLE;i++)	{
@@ -451,7 +451,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 				screen_dirty = 1;
 
-            /* XXX I don't get the fancy "hold thing so I left it out */
+            /* XXX I don't get the fancy "hold" thing so I left it out */
 
 			} else if (hold_count < 8) {
 				//Specs: single frame hold
@@ -766,7 +766,7 @@ GuyDisp(int xa, int ya, struct Astros *Guy)
 	grSetColor(1);
 	assert(Guy != NULL);
 	if (Guy->Sex == 1)
-		grSetColor(18);	  // Display female 'nauts in blue, not white
+		grSetColor(6);	  // Display female 'nauts in navy blue, not white
 	PrintAt(xa, ya, Guy->Name);
 	PrintAt(0, 0, ": ");
 	switch (Guy->Status)
@@ -856,7 +856,7 @@ char FailureMode(char plr,int prelim,char *text)
 
 
   // Flight Crew Info
-  InRFBox(4,131,315,151,0);// Astro List/Crew
+  InRFBox(4,131,315,151,0); // Astro List/Crew
   grSetColor(12);PrintAt(15,139,"CREW");PrintAt(9,146,"STATUS");
 
 

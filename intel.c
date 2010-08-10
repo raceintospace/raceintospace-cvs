@@ -232,8 +232,8 @@ void BackIntel(char p,char year)
  DispNum(0,0,Data->P[p].PastIntel[year].num);DispChr(Data->P[p].PastIntel[year].code);
  PrintAt(0,0,"-");if (Data->Season==0) PrintAt(0,0,"S");else PrintAt(0,0,"F");
  DispNum(0,0,58+year);
- grSetColor(6);PrintAt(17,51,"CODENAME: ");grSetColor(1);xc=39;yc=59;
- // CODENAME GOES HERE
+ grSetColor(6);PrintAt(17,51,"CODE NAME: ");grSetColor(1);xc=39;yc=59;
+ // CODE NAME GOES HERE
  code=-1;
  if (prg==0) code=ind;
    else if (prg==1) code=ind+7;
@@ -580,7 +580,7 @@ void DrawBre(char plr)
   ShBox(132,29,148,80);
   ShBox(132,82,148,133);
   ShBox(6,29,130,41);InBox(8,31,128,39); // code
-  ShBox(6,43,130,63);InBox(8,45,128,61); // codename
+  ShBox(6,43,130,63);InBox(8,45,128,61); // code name
   ShBox(6,65,130,85);InBox(8,67,128,83); // class
   ShBox(6,87,130,101);InBox(8,89,128,99); // crew
   ShBox(6,103,130,118);InBox(8,105,128,116); // program
@@ -707,7 +707,7 @@ void ReButs(char old,char nw)
   
   switch(old) {
     case 0:OutBox(7,164,75,195);
-	   gxVirtualDisplay(&but,0,0,8,165,74,194,0); // Unmanned
+	   gxVirtualDisplay(&but,0,0,8,165,74,194,0);  // Unmanned
 	   break;
     case 1:OutBox(83,164,156,195);
 	   gxVirtualDisplay(&but,68,0,84,165,155,194,0);  // Rocket
@@ -723,7 +723,7 @@ void ReButs(char old,char nw)
   }
   switch(nw) {
     case 0:InBox(7,164,75,195);
-	   gxVirtualDisplay(&but,0,31,8,165,74,194,0); // Unmanned
+	   gxVirtualDisplay(&but,0,31,8,165,74,194,0);  // Unmanned
 	   break;
     case 1:InBox(83,164,156,195);
 	   gxVirtualDisplay(&but,68,31,84,165,155,194,0);  // Rocket

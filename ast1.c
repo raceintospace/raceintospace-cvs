@@ -142,9 +142,9 @@ void DrawAstCheck(char plr)
 
  if (ad==0) {
   if (Data->P[plr].Cash<i) {
-    PrintAt(99,113,"YOU CANNOT AFFORD");
-    if (plr==0) PrintAt(100,122,"ASTRONAUTS THIS TURN");
-    else PrintAt(100,122,"COSMONAUTS THIS TURN");
+    PrintAt(110,113,"YOU CANNOT AFFORD");
+    if (plr==0) PrintAt(103,122,"ASTRONAUTS THIS TURN");
+    else PrintAt(103,122,"COSMONAUTS THIS TURN");
     grSetColor(8);
     PrintAt(113,143,"EXIT");
     PrintAt(181,143,"EXIT");
@@ -335,7 +335,7 @@ DrawAstCheck(plr);
     	 
       }
     }
-    //else
+    // else
     if (((x>=6 && y>=130 && x<=18 && y<=161 && mousebuttons>0) || (key==UP_ARROW && ksel==1)) && count>0)
      { /* Lft Up */
     	InBox(6,130,18,161);
@@ -599,7 +599,7 @@ DrawAstCheck(plr);
 	   OutBox(168,111,313,123);
      };
 
-      if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) {   /* Exit - not til done */
+      if ((x>=245 && y>=5 && x<=314 && y<=17 && mousebuttons>0) || key==K_ENTER) {   /* Exit - not 'til done */
        if (fem==1) {
          j=0;
          for (i=0;i<count;i++) if (Men[sel[i]].Sex==1) j++;

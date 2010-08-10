@@ -160,7 +160,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 	      if (MH[pad][1]!=NULL) Mev[step].Class=1;      // Kicker
 	      else if (MH[pad][0]!=NULL) Mev[step].Class=0;   // Cap
          else if (MH[pad][2]!=NULL) Mev[step].Class=2; // LM
-		   else Mev[step].Class=3;                            // Satelite
+		   else Mev[step].Class=3;                            // Satellite
          if (step>11 && MH[pad][0]!=NULL) Mev[step].Class=0; // Cap L->E
 	      break;
     case 'Q': case 'R': case 'S': case 'T':
@@ -173,7 +173,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
          if (MH[pad][3]!=NULL) Mev[step].Class=3;      // DM
 	      else Mev[step].Class=2;                            // Satellite
 	      break;
-    case 'd': //Special
+    case 'd':  //Special
     default: break;
   };
 
@@ -303,7 +303,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 
      /////////////////////////////////////////////////
      // Fix for BARIS CD-ROM Planetary Steps (Step W)
-     // E=moon ; M= mars ;S = saturn; V=venus; J= jupiter  R= Mercury
+     // E= Moon; M= Mars; S= Saturn; V= Venus; J= Jupiter  R= Mercury
      // Must be at .Name[2]
      //
 
@@ -314,13 +314,13 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
         Mev[step].Name[2]='V';  // Venus
         Mev[step].Name[2]='E';  // Earth
         Mev[step].Name[2]='M';  // Mars
-        Mev[step].Name[2]='J';  // Juptier
+        Mev[step].Name[2]='J';  // Jupiter
         Mev[step].Name[2]='S';  // Saturn
 #endif
 
 
       if (Mev[step].Class==5) {
-         if (MH[0][1] && MH[0][1]->ID[1]==0x32) strncat(Mev[step].Name,"M2",2); //Kicker C
+         if (MH[0][1] && MH[0][1]->ID[1]==0x32) strncat(Mev[step].Name,"M2",2); //Kicker-C
          else if (MH[pad][0] && MH[pad][0]->ID[1]==0x34) strncat(Mev[step].Name,"C4",2); // FourMan
          else {  // standard LMs
             if (mcode=='P') {
@@ -393,7 +393,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
    if (strncmp(&Mev[step].Name[2],"M3C0",4)==0)
      Mev[step].FName[1]='1';
 
-  if (Mev[step].FName[3]!='P') {   // exclude any probe's
+  if (Mev[step].FName[3]!='P') {   // exclude any probes
    if (Mev[step].loc==15 && Mev[step].Name[6]==0x36) Mev[step].FName[1]='1';
 
    if (Mev[step].loc==16 && STEP>8) {
@@ -455,7 +455,7 @@ char i,j,t;
          DMFake=1;
          }
       }
-    if (Data->P[plr].Mission[mis].MissionCode==57) { // Soyuz Kicker C
+    if (Data->P[plr].Mission[mis].MissionCode==57) { // Soyuz Kicker-C
       Data->P[plr].Mission[mis].Hard[Mission_Probe_DM]=4;
       DMFake=1;
       }
@@ -466,7 +466,7 @@ char i,j,t;
     }
 
 
-    // this code is to buffer any difficulties when a mission gets through
+    // This code is to buffer any difficulties when a mission gets through
     // all the checks to this point without having a docking module assigned
 #if 0
     if ((Mis.mVab[j] & 0x10)>0 && Data->P[plr].DMod==0) { // DMO Patch
@@ -612,7 +612,7 @@ MisDur(char plr, char dur)
 	diff = dur - Data->P[plr].DurLevel;
 	if (Data->P[plr].DurLevel == 0)
 		diff--;
-	if (diff <= 0)
+	if (diff <= 2)    // Changed from "diff <= 0" to disable broken Duration milestone system  -Leon
 		return;
 	diff = 5 * diff;
 	if ((MH[0][0] && MH[0][0]->ID[0] == 'C')
