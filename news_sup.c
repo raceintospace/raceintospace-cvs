@@ -165,8 +165,8 @@ int DamMod(int p,int prog,int dam,int cost)
   if (j==0) return 0;
   j=hi-1; while(save[j]==0) j--;
   strcpy(&Name[0],&Eptr[j]->Name[0]);
-  if (options.cheat_no_damage==0) Eptr[j]->Damage=dam;    //Damaged Equipment Cheat, Nikakd, 10/8/10
-  if (options.cheat_no_damage==0) Eptr[j]->DCost=cost;
+  if (options.cheat_no_damage==0) Eptr[j]->Damage+=dam;    //Damaged Equipment Cheat
+  if (options.cheat_no_damage==0) Eptr[j]->DCost+=cost;
   return save[j];
 }
 

@@ -234,39 +234,43 @@ int FillVab(char plr,char f,char mode)
       switch(i) {
 	      case 0: case 2:
 	        if ((Data->P[plr].Manned[VAS[f][i].dex].Num-Data->P[plr].Manned[VAS[f][i].dex].Spok)==0) {
-            if (mode==1) {
-	            Data->P[plr].Cash-=maxx(1,Data->P[plr].Manned[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Manned[VAS[f][i].dex].UnitCost/2);
+		int temp_cost = Data->P[plr].TurnOnly==3? maxx(1,Data->P[plr].Manned[VAS[f][i].dex].UnitCost/2):Data->P[plr].Manned[VAS[f][i].dex].UnitCost;
+            	if (mode==1) {
+	            Data->P[plr].Cash-=temp_cost;
 	            Data->P[plr].Manned[VAS[f][i].dex].Num++;
 	          }
-            else cost+=maxx(1,Data->P[plr].Manned[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Manned[VAS[f][i].dex].UnitCost/2);
+            	else cost+=temp_cost;
           }
 	        break;
 	      case 1: 
 	        if ((Data->P[plr].Misc[VAS[f][i].dex].Num-Data->P[plr].Misc[VAS[f][i].dex].Spok)==0) {
-            if (mode==1) {
-	            Data->P[plr].Cash-=maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2);
+		int temp_cost = Data->P[plr].TurnOnly==3? maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2):Data->P[plr].Misc[VAS[f][i].dex].UnitCost;
+            	if (mode==1) {
+	            Data->P[plr].Cash-=temp_cost;
 	            Data->P[plr].Misc[VAS[f][i].dex].Num++;
 	          }
-            else cost+=maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2);
+            	else cost+=temp_cost;
 			  }
 	        break;
     	   case 3:
 	        if (VAS[f][i].dex!=4) {
 	          if ((Data->P[plr].Probe[VAS[f][i].dex].Num-Data->P[plr].Probe[VAS[f][i].dex].Spok)==0) {
-              if (mode==1) {
-		           Data->P[plr].Cash-=maxx(1,Data->P[plr].Probe[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Probe[VAS[f][i].dex].UnitCost/2);
+		int temp_cost = Data->P[plr].TurnOnly==3? maxx(1,Data->P[plr].Probe[VAS[f][i].dex].UnitCost/2):Data->P[plr].Probe[VAS[f][i].dex].UnitCost;
+              	if (mode==1) {
+		           Data->P[plr].Cash-=temp_cost;
 		           Data->P[plr].Probe[VAS[f][i].dex].Num++;
 	            }
-              else cost+=maxx(1,Data->P[plr].Probe[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Probe[VAS[f][i].dex].UnitCost/2);
+              else cost+=temp_cost;
             }
 	        }
           else {
 	          if ((Data->P[plr].Misc[VAS[f][i].dex].Num-Data->P[plr].Misc[VAS[f][i].dex].Spok)==0) {
+		int temp_cost = Data->P[plr].TurnOnly==3? maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2):Data->P[plr].Misc[VAS[f][i].dex].UnitCost;
               if (mode==1) {
-		           Data->P[plr].Cash-=maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2);
+		           Data->P[plr].Cash-=temp_cost;
 		           Data->P[plr].Misc[VAS[f][i].dex].Num++;
 	            }
-              else cost+=maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2);
+              else cost+=temp_cost;
 	          }
           }
 	        break;
@@ -309,21 +313,23 @@ int BuyVabRkt(char plr,int rk,int *q,char mode)
 {
   int cost=0;
   if ((Data->P[plr].Rocket[rk%4].Num-Data->P[plr].Rocket[rk%4].Spok)==0) {
+	int temp_cost = Data->P[plr].TurnOnly==3? maxx(1,Data->P[plr].Rocket[rk%4].UnitCost/2):Data->P[plr].Rocket[rk%4].UnitCost;
       if (mode==1) {
-        Data->P[plr].Cash-=maxx(1,Data->P[plr].Rocket[rk%4].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Rocket[rk%4].UnitCost/2);
+        Data->P[plr].Cash-=temp_cost;
         Data->P[plr].Rocket[rk%4].Num++;
         q[rk%4]++;
       }
-      else cost=maxx(1,Data->P[plr].Rocket[rk%4].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Rocket[rk%4].UnitCost/2);
+      else cost=temp_cost;
   }
   if (rk>3 && (Data->P[plr].Rocket[4].Num-Data->P[plr].Rocket[4].Spok)==0)
   {
+	int temp_cost = Data->P[plr].TurnOnly==3? maxx(1,Data->P[plr].Rocket[4].UnitCost/2):Data->P[plr].Rocket[4].UnitCost;
      if (mode==1) {
-       Data->P[plr].Cash-=maxx(1,Data->P[plr].Rocket[4].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Rocket[4].UnitCost/2);
+       Data->P[plr].Cash-=temp_cost;
        Data->P[plr].Rocket[4].Num++;
        q[rk]++;
      }
-     else cost+=maxx(1,Data->P[plr].Rocket[rk%4].UnitCost-(Data->P[plr].TurnOnly==3)*Data->P[plr].Rocket[rk%4].UnitCost/2);
+     else cost+=temp_cost;
 
   }
   return cost;
@@ -995,11 +1001,14 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
   }
 
   else if (VX == 0x81) { // P/S:CAP+KIC XX
-    if (prog==1 || prog==3) {
-      VASqty++;
-      VVals(plr,1,&Data->P[plr].Misc[0],0,20);
-      VASqty++;
-      VVals(plr,1,&Data->P[plr].Misc[1],1,21);
+    if (prog==1 || prog==3) { 
+	if (mcode !=52) {   ///Special Case EOR LM Test
+      		VASqty++;
+      		VVals(plr,1,&Data->P[plr].Misc[0],0,20);
+      		VASqty++;
+      		VVals(plr,1,&Data->P[plr].Misc[1],1,21);
+		}
+	else {VASqty++; VVals(plr,1,&Data->P[plr].Misc[1],1,20);}
     } else VASqty=1;
   }
 
@@ -1014,10 +1023,13 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
 
   else if (VX == 0x89 && part==1) { // S:CAP+EVA+KIC
    if (prog!=2) {
-    VASqty++;
-    VVals(plr,1,&Data->P[plr].Misc[0],0,20);
-    VASqty++;
-    VVals(plr,1,&Data->P[plr].Misc[1],1,21);
+    if (mcode !=55) { ///Special Case EOR Lunar Landing
+    	VASqty++;
+    	VVals(plr,1,&Data->P[plr].Misc[0],0,20);
+    	VASqty++;
+    	VVals(plr,1,&Data->P[plr].Misc[1],1,21);
+	}
+    else { VASqty++; VVals(plr,1,&Data->P[plr].Misc[1],1,20);}
    } else VASqty=1;
     // EVA Check
   }

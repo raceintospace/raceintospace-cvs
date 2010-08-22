@@ -658,6 +658,11 @@ void ShowUnit(char hw,char un,char player_index)
       OnHand(PL->Num);
       grSetColor(SCol);
       DispNum(256,111,PL->Safety);DispChr('%');
+	//Display Damaged Equipment
+       if (PL->Damage!=0) {
+		grSetColor(8);
+		PrintAt(280,111,"(");DispNum(283,111,PL->Safety+PL->Damage<1?1:PL->Safety+PL->Damage);DispChr('%');DispChr(')');
+		}
       qty=0;
     };
   RectFill(27,95,130,171,0);

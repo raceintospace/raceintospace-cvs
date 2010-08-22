@@ -1,4 +1,14 @@
-2010-08-10      Nicolas Laplume <nik_omega@hotmail.com>
+2010-08-22	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	*V242
+
+	*vab.c: Fixed EOR kicker-b bug
+
+	*rdplex.c, news_sup.c: Damaged equipment improvements
+
+	*vab.c: Auto-purchase half-off bug fixed
+
+2010-08-10      Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	*V241
 
