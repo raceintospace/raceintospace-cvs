@@ -652,6 +652,9 @@ void ClrMiss(char plr,char pad);
 void PadPict(char poff);
 void ShowPad(char plr,char pad);
 
+// RANDOMIZE.C
+void RandomizeEq(void);
+
 // RDPLEX.C
 void SRPrintAt(int x, int y, char *text,char fgd,char bck);
 void Load_RD_BUT(char plr);

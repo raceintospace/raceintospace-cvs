@@ -55,7 +55,7 @@ BARIS_HFILES = av.h Buzz_inc.h data.h endianness.h externs.h gamedata.h \
 BARIS_OBJS = $(addsuffix .@OBJEXT@, \
 	admin aimast aimis aipur ast0 ast1 ast2 ast3 ast4 budget crew endgame \
 	endianness futbub future hardef intel intro main mc2 mc mis_c mis_m museum \
-	newmis news news_sup news_suq place port prefs prest radar rdplex records \
+	newmis news news_sup news_suq place port prefs prest radar randomize rdplex records \
 	replay review rush start vab pace gx gr sdl music_vorbis gamedata mmfile options fs \
 	utils logging log4c log_default \
 )

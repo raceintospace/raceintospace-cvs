@@ -28,7 +28,6 @@
 #include <externs.h>
 #include <assert.h>
 #include <options.h>
-#include <randomize.c>
 
 extern struct ManPool *Men;
 struct ManPool *Sov;

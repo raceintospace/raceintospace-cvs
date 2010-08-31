@@ -104,9 +104,9 @@ static struct {
 	{"no_c_training", &options.feat_no_cTraining, "%u", 0,
 		"Set to non-zero to enable skiping capsule training" },   //No Capsule Training, Nikakd, 10/8/10
 	{"cheat_no_damage", &options.cheat_no_damage, "%u", 0,
-		"Set to non-zero to disable damaged equipment" },   
+		"Set to non-zero to disable damaged equipment (Will prevent future damage)" },   
 	{"random_eq", &options.feat_random_eq, "%u", 0,
-		"Set to non-zero to enable random equipment" },
+		"Set to non-zero to enable random equipment (Will break game balance and possibly break the AI)" },
 };
 
 /** prints the minimal usage information to stderr

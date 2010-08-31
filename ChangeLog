@@ -1,5 +1,13 @@
 2010-08-30	Nicolas Laplume <nikakd@users.sourceforge.net>
 
+	*V244
+
+	*proto.h, randomize.c, prefs.c, Makefile.in: Modify random equipmet files
+
+	*options.c: Change config file text
+
+2010-08-30	Nicolas Laplume <nikakd@users.sourceforge.net>
+
 	*V243
 
 	*options.c,options.h: Change no_capsule_training default to 1, add random_eq option
