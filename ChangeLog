@@ -1,3 +1,15 @@
+2010-08-30	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	*V243
+
+	*options.c,options.h: Change no_capsule_training default to 1, add random_eq option
+
+	*prefs.c, randomize.c: Add option to randomize equipment
+
+	*vab.c: Fixed problem where booster safety was display uncorrectly
+
+	*readme: Added section about config file
+
 2010-08-22	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	*V242

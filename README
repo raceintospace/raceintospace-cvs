@@ -76,4 +76,13 @@ Interplay as a disk-based game in 1992 and a CD-ROM in 1994.
 
     see file DEVELOPER.
 
+\section advancedconf 4. Advanced Options
+
+    Inside .raceintospace folder (where savegames are stored) there is a
+    config file.  It can be opened with any text editor, and the options
+    have a short description.  To enable any  option,  you should remove
+    the # symbol and add the number you want after a space. Some options
+    wont  change  immediately,  but  will  take  a  while  (e.g.  'nauts
+    compatibility  wont  cause  any  change  until your next group)
+   
 */

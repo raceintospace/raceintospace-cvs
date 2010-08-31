@@ -27,6 +27,8 @@
 #include <Buzz_inc.h>
 #include <externs.h>
 #include <assert.h>
+#include <options.h>
+#include <randomize.c>
 
 extern struct ManPool *Men;
 struct ManPool *Sov;
@@ -295,6 +297,10 @@ long size;
 	          fread(&Data->P[1].Probe[0],28*(sizeof (Equipment)),1,fin);
 	          fclose(fin);
 	         }
+
+	///Random Equipment
+	if (options.feat_random_eq==1) RandomizeEq();	
+
 	       if (Data->Def.Input==0 || Data->Def.Input==2)
            { // Hist Crews
 	         fin=sOpen("CREW.DAT","rb",0);

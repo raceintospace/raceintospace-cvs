@@ -678,8 +678,8 @@ begvab:
   // Rocket Display Data --------------------------
   for (i=0;i<7;i++) {
     if (i>3) {
-      sf[i]=(Data->P[plr].Rocket[i-4].Safety+
-		Data->P[plr].Rocket[4].Safety)>>1;
+      sf[i]=(Data->P[plr].Rocket[i-4].Safety*
+		Data->P[plr].Rocket[4].Safety)/100;
       strcpy(&Name[i][0],"B/");
       strcat(&Name[i][0],&Data->P[plr].Rocket[i-4].Name[0]);
       qty[i]=Data->P[plr].Rocket[i-4].Num-Data->P[plr].Rocket[i-4].Spok;
@@ -736,8 +736,8 @@ begvab:
     	 // Rocket Display Data --------------------------
 	    for (i=0;i<7;i++) {
 	     if (i>3) {
-	      sf[i]=(Data->P[plr].Rocket[i-4].Safety+
-		      Data->P[plr].Rocket[4].Safety)>>1;
+	      sf[i]=(Data->P[plr].Rocket[i-4].Safety*
+		      Data->P[plr].Rocket[4].Safety)/100;
 	      strcpy(&Name[i][0],"B/");
 	      strcat(&Name[i][0],&Data->P[plr].Rocket[i-4].Name[0]);
 	      qty[i]=Data->P[plr].Rocket[i-4].Num-Data->P[plr].Rocket[i-4].Spok;

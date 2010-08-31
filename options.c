@@ -104,7 +104,9 @@ static struct {
 	{"no_c_training", &options.feat_no_cTraining, "%u", 0,
 		"Set to non-zero to enable skiping capsule training" },   //No Capsule Training, Nikakd, 10/8/10
 	{"cheat_no_damage", &options.cheat_no_damage, "%u", 0,
-		"Set to non-zero to disable damaged equipment" },    //Damaged Equipment Cheat, Nikakd, 10/8/10
+		"Set to non-zero to disable damaged equipment" },   
+	{"random_eq", &options.feat_random_eq, "%u", 0,
+		"Set to non-zero to enable random equipment" },
 };
 
 /** prints the minimal usage information to stderr
@@ -375,8 +377,9 @@ setup_options(int argc, char *argv[])
 	options.feat_shorter_advanced_training = 0;
 	options.feat_random_nauts =0;    //Naut Randomize, Nikakd, 10/8/10
 	options.feat_compat_nauts =10;   //Naut Compatibility, Nikakd, 10/8/10
-	options.feat_no_cTraining =0;    //No Capsule Training, Nikakd, 10/8/10
+	options.feat_no_cTraining =1;    //No Capsule Training, Nikakd, 10/8/10
 	options.cheat_no_damage=0;       //Damaged Equipment Cheat, Nikakd, 10/8/10
+	options.feat_random_eq=0;
 
 	fixpath_options();
 
