@@ -13,6 +13,7 @@ typedef struct {
     unsigned feat_random_nauts;  
     unsigned feat_compat_nauts;  
     unsigned feat_no_cTraining;  
+    unsigned feat_no_backup;  
     unsigned cheat_no_damage;    
     unsigned feat_random_eq;
 } game_options;

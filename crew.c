@@ -17,7 +17,7 @@
 */
 #include <Buzz_inc.h>
 #include <externs.h>
-#include <options.h>  //No Capsule Training, Nikakd, 10/8/10
+#include <options.h>  //No Capsule Training, Nikakd, 10/8/10 - Also No requirement to assign Backup crews -Leon
 
 extern struct mStr Mis;
 
@@ -239,7 +239,7 @@ int AsnCrew(char plr,char pad,char part)
       WaitForMouseUp();
      }
     }
-   if (((x>=166 && y>=9 && x<=236 && y<=19 && mousebuttons>0) || key==K_ENTER || key=='A') && prime!=-1 && back!=-1 && bug==0)
+   if (((x>=166 && y>=9 && x<=236 && y<=19 && mousebuttons>0) || key==K_ENTER || key=='A') && prime!=-1 && (back!=-1 || options.feat_no_backup>0) && bug==0)
 	 {   // Assign
 	  
 	  InBox(166,9,236,19);
@@ -333,7 +333,8 @@ void FutSt2(int num,int type)
 	     grMoveTo(168,135+temp*16); };
   switch(type) {
     case 0: grSetColor(6);PrintAt(0,0,"UNASSIGNED");break;
-    case 1: grSetColor(9);PrintAt(0,0,"TRAINING");break;
+    case 1: grSetColor(9);if (options.feat_no_cTraining==1) { grSetColor(11); };
+	    PrintAt(0,0,"TRAINING");break;
     case 2: grSetColor(9);PrintAt(0,0,"VACANT");break;
     case 3: grSetColor(11);PrintAt(0,0,"PRIMARY");break;
     case 4: grSetColor(11);PrintAt(0,0,"BACKUP");break;

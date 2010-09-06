@@ -239,7 +239,7 @@ RDButTxt(int cost, int encodedRolls, char playerIndex, char SpDModule) //DM Scre
 
  		//DM Screen, Nikakd, 10/8/10
 	if (SpDModule==1) {
-		PrintAt(169, 191,"    CANNOT BE RESEARCHED");
+		PrintAt(184,191,"CANNOT BE RESEARCHED");
 		return;
 		}
 

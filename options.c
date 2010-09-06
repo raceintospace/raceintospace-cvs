@@ -88,25 +88,27 @@ static struct {
 	{"audio", &options.want_audio, "%u", 0,
 		"Set to 0 if you don't want audio in game." },
 	{"nofail",  &options.want_cheats, "%u", 0,
-		"Set to 1 if you want every mission step check to succeeed." },
+		"Set to 1 if you want every mission step check to succeed." },
 	{"intro", &options.want_intro, "%u", 0,
 		"Set to 0 if do not want intro displayed at startup." },
 	{"fullscreen", &options.want_fullscreen, "%u", 0,
 		"Set to 1 if you want (ugly) full screen game." },
 	{"debuglevel", &options.want_debug, "%u", 0,
-		"Set to positive values to increase debugging verbosity" },
+		"Set to positive values to increase debugging verbosity." },
 	{"short_training", &options.feat_shorter_advanced_training, "%u", 0,
-		"Set to non-zero to shorten Advanced Training duration from 4 to 3 seasons" },
+		"Set to non-zero to shorten Advanced Training duration from 4 to 3 seasons." },
 	{"random_nauts", &options.feat_random_nauts, "%u", 0,
-		"Set to non-zero to enable randomization of nauts" },  //Naut Randomize, Nikakd, 10/8/10
+		"Set to non-zero to enable randomization of nauts." },  //Naut Randomize, Nikakd, 10/8/10
 	{"compt_nauts", &options.feat_compat_nauts, "%u", 0,
-		"Set the compatibility level of nauts (10 is default, 1 complete)" }, //Naut Compatibility, Nikakd, 10/8/10
-	{"no_c_training", &options.feat_no_cTraining, "%u", 0,
-		"Set to non-zero to enable skiping capsule training" },   //No Capsule Training, Nikakd, 10/8/10
+		"Set the compatibility level of nauts (10 is default, 1 complete)." }, //Naut Compatibility, Nikakd, 10/8/10
+	{"no_c_training", &options.feat_no_cTraining, "%u", 1,
+		"Set to non-zero to enable skipping capsule training." },   //No Capsule Training, Nikakd, 10/8/10
+	{"no_backup", &options.feat_no_backup, "%u", 1,
+		"Set to non-zero to allow player to assign a Primary but not Backup crew." },   // No Backup crew required -Leon
 	{"cheat_no_damage", &options.cheat_no_damage, "%u", 0,
-		"Set to non-zero to disable damaged equipment (Will prevent future damage)" },   
+		"Set to non-zero to disable damaged equipment (Will prevent future damage)." },   
 	{"random_eq", &options.feat_random_eq, "%u", 0,
-		"Set to non-zero to enable random equipment (Will break game balance and possibly break the AI)" },
+		"Set to non-zero to enable random equipment (Will break game balance and possibly break the AI)." },
 };
 
 /** prints the minimal usage information to stderr
@@ -378,6 +380,7 @@ setup_options(int argc, char *argv[])
 	options.feat_random_nauts =0;    //Naut Randomize, Nikakd, 10/8/10
 	options.feat_compat_nauts =10;   //Naut Compatibility, Nikakd, 10/8/10
 	options.feat_no_cTraining =1;    //No Capsule Training, Nikakd, 10/8/10
+	options.feat_no_backup =1;       //No Backup crew required -Leon
 	options.cheat_no_damage=0;       //Damaged Equipment Cheat, Nikakd, 10/8/10
 	options.feat_random_eq=0;
 
