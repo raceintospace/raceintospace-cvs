@@ -339,9 +339,8 @@ AstroTurn(void)
 							Data->P[j].Pool[i].RetReas = 12;	/* Washout */
 						}
 
-						/** \todo: This is probably a bug! Should be Cap == 0 ?? */
 						if (Data->P[j].Pool[i].Cap < 0)
-							Data->P[j].Pool[i].Endurance = 0;
+							Data->P[j].Pool[i].Cap = 0; //modified from Data->P[j].Pool[i].Endurance, as it's probably a bug
 						if (Data->P[j].Pool[i].LM < 0)
 							Data->P[j].Pool[i].LM = 0;
 						if (Data->P[j].Pool[i].EVA < 0)

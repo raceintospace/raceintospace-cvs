@@ -310,10 +310,10 @@ void FixPrograms(char plr)
 
 void DamProb(char plr,char prog,int chk)
 {
- int D_Cost,Saf_Loss;
+ int D_Cost,Saf_Loss, ESafety;
  char Digit[4],Name[30];
 
- Saf_Loss = D_Cost = 0; /* XXX check uninitialized */
+ Saf_Loss = D_Cost = ESafety = 0; /* XXX check uninitialized */
 
  FadeOut(2,pal,10,0,0);
  
@@ -322,18 +322,22 @@ void DamProb(char plr,char prog,int chk)
   {
    case 0:D_Cost=Data->P[plr].Probe[chk].DCost;
           Saf_Loss=Data->P[plr].Probe[chk].Damage;
+	  ESafety =Data->P[plr].Probe[chk].Safety;
           strcpy((char *)Name,Data->P[plr].Probe[chk].Name);
           break;
    case 1:D_Cost=Data->P[plr].Rocket[chk].DCost;
           Saf_Loss=Data->P[plr].Rocket[chk].Damage;
+	  ESafety =Data->P[plr].Rocket[chk].Safety;
           strcpy((char *)Name,Data->P[plr].Rocket[chk].Name);
           break;
    case 2:D_Cost=Data->P[plr].Manned[chk].DCost;
           Saf_Loss=Data->P[plr].Manned[chk].Damage;
+	  ESafety =Data->P[plr].Manned[chk].Safety;
           strcpy((char *)Name,Data->P[plr].Manned[chk].Name);
           break;
    case 3:D_Cost=Data->P[plr].Misc[chk].DCost;
           Saf_Loss=Data->P[plr].Misc[chk].Damage;
+	  ESafety =Data->P[plr].Misc[chk].Safety;
           strcpy((char *)Name,Data->P[plr].Misc[chk].Name);
           break;
    default:break;
@@ -350,7 +354,7 @@ void DamProb(char plr,char prog,int chk)
 
   //Cash Display in Damaged Equipment, Nikakd, 10/8/10
  grSetColor(6);
- PrintAt(215,95,"CASH:"); 
+ PrintAt(215,95,"CASH: "); 
  grSetColor(1);
  DispMB (0,0,Data->P[plr].Cash);
 
@@ -366,6 +370,8 @@ void DamProb(char plr,char prog,int chk)
  grSetColor(6);
  PrintAt(121,122,"SAFETY LOSS: ");
  grSetColor(1);
+ sprintf(&Digit[0],"%d",ESafety);PrintAt(0,0,&Digit[0]);
+PrintAt(0,0,"% ");
  sprintf(&Digit[0],"%d",Saf_Loss);PrintAt(0,0,&Digit[0]);
  PrintAt(0,0,"%");
  FadeIn(2,pal,10,0,0);

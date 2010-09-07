@@ -23,6 +23,18 @@
 #include <assert.h>
 #include <logging.h>
 
+  //Used to read steps from missStep.dat
+  FILE* MSteps;
+  char missStep[1024];
+  static inline char B_Mis(char x) {return missStep[x]-0x30;}
+  /*missStep.dat is plain text, with:
+Mission Number (2 first bytes of each line)
+A Coded letter, each drawing a different line (1105-1127 for all possible letters)
+Numbers folowing each letter, which are the parameters of the function
+Each line must finish with a Z, so the game stops reading
+Any other char is ignored, but it's easier to read for a human that way */
+
+
 LOG_DEFAULT_CATEGORY(future)
 
   char status[5],lck[5],F1,F2,F3,F4,FMen,F5,Pad;
@@ -1085,190 +1097,39 @@ void Missions(char plr,int X,int Y,int val,char bub)
   if (bub==3) GetMinus(plr);
   if (bub==0 || bub==3) {return;}
   
-  /**
-   * \todo This mapping of val -> drawing of missions steps should be more variable
-   */
-  switch(val)
-  {
-    case 0: break;
-    case 1: Draw_IJ(1); Draw_IJV(0); OrbOut(0,0,0);
-	    LefEarth(0,0); OrbOut(0,1,0);break;
-    case 2: Draw_IJ(0); Draw_IJV(0); OrbIn(0,1,1);break;
-    case 3: Draw_IJ(0);Draw_IJV(0);OrbIn(0,1,1);break;
-    case 4: Draw_IJ(1);Draw_IJV(0);OrbMid(0,1,0,0);LefEarth(0,0);
-	    OrbMid(0,0,0,0);LefOrb(0,1,1,1);break;
-    case 5: Draw_IJ(1);Draw_IJV(0);OrbOut(0,0,0);LefEarth(0,0);OrbOut(0,1,0);
-	    break;
-    case 6: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);LefEarth(1,0);
-	    OrbMid(0,0,0,0);LefEarth(0,0);OrbMid(0,0,0,0);LefOrb(0,1,1,1);break;
-    case 7: Draw_IJ(1); Draw_IJV(1); OrbOut(0,0,0); LefEarth(0,0);
-	    Draw_LowS(0,0,0,0,0,1); LefGap(1);break;
-    case 8: Draw_IJ(1);Draw_IJV(1);OrbOut(0,0,0);LefEarth(0,0);
-	    Draw_LowS(0,0,0,0,0,1);S_Patch(1);break;
-    case 9: Draw_IJ(1);Fly_By();VenMarMerc(1);break;
-    case 10: Draw_IJ(1);Fly_By();VenMarMerc(2);break;
-    case 11: Draw_IJ(1);Fly_By();VenMarMerc(3);break;
-    case 12: Draw_IJ(1);Fly_By();Draw_PQR();break;
-    case 13: Draw_IJ(1);Fly_By();Draw_PST();break;
-    case 14: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);
-	     LefEarth(0,0);OrbMid(1,1,0,0);LefOrb(0,1,1,1);break;
-    case 15: Draw_IJ(1);Draw_IJV(0);OrbMid(0,0,0,0);LefEarth(0,0);
-	     OrbMid(1,0,1,1);LefOrb(0,1,1,1);break;
-    case 16: Draw_IJ(1);Draw_IJV(0);OrbMid(1,0,0,0);Draw_GH(1,0); Q_Patch();
-	     OrbMid(0,0,1,1);LefEarth(0,0);OrbMid(0,0,0,0);LefOrb(0,1,1,1);
-	     break;
-    case 17: Draw_IJ(1);Draw_IJV(1);OrbOut(0,0,0);LefEarth(0,0);
-	     OrbOut(0,1,1);LefOrb(0,1,1,1);break;
-    case 18: Draw_IJ(1); Draw_IJV(0); OrbMid(0,0,1,0);LefEarth(0,0);
-	     Draw_GH(1,0); Q_Patch();OrbOut(0,1,1); LefEarth(0,0);break;
-    case 19: Draw_IJ(1); Draw_IJV(0); OrbMid(0,0,1,0); LefEarth(0,0);
-	     Draw_GH(1,0); Q_Patch(); OrbOut(0,1,1); LefEarth(0,0);
-	     OrbIn(1,1,1); OrbMid(0,0,0,0); LefOrb(0,1,1,1);break;
-    case 20: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0); LefEarth(0,0);
-	     OrbMid(0,1,1,1); LefOrb(0,1,1,1);break;
-    case 21: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(1,0,0,1); LefOrb(0,1,1,1);break;
-    case 22: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(1,0,0,1); LefEarth(0,0);
-	     OrbIn(1,1,1);  OrbMid(0,0,0,0); LefOrb(0,1,1,1);break;
-    case 23: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(0,0,0,0);LefEarth(0,0);
-	     OrbMid(1,0,0,1);LefEarth(1,0);
-	     OrbIn(1,1,1);OrbMid(0,0,0,0);LefOrb(0,1,1,1);break;
-    case 24: Draw_IJ(1);Draw_IJV(1);OrbOut(0,0,0);LefEarth(0,0);
-	     OrbOut(0,1,1);LefOrb(1,1,1,1);break;
-    case 25: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);LefEarth(0,0);
-	     OrbMid(0,0,1,0);LefOrb(0,1,1,1);break;
-    case 26: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,1,0);
-	     LefEarth(1,0);OrbMid(0,0,0,0);LefOrb(0,1,1,1);break;
-    case 27: Draw_IJ(1);Draw_IJV(1);OrbMid(0,1,0,1);
-	     LefEarth(0,0);OrbMid(0,0,0,0);LefOrb(0,1,1,1);break;
-    case 28: Draw_IJ(1);Draw_IJV(1);OrbOut(0,0,0);
-	     LefEarth(0,0);OrbOut(0,1,1);LefOrb(1,1,1,1);break;
-    case 29: Draw_IJ(1);Draw_IJV(1);OrbOut(0,1,1);
-	     LefEarth(1,0);OrbOut(0,0,0);LefOrb(1,1,1,1);break;
-    case 30: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);
-	     LefEarth(0,0);OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(1,0,0,1);LefEarth(0,0);
-	     OrbIn(1,1,1);OrbMid(0,0,0,0); LefEarth(1,0); OrbMid(0,0,0,0);
-	     LefOrb(0,1,1,1);break;
-    case 31: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);LefEarth(0,0);
-	     Draw_GH(1,1);Q_Patch();OrbMid(1,0,0,1);LefOrb(0,1,1,1);break;
-    case 32: Draw_IJ(1);Draw_IJV(1);OrbMid(0,0,0,0);LefEarth(0,0);
-	     Draw_GH(1,1); OrbMid(1,1,0,0); LefEarth(1,0);
-	     OrbIn(0,1,1); OrbMid(0,0,0,0); LefOrb(0,1,1,1);break;
-    case 33: Draw_IJ(1); Draw_IJV(1); OrbMid(1,0,0,1); LefEarth(1,0);
-	     OrbOut(0,1,0); LefOrb(0,1,1,1);break;
-    case 34: Draw_IJ(1); Draw_IJV(1); OrbOut(0,0,0); LefEarth(0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbOut(1,1,1); LefOrb(0,1,1,1);break;
-    case 35: Draw_IJ(1); Draw_IJV(1); OrbOut(0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbOut(1,0,0); LefEarth(0,0); OrbOut(0,1,0);
-	     LefEarth(0,0); OrbIn(1,1,1); OrbOut(0,0,1); LefEarth(0,0);
-	     OrbOut(0,0,0); LefOrb(0,1,1,1); break;
-    case 36: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(1,0,1,0); LefEarth(0,0);
-	     OrbMid(0,0,0,1); OrbIn(1,1,1); OrbMid(0,0,0,0); LefOrb(0,1,1,1);
-	     break;
-    case 37: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(1,0,0,0); LefEarth(0,0);
-	     OrbIn(1,1,1); OrbMid(0,0,0,0); LefEarth(1,0); OrbMid(0,0,0,0);
-	     LefOrb(0,1,1,1);break;
-    case 38: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     OrbMid(0,1,1,0); LefEarth(0,0);
-	     OrbOut(1,1,1); LefEarth(0,0); OrbMid(0,0,0,0);
-	     LefOrb(0,1,1,1);break;
-    case 39: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(0,0,1,0); LefEarth(0,0);
-	     OrbOut(1,1,1); LefEarth(0,0); OrbMid(0,0,0,0);
-	     LefOrb(0,1,1,1);break;
-    case 40: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0); LefEarth(0,0);
-	     OrbMid(0,1,1,0); LefEarth(0,1); OrbOut(1,1,1);
-	     LefEarth(1,0); OrbMid(0,0,0,0); LefOrb(0,1,1,1);break;
-    case 41: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(0,1,1,0); LefEarth(0,0);
-	     OrbOut(1,1,1); LefEarth(1,0); OrbMid(0,0,0,0);
-	     LefOrb(0,1,1,1);break;
-    case 42: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,0,0,1,0,0);
-	     RghtMoon(0,0); DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 43: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,0,0,1,0,0); RghtMoon(0,0);
-	     DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 44: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(0,0,1,0); LefEarth(0,0);
-	     Draw_LowS(1,0,1,0,0,0); RghtMoon(0,0);
-	     DrawLunPas(1,1,1,1); LefOrb(0,1,1,1);break;
-    case 45: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,1,0,0,1,0); RghtMoon(0,0);
-	     DrawLefMoon(1,0); RghtMoon(0,0);  DrawLunPas(1,1,1,1);
-	     LefOrb(0,1,1,1);break;
-    case 46: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,1,0,0,1,0); RghtMoon(0,0);
-	     DrawLefMoon(1,0); RghtMoon(0,0); DrawLunPas(1,1,1,1);
-	     LefOrb(0,1,1,1);break;
-    case 47: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(0,0,1,0); LefEarth(0,0);
-	     Draw_LowS(0,1,0,1,1,0); RghtMoon(0,0);
-	     DrawLefMoon(1,0); RghtMoon(0,0); DrawLunPas(1,1,1,0);
-	     LefOrb(1,1,1,1);break;
-    case 48: Draw_IJ(1); Draw_IJV(1);
-	     Draw_LowS(0,1,0,1,1,0); RghtMoon(0,0); DrawLefMoon(1,0);
-	     RghtMoon(1,0); DrawLefMoon(0,0);
-	     DrawSTUV(1,1,0,1);
-	     DrawLunPas(1,1,0,1); LefOrb(1,1,1,1);break;
-    case 49: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,1,0,0,1,0);
-	     RghtMoon(0,0); DrawLefMoon(0,0);
-	     Draw_GH(1,1); Draw_HighS(1,1,0);
-	     RghtMoon(1,1); DrawLefMoon(1,0);
-	     DrawSTUV(1,1,1,0); DrawLefMoon(0,0);
-	     RghtMoon(0,0); DrawLunPas(1,1,0,1); LefOrb(1,1,1,1);break;
-    case 50: Draw_IJ(1); Draw_IJV(1);
-	     Draw_LowS(0,1,0,1,1,0); RghtMoon(1,1); DrawLefMoon(1,0);
-	     DrawSTUV(1,1,1,0); DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 51: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,1,0,0,1,0);
-	     RghtMoon(0,0); DrawLefMoon(0,0); Draw_GH(1,1);
-	     Draw_HighS(1,1,0); RghtMoon(1,1); DrawLefMoon(1,1);
-	     DrawSTUV(1,1,1,0); DrawLunPas(1,1,0,1); LefOrb(1,1,1,1);break;
-    case 52: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     Draw_GH(1,1); Q_Patch(); OrbMid(0,0,0,0);
-	     LefEarth(0,0); OrbMid(0,0,1,0);
-	     LefEarth(0,0); Draw_LowS(1,0,0,1,1,0); RghtMoon(0,0);
-	     DrawLefMoon(1,0); DrawSTUV(1,1,0,1);
-	     DrawLunPas(1,1,0,1); LefOrb(1,1,1,1);break;
-    case 53: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,0,1,1,1,1);
-	     RghtMoon(0,0); DrawLefMoon(0,0); DrawMoon(1,1,1,0,1,1,1);
-	     RghtMoon(0,0); DrawLefMoon(1,0); RghtMoon(0,1);
-	     DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 54: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,1,0,0,1,0);DrawMoon(1,1,1,0,1,1,1);
-	     RghtMoon(0,1); DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 55: Draw_IJ(1); Draw_IJV(1); OrbMid(0,0,0,0);
-	     LefEarth(0,0); Draw_GH(1,1); OrbMid(0,0,1,0);
-	     LefEarth(0,0); Draw_LowS(0,1,0,1,1,0); RghtMoon(0,0);
-	     DrawLefMoon(0,0);DrawMoon(1,1,1,0,1,1,1);
-	     RghtMoon(0,0); DrawLefMoon(1,0);
-	     RghtMoon(0,1); DrawLunPas(1,1,1,0);
-	     LefOrb(1,1,1,1);break;
-    case 56: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,0,1,0,1,0);
-	     RghtMoon(0,0); DrawLefMoon(0,0); Draw_GH(1,1);
-	     Draw_HighS(1,1,1);RghtMoon(0,0); DrawLefMoon(0,0);
-	     RghtMoon(1,0); DrawLefMoon(0,0);DrawMoon(0,1,1,0,1,1,1);
-	     RghtMoon(0,0);DrawLefMoon(1,0); RghtMoon(0,1);
-	     DrawLunPas(1,1,0,1); LefOrb(1,1,1,1);break;
-    case 57: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,0,1,0,1,0);
-	     RghtMoon(0,0); DrawLefMoon(0,0); Draw_GH(1,1);
-	     Draw_HighS(1,1,0); RghtMoon(0,0); DrawLefMoon(1,0);
-	     DrawMoon(1,1,1,0,1,1,1); RghtMoon(0,0);
-	     DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 58: Draw_IJ(1); Draw_IJV(1); OrbOut(0,0,0);
-	     LefEarth(0,0); OrbOut(1,1,1); LefOrb(0,1,1,1);break;
-    case 59: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,0,1,0,1,1);
-	     RghtMoon(0,0); DrawLefMoon(1,0); DrawZ(); DrawLefMoon(0,0);
-	     RghtMoon(1,0);DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 60: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,1,0,1,1,1);
-	     RghtMoon(0,0); DrawLefMoon(0,0);DrawMoon(1,1,1,1,1,1,1);
-	     RghtMoon(0,0);DrawLefMoon(1,0); RghtMoon(0,1);
-	     DrawLunPas(1,1,1,0); LefOrb(1,1,1,1);break;
-    case 61: Draw_IJ(1); Draw_IJV(1); Draw_LowS(0,0,0,1,1,0);
-	     DrawMoon(1,1,1,1,1,1,1); RghtMoon(0,0);DrawLefMoon(0,1);
-	     RghtMoon(0,1);DrawLunPas(0,1,1,0); LefOrb(1,1,1,1);break;
-    default: break;
-  }  // end switch
+    
+	MSteps=sOpen("missSteps.dat","r",FT_DATA);
+	fgets(missStep, 1024, MSteps);
+	while (!feof(MSteps)&&((missStep[0]-0x30)*10+(missStep[1]-0x30))!=val) fgets(missStep, 1024, MSteps);
+	fclose(MSteps);
+
+	for (int n=2;missStep[n]!='Z';n++)
+		switch (missStep[n]) {
+			case 'A': Draw_IJ	(B_Mis(++n));	break;
+			case 'B': Draw_IJV	(B_Mis(++n));	break;
+			case 'C': OrbOut	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3));	n+=3;	break;
+			case 'D': LefEarth	(B_Mis(n+1),B_Mis(n+2));	n+=2; 	break;
+			case 'E': OrbIn		(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3));	n+=3; 	break;
+			case 'F': OrbMid	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3),B_Mis(n+4));	n+=4;	break;
+			case 'G': LefOrb	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3),B_Mis(n+4));	n+=4;	break;
+			case 'H': Draw_LowS	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3),B_Mis(n+4),B_Mis(n+5),B_Mis(n+6));	n+=6;	break;
+			case 'I': Fly_By	();		break;
+			case 'J': VenMarMerc	(B_Mis(++n));	break;
+			case 'K': Draw_PQR	();		break;
+			case 'L': Draw_PST	();		break;
+			case 'M': Draw_GH	(B_Mis(n+1),B_Mis(n+2));	n+=2;	break;
+			case 'N': Q_Patch	();		break;
+			case 'O': RghtMoon	(B_Mis(n+1),B_Mis(n+2));	n+=2; 	break;
+			case 'P': DrawLunPas	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3),B_Mis(n+4));	n+=4;	break;
+			case 'Q': DrawLefMoon	(B_Mis(n+1),B_Mis(n+2)); 	n+=2;	break;
+			case 'R': DrawSTUV	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3),B_Mis(n+4));	n+=4;	break;
+			case 'S': Draw_HighS	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3));	n+=3;	break;
+			case 'T': DrawMoon	(B_Mis(n+1),B_Mis(n+2),B_Mis(n+3),B_Mis(n+4),B_Mis(n+5),B_Mis(n+6),B_Mis(n+7));	n+=7;	break;
+			case 'U': LefGap	(B_Mis(++n));	break;
+			case 'V': S_Patch	(B_Mis(++n));	break;
+			case 'W': DrawZ		();		break;
+			default : break;
+		}
   gr_sync ();
   MissionCodes(plr,MisType,Pad);
   TRACE1("<-Missions()");

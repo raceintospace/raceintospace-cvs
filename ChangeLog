@@ -1,3 +1,13 @@
+2010-09-07	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	*V245
+
+	*future.c: changed the way the game draws the future mission, so it can be read from a file
+
+	*ast4.c: add current equipment safety to damaged equipment screen
+
+	*crew.c: fixed the no backup option Leon had made
+
 2010-08-30	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	*V244

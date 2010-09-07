@@ -164,7 +164,7 @@ int AsnCrew(char plr,char pad,char part)
 		   else stflag=1;
 	 if (stflag==0) count++; // increment the counter
 	}
-   if (count>=7) 
+   if ((count>=7 && options.feat_no_backup==0) || (count>=8 && options.feat_no_backup>0)) 
     { 
      
      if (temp)EMPTY_BODY;
