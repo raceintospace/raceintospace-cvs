@@ -101,10 +101,10 @@ static struct {
 		"Set to non-zero to enable randomization of nauts." },  //Naut Randomize, Nikakd, 10/8/10
 	{"compt_nauts", &options.feat_compat_nauts, "%u", 0,
 		"Set the compatibility level of nauts (10 is default, 1 complete)." }, //Naut Compatibility, Nikakd, 10/8/10
-	{"no_c_training", &options.feat_no_cTraining, "%u", 1,
-		"Set to non-zero to enable skipping capsule training." },   //No Capsule Training, Nikakd, 10/8/10
-	{"no_backup", &options.feat_no_backup, "%u", 1,
-		"Set to non-zero to allow player to assign a Primary but not Backup crew." },   // No Backup crew required -Leon
+	{"no_c_training", &options.feat_no_cTraining, "%u", 0,
+		"Set to zero to disable skipping capsule training." },   //No Capsule Training, Nikakd, 10/8/10
+	{"no_backup", &options.feat_no_backup, "%u", 0,
+		"Set to zero to require assigning a Backup crew." },   // No Backup crew required -Leon
 	{"cheat_no_damage", &options.cheat_no_damage, "%u", 0,
 		"Set to non-zero to disable damaged equipment (Will prevent future damage)." },   
 	{"random_eq", &options.feat_random_eq, "%u", 0,
@@ -294,6 +294,7 @@ write_default_config(void)
 	fprintf(f, "# Comments start with '#' sign and span whole line.\n");
 	fprintf(f, "# Non comment lines should look like:\n");
 	fprintf(f, "# variable_name variable_value\n\n");
+	fprintf(f, "# (be sure to remove the #)\n\n");
 	for (i = 0; i < (int) ARRAY_LENGTH(config_strings); ++i)
 		fprintf(f, "# %s\n# %s\n\n",
 			config_strings[i].comment, config_strings[i].name);

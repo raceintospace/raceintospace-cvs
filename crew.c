@@ -239,7 +239,7 @@ int AsnCrew(char plr,char pad,char part)
       WaitForMouseUp();
      }
     }
-   if (((x>=166 && y>=9 && x<=236 && y<=19 && mousebuttons>0) || key==K_ENTER || key=='A') && prime!=-1 && (back!=-1 || options.feat_no_backup>0) && bug==0)
+   if (((x>=166 && y>=9 && x<=236 && y<=19 && mousebuttons>0) || key==K_ENTER || key=='A') && prime!=-1 && (back!=-1 || options.feat_no_backup==1) && bug==0)
 	 {   // Assign
 	  
 	  InBox(166,9,236,19);
@@ -314,10 +314,10 @@ void FutSt(char plr,int pr,int p,int b)
     if (i==b) FutSt2(i,4);
     if (i!=p && i!=b) {
       if (Data->P[plr].Crew[pr][i][0]==0) FutSt2(i,2);
-      else if (Data->P[plr].Pool[Data->P[plr].Crew[pr][i][0]-1].Moved==0)
-	 FutSt2(i,1);
-      else if (Data->P[plr].Pool[Data->P[plr].Crew[pr][i][0]-1].Prime>0)
-	FutSt2(i,5);
+	else if (Data->P[plr].Pool[Data->P[plr].Crew[pr][i][0]-1].Prime>0)
+	  FutSt2(i,5);
+	else if (Data->P[plr].Pool[Data->P[plr].Crew[pr][i][0]-1].Moved==0)
+	  FutSt2(i,1);
       else FutSt2(i,0);
     }
   };
@@ -333,7 +333,7 @@ void FutSt2(int num,int type)
 	     grMoveTo(168,135+temp*16); };
   switch(type) {
     case 0: grSetColor(6);PrintAt(0,0,"UNASSIGNED");break;
-    case 1: grSetColor(9);if (options.feat_no_cTraining==1) { grSetColor(11); };
+    case 1: grSetColor(8);if (options.feat_no_cTraining>0) { grSetColor(12); }
 	    PrintAt(0,0,"TRAINING");break;
     case 2: grSetColor(9);PrintAt(0,0,"VACANT");break;
     case 3: grSetColor(11);PrintAt(0,0,"PRIMARY");break;
