@@ -1,3 +1,13 @@
+2010-10-02	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	*V246
+
+	*randomize.c, prefs.c, proto.h, options.c, options.h: Added name change option
+
+	*randomize.c, prefs.c: Changed randomization algorytm
+
+	*endgame.c: Fixed obscure bug where first nauts where displayed incorrectly
+
 2010-09-07	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	*V245

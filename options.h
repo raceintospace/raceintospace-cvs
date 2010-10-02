@@ -16,6 +16,7 @@ typedef struct {
     unsigned feat_no_backup;  
     unsigned cheat_no_damage;    
     unsigned feat_random_eq;
+    unsigned feat_eq_new_name;
 } game_options;
 
 extern game_options options;

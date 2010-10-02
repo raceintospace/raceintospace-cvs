@@ -275,6 +275,10 @@ long size;
 	    WaitForMouseUp();
        if (key>0) delay(150); 
 	    OutBox(245,5,314,17);
+	    if (!(Data->Def.Input==2 || Data->Def.Input==3)) {
+		if (options.feat_eq_new_name && hum1!=1) SetEquipName(0);
+		if (options.feat_eq_new_name && hum2!=1) SetEquipName(1);
+	    } //Change Name, if basic mode and for human players
 	    if (Data->Def.Plr1!=Data->Def.Plr2)
          {
 	       if (Data->Def.Plr1==1)
@@ -298,7 +302,8 @@ long size;
 	         }
 
 	///Random Equipment
-	if (options.feat_random_eq==1) RandomizeEq();	
+	if ((where==0 || where==3) && options.feat_random_eq==1) RandomizeEq();	
+	
 
 	       if (Data->Def.Input==0 || Data->Def.Input==2)
            { // Hist Crews
@@ -431,6 +436,10 @@ long size;
 	     CLevels(0,hum1);
 	     OutBox(8,77,18,85);
 	     /* P1: Human/Computer */
+		//change human to dif 1 and comp to 3
+		if (hum1==1) Data->Def.Lev1=2;
+		else Data->Def.Lev1=0;
+		Levels(0,Data->Def.Lev1,1);
        }
       else
       if ((x>=8 && y>=107 && x<=81 && y<=138 && (where==0 || where==3) && mousebuttons>0) ||
@@ -479,6 +488,10 @@ long size;
 	     CLevels(1,hum2);
 	     OutBox(238,77,248,85);
 	     /* P2:Human/Computer */
+		//change human to dif 1 and comp to 3
+		if (hum2==1) Data->Def.Lev2=2;
+		else Data->Def.Lev2=0;
+		Levels(1,Data->Def.Lev2,1);
        }
       else
       if ((x>=238 && y>=107 && x<=311 && y<=138 && (where==0 || where==3) && mousebuttons>0) ||

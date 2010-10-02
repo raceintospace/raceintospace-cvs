@@ -259,10 +259,10 @@ void EndGame(char win,char pad)
  man4=Data->P[win].History[gork].Man[i][3]; 
 // no astronaut klugge
  r=Data->P[win].AstroCount;
- if (man1<=1) man1=random(r);
- if (man2<=1) man2=random(r);
- if (man3<=1) man3=random(r);
- if (man4<=1) man4=random(r);
+ if (man1<=-1) man1=random(r);
+ if (man2<=-1) man2=random(r);
+ if (man3<=-1) man3=random(r);
+ if (man4<=-1) man4=random(r);
  if (!(Option==-1 || Option==win))
   {
    Data->P[win].History[gork].Man[i][0]=man1; 

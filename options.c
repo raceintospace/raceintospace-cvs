@@ -109,6 +109,8 @@ static struct {
 		"Set to non-zero to disable damaged equipment (Will prevent future damage)." },   
 	{"random_eq", &options.feat_random_eq, "%u", 0,
 		"Set to non-zero to enable random equipment (Will break game balance and possibly break the AI)." },
+	{"eq_name_change", &options.feat_eq_new_name, "%u", 0,
+		"Set to non-zero to be able to change equipment name when starting a new game." },
 };
 
 /** prints the minimal usage information to stderr
@@ -384,6 +386,7 @@ setup_options(int argc, char *argv[])
 	options.feat_no_backup =1;       //No Backup crew required -Leon
 	options.cheat_no_damage=0;       //Damaged Equipment Cheat, Nikakd, 10/8/10
 	options.feat_random_eq=0;
+	options.feat_eq_new_name =0;
 
 	fixpath_options();
 
