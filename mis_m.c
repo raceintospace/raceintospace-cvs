@@ -165,14 +165,16 @@ void MisCheck(char plr,char mpad)
         if (Mev[Mev[STEP].trace].loc==8)
            Mev[STEP].trace++;  // skip over docking.
      }
+     if (Mev[STEP].loc==16 && Mis.PCat[4]==22) FirstManOnMoon(plr,0,Mis.Index);
 
      // Duration Hack Part 1 of 3   (during the Duration stuff)
      if ((Mev[STEP].loc==27 || Mev[STEP].loc==28) && durx>0) {
         
         if (Mev[STEP].StepInfo!=1) {
-           durx=-1;  // end durations
-           Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration=
-              minn(1,maxx(1,Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration));
+           Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration= 
+           minn( Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration-durx ,
+		maxx( 1, Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration));
+           durx=-1;  // end durations     
         }
         else {
            Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration++;
@@ -182,6 +184,10 @@ void MisCheck(char plr,char mpad)
            else Mev[STEP].dice=random(100)+1;
            Mev[STEP].rnum=random(10000);  // reroll failure type
            Mev[STEP].trace=STEP;
+	   if (durx==1) {
+		durx--;
+		Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration++;
+		}
         }
      }
 

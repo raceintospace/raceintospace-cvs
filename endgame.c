@@ -35,7 +35,9 @@ const int draw_projectiles = 0;
 extern char Month[12][11];
 extern char AI[2];
 extern char Nums[30][7];
-extern char Option,MAIL;
+extern char Option,MAIL,manOnMoon,dayOnMoon;
+extern char daysAMonth[12];
+char month,firstOnMoon, capName[30]; 
 char PF[29][40]={
     "ORBITAL SATELLITE","LUNAR FLYBY","MERCURY FLYBY","VENUS FLYBY",
     "MARS FLYBY","JUPITER FLYBY","SATURN FLYBY","LUNAR PROBE LANDING",
@@ -217,28 +219,30 @@ void EndGame(char win,char pad)
    miss=Data->P[win].History[Data->Prestige[22].Indec].MissionCode;
   }
 
- grSetColor(6);PrintAt(10,40,"MISSION: ");grSetColor(8);
+ grSetColor(6);PrintAt(10,50,"MISSION TYPE: ");grSetColor(8);
   if (miss==55  || miss==56 || miss==57) i=1; else i=0;
 
- MissionName(miss,53,40,24);
- grSetColor(6);
- PrintAt(10,50,"YEAR: ");grSetColor(8);PrintAt(0,0,"19");DispNum(0,0,Data->Year);
+ MissionName(miss,80,50,24);
 
  if (Option==-1 && MAIL==-1)
   {
-   grSetColor(6);PrintAt(75,50,"MONTH: ");grSetColor(8);PrintAt(0,0,Month[Data->P[win].Mission[pad].Month]);
-   grSetColor(6);PrintAt(10,60,"CAPSULE: ");grSetColor(8);PrintAt(0,0,&Data->P[win].Mission[pad].Name[0]);
+	strcpy(capName , Data->P[win].Mission[pad].Name);
+	month   = Data->P[win].Mission[pad].Month;
   }
  else {
-   grSetColor(6);PrintAt(75,50,"MONTH: ");grSetColor(8);PrintAt(0,0,Month[Data->Prestige[22].Month]);
-   grSetColor(6);PrintAt(10,60,"CAPSULE: ");grSetColor(8);
-   if (MAIL!=-1 || Option==win) PrintAt(0,0,&Data->P[win].History[Data->Prestige[22].Indec].MissionName[0][0]);
-    else {
+	month   = Month[Data->Prestige[22].Month];
+   if (MAIL!=-1 || Option==win) strcpy(capName , Data->P[win].History[Data->Prestige[22].Indec].MissionName[0]);
+   else {
      prog=Data->P[win].History[Data->Prestige[22].Indec].Hard[i][0]+1;
-     PrintAt(0,0,&Data->P[win].Manned[prog-1].Name[0]);
-     PrintAt(0,0," ");PrintAt(0,0,&Nums[Data->P[win].Manned[prog-1].Used][0]);
+     strcpy(capName , &Data->P[win].Manned[prog-1].Name[0]);
+     strcat(capName , " ");
+     strcat(capName , Nums[Data->P[win].Manned[prog-1].Used]);
    }
  }
+
+	grSetColor(6);PrintAt(10,40,"MISSION: ");grSetColor(8);PrintAt(0,0,capName);
+	grSetColor(6);PrintAt(0,0,"  -  ");grSetColor(8);DispNum(0,0,dayOnMoon);PrintAt(0,0," ");
+	PrintAt(0,0,Month[month]);PrintAt(0,0,"19");DispNum(0,0,Data->Year);
 
 // correct mission pictures
  bud=0; // initialize bud
@@ -308,6 +312,10 @@ void EndGame(char win,char pad)
 	   default:break;
 	  }
 	 }
+ //Print the first in the moon
+ firstOnMoon = (manOnMoon==1? man1 : manOnMoon==2? man2 : manOnMoon==3? man3 :manOnMoon==4? man4: man2);
+ grSetColor(11);PrintAt(10,60,"FIRST ON THE MOON: ");grSetColor(14);PrintAt(0,0,&Data->P[win].Pool[firstOnMoon].Name[0]);
+ 
  grSetColor(6);
  AltHistory(win);
  FadeIn(2,pal,10,0,0);
@@ -508,7 +516,8 @@ void NewEnd(char win,char loc)
 void FakeWin(char win)
 {
  int i,r;
- char miss,prog,man1,man2,man3,man4,bud,yr;
+ char miss,prog,man1,man2,man3,man4,bud,yr,monthWin;
+ monthWin=random(12);
  
  FadeOut(2,pal,10,0,0);
  gxClearDisplay(0,0);
@@ -527,25 +536,26 @@ void FakeWin(char win)
    else if (r<85) miss=55;
     else miss=56;
 
- grSetColor(6);PrintAt(10,40,"MISSION: ");grSetColor(8);
+ grSetColor(6);PrintAt(10,50,"MISSION TYPE: ");grSetColor(8);
  if (miss==55  || miss==56) i=1; else i=0;
- MissionName(miss,53,40,24);
+ MissionName(miss,80,50,24);
  grSetColor(6);
 
  if (Data->Year<=65) r=65+random(5);
   else if (Data->Year<=70) r=70+random(3);
     else if (Data->Year<=77) r=Data->Year;
 
- PrintAt(10,50,"YEAR: ");grSetColor(8);PrintAt(0,0,"19");DispNum(0,0,r);
  yr=r;
- grSetColor(6);PrintAt(75,50,"MONTH: ");grSetColor(8);PrintAt(0,0,Month[random(12)]);
  r=random(100);
  if (miss==54) prog=5;
   else if (r<20) prog=2;
     else if (r<60) prog=3;
      else prog=4;
- grSetColor(6);PrintAt(10,60,"CAPSULE: ");grSetColor(8);PrintAt(0,0,&Data->P[win].Manned[prog-1].Name[0]);
- PrintAt(0,0," ");PrintAt(0,0,&Nums[random(15)+1][0]);
+ grSetColor(6);PrintAt(10,40,"MISSION: ");grSetColor(8);PrintAt(0,0,&Data->P[win].Manned[prog-1].Name[0]);
+ PrintAt(0,0," ");PrintAt(0,0,&Nums[random(15)+1][0]);grSetColor(6);
+ PrintAt(0,0,"  -  ");
+ grSetColor(8);;DispNum(0,0, random(daysAMonth[monthWin])+1);PrintAt(0,0," ");
+ PrintAt(0,0,Month[monthWin]);PrintAt(0,0,"19");DispNum(0,0,yr);
  bud=0; // initialize bud
  r=random(100);
  if (win==1 && prog==5) bud=5;
@@ -606,6 +616,8 @@ void FakeWin(char win)
 	   default:break;
 	  }
 	 }
+ manOnMoon=man2; if (prog==3 || prog==4) manOnMoon=man1;
+ grSetColor(11);PrintAt(10,60,"FIRST ON THE MOON: ");grSetColor(14);PrintAt(0,0,&Data->P[win].Pool[manOnMoon].Name[0]);
  grSetColor(6);
  FakeHistory(win,yr);
  music_start(M_INTERLUD);

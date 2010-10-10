@@ -474,6 +474,8 @@ char FailureMode(char plr,int prelim,char *text);
 FILE *OpenAnim(char *fname);
 int CloseAnim(FILE * fin);
 int StepAnim(int x,int y,FILE *fin);
+char DrawMoonSelection (char nauts,char plr);
+void FirstManOnMoon (char plr, char isAI, char misNum);
 
 
 // MIS_M.C

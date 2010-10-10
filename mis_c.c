@@ -66,11 +66,13 @@ GXHEADER dply;
 struct AnimType AHead;
 struct BlockHead BHead;
 
+extern char Month[12][11];
 char STEPnum,loc[4];
 extern struct MisAst MA[2][4];
 extern struct MisEval Mev[60];
 extern char MANNED[2],STEP,pal2[768],AI[2],fEarly,LM[2],EVA[2];
-extern char BIG;
+extern char BIG, manOnMoon,dayOnMoon;
+char daysAMonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 void Tick(char plr);
 void Clock(char plr,char clck,char mode,char tm);
@@ -1058,4 +1060,167 @@ int StepAnim(int x,int y,FILE *fin)
 }
 
 
+
+void FirstManOnMoon (char plr, char isAI, char misNum) {
+	int nautsOnMoon=0;
+	dayOnMoon = random(daysAMonth[Data->P[plr].Mission[Mev[STEP].pad].Month])+1;
+	if (misNum==57 && plr==1) nautsOnMoon=3;
+
+	
+	//Direct Ascend
+	if (strcmp(Mev[STEP].E->Name,Data->P[plr].Manned[4].Name)==0)
+		nautsOnMoon=4;
+	//2 men LL
+	if (strcmp(Mev[STEP].E->Name,Data->P[plr].Manned[5].Name)==0)
+		nautsOnMoon=2;
+	//1 man LL
+	if (strcmp(Mev[STEP].E->Name,Data->P[plr].Manned[6].Name)==0)
+		nautsOnMoon=1;
+
+	
+	if (nautsOnMoon==1) {
+		manOnMoon=2;
+		return;
+	}
+
+	if (!AI[plr]) manOnMoon = DrawMoonSelection(nautsOnMoon,plr);
+	else manOnMoon = random(nautsOnMoon)+1;
+	EVA[0]=EVA[1]=manOnMoon-1;
+
+
+
+	return;
+}
+
+char DrawMoonSelection (char nauts,char plr) {
+	char save_screen[64000], save_pal[768];
+	struct MisAst MX[2][4];
+  	FILE *fin;
+  	double last_secs;
+
+	memcpy(MX,MA,8*sizeof(struct MisAst));
+	char cPad;
+	if (MX[Mev[STEP].pad][0].A != NULL) cPad=Mev[STEP].pad;
+	else if (MX[other(Mev[STEP].pad)][0].A != NULL) cPad=other(Mev[STEP].pad);
+	else return 2;
+
+	FadeOut(2,pal,10,0,0);
+	memcpy(save_screen,screen,64000);
+	memcpy(save_pal,pal,768);
+
+	gxClearDisplay(0,0);
+	ShBox(0,0,319,22); InBox(3,3,30,19); FlagSm(plr,4,4);
+	ShBox(0,24,319,199);
+	DispBig(40,5,"FIRST LUNAR EVA",0,-1);
+
+InRFBox(162,28,312,42,10);
+  grSetColor(11);PrintAt(194,37,"EQUIPMENT DETAIL");
+
+  InRFBox(162,46,312,127,0); // Image is 188,49
+
+  // Place Image Here
+  // Build Name
+  memset(Name,0x00,sizeof Name);
+
+  VerifyData();
+  if (plr==0) strcat(Name,"US");
+  else strcat(Name,"SV");
+  strncat(Name,Mev[STEP].E->ID,2);
+
+   if(Mev[STEP].Class==6) {
+      strcpy(&Name[0],"XCAM\0");
+      }
+
+   strcat(Name,".BZ\0");
+
+  fin=OpenAnim(Name);
+  StepAnim(188,47,fin);
+
+  last_secs = get_time ();
+
+	InRFBox(25,31,135,45,10);
+	grSetColor(11);
+	PrintAt(83-strlen(Data->P[plr].Mission[Mev[STEP].pad].Name)*3,40,Data->P[plr].Mission[Mev[STEP].pad].Name);
+	InRFBox(162,161,313,175,10);
+	grSetColor(11);
+	DispNum(198,170,dayOnMoon);PrintAt(0,0," ");PrintAt(0,0,Month[Data->P[plr].Mission[Mev[STEP].pad].Month]);
+	PrintAt(0,0,"19");DispNum(0,0,Data->Year);
+
+	InRFBox(25,51,135,85,10);
+  	grSetColor(11);
+	PrintAt(30,60," Who should be the");
+	PrintAt(30,70,plr==0?
+		      "first astronaut to":
+		      "first cosmonaut to");
+	PrintAt(30,80," walk on the moon?");
+
+	for(int i=0;i<nauts;i++) {
+		IOBox(25,100 +i*25,135,115+i*25);
+		grSetColor(12);
+		GuyDisp(45,110+i*25, MX[cPad][i].A);
+	}
+
+	FadeIn(2,pal,10,0,0);
+	WaitForMouseUp();
+	key=0;
+	while (1) {
+		if (get_time () - last_secs > .55) {
+	    		last_secs = get_time ();
+	    		StepAnim(188,47,fin);
+    			}
+		GetMouse();
+		if (MX[cPad][0].A->Status != 1 &&
+		   (key=='1' || (x>=25&&x<=135&&y>=100&&y<=115&&mousebuttons>0))) {
+			InBox(27,102,133,113);
+			WaitForMouseUp();
+			OutBox(27,102,133,113);delay(10);
+			FadeOut(2,pal2,10,0,0);
+			memcpy(screen,save_screen,64000);
+			memcpy(pal,save_pal,768);
+			
+			FadeIn(2,pal,10,0,0);
+			key=0;
+			return 1;
+		}
+		if (MX[cPad][1].A->Status != 1 &&
+		   (key=='2' || (x>=25&&x<=135&&y>=125&&y<=140&&mousebuttons>0))) {
+			InBox(27,127,133,138);
+			WaitForMouseUp();
+			OutBox(27,127,133,138);delay(10);
+			FadeOut(2,pal2,10,0,0);
+			memcpy(screen,save_screen,64000);
+			memcpy(pal,save_pal,768);
+			
+			FadeIn(2,pal,10,0,0);
+			key=0;
+			return 2;
+		}
+		if (nauts >=3 && MX[cPad][2].A->Status != 1 &&
+		   (key=='3' || (x>=25&&x<=135&&y>=150&&y<=165&&mousebuttons>0))) {
+			InBox(27,152,133,163);
+			WaitForMouseUp();
+			OutBox(27,152,133,163);delay(10);
+			FadeOut(2,pal2,10,0,0);
+			memcpy(screen,save_screen,64000);
+			memcpy(pal,save_pal,768);
+			
+			FadeIn(2,pal,10,0,0);
+			key=0;
+			return 3;
+		}
+		if (nauts >=4 && MX[cPad][3].A->Status != 1 &&
+		   (key=='4' || (x>=25&&x<=135&&y>=175&&y<=190&&mousebuttons>0))) {
+			InBox(27,177,133,188);
+			WaitForMouseUp();
+			OutBox(27,177,133,188);delay(10);
+			FadeOut(2,pal2,10,0,0);
+			memcpy(screen,save_screen,64000);
+			memcpy(pal,save_pal,768);
+			
+			FadeIn(2,pal,10,0,0);
+			key=0;
+			return 4;
+		}
+	}
+}
 

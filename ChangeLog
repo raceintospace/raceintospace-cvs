@@ -1,3 +1,11 @@
+2010-10-10	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	*V247
+
+	*mis_c.c, main.c, proto.h, mis_m.c: Added First Lunar EVA screen
+
+	*endgame.c: Modified history screen to display first on the moon and day of landing
+
 2010-10-02	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	*V246

@@ -58,7 +58,8 @@
   struct cdtable *cdt;
   long PalOff;
   ui16 LetHand;
-  char BIG;         /**< 1 for fullscreen mission playback, 0 otherwise */
+  char BIG, 			   /**< 1 for fullscreen mission playback, 0 otherwise */
+	manOnMoon=0, dayOnMoon=20;         
 
 char *S_Name[] = {
    "LAUNCH",
