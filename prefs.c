@@ -128,7 +128,7 @@ void HModel(char mode,char tx)
   FILE *in;
 
   in=sOpen("PRFX.BUT","rb",0);
-  fseek(in,(mode==0 || mode==1)*sizeof_SimpleHdr,SEEK_CUR);
+  fseek(in,(mode==0 || mode==1 ||mode==4)*sizeof_SimpleHdr,SEEK_CUR);
   fread_SimpleHdr(&table,1,in);
   fseek(in,table.offset,SEEK_SET);
   GV(&local,127,80);
@@ -146,9 +146,10 @@ void HModel(char mode,char tx)
   DV(&local);
   grSetColor(11);
   if (mode==2 || mode==3) PrintAt(100,122,"HISTORICAL MODEL");
-  else PrintAt(100,122,"BASIC MODEL");
+  else if (mode==0||mode==1) PrintAt(100,122,"BASIC MODEL");
+  else if (mode==4||mode==5) PrintAt(100,122,"RANDOM MODEL");
   grSetColor(9);
-  if (mode==0 || mode==2) PrintAt(100,128,"HISTORICAL ROSTER");
+  if (mode==0 || mode==2 || mode==4) PrintAt(100,128,"HISTORICAL ROSTER");
   else PrintAt(100,128,"CUSTOM ROSTER");
   
   return;
@@ -302,10 +303,10 @@ long size;
 	         }
 
 	///Random Equipment
-	if ((where==0 || where==3) && options.feat_random_eq==1) RandomizeEq();	
+	if ((where==0 || where==3) && (Data->Def.Input==4 || Data->Def.Input==5)) RandomizeEq();	
 	
 
-	       if (Data->Def.Input==0 || Data->Def.Input==2)
+	       if (Data->Def.Input==0 || Data->Def.Input==2 || Data->Def.Input==4)
            { // Hist Crews
 	         fin=sOpen("CREW.DAT","rb",0);
             size=fread(buffer,1,BUFFER_SIZE,fin);
@@ -314,7 +315,7 @@ long size;
             fwrite(buffer,size,1,fin);
             fclose(fin);
 	        }
-          else if (Data->Def.Input==1 || Data->Def.Input==3)
+          else if (Data->Def.Input==1 || Data->Def.Input==3 || Data->Def.Input==5)
            { // User Crews
 	         fin=sOpen("USER.DAT","rb",FT_SAVE);
              if (!fin)
@@ -370,9 +371,11 @@ long size;
       else
       if (((x>=96 && y>=114 && x<=223 && y<=194 && mousebuttons>0) || key==K_SPACE) && (where==3 || where==0))  // Hist
        {
+	     char maxHModels;
+	     maxHModels = options.feat_random_eq>0? 5:3;
 	     WaitForMouseUp();
 	     Data->Def.Input++;
-        if (Data->Def.Input>3) Data->Def.Input=0;
+        if (Data->Def.Input>maxHModels) Data->Def.Input=0;
 	     HModel(Data->Def.Input,0);
       }
       else

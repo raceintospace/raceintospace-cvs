@@ -1,3 +1,11 @@
+2010-10-12	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	*V248
+
+	*start.c: Fixed a bug that prevent crews in 4-man capsule to be broken, even with dead or retired nauts ("Zombie crew bug")
+ 
+	*prefs.c, options.c: Added Random Model, displayed only when randomize option is on
+
 2010-10-10	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	*V247

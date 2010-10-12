@@ -549,7 +549,7 @@ AstroTurn(void)
 	for (j = 0; j < NUM_PLAYERS; j++)	// for each player
 	{
 		if (MAIL == -1 || (MAIL == j))
-			for (k = 0; k < ASTRONAUT_POOLS; k++)
+			for (k = 0; k < ASTRONAUT_POOLS+1; k++)
 			{
 				for (l = 0; l < ASTRONAUT_CREW_MAX; l++)
 				{
