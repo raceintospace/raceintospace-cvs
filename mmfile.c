@@ -558,14 +558,14 @@ mm_decode_video(mm_file * mf, SDL_Overlay * ovl)
 	return 1;
 }
 
-/* for now just 8bit unsigned values, mono channels FIXME
+/* for now just 16bit signed values, mono channels FIXME
  * maybe use SDL_AudioConvert() for this */
 int
 mm_decode_audio(mm_file * mf, void *buf, int buflen)
 {
-	const int max_val = UCHAR_MAX;
-	const int min_val = 0;
-	const int bytes_per_sample = 1;
+	const int max_val = INT16_MAX;
+	const int min_val = INT16_MIN;
+	const int bytes_per_sample = 2;
 
 	int rv = 0, samples = 0, left = 0, total = 0;
 	unsigned channels = 0;
@@ -602,13 +602,13 @@ mm_decode_audio(mm_file * mf, void *buf, int buflen)
 				for (ch = 0; ch < channels; ++ch)
 				{
 					/* XXX: lrint requires C99 */
-					int val = lrint((pcm[ch][i] + 1.0) / 2.0 * max_val);
+					int val = lrint(pcm[ch][i] * max_val);
 
 					if (val > max_val)
 						val = max_val;
 					if (val < min_val)
 						val = min_val;
-					*((uint8_t *) buf + (total + i) * channels + ch) = val;
+					*((int16_t *) buf + (total + i) * channels + ch) = val;
 				}
 			}
 

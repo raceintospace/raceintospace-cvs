@@ -120,6 +120,8 @@ audio_callback(void *userdata, Uint8 * stream, int len)
 {
 	int ch = 0;
 
+	memset(stream, 0, len);
+
 	for (ch = 0; ch < AV_NUM_CHANNELS; ++ch)
 	{
 		int pos = 0;
@@ -134,13 +136,14 @@ audio_callback(void *userdata, Uint8 * stream, int len)
 				int bytes =
 					min(len - pos, (int) ac->size - (int) chp->offset);
 
-				/*
-				 * SDL docs say that this should not be used to mix more than
-				 * 2 channels, BUT SDL_mixer library just does that for each
-				 * stream! Anyway, we have 2 channels so no worries ;)
-				 */
-				SDL_MixAudio(stream + pos, ((Uint8 *)ac->data) + chp->offset,
-						bytes, chp->volume);
+				int i = 0;
+				int16_t* dst = (int16_t*) (stream + pos);
+				const int16_t* src = (int16_t*)((uint8_t*) ac->data + chp->offset);
+
+				for (i = 0; i < bytes/2; ++i)
+				{
+					dst[i] += src[i] * chp->volume / AV_MAX_VOLUME / AV_NUM_CHANNELS;
+				}
 
 				pos += bytes;
 				chp->offset += bytes;
@@ -380,7 +383,7 @@ av_setup(void)
 		int i = 0;
 
 		audio_desired.freq = 11025;
-		audio_desired.format = AUDIO_U8;
+		audio_desired.format = AUDIO_S16SYS;
 		audio_desired.channels = 1;
 		/* audio was unresponsive on win32 so let's use shorter buffer */
 		audio_desired.samples = 2048;	/* was 8192 */

@@ -1,82 +1,92 @@
+2010-06-22	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
+
+	* V249
+
+	* sdl.c (av_setup): change sound sample format to 16 bit signed
+
+	* sdl.c (audio_callback): better mixing for 2 audio channels
+
+	* mmfile.c (mm_decode_audio): output 16 bit signed audio samples
+
 2010-10-12	Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*V248
+	* V248
 
-	*start.c: Fixed a bug that prevent crews in 4-man capsule to be broken, even with dead or retired nauts ("Zombie crew bug")
+	* start.c: Fixed a bug that prevent crews in 4-man capsule to be broken, even with dead or retired nauts ("Zombie crew bug")
  
-	*prefs.c, options.c: Added Random Model, displayed only when randomize option is on
+	* prefs.c, options.c: Added Random Model, displayed only when randomize option is on
 
 2010-10-10	Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*V247
+	* V247
 
-	*mis_c.c, main.c, proto.h, mis_m.c: Added First Lunar EVA screen
+	* mis_c.c, main.c, proto.h, mis_m.c: Added First Lunar EVA screen
 
-	*endgame.c: Modified history screen to display first on the moon and day of landing
+	* endgame.c: Modified history screen to display first on the moon and day of landing
 
 2010-10-02	Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*V246
+	* V246
 
-	*randomize.c, prefs.c, proto.h, options.c, options.h: Added name change option
+	* randomize.c, prefs.c, proto.h, options.c, options.h: Added name change option
 
-	*randomize.c, prefs.c: Changed randomization algorytm
+	* randomize.c, prefs.c: Changed randomization algorytm
 
-	*endgame.c: Fixed obscure bug where first nauts where displayed incorrectly
+	* endgame.c: Fixed obscure bug where first nauts where displayed incorrectly
 
 2010-09-07	Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*V245
+	* V245
 
-	*future.c: changed the way the game draws the future mission, so it can be read from a file
+	* future.c: changed the way the game draws the future mission, so it can be read from a file
 
-	*ast4.c: add current equipment safety to damaged equipment screen
+	* ast4.c: add current equipment safety to damaged equipment screen
 
-	*crew.c: fixed the no backup option Leon had made
-
-2010-08-30	Nicolas Laplume <nikakd@users.sourceforge.net>
-
-	*V244
-
-	*proto.h, randomize.c, prefs.c, Makefile.in: Modify random equipmet files
-
-	*options.c: Change config file text
+	* crew.c: fixed the no backup option Leon had made
 
 2010-08-30	Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*V243
+	* V244
 
-	*options.c,options.h: Change no_capsule_training default to 1, add random_eq option
+	* proto.h, randomize.c, prefs.c, Makefile.in: Modify random equipmet files
 
-	*prefs.c, randomize.c: Add option to randomize equipment
+	* options.c: Change config file text
 
-	*vab.c: Fixed problem where booster safety was display uncorrectly
+2010-08-30	Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*readme: Added section about config file
+	* V243
+
+	* options.c,options.h: Change no_capsule_training default to 1, add random_eq option
+
+	* prefs.c, randomize.c: Add option to randomize equipment
+
+	* vab.c: Fixed problem where booster safety was display uncorrectly
+
+	* readme: Added section about config file
 
 2010-08-22	Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*V242
+	* V242
 
-	*vab.c: Fixed EOR kicker-b bug
+	* vab.c: Fixed EOR kicker-b bug
 
-	*rdplex.c, news_sup.c: Damaged equipment improvements
+	* rdplex.c, news_sup.c: Damaged equipment improvements
 
-	*vab.c: Auto-purchase half-off bug fixed
+	* vab.c: Auto-purchase half-off bug fixed
 
 2010-08-10      Nicolas Laplume <nikakd@users.sourceforge.net>
 
-	*V241
+	* V241
 
-	*aimis.c, main.c, newmis.c, vab.c, mis_m.c: Changed booster's safety.
+	* aimis.c, main.c, newmis.c, vab.c, mis_m.c: Changed booster's safety.
 
-	*mc2.c, newmis.c, ast4.c, options.h, options.c, news_sup.c: Fixed damaged equipment bug.
+	* mc2.c, newmis.c, ast4.c, options.h, options.c, news_sup.c: Fixed damaged equipment bug.
 
-	*rdplex.c, proto.h: Show DM in R&D, esthetic changes.
+	* rdplex.c, proto.h: Show DM in R&D, esthetic changes.
 
-	*options.h, options.c, ast1.c, aipur.c: Nauts compatiblity and randomization options.
+	* options.h, options.c, ast1.c, aipur.c: Nauts compatiblity and randomization options.
 
-	*options.h, options.c, crew.c: Skip Capsule Training option.
+	* options.h, options.c, crew.c: Skip Capsule Training option.
 
 
 2010-08-09	Leon Baradat <peyre@users.sourceforge.net>
