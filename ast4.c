@@ -352,12 +352,6 @@ void DamProb(char plr,char prog,int chk)
  if (plr==0) PrintAt(0,0,&Data->P[Data->plr[0]].Name[0]);
    else PrintAt(0,0,&Data->P[Data->plr[1]].Name[0]);
 
-  //Cash Display in Damaged Equipment, Nikakd, 10/8/10
- grSetColor(6);
- PrintAt(215,95,"CASH: "); 
- grSetColor(1);
- DispMB (0,0,Data->P[plr].Cash);
-
  grSetColor(6);PrintAt(121,104,"DAMAGE: ");
  grSetColor(11);
  strcat((char *)Name," PROGRAM");
@@ -366,14 +360,15 @@ void DamProb(char plr,char prog,int chk)
  PrintAt(121,113,"DAMAGE COST: ");
  grSetColor(1);
  sprintf(&Digit[0],"%d",D_Cost);PrintAt(0,0,&Digit[0]);
- PrintAt(0,0," M.B.");
+ PrintAt(0,0," M.B.  (OF ");
+ DispMB (0,0,Data->P[plr].Cash); PrintAt(0,0,")");
  grSetColor(6);
  PrintAt(121,122,"SAFETY LOSS: ");
  grSetColor(1);
- sprintf(&Digit[0],"%d",ESafety);PrintAt(0,0,&Digit[0]);
-PrintAt(0,0,"% ");
  sprintf(&Digit[0],"%d",Saf_Loss);PrintAt(0,0,&Digit[0]);
- PrintAt(0,0,"%");
+ PrintAt(0,0,"%  (FROM ");
+sprintf(&Digit[0],"%d",ESafety);PrintAt(0,0,&Digit[0]);
+ PrintAt(0,0,"%)");
  FadeIn(2,pal,10,0,0);
  
  WaitForMouseUp();

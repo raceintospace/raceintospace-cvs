@@ -184,10 +184,6 @@ void MisCheck(char plr,char mpad)
            else Mev[STEP].dice=random(100)+1;
            Mev[STEP].rnum=random(10000);  // reroll failure type
            Mev[STEP].trace=STEP;
-	   if (durx==1) {
-		durx--;
-		Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration++;
-		}
         }
      }
 
@@ -203,8 +199,8 @@ void MisCheck(char plr,char mpad)
 
     // Duration Hack Part 2 of 3    (set up durx for duration use)
     if ((Mev[STEP].loc==27 || Mev[STEP].loc==28) && durx==-1) {
-        durx=durxx;
-        Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration=1;
+        durx=durxx-1;
+        Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration=2;
     }
 
     if (Mev[STEP].Name[0]=='A') {
