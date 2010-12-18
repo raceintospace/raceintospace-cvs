@@ -27,6 +27,7 @@
 
 #include <Buzz_inc.h>
 #include <externs.h>
+#include <options.h>
 
 
 void DrawTrain(char plr,char lvl)
@@ -151,7 +152,9 @@ TrainText(char plr, int astro, int cnt)
 			PrintAt(0, 0, "ADV TRAINING III");
 			break;
 		case AST_ST_TRAIN_ADV_4:
-			PrintAt(0, 0, "ADV TRAINING IV");
+			if (options.feat_shorter_advanced_training) 
+				PrintAt(0, 0, "ADV TRAINING III");
+			else	PrintAt(0, 0, "ADV TRAINING IV");
 			break;
 		default:
 			break;

@@ -171,9 +171,7 @@ void MisCheck(char plr,char mpad)
      if ((Mev[STEP].loc==27 || Mev[STEP].loc==28) && durx>0) {
         
         if (Mev[STEP].StepInfo!=1) {
-           Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration= 
-           minn( Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration-durx ,
-		maxx( 1, Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration));
+           Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration= 1; //Original code would also return 1
            durx=-1;  // end durations     
         }
         else {

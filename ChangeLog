@@ -1,10 +1,18 @@
+2010-12-18	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	* V251
+
+	* Fixed duration level when failed
+
+	* Changed last Adv Training to III if shorter Adv Training is on
+
 2010-10-24	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V250
 
-	*mis_m.c: Reduce the number of durations steps by 1
+	* mis_m.c: Reduce the number of durations steps by 1
 
-	*ast4.c: Changes to the damaged equipment screen
+	* ast4.c: Changes to the damaged equipment screen
 
 2010-06-22	Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
