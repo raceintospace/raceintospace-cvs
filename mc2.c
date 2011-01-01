@@ -352,6 +352,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 		Mev[step].loc = mcode - 65;
 		if (Mev[step].loc > 25)
 			Mev[step].loc -= 6;
+		if (Mev[step].loc==32 && Mis.Lun) Mev[step].loc=29;
 	}
   }
 
