@@ -108,9 +108,11 @@ static struct {
 	{"cheat_no_damage", &options.cheat_no_damage, "%u", 0,
 		"Set to non-zero to disable damaged equipment (Will prevent future damage)." },   
 	{"random_eq", &options.feat_random_eq, "%u", 0,
-		"Set to non-zero to enable random equipment (Will break game balance and possibly break the AI)." },
+		"Set to non-zero to enable random equipment Model (Will break game balance and possibly break the AI)." },
 	{"eq_name_change", &options.feat_eq_new_name, "%u", 0,
 		"Set to non-zero to be able to change equipment name when starting a new game." },
+	{"altasLunar", &options.cheat_altasOnMoon, "%u", 0,
+		"Set to non-zero to enable Altas rockets in lunar missions." },
 };
 
 /** prints the minimal usage information to stderr
@@ -387,6 +389,7 @@ setup_options(int argc, char *argv[])
 	options.cheat_no_damage=0;       //Damaged Equipment Cheat, Nikakd, 10/8/10
 	options.feat_random_eq=0;
 	options.feat_eq_new_name =0;
+	options.cheat_altasOnMoon=0;
 
 	fixpath_options();
 

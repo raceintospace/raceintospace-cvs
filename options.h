@@ -17,6 +17,7 @@ typedef struct {
     unsigned cheat_no_damage;    
     unsigned feat_random_eq;
     unsigned feat_eq_new_name;
+    unsigned cheat_altasOnMoon;
 } game_options;
 
 extern game_options options;

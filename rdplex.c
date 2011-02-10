@@ -288,7 +288,30 @@ char RD(char player_index)
   {
     key=0;GetMouse();
     if (mousebuttons>0 || key>0)
-     {
+     {if ((x>=295 && y>=90 && x<=312 && y<=100) || key=='F')
+	{
+	char EqDmg=0;
+	switch (hardware-1)
+		{
+		case 0: EqDmg=Data->P[player_index].Probe[unit-1].Damage!=0?1:0; break;
+		case 1: EqDmg=Data->P[player_index].Rocket[unit-1].Damage!=0?1:0; break;
+		case 2: EqDmg=Data->P[player_index].Manned[unit-1].Damage!=0?1:0; break;
+		case 3: EqDmg=Data->P[player_index].Misc[unit-1].Damage!=0?1:0; break;
+		default: break; }
+	if (EqDmg) {	InBox(295,90,312,100);
+			DamProb(player_index,hardware-1,unit-1);
+			DrawRD(player_index);
+			BButs(1,hardware);
+  			ShowUnit(hardware,unit,player_index);
+  			RDButTxt(b*roll,buy[hardware-1][unit-1],player_index,((hardware==4&&unit==5)?1:0));  //DM Screen, Nikakd, 10/8/10
+  			if (buy[hardware-1][unit-1]==0) QueryUnit(hardware,unit,player_index);
+  			else {InBox(165,184,315,194);};
+  			ManSel(decodeNumRolls(buy[hardware-1][unit-1]));
+  			strcpy(IDT,"i009");strcpy(IKEY,"k009");
+  			FadeIn(2,pal,10,0,0);
+		}
+	}
+      else
       if ((y>=29 && y<=60 && mousebuttons>0) || (key=='U' || key=='R' || key=='M' || key=='C'))
        {
 	    if (((x>=7 && x<=75 && mousebuttons>0) || key=='U') && hardware != 1)  /* Unmanned */
@@ -594,6 +617,16 @@ void ShowUnit(char hw,char un,char player_index)
   PrintAt(170,146,"MAXIMUM SAFETY:");
   grSetColor(20);PrintAt(170,139,"MAXIMUM R&D:");
 
+	char EqDmg=0;
+	switch (hw-1)
+	{
+	case 0: EqDmg=Data->P[player_index].Probe[un-1].Damage!=0?1:0; break;
+	case 1: EqDmg=Data->P[player_index].Rocket[un-1].Damage!=0?1:0; break;
+	case 2: EqDmg=Data->P[player_index].Manned[un-1].Damage!=0?1:0; break;
+	case 3: EqDmg=Data->P[player_index].Misc[un-1].Damage!=0?1:0; break;
+	default: break; }
+	if (EqDmg!=0) {IOBox(293,88,314,102); grSetColor(8); PrintAt(296,97,"F");grSetColor(11); PrintAt(0,0,"IX");}
+
   SCol=(PL->Num<0) ? 20 : ((PL->Safety<75) ? 8 : 16);
   grSetColor(SCol);PrintAt(170,111,"SAFETY FACTOR:");
 
@@ -768,7 +801,29 @@ char HPurc(char player_index)
   while (1)
   {
     key=0;GetMouse();
-    if ((x>266 && y>164 && x<314 && y<174 && mousebuttons>0) || key=='Z') {
+	if ((x>=295 && y>=90 && x<=312 && y<=100 && mousebuttons>0) || key=='F')
+	{
+	char EqDmg=0;
+	switch (hardware-1)
+		{
+		case 0: EqDmg=Data->P[player_index].Probe[unit-1].Damage!=0?1:0; break;
+		case 1: EqDmg=Data->P[player_index].Rocket[unit-1].Damage!=0?1:0; break;
+		case 2: EqDmg=Data->P[player_index].Manned[unit-1].Damage!=0?1:0; break;
+		case 3: EqDmg=Data->P[player_index].Misc[unit-1].Damage!=0?1:0; break;
+		default: break; }
+	if (EqDmg) {	InBox(295,90,312,100);
+			DamProb(player_index,hardware-1,unit-1);
+			strcpy(IDT,"i008");strcpy(IKEY,"k008");
+  			DrawHPurc(player_index);
+ 			BButs(1,hardware);
+  			ShowUnit(hardware,unit,player_index);
+
+			FadeIn(2,pal,10,0,0);
+			music_start(M_FILLER);
+ 			WaitForMouseUp();
+		}
+	}
+    else if ((x>266 && y>164 && x<314 && y<174 && mousebuttons>0) || key=='Z') {
       InBox(266,164,314,174);
 			WaitForMouseUp();
   //    memcpy(Data,vhptr.vptr,sizeof(struct Players));

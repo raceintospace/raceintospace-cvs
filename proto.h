@@ -766,7 +766,7 @@ void DispVAB(char plr,char pad);
 int FillVab(char plr,char f,char mode);
 int  BuyVabRkt(char plr,int rk,int *q,char mode);
 void ShowVA(char f);
-void ShowRkt(char *Name,int sf,int qty,char mode);
+void ShowRkt(char *Name,int sf,int qty,char mode, char isDmg);
 void DispVA(char plr,char f);
 void DispRck(char plr,char wh);
 void DispWts(int two,int one);

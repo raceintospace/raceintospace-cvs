@@ -510,7 +510,7 @@ struct MXM {
    int32_t Offset[6];
 };
 
-struct VInfo {char name[15],qty,ac,sf,dex,img;int16_t wt;};
+struct VInfo {char name[15],qty,ac,sf,dex,img;int16_t wt;char dmg;};
 struct ManPool {char Name[14],Sex,Cap,LM,EVA,Docking,Endurance;};
 struct order {int16_t plr,loc,budget,date;};    
 

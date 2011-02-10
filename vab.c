@@ -32,6 +32,7 @@
 #include <externs.h>
 #include <utils.h>
 #include <logging.h>
+#include <options.h>
 
 extern char AI[2];
 
@@ -41,6 +42,7 @@ extern char AI[2];
   extern char Vab_Spot;
 
 // CAP,LM,SDM,DMO,EVA,PRO,INT,KIC
+char isDamaged[8] = {0,0,0,0,0,0,0,0};
 
 struct MDA {
   i16 x1,y1,x2,y2,o;
@@ -358,7 +360,8 @@ void ShowVA(char f)
       DispNum(128,136+12*i,0);
     } else {
       DispNum(152,136+12*i,VAS[f][i].qty-VAS[f][i].ac);
-      DispNum(128,136+12*i,VAS[f][i].sf);
+	if(VAS[f][i].dmg) grSetColor(9);
+      	DispNum(128,136+12*i,VAS[f][i].sf);
     };
     PrintAt(0,0,"%");
   };
@@ -367,7 +370,7 @@ void ShowVA(char f)
 }
 
 
-void ShowRkt(char *Name,int sf,int qty,char mode)
+void ShowRkt(char *Name,int sf,int qty,char mode,char isDmg)
 {
   
   RectFill(65,182,160,190,3);
@@ -376,6 +379,7 @@ void ShowRkt(char *Name,int sf,int qty,char mode)
   if (qty<0) {DispNum(152,188,0);DispNum(128,188,0); }
   else {
     DispNum(152,188,qty);
+	if (isDmg) grSetColor(9);
     DispNum(128,188,sf);
   };
   PrintAt(0,0,"%");
@@ -678,6 +682,7 @@ begvab:
   // Rocket Display Data --------------------------
   for (i=0;i<7;i++) {
     if (i>3) {
+	isDamaged[i] = Data->P[plr].Rocket[i-4].Damage!=0?1:0;
       sf[i]=(Data->P[plr].Rocket[i-4].Safety*
 		Data->P[plr].Rocket[4].Safety)/100;
       strcpy(&Name[i][0],"B/");
@@ -687,6 +692,7 @@ begvab:
       if (tmp<qty[i]) qty[i]=tmp;
       pay[i]=(Data->P[plr].Rocket[i-4].MaxPay+Data->P[plr].Rocket[4].MaxPay);
     } else {
+	isDamaged[i] = Data->P[plr].Rocket[i].Damage!=0?1:0;
        sf[i]=Data->P[plr].Rocket[i].Safety;
        strcpy(&Name[i][0],&Data->P[plr].Rocket[i].Name[0]);
        qty[i]=Data->P[plr].Rocket[i].Num-Data->P[plr].Rocket[i].Spok;
@@ -702,7 +708,7 @@ begvab:
   rk=0;while(pay[rk]<wgt) rk++;
   ccc=1;
   ShowVA(ccc);
-  ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);
+  ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt,isDamaged[rk]);
   DispRck(plr,rk);
   DispVA(plr,ccc);
   cwt=0;for (i=0;i<4;i++) cwt+=VAS[ccc][i].wt;
@@ -736,6 +742,7 @@ begvab:
     	 // Rocket Display Data --------------------------
 	    for (i=0;i<7;i++) {
 	     if (i>3) {
+		isDamaged[i] = Data->P[plr].Rocket[i-4].Damage!=0?1:0;
 	      sf[i]=(Data->P[plr].Rocket[i-4].Safety*
 		      Data->P[plr].Rocket[4].Safety)/100;
 	      strcpy(&Name[i][0],"B/");
@@ -745,6 +752,7 @@ begvab:
 	      if (tmp<qty[i]) qty[i]=tmp;
 	       pay[i]=(Data->P[plr].Rocket[i-4].MaxPay+Data->P[plr].Rocket[4].MaxPay);
 	     } else {
+		isDamaged[i] = Data->P[plr].Rocket[i].Damage!=0?1:0;
 	      sf[i]=Data->P[plr].Rocket[i].Safety;
 	      strcpy(&Name[i][0],&Data->P[plr].Rocket[i].Name[0]);
 	      qty[i]=Data->P[plr].Rocket[i].Num-Data->P[plr].Rocket[i].Spok;
@@ -757,7 +765,7 @@ begvab:
 	   }
 	   else if (ac==0) Help("i135");  // delay on purchase
 	    else Help("i137");  // not enough money
-     ShowVA(ccc);ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);
+     ShowVA(ccc);ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt,isDamaged[rk]);
      OutBox(6,86,163,94);
     }
 
@@ -853,9 +861,9 @@ begvab:
       rk++;
       if (rk>6) rk=0;
       if (((Misdef(mis)>=42 && Misdef(mis)<=57) || (Misdef(mis)>=7 && Misdef(mis)<=13)) && (rk==4 || rk==0))
-        rk++;
+        if (options.cheat_altasOnMoon==0) rk++;
       
-	   ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt);
+	   ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt,isDamaged[rk]);
 	   DispWts(cwt,pay[rk]);
 	   DispRck(plr,rk);
 	   WaitForMouseUp();
@@ -913,7 +921,7 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
   for (i=0;i<7;i++)
     for (j=0;j<5;j++) {
       strcpy(&VAS[i][j].name[0],"NONE");
-      VAS[i][j].qty=VAS[i][j].sf=VAS[i][j].wt=0;
+      VAS[i][j].qty=VAS[i][j].sf=VAS[i][j].wt=VAS[i][j].dmg=0;
       VAS[i][j].dex=VAS[i][j].img=-1;
     };
 #if 0
@@ -922,6 +930,7 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
       VAS[i][4].qty=1;  // Set Flag to signal EVA on Mission
       VAS[i][4].dex=Data->P[plr].Misc[3].Num; // Copy qty if have stuff
       VAS[i][4].sf=Data->P[plr].Misc[3].Safety; // EVA safety factor
+	VAS[i][4].dmg=Data->P[plr].Misc[3].Damage!=0?1:0;
     }
   }
 #endif
@@ -1079,6 +1088,7 @@ void VVals(char plr,char tx,Equipment *EQ,char v4,char v5)
   if (tx==3 && v4==4 && AI[plr]==1) VAS[VASqty][tx].sf=EQ->MSF;
   else VAS[VASqty][tx].sf=EQ->Safety;
   VAS[VASqty][tx].dex=v4;VAS[VASqty][tx].img=v5;
+	VAS[VASqty][tx].dmg=EQ->Damage!=0?1:0;
   return;
 }
 
