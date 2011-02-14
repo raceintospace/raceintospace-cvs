@@ -27,6 +27,7 @@
 #include <externs.h>
 #include <macros.h>
 #include <logging.h>
+#include <options.h>
 
 LOG_DEFAULT_CATEGORY(LOG_ROOT_CAT)
 
@@ -149,7 +150,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 	      Mev[step].Class=3;                                 // Satellite
 	      break;
 	 // Misc Programs
-    case 'H': case 'P': 
+    case 'H': case 'P':
 	      Mev[step].Class=5;                                 // EVA Suits
 	      break;
 	 // Photo Recon
@@ -178,9 +179,9 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
   };
 
   Mev[step].Prest=-100;
-  
+
   switch(mcode) {
-   case 'B': if (MH[pad][0]!=NULL) 
+   case 'B': if (MH[pad][0]!=NULL)
                Mev[step].PComp=WhichPart(plr,Mev[step].Prest=-18);  // CAP
              else Mev[step].Prest=-100;Mev[step].PComp=0;
              break;
@@ -364,7 +365,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
   if (Mev[step].loc>=10) Mev[step].FName[2]='1';
   if (Mev[step].loc>=20) Mev[step].FName[2]='2';
   if (Mev[step].loc>=30) Mev[step].FName[2]='3';
-  
+
   if (Mev[step].loc==32) {  // Fix _g special case #48010
    Mev[step].FName[2]='0';
    Mev[step].FName[3]='1';
@@ -412,12 +413,12 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
 
 
    if (Mev[step].loc==20 && (Mev[step].Name[4]==0x34 || Mev[step].Name[4]==0x33))
-     Mev[step].FName[1]='1';  
+     Mev[step].FName[1]='1';
 
    Mev[step].StepInfo=0;
 
   }
-  //if (mcode!='d') 
+  //if (mcode!='d')
   STEP++;
   return;
 }
@@ -428,7 +429,7 @@ void MisPrt(void)
   for (i=0;i<STEP-1;i++) { Mev[i].dice=100;
     Mev[0].E->MisSaf=5;
     Mev[0].rnum=9999;
-  } 
+  }
   return;
 }
 
@@ -481,7 +482,7 @@ char i,j,t;
       MH[j][i]=NULL;  // Clear Pointers
       if (t>=0) {
 	      switch(i) {
-	         case Mission_Capsule: 
+	         case Mission_Capsule:
 					 case Mission_LM:   // Cap - LM
 	            MH[j][i]=&Data->P[plr].Manned[t];
                if (MH[j][i]->Num && t!=3) MH[j][i]->Num--;
@@ -552,7 +553,7 @@ char i,j,t;
    }; // for (0<2)
 
   if (DMFake==1) Data->P[plr].Mission[mis].Hard[Mission_Probe_DM]=-1;
- 
+
   return;
 }
 
@@ -566,9 +567,9 @@ void MissionSetDown(char plr,char mis)
           if (MH[j][i]!=NULL && (MH[j][i]->MisSucc>0 || MH[j][i]->MisFail>0)) {
 
               MH[j][i]->SMods=MH[j][i]->Damage=MH[j][i]->DCost=0;
-           
+
               if (strncmp(MH[j][i]->Name,(i==3)?"DOC":"PHO",3)!=0 && MH[j][i]->MisSucc>0)
-                  MH[j][i]->Safety++;
+                   {MH[j][i]->Safety++; if (options.cheat_addMaxS) MH[j][i]->MaxRD++; if(MH[j][i]->MaxRD>MH[j][i]->MaxSafety-2) MH[j][i]->MaxRD=MH[j][i]->MaxSafety-2;}
               if (strncmp(MH[j][i]->Name,"DOC",3)==0 && (MH[j][i]->MisFail+MH[j][i]->MisSucc)==0)
                  MH[j][i]->MisFail=1;
 
@@ -584,7 +585,7 @@ void MissionSetDown(char plr,char mis)
               MH[j][i]->Steps+=(MH[j][i]->MisFail+MH[j][i]->MisSucc);
 
               if (i==4 && MH[j][7]!=NULL) {  // Boosters
-                if (MH[j][4]->MisSucc>0) MH[j][7]->Safety++;
+                if (MH[j][4]->MisSucc>0)  {MH[j][7]->Safety++; if (options.cheat_addMaxS) MH[j][7]->MaxRD++; if(MH[j][7]->MaxRD>MH[j][7]->MaxSafety-2) MH[j][7]->MaxRD=MH[j][7]->MaxSafety-2;}
                 MH[j][7]->SMods=MH[j][7]->Damage=MH[j][7]->DCost=0;
 
                 MH[j][7]->Failures+=MH[j][4]->MisFail;
@@ -601,7 +602,7 @@ void MissionSetDown(char plr,char mis)
 
 /**
  * Apply duration penalty to mission steps in manned missions.
- * 
+ *
  * \param plr current player
  * \param dur mission duration in days
  */

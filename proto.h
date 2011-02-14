@@ -43,7 +43,7 @@
 
 #define isMile(a,b)   Data->Mile[a][b]
 
-#ifndef BYTE 
+#ifndef BYTE
 #define BYTE unsigned char
 #endif
 #ifndef WORD
@@ -62,7 +62,7 @@
 
 #define HIST    (xMODE&xMODE_HIST)
 #define CHEAT   (xMODE&xMODE_CHEAT)
-#define NOFAIL  (xMODE&xMODE_NOFAIL) 
+#define NOFAIL  (xMODE&xMODE_NOFAIL)
 #define TOM     (xMODE&xMODE_TOM)
 #define DOANIM  (xMODE&xMODE_DOANIM)
 #define NOCOPRO (xMODE&xMODE_NOCOPRO)
@@ -267,6 +267,7 @@ void DrawViewing(char plr);
 void DrawVText(char got);
 int RetFile(char plr,int card);
 void Viewing(char plr);
+void DrawPreviousMissions (char plr);
 
 
 
@@ -578,6 +579,7 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
 void DispHelp(char top, char bot, char *txt);
 int Help(char *FName);
 void Draw_Mis_Stats(char plr, char index, int *where,char mode);
+void writePrestigeFirst(char index);
 
 // PORT.C
 void Seek_sOff(int where);

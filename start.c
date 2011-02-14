@@ -36,7 +36,7 @@ char Nums[30][7]={"I","II","III","IV","V","VI","VII","VIII","IX","X",
    "XXVIII","XXIX","XXX"};
 
 /** \todo This function fills Data->Events, but how it's a mystery... */
- 
+
 void SetEvents(void)
 {
   int i,j,k,rans,tag,mx=2;
@@ -70,7 +70,7 @@ void SetEvents(void)
     fseek(in,23*Data->Events[j]+(j&0x01)*23,0);
     fread(&chai[0],sizeof chai,1,in);
     fclose(in);
- 
+
     if (j&0x01) {  // Player 1  SOV
       for(i=0;i<23;i++) {
         if (j==5 && chai[i]>0) Data->P[1].AIpath[i]=chai[i]+2;
@@ -85,7 +85,7 @@ void SetEvents(void)
       }
     }
 #endif
-          
+
 
    i=-1;
    fout=sOpen("REPLAY.DAT","wb",1);
@@ -120,7 +120,7 @@ updateAstronautSkills(unsigned plr, struct Astros* astro)
 	};
 	const char skillMax = 4;
 	const char skillMin = 0;
-		
+
 	if ((astro->Moved == 0)
 		&& (astro->oldAssign < astro->Assign))
 			/* Moved to better prog, increase morale */
@@ -500,19 +500,30 @@ AstroTurn(void)
 						Compat[cnt++] = 2;
 				}
 				temp = 0;
+				char sameGroup=0, group=Data->P[j].Pool[i].Group, mates=0;
 				for (k = 0; k < ASTRONAUT_FLT_CREW_MAX; k++)
 				{
+					char guyCode = Data->P[j].Crew[Data->P[j].Pool[i].Assign][Data->P[j].Pool[i].Crew-1][k]-1;
+					if (guyCode>-1 && guyCode!=i) {
+						mates++;
 					for (l = 0; l < cnt; l++)
 					{
 						if (Compat[l] ==
-							Data->P[j].Crew[Data->P[j].Pool[i].Assign][Data->
-								P[j].Pool[i].Crew][k])
+							Data->P[j].Pool[guyCode].Compat
+								)
 							temp++;
+					}
+					if (group==Data->P[j].Pool[guyCode].Group)
+						sameGroup++;
 					}
 				}
 
-				if (temp > 0)
-					Data->P[j].Pool[i].Mood -= 4;
+				if (mates > 0) //-5 for each in Gemini, -3 for each incompatible in Jupiter , -4 in Apollo/Minishutle
+					Data->P[j].Pool[i].Mood -= Data->P[j].Pool[i].Assign==2? 5*(mates-temp) : Data->P[j].Pool[i].Assign==5? 3*(mates-temp): 4 * (mates-temp);
+				if (sameGroup>0) //+1 for each mate from the same group
+					Data->P[j].Pool[i].Mood += 1*sameGroup;
+				if (temp>0)			//+1 for each compatible mate
+					Data->P[j].Pool[i].Mood += 1*temp;
 
 				/* Final record updating */
 
@@ -641,8 +652,8 @@ void Update(void)
 	  strcat(&tName[0],&Nums[(Data->P[j].Probe[2].Code)%30][0]);
 	  strcpy(&Data->P[j].Mission[i].Name[0],&tName[0]); // copy into struct
 	  Data->P[j].Probe[2].Code++;  // Increase Planned Mission Count
-	} else if (Data->P[j].Mission[i].MissionCode==7 || 
-	    (Data->P[j].Mission[i].MissionCode>=9 && 
+	} else if (Data->P[j].Mission[i].MissionCode==7 ||
+	    (Data->P[j].Mission[i].MissionCode>=9 &&
 	    Data->P[j].Mission[i].MissionCode<=13)) {
 	  Data->P[j].Mission[i].Patch=-1;
 	  strcpy(&tName[0],&Data->P[j].Probe[1].Name[0]);strcat(&tName[0]," ");
@@ -680,7 +691,7 @@ void Update(void)
   // Reset R&D Purchasing Ability
   memset(Data->P[0].Buy, 0x00, sizeof(Data->P[0].Buy));
   memset(Data->P[1].Buy, 0x00, sizeof(Data->P[1].Buy));
-  
+
   AstroTurn();   /* Process all astronauts */
 
   for (j=0;j<NUM_PLAYERS;j++) {
@@ -705,7 +716,7 @@ void Update(void)
         else if (Data->P[0].History[p0].Month > Data->P[1].History[p1].Month) {
            TestFMis(1,p1);p1++;}
         else if (Data->P[0].History[p0].Month==Data->P[1].History[p1].Month) {
-           if (Data->P[0].Budget<Data->P[1].Budget && (p0 < Data->P[0].PastMis)) 
+           if (Data->P[0].Budget<Data->P[1].Budget && (p0 < Data->P[0].PastMis))
               {TestFMis(0,p0);p0++;}
            else if (Data->P[0].Budget>Data->P[1].Budget && (p1 < Data->P[1].PastMis))
               {TestFMis(1,p1);p1++;}
@@ -772,7 +783,7 @@ void UpdAll(char side)
     memcpy(&Data->P[side].Mission[i],&Data->P[side].Future[i],sizeof (struct MissionType));
     memset(&Data->P[side].Future[i],0x00,sizeof (struct MissionType));
     strcpy(Data->P[side].Future[i].Name,"UNDETERMINED");
-   }; 
+   };
 
   for (i=0;i<3;i++) {
 	if (Data->P[side].Mission[i].MissionCode==1) {
@@ -787,8 +798,8 @@ void UpdAll(char side)
 	  strcat(&tName[0],&Nums[(Data->P[side].Probe[2].Code)%30][0]);
 	  strcpy(&Data->P[side].Mission[i].Name[0],&tName[0]); // copy into struct
 	  Data->P[side].Probe[2].Code++;  // Increase Planned Mission Count
-	} else if (Data->P[side].Mission[i].MissionCode==7 || 
-	    (Data->P[side].Mission[i].MissionCode>=9 && 
+	} else if (Data->P[side].Mission[i].MissionCode==7 ||
+	    (Data->P[side].Mission[i].MissionCode>=9 &&
 	    Data->P[side].Mission[i].MissionCode<=13)) {
 	  Data->P[side].Mission[i].Patch=-1;
 	  strcpy(&tName[0],&Data->P[side].Probe[1].Name[0]);strcat(&tName[0]," ");
@@ -819,12 +830,12 @@ void UpdAll(char side)
 	      Data->P[side].Manned[k].Code++;  // Increase Planned Mission Count
 	    }
 	  }
-   }    
+   }
  }
 
   // Reset R&D Purchasing Ability
   memset(Data->P[side].Buy, 0x00, sizeof(Data->P[side].Buy));
-  
+
   AstroTurn();   /* Process all astronauts */
 
   Data->P[side].RDMods=0;
@@ -850,7 +861,7 @@ void UpdAll(char side)
         else if (Data->P[0].History[p0].Month > Data->P[1].History[p1].Month) {
            TestFMis(1,p1);p1++;}
         else if (Data->P[0].History[p0].Month==Data->P[1].History[p1].Month) {
-           if (Data->P[0].Budget<Data->P[1].Budget && (p0 < Data->P[0].PastMis)) 
+           if (Data->P[0].Budget<Data->P[1].Budget && (p0 < Data->P[0].PastMis))
               {TestFMis(0,p0);p0++;}
            else if (Data->P[0].Budget>Data->P[1].Budget && (p1 < Data->P[1].PastMis))
               {TestFMis(1,p1);p1++;}
@@ -861,7 +872,7 @@ void UpdAll(char side)
         }
      }
   };  // end while
- } 
+ }
 
   memset(pNeg,0x00,sizeof pNeg);
 
@@ -939,7 +950,7 @@ TestFMis(int j, int i)
 
 /** Update equipment
  * \todo limit of hardcoded 28 hardware types
- * 
+ *
  * \todo Should this not handle all four types of hardware?
  */
 void

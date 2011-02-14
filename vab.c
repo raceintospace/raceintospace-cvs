@@ -24,7 +24,7 @@
 // Programmed by Michael K McCarty
 //
 /** \file vab.c Vehicle Assembly Building
- * 
+ *
  */
 
 #include <gamedata.h>
@@ -40,6 +40,7 @@ extern char AI[2];
   char VASqty,CV;
   extern struct mStr Mis;
   extern char Vab_Spot;
+  int TotalCost; char hasDelay;//Used  to display the cost of autopurchase
 
 // CAP,LM,SDM,DMO,EVA,PRO,INT,KIC
 char isDamaged[8] = {0,0,0,0,0,0,0,0};
@@ -128,7 +129,7 @@ void DispVAB(char plr,char pad)
   uint16_t image_len = 0;
 
   strcpy(IDT,"i016");strcpy(IKEY,"k016");
-  
+
   FadeOut(2,pal,10,0,0);
 
   fp = sOpen("VAB.IMG","rb",0);
@@ -155,15 +156,13 @@ void DispVAB(char plr,char pad)
 
   InBox(4,104,166,123);
   IOBox(62,127,163,177);  IOBox(62,179,163,193);
-  
+
   InBox(177,28,314,180);
   RectFill(178,29,313,179,3);
 
   IOBox(4,84,165,96);
 
   grSetColor(1);
-  PrintAt(13,92,"AUTOPURCHASE    CASH: ");
-    DispMB(127,92,Data->P[plr].Cash);
   PrintAt(200,192,"EXIT");
   PrintAt(268,192,"SCRUB");
   PrintAt(263,13,"ASSIGN");
@@ -204,9 +203,9 @@ void DispVAB(char plr,char pad)
   GetMisType(Data->P[plr].Mission[pad].MissionCode);
 
   PrintAt(5,52,Mis.Abbr);
-      int MisCod; 
+      int MisCod;
       MisCod=Data->P[plr].Mission[pad].MissionCode;
-      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41) 
+      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)
 	   // Show duration level only on missions with a Duration step - Leon
        {
 	switch(Data->P[plr].Mission[pad].Duration)
@@ -218,7 +217,7 @@ void DispVAB(char plr,char pad)
 	 case 5:PrintAt(0,0," (E)");break;
 	 case 6:PrintAt(0,0," (F)");break;
 	 default:PrintAt(0,0,"");break;
-	} 
+	}
        }
 
   FlagSm(plr,4,4);
@@ -244,7 +243,7 @@ int FillVab(char plr,char f,char mode)
             	else cost+=temp_cost;
           }
 	        break;
-	      case 1: 
+	      case 1:
 	        if ((Data->P[plr].Misc[VAS[f][i].dex].Num-Data->P[plr].Misc[VAS[f][i].dex].Spok)==0) {
 		int temp_cost = Data->P[plr].TurnOnly==3? maxx(1,Data->P[plr].Misc[VAS[f][i].dex].UnitCost/2):Data->P[plr].Misc[VAS[f][i].dex].UnitCost;
             	if (mode==1) {
@@ -294,7 +293,7 @@ int ChkDelVab(char plr,char f)
 	        if (Data->P[plr].Manned[VAS[f][i].dex].Delay!=0)
            return 0;
 	        break;
-	      case 1: 
+	      case 1:
 	        if (Data->P[plr].Misc[VAS[f][i].dex].Delay!=0) return 0;
 	        break;
     	   case 3:
@@ -349,7 +348,7 @@ int ChkVabRkt(char plr,int rk,int *q)
 void ShowVA(char f)
 {
   int i;
-  
+
   RectFill(65,130,160,174,3);
   grSetColor(1);
   for (i=0;i<4;i++) {
@@ -365,14 +364,14 @@ void ShowVA(char f)
     };
     PrintAt(0,0,"%");
   };
-  
+
  return;
 }
 
 
 void ShowRkt(char *Name,int sf,int qty,char mode,char isDmg)
 {
-  
+
   RectFill(65,182,160,190,3);
   if (qty<0 || mode==1) grSetColor(9); else grSetColor(1);
   PrintAt(67,188,&Name[0]);
@@ -383,7 +382,7 @@ void ShowRkt(char *Name,int sf,int qty,char mode,char isDmg)
     DispNum(128,188,sf);
   };
   PrintAt(0,0,"%");
-  
+
   return;
 }
 
@@ -569,7 +568,7 @@ void DispVA(char plr,char f)
 
   DV(&local2);
   gxPutImage(&local,gxSET,210-w/2,103-h/2,0);
-  
+
   DV(&local);
   return;
 }
@@ -585,7 +584,7 @@ void DispRck(char plr,char wh)
     w=x2-x1+1;h=y2-y1+1;
     GV(&local,w,h); GV(&local2,w,h);
     gxVirtualVirtual(&vhptr,x1,y1,x2,y2,&local,0,0,gxSET);
-    
+
     RectFill(247,29,313,179,3);
     gxGetImage(&local2,282-w/2,103-h/2,282-w/2+w-1,103-h/2+h-1,0);
 
@@ -594,14 +593,14 @@ void DispRck(char plr,char wh)
     };
 
     gxPutImage(&local,gxSET,282-w/2,103-h/2,0);
-    
+
     DV(&local2);DV(&local);
   return;
 }
 
 void DispWts(int two,int one)
 {
-  
+
   RectFill(5,65,140,83,3);
 
   grSetColor(1);
@@ -611,7 +610,7 @@ void DispWts(int two,int one)
   PrintAt(5,70,"CURRENT PAYLOAD: ");
   if (one<two) grSetColor(9);
   DispNum(0,0,two);
-  
+
   return;
 }
 
@@ -645,7 +644,7 @@ begvab:
   {
      Vab_Spot = (Data->P[plr].Mission[0].Hard[Mission_PrimaryBooster] > 0) ? 1 : 0;
      music_stop();
-     free(MI); 
+    free(MI);
      return;
   };
 
@@ -660,7 +659,7 @@ begvab:
   if (Data->P[plr].Mission[mis].Hard[Mission_PrimaryBooster] > 0) {
 	 for (i=Mission_Capsule; i<=Mission_Probe_DM; i++) {
 	   switch(i) {
-	     case Mission_Capsule: 
+	     case Mission_Capsule:
 			 case Mission_LM:  // Manned+LM
 	       Data->P[plr].Manned[Data->P[plr].Mission[mis].Hard[i] ].Spok--;
 	       break;
@@ -676,7 +675,7 @@ begvab:
 
 	 Data->P[plr].Rocket[(Data->P[plr].Mission[mis].Hard[Mission_PrimaryBooster]-1)%4].Spok--;
 	 if (Data->P[plr].Mission[mis].Hard[Mission_PrimaryBooster]>3) Data->P[plr].Rocket[4].Spok--;
-     
+
   };
   BuildVAB(plr,mis,0,0,0);  // now holds the mission info
   // Rocket Display Data --------------------------
@@ -713,7 +712,22 @@ begvab:
   DispVA(plr,ccc);
   cwt=0;for (i=0;i<4;i++) cwt+=VAS[ccc][i].wt;
   DispWts(cwt,pay[rk]);
-  
+
+  //display cost (XX of XX)
+		hasDelay=0;
+		TotalCost=0;
+        hasDelay=ChkDelVab(plr,ccc);
+        if (hasDelay!=0) hasDelay=ChkVabRkt(plr,rk,&qty[0]);
+        TotalCost=FillVab(plr,ccc,0);
+        TotalCost+=BuyVabRkt(plr,rk,&qty[0],0);
+		RectFill(7,87,162,93,3);
+  		grSetColor(1); if (hasDelay==0 || TotalCost>Data->P[plr].Cash) grSetColor(9); //if cant buy (delay, cost>cash) ->red letters
+  		PrintAt(13,92,"AUTOPURCHASE (");
+  		DispNum(0,0,TotalCost);
+  		PrintAt(0,0," OF ");
+ 	 	DispMB(0,0,Data->P[plr].Cash);
+ 	    PrintAt(0,0,")");
+
   FadeIn(2,pal,10,0,0);
   WaitForMouseUp();
   while (1)
@@ -738,7 +752,7 @@ begvab:
           FillVab(plr,ccc,1);
           BuyVabRkt(plr,rk,&qty[0],1);
           BuildVAB(plr,mis,0,0,1);
-          
+
     	 // Rocket Display Data --------------------------
 	    for (i=0;i<7;i++) {
 	     if (i>3) {
@@ -759,9 +773,20 @@ begvab:
 	      pay[i]=Data->P[plr].Rocket[i].MaxPay;
 	     }
 	    }
-		RectFill(127,88,160,92,3);
-		grSetColor(1);
-		DispMB(127,92,Data->P[plr].Cash);
+		//display cost (XX of XX)
+		hasDelay=0;
+		TotalCost=0;
+        hasDelay=ChkDelVab(plr,ccc);
+        if (hasDelay!=0) hasDelay=ChkVabRkt(plr,rk,&qty[0]);
+        TotalCost=FillVab(plr,ccc,0);
+        TotalCost+=BuyVabRkt(plr,rk,&qty[0],0);
+		RectFill(7,87,162,93,3);
+  		grSetColor(1); if (hasDelay==0 || TotalCost>Data->P[plr].Cash) grSetColor(9); //if cant buy (delay, cost>cash) ->red letters
+  		PrintAt(13,92,"AUTOPURCHASE (");
+  		DispNum(0,0,TotalCost);
+  		PrintAt(0,0," OF ");
+ 	 	DispMB(0,0,Data->P[plr].Cash);
+ 	    PrintAt(0,0,")");
 	   }
 	   else if (ac==0) Help("i135");  // delay on purchase
 	    else Help("i137");  // not enough money
@@ -776,7 +801,7 @@ begvab:
         if (key>0) delay(150);
 	      OutBox(177,185,242,195);
 				// Clear mission hardware
-	      for (i=Mission_Capsule; i<=Mission_PrimaryBooster; i++) 
+	      for (i=Mission_Capsule; i<=Mission_PrimaryBooster; i++)
 					Data->P[plr].Mission[mis].Hard[i]=0;
         goto begvab; /* CONTINUE/EXIT/DO NOTHING */
       }
@@ -816,7 +841,7 @@ begvab:
       }
       if (strncmp((char *)VAS[ccc][3].name,"NONE",4)!=0) {
         j++;
-        if  (((Data->P[plr].Probe[VAS[ccc][3].dex].Num-Data->P[plr].Probe[VAS[ccc][3].dex].Spok)>0) 
+        if  (((Data->P[plr].Probe[VAS[ccc][3].dex].Num-Data->P[plr].Probe[VAS[ccc][3].dex].Spok)>0)
             || ((Data->P[plr].Misc[VAS[ccc][3].dex].Num-Data->P[plr].Misc[VAS[ccc][3].dex].Spok)>0))
            j2++;
         }
@@ -832,7 +857,7 @@ begvab:
 	            Data->P[plr].Mission[mis].Hard[i]=VAS[ccc][i].dex;
               if (VAS[ccc][i].dex>=0) {
 	              switch(i) {
-		             case Mission_Capsule: 
+		             case Mission_Capsule:
 								 case Mission_LM:  // Manned+LM
 		               Data->P[plr].Manned[VAS[ccc][i].dex].Spok++;
 	                  break;
@@ -857,12 +882,28 @@ begvab:
     if ((x>=64 && y>=181 && x<=161 && y<=191 && mousebuttons>0) || key=='R')
      {
     	InBox(64,181,161,191);
-      #define Misdef(a)     Data->P[plr].Mission[(a)].MissionCode 
+      #define Misdef(a)     Data->P[plr].Mission[(a)].MissionCode
       rk++;
       if (rk>6) rk=0;
       if (((Misdef(mis)>=42 && Misdef(mis)<=57) || (Misdef(mis)>=7 && Misdef(mis)<=13)) && (rk==4 || rk==0))
         if (options.cheat_altasOnMoon==0) rk++;
-      
+        if (rk==4 && options.cheat_altasBoosters==0) rk++;
+
+		//display cost (XX of XX)
+		hasDelay=0;
+		TotalCost=0;
+        hasDelay=ChkDelVab(plr,ccc);
+        if (hasDelay!=0) hasDelay=ChkVabRkt(plr,rk,&qty[0]);
+        TotalCost=FillVab(plr,ccc,0);
+        TotalCost+=BuyVabRkt(plr,rk,&qty[0],0);
+		RectFill(7,87,162,93,3);
+  		grSetColor(1); if (hasDelay==0 || TotalCost>Data->P[plr].Cash) grSetColor(9); //if cant buy (delay, cost>cash) ->red letters
+  		PrintAt(13,92,"AUTOPURCHASE (");
+  		DispNum(0,0,TotalCost);
+  		PrintAt(0,0," OF ");
+ 	 	DispMB(0,0,Data->P[plr].Cash);
+ 	    PrintAt(0,0,")");
+
 	   ShowRkt(&Name[rk][0],sf[rk],qty[rk],pay[rk]<wgt,isDamaged[rk]);
 	   DispWts(cwt,pay[rk]);
 	   DispRck(plr,rk);
@@ -879,6 +920,20 @@ begvab:
 	   cwt=0;for (i=0;i<4;i++) cwt+=VAS[ccc][i].wt;
 	   ShowVA(ccc);DispWts(cwt,pay[rk]);
 	   DispVA(plr,ccc);
+	   //display cost (XX of XX)
+		hasDelay=0;
+		TotalCost=0;
+        hasDelay=ChkDelVab(plr,ccc);
+        if (hasDelay!=0) hasDelay=ChkVabRkt(plr,rk,&qty[0]);
+        TotalCost=FillVab(plr,ccc,0);
+        TotalCost+=BuyVabRkt(plr,rk,&qty[0],0);
+		RectFill(7,87,162,93,3);
+  		grSetColor(1); if (hasDelay==0 || TotalCost>Data->P[plr].Cash) grSetColor(9); //if cant buy (delay, cost>cash) ->red letters
+  		PrintAt(13,92,"AUTOPURCHASE (");
+  		DispNum(0,0,TotalCost);
+  		PrintAt(0,0," OF ");
+ 	 	DispMB(0,0,Data->P[plr].Cash);
+ 	    PrintAt(0,0,")");
 	   WaitForMouseUp();
       if (key>0) delay(100);
 	   OutBox(64,129,161,175);
@@ -917,7 +972,7 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
   GetMisType(mcode);
 
   VX=Mis.mVab[part];
-  
+
   for (i=0;i<7;i++)
     for (j=0;j<5;j++) {
       strcpy(&VAS[i][j].name[0],"NONE");
@@ -963,7 +1018,7 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
     VVals(plr,3,&Data->P[plr].Probe[2],2,11);
   }
   else if (VX == 0x60 && part==0) { // P:LM+SDM XX
-    LMAdd(plr,ext,-1,1); 
+    LMAdd(plr,ext,-1,1);
   }
   else if (VX == 0xe8 && part==0) { // P:LM+SDM+EVA XX
     LMAdd(plr,prog,-1,1);
@@ -1010,7 +1065,7 @@ void BuildVAB(char plr,char mis,char ty,char pa,char pr)
   }
 
   else if (VX == 0x81) { // P/S:CAP+KIC XX
-    if (prog==1 || prog==3) { 
+    if (prog==1 || prog==3) {
 	if (mcode !=52) {   ///Special Case EOR LM Test
       		VASqty++;
       		VVals(plr,1,&Data->P[plr].Misc[0],0,20);
@@ -1081,10 +1136,10 @@ void LMAdd(char plr,char prog,char kic,char part)
 
 void VVals(char plr,char tx,Equipment *EQ,char v4,char v5)
 {
-  strcpy(&VAS[VASqty][tx].name[0],&EQ->Name[0]); 
+  strcpy(&VAS[VASqty][tx].name[0],&EQ->Name[0]);
   VAS[VASqty][tx].qty=EQ->Num;
   VAS[VASqty][tx].ac=EQ->Spok;
-  VAS[VASqty][tx].wt=EQ->UnitWeight; 
+  VAS[VASqty][tx].wt=EQ->UnitWeight;
   if (tx==3 && v4==4 && AI[plr]==1) VAS[VASqty][tx].sf=EQ->MSF;
   else VAS[VASqty][tx].sf=EQ->Safety;
   VAS[VASqty][tx].dex=v4;VAS[VASqty][tx].img=v5;

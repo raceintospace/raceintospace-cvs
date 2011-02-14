@@ -68,7 +68,7 @@ int MChoice(char qty,char *Name)
 	SwapPatchHdr(&P);
 
 	fseek(in,P.offset,SEEK_SET);
-	GV(&local,P.w,P.h); 
+	GV(&local,P.w,P.h);
 	GV(&local2,P.w,P.h);
 	gxGetImage(&local2,0,0,P.w-1,P.h-1,0);
 	fread(local.vptr,P.size,1,in);
@@ -130,7 +130,7 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   int i,j,starty=100;
   GXHEADER local;
   FILE *fin=sOpen("PORTBUT.BUT","rb",0);
-  
+
   //FadeOut(2,pal,10,0,0);
 
   GV(&local,30,19);
@@ -149,7 +149,7 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   DV(&local);
 
   av_need_update_xy(23, starty, 60+22*15, starty+23*i);
-  
+
   // FadeIn(2,pal,10,0,0);
 	WaitForMouseUp();
   j=-1;
@@ -159,9 +159,9 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 	for (i=0;i<qty;i++) // keyboard stuff
 	   if ((char)key==Name[i*22])
 	{
-	  
+
 	  InBox(23,starty+23*i,54,starty+20+23*i);
-	  
+
 	  delay(50);
 	  j=i+1;key=0;
 	}
@@ -170,9 +170,9 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
 	if ((x>=23 && x<=54 && y>=starty+23*i && y<=starty+20+23*i) ||
 		(x>56 && y>starty+23*i && x<296 && y<starty+20+23*i))
 	{
-	  
+
 	  InBox(23,starty+23*i,54,starty+20+23*i);
-	  
+
 	  delay(50);
 	  j=i+1;
 	}
@@ -182,9 +182,9 @@ int BChoice(char plr,char qty,char *Name,char *Imx)  // Name[][22]
   return j;
 }
 
-void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff) 
+void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
 {
-    /* 
+    /*
      * XXX: HACK WARNING.  In my datafiles some Patch entries have
      * errors in widths. That causes malformed images, though the data
      * is there.  I corrected the problem here (look for do_fix).
@@ -220,13 +220,13 @@ void PatchMe(char plr,int x,int y,char prog,char poff,unsigned char coff)
   fclose(in);
   //RLED(buffer+20000,local.vptr,P.size);
     for (j = 0; j < P.size; j++)
-        if (local.vptr[j] != 0) 
+        if (local.vptr[j] != 0)
         {
             if (do_fix && ((j % P.w) + 1 == (unsigned char)P.w))
                 continue;
             local2.vptr[j] = local.vptr[j] + coff;
         }
-  
+
   gxPutImage(&local2,gxSET,x,y,0);
   DV(&local); DV(&local2);
   return;
@@ -254,7 +254,7 @@ AstFaces(char plr, int x, int y, char face)
 	GV(&local, 18, 15);
 	fread(local.vptr, 18 * 15, 1, fin);
 
-	
+
 	face_offset = ((int)(85+plr)) * sizeof(i32);
 	fseek(fin, face_offset, SEEK_SET);	// Get Helmet
 	fread(&offset, sizeof(long), 1, fin);
@@ -318,7 +318,7 @@ void SmHardMe(char plr,int x,int y,char prog,char planet,unsigned char coff)
   fclose(in);
   //RLED(buffer+20000,local.vptr,P.size);
     for (j = 0; j < P.size; j++)
-        if (local.vptr[j] != 0) 
+        if (local.vptr[j] != 0)
         {
             if (do_fix && ((j % P.w) + 1 == (unsigned char)P.w))
                 continue;
@@ -348,7 +348,7 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
   extern struct AnimType AHead;
   extern struct BlockHead BHead;
 
-  
+
    if (sh==0) {
       size=(plr*32)+(hw*8)+unit;
       in=sOpen("RDFULL.BUT","rb",0);
@@ -414,11 +414,11 @@ void BigHardMe(char plr,int x,int y,char hw,char unit,char sh,unsigned char coff
 	      if (local.vptr[j]!=0) local.vptr[j]-=(128-coff);
       }
       local.vptr[0]=0x00;
-      
+
       if (FADE==0) gxSetDisplayPalette(pal);
       gxVirtualDisplay(&local,0,0,x+1,y,x+102,y+76,0);
 	   //gxPutImage(&dply,mode,x,y,0);
-      
+
 
       DV(&local);
       fclose(fin);
@@ -481,7 +481,7 @@ int Help(char *FName)
   fread(&count,sizeof count,1,fin);
   fread(&Pul,sizeof Pul,1,fin);
 	Swap32bit(count);
-	
+
   i=0;
   while (xstrncasecmp(Pul.Code,FName,4)!=0 && i<count) {
      fread(&Pul,sizeof Pul,1,fin);
@@ -499,7 +499,7 @@ int Help(char *FName)
 
   // Process File
   i=0;j=0;line=0;fsize=1;
-  
+
   while(line<fsize) {
    if (Help[i]==0x3B) while(Help[i++]!=0x0a);  // Remove Comments
    else if (Help[i]==0x25) {  // Percent for line qty
@@ -600,13 +600,54 @@ int Help(char *FName)
       }  // Down
 
   }
-  
+
   gxPutImage(&local,gxSET,34,32,0);
   free(NTxt);
   DV(&local);
-  
+
   AL_CALL=0;
   return i;
+}
+
+void writePrestigeFirst(char index) { ///index==plr
+	char w=0,i,draw=0;
+	extern char PF[29][40];
+	 for (i=0;i<28;i++)
+	  {
+	   if (w<6 && Data->Prestige[i].Place==index && Data->PD[index][i]==0)
+		{
+			if (draw==0) {
+			ShBox(6,170,314,197);
+			RectFill(10,173,310,194,7);InBox(9,172,311,195);
+			ShBox(216,156,314,172);
+			RectFill(220,160,310,168,9);InBox(219,159,311,169);
+			RectFill(216,171,216,171,3);
+			RectFill(312,172,313,172,3);
+			grSetColor(11);
+			PrintAt(224,166,"PRESTIGE FIRSTS");
+			draw=1;
+			}
+			grSetColor(11);
+		   PrintAt( w>2?170:14,
+						w>2? 179+(w-3)*7:179+w*7,
+					 &PF[i][0]);
+		   ++w;
+		   Data->PD[index][i]=1;
+		   switch (i)
+		   {
+		   	case 8: if (Data->Prestige[9].Place==index && Data->PD[index][9]==0)
+		   				PrintAt(0,0,", E");
+			case 9: if (Data->Prestige[10].Place==index && Data->PD[index][10]==0)
+		   				PrintAt(0,0,", D");
+			case 10: if (Data->Prestige[11].Place==index && Data->PD[index][11]==0)
+		   				PrintAt(0,0,", C");
+			case 11: if (Data->Prestige[12].Place==index && Data->PD[index][12]==0)
+		   				PrintAt(0,0,", B");
+			case 12: i=12;
+			default: break;
+		   }
+		}
+	  }
 }
 
 
@@ -614,7 +655,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 {
   int j,k,mcode;
   int let;
-  
+
 
   if (mode==0) InBox(245,5,314,17);
 
@@ -653,7 +694,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
         PrintAt(0,0,"SECONDARY CREW DEAD");
       else if (Data->P[plr].History[index].spResult==4199)
         PrintAt(0,0,"BOTH CREWS DEAD");
-      else PrintAt(0,0,((Data->P[plr].History[index].spResult<500) || (Data->P[plr].History[index].spResult>=5000)) ? "SUCCESS" : 
+      else PrintAt(0,0,((Data->P[plr].History[index].spResult<500) || (Data->P[plr].History[index].spResult>=5000)) ? "SUCCESS" :
 	    (Data->P[plr].History[index].spResult<1999) ? "PARTIAL FAILURE" :
 	    (Data->P[plr].History[index].spResult==1999) ? "FAILURE" :
 	    (Data->P[plr].History[index].spResult<3000) ? "MISSION INJURY" :
@@ -676,7 +717,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
   InBox(214,55,310,116);
 
   AbzFrame(plr,index,215,56,94,60,"OOOO",mode);
-   
+
   IOBox(214,134,310,148);grSetColor(1);PrintAt(224,143,"REPLAY MISSION");
   if (mode==0) {
      IOBox(214,151,310,165);
@@ -709,8 +750,9 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 	    }
     }
 
-  }  
-  
+  }
+
+  writePrestigeFirst(plr);
 
   if (mode==1) {
      FadeIn(2,pal,10,0,0);
@@ -720,8 +762,8 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
   while(1) {
 	   GetMouse();
 	   if (mode==0 && ((x>=216 && y>=153 && x<=308 && y<=163 && mousebuttons==1) || (key==K_ENTER || key=='E')))
-	   { 
-	      InBox(216,153,308,153);OutBox(245,5,314,17); 
+	   {
+	      InBox(216,153,308,153);OutBox(245,5,314,17);
 	      WaitForMouseUp();
         if(key>0) delay(150);
 	      DrawMisHist(plr,where);
@@ -744,13 +786,13 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 	      InBox(216,136,308,146);
         if (mode==0) InBox(216,153,309,163);
         grSetColor(11);PrintAt(225,125,"PLAYING...");
-         
+
 	      WaitForMouseUp();
         grSetColor(1);
 
         if (x==0 && y==0) {
            FILE *tin;
-           
+
            tin=sOpen("REPL.TMP","wb",1); // Create temp image file
            fwrite(pal,sizeof pal,1,tin);
            fwrite(screen,64000,1,tin);
@@ -763,7 +805,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
              Data->P[plr].History[index].MissionCode==13)
             {
              if (Data->P[plr].History[index].Event==0 &&
-              Data->P[plr].History[index].spResult==1) 
+              Data->P[plr].History[index].spResult==1)
                switch(Data->P[plr].History[index].MissionCode)
                 {
                  case 10:Replay(plr,index,0,0,320,200,(plr==0) ? "WUM1" : "WSM1");break;
@@ -781,7 +823,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
            FadeIn(2,pal,10,0,0);
            key=0;
            remove_savedat("REPL.TMP");
-           
+
         }
         else {
           //Specs: Planetary Mission Klugge
@@ -808,7 +850,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
           if (mode==0) OutBox(216,153,309,163);
           RectFill(212,119,312,127,3);
           key=0;
-          
+
 	   }; // if
 
   }; // while

@@ -106,17 +106,21 @@ static struct {
 	{"no_backup", &options.feat_no_backup, "%u", 0,
 		"Set to zero to require assigning a Backup crew." },   // No Backup crew required -Leon
 	{"cheat_no_damage", &options.cheat_no_damage, "%u", 0,
-		"Set to non-zero to disable damaged equipment (Will prevent future damage)." },   
+		"Set to non-zero to disable damaged equipment (Will prevent future damage)." },
 	{"random_eq", &options.feat_random_eq, "%u", 0,
 		"Set to non-zero to enable random equipment Model (Will break game balance and possibly break the AI)." },
 	{"eq_name_change", &options.feat_eq_new_name, "%u", 0,
 		"Set to non-zero to be able to change equipment name when starting a new game." },
 	{"altasLunar", &options.cheat_altasOnMoon, "%u", 0,
 		"Set to non-zero to enable Altas rockets in lunar missions." },
+	{"succesRDMax", &options.cheat_addMaxS, "%u", 0,
+		"Set to non-zero to make sucessful mission add to R&D max Safety." },
+	{"atlasBoosters", &options.cheat_altasBoosters, "%u", 0,
+		"Set to non-zero to enable Boosters when using Atlas." },
 };
 
 /** prints the minimal usage information to stderr
- * 
+ *
  * \param fail sets the exit code
  */
 static void
@@ -192,10 +196,10 @@ parse_var_value(FILE * f, int index)
 	return 0;
 }
 
-/** read the config file 
- * 
- * 
- * 
+/** read the config file
+ *
+ *
+ *
  * \return -1 if the config file is unavailable
  */
 static int
@@ -346,10 +350,10 @@ fixpath_options(void)
 }
 
 /** read the commandline options
- * 
- * \return length of modified argv 
  *
- * \todo possibly maintain a list of dirs to search?? 
+ * \return length of modified argv
+ *
+ * \todo possibly maintain a list of dirs to search??
  */
 int
 setup_options(int argc, char *argv[])
@@ -390,6 +394,8 @@ setup_options(int argc, char *argv[])
 	options.feat_random_eq=0;
 	options.feat_eq_new_name =0;
 	options.cheat_altasOnMoon=0;
+	options.cheat_addMaxS=0;
+	options.cheat_altasBoosters=0;
 
 	fixpath_options();
 
@@ -473,7 +479,7 @@ setup_options(int argc, char *argv[])
 		shift_argv(argv + pos, argc - pos, 1);
 
 		/*
-		 * now we have one less arg, pos points to the next arg, 
+		 * now we have one less arg, pos points to the next arg,
 		 * keep it this way after incrementing it on top of the loop
 		 */
 		pos--;

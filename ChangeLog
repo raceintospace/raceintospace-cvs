@@ -1,3 +1,21 @@
+2011-02-14	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	* V255
+
+	* Fixed bug in the naut morale caluclations. Changed the penalty/bonus when crewmates are compatible
+
+	* Added Prestige First in Mission Review
+
+	* Viwing Stand now shows all missions, not just last 3
+
+	* VAB's Autopurchase now shows the price of the equipment
+
+	* Changed version to 1.0.0
+
+	* Removed Atlas Booster capacity (can be turned on in config file)
+
+	* Added Cheat to enable sucessful missions increase R&DMax
+
 2011-02-10	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V254
@@ -51,7 +69,7 @@
 	* V248
 
 	* start.c: Fixed a bug that prevent crews in 4-man capsule to be broken, even with dead or retired nauts ("Zombie crew bug")
- 
+
 	* prefs.c, options.c: Added Random Model, displayed only when randomize option is on
 
 2010-10-10	Nicolas Laplume <nikakd@users.sourceforge.net>
@@ -139,7 +157,7 @@
 
 	* V239
 
-	* crew.c: Screen where you assign 'nauts to crews now shows how many missions each crew 
+	* crew.c: Screen where you assign 'nauts to crews now shows how many missions each crew
 	member has flown only if >0 (to match other screens).
 
 	* radar.c: Launch pad now shows how many missions each crew member has flown only if >0.
@@ -157,7 +175,7 @@
 
 	* ast4.c: Capsule/Shuttle building now shows how many missions each crew member has flown if >0.
 
-	* crew.c: Screen where you assign 'nauts to crews now shows how many missions each crew 
+	* crew.c: Screen where you assign 'nauts to crews now shows how many missions each crew
 	member has flown.
 
 	* future.c: Future Missions screen now shows the date.
@@ -204,53 +222,53 @@
 
 	* V234
 
-	* ast4.c, ast2.c: In capsule/shuttle screen, and Astronaut Complex / Cosmonaut  
-	Center, the name of a 'naut who's announced retirement now shows in black.  Also 
-	in the 'Naut Complex/Center, the capsule/shuttle program names, and the names of 
-	the Adv. Training programs, are better centered in their respective buttons.  In 
-	the capsule/shuttle screen, MAX DURATION now shows Duration level after the number 
+	* ast4.c, ast2.c: In capsule/shuttle screen, and Astronaut Complex / Cosmonaut
+	Center, the name of a 'naut who's announced retirement now shows in black.  Also
+	in the 'Naut Complex/Center, the capsule/shuttle program names, and the names of
+	the Adv. Training programs, are better centered in their respective buttons.  In
+	the capsule/shuttle screen, MAX DURATION now shows Duration level after the number
 	of days: e.g., "14 DAYS (LVL E)" for Gemini.
 
-	* ast0.c, ast4.c: Female 'nauts now show in pale purple.  They used to show in  
-	that color during recruitment, then in orange in the select list in various 
-	screens (vs. the men in yellow), then in white in the capsule/shuttle window 
-	(indistinguishable from the men).  Now all three show women in pale purple.  Also 
-	in ast0.c, 'nauts who've announced retirement show in purple in the select list in 
-	various screens (black doesn't show well here).  In ast4.c, women who have announced 
+	* ast0.c, ast4.c: Female 'nauts now show in pale purple.  They used to show in
+	that color during recruitment, then in orange in the select list in various
+	screens (vs. the men in yellow), then in white in the capsule/shuttle window
+	(indistinguishable from the men).  Now all three show women in pale purple.  Also
+	in ast0.c, 'nauts who've announced retirement show in purple in the select list in
+	various screens (black doesn't show well here).  In ast4.c, women who have announced
 	retirement now show in black.
 
 	* crew.c: In the screen where you assign crews to a mission, the name of a 'naut
-	who's announced retirement shows in gray rather than white (black doesn't show 
-	well on a dark blue background).  Also the capsule/shuttle names are better 
+	who's announced retirement shows in gray rather than white (black doesn't show
+	well on a dark blue background).  Also the capsule/shuttle names are better
 	centered in their respective buttons.
 
-	* museum.c: In Astronaut/Cosmonaut History, now displays female 'nauts in pale 
-	purple instead of white.  Also shows "ASTRONAUT COMPLEX" and "COSMONAUT CENTER" 
-	rather than just "COMPLEX" and "CENTER", and rather than just a program name 
+	* museum.c: In Astronaut/Cosmonaut History, now displays female 'nauts in pale
+	purple instead of white.  Also shows "ASTRONAUT COMPLEX" and "COSMONAUT CENTER"
+	rather than just "COMPLEX" and "CENTER", and rather than just a program name
 	(e.g., "APOLLO") it now follows that with "PROGRAM" (e.g., "APOLLO PROGRAM").
 
 	* mis_c.c: Shows names of female 'nauts in pale purple rather than white.
 
-	* place.c: Shows names of female 'nauts in pale purple rather than yellow.  Also 
+	* place.c: Shows names of female 'nauts in pale purple rather than yellow.  Also
 	centered YES, NO, and REPLAY MISSION inside their buttons.
 
-	* news_suq.c: Fixed bug in newscast saying that Gemini/Voskhod capsules will cost 
-	2MB extra per spacecraft.  A typo had prevented it from having an effect (though 
+	* news_suq.c: Fixed bug in newscast saying that Gemini/Voskhod capsules will cost
+	2MB extra per spacecraft.  A typo had prevented it from having an effect (though
 	the equivalent newscast for Apollo/Soyuz did work).
 
 	* budget.c: Shows Duration level of Duration missions, and some better centerings.
 
 	* admin.c: Fixed typo "ENOUGHT".
 
-	* radar.c: Male 'nauts who have announced retirement now show in black, while women 
+	* radar.c: Male 'nauts who have announced retirement now show in black, while women
 	who've announced retirement now show in purple.  Also better centering of some text.
 
-	* newmis.c: Was displaying two spaces between month and year.  Also better centering 
+	* newmis.c: Was displaying two spaces between month and year.  Also better centering
 	of "SINGLE LAUNCH" and "JOINT LAUNCH".
 
 	* port.c: Changed it to add a question mark to "QUIT" "ARE YOU SURE" YES/NO.
 
-	* rdplex.c: Better centering of text in the "PURCHASE EQUIPMENT" and 
+	* rdplex.c: Better centering of text in the "PURCHASE EQUIPMENT" and
 	"R&D xx% IMPROVEMENT" buttons in R&D and Purchasing screens.
 
 	* prefs.c: Better centering of "COUNTRY" in the preferences screen.
@@ -268,14 +286,14 @@
 
 	* V233
 
-	* admin.c, newmis.c, rush.c, vab.c: Fixed bug that continued to show the Duration 
-	level of a scrubbed duration mission or of a lunar mission (lunar pass, orbital, or 
-	landing).  In rush.c, also fixed a bug that continued to show the Duration level of 
+	* admin.c, newmis.c, rush.c, vab.c: Fixed bug that continued to show the Duration
+	level of a scrubbed duration mission or of a lunar mission (lunar pass, orbital, or
+	landing).  In rush.c, also fixed a bug that continued to show the Duration level of
 	the original mission after it had been downgraded to remove the Duration step(s).
 
-	* radar.c: Now shows the crew number, e.g., "(CREW III)" above the names of the 
-	crew members in the launch pad screen.  Also fixed a tiny bug that displayed duration 
-	level on scrubbed missions--and on missions that had been downgraded to remove the 
+	* radar.c: Now shows the crew number, e.g., "(CREW III)" above the names of the
+	crew members in the launch pad screen.  Also fixed a tiny bug that displayed duration
+	level on scrubbed missions--and on missions that had been downgraded to remove the
 	duration step.  I noticed this bug when I found the bug above.
 
 	* crew.c: Added duration level to the screen where you assign crews to a mission.
@@ -292,15 +310,15 @@
 
 	* V232
 
-	* admin.c, newmis.c, rush.c, vab.c: These windows now show the Duration level of a 
+	* admin.c, newmis.c, rush.c, vab.c: These windows now show the Duration level of a
 	Duration mission, e.g.: ORBITAL-EX (B) instead of just ORBITAL-EX.
 
 2010-02-22	Leon Baradat <peyre@users.sourceforge.net>
 
 	* V231
 
-	* crew.c: When you're assigning crews to a mission, the crew members now display a 
-		  morale box next to them so you can see at a glance how your available 
+	* crew.c: When you're assigning crews to a mission, the crew members now display a
+		  morale box next to them so you can see at a glance how your available
 		  crews are doing morale-wise.
 
 2010-02-21	Leon Baradat <peyre@users.sourceforge.net>
@@ -308,7 +326,7 @@
 	* V230
 
 	* vab.c: When you click AUTOPURCHASE in VAB/VIB, it now updates the amount of cash
-		 the player has (i.e., it acknowledges that a purchase has been made). 
+		 the player has (i.e., it acknowledges that a purchase has been made).
 		 Also a few tiny changes to make things slightly better centered.
 
 2010-02-20	Leon Baradat <peyre@users.sourceforge.net>
@@ -317,15 +335,15 @@
 
 	* ast0.c: Refined AVOID FAILURE: YES/NO in the LM Program building
 
-	* ast3.c: Added a space between "BASIC TRAINING" and the level of training the 
+	* ast3.c: Added a space between "BASIC TRAINING" and the level of training the
 		  'nauts are currently in; it used to say "BASIC TRAININGI" and so on.
 
 	* vab.c: Updated VAB/VIB to show player's cash on hand
 
-	* port.c: Changed Soviet spaceport name from "BAIKONOUR" to "BAIKONUR", in line 
+	* port.c: Changed Soviet spaceport name from "BAIKONOUR" to "BAIKONUR", in line
 		  with transliteration changes made to 'naut roster
 
-	* radar.c: Corrected change I uploaded accidentally earlier today--set this file 
+	* radar.c: Corrected change I uploaded accidentally earlier today--set this file
 		   back the way it was before
 
 2010-02-20	Leon Baradat <peyre@users.sourceforge.net>
@@ -336,11 +354,11 @@
 
 	* rush.c: Centered the word ASSIGN in its button
 
-	* vab.c: Slightly centered the word ASSIGN in its button (moved it one unit 
+	* vab.c: Slightly centered the word ASSIGN in its button (moved it one unit
 		 to the left to put it in same coordinates as the one in rush.c)
 
-	* news_suq.c: Cosmetic change--it seemed more appropriate to replace 
-		      SCHLICKBERND with SHIBORIN and FARGOV with DOLGOV, rather than 
+	* news_suq.c: Cosmetic change--it seemed more appropriate to replace
+		      SCHLICKBERND with SHIBORIN and FARGOV with DOLGOV, rather than
 		      SCHLICKBERND with DOLGOV and FARGOV with SHIBORIN
 
 2010-02-15	Leon Baradat <peyre@users.sourceforge.net>
@@ -353,8 +371,8 @@
 
 	* V226
 
-	* ast4.c: in the screen where a program's crews are displayed, the skills 
-	needed by each crew member are now highlighted: the command pilot's CA 
+	* ast4.c: in the screen where a program's crews are displayed, the skills
+	needed by each crew member are now highlighted: the command pilot's CA
 	skill is now yellow instead of white, etc.
 
 	* ast4.c: corrected typo "COMPATABILITY"
@@ -368,7 +386,7 @@
 	* rdplex.c, proto.h: Reformat & document RDUnit and ManSelport.c: Changed Soviet spaceport name from "BAIKONOUR" to "BAIKONUR", in line with transliteration changes made to 'naut roster
 
 	* data.h: encode number of researchers (rolls) in Buy array
-	
+
 	* rdplex.c: add inline functions for encoding/decoding rolls
 
 	* news_suq.c (REvent): reformat code for "launch blocked" event
@@ -552,7 +570,7 @@
 	* V204
 
 	* Buzz_inc.h: added assert.h header
-	
+
 	* main.c: bugfix for #1817223, reverted changes from V178
 
 2007-11-02  Fabian S. <fabguy@users.sourceforge.net>
@@ -733,61 +751,61 @@
 2007-08-17  Will Glynn <will@lerfjhax.com>
 
 	* V184
-	
+
 	* endgame.c: victory music fixes
 
 	* V183
-	
+
 	* os_macosx/: build process now confirms the existence of midi/ in the data
 	directory, and excludes audio/music/ if present from the resulting .app
 
 2007-08-16	Will Glynn <will@lerfjhax.com>
 
 	* V182
-	
+
 	* music.h, music_vorbis.c, music_osx.c: Added music_set_mute()
-	
+
 	* prefs.c: calls music_set_mute() on mute change, rather than toggling the channel
 	directly
 
 	* V181
-	
+
 	* configure.in: bump to 0.4.6
-	
+
 	* music.h: replaced music API. music_start(track), music_stop() are the key calls.
 	No more preloading; computers are fast these days, and one call is cleaner than two.
-	
+
 	* music.c: removed
-	
+
 	* music_vorbis.c: plays Vorbis via SDL like music.c did, but with the new API, and
 	cleaner internals
-	
+
 	* music_osx.c: CoreMIDI implementation of common music API
-	
+
 	* sdl.c: now calls music_pump() in av_sync()
-	
+
 	* Makefile.in: reflects change from music to music_vorbis
-	
+
 	* os_macosx/: reflects change from music to music_osx, bundles race-data/midi/, and
 	builds .dmg files with the build number in the filename (e.g. 0.4.6.181.dmg)
-	
+
 	* introd.c, main.c: M_LIFTOFF now plays on game start or return to main menu
-	
+
 	* others: updated to use the new music API
-	
+
 2007-08-15	Will Glynn <will@lerfjhax.com>
 
 	* V180
-	
+
 	* os_macosx/: project now bundles Sparkle for automatic updates. Framework is
 	downloaded and extracted into os_macosx/vendor/ automatically as required.
 	Appcast-related scripts and documentation for distributing updates are accessible
 	in the Sourceforge group space.
-	
+
 	* os_macosx/: project now bundles SmartCrashReports. As with Sparkle, it's downloaded
 	and extracted automatically. Crash reports are collected and stored in the SF.net
 	_crash database, though nothing is done with them at the moment.
-	
+
 	* prest.c: fixed crash bug -- on OS X Intel, anyway -- where manned missions would
 	frequently overrun an array on the stack. This affected all platforms, and I don't
 	really know why it didn't crash on others.
@@ -804,23 +822,23 @@
 2007-08-09	Will Glynn <will@lerfjhax.com>
 
 	* V178
-	
+
 	* admin/main.c: fixed references to P[plr[n]], which can go out of bounds and crash
-	
+
 	* os_macosx/: project now builds Release as Universal Binaries (ppc/i386) and copies
 	version.c to a #define PACKAGE_BUILD
-	
+
 	* sdl.c: includes the build number in the title bar if defined
 
 2007-08-08	Will Glynn <will@lerfjhax.com>
 
 	* V177
-	
+
 	* intro.c: skips first two frames of intro, as neither company exists
-	
+
 	* os_macosx: now statically links against the new 'xiph' module -- output binaries
 	now have no outside dependencies (i.e. MacPorts/Fink)
-	
+
 	* DEVELOPER: updated OS X instructions to reflect 'xiph' module
 
 2007-08-07  Will Glynn <will@lerjhax.com>
@@ -832,7 +850,7 @@
 2007-08-07  Will Glynn <will@lerjfhax.com>
 
 	* V175
-	
+
 	* os_macosx: Re-worked OS X port: now builds straight from Xcode
 	(longer dependent on autoconf), supports Fink and DarwinPorts, uses
 	Cocoa to bootstrap SDL, embeds the data files inside the .app, and has
@@ -848,7 +866,7 @@
 
 	* main.c: added externs.h, removed declaration of palette, and changed
 	normal exit code to EXIT_SUCCESS
-	
+
 	* sdl.c: removed SDL icon calls under OS X, define surfaces in
 	multiples of MAX_X/MAX_Y
 
@@ -894,11 +912,11 @@
 	* os_win32/installer.nsi.in: update to current version, change icon
 
 2007-07-20  Pace Willisson  <pace@rhino.pacew.com>
-	
+
 	* V169
-	
+
 	* generate mkrpm and raceintospace.spec during autoconf
-	
+
 	* change version number to 0.4.2 since rpm doesn't like
 	dashes in version numbers
 
@@ -955,7 +973,7 @@
 
 	* V162
 
-	* New logging framework - tweaked log4c lite. 
+	* New logging framework - tweaked log4c lite.
 
 2007-05-05  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
 
@@ -1100,7 +1118,7 @@
 	* .gdbinit: Typo.
 
 	* TODO: Rewritten.
-	
+
 	* configure.in: Advanced bugfix number.
 
 2007-02-25  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
@@ -1147,13 +1165,13 @@
 2007-02-24  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V141
-	
+
 	* allow any key to end intro pictures, instead of just Escape
 
 	* I noted a few bugs at the top of the TODO file
 
 	* V140
-	
+
 	* bring rpm building up to date
 
 	* one of the main ideas is that a simple "make; make install" on
@@ -1161,10 +1179,10 @@
 	happens inside the rpm building process uses /usr
 
 	* here are the main changes:
-	
+
 	* add DESTDIR to makefile which allows "make install" to install
 	into a different tree than the program is compiled to run under
-	
+
 	* configure doesn't set @docdir@, so make the docdir Makefile
 	variable go under ${datadir}; similarly, configure doesn't set
 	@datarootdir@, so use ${datadir} for that too;
@@ -1191,9 +1209,9 @@
 	* In options.c, change SDL_getenv to getenv.  SDL_getenv is not
 	defined on my Fedora system, but it looks like the SDL will define
 	both of these symbols on systems that don't have native getenv.
-	
+
 	* remove aclocal.m4 in make distclean since it is a generated file
-	
+
 	* move mingw32 notes farther down in DEVELOPER, since
 	it probably won't be useful to anyone now that the cygwin
 	path is working
@@ -1488,17 +1506,17 @@
 	aclocal with "-I m4" params
 
 2007-02-06  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
-	
+
 	* V122
 
 	* From now on checkin2 will always check in Changelog and version.c
-	
+
 	* Factored out some common functionality in replay.c
 
 	* Changes in place.c finish the first step towards removing *.frm files
 
 2007-02-06  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
-	
+
 	* V121
 
 	* Quick fix for huge memory leak (5MB each turn) in news.c
@@ -1506,7 +1524,7 @@
 	* Fix in Makefile.in
 
 2007-02-06  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
-	
+
 	* V120
 
 	* Few fixes & improvements in configure.in & Makefile.in
@@ -1518,7 +1536,7 @@
 	* Small changes in audio init in sdl.c
 
 2007-02-05  Michael McCarty <k6mmc@users.sourceforge.net>
-	
+
 	* V119
 
 	* Changed the SDL related autoconf stuff
@@ -1607,14 +1625,14 @@
 
 	* various portability tweaks to get it to compile on Fedora core 5
 	again
-	
+
 	* it turns out strcasecmp is not all that standard, so convered
 	uses of it, strncasecmp, strcmpi and strncmpi to xstrcasecmp
 	and xstrncasecmp, written explicitly in pace.c
 
 	* strdup is also not in c99, so changed implementation of xstrdup
 	to avoid it
-	
+
 	* add note about how to run aclocal in DEVELOPER
 
 2007-01-23  Krzysztof Kosciuszkiewicz <drvee@users.sourceforge.net>
@@ -1646,7 +1664,7 @@
 	works now
 
 2007-01-18  Michael McCarty <k6mmc@users.sourceforge.net>
-	
+
 	* V105
 
 	* Removed replay.h, moved structures into data.h and spelled REPLAY correctly
@@ -1783,13 +1801,13 @@
 	* Removed all SetPal() calls in favor of just swapping the
 	palette in av_sync() where the pixel magic happens
 
-	* Replaced a bunch of locally defined structures as PatchHdr and 
+	* Replaced a bunch of locally defined structures as PatchHdr and
 	SimpleHdr and added the appropriate Endian swap.
 
 	* Moved endian related headers into endianness.h
 
 	* Replaced all endian related defines with __BIG_ENDIAN__
-	
+
 
 2007-01-14  Michael McCarty <k6mmc@users.sourceforge.net>
 
@@ -1837,9 +1855,9 @@
 
 	* MAC: Lots of stuff working now, right up to the launch of the missions
 
-	* Commented out a few assertions in gx.c, the params were valid and I'll 
+	* Commented out a few assertions in gx.c, the params were valid and I'll
 	have to recheck the assertion later
-	
+
 	* Modified checkin2 to show diffstat only and not include it in the checking comments
 
 2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
@@ -1877,17 +1895,17 @@
 
 	* Lots of additional cleanup in the Spaceport code and variable renaming
 	especially the very confusing PreOut. Renamed it to pPortOutlineRestore and
-	allocated it dynamically instead of having it tacked onto a buffer.  
+	allocated it dynamically instead of having it tacked onto a buffer.
 
 2007-01-12  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V82
 
-	* AdminPort and NPPort where almost the same.  I removed AdminPort() 
+	* AdminPort and NPPort where almost the same.  I removed AdminPort()
 	since it was used to paint the Spaceport under the Admin screen text
-	and kept NPPort (removing the fades) figuring it's the more accurate as 
-	it's the one that's actually used for the spaceport.  So renamed 
-	NPPort() to DrawSpaceport() and added fades around a call to 
+	and kept NPPort (removing the fades) figuring it's the more accurate as
+	it's the one that's actually used for the spaceport.  So renamed
+	NPPort() to DrawSpaceport() and added fades around a call to
 	DrawSpaceport() where calls to NPPort used to be.
 
 	* Removed a few 'return;' statements from the end of void functions.
@@ -2049,7 +2067,7 @@
 
 	* Made earlier changes unbreak the linux compile.  I should really start checking
 	this before I check things in.
-		
+
 2007-01-08  Michael McCarty <k6mmc@users.sourceforge.net>
 
 	* V61
@@ -2090,7 +2108,7 @@
 
 	* Modify configure.in and a few sources to check for __APPLE__
 	at compile time.  I'd like to work off a MACOSX define but couldn't
-	figure out how to get that defined from within the autoconf.  
+	figure out how to get that defined from within the autoconf.
 	__APPLE__ could theoretically include non OSX Mac's
 
 	* Modified configure.in to use sdl-config on mingw platform.
@@ -2098,22 +2116,22 @@
 2007-01-07  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V55
-	
+
 	* don't exit on CDAccess calls
 
 	* V54
-	
+
 	* basic support for cross compiling for windows; use autoconf
-	
+
 
 2007-01-06  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V53
-	
+
 	* protect against null pointer
 
 	* V52
-	
+
 	* automatically save game into "autosave.sav" every turn
 
 	* V51
@@ -2123,7 +2141,7 @@
 	text on admin screen
 
 	* V50
-	
+
 	* handle the situation where the video runs out before the
 	audio a little better
 
@@ -2150,7 +2168,7 @@
 	* Checked uninits in aipur.c and formatted code
 
 2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
-	
+
 	* V46
 
 	* verified XXX marked code in future.c
@@ -2172,7 +2190,7 @@
 	when we are falling behind on the newscaster animation and skip
 	frames to catch up; remove some dead code; add dbg() function
 	from libopus which prints nice timestamps on log messages; improve
-	animation handling in port.c so it doesn't waste so much cpu time; 
+	animation handling in port.c so it doesn't waste so much cpu time;
 
 2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
 
@@ -2201,7 +2219,7 @@
 	* Removed the macosx directory so there isn't false hope
 
 2007-01-03  Michael McCarty <k6mmc@users.sourceforge.net>
-	
+
 	* V39
 
 	* fixed some unitialized values
@@ -2219,21 +2237,21 @@
 	* allow videos to be skipped when viewing missions
 
 	* V36
-	
+
 	* make little screens work during launch
 
 	* V35
-	
+
 	* remove stubs that are no longer needed (now unimp() is gone);
 	remove modem and play by mail stuff until everything else works
 
 	* V34
-	
+
 	* hack around messed up crane image (search for fixing sImg) in
 	port.c
 
 	* V33
-	
+
 	* fix some NULL pointer problems in mc.c and prest.c
 
 	* V32
@@ -2241,11 +2259,11 @@
 	* enable gcc warning related to structured initializers
 
 	* V31
-	
+
 	* enable gcc warning about comparing signed and unsigned values
-		
+
 	* V30
-	
+
 	* enable gcc check for use of uninitialized local
 	variable - put in lots of comments like this:
 
@@ -2257,9 +2275,9 @@
 	traverse given other data constraints.  Future project:
 	look for all these comments and either fix any bugs present,
 	or remove the comment if the code is ok.
-	
+
 	* V29
-	
+
 	* add extra braces and parens so gcc's Wparentheses warning
 	will be useful.  I compiled the program before and after
 	these changes with no difference in the .o files, so the
@@ -2294,7 +2312,7 @@
 	* another block of unused locals
 
 	* V25
-	
+
 	* remove more unused locals
 
 	* V24
@@ -2309,33 +2327,33 @@
 	* added BARIS_ROOT envorinment variable so GAMEDAT and ROM assets
 	can exist on a local disk
 
-	* Removed definition of _ExceptInit(void) which was originally used to 
-	trim unused Borland C exception code and reduce code size 
+	* Removed definition of _ExceptInit(void) which was originally used to
+	trim unused Borland C exception code and reduce code size
 
 2007-01-02  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V22
-	
+
 	* remove remaining ems stuff; remove libopus references; fix
 	credits; re-enable water flowing
 
 	* V21
-	
+
 	* enable mission failures (and make command line arg to force all
 	to succeed again); allow jumbled arg order in draw/clear rectangle;
 	give symbolic names to xMODE flags (for cloud testing); failure
-	animation; data type size problem reading NTABLE.DAT; 
+	animation; data type size problem reading NTABLE.DAT;
 
 	* V20
-	
+
 	* remove deadwood
 
 	* V19
-	
+
 	* a few notes in README
 
 	* V18
-	
+
 	* improve finding files on cdrom; move savedat to ~/.raceintospace;
 	put music files in /usr/share/raceintospace/music
 
@@ -2346,21 +2364,21 @@
 	* clean up timers and frame rate; improve mouse click handling;
 	remove play by mail and modem choices; make flag waving and
 	water flowing work;
-	
+
 	* V16
-	
+
 	* remove unused files
 
 	* V15
-	
+
 	* add music
 
 	* V14
-	
+
 	* add audio to mission playback
 
 	* V13
-	
+
 	* make mission display work; fix up inter-frame delays in video;
 
 	* V12
@@ -2370,11 +2388,11 @@
 	in when waiting for input
 
 	* V11
-	
+
 	* fix display in VAB; some other helper programs
 
 	* V10
-	
+
 	* more pathname details
 
 	* V9
@@ -2382,9 +2400,9 @@
 	* pathname handling
 
 	* V8
-	
+
 	* PlaySequence, Replay
-	
+
 	* change "kill()" to "remove_savegame()"
 
 	* remove uses of SetROMDir, chdir, unlink
@@ -2392,7 +2410,7 @@
 2006-12-31  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V7
-	
+
 	* old bug: initialization of FList when looking for saved games
 
 	* frm decoding; first page of mission history screen (with
@@ -2401,11 +2419,11 @@
 2006-12-30  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V6
-	
+
 	* change many RLED to RLED_img
-	
+
 	* avoid segfaults due to NULL pointers
-	
+
 2006-12-29  Pace Willisson  <pace@rhino.pacew.com>
 
 	* V5

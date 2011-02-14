@@ -37,7 +37,7 @@ void DrawBudget(char player,char *pStatus)
   int i,j,max = 0,k,pscale;
   char name[20],str[10];
 
-  
+
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
   ShBox(0,0,319,47);ShBox(0,49,319,67);ShBox(0,69,158,199);
@@ -82,7 +82,7 @@ void DrawBudget(char player,char *pStatus)
 		DispNum(11,96,10);
 		DispNum(11,87,20);
 	}
-	else 
+	else
 	{
 		DispNum(6,122,-max);
 		DispNum(6,114,-max/2);
@@ -215,7 +215,7 @@ void DrawBudget(char player,char *pStatus)
   }
   DrawPastExp(player,pStatus);
   FadeIn(2,pal,10,0,0);
-  
+
   return;
 }
 
@@ -230,7 +230,7 @@ void BudPict(char poff)
   fread(&P,sizeof P,1,in);
 	SwapPatchHdrSmall(&P);
   fseek(in,P.offset,SEEK_SET);
-  GV(&local,P.w,P.h); 
+  GV(&local,P.w,P.h);
   fread(local.vptr,P.size,1,in);
   //RLED(buffer,local.vptr,P.size);
   gxPutImage(&local,gxSET,245,4,0);
@@ -243,7 +243,7 @@ void BudPict(char poff)
 	 fread(&P,sizeof P,1,in);
 	SwapPatchHdrSmall(&P);
 	 fseek(in,P.offset,SEEK_SET);
-	 GV(&local,P.w,P.h); 
+	 GV(&local,P.w,P.h);
 	 fread(local.vptr,P.size,1,in);
        //  RLED(buffer,local.vptr,P.size);
 	 gxPutImage(&local,gxSET,x,y,0);
@@ -326,40 +326,40 @@ void Budget(char player)
 	  if ((x>=133 && y>=140 && x<=152 && y<152 && mousebuttons>0) || key=='U')
 		{
 		 pStatus[0] = (pStatus[0]==0) ? 1 : 0;
-		 
+
 		 if (pStatus[0]==1) InBox(133,140,152,152);
 		   else OutBox(133,140,152,152);
-		 
+
 		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=154 && x<=152 && y<166 && mousebuttons>0) || key=='R')
 		{
 		 pStatus[1] = (pStatus[1]==0) ? 1 : 0;
-		 
+
 		 if (pStatus[1]==1) InBox(133,154,152,166);
 			else OutBox(133,154,152,166);
-		 
+
 		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=168 && x<=152 && y<180 && mousebuttons>0) || key=='C')
 		{
 		 pStatus[2] = (pStatus[2]==0) ? 1 : 0;
-		 
+
 		 if (pStatus[2]==1) InBox(133,168,152,180);
 			else OutBox(133,168,152,180);
-		 
+
 		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
 		}
 	 if ((x>=133 && y>=182 && x<=152 && y<194 && mousebuttons>0) || key=='M')
 		{
 		 pStatus[3] = (pStatus[3]==0) ? 1 : 0;
-		 
+
 		 if (pStatus[3]==1) InBox(133,182,152,194);
 			else OutBox(133,182,152,194);
-		 
+
 		 WaitForMouseUp();
 		 DrawPastExp(player,pStatus);
       }
@@ -367,42 +367,14 @@ void Budget(char player)
   };
 }
 
-void DrawViewing(char plr)
+void DrawPreviousMissions (char plr)
 {
-  int i,misnum;
-  extern char *Months[12];
-
-  
-  FadeOut(2,pal,10,0,0);
-  gxClearDisplay(0,0);
-  memset(buffer,0x00,BUFFER_SIZE);
-  ShBox(0,0,319,22);InBox(3,3,30,19);FlagSm(plr,4,4);
-  IOBox(243,3,316,19);
-
-  ShBox(0,24,319,95);
-  InBox(5,28,314,38);RectFill(6,29,313,37,7);
-  InBox(5,41,314,91);RectFill(6,42,313,90,0);
-
-  ShBox(0,97,319,199);
-  InBox(5,101,314,112);RectFill(6,102,313,111,10);
-  InBox(5,114,314,178);RectFill(6,115,313,177,0);
-  IOBox(4,182,77,196);IOBox(242,182,315,196);
-  LTArrow(24,186);RTArrow(262,186);
-  InBox(81,182,238,196);RectFill(82,183,237,195,7);
-  ShBox(302,116,312,145);UPArrow(304,118);
-  ShBox(302,147,312,176);DNArrow(304,149);
-
-  grSetColor(11);
-  PrintAt(82,35,"LAST THREE LAUNCHED MISSIONS");
-  PrintAt(106,108,"PAST CURRENT EVENTS");
-
-  grSetColor(1);PrintAt(258,13,"CONTINUE");
-  DispBig(45,5,"VIEWING STAND",0,-1);
-
-  i=Data->P[plr].PastMis-1;
-  misnum=0;
+	int i, misnum=0;
+	 extern char *Months[12];
+	InBox(5,41,314,91);RectFill(6,42,313,90,0);
+	i=Data->P[plr].PastMis-olderMiss;
   grSetColor(2);
-  while (i > (Data->P[plr].PastMis-4) && i>=0) {
+  while (i > (Data->P[plr].PastMis-olderMiss-3) && i>=0) {
 
      GetMisType(Data->P[plr].History[i].MissionCode);
 
@@ -434,8 +406,41 @@ void DrawViewing(char plr)
      grSetColor(1);
      PrintAt(9,49+16*misnum,"NO PAST MISSIONS REMAINING");
   }
+}
 
-  
+void DrawViewing(char plr)
+{
+
+  FadeOut(2,pal,10,0,0);
+  gxClearDisplay(0,0);
+  memset(buffer,0x00,BUFFER_SIZE);
+  ShBox(0,0,319,22);InBox(3,3,30,19);FlagSm(plr,4,4);
+  IOBox(243,3,316,19);
+
+  ShBox(0,24,319,95);
+  InBox(81,28,238,38);RectFill(82,29,237,37,7);
+  InBox(5,41,314,91);RectFill(6,42,313,90,0);
+
+  ShBox(0,97,319,199);
+  InBox(5,101,314,112);RectFill(6,102,313,111,10);
+  InBox(5,114,314,178);RectFill(6,115,313,177,0);
+  IOBox(4,182,77,196);IOBox(242,182,315,196);
+  LTArrow(24,186);RTArrow(262,186);
+  InBox(81,182,238,196);RectFill(82,183,237,195,7);
+  ShBox(302,116,312,145);UPArrow(304,118);
+  ShBox(302,147,312,176);DNArrow(304,149);
+
+  grSetColor(11);
+  PrintAt(113,35,"PREVIOUS MISSIONS");
+  PrintAt(106,108,"PAST CURRENT EVENTS");
+
+  grSetColor(1);PrintAt(258,13,"CONTINUE");
+  DispBig(45,5,"VIEWING STAND",0,-1);
+
+  DrawPreviousMissions (plr);
+  IOBox(4,26,77,40);IOBox(242,26,315,40); InBox(244,28,313,38);
+  LTArrow(24,30);RTArrow(262,30);
+
   return;
 }
 
@@ -457,7 +462,7 @@ void DrawVText(char got)
     if (strncmp(&buf[0],"PLANETARY",9)==0) grSetColor(11);
     if (strncmp(&buf[0],"CHECK INTEL",11)==0) grSetColor(11);
   }
-  
+
   for(i=0;i<8;i++) {
     RectFill(6,yy-4,300,yy+1,0);
     grMoveTo(xx,yy);
@@ -493,13 +498,13 @@ int RetFile(char plr,int card)
   bline=0;
   for (i=0;i<(int)strlen(buffer);i++) if (buffer[i]=='x') bline++;
   bline-=8;
-  
+
   RectFill(82,183,237,195,7);
   grSetColor(11);
   if ((card%2)==1) PrintAt(131,191,"FALL 19");
   else PrintAt(128,191,"SPRING 19");
   DispNum(0,0,(card>>1)+57);
-  
+
   return bline;
 }
 
@@ -548,11 +553,11 @@ void Viewing(char plr)
       oset--;
       bline=RetFile(plr,oset);
       ctop=0; DrawVText(ctop);
-      
+
 	    if (oset!=0) OutBox(6,184,75,194);
       bzdelay (DELAYCNT);
       OutBox(244,184,313,194);
-      
+
 	    // Left Select
       }
      else if (oset<maxcard && ((mousebuttons>0 && x>=244 && y>=184 && x<=313 && y<=194) || key==RT_ARROW)) {
@@ -560,11 +565,11 @@ void Viewing(char plr)
       oset++;
       bline=RetFile(plr,oset);
       ctop=0; DrawVText(ctop);
-      
+
 	    if (oset!=maxcard) OutBox(244,184,313,194);
       bzdelay (DELAYCNT);
       OutBox(6,184,75,194);
-      
+
       // Right Select
       }
 		else if ((mousebuttons>0 && x>=245 && y>=5 && x<=314 && y<=17) || key==K_ENTER || key==K_ESCAPE) {
@@ -573,8 +578,27 @@ void Viewing(char plr)
 	     //OutBox(245,5,314,17);
         music_stop();
 	     return;  // Continue
-       };
+       }
+		else if (key=='O' || (mousebuttons>0 && x>=6 && y>=28 && x<=75 && y<=38)) {
+			olderMiss++;
+			if (olderMiss>Data->P[plr].PastMis-2) olderMiss=Data->P[plr].PastMis-2;
+			if (olderMiss!=1)OutBox(244,28,313,38); //Boton Newer
+			InBox(6,28,75,38); //Botton Older
+      		// Debe dibujar la mission
+      		DrawPreviousMissions (plr);
+      		bzdelay (DELAYCNT);
+      		if (olderMiss!=Data->P[plr].PastMis-2) OutBox(6,28,75,38); //Boton Older
+			}
+		else if (key=='N' || (mousebuttons>0 && x>=244 && y>=28 && x<=313 && y<=38))  {
+			olderMiss--;
+			if (olderMiss<1) olderMiss=1;
+			if (olderMiss!=Data->P[plr].PastMis-2) OutBox(6,28,75,38); //Boton Older
+			InBox(244,28,313,38); //Botton Newer
+      		// Debe dibujar la mission
+      		DrawPreviousMissions (plr);
+      		bzdelay (DELAYCNT);
+      		if (olderMiss!=1)OutBox(244,28,313,38); //Boton Newer
+			}
   }
 }
-
 /* EOF */

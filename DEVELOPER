@@ -3,7 +3,7 @@
 0. Dependencies:
 
     libSDL      http://www.libsdl.org/
-    libogg      
+    libogg
     libvorbis
     libtheora   all available at http://xiph.org/downloads/
 
@@ -60,7 +60,7 @@
         Release.
     7)  Open race/os_macosx/RaceIntoSpace.xcodeproj and compile.
 
-4. Making RPM's 
+4. Making RPM's
 
 THIS SECTION (Making RPMs) NEEDS UPDATING
 
@@ -86,6 +86,10 @@ THIS SECTION (Making RPMs) NEEDS UPDATING
     2)  Edit file configure.mingw32
     3)  run ./configure.mingw32
     4)  make
+
+    Msys can also be used to build the game under Windows.
+    Once you have everything installed (libogg, libvorbis and libtheora must be made from source),
+    you should follow the Linux instructions (1) inside msys.
 
 6. CVS access
 

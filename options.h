@@ -10,14 +10,16 @@ typedef struct {
     unsigned want_cheats;
     unsigned want_debug;
     unsigned feat_shorter_advanced_training;
-    unsigned feat_random_nauts;  
-    unsigned feat_compat_nauts;  
-    unsigned feat_no_cTraining;  
-    unsigned feat_no_backup;  
-    unsigned cheat_no_damage;    
+    unsigned feat_random_nauts;
+    unsigned feat_compat_nauts;
+    unsigned feat_no_cTraining;
+    unsigned feat_no_backup;
+    unsigned cheat_no_damage;
     unsigned feat_random_eq;
     unsigned feat_eq_new_name;
     unsigned cheat_altasOnMoon;
+    unsigned cheat_addMaxS;
+    unsigned cheat_altasBoosters;
 } game_options;
 
 extern game_options options;
