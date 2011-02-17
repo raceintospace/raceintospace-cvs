@@ -30,12 +30,12 @@ extern char dg[62][6];
 extern char Option,MAIL,BIG;
 
 /** Function to compare two Missions
- * 
+ *
  * Orders by date and budget
- * 
+ *
  * \param
  * \param
- * 
+ *
  * \return -1 if first date earlier than second
  * \return 0 if date and budget are the same
  * \return 1 if first budget is lower than second
@@ -50,10 +50,15 @@ cmp_order(const void *p1, const void *p2)
         return -1;
     else if (o1->date == o2->date)
     {
-        if (o1->budget < o2->budget)
+        if (o1->budget > o2->budget)
             return -1;
-        else
-            return 0;
+        else if  (o1->budget == o2->budget)
+            {
+            	char whoFirst = random(2);
+            	if (whoFirst==1) return 1;
+            	else return -1;
+            }
+            else return 1;
     }
     else return 1;
 }
@@ -78,7 +83,7 @@ OrderMissions(void)
 				k++;
 			};
     if (k)
-        qsort(Order, k-1, sizeof(struct order), cmp_order);
+        qsort(Order, k, sizeof(struct order), cmp_order);
 
 	if (MAIL == -1 && Option == -1 && AI[0] == 0 && AI[1] == 0 && k != 0)
 		MisOrd(k);
@@ -88,7 +93,7 @@ OrderMissions(void)
 void MisOrd(char num)
 {
   int i,j=0;
-  
+
   ShBox(63,19,257,173);
   InBox(74,36,246,163);
   grSetColor(36);PrintAt(77,30,"       LAUNCH ORDER");
@@ -108,7 +113,7 @@ void MisOrd(char num)
     j++;
   };
   FadeIn(2,pal,10,0,0);
-  
+
   WaitForMouseUp();
 	WaitForKeyOrMouseDown();
 	WaitForMouseUp();
@@ -122,7 +127,7 @@ void MisAnn(char plr,char pad)
   struct mStr Mis2;
   char k,hold,Digit[4],HelpFlag=0;
   char pad_str[2] = {'A'+pad, '\0'};
-  
+
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
   gxClearDisplay(0,0);
@@ -164,9 +169,9 @@ void MisAnn(char plr,char pad)
   }
 
   PrintAt(127,54,Mis.Abbr);
-      int MisCod; 
-      MisCod=Data->P[plr].Mission[pad].MissionCode; 
-      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+      int MisCod;
+      MisCod=Data->P[plr].Mission[pad].MissionCode;
+      if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)
 	// Show duration level only on missions with a Duration step - Leon
        {
 	switch(Data->P[plr].Mission[pad].Duration)
@@ -178,8 +183,8 @@ void MisAnn(char plr,char pad)
 	 case 5:PrintAt(0,0," (E)");break;
 	 case 6:PrintAt(0,0," (F)");break;
 	 default:PrintAt(0,0,"");break;
-	}  
-       } 
+	}
+       }
 
   IOBox(57,68,118,84);IOBox(131,68,197,84);IOBox(205,68,266,84);
   grSetColor(1);PrintAt(65,78,"CONTINUE");PrintAt(139,78,"PLAY FULL");
@@ -193,7 +198,7 @@ void MisAnn(char plr,char pad)
   //PrintAt(102,78,"C");PrintAt(189,78,"S");
 
   if (Data->P[plr].Mission[pad].Joint==0) PrintAt(128,91,"SINGLE LAUNCH");
-    else 
+    else
      {
       PrintAt(131,91,"JOINT LAUNCH");
       PrintAt(49,101,"PART ONE");
@@ -223,12 +228,12 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
     hold = Data->P[plr].Mission[pad+i].Hard[j];
     switch(j)
      {
-      case 0:if (hold>-1) 
+      case 0:if (hold>-1)
 	       {
 		grSetColor(7);PrintAt(bud,109+14*k,"CAPSULE: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Manned[hold].Name[0]);
 		grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
      Data->P[plr].Manned[hold].Damage != 0? grSetColor(9):grSetColor(1); //Damaged Equipment, Nikakd, 10/8/10
-     sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety+Data->P[plr].Manned[hold].Damage);  
+     sprintf(&Digit[0],"%d",Data->P[plr].Manned[hold].Safety+Data->P[plr].Manned[hold].Damage);
      PrintAt(0,0,&Digit[0]);
      PrintAt(0,0,"%");
 	 //	PrintAt(144+i*111,116+14*k,"%");
@@ -244,11 +249,11 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
      PrintAt(0,0,&Digit[0]);
      PrintAt(0,0,"%");
     // DispNum(0,0,Data->P[plr].Misc[hold].Safety);
-	  //	PrintAt(144+i*111,116+14*k,"%");  
+	  //	PrintAt(144+i*111,116+14*k,"%");
 		++k;
 	       };
 	      break;
-       case 2:if (hold>-1)          
+       case 2:if (hold>-1)
 		{
 		 grSetColor(7);PrintAt(bud,109+14*k,"LM: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Manned[hold].Name[0]);
 		 grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
@@ -257,7 +262,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
       PrintAt(0,0,&Digit[0]);
       PrintAt(0,0,"%");
       //DispNum(0,0,Data->P[plr].Manned[hold].Safety);
-		 //PrintAt(144+i*111,116+14*k,"%");  
+		 //PrintAt(144+i*111,116+14*k,"%");
 		 ++k;
 		};
 	       break;
@@ -272,7 +277,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Probe[hold].Safety);
-		     //PrintAt(144+i*111,116+14*k,"%");  
+		     //PrintAt(144+i*111,116+14*k,"%");
 		     ++k;
 		    }
 		   else if (hold==4)
@@ -284,7 +289,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Misc[hold].Safety);
-		     //PrintAt(144+i*111,116+14*k,"%");    
+		     //PrintAt(144+i*111,116+14*k,"%");
 		     ++k;
 		    }
 		 };
@@ -300,10 +305,10 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
           PrintAt(0,0,&Digit[0]);
           PrintAt(0,0,"%");
           //DispNum(0,0,Data->P[plr].Rocket[hold-1].Safety);
-		     //PrintAt(144+i*111,116+14*k,"%");  
+		     //PrintAt(144+i*111,116+14*k,"%");
 		     ++k;
 		    }
-		  else 
+		  else
 		   {
 		    grSetColor(7);PrintAt(bud,109+14*k,"ROCKET: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Rocket[hold-5].Name[0]);PrintAt(0,0," W/B");
 		    grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
@@ -312,7 +317,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
          PrintAt(0,0,&Digit[0]);
          PrintAt(0,0,"%");
         // DispNum(0,0,(Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[4].Safety)/2);
-		   // PrintAt(144+i*111,116+14*k,"%");  
+		   // PrintAt(144+i*111,116+14*k,"%");
 		    ++k;
 		   }
 		 }
@@ -322,7 +327,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
    }
   }
   FadeIn(2,pal,10,0,0);
-  
+
 
   WaitForMouseUp();
   if (HelpFlag) Help("i156");  // Notification of being an Help
@@ -366,7 +371,7 @@ void AI_Begin(char plr)
   FILE *fin;
   long len[2];
 
-  
+
   for (i=0;i<768;i++) pal[i]=0;
   gxSetDisplayPalette(pal);
 
@@ -399,6 +404,6 @@ void AI_Done(void)
   music_stop();
   FadeOut(2,pal,10,0,0);
   memset(screen,0x00,64000);
-  
+
 }
 

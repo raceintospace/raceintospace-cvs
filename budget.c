@@ -31,6 +31,7 @@
 int MisCod;  // Variable to store Mission Code (for knowing when to display Duration level)
 
 extern struct mStr Mis;
+char olderMiss;
 
 void DrawBudget(char player,char *pStatus)
 {
@@ -511,6 +512,7 @@ int RetFile(char plr,int card)
 void Viewing(char plr)
 {
   int ctop,bline=0,oset,maxcard;
+  olderMiss=1;
   DrawViewing(plr);
   maxcard=oset=Data->P[plr].eCount-1;
   bline=RetFile(plr,oset);

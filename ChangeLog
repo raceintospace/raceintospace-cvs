@@ -1,3 +1,11 @@
+2011-02-17	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	* V256
+
+	* Fixed bug in the order of the missions in 2-players games
+
+	* Readded Atlas/R7 Booster capacity (removed option to turn it off)
+
 2011-02-14	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V255
