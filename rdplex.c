@@ -127,7 +127,7 @@ void DrawRD(char player_index)
   int i;
   FILE *fin;
   strcpy(IDT,"i009");strcpy(IKEY,"k009");
-  
+
   FadeOut(2,pal,10,0,0);
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin); fclose(fin);
@@ -188,14 +188,14 @@ void DrawRD(char player_index)
   FlagSm(player_index,4,4);
   QueryUnit(1,1,player_index);
   ShowUnit(1,1,player_index);
-  
+
   return;
 } // End of DrawRD
 
 
 void BButs(char old,char nw)
 {
-  
+
   switch(old) {
     case 1:OutBox(7,29,75,60);
 	   gxVirtualDisplay(&but,0,0,8,30,74,59,0);  // Unmanned
@@ -225,7 +225,7 @@ void BButs(char old,char nw)
 	   break;
   }
 
-  
+
   return;
 }
 
@@ -288,7 +288,7 @@ char RD(char player_index)
   {
     key=0;GetMouse();
     if (mousebuttons>0 || key>0)
-     {if ((x>=295 && y>=90 && x<=312 && y<=100) || key=='F')
+     {if ((x>=283 && y>=90 && x<=302 && y<=100) || key=='F')
 	{
 	char EqDmg=0;
 	switch (hardware-1)
@@ -298,7 +298,7 @@ char RD(char player_index)
 		case 2: EqDmg=Data->P[player_index].Manned[unit-1].Damage!=0?1:0; break;
 		case 3: EqDmg=Data->P[player_index].Misc[unit-1].Damage!=0?1:0; break;
 		default: break; }
-	if (EqDmg) {	InBox(295,90,312,100);
+	if (EqDmg) {	InBox(283,90,302,100);
 			DamProb(player_index,hardware-1,unit-1);
 			DrawRD(player_index);
 			BButs(1,hardware);
@@ -481,7 +481,7 @@ char RD(char player_index)
 	    wh=HPurc(player_index);
 	    if (call==0) return 0;
 	    hardware=HARD1;unit=UNIT1;
-	    call=0; 
+	    call=0;
 	    for(i=0;i<4;i++) for(j=0;j<7;j++) buy[i][j]=Data->P[player_index].Buy[i][j];
 	    DrawRD(player_index);
       //DM Screen, Nikakd, 10/8/10 (Removed line)
@@ -525,20 +525,20 @@ char QueryUnit(char hardware_index,char unit_index,char player_index)
 {
   char enableButton = 0;
 
-  enableButton = 
+  enableButton =
       ((hardware_index==1 && (Data->P[player_index].Probe[unit_index-1].Num != PROGRAM_NOT_STARTED)) ||
-      (hardware_index==2 && (Data->P[player_index].Rocket[unit_index-1].Num != PROGRAM_NOT_STARTED)) || 
+      (hardware_index==2 && (Data->P[player_index].Rocket[unit_index-1].Num != PROGRAM_NOT_STARTED)) ||
       (hardware_index==3 && (Data->P[player_index].Manned[unit_index-1].Num != PROGRAM_NOT_STARTED)) ||
       (hardware_index==4 && (unit_index!=5 && Data->P[player_index].Misc[unit_index-1].Num != PROGRAM_NOT_STARTED)));   //DM Screen, Nikakd, 10/8/10
-  
+
   if (IsHumanPlayer(player_index))
   {
-    if (enableButton) 
+    if (enableButton)
       OutBox(165,184,315,194);
-    else 
+    else
       InBox(165,184,315,194);
   }
-  
+
   return(enableButton);
 }
 
@@ -576,7 +576,7 @@ RDUnit(char hardwareTypeIndex, char hardwareIndex, char nRolls, char playerIndex
 	assert (hardwareTypeIndex <= 4);
 	assert (hardwareIndex >= 1);
 	assert (hardwareIndex <= 8);
-   
+
 	eq = &eqArr[hardwareTypeIndex - 1][hardwareIndex - 1];
 
 	diceRoll = 0;
@@ -604,9 +604,9 @@ void ShowUnit(char hw,char un,char player_index)
    case 3: PL=(Equipment *)&Data->P[player_index].Manned[un-1].Name[0];break;
    case 4: PL=(Equipment *)&Data->P[player_index].Misc[un-1].Name[0];break;
    }
-  
+
   grSetColor(1);
-  
+
   RectFill(162,69,318,154,3);RectFill(200,9,238,21,3);
   grSetColor(1);
   PrintAt(170,97,"INITIAL COST:");
@@ -625,7 +625,7 @@ void ShowUnit(char hw,char un,char player_index)
 	case 2: EqDmg=Data->P[player_index].Manned[un-1].Damage!=0?1:0; break;
 	case 3: EqDmg=Data->P[player_index].Misc[un-1].Damage!=0?1:0; break;
 	default: break; }
-	if (EqDmg!=0) {IOBox(293,88,314,102); grSetColor(8); PrintAt(296,97,"F");grSetColor(11); PrintAt(0,0,"IX");}
+	if (EqDmg!=0) {IOBox(281,88,304,102); grSetColor(8); PrintAt(285,97,"F");grSetColor(11); PrintAt(0,0,"IX");}
 
   SCol=(PL->Num<0) ? 20 : ((PL->Safety<75) ? 8 : 16);
   grSetColor(SCol);PrintAt(170,111,"SAFETY FACTOR:");
@@ -700,7 +700,7 @@ void ShowUnit(char hw,char un,char player_index)
     };
   RectFill(27,95,130,171,0);
   BigHardMe(player_index,27,95,hw-1,un-1,qty,32);
-  
+
   return;
 }
 
@@ -716,7 +716,7 @@ void OnHand(char qty)
 void DrawHPurc(char player_index)
 {
   FILE *fin;
-  
+
   FadeOut(2,pal,10,0,0);
   fin=sOpen("VAB.IMG","rb",0);
   fread(&pal[0],768,1,fin);
@@ -771,7 +771,7 @@ void DrawHPurc(char player_index)
   grSetColor(1);PrintAt(258,13,"CONTINUE");
   ShowUnit(1,1,player_index);
   strcpy(IDT,"i008");strcpy(IKEY,"k008");
-  
+
   return;
 }
 
@@ -791,7 +791,7 @@ char HPurc(char player_index)
   BButs(1,hardware);
   ShowUnit(hardware,unit,player_index);
 
-  //Specs: undo fix 
+  //Specs: undo fix
   //memset(vhptr.vptr,0x00,64000);
   //memcpy(vhptr.vptr,Data,sizeof(struct Players));
 
@@ -801,7 +801,7 @@ char HPurc(char player_index)
   while (1)
   {
     key=0;GetMouse();
-	if ((x>=295 && y>=90 && x<=312 && y<=100 && mousebuttons>0) || key=='F')
+	if ((x>=283 && y>=90 && x<=302 && y<=100 && mousebuttons>0) || key=='F')
 	{
 	char EqDmg=0;
 	switch (hardware-1)
@@ -811,7 +811,7 @@ char HPurc(char player_index)
 		case 2: EqDmg=Data->P[player_index].Manned[unit-1].Damage!=0?1:0; break;
 		case 3: EqDmg=Data->P[player_index].Misc[unit-1].Damage!=0?1:0; break;
 		default: break; }
-	if (EqDmg) {	InBox(295,90,312,100);
+	if (EqDmg) {	InBox(283,90,302,100);
 			DamProb(player_index,hardware-1,unit-1);
 			strcpy(IDT,"i008");strcpy(IKEY,"k008");
   			DrawHPurc(player_index);
@@ -864,7 +864,7 @@ char HPurc(char player_index)
 	     ShowUnit(hardware,unit,player_index);
 	    }
      }
-     else 
+     else
      if ((x>=5 && y>=184 && x<=74 && y<=194 && mousebuttons>0) || key==LT_ARROW) /* LEFT ARROW */
       {
 	    InBox(5,184,74,194);

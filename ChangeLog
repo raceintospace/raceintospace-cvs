@@ -1,3 +1,13 @@
+2011-02-20	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	* V257
+
+	* Fixed bug in some failures in Lunar Missions (from V252)
+
+	* place.c: Changed the Prestige First screen in Mission Review to show also Prestige Seconds
+
+	* prest.c: Reduced penalty in manned missions when no-one dies to -7
+
 2011-02-17	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V256

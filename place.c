@@ -613,7 +613,7 @@ void writePrestigeFirst(char index) { ///index==plr
 	char w=0,i,draw=0;
 	extern char PF[29][40];
 	 for (i=0;i<28;i++)
-	  {
+	  { //Preestige First
 	   if (w<6 && Data->Prestige[i].Place==index && Data->PD[index][i]==0)
 		{
 			if (draw==0) {
@@ -635,17 +635,54 @@ void writePrestigeFirst(char index) { ///index==plr
 		   Data->PD[index][i]=1;
 		   switch (i)
 		   {
-		   	case 8: if (Data->Prestige[9].Place==index && Data->PD[index][9]==0)
-		   				PrintAt(0,0,", E");
+		   	case 8:	if (Data->Prestige[9].Place==index && Data->PD[index][9]==0)
+		   				{PrintAt(0,0,", E"); Data->PD[index][9]=1;}
 			case 9: if (Data->Prestige[10].Place==index && Data->PD[index][10]==0)
-		   				PrintAt(0,0,", D");
-			case 10: if (Data->Prestige[11].Place==index && Data->PD[index][11]==0)
-		   				PrintAt(0,0,", C");
-			case 11: if (Data->Prestige[12].Place==index && Data->PD[index][12]==0)
-		   				PrintAt(0,0,", B");
+		   				{PrintAt(0,0,", D"); Data->PD[index][10]=1;}
+			case 10:if (Data->Prestige[11].Place==index && Data->PD[index][11]==0)
+		   				{PrintAt(0,0,", C"); Data->PD[index][11]=1;}
+			case 11:if (Data->Prestige[12].Place==index && Data->PD[index][12]==0)
+		   				{PrintAt(0,0,", B"); Data->PD[index][12]=1; i=11;}
 			case 12: i=12;
 			default: break;
 		   }
+		}
+	  }
+	 for (i=0;i<28;i++)
+	  { //Prestige Seconds
+	   if (w<6 && Data->Prestige[i].mPlace==index && Data->PD[index][i]==0)
+		{
+			if (draw==0) {
+			ShBox(6,170,314,197);
+			RectFill(10,173,310,194,7);InBox(9,172,311,195);
+			ShBox(216,156,314,172);
+			RectFill(220,160,310,168,9);InBox(219,159,311,169);
+			RectFill(216,171,216,171,3);
+			RectFill(312,172,313,172,3);
+			grSetColor(11);
+			PrintAt(224,166,"PRESTIGE FIRSTS");
+			draw=1;
+			}
+			grSetColor(11);
+		   PrintAt( w>2?170:14,
+						w>2? 179+(w-3)*7:179+w*7,
+					 &PF[i][0]);
+		   ++w;
+		   Data->PD[index][i]=1;
+		   switch (i)
+		   {
+		   	case 8:	if (Data->Prestige[9].mPlace==index && Data->PD[index][9]==0)
+		   				{PrintAt(0,0,", E"); Data->PD[index][9]=1;}
+			case 9: if (Data->Prestige[10].mPlace==index && Data->PD[index][10]==0)
+		   				{PrintAt(0,0,", D"); Data->PD[index][10]=1;}
+			case 10:if (Data->Prestige[11].mPlace==index && Data->PD[index][11]==0)
+		   				{PrintAt(0,0,", C"); Data->PD[index][11]=1;}
+			case 11:if (Data->Prestige[12].mPlace==index && Data->PD[index][12]==0)
+		   				{PrintAt(0,0,", B"); Data->PD[index][12]=1; i=11;}
+			case 12: i=12;
+			default: break;
+		   }
+		   PrintAt(0,0," (SCD)");
 		}
 	  }
 }

@@ -37,7 +37,7 @@ void Set_Dock(char plr, char total)
 {
   int i;
   for (i=0;i<total;i++) {
-   if (Mev[i].loc==8 && Mev[i].StepInfo==1) 
+   if (Mev[i].loc==8 && Mev[i].StepInfo==1)
      {Data->Prestige[24].Goal[plr]++;return;};
    }
   return;
@@ -101,7 +101,7 @@ int
 PrestMap(int val)
 {
 	switch (val) {
-		case ORBSAT: 
+		case ORBSAT:
 			return MILE_OSAT;
 		case MANSPACE:
 			return MILE_MAN;
@@ -172,7 +172,7 @@ PrestMin(char plr)
 
 
 /** Returns the amount of prestige added
- * 
+ *
  * \note Assumes that the Mis Structure is Loaded
  */
 int PrestCheck(char plr)
@@ -186,19 +186,19 @@ int PrestCheck(char plr)
     if (tm!=-1 && Data->Prestige[tm].Goal[plr]==0) { // First Mission Bonus
       if (Data->Prestige[tm].Goal[other(plr)]==0 && tm<27)
 	total+=Data->Prestige[tm].Add[0];     // your first
-      else total+=Data->Prestige[tm].Add[1];  // your second 
+      else total+=Data->Prestige[tm].Add[1];  // your second
     }
   }
 
   if (Mis.Doc==1 && Data->Prestige[24].Goal[plr]==0) {
     if (Data->Prestige[24].Goal[other(plr)]==0)
       total+=Data->Prestige[24].Add[0];      // your first
-    else total+=Data->Prestige[24].Add[1];   // your second 
+    else total+=Data->Prestige[24].Add[1];   // your second
   }
 
   if (Mis.EVA==1 && Data->Prestige[26].Goal[plr]==0) {
     if (Data->Prestige[26].Goal[other(plr)]==0)
-      total+=Data->Prestige[26].Add[0];     // your first 
+      total+=Data->Prestige[26].Add[0];     // your first
     else total+=Data->Prestige[26].Add[1];  // your second
   }
 
@@ -211,7 +211,7 @@ int PrestCheck(char plr)
       total+=Data->Prestige[14-Mis.Days].Add[0];
     else if (Mis.Days==3 && Data->Prestige[14-Mis.Days].Goal[plr]==0)
       total+=Data->Prestige[14-Mis.Days].Add[0];
-    else if (Mis.Days==2 && Data->Prestige[14-Mis.Days].Goal[plr]==0) 
+    else if (Mis.Days==2 && Data->Prestige[14-Mis.Days].Goal[plr]==0)
       total+=Data->Prestige[14-Mis.Days].Add[0];
   }
 
@@ -245,12 +245,12 @@ int PrestCheck(char plr)
 /** ???
  *
  * \deprecated
- * 
- * \note Requires MEV to be packed 
- * Only checks goal steps :: 
- * returns GOAL value 
+ *
+ * \note Requires MEV to be packed
+ * Only checks goal steps ::
+ * returns GOAL value
  * Does not check if entire mission is a success
- * 
+ *
  */
 char Was_Goal(char total,char which)
 {
@@ -270,7 +270,7 @@ char Was_Goal(char total,char which)
       case DOCK:val=8;break;             // Docking
       case EWALK:val=7;break;     // E EVA
       case LWALK:val=15;break;    // L EVA
-      case -1: 
+      case -1:
 			default:
 					return -1;
       }
@@ -346,7 +346,7 @@ char Set_Goal(char plr,char which,char control)
         if (Option==1)
          {
           pd=Mev[0].pad;
-          qt=MP[pd].Qty; 
+          qt=MP[pd].Qty;
           MP[pd].HInd=Data->P[1].PastMis;
           MP[pd].Poss[qt]=which;
           MP[pd].PossVal[qt]=0;
@@ -355,14 +355,14 @@ char Set_Goal(char plr,char which,char control)
          }
         else if (MAIL==0) {
           pd=Mev[0].pad;
-          qt=Data->P[0].Udp[pd].Qty; 
+          qt=Data->P[0].Udp[pd].Qty;
           Data->P[0].Udp[pd].HInd=Data->P[0].PastMis;
           Data->P[0].Udp[pd].Poss[qt]=which;
           Data->P[0].Udp[pd].PossVal[qt]=0;
           Data->P[0].Udp[pd].Mnth=tMo;
           ++Data->P[0].Udp[pd].Qty;
          }
-        else 
+        else
          {
           Data->Prestige[which].Place=plr;
           Data->Prestige[which].Indec=Data->P[plr].PastMis;
@@ -409,7 +409,7 @@ char Set_Goal(char plr,char which,char control)
             default: break;
           };
         }
-     }   
+     }
       else if (Data->Prestige[which].mPlace==-1 && Data->Prestige[which].Place!=plr){
 	     Data->P[plr].Other|=4;  // for astros
 
@@ -472,7 +472,7 @@ char Set_Goal(char plr,char which,char control)
    Data->P[plr].History[Data->P[plr].PastMis].Duration=4;
 
   switch(which) {
-    case ORBSAT: return(sum); 
+    case ORBSAT: return(sum);
     case MANSPACE:return(sum);
     case EORBIT:return(sum+Set_Goal(plr,ORBSAT,1));
     case LUNFLY:return(sum+Set_Goal(plr,EORBIT,1));
@@ -498,7 +498,7 @@ char Set_Goal(char plr,char which,char control)
 }
 
 /** Only sets negative for highest failed goal step
- * 
+ *
  * checks if entire mission was a failure
  */
 char Did_Fail(void)
@@ -533,7 +533,7 @@ int MaxFail(void)
       ++count;
     }
  if (count>=54) return 1; else return t;
-}       
+}
 
 #define PSTS(a)  (PVal[a]==1 || PVal[a]==2)
 #define NSTS(a)  (PVal[a]==4)
@@ -608,7 +608,7 @@ int AllotPrest(char plr,char mis)
    tYr=Data->Year;
    tIDX=bIDX=0;
    memset(PVal,0x00,sizeof PVal);
-   
+
    // SETUP INFO
    mcode=Data->P[plr].Mission[mis].MissionCode;
 
@@ -629,24 +629,24 @@ int AllotPrest(char plr,char mis)
 
    // FEMALE 'NAUTS
      PVal[25]= (MA[0][0].A!=NULL && MA[0][0].A->Sex)
-        || (MA[0][1].A!=NULL && MA[0][1].A->Sex) 
-        || (MA[0][2].A!=NULL && MA[0][2].A->Sex) 
+        || (MA[0][1].A!=NULL && MA[0][1].A->Sex)
+        || (MA[0][2].A!=NULL && MA[0][2].A->Sex)
         || (MA[0][3].A!=NULL && MA[0][3].A->Sex)
         || (MA[1][0].A!=NULL && MA[1][0].A->Sex)
-        || (MA[1][1].A!=NULL && MA[1][1].A->Sex) 
-        || (MA[1][2].A!=NULL && MA[1][2].A->Sex) 
+        || (MA[1][1].A!=NULL && MA[1][1].A->Sex)
+        || (MA[1][2].A!=NULL && MA[1][2].A->Sex)
         || (MA[1][3].A!=NULL && MA[1][3].A->Sex);
 
    for (i=0;i<STEPnum;i++) {
       ival=abs(Mev[i].Prest);
       cval=Mev[i].PComp;
-			
+
 			// ival of 100 seems to mean "don't record this in PVal[]"
 			// Regardless of intention, it's out of bounds, so don't access or overwrite it
 			if (ival != 100) {
 				if (Mev[i].StepInfo==0 && PVal[ival]==0)
 					cval=4;
-				
+
 				if (PVal[ival]!=4)
 					PVal[ival]=cval;
 			}
@@ -743,7 +743,7 @@ int AllotPrest(char plr,char mis)
       //    total+=Set_Goal(plr,27,0);
       }
 
-   // GOAL NEGATIVE 
+   // GOAL NEGATIVE
    if (N_Goal!=-1) {
      negs+=PrestNeg(plr,N_Goal);
      PVal[N_Goal]=0;
@@ -752,7 +752,7 @@ int AllotPrest(char plr,char mis)
    if (mcode==32 || mcode==36) PVal[23]=Check_Lab();
 
    // TOTAL ALL MISSION FIRSTS
-   for (i=0;i<28;i++) 
+   for (i=0;i<28;i++)
       if (PVal[i]==1 || (PVal[i]==2 && other<3000))
          total+=(char) Set_Goal(plr,i,0);
       //else if (PVal[i]==4) negs+=Set_Goal(plr,i,0);
@@ -786,7 +786,7 @@ int AllotPrest(char plr,char mis)
       // SET SUBSEQUENT Goal
       if (S_Goal!=-1 && other<3000) total=Set_Goal(plr,S_Goal,0);
 
-      for (i=0;i<28;i++) 
+      for (i=0;i<28;i++)
          if (PVal[i]==1 || (PVal[i]==2 && other<3000))
             total+=(char) Set_Goal(plr,i,0);
          else if (PVal[i]==3) Set_Goal(plr,i,0);
@@ -798,6 +798,8 @@ int AllotPrest(char plr,char mis)
 
    // ADD IN NEGATIVES AND RETURN MIN of -10
    total=((total+negs) < -10) ? -10 : total+negs;
+
+   if (!death && total==-10) total = -7;
 
    return total;
 }
@@ -823,7 +825,7 @@ int Find_MaxGoal(void)
    int i,ival,cval;
    char PVal[28];
    memset(PVal,0x00,sizeof PVal);
-   
+
    for (i=0;i<STEPnum;i++) {
       ival=abs(Mev[i].Prest);
       cval=Mev[i].PComp;
@@ -866,7 +868,7 @@ int U_AllotPrest(char plr,char mis)
          case 12: i=5;break;
          case 13: i=6;break;
          }
-  
+
 
       if (other==1) {
         if (mcode==10 || mcode==12 || mcode==13) return 0;
