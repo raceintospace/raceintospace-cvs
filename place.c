@@ -682,7 +682,7 @@ void writePrestigeFirst(char index) { ///index==plr
 			case 12: i=12;
 			default: break;
 		   }
-		   PrintAt(0,0," (SCD)");
+		   PrintAt(0,0," (2ND)");
 		}
 	  }
 }

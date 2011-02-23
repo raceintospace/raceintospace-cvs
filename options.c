@@ -115,8 +115,6 @@ static struct {
 		"Set to non-zero to enable Altas rockets in lunar missions." },
 	{"succesRDMax", &options.cheat_addMaxS, "%u", 0,
 		"Set to non-zero to make sucessful mission add to R&D max Safety." },
-	{"atlasBoosters", &options.cheat_altasBoosters, "%u", 0,
-		"Set to non-zero to enable Boosters when using Atlas." },
 };
 
 /** prints the minimal usage information to stderr
@@ -395,7 +393,6 @@ setup_options(int argc, char *argv[])
 	options.feat_eq_new_name =0;
 	options.cheat_altasOnMoon=0;
 	options.cheat_addMaxS=0;
-	options.cheat_altasBoosters=0;
 
 	fixpath_options();
 

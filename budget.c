@@ -440,6 +440,7 @@ void DrawViewing(char plr)
 
   DrawPreviousMissions (plr);
   IOBox(4,26,77,40);IOBox(242,26,315,40); InBox(244,28,313,38);
+  if (Data->P[plr].PastMis<4) InBox(6,28,75,38);
   LTArrow(24,30);RTArrow(262,30);
 
   return;
@@ -584,17 +585,18 @@ void Viewing(char plr)
 		else if (key=='O' || (mousebuttons>0 && x>=6 && y>=28 && x<=75 && y<=38)) {
 			olderMiss++;
 			if (olderMiss>Data->P[plr].PastMis-2) olderMiss=Data->P[plr].PastMis-2;
+			if (olderMiss<1) olderMiss=1;
 			if (olderMiss!=1)OutBox(244,28,313,38); //Boton Newer
 			InBox(6,28,75,38); //Botton Older
       		// Debe dibujar la mission
       		DrawPreviousMissions (plr);
       		bzdelay (DELAYCNT);
-      		if (olderMiss!=Data->P[plr].PastMis-2) OutBox(6,28,75,38); //Boton Older
+      		if (olderMiss!=Data->P[plr].PastMis-2 && Data->P[plr].PastMis>3) OutBox(6,28,75,38); //Boton Older
 			}
 		else if (key=='N' || (mousebuttons>0 && x>=244 && y>=28 && x<=313 && y<=38))  {
 			olderMiss--;
 			if (olderMiss<1) olderMiss=1;
-			if (olderMiss!=Data->P[plr].PastMis-2) OutBox(6,28,75,38); //Boton Older
+			if (olderMiss!=Data->P[plr].PastMis-2 && Data->P[plr].PastMis>3) OutBox(6,28,75,38); //Boton Older
 			InBox(244,28,313,38); //Botton Newer
       		// Debe dibujar la mission
       		DrawPreviousMissions (plr);

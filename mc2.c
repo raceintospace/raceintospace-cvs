@@ -366,7 +366,7 @@ void MissionSteps(char plr,int mcode,int Mgoto,int step,int pad)
   if (Mev[step].loc>=20) Mev[step].FName[2]='2';
   if (Mev[step].loc>=30) Mev[step].FName[2]='3';
 
-  if (Mev[step].loc==32) {  // Fix _g special case #48010
+  if (Mev[step].loc==32 || Mev[step].loc==29) {  // Fix _g special case #48010
    Mev[step].FName[2]='0';
    Mev[step].FName[3]='1';
    }

@@ -1,8 +1,22 @@
+2011-02-23	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	* V258
+
+	* configure.in: Changed version to 1.0.0
+
+	* vab.c, options.c, options.h: Readded Atlas/R7 Booster capacity (removed option to turn it off)
+
+	* prest.c: Changed Prestige Seconds text from "(SCD)" to "(2ND)"
+
+	* budget.c: Fixed bug in Viewing Stand when flown missions was fewer than 3
+
+	* mission.dat: Fixed bug in Lunar Missions (from V252)
+
 2011-02-20	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V257
 
-	* Fixed bug in some failures in Lunar Missions (from V252)
+	* mission.dat: Fixed bug in some failures in Lunar Missions (from V252)
 
 	* place.c: Changed the Prestige First screen in Mission Review to show also Prestige Seconds
 
@@ -12,37 +26,33 @@
 
 	* V256
 
-	* Fixed bug in the order of the missions in 2-players games
-
-	* Readded Atlas/R7 Booster capacity (removed option to turn it off)
+	* newmis.c: Fixed bug in the order of the missions in 2-players games
 
 2011-02-14	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V255
 
-	* Fixed bug in the naut morale caluclations. Changed the penalty/bonus when crewmates are compatible
+	* start.c: Fixed bug in the naut morale caluclations. Changed the penalty/bonus when crewmates are compatible
 
-	* Added Prestige First in Mission Review
+	* place.c: Added Prestige First in Mission Review
 
-	* Viwing Stand now shows all missions, not just last 3
+	* budget.c: Viwing Stand now shows all missions, not just last 3
 
-	* VAB's Autopurchase now shows the price of the equipment
+	* vab.c: VAB's Autopurchase now shows the price of the equipment
 
-	* Changed version to 1.0.0
+	* vab.c, options: Removed Atlas Booster capacity (can be turned on in config file)
 
-	* Removed Atlas Booster capacity (can be turned on in config file)
-
-	* Added Cheat to enable sucessful missions increase R&DMax
+	* mc.c, options: Added Cheat to enable sucessful missions increase R&DMax
 
 2011-02-10	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V254
 
-	* Added FIX button in R&D and Hardware Purchase
+	* rdplex.c: Added FIX button in R&D and Hardware Purchase
 
-	* Added option to enable Atlas to lunar missions
+	* vab.c, options: Added option to enable Atlas to lunar missions
 
-	* Changed version to 0.4.9
+	* configure.in: Changed version to 0.4.9
 
 2011-01-05	Leon Baradat <peyre@users.sourceforge.net>
 
@@ -54,15 +64,15 @@
 
 	* V252
 
-	* Added Reentry Corridor step to Lunar Missions
+	* mc2.c, mission.dat: Added Reentry Corridor step to Lunar Missions
 
 2010-12-18	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V251
 
-	* Fixed duration level when failed
+	* mis_m.c: Fixed duration level when failed
 
-	* Changed last Adv Training to III if shorter Adv Training is on
+	* ast4.c: Changed last Adv Training to III if shorter Adv Training is on
 
 2010-10-24	Nicolas Laplume <nikakd@users.sourceforge.net>
 

@@ -887,7 +887,6 @@ begvab:
       if (rk>6) rk=0;
       if (((Misdef(mis)>=42 && Misdef(mis)<=57) || (Misdef(mis)>=7 && Misdef(mis)<=13)) && (rk==4 || rk==0))
         if (options.cheat_altasOnMoon==0) rk++;
-        if (rk==4 && options.cheat_altasBoosters==0) rk++;
 
 		//display cost (XX of XX)
 		hasDelay=0;

@@ -2,7 +2,7 @@ dnl ===========================
 dnl === Initialize autoconf ===
 dnl ===========================
 
-AC_INIT(Race Into Space,0.4.9,mkmccarty@raceintospace.org,raceintospace)
+AC_INIT(Race Into Space,1.0.0,mkmccarty@raceintospace.org,raceintospace)
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -145,7 +145,7 @@ dnl === Write configuration files ===
 dnl =================================
 
 AC_CONFIG_HEADER(race.h)
-if test -n "$build_win" ; then 
+if test -n "$build_win" ; then
 	AC_CONFIG_FILES(installer.nsi, chmod a-w installer.nsi)
 fi
 AC_CONFIG_FILES(mkrpm raceintospace.spec, chmod a+x mkrpm)
