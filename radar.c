@@ -145,6 +145,17 @@ void PadDraw(char plr,char pad)
     if (j==6) PrintAt(0,0,"(CREW VII)");
     if (j==7) PrintAt(0,0,"(CREW VIII)");
     for (k=0;k<Data->P[plr].Gcnt[i][j];k++) {
+      // Draw a morale box for each crew member - Leon
+      grSetColor(1);
+      RectFill(13,110+7*k,20,110+7*k,2); // Top
+      RectFill(13,110+7*k,13,116+7*k,2); // Left
+      RectFill(13,116+7*k,20,116+7*k,4); // Bottom
+      RectFill(21,110+7*k,21,116+7*k,4); // Right
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Mood>=65) RectFill(14,111+7*k,20,115+7*k,16);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Mood<65 && Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Mood>=40) RectFill(14,111+7*k,20,115+7*k,11);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Mood<40 && Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Mood>=20) RectFill(14,111+7*k,20,115+7*k,8);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Mood<20) RectFill(14,111+7*k,20,115+7*k,0);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Mood==0) RectFill(14,111+7*k,20,115+7*k,3);
 	    grSetColor(1);
 	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].Sex==1) grSetColor(5); // Show female 'nauts in blue
 	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][j][k]-1].RDelay>0) grSetColor(0); // Show anyone who's announced retirement in black
@@ -168,6 +179,17 @@ void PadDraw(char plr,char pad)
     if (l==6) PrintAt(0,0,"(CREW VII)");
     if (l==7) PrintAt(0,0,"(CREW VIII)");
     for (k=0;k<Data->P[plr].Gcnt[i][l];k++) {
+      // Draw a morale box for each crew member - Leon
+      grSetColor(1);
+      RectFill(13,148+7*k,20,148+7*k,2); // Top
+      RectFill(13,148+7*k,13,154+7*k,2); // Left
+      RectFill(13,154+7*k,20,154+7*k,4); // Bottom
+      RectFill(21,148+7*k,21,154+7*k,4); // Right
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Mood>=65) RectFill(14,149+7*k,20,153+7*k,16);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Mood<65 && Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Mood>=40) RectFill(14,149+7*k,20,153+7*k,11);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Mood<40 && Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Mood>=20) RectFill(14,149+7*k,20,153+7*k,8);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Mood<20) RectFill(14,149+7*k,20,153+7*k,0);
+	if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Mood==0) RectFill(14,149+7*k,20,153+7*k,3);
 	    grSetColor(1);
 	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].Sex==1) grSetColor(5); // Show female 'nauts in blue
 	    if (Data->P[plr].Pool[Data->P[plr].Crew[i][l][k]-1].RDelay>0) grSetColor(0); // But show anyone who's announced retirement in black
