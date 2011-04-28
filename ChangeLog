@@ -1,4 +1,12 @@
-2011-02-23	Leon Baradat <peyre@users.sourceforge.net>
+2011-04-27	Leon Baradat <peyre@users.sourceforge.net>
+
+	* V260
+
+	* ast2.c: Touchup of skills display in Astronaut Complex / Cosmonaut Center
+
+	* rush.c: Improved centering in Mission Control building
+
+2011-04-26	Leon Baradat <peyre@users.sourceforge.net>
 
 	* V259
 

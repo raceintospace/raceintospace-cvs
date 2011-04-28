@@ -436,7 +436,8 @@ void LimboText(char plr,int astro)
       case 4: PrintAt(53,118,"V");break;
       }                           
    RectFill(123,62,145,77,3);
-   RectFill(128,79,145,92,3);
+   RectFill(125,79,145,85,3);
+   RectFill(131,86,145,92,3);
    RectFill(123,95,145,101,3);
    RectFill(130,54,155,61,3);
     grSetColor(col); // Print 'naut mood in green/yellow/red/black depending on mood -Leon
@@ -444,8 +445,8 @@ void LimboText(char plr,int astro)
     grSetColor(11);
    DispNum(125,68,Data->P[plr].Pool[astro].Cap);
    DispNum(123,76,Data->P[plr].Pool[astro].LM); 
-   DispNum(131,84,Data->P[plr].Pool[astro].EVA); 
-   DispNum(130,92,Data->P[plr].Pool[astro].Docking); 
+   DispNum(125,84,Data->P[plr].Pool[astro].EVA); 
+   DispNum(131,92,Data->P[plr].Pool[astro].Docking); 
    DispNum(125,100,Data->P[plr].Pool[astro].Endurance); 
    RectFill(127,113,141,120,3);grSetColor(11);
    DispNum(130,118,Data->P[plr].Pool[astro].Active);

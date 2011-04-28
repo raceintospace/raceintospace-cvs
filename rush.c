@@ -199,14 +199,14 @@ void DrawRush(char plr)
       grSetColor(1);PrintAt(89,33+i*58,"SCHEDULE:");
       PrintAt(88,69+i*58,"RUSHING PENALTY: ");
       PrintAt(88,77+i*58,"DOWNGRADE PENALTY: ");
-      PrintAt(196,69+i*58,"COST:");
+      PrintAt(199,69+i*58,"COST:");
       OutBox(11 ,33+i*58, 69, 74+i*58);
       InBox(20,38+i*58,60,69+i*58);
       gxVirtualDisplay(&vhptr,156*plr,i*30,21,39+i*58,59,68+i*58,0);
 
       SetRush(Data->P[plr].Mission[i].Rushing,i);
       grSetColor(1);
-      DispBig(60,5,"MISSION SCHEDULE",0,-1);
+      DispBig(55,5,"MISSION SCHEDULE",0,-1);
 
       grSetColor(5);
 
