@@ -47,7 +47,7 @@ char isDamaged[8] = {0,0,0,0,0,0,0,0};
 
 struct MDA {
   i16 x1,y1,x2,y2,o;
-} *MI; //  MI[2][28] = {
+} MI[2*28]; //  MI[2][28] = {
 #if 0
   104,1,119,55,0,   // Atlas  0
   143,1,153,67,0,   // Titan  1
@@ -621,7 +621,7 @@ void VAB(char plr)
   FILE* file;
   int MI_size = sizeof (struct MDA) * 28 * 2;
 
-  MI = xmalloc(MI_size);
+
   file = sOpen("VTABLE.DAT", "rb", 0);
   fread(MI, MI_size, 1, file);
   fclose(file);
@@ -644,7 +644,6 @@ begvab:
   {
      Vab_Spot = (Data->P[plr].Mission[0].Hard[Mission_PrimaryBooster] > 0) ? 1 : 0;
      music_stop();
-    free(MI);
      return;
   };
 
@@ -682,8 +681,7 @@ begvab:
   for (i=0;i<7;i++) {
     if (i>3) {
 	isDamaged[i] = Data->P[plr].Rocket[i-4].Damage!=0?1:0;
-      sf[i]=(Data->P[plr].Rocket[i-4].Safety*
-		Data->P[plr].Rocket[4].Safety)/100;
+	  sf[i] = RocketBoosterSafety(Data->P[plr].Rocket[i-4].Safety, Data->P[plr].Rocket[4].Safety);
       strcpy(&Name[i][0],"B/");
       strcat(&Name[i][0],&Data->P[plr].Rocket[i-4].Name[0]);
       qty[i]=Data->P[plr].Rocket[i-4].Num-Data->P[plr].Rocket[i-4].Spok;
@@ -757,8 +755,7 @@ begvab:
 	    for (i=0;i<7;i++) {
 	     if (i>3) {
 		isDamaged[i] = Data->P[plr].Rocket[i-4].Damage!=0?1:0;
-	      sf[i]=(Data->P[plr].Rocket[i-4].Safety*
-		      Data->P[plr].Rocket[4].Safety)/100;
+		  sf[i] = RocketBoosterSafety(Data->P[plr].Rocket[i-4].Safety, Data->P[plr].Rocket[4].Safety);
 	      strcpy(&Name[i][0],"B/");
 	      strcat(&Name[i][0],&Data->P[plr].Rocket[i-4].Name[0]);
 	      qty[i]=Data->P[plr].Rocket[i-4].Num-Data->P[plr].Rocket[i-4].Spok;

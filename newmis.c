@@ -313,7 +313,7 @@ for (i=0;i<Data->P[plr].Mission[pad].Joint+1;i++)
 		    grSetColor(7);PrintAt(bud,109+14*k,"ROCKET: ");grSetColor(1);PrintAt(0,0,&Data->P[plr].Rocket[hold-5].Name[0]);PrintAt(0,0," W/B");
 		    grSetColor(11);PrintAt(bud,116+14*k,"SAFETY FACTOR: ");
          (Data->P[plr].Rocket[hold-5].Damage != 0 || Data->P[plr].Rocket[4].Damage !=0)? grSetColor(9):grSetColor(1);   //Damaged Equipment && Booster's Safety Mod, Nikakd, 10/8/10
-         sprintf(&Digit[0],"%d",((Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[hold-5].Damage)*(Data->P[plr].Rocket[4].Safety+Data->P[plr].Rocket[4].Damage))/100);
+         sprintf(&Digit[0],"%d",RocketBoosterSafety(Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[hold-5].Damage, Data->P[plr].Rocket[4].Safety+Data->P[plr].Rocket[4].Damage));
          PrintAt(0,0,&Digit[0]);
          PrintAt(0,0,"%");
         // DispNum(0,0,(Data->P[plr].Rocket[hold-5].Safety+Data->P[plr].Rocket[4].Safety)/2);

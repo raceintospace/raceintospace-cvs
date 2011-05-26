@@ -31,6 +31,7 @@
 #include <mmfile.h>
 #include <utils.h>
 #include <logging.h>
+#include <options.h>
 
 #include <assert.h>
 
@@ -131,10 +132,10 @@ bot:                          // bottom of routine
 #endif
 
 /** Finds the video fitting to the current mission step and plays it.
- * 
- * The function does handle variations for the videos 
+ *
+ * The function does handle variations for the videos
  * and also finds the proper babypics to display.
- * 
+ *
  * \param plr Player structure
  * \param step Missions step ID
  * \param Seq Sequence-Code for the movies (?)
@@ -190,7 +191,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 
 	if (Seq[0]=='Q') {
 		if (Mev[STEP-1].Name[0]!='S') {
-  		    if (mode==0){ 
+  		    if (mode==0){
     		    Seq[0]='i';
   		    } else if (mode==1) {
 				Seq[0]='i';
@@ -198,9 +199,9 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			}
 		}
 		if ((Seq[1]=='U' || Seq[1]=='S') && Seq[2]=='C') {
-  		    if (Seq[3]=='5'){ 
+  		    if (Seq[3]=='5'){
     		    Seq[3]='6';
-  		    } else if (Seq[3]=='6'){ 
+  		    } else if (Seq[3]=='6'){
     		    Seq[3]='5';
   		    }
 		}
@@ -275,7 +276,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 			j++;
 
 		if (bSeq[j].ID[2]-0x30 == 1)
-			if (fem==0) j++; 
+			if (fem==0) j++;
 	} else if (err==0) {
 		j=0;
 		memset(sName,0x00,sizeof sName);
@@ -285,7 +286,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		while(strncmp(sName,&Seq[strlen(Seq)-2],2) !=0) {
 			j++;
 			strncpy(sName,&dSeq[j].ID[3+strlen(&dSeq[j].ID[3])-2],2);
-			if (j>=F[i].size/sizeof_oFGROUP) {err=1;break;} 
+			if (j>=F[i].size/sizeof_oFGROUP) {err=1;break;}
 		}
 	};
 
@@ -352,7 +353,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 	fout=sOpen("REPLAY.TMP","at",1);
 	if (mode==0) fprintf(fout,"%d\n",(unsigned int)j);
 	else {i+=1;fprintf(fout,"%d\n",(unsigned int)(i*1000+j));}
-	// Specs: mode==1 save out fail seq (i*1000)+j 
+	// Specs: mode==1 save out fail seq (i*1000)+j
 	fclose(fout);
 
 	if (AI[plr]==1) return;
@@ -378,7 +379,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		fclose(nfin);
 
         // Endianness swap
-		for (i=0;i<SCND_TABLE;i++) 
+		for (i=0;i<SCND_TABLE;i++)
 			Swap16bit(Mob2[i].idx);
 
 		for (i=0;i<SCND_TABLE;i++) Mob2[i].Name[strlen(Mob2[i].Name)-3]='_'; // patch
@@ -386,7 +387,7 @@ void PlaySequence(char plr,int step,char *Seq,char mode)
 		nfin=open_gamedat("BABYNORM.CDR");
 		fread(Mob,NORM_TABLE*(sizeof (struct Infin)),1,nfin);
 		fclose(nfin);
-        
+
         // Endianness swap
 		for (i = 0; i< NORM_TABLE; i++)
 		{
@@ -590,7 +591,7 @@ void Clock(char plr,char clck,char mode,char tm)
  //: Specs: clock y value
  if (plr==0) sy=108;
   else sy=121;
- //: Specs: color 
+ //: Specs: color
  if (mode==0) mode=3;
   else mode=4;
  //: Specs: clock x_value
@@ -699,7 +700,7 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
         };
         if (try>=CLIF_TABLE) which=415+random(25);
          else
-          {  
+          {
            which=random(Mob[try].Qty);
            if (which>=10)
             {
@@ -721,7 +722,7 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
     };
    if (try>=NORM_TABLE) which=415+random(25);
     else
-     {  
+     {
       which=random(Mob[try].Qty);
       if (which>=10)
        {
@@ -733,7 +734,7 @@ void DoPack(char plr,FILE *ffin,char mode,char *cde,char *fName)
   };
 
   //Specs: which holds baby num
-  locl=(long) 1612*which; 
+  locl=(long) 1612*which;
   if (which<580) memset(&pal[off*3],0x00,48);
   if(loc!=0 && which<580) {VBlank();gxSetDisplayPalette(pal);}
   fseek(ffin,(long)locl,SEEK_SET);
@@ -801,7 +802,7 @@ char FailureMode(char plr,int prelim,char *text)
   char save_screen[64000], save_pal[768];
 
   FadeOut(2,pal,10,0,0);
- 
+
   // this destroys what's in the current page frames
   memcpy (save_screen, screen, 64000);
   memcpy (save_pal, pal, 768);
@@ -931,7 +932,7 @@ char FailureMode(char plr,int prelim,char *text)
   last_secs = get_time ();
 
   FadeIn(2,pal,10,0,0);
-  
+
 
 	WaitForMouseUp();
 	key = 0;
@@ -981,7 +982,7 @@ char FailureMode(char plr,int prelim,char *text)
 }
 
 /** open the animations file and seek the proper animation
- * 
+ *
  * \param fname Name of the Animation to search for
  */
 FILE *OpenAnim(char *fname)
@@ -993,10 +994,10 @@ FILE *OpenAnim(char *fname)
         long offset;
         long size;
     } AIndex;
-    
+
     fin=open_gamedat("LIFTOFF.ABZ");
     if (!fin)
-    {								   
+    {
         WARNING1("can't access file LIFTOFF.ABZ");
         return fin;
     }
@@ -1007,7 +1008,7 @@ FILE *OpenAnim(char *fname)
     Swap32bit(AIndex.offset);
     Swap32bit(AIndex.size);
     fseek(fin,AIndex.offset,SEEK_SET);
-    
+
     fread(&AHead,sizeof AHead,1,fin);
     Swap16bit(AHead.w);
     Swap16bit(AHead.h);
@@ -1015,7 +1016,7 @@ FILE *OpenAnim(char *fname)
     aLoc=ftell(fin);
     tFrames=AHead.fNum;
     cFrame=0;
-    
+
     GV(&dply,AHead.w,AHead.h);
     DEBUG1("<-OpenAnim");
     return fin;
@@ -1050,10 +1051,10 @@ int StepAnim(int x,int y,FILE *fin)
 	   case 2: RLED_img(vhptr.vptr,dply.vptr,BHead.fSize,dply.w,dply.h); mode=gxXOR; break;
 		   default: break;
 		   }
-      
+
       dply.vptr[AHead.w*AHead.h-1]=dply.vptr[AHead.w*AHead.h-2];
 	    gxPutImage(&dply,mode,x,y,0);
-      
+
       cFrame++;
    }
    return (tFrames-cFrame);  //remaining frames
@@ -1066,7 +1067,7 @@ void FirstManOnMoon (char plr, char isAI, char misNum) {
 	dayOnMoon = random(daysAMonth[Data->P[plr].Mission[Mev[STEP].pad].Month])+1;
 	if (misNum==57 && plr==1) nautsOnMoon=3;
 
-	
+
 	//Direct Ascend
 	if (strcmp(Mev[STEP].E->Name,Data->P[plr].Manned[4].Name)==0)
 		nautsOnMoon=4;
@@ -1077,7 +1078,7 @@ void FirstManOnMoon (char plr, char isAI, char misNum) {
 	if (strcmp(Mev[STEP].E->Name,Data->P[plr].Manned[6].Name)==0)
 		nautsOnMoon=1;
 
-	
+
 	if (nautsOnMoon==1) {
 		manOnMoon=2;
 		return;
@@ -1177,7 +1178,7 @@ InRFBox(162,28,312,42,10);
 			FadeOut(2,pal2,10,0,0);
 			memcpy(screen,save_screen,64000);
 			memcpy(pal,save_pal,768);
-			
+
 			FadeIn(2,pal,10,0,0);
 			key=0;
 			return 1;
@@ -1190,7 +1191,7 @@ InRFBox(162,28,312,42,10);
 			FadeOut(2,pal2,10,0,0);
 			memcpy(screen,save_screen,64000);
 			memcpy(pal,save_pal,768);
-			
+
 			FadeIn(2,pal,10,0,0);
 			key=0;
 			return 2;
@@ -1203,7 +1204,7 @@ InRFBox(162,28,312,42,10);
 			FadeOut(2,pal2,10,0,0);
 			memcpy(screen,save_screen,64000);
 			memcpy(pal,save_pal,768);
-			
+
 			FadeIn(2,pal,10,0,0);
 			key=0;
 			return 3;
@@ -1216,7 +1217,7 @@ InRFBox(162,28,312,42,10);
 			FadeOut(2,pal2,10,0,0);
 			memcpy(screen,save_screen,64000);
 			memcpy(pal,save_pal,768);
-			
+
 			FadeIn(2,pal,10,0,0);
 			key=0;
 			return 4;
@@ -1224,3 +1225,12 @@ InRFBox(162,28,312,42,10);
 	}
 }
 
+int RocketBoosterSafety(int safetyRocket, int safetyBooster)
+{
+	if (options.boosterSafety==0)
+		return ((safetyRocket * safetyBooster)/100);
+	if (options.boosterSafety==1)
+		return (min(safetyRocket, safetyBooster));
+	else
+		return ((safetyRocket + safetyBooster) /2);
+}

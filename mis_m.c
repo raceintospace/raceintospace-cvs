@@ -86,7 +86,7 @@ void GetFailStat(struct XFails *Now,char *FName,int rnum)
 	  do {
 	     fread(Now,sizeof (struct XFails),1,fin);
 				Swap32bit(Now->per);	// Only need to swap this one since we're checking only that
-				
+
 	  } while (Now->per!=rnum);
 	}
   else {
@@ -120,7 +120,7 @@ void MisCheck(char plr,char mpad)
    MPad=mpad;
    SCRUBS=noDock=InSpace=0;
 
-   
+
 
   if (!AI[plr] && BIG==0) {
     //FadeOut(1,pal,100,128,1);
@@ -169,10 +169,10 @@ void MisCheck(char plr,char mpad)
 
      // Duration Hack Part 1 of 3   (during the Duration stuff)
      if ((Mev[STEP].loc==27 || Mev[STEP].loc==28) && durx>0) {
-        
+
         if (Mev[STEP].StepInfo!=1) {
            Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration= 1; //Original code would also return 1
-           durx=-1;  // end durations     
+           durx=-1;  // end durations
         }
         else {
            Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration++;
@@ -256,10 +256,9 @@ void MisCheck(char plr,char mpad)
 
     if ((Mev[STEP].Name[0]=='A') && MH[Mev[STEP].pad][7]!=NULL)
     {  // boosters involved
-      safety*=MH[Mev[STEP].pad][7]->Safety;
-      safety=safety/100;  //Boosters Safety Mod, Nikakd,10/8/10
+    	safety = RocketBoosterSafety(safety, MH[Mev[STEP].pad][7]->Safety);
     }
-   
+
     // Duration Hack Part 3 of 3
     if (Mev[STEP].loc==28 || Mev[STEP].loc==27) {
       safety=Mev[STEP].E->MisSaf;  // needs to be for both
@@ -286,7 +285,7 @@ void MisCheck(char plr,char mpad)
             safety, val,
             PROBLEM ? " problem" : (options.want_cheats ? " cheating" : ""));
 
-    if (!AI[plr] && BIG==0) 
+    if (!AI[plr] && BIG==0)
       if (!(fEarly && STEP!=0))
         lc=MCGraph(plr,lc,maxx(0,safety),maxx(0,val),PROBLEM);  // Graph Chart
 
@@ -298,16 +297,16 @@ void MisCheck(char plr,char mpad)
 
    // Debug Code Only
 #if MIS_SET
-   if (!AI[plr]) {               //&& TOM && NOFAIL 
+   if (!AI[plr]) {               //&& TOM && NOFAIL
      memset(Text,0x00,sizeof Text);
      strcpy(Text,"FAIL:\0");
      strcpy(&Text[5],S_Name[Mev[STEP].loc]);
-     
+
      PROBLEM=Request(0,Text,6);
-     
+
    }
 #endif
-    
+
    // Fix wrong anim thing for the Jt Durations
       if (Mev[STEP].loc==28 || Mev[STEP].loc==27) {
          strcpy(Mev[STEP].Name,(plr==0)?"_BUSC0\0":"_BSVC0");
@@ -336,7 +335,7 @@ void MisCheck(char plr,char mpad)
          tomflag = 0;
          if (Mev[STEP].Name[0]=='H' && Mev[STEP].Name[1]=='M')
       {
-   
+
          gork=Data->P[plr].Mission[mpad].Prog;
          if (gork==2) strcpy(Mev[STEP].Name,(plr==0)?"HUM3C1":"HSM3C1");
          else if (gork==3) strcpy(Mev[STEP].Name,(plr==0)?"HUM3C2":"HSM3C2");
@@ -374,8 +373,8 @@ void MisCheck(char plr,char mpad)
       Name[strlen(Name)]=0x30+Now.fail%10;
       Name[strlen(Name)]=0x00;
 
-      
-   
+
+
 
       //:::::: STEP FAILURE :::::::::
       //:::::::::::::::::::::::::::::
@@ -418,12 +417,12 @@ void MisCheck(char plr,char mpad)
       gork=0;
 
       gork = ((MA[0][0].A!=NULL && MA[0][0].A->Sex && EVA[0]==0)
-           || (MA[0][1].A!=NULL && MA[0][1].A->Sex && EVA[0]==1) 
-           || (MA[0][2].A!=NULL && MA[0][2].A->Sex && EVA[0]==2) 
+           || (MA[0][1].A!=NULL && MA[0][1].A->Sex && EVA[0]==1)
+           || (MA[0][2].A!=NULL && MA[0][2].A->Sex && EVA[0]==2)
            || (MA[0][3].A!=NULL && MA[0][3].A->Sex && EVA[0]==3)
            || (MA[1][0].A!=NULL && MA[1][0].A->Sex && EVA[1]==0)
-           || (MA[1][1].A!=NULL && MA[1][1].A->Sex && EVA[1]==1) 
-           || (MA[1][2].A!=NULL && MA[1][2].A->Sex && EVA[1]==2) 
+           || (MA[1][1].A!=NULL && MA[1][1].A->Sex && EVA[1]==1)
+           || (MA[1][2].A!=NULL && MA[1][2].A->Sex && EVA[1]==2)
            || (MA[1][3].A!=NULL && MA[1][3].A->Sex && EVA[1]==3));
 
      //if (!((mcc==9 || mcc==11) && (Mev[STEP].Name[0]=='W')))
@@ -484,12 +483,12 @@ void MisCheck(char plr,char mpad)
   if (!AI[plr] && death==0) delay(1000);
 
   if ((MA[0][0].A!=NULL && MA[0][0].A->Status==AST_ST_DEAD)
-        || (MA[0][1].A!=NULL && MA[0][1].A->Status==AST_ST_DEAD) 
-        || (MA[0][2].A!=NULL && MA[0][2].A->Status==AST_ST_DEAD) 
+        || (MA[0][1].A!=NULL && MA[0][1].A->Status==AST_ST_DEAD)
+        || (MA[0][2].A!=NULL && MA[0][2].A->Status==AST_ST_DEAD)
         || (MA[0][3].A!=NULL && MA[0][3].A->Status==AST_ST_DEAD)
         || (MA[1][0].A!=NULL && MA[1][0].A->Status==AST_ST_DEAD)
-        || (MA[1][1].A!=NULL && MA[1][1].A->Status==AST_ST_DEAD) 
-        || (MA[1][2].A!=NULL && MA[1][2].A->Status==AST_ST_DEAD) 
+        || (MA[1][1].A!=NULL && MA[1][1].A->Status==AST_ST_DEAD)
+        || (MA[1][2].A!=NULL && MA[1][2].A->Status==AST_ST_DEAD)
         || (MA[1][3].A!=NULL && MA[1][3].A->Status==AST_ST_DEAD))
   {  // Mission Death
     if (!AI[plr]) {
@@ -509,20 +508,20 @@ void MisCheck(char plr,char mpad)
   else {
    death=0;
   };
-  
+
   return;
 }
 
 /** Draw mission step rectangle
- * 
+ *
  * The rectangle represents the success or failure rate.
- * 
+ *
  * \param plr Player data
  * \param lc ??? maybe location of the chart
  * \param safety Safety factor in percent
  * \param val value of the dice checked against safety
  * \param prob is this a problem or not?
- * 
+ *
  * \return new value of lc
  */
 int MCGraph(char plr,int lc,int safety,int val,char prob)
@@ -535,8 +534,8 @@ int MCGraph(char plr,int lc,int safety,int val,char prob)
         RectFill(lc-2,195,lc,i,21);
         delay(15);
     }
-  
-  
+
+
   if (plr==1 && !AI[plr]) {
       if (val>safety && prob==0) {
         RectFill(lc-2,195,lc,195-val*22/100,9);
@@ -544,7 +543,7 @@ int MCGraph(char plr,int lc,int safety,int val,char prob)
       } else if (val>safety) {
         RectFill(lc-2,195,lc,195-val*22/100,9);
         lc+=5;
-      } else {  
+      } else {
         if (lc>=241) {
           grSetColor(55);RectFill(189,173,249,196,55);
           for (i=190;i<250;i+=2) {
@@ -646,7 +645,7 @@ void F_KillCrew(char mode,struct Astros *Victim)
 void F_IRCrew(char mode,struct Astros *Guy)
 {
    if (Guy->Status==AST_ST_DEAD) return;
-   if (Guy==NULL) return;  
+   if (Guy==NULL) return;
    if (mode==F_RET) {  // should work in news
       Guy->Status=AST_ST_RETIRED;
       Guy->RDelay=1;   // Retire begginning of next season
@@ -681,11 +680,11 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
      if (!AI[plr]) temp=FailureMode(plr,FNote,text);
 
      //Special Case for PhotoRecon with Lunar Probe
-     if (Mev[STEP].loc==20 && mcc==8)  
+     if (Mev[STEP].loc==20 && mcc==8)
         Mev[STEP-1].E->MisFail++;
      return 0;
    };
-   
+
   Mev[STEP].StepInfo=0;
 
 	switch(type) {
@@ -719,7 +718,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 
 		    Mev[STEP].StepInfo=4600+Mev[STEP].loc;
          Mev[STEP].trace=0x7F;
-		    break; 
+		    break;
 
 	   case 4:  // Branch to Alternate Step
          FNote=1;
@@ -763,7 +762,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 //         Mev[STEP].rnum=random(10000)+1;  // new failure roll
 //         Mev[STEP].dice=random(100)+1;    // new die roll
          Mev[STEP].trace=STEP;            // redo step
-		   break; 
+		   break;
 
 	   case 12:  // Subtract VAL% from Safety, repair Pad for XTRA (launch only)
          FNote=5;
@@ -939,7 +938,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
          FNote=5;
          Mev[STEP].StepInfo=700;
          Mev[STEP].trace=0x7F;   // End of Mission
-         break;               
+         break;
 
       case 26: // Subtract VAL% from Equip perm and branch to alternate
          FNote=1;
@@ -947,7 +946,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
          Mev[STEP].E->Safety-=abs(val);
 		   if (Mev[STEP].E->Safety<=0)
             Mev[STEP].E->Safety=1;
-      
+
          if (Mev[STEP].fgoto==-1) {Mev[STEP].trace=0x7F;FNote=7;}
          else if (Mev[STEP].fgoto!=-2) Mev[STEP].trace=Mev[STEP].fgoto;
          else Mev[STEP].trace=STEP+1;
@@ -978,10 +977,10 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
           F_KillCrew(F_ONE,MA[1][EVA[1]].A);
           if (LM[1]!=EVA[1]) F_KillCrew(F_ONE,MA[1][LM[1]].A);
         }
-      }      
+      }
       death=1;
       break;
-   
+
 	   case 33:  // Kill Crew on All Capsules (happens only on dockings)
          if (type==5) FNote=4;
          FNote=8;
@@ -993,7 +992,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
         }
 		   Mev[STEP].StepInfo=4600+Mev[STEP].loc;
          Mev[STEP].trace=0x7F;
-		   break; 
+		   break;
 
 	   case 1: case 8: case 10: case 11: case 14: case 21: case 27:
       case 28: case 29: default:
@@ -1004,7 +1003,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 		   break; // nothing : continue steps
 	};
 
-  if ((Mev[STEP].Name[0]=='A') && MH[Mev[STEP].pad][7]!=NULL)  
+  if ((Mev[STEP].Name[0]=='A') && MH[Mev[STEP].pad][7]!=NULL)
   {  // boosters involved
      if (MH[Mev[STEP].pad][4]->Safety==MH[Mev[STEP].pad][4]->Base)
        MH[Mev[STEP].pad][7]->Safety=MH[Mev[STEP].pad][7]->Base;
@@ -1015,7 +1014,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
   // check for all astro's that are dead.  End mission if this is the case.
    while(bioskey(1)) bioskey(0);
    key=0;
-   
+
    if (!AI[plr]) temp=FailureMode(plr,FNote,text);
 
    if (temp==0 && FNote==3) Mev[STEP].trace=STEP+1;
@@ -1023,7 +1022,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 
     if (SCRUBS==1) {
       if (Mev[STEP].loc==8 && noDock==1) PROBLEM=1;
-      
+
       if (PROBLEM==0) {
          if (Mev[STEP].fgoto==-1) {  // End of Mission Flag
 	         if (Mev[STEP].PComp>0) Mev[STEP].PComp=4;
@@ -1103,7 +1102,7 @@ void DebugSetFailure(char *Text)
  PrintAt(82,57,"ENTER THE NEW FAILURE NUMBER FOR");
  PrintAt(82,64,Text);
  memset(A,0x00,sizeof A);i=0; //reset i
- 
+
  while(1)
   {
    key=0;
@@ -1111,10 +1110,10 @@ void DebugSetFailure(char *Text)
    GetMouse();
 
    if ((key==K_ENTER ) || (x>=187 && y>=95 && x<=245 && y<=103 && mousebuttons>0))
-    { 
-     InBox(187,95,245,103); 
+    {
+     InBox(187,95,245,103);
 		WaitForMouseUp();
-     
+
      if (i>0) {
        i=atoi(&A[0]);
        Mev[STEP].rnum=maxx(minn(9999,i),0);
@@ -1130,30 +1129,30 @@ void DebugSetFailure(char *Text)
       if (j<5) InBox(187+j*12,74,197+j*12,82);
        else InBox(187+(j-5)*12,84,197+(j-5)*12,92);
 		A[i++]=key;
-      
+
       if (key>0) delay(150);
       RectFill(142,92,173,100,10);
 		grSetColor(1);PrintAt(144,98,&A[0]);
       if (j<5) OutBox(187+j*12,74,197+j*12,82);
-       else OutBox(187+(j-5)*12,84,197+(j-5)*12,92); 
-      
+       else OutBox(187+(j-5)*12,84,197+(j-5)*12,92);
+
  	   key=0;
 	  }
 	 if (i>0 && key==0x08)
 	  {
-      
+
 	   A[--i]=0x00;
 		grSetColor(1);
       RectFill(142,92,173,100,10);
       PrintAt(144,98,&A[0]);
-      
+
 		key=0;
 	  }
     for(j=0;j<5;j++)
      {
       if (x>=187+j*12 && y>=74 && x<=197+j*12 && y<=82 && mousebuttons>0 && i<4)
        {
-        
+
         InBox(187+j*12,74,197+j*12,82);
         key=j+0x30;
         A[i++]=key;
@@ -1163,14 +1162,14 @@ void DebugSetFailure(char *Text)
 	     grSetColor(1);PrintAt(150,98,&A[0]);
  	     key=0;
         OutBox(187+j*12,74,197+j*12,82);
-        
-       }    
+
+       }
      }
     for(j=0;j<5;j++)
      {
       if (x>=187+j*12 && y>=84 && x<=197+j*12 && y<=92 && mousebuttons>0 && i<4)
        {
-        
+
         InBox(187+j*12,84,197+j*12,92);
         key=j+0x35;
         A[i++]=key;
@@ -1180,10 +1179,10 @@ void DebugSetFailure(char *Text)
         grSetColor(1);PrintAt(150,98,&A[0]);
  	     key=0;
         OutBox(187+j*12,84,197+j*12,92);
-        
-       }    
+
+       }
      }
-  }  
+  }
 }
 
 #endif

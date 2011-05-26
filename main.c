@@ -59,7 +59,7 @@
   long PalOff;
   ui16 LetHand;
   char BIG, 			   /**< 1 for fullscreen mission playback, 0 otherwise */
-	manOnMoon=0, dayOnMoon=20;         
+	manOnMoon=0, dayOnMoon=20;
 
 char *S_Name[] = {
    "LAUNCH",
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     MakeRecords();
 
     fin=sOpen("RAST.DAT","rb",0);
-    i=fread(buffer,1,BUFFER_SIZE,fin); 
+    i=fread(buffer,1,BUFFER_SIZE,fin);
     fclose(fin);
 
     DEBUG2("reading Players: size = %d", (int)sizeof (struct Players));
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 
 tommy:
 		music_start(M_LIFTOFF);
-			
+
     i=99;
     while (i == 99)
      {
@@ -261,11 +261,11 @@ tommy:
 }
 
 /** utility fn for AI to see if it should scrub the mission
- * 
+ *
  * Rules are:
  * - always do unmanned missions
  * - Safety must be within 15 of R&D-Safety
- * 
+ *
  * \param plr Playerdata
  * \param launchIdx ID of the launch
  */
@@ -304,7 +304,7 @@ int CheckIfMissionGo(char plr,char launchIdx)
 
 				// YYY  Safety check for this is never reached
 				if (idx>Mission_PrimaryBooster)		// implies
-					E->MisSaf = (int) (E->Safety*Data->P[plr].Manned[pMission->Hard[Mission_PrimaryBooster]].Safety)/100; //Boosters Safety Mod, Nikakd,10/8/10
+					E->MisSaf = (int) RocketBoosterSafety(E->Safety, Data->P[plr].Manned[pMission->Hard[Mission_PrimaryBooster]].Safety);
 				break;
 		}
 
@@ -566,7 +566,7 @@ void FreePadMen(char plr,struct MissionType *XMis)
 
 
 /** Destroy Pad and Reset any Crews affected
- * 
+ *
  * \param cost amount of MB to pay for repairs
  * \param pad number of the launch facility destroyed
  * \param plr Player data
@@ -620,7 +620,7 @@ void GetMouse_fast(void)
 {
   mousebuttons=0;
   oldx=x;oldy=y;
-  
+
   gr_maybe_sync ();
   av_step ();
 
@@ -650,17 +650,17 @@ void GetMouse_fast(void)
   else if (AL_CALL==0 && ((key>>8)==0x3D)) Help("i123");
 }
 
-void WaitForMouseUp(void) 
+void WaitForMouseUp(void)
 {
 	// Wait for mouse and key to be up
 	while (mousebuttons)
 		GetMouse();
 }
 
-void WaitForKeyOrMouseDown(void) 
+void WaitForKeyOrMouseDown(void)
 {
 	// Wait for mouse and key to be up
-	while (mousebuttons==0 && key==0) 
+	while (mousebuttons==0 && key==0)
 		GetMouse();
 }
 
@@ -677,17 +677,17 @@ void PauseMouse(void)
 }
 
 /** Print string at specific position
- * 
+ *
  * The function will print a string at a certain position.
  * If both the x and y coordinate are zero (0) the position is "current position".
  * The area will be marked as "needs update" to the graphics handler.
- * 
+ *
  * \note Will not print anything if length of string exceeds 100 characters
- * 
+ *
  * \param x x-coordinate of the start of the string
  * \param y y-coordinate of the start of the string
  * \param s pointer to char-array (string) to print
- * 
+ *
  */
 void PrintAt(int x,int y,char *s)
 {
@@ -864,13 +864,13 @@ void IOBox(int x1, int y1, int x2, int y2)
 }
 
 /** draw a rectangle
- * 
+ *
  * \param x1
  * \param y1
  * \param x2
  * \param y2
  * \param col Color code of the rectangle
- * 
+ *
  */
 void RectFill(int x1,int y1,int x2,int y2,char col)
 {
@@ -966,9 +966,9 @@ void Flag(int x,int y,char plr)
 }
 
 /** Prints a character at current position of graphics handler.
- * 
+ *
  * \note The function converts all characters to upper case before printing.
- * 
+ *
  * \param chr Character to be printed
  */
 void DispChr(char chr)
@@ -1099,10 +1099,10 @@ void VerifyCrews(char plr)
 }
 
 /** Opens "MISSION.DAT" to find mission data
- * 
+ *
  * \param mcode Code of the mission - works as index for the file
- * 
- * \todo This is highly coupled to game logic 
+ *
+ * \todo This is highly coupled to game logic
  * and size of internal structures.
  */
 void GetMisType(char mcode)

@@ -518,12 +518,8 @@ AstroTurn(void)
 					}
 				}
 
-				if (mates > 0) //-5 for each in Gemini, -3 for each incompatible in Jupiter , -4 in Apollo/Minishutle
-					Data->P[j].Pool[i].Mood -= Data->P[j].Pool[i].Assign==2? 5*(mates-temp) : Data->P[j].Pool[i].Assign==5? 3*(mates-temp): 4 * (mates-temp);
-				if (sameGroup>0) //+1 for each mate from the same group
-					Data->P[j].Pool[i].Mood += 1*sameGroup;
-				if (temp>0)			//+1 for each compatible mate
-					Data->P[j].Pool[i].Mood += 1*temp;
+				if (mates > 0) //-2 for each in Jupiter/Minishuttle , -3 in others
+					Data->P[j].Pool[i].Mood -= (Data->P[j].Pool[i].Assign==5 || Data->P[j].Pool[i].Assign==4)? 2*(mates-temp): 3 * (mates-temp);
 
 				/* Final record updating */
 

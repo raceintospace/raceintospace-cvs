@@ -477,7 +477,7 @@ int CloseAnim(FILE * fin);
 int StepAnim(int x,int y,FILE *fin);
 char DrawMoonSelection (char nauts,char plr);
 void FirstManOnMoon (char plr, char isAI, char misNum);
-
+int RocketBoosterSafety(int safetyRocket, int safetyBooster);
 
 // MIS_M.C
 void MevDebug(FILE *fout,char i);

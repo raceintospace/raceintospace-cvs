@@ -186,7 +186,7 @@ void Strategy_One(char plr,int *m_1,int *m_2,int *m_3)
 {
  //AI version 12/26/92
  switch(Data->P[plr].Track[1])
-  {  
+  {
    case 0:// mission 26 -> if manned docking and eva  -> DurLevel+1
           *m_1=15;*m_2=15;++Data->P[plr].Track[1];*m_3=7;break;
    case 1:*m_1=15;if (PreChe(plr,26)==0) *m_2=20;else *m_2=14;++Data->P[plr].Track[1];*m_3=7;break;
@@ -214,7 +214,7 @@ void Strategy_One(char plr,int *m_1,int *m_2,int *m_3)
           if (Data->P[plr].Rocket[2].Num>=0) Data->P[plr].Track[5]=1;
           Data->P[plr].Buy[1][2]=0;RDafford(plr,1,2);
           break;
-   case 5:*m_1=43;if (Cur_Status==Behind) *m_2=46; 
+   case 5:*m_1=43;if (Cur_Status==Behind) *m_2=46;
           //lunar pass
           ++Data->P[plr].Track[1];
           break;
@@ -236,7 +236,7 @@ void Strategy_One(char plr,int *m_1,int *m_2,int *m_3)
            {
             switch(Data->P[plr].LMpts)
              {
-              case 0:case 1:if (Data->P[plr].Mission[0].MissionCode==48) *m_1=53; 
+              case 0:case 1:if (Data->P[plr].Mission[0].MissionCode==48) *m_1=53;
                       else {*m_1=48;}break;
               case 2: case 3:*m_1=53;break;
               default:*m_1=53;break;
@@ -256,7 +256,7 @@ void Strategy_Two(char plr,int *m_1,int *m_2,int *m_3)
 {
  // AI version 12/28/92
  switch(Data->P[plr].Track[1])
-  {  
+  {
    case 0:*m_1=15;*m_2=15;++Data->P[plr].Track[1];*m_3=7;break;
    case 1:*m_1=15;*m_2=14;++Data->P[plr].Track[1];*m_3=7;break;
    case 2:if (PreChe(plr,24) && PreChe(plr,26))
@@ -283,7 +283,7 @@ void Strategy_Two(char plr,int *m_1,int *m_2,int *m_3)
           if (Data->P[plr].Rocket[2].Num>=0) Data->P[plr].Track[5]=1;
           Data->P[plr].Buy[1][2]=0;RDafford(plr,1,2);
           break;
-   case 5:*m_1=43;if (Cur_Status==Behind) *m_2=46; 
+   case 5:*m_1=43;if (Cur_Status==Behind) *m_2=46;
           //lunar pass
           ++Data->P[plr].Track[1];
           break;
@@ -305,7 +305,7 @@ void Strategy_Two(char plr,int *m_1,int *m_2,int *m_3)
            {
             switch(Data->P[plr].LMpts)
              {
-              case 0:case 1:if (Data->P[plr].Mission[0].MissionCode==48) *m_1=53; 
+              case 0:case 1:if (Data->P[plr].Mission[0].MissionCode==48) *m_1=53;
                       else {*m_1=48;}break;
               case 2: case 3:*m_1=53;break;
               default:*m_1=53;break;
@@ -325,7 +325,7 @@ void Strategy_Thr(char plr,int *m_1,int *m_2,int *m_3)
 {
  //new version undated
  switch(Data->P[plr].Track[1])
-  {  
+  {
    case 0:// mission 26 -> if manned docking and eva  -> DurLevel+1
           *m_1=15;*m_2=15;++Data->P[plr].Track[1];*m_3=7;break;
    case 1:*m_1=15;if (PreChe(plr,26)==0) *m_2=20;else *m_2=14;++Data->P[plr].Track[1];*m_3=7;break;
@@ -353,7 +353,7 @@ void Strategy_Thr(char plr,int *m_1,int *m_2,int *m_3)
           if (Data->P[plr].Rocket[2].Num>=0) Data->P[plr].Track[5]=1;
           Data->P[plr].Buy[1][2]=0;RDafford(plr,1,2);
           break;
-   case 5:*m_1=43;if (Cur_Status==Behind) *m_2=46; 
+   case 5:*m_1=43;if (Cur_Status==Behind) *m_2=46;
           //lunar pass
           ++Data->P[plr].Track[1];
           break;
@@ -375,7 +375,7 @@ void Strategy_Thr(char plr,int *m_1,int *m_2,int *m_3)
            {
             switch(Data->P[plr].LMpts)
              {
-              case 0:case 1:if (Data->P[plr].Mission[0].MissionCode==48) *m_1=53; 
+              case 0:case 1:if (Data->P[plr].Mission[0].MissionCode==48) *m_1=53;
                       else {*m_1=48;}break;
               case 2: case 3:*m_1=53;break;
               default:*m_1=53;break;
@@ -497,7 +497,7 @@ void NewAI(char plr,char frog)
    if (Data->P[plr].Track[2]>0)
 	 {
 	  if (GenPur(plr,2,Data->P[plr].Track[2])) RDafford(plr,2,Data->P[plr].Track[2]);
-		else RDafford(plr,2,Data->P[plr].Track[2]);	 }                     
+		else RDafford(plr,2,Data->P[plr].Track[2]);	 }
    else
 	{
 	 Data->P[plr].Track[2]=6;
@@ -526,7 +526,7 @@ void NewAI(char plr,char frog)
 	   {
 	    if (P_pad!=0 && B_pad!=1)
 	      {
-	       if (P_pad==1) B_pad=2; 
+	       if (P_pad==1) B_pad=2;
 	        else if (P_pad==0 && B_pad==-1) B_pad=2;
 	       else P_pad=2;
 		   }
@@ -575,7 +575,7 @@ void NewAI(char plr,char frog)
 			     if (mis3==0) mis3=8;
 			    }
             if ((Data->P[plr].Probe[1].Safety>Data->P[plr].Probe[1].MaxRD-15) && mis3==0)
-             { 
+             {
 		        if (PreChe(plr,1)==0 && PreChe(other(plr),1)==0 && Data->P[plr].Mission[2].MissionCode!=7) mis3=7;
                else if (PreChe(plr,2)==0 && PreChe(other(plr),2)==0 && Data->P[plr].Mission[2].MissionCode!=11) mis3=11;
                 else if (PreChe(plr,3)==0 && PreChe(other(plr),3)==0 && Data->P[plr].Mission[2].MissionCode!=9) mis3=9;
@@ -627,7 +627,7 @@ void AIFuture(char plr,char mis,char pad,char *prog)
 	// duration
 	if (Data->P[plr].DurLevel<=5 && Data->P[plr].Future[pad+i].Duration==0) {
 	  if (Mis.Dur==1) Data->P[plr].Future[pad+i].Duration=
-	    maxx(Mis.Days,minn(Data->P[plr].DurLevel+1,6)); 
+	    maxx(Mis.Days,minn(Data->P[plr].DurLevel+1,6));
 	  else Data->P[plr].Future[pad+i].Duration=Mis.Days;
 	}
    if (Data->P[plr].Mission[0].Duration==Data->P[plr].Future[pad+i].Duration ||
@@ -818,7 +818,7 @@ void AILaunch(char plr)
   for (i=0;i<7;i++) {
 	bdex[i]=i;
 	boos[i]=(i>3) ?
-	   (Data->P[plr].Rocket[i-4].Safety*Data->P[plr].Rocket[4].Safety)/100  //Boosters Safety Mod, Nikakd,10/8/10
+		RocketBoosterSafety(Data->P[plr].Rocket[i-4].Safety, Data->P[plr].Rocket[4].Safety)
 	  : Data->P[plr].Rocket[i].Safety;
 	bwgt[i]=(i>3) ?
 	   (Data->P[plr].Rocket[i-4].MaxPay+Data->P[plr].Rocket[4].MaxPay)
@@ -845,7 +845,7 @@ void AILaunch(char plr)
 		 {
 		  if (Data->P[plr].Mission[i].Prog==0) BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,0,Data->P[plr].Mission[i].Prog);
 		   else BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,0,Data->P[plr].Mission[i].Prog-1);
-		  for (j=Mission_Capsule; j <= Mission_Probe_DM; j++) 
+		  for (j=Mission_Capsule; j <= Mission_Probe_DM; j++)
 				Data->P[plr].Mission[i].Hard[j] = VAS[whe[0]][j].dex;
 
 		  wgt=0;for (j=0;j<4;j++) wgt+=VAS[whe[0]][j].wt;
@@ -875,7 +875,7 @@ void AILaunch(char plr)
 		{
 		 if (Data->P[plr].Mission[i].Prog==0) BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,1,Data->P[plr].Mission[i].Prog);
 		   else BuildVAB(plr,Data->P[plr].Mission[i].MissionCode,1,1,Data->P[plr].Mission[i].Prog-1);
-		 for (j=Mission_Capsule ; j <= Mission_Probe_DM; j++) 
+		 for (j=Mission_Capsule ; j <= Mission_Probe_DM; j++)
 		 	Data->P[plr].Mission[i+1].Hard[j] = VAS[whe[1]][j].dex;
 		 wgt=0;for (j=0;j<4;j++) wgt+=VAS[whe[1]][j].wt;
 		 rck[1]=-1;

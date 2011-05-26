@@ -19,6 +19,7 @@ typedef struct {
     unsigned feat_eq_new_name;
     unsigned cheat_altasOnMoon;
     unsigned cheat_addMaxS;
+    unsigned boosterSafety;
 } game_options;
 
 extern game_options options;
