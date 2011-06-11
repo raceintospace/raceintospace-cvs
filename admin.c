@@ -24,7 +24,7 @@
 //
 // All Administration Main Files
 /** \file admin.c Responsible for the Administration office.
- * 
+ *
  */
 
 #include <Buzz_inc.h>
@@ -64,11 +64,11 @@ void Admin(char plr)
 
   //FadeOut(2,pal,10,0,0);
   i=0;beg=1;
-  
+
   do {
      if (beg) beg=0;
      else {
-        
+
         FadeOut(2,pal,10,0,0);
 
         DrawSpaceport(plr);
@@ -80,7 +80,7 @@ void Admin(char plr)
         else PrintAt(166,197,"FALL 19");DispNum(0,0,Data->Year);
         grSetColor(11);if (Data->Season==0) PrintAt(165,196,"SPRING 19");
         else PrintAt(165,196,"FALL 19");DispNum(0,0,Data->Year);
-        
+
         FadeIn(2,pal,10,0,0);
      }
 
@@ -210,7 +210,7 @@ int GenerateTables(SaveGameType saveType)
      }
    }
 
-  } 
+  }
   return tFiles;
 }
 
@@ -233,20 +233,20 @@ void FileAccess(char mode)
    sc=1; //only allow mail save
   }
 
-  
+
   strcpy(IDT,"i128");strcpy(IKEY,"k128");
   FadeOut(2,pal,10,0,0);
   gxClearDisplay(0,0);
 
 	saveType = SAVEGAME_Normal;
 
-  if (Option!=-1) 
+  if (Option!=-1)
 		saveType = SAVEGAME_Modem;
-	else if (mode==2) 
+	else if (mode==2)
 		saveType = SAVEGAME_PlayByMail;
 
   tFiles=GenerateTables(saveType);
-  
+
   ShBox(34,32,283,159);
   InBox(37,35,204,45);RectFill(38,36,203,44,7);
   InBox(207,35,280,45);RectFill(208,36,279,44,10);
@@ -260,13 +260,13 @@ void FileAccess(char mode)
   if (mode==0)
    {
     if (sc==0 || sc==2) IOBox(207,62,280,74); // Regular Save game
-     else InBox(207,62,280,74); 
+     else InBox(207,62,280,74);
     if (sc==1) IOBox(207,76,280,88); // Mail Save game
      else InBox(207,76,280,88);
-   }   
+   }
    else {
     InBox(207,62,280,74);
-    InBox(207,76,280,88); 
+    InBox(207,76,280,88);
    }
   if (tFiles>0) IOBox(207,90,280,102); else InBox(207,90,280,102); // Delete
   IOBox(207,104,280,116); // Play
@@ -288,25 +288,25 @@ void FileAccess(char mode)
   if (tFiles)
 	  FileText(&FList[now].Name[0]);
   FadeIn(2,pal,10,0,0);
-  
-  
+
+
   while(!done) {
     GetMouse();
-    
+
     for (i=0;i<9;i++)
      {  // Right Select Box
       if (x>=40 && y>=(53+i*8) && x<=188 && y<=(59+i*8) && mousebuttons>0 && (now-BarB+i)<=(tFiles-1))
        {
-        
+
 	      now-=BarB; now+=i; BarB=i;
         RectFill(38,49,190,127,0);
     	   ShBox(39,52+BarB*8,189,60+BarB*8);
         DrawFiles(now,BarB,tFiles);
 	      FileText(&FList[now].Name[0]);
-		  WaitForMouseUp();   	   
+		  WaitForMouseUp();
        }
-    }  
-    
+    }
+
   if ((sc==0 || sc==2) && tFiles>0 && ((x>=209 && y>=50 && x<=278 && y<=58 && mousebuttons>0)
    || (key=='L')))
    {
@@ -314,20 +314,20 @@ void FileAccess(char mode)
 	  char *load_buffer = NULL;
 	  size_t fileLength = 0, eventSize = 0;
 	  size_t readLen = 0;
-	  
+
     InBox(209,50,278,58);
 	  delay(250);
     if (mode==1) temp=1;
      else {
 	    temp=Help("i101");
-     }    
+     }
 
 	 WaitForMouseUp();
     if (temp>=0) {
 			// Read in Saved game data
 
 	   fin=sOpen(FList[now].Name,"rb",1);
-		
+
 		fseek(fin,0,SEEK_END);
 		fileLength = ftell(fin);
 		rewind(fin);
@@ -336,14 +336,14 @@ void FileAccess(char mode)
 	   // Determine Endian Swap
 	   if (SaveHdr->dataSize!=sizeof(struct Players))
 		   endianSwap = 1;
-	
+
 	   if (endianSwap) {
 		   SaveHdr->compSize = _Swap16bit(SaveHdr->compSize);
 		   SaveHdr->dataSize = _Swap16bit(SaveHdr->dataSize);
 	   }
 	  readLen = SaveHdr->compSize;
 	   load_buffer = malloc(readLen);
-	   
+
 	   readLen = fread(load_buffer,1,readLen,fin);
 	   if (SaveHdr->dataSize==sizeof(struct Players))
        {
@@ -357,13 +357,26 @@ void FileAccess(char mode)
 #endif
  	      RLED((char *) load_buffer,(char *)Data,SaveHdr->compSize);
 		   free(load_buffer);
-		   
+
 		   // Swap Players' Data
 		   if (endianSwap)
 		   {
 			 _SwapGameDat();
 		   }
-		   
+		   //MSF now holds MaxRDBase (from 1.0.0)
+		   if (Data->P[0].Probe[0].MSF==0)
+		   {
+		   int i,k;
+			for (i=0; i<NUM_PLAYERS; i++)
+				for (k=0; k<7; k++)
+			{
+				Data->P[i].Probe[k].MSF = Data->P[i].Probe[k].MaxRD;
+				Data->P[i].Rocket[k].MSF = Data->P[i].Rocket[k].MaxRD;
+				Data->P[i].Manned[k].MSF = Data->P[i].Manned[k].MaxRD;
+				Data->P[i].Misc[k].MSF = Data->P[i].Misc[k].MaxRD;
+			}
+		   }
+
 		// Read the Replay Data
 		load_buffer = malloc((sizeof(REPLAY)) * MAX_REPLAY_ITEMS);
         readLen = fread(load_buffer,1,sizeof(REPLAY)*MAX_REPLAY_ITEMS,fin);
@@ -377,7 +390,7 @@ void FileAccess(char mode)
 				int ii;
 				for (ii = 0; ii < r->Qty; ii++)
 					r[i].Off[ii] = _Swap16bit(r[i].Off[ii]);
-					
+
 			}
 		}
 		fout=sOpen("REPLAY.DAT","wb",1);
@@ -386,12 +399,12 @@ void FileAccess(char mode)
 		free(load_buffer);
 
 		eventSize = fileLength - ftell(fin);
-		
+
 		// Read the Event Data
 		load_buffer = malloc(eventSize);
 		readLen = fread(load_buffer,1,eventSize,fin);
 		fclose(fin);
-		
+
 		if (endianSwap)
 		{
 			int i;
@@ -403,14 +416,14 @@ void FileAccess(char mode)
 					on->size = _Swap16bit(on->size);
 				}
 			}
-			
+
 			// File Structure is 84 longs 42 per side
 		}
         fout=sOpen("EVENT.TMP","wb",1);
 		fwrite(load_buffer,eventSize,1,fout);
 		fclose(fout);
 		free(load_buffer);
-		
+
          if (!(SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7 || SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9))
           {
 	         plr[0]=Data->Def.Plr1;plr[1]=Data->Def.Plr2;
@@ -458,7 +471,7 @@ void FileAccess(char mode)
              fwrite(buffer,size,1,fin);
              fclose(fin);
 	        }
-         } 
+         }
         else
          // Modem save game LOAD
         if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7)
@@ -494,10 +507,10 @@ void FileAccess(char mode)
              fwrite(buffer,size,1,fin);
              fclose(fin);
 	        }
-        }  
+        }
 	      if (Option!=MODEM_ERROR) LOAD=done=1;
          else {Option=-1;LOAD=done=0;return;}
-	     }   
+	     }
       else {fclose(fin);BadFileType();};
       } // temp
 	   OutBox(209,50,278,58);  // Button Out
@@ -518,7 +531,7 @@ void FileAccess(char mode)
         SaveHdr->Name[22]=0x1A;
 	      temp=NOTSAME;
 
-	      for (i=0;(i<tFiles && temp==2);i++) 
+	      for (i=0;(i<tFiles && temp==2);i++)
 	         if (strcmp(SaveHdr->Name,FList[i].Title)==0) {
 	            temp=RequestX("REPLACE FILE",1);
               if (temp==SAME_ABORT) done=0;
@@ -534,7 +547,7 @@ void FileAccess(char mode)
              if (Option==0) {plr[0]=6;plr[1]=1;}
               else if (Option==1) {plr[0]=0;plr[1]=7;}
              Data->Def.Plr1=plr[0];Data->Def.Plr2=plr[1];
-  	          Data->plr[0]=Data->Def.Plr1;   
+  	          Data->plr[0]=Data->Def.Plr1;
 	          Data->plr[1]=Data->Def.Plr2;
 	          AI[0]=0;AI[1]=0;
             }
@@ -543,7 +556,7 @@ void FileAccess(char mode)
 	         SaveHdr->Season=Data->Season;
 	         SaveHdr->Year=Data->Year;
 	         SaveHdr->dataSize=sizeof(struct Players);
-	   
+
 	         fin=sOpen("ENDTURN.TMP","rb",1);
 	         if (fin) {
 	            SaveHdr->compSize=fread(vhptr.vptr,1,vhptr.h*vhptr.w,fin);
@@ -551,7 +564,7 @@ void FileAccess(char mode)
 	         } else SaveHdr->compSize=0;
 
 	      if (temp==NOTSAME)
-          { 
+          {
 	        i=0;
            fin=NULL;
 	        do {
@@ -574,7 +587,7 @@ void FileAccess(char mode)
           if (Option==0) {plr[0]=0;plr[1]=1;}
            else if (Option==1) {plr[0]=0;plr[1]=1;}
           Data->Def.Plr1=plr[0];Data->Def.Plr2=plr[1];
-          Data->plr[0]=Data->Def.Plr1;   
+          Data->plr[0]=Data->Def.Plr1;
           Data->plr[1]=Data->Def.Plr2;
 	       AI[0]=0;AI[1]=0;
          }
@@ -616,7 +629,7 @@ void FileAccess(char mode)
 		 SaveHdr->ID = RaceIntoSpace_Signature;
      SaveHdr->Name[22]=0x1A;
 	  temp=NOTSAME;
-	  for (i=0;(i<tFiles && temp==2);i++) 
+	  for (i=0;(i<tFiles && temp==2);i++)
 	   if (strcmp(SaveHdr->Name,FList[i].Title)==0)
        {
 	     temp=RequestX("REPLACE FILE",1);
@@ -632,7 +645,7 @@ void FileAccess(char mode)
         // starts US side
         plr[0]=0;plr[1]=9;MAIL=-1;
         Data->Def.Plr1=plr[0];Data->Def.Plr2=plr[1];
-  	     Data->plr[0]=Data->Def.Plr1;   
+  	     Data->plr[0]=Data->Def.Plr1;
 	     Data->plr[1]=Data->Def.Plr2;
 	     AI[0]=0;AI[1]=0;
 
@@ -652,7 +665,7 @@ void FileAccess(char mode)
 	      } else SaveHdr->compSize=0;
 
 	      if (temp==NOTSAME)
-          { 
+          {
 	        i=0;
           fin=NULL;
 	        do {
@@ -664,7 +677,7 @@ void FileAccess(char mode)
           fin=sOpen(Name,"wb",1);
 	      }
         else fin=sOpen(FList[i].Name,"wb",1);
-	   
+
 	     fwrite(SaveHdr,sizeof (SaveFileHdr),1,fin);
         fout=sOpen("ENDTURN.TMP","rb",1);
         size=16000L;
@@ -689,7 +702,7 @@ void FileAccess(char mode)
          }
       fclose(fout); // close EVENT.TMP
 	    fclose(fin);
-	   }  
+	   }
      OutBox(209,78,278,86);
      key=0;
     }
@@ -703,7 +716,7 @@ void FileAccess(char mode)
 	 // perform delete
 	 i=RequestX("DELETE FILE",1);
 	 if (i==1) {
-	   
+
 	   remove_savedat(FList[now].Name);
       memset(Name,0x00,sizeof Name);
 			saveType = SAVEGAME_Normal;
@@ -723,7 +736,7 @@ void FileAccess(char mode)
 	     InBox(207,90,280,102);RectFill(208,91,279,101,3);
 	     grSetColor(1);PrintAtKey(226,98,"DELETE",0);
 	   }
-	   
+
 	 }
 	 key=0;
       }
@@ -771,14 +784,14 @@ void FileAccess(char mode)
 	   DrawFiles(now,BarB,tFiles);
 	   FileText(&FList[now].Name[0]);
 	 };
-	 
+
 	 //  WaitForMouseUp();
 	 OutBox(191,50,202,87);
 	 // perform Up Button
 	 key=0;
     }
     else if (key==0x4900) {  // Page Up
-   	 
+
    	 if (now>0) {
    	   RectFill(38,49,190,127,0);
    	   now-=9;
@@ -787,13 +800,13 @@ void FileAccess(char mode)
    	   DrawFiles(now,BarB,tFiles);
    	   FileText(&FList[now].Name[0]);
    	 };
-   	 
+
    	 // perform Up Button
   	   key=0;
 
       }
     else if (key==0x5100) {  // Page Down
-   	 
+
    	   if (now<(tFiles-9)) {
    	     now+=9;
            if (now>(tFiles-1)) {
@@ -805,7 +818,7 @@ void FileAccess(char mode)
    	     DrawFiles(now,BarB,tFiles);
    	     FileText(&FList[now].Name[0]);
    	   }
-   	 
+
    	 key=0;
       }
       else if ((x>=191 && y>=89 && x<=202 && y<=126 && mousebuttons>0) || key==DN_ARROW)
@@ -827,8 +840,8 @@ void FileAccess(char mode)
 	   DrawFiles(now,BarB,tFiles);
 	   FileText(&FList[now].Name[0]);
 	 };
-	 
-   
+
+
 	 // WaitForMouseUp();
 	 OutBox(191,89,202,126);
 	 // perform Down Button
@@ -869,7 +882,7 @@ save_game (char *name)
 	hdr.Year = Data->Year;
 	hdr.dataSize = sizeof(struct Players);
 	hdr.compSize = 0; //filelength (fileno (inf));
-	   
+
 	if ((outf = sOpen (name, "wb", 1)) == NULL) {
 		WARNING2("can't save to file `%s'", name);
 		goto cleanup;
@@ -883,10 +896,10 @@ save_game (char *name)
         goto cleanup;
     }
     hdr.compSize = size;
-	
+
 	fwrite(&hdr,sizeof hdr,1,outf);
     fwrite(buf, size, 1, outf);
-	
+
 	if ((inf = sOpen ("REPLAY.DAT", "rb", 1)) != NULL) {
         size = fread_dyn(&buf, &buflen, inf);
         if (size >= 0)
@@ -899,7 +912,7 @@ save_game (char *name)
         fclose(inf);
         inf = NULL;
 	}
-	
+
 	if ((inf = sOpen ("EVENT.TMP", "rb", 1)) != NULL) {
         size = fread_dyn(&buf, &buflen, inf);
         if (size >= 0)
@@ -928,7 +941,7 @@ char GetBlockName(char *Nam)
 {
   int i,key;
   GXHEADER local;
-  
+
   GV(&local,164,77);
   gxGetImage(&local,39,50,202,126,0);
   ShBox(39,50,202,126);
@@ -941,10 +954,10 @@ char GetBlockName(char *Nam)
     InBox(43,67,197,77);RectFill(44,68,196,76,13);
     grSetColor(11);PrintAt(47,74,"NOT ENOUGH DISK SPACE");
     delay(2000);gxPutImage(&local,gxSET,39,50,0);DV(&local);
-    
+
     return 0;
   }
-  
+
   gr_sync ();
   key=0;i=0;
   while(!(key==K_ENTER || key==K_ESCAPE)) {
@@ -963,18 +976,18 @@ char GetBlockName(char *Nam)
       }
       if (i>0 && key==0x08) {
 	Nam[--i]=0x00;
-  
+
 	RectFill(52,96,189,104,0);
 	grSetColor(1);PrintAt(53,102,&Nam[0]);
-  
+
 	key=0;
       }
     }
   }
-  
+
   gxPutImage(&local,gxSET,39,50,0);
   DV(&local);
-  
+
   if(key==K_ENTER && i>=1) return 1; else return 0;
 }
 
@@ -1026,11 +1039,11 @@ void FileText(char *name)
   fread(SaveHdr,sizeof (SaveFileHdr),1,fin);
   fclose(fin);
   grMoveTo(40,139);
-  //if (((char)SaveHdr->Country[0])&0x02) grSetColor(7+(SaveHdr->Country[1]-2)*3); 
+  //if (((char)SaveHdr->Country[0])&0x02) grSetColor(7+(SaveHdr->Country[1]-2)*3);
 
   grSetColor(5);
 
-  //grSetColor(6+(SaveHdr->Country[0]%2)*3); 
+  //grSetColor(6+(SaveHdr->Country[0]%2)*3);
   if (SaveHdr->Country[0]==6 || SaveHdr->Country[1]==7) PrintAt(0,0,"MODEM DIRECTOR ");
    else if (SaveHdr->Country[0]==8 || SaveHdr->Country[1]==9) PrintAt(0,0,"MAIL DIRECTOR ");
     else if (SaveHdr->Country[0]==2) PrintAt(0,0,"COMPUTER DIRECTOR ");
@@ -1039,7 +1052,7 @@ void FileText(char *name)
   PrintAt(0,0," OF THE U.S.A.");
 
   grMoveTo(40,147);
-  //if (((char)SaveHdr->Country[1])&0x02) grSetColor(7+(SaveHdr->Country[1]-2)*3); 
+  //if (((char)SaveHdr->Country[1])&0x02) grSetColor(7+(SaveHdr->Country[1]-2)*3);
 
   grSetColor(9);
 
@@ -1062,7 +1075,7 @@ void FileText(char *name)
     if (SaveHdr->Country[0]==8) PrintAt(0,0,"U.S.A. TURN IN THE FALL OF ");
      else if (SaveHdr->Country[1]==9) PrintAt(0,0,"SOVIET TURN IN THE FALL OF ");
       else PrintAt(0,0,"THE FALL OF ");
-   }   
+   }
   DispNum(0,0,19);DispNum(0,0,SaveHdr->Year);PrintAt(0,0,".");
 }
 
@@ -1071,7 +1084,7 @@ int FutureCheck(char plr,char type)
 {
   int i,pad,p[3],m[3],t=0,tx[3]={0,0,0};
   FILE *fin;
-  
+
   for (i=0;i<3;i++) {
     p[i]=Data->P[plr].LaunchFacility[i];
     if (type==0) m[i]=Data->P[plr].Future[i].MissionCode;
@@ -1115,7 +1128,7 @@ int FutureCheck(char plr,char type)
         GetMisType(Data->P[plr].Mission[i].MissionCode);
         PrintAt(111,41+i*51,Mis.Abbr);
 	  MisCod=Data->P[plr].Mission[i].MissionCode;
-	  if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+	  if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)
 	   // Show duration level only on missions with a Duration step - Leon
 	    {
 	     switch(Data->P[plr].Mission[i].Duration)
@@ -1141,7 +1154,7 @@ int FutureCheck(char plr,char type)
 
            PrintAt(111,41+i*51,Mis.Abbr);
 	   MisCod=Data->P[plr].Future[i].MissionCode;
-	   if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)  
+	   if ((MisCod>24 && MisCod<32) || MisCod==33 || MisCod==34 || MisCod==35 || MisCod==37 || MisCod==40 || MisCod==41)
 	    // Show duration level only on missions with a Duration step - Leon
 	   {
 	     switch(Data->P[plr].Future[i].Duration)
@@ -1191,12 +1204,12 @@ int FutureCheck(char plr,char type)
   }
 
   FadeIn(2,pal,10,0,0);
-  
+
   WaitForMouseUp();
   pad=-1;x=y=mousebuttons=key=0;
   while(pad==-1) {
    key=0;GetMouse();
-     if (x>=219 && y>=19 && x<=262 && y<=27 && mousebuttons>0) 
+     if (x>=219 && y>=19 && x<=262 && y<=27 && mousebuttons>0)
       {
        InBox(219,19,262,27);
        WaitForMouseUp();
@@ -1216,7 +1229,7 @@ int FutureCheck(char plr,char type)
 	 delay(300);
 	 if (p[i]==1) pad=i;
 	 if (p[i]==-1 && Data->P[plr].Cash>=20 && type==0) {
-     
+
 	   gxVirtualDisplay(&vhptr,156*plr+39,i*30,65,36+i*51,103,65+i*51,0);
 	   Data->P[plr].Cash-=20;
 	   Data->P[plr].Spend[0][3]+=20;
@@ -1225,7 +1238,7 @@ int FutureCheck(char plr,char type)
 	   RectFill(109,36+51*i,263,63+51*i,3);
 	   grSetColor(5);Missions(plr,111,41+i*51,m[i],0);
 	   PrintAt(113,75+i*51,"ASSIGN FUTURE MISSION");
-     
+
 	 }
    else if (p[i]==-1 && Data->P[plr].Cash<20 && type==0)
     {Help("i129");}
@@ -1233,7 +1246,7 @@ int FutureCheck(char plr,char type)
 
 	 if (p[i]>4 && Data->P[plr].Cash>=abs(Data->P[plr].LaunchFacility[i])
 	    && type==0) {
-     
+
 	   gxVirtualDisplay(&vhptr,156*plr+39,i*30,65,36+i*51,103,65+i*51,0);
 	   Data->P[plr].Cash-=Data->P[plr].LaunchFacility[i];
 	   Data->P[plr].Spend[0][3]+=Data->P[plr].LaunchFacility[i];
@@ -1242,7 +1255,7 @@ int FutureCheck(char plr,char type)
 	   ShBox(110,69+i*51,262,77+i*51);
 	   grSetColor(5);Missions(plr,111,41+i*51,m[i],0);
 	   PrintAt(113,75+i*51,"ASSIGN FUTURE MISSION");
-     
+
 	 }
 	 else if (p[i]>4 && Data->P[plr].Cash<abs(Data->P[plr].LaunchFacility[i])
 	    && type==0) {Help("i129");}
@@ -1257,7 +1270,7 @@ char RequestX(char *s,char md)
   char i;
   GXHEADER local;
 
-  
+
   if (md==1) {  // Save Buffer
     GV(&local,196,84);
     gxGetImage(&local,85,52,280,135,0);
@@ -1274,7 +1287,7 @@ char RequestX(char *s,char md)
   grSetColor(11);
   DispBig(166-i*10,65,&s[0],0,-1);
   PrintAt(136,94,"ARE YOU SURE?");
-  
+
   WaitForMouseUp();
   i=2;
   while(i==2) {
@@ -1290,7 +1303,7 @@ char RequestX(char *s,char md)
   };
 
   if (md==1) {
-    
+
     WaitForMouseUp();
     gxPutImage(&local,gxSET,85,52,0);
     DV(&local);
@@ -1318,7 +1331,7 @@ void SaveMail(void)
   SaveHdr->Name[22]=0x1A;
   temp=NOTSAME;
   done=YES;
-  for (i=0;(i<tFiles && temp==2);i++) 
+  for (i=0;(i<tFiles && temp==2);i++)
    if (strcmp(SaveHdr->Name,FList[i].Title)==0)
     {
      temp=1;
@@ -1336,7 +1349,7 @@ void SaveMail(void)
     if (MAIL==0) {plr[0]=0;plr[1]=9;}
      else if (MAIL==1) {plr[0]=8;plr[1]=1;}
     Data->Def.Plr1=plr[0];Data->Def.Plr2=plr[1];
-  	 Data->plr[0]=Data->Def.Plr1;   
+  	 Data->plr[0]=Data->Def.Plr1;
 	 Data->plr[1]=Data->Def.Plr2;
 	 AI[0]=0;AI[1]=0;
 
@@ -1358,7 +1371,7 @@ void SaveMail(void)
 	  } else SaveHdr->compSize=0;
 
  	 if (temp==NOTSAME)
-     { 
+     {
 	   i=0;
      fin=NULL;
 	   do {
@@ -1370,7 +1383,7 @@ void SaveMail(void)
      fin=sOpen(Name,"wb",1);
 	  }
      else fin=sOpen(FList[i].Name,"wb",1);
-	   
+
 	  fwrite(SaveHdr,sizeof (SaveFileHdr),1,fin);
      fout=sOpen("ENDTURN.TMP","rb",1);
      size=16000L;
@@ -1394,7 +1407,7 @@ void SaveMail(void)
       }
      fclose(fout); // close EVENT.TMP
 	  fclose(fin);
-    }	 
+    }
 }
 #endif
 
@@ -1409,17 +1422,17 @@ void EndOfTurnSave(char *inData, int dataLen)
 	remove_savedat("ENDTURN.TMP");
 
 	// Create new save data
-	fout = sOpen("ENDTURN.TMP","wb",1);  
+	fout = sOpen("ENDTURN.TMP","wb",1);
 	compressedLen = RLEC(inData, buffer, dataLen);
 #ifdef OLD_DOS_ENCRYPT_SAVEDATA
 	{
 		int moo = 0;
 		srand(compressedLen);		// Seed the random number generator with file length
-		for(moo=0;moo<j;moo++) 
+		for(moo=0;moo<j;moo++)
 		{
 			buffer[moo]^=random(256);	//
 		}
-		// Reseed the random number generator 
+		// Reseed the random number generator
 		// -- this may have been the source of created complaints about randomness
 		randomize();
 	}

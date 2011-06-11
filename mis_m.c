@@ -609,6 +609,7 @@ void F_KillCrew(char mode,struct Astros *Victim)
   if ( (Data->Def.Lev1 == 0 && p == 0 ) || ( Data->Def.Lev2 == 0 && p == 1) )
 	Mev[STEP].E->Safety/=2;
   else Mev[STEP].E->Safety=Mev[STEP].E->Base;
+  Mev[STEP].E->MaxRD = Mev[STEP].E->MSF-1;
 
   if (mode==F_ALL) {
 	for(k=0;k<MANNED[Mev[STEP].pad];k++) {  // should work in news
@@ -748,9 +749,6 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 
 	   case 7:   // Reduce Safety by VAL% perm
          FNote=0;
-         Mev[STEP].E->Safety-=abs(val);
-		   if (Mev[STEP].E->Safety<=0)
-            Mev[STEP].E->Safety=1;
 		   Mev[STEP].StepInfo=1700+Mev[STEP].loc;
          if (Mev[STEP].fgoto==-1) Mev[STEP].trace=0x7F;
          else Mev[STEP].trace=STEP+1;
@@ -915,9 +913,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
                ctr++;
 		         }
 		      };
-         Mev[STEP].E->Safety-=xtra;
-         if (Mev[STEP].E->Safety<=0)
-            Mev[STEP].E->Safety=1;
+         //Used to reduce safety
 
          if (Mev[STEP].fgoto==-1) Mev[STEP].trace=0x7F;
          else if (Mev[STEP].fgoto!=-2) Mev[STEP].trace=Mev[STEP].fgoto;
@@ -926,7 +922,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 
 	   case 24:   // Reduce Safety by VAL% perm :: hardware recovered
          FNote=5;
-         Mev[STEP].E->Safety-=abs(val);
+         Mev[STEP].E->Safety-=random(10);
 		   if (Mev[STEP].E->Safety<=0)
             Mev[STEP].E->Safety=1;
 		   Mev[STEP].StepInfo=800+Mev[STEP].loc;
@@ -943,7 +939,7 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
       case 26: // Subtract VAL% from Equip perm and branch to alternate
          FNote=1;
          Mev[STEP].StepInfo=1926;
-         Mev[STEP].E->Safety-=abs(val);
+         Mev[STEP].E->Safety-=random(10);
 		   if (Mev[STEP].E->Safety<=0)
             Mev[STEP].E->Safety=1;
 
@@ -954,9 +950,12 @@ int FailEval(char plr,int type,char *text,int val,int xtra)
 
 
 	   case 30:  // Duration Failure
+	   Data->P[plr].Mission[MPad+Mev[STEP].pad].Duration= 1; //Original code would also return 1
+           durx=-1;  // end durations
          FNote=7;
 		   Mev[STEP].StepInfo=1950;
          Mev[STEP].trace=STEP+1;
+
 		   break;
 
    case 31:  // kill EVA and LM people and branch VAL steps

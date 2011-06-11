@@ -675,7 +675,11 @@ void ShowUnit(char hw,char un,char player_index)
     if (hw!=2) DispNum(240,125,PL->UnitWeight);
     else PrintAt(240,125,"N/A");
 
-    grSetColor(20);DispNum(242,139,PL->MaxRD);DispChr('%');
+    grSetColor(20);
+    if (PL->MaxRD!=0)	{DispNum(242,139,PL->MaxRD);DispChr('%');
+    	PrintAt(0,0," / "); DispNum(0,0,PL->MSF); DispChr('%'); //Used to test if MSF was holding the right value
+    	}
+    else PrintAt(242,139, "--")
     grSetColor(11);DispNum(254,146,PL->MaxSafety);DispChr('%');
 
     if (hw!=2) PrintAt(268,132,"N/A"); /* Payload */

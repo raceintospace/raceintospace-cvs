@@ -114,7 +114,7 @@ static struct {
 	{"altasLunar", &options.cheat_altasOnMoon, "%u", 0,
 		"Set to non-zero to enable Altas rockets in lunar missions." },
 	{"succesRDMax", &options.cheat_addMaxS, "%u", 0,
-		"Set to non-zero to make sucessful mission add to R&D max Safety." },
+		"Set to zero to make MaxRD not change with succesful missions." },
 	{"boosterSafety", &options.boosterSafety, "%u", 0,
 		"0: Stadistical Safety (default) - 1: Min Safety - 2: Average Safety" },
 };
@@ -394,7 +394,7 @@ setup_options(int argc, char *argv[])
 	options.feat_random_eq=0;
 	options.feat_eq_new_name =0;
 	options.cheat_altasOnMoon=0;
-	options.cheat_addMaxS=0;
+	options.cheat_addMaxS=1;
 	options.boosterSafety=0;
 
 	fixpath_options();

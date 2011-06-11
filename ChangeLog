@@ -1,3 +1,15 @@
+2011-06-11	Nicolas Laplume <nikakd@users.sourceforge.net>
+
+	* V264
+
+	* Make MaxRD improve by 1 with each succesful mission (up to MaxSafety-2)
+
+	* Make MaxRD change back to original MaxRD after catastrophic failures
+
+	* Reduce Safety penalty in no-catastrophic failures to up to 10 (to 0 if "All systems are GO")
+
+	* Fixed bug that awarded duration level if last duration step failed
+
 2011-05-26	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V263

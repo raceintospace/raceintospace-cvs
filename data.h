@@ -20,16 +20,16 @@
 */
 /**
 \page eventcards Event Card Structure
- * 
+ *
  * \section datafile Sample Work for Data File Saving and Loading
- * 
+ *
  * \subsection missioncode MissionCode
  *         x = Mission Type.
- * 
+ *
  * \todo A load of code uses these number directly.
- * We should fix this and attach propper attributes to 
+ * We should fix this and attach propper attributes to
  * the missions or keep lists of missions having these attributes.
- * 
+ *
  * \subsection turnonly TurnOnly
  * \li 1 = No new astronauts
  * \li 2 = No manned missions this year
@@ -37,13 +37,13 @@
  * \li 4 = Hardware 50% off next season
  * \li 5 = 50% chance of explosion on pad
  * \li 6 = Only one launch this turn
- * 
+ *
  * \section futureplans FuturePlans
  * \li  1 = Multi-Manned Mission
  * \li  2 = Satellite
  * \li  3 = Manned Launch
  * \li  4 = Joint Mission
- * 
+ *
  * \section astronautstatus Astronaut.Status
  * \li   0 = Active
  * \li   1 = Dead
@@ -56,7 +56,7 @@
  * \li   8 = Advanced Training II
  * \li   9 = Advanced Training III
  * \li  10 = Advanced Training IV
- * 
+ *
  * \section astronauttraininglevel Astronaut.TrainingLevel:
  * \li   0 = None
  * \li   1 = Basic Training I
@@ -66,7 +66,7 @@
  * \li   5 = Advanced Training II
  * \li   6 = Advanced Training III
  * \li   7 = Advanced Training IV
- * 
+ *
  * \section astronautspecial Astros::Special
  *                 News specials
  * \li   1 = Retirement announcement
@@ -135,7 +135,7 @@ typedef struct _Equipment {
 	char ID[2];			/**< EquipID "C0 C1 C2 C3 : Acts as Index */
 	int16_t Safety;		/**< current safety factor */
 	int16_t MisSaf;		/**< Safety During Mission */
-	int16_t MSF;		/**< used only to hold safety for docking kludge */
+	int16_t MSF;		/**< used only to hold safety for docking kludge / Base Max R&D for others (from 1.0.0)*/
 	char Base;			/**< initial safety factor */
 	int16_t InitCost;	/**< Startup Cost of Unit */
 	char UnitCost;		/**< Individual Cost */
@@ -431,9 +431,9 @@ enum MissionHardwareType
 	Mission_SecondaryBooster	// 7
 };
 
-struct MisAst {  // This struct will be -1's if empty 
+struct MisAst {  // This struct will be -1's if empty
   struct Astros *A;
-  char loc;         
+  char loc;
 };
 
 struct MisEval {
@@ -512,7 +512,7 @@ struct MXM {
 
 struct VInfo {char name[15],qty,ac,sf,dex,img;int16_t wt;char dmg;};
 struct ManPool {char Name[14],Sex,Cap,LM,EVA,Docking,Endurance;};
-struct order {int16_t plr,loc,budget,date;};    
+struct order {int16_t plr,loc,budget,date;};
 
 struct mfab {
   char Text[2][75];
@@ -562,7 +562,7 @@ enum SpacePortOverlays
   PORT_SVHQ,				// 34 Strategic Visions H.Q.
 };
 
-// Typical 
+// Typical
 typedef struct _patch {
   int16_t w;
   int16_t h;
@@ -597,7 +597,7 @@ typedef struct oldNews {
 
 // Save Game related typedefs
 //#define RaceIntoSpace_Signature	'RiSP'
-#define RaceIntoSpace_Signature 0x52695350		
+#define RaceIntoSpace_Signature 0x52695350
 #define RaceIntoSpace_Old_Sig 0x49443a00  //'ID:\0"
 #define SAVEFILE_UNK_MAGIC	0x1A
 

@@ -38,7 +38,7 @@ void DrawPrefs(int where,char a1,char a2)
 {
   int i,mode=0;
   FILE *fin;
-  
+
   FadeOut(2,pal,10,0,0);
   strcpy(IDT,"i013");strcpy(IKEY,"K013");
   fin=sOpen("PREFS.BUT","rb",0);
@@ -114,7 +114,7 @@ void DrawPrefs(int where,char a1,char a2)
   gxVirtualDisplay(&vhptr,72*(Data->Def.Anim),90,147,71,218,100,0);
   HModel(Data->Def.Input,1);
 
-  // if (where==0 || where==2) 
+  // if (where==0 || where==2)
   FadeIn(2,pal,10,0,0);
   return;
 }
@@ -139,7 +139,7 @@ void HModel(char mode,char tx)
   RLED_img(buffer,local.vptr,table.size, local.w, local.h);
   n = gxVirtualSize(gxVGA_13,127,80);
   for (j=0;j<n;j++) local.vptr[j]+=112;
-  
+
   RectFill(96,114,223,194,0);
   if (tx==0) gxSetDisplayPalette(pal);
   gxPutImage(&local,gxSET,97,115,0);
@@ -151,7 +151,7 @@ void HModel(char mode,char tx)
   grSetColor(9);
   if (mode==0 || mode==2 || mode==4) PrintAt(100,128,"HISTORICAL ROSTER");
   else PrintAt(100,128,"CUSTOM ROSTER");
-  
+
   return;
 }
 
@@ -159,29 +159,29 @@ void HModel(char mode,char tx)
 void Levels(char plr,char which,char x)
 {
  unsigned char v[2][2]={{9,239}, {161,108}};
- 
+
  gxVirtualDisplay(&vhptr,0+which*72,30+x*30,v[0][plr],v[1][x],v[0][plr]+71,v[1][x]+29,0);
- 
+
  return;
 }
 
 void BinT(int x,int y,char st)
 {
   char sta[2][2]={{2,4},{4,2}};
-  
+
   grSetColor(sta[st][0]);
   grMoveTo(0+x,y+20);grLineTo(0+x,y+0);grLineTo(72+x,y+0);
   grMoveTo(12+x,y+21);grLineTo(12+x,y+30);
   grSetColor(sta[st][1]);
   grMoveTo(0+x,y+21);grLineTo(11+x,y+21);
   grMoveTo(12+x,y+31);grLineTo(73+x,y+31);grLineTo(73+x,y+0);
-  
+
   return;
 }
 
 void PLevels(char side,char wh)
 {
- 
+
  if (side==0) {
    gxVirtualDisplay(&vhptr, 0+wh*72,     0,   9,  55,  20,  74,  0);
    gxVirtualDisplay(&vhptr, 0+wh*72+11,  0,  21,  55,  80,  84,  0);
@@ -190,17 +190,17 @@ void PLevels(char side,char wh)
    gxVirtualDisplay(&vhptr, 0+wh*72,     0, 239,  55, 250,  74,  0);
    gxVirtualDisplay(&vhptr, 0+wh*72+11,  0, 250,  55, 310,  84,  0);
  }
- 
+
  return;
 }
 
 void CLevels(char side,char wh)
 {
- 
+
  if (side==0)
    gxVirtualDisplay(&vhptr,144,wh*7,9,78,17,84,0);
  else gxVirtualDisplay(&vhptr,144,wh*7,239,78,247,84,0);
- 
+
  return;
 }
 
@@ -274,7 +274,7 @@ long size;
       {
 	    InBox(245,5,314,17);
 	    WaitForMouseUp();
-       if (key>0) delay(150); 
+       if (key>0) delay(150);
 	    OutBox(245,5,314,17);
 	    if (!(Data->Def.Input==2 || Data->Def.Input==3)) {
 		if (options.feat_eq_new_name && hum1!=1) SetEquipName(0);
@@ -302,9 +302,18 @@ long size;
 	          fclose(fin);
 	         }
 
-	///Random Equipment
-	if ((where==0 || where==3) && (Data->Def.Input==4 || Data->Def.Input==5)) RandomizeEq();	
-	
+			///Random Equipment
+			if ((where==0 || where==3) && (Data->Def.Input==4 || Data->Def.Input==5)) RandomizeEq();
+
+			int i,k;
+			for (i=0; i<NUM_PLAYERS; i++)
+				for (k=0; k<7; k++)
+			{
+				Data->P[i].Probe[k].MSF = Data->P[i].Probe[k].MaxRD;
+				Data->P[i].Rocket[k].MSF = Data->P[i].Rocket[k].MaxRD;
+				Data->P[i].Manned[k].MSF = Data->P[i].Manned[k].MaxRD;
+				Data->P[i].Misc[k].MSF = Data->P[i].Misc[k].MaxRD;
+			}
 
 	       if (Data->Def.Input==0 || Data->Def.Input==2 || Data->Def.Input==4)
            { // Hist Crews
@@ -352,20 +361,20 @@ long size;
         if (key>0) delay(150);
 	     OutBox(146,30,219,61);
 	     GV(&local2,320,200);
-	     
+
 	     gxGetImage(&local2,0,0,319,199,0);
-	     
+
         music_stop();
         music_start(M_FILLER);
 	     EditAst();
        strcpy(IDT,"i013");strcpy(IKEY,"K013");
         music_stop();
         music_start((where==0 || where==3) ? M_SOVTYP : M_DRUMSM);
-	     
+
 	     gxPutImage(&local2,gxSET,0,0,0);
-	     
+
 	     DV(&local2);
-	     FadeIn(2,pal,10,0,0); 
+	     FadeIn(2,pal,10,0,0);
 	     // Astronaut Changes
        }
       else
@@ -417,7 +426,7 @@ long size;
 
 #if 0
       else
-      if (((x>=8 && y>=54 && x<=19 && y<=75 && where==0) || (x>=20 && y>=54 && x<=81 && y<=85 && where==0)) 
+      if (((x>=8 && y>=54 && x<=19 && y<=75 && where==0) || (x>=20 && y>=54 && x<=81 && y<=85 && where==0))
            || (where==0 && ksel==0 && key=='C'))
        {
 	     BinT(8,54,1);
@@ -470,7 +479,7 @@ long size;
        }
 #if 0
       else
-      if (((x>=238 && y>=54 && x<=249 && y<=75 && ((where==3 || where==0) && mousebuttons>0) || (x>=250 && y>=54 && x<=311 && y<=85 && where==0)) 
+      if (((x>=238 && y>=54 && x<=249 && y<=75 && ((where==3 || where==0) && mousebuttons>0) || (x>=250 && y>=54 && x<=311 && y<=85 && where==0))
           || (where==0 && ksel==1 && key=='C'))
        {
 	     BinT(238,54,1);
@@ -584,8 +593,8 @@ void EditAst(void)
  FILE *fin;
  char Cur,Cnt,temp,b;
  strcpy(IDT,"i040");strcpy(IKEY,"k040");
- FadeOut(2,pal,10,0,0);        
- 
+ FadeOut(2,pal,10,0,0);
+
  gxClearDisplay(0,0);
  ShBox(0,0,319,22);;IOBox(243,3,316,19);
  grSetColor(1);PrintAt(258,13,"CONTINUE");
@@ -604,13 +613,13 @@ void EditAst(void)
  OutBox(6,124,43,136);OutBox(6,139,43,151);OutBox(6,154,43,166);
  OutBox(6,169,43,181);OutBox(6,184,43,196);
  grSetColor(9);
- PrintAt(13,132,"CAP");PrintAt(13,147,"L.M.");         
- PrintAt(13,162,"EVA");PrintAt(13,177,"DOCK.");PrintAt(13,192,"ENDR.");             
+ PrintAt(13,132,"CAP");PrintAt(13,147,"L.M.");
+ PrintAt(13,162,"EVA");PrintAt(13,177,"DOCK.");PrintAt(13,192,"ENDR.");
  grSetColor(1);
  PrintAt(71,138,"NAME:");PrintAt(71,147,"SKILL:");
- PrintAt(94,155,"CAP");PrintAt(94,163,"L.M.");PrintAt(94,171,"EVA");PrintAt(94,179,"DOCK");   
+ PrintAt(94,155,"CAP");PrintAt(94,163,"L.M.");PrintAt(94,171,"EVA");PrintAt(94,179,"DOCK");
  PrintAt(94,187,"ENDR.");
- ShBox(206,126,311,146);RectFill(207,127,310,145,6);InBox(209,129,308,143); 
+ ShBox(206,126,311,146);RectFill(207,127,310,145,6);InBox(209,129,308,143);
  RectFill(210,130,307,142,3);
  now=now2=BarA=BarB=0;
  Cnt=Cur=0; // holds current change
@@ -618,14 +627,14 @@ void EditAst(void)
  Men=(struct ManPool *) buffer;
  Sov=(struct ManPool *) buffer+106*sizeof(struct ManPool);
  assert(2 * 106 * sizeof(struct ManPool) < BUFFER_SIZE);
- FadeIn(2,pal,10,0,0);  
- 
+ FadeIn(2,pal,10,0,0);
+
  temp=Help("i105");
- 
+
  if (temp==1)
  {
      fin = sOpen("CREW.DAT","rb",FT_DATA);   /* Open Astronaut Data File  */
- } 
+ }
  else
  {
      fin=sOpen("USER.DAT","rb",FT_SAVE);
@@ -642,9 +651,9 @@ void EditAst(void)
  for (i=0;i<106;i++) M_Us[i]=0;
  for (i=0;i<106;i++) M_Sv[i]=0;
  for (i=0;i<106;i++) M_Us[i]=Men[i].Cap+Men[i].LM+Men[i].EVA+Men[i].Docking+Men[i].Endurance;
- for (i=0;i<106;i++) M_Sv[i]=Sov[i].Cap+Sov[i].LM+Sov[i].EVA+Sov[i].Docking+Sov[i].Endurance; 
+ for (i=0;i<106;i++) M_Sv[i]=Sov[i].Cap+Sov[i].LM+Sov[i].EVA+Sov[i].Docking+Sov[i].Endurance;
  FadeIn(2,pal,10,0,0);
- 
+
  WaitForMouseUp();
   while (1)
   {
@@ -660,13 +669,13 @@ void EditAst(void)
 	  if (temp==1)
       {
         fin=sOpen("USER.DAT","wb",FT_SAVE);
-	     fwrite(Men,(sizeof (struct ManPool))*106,1,fin);   
-	     fwrite(Sov,(sizeof (struct ManPool))*106,1,fin); 
+	     fwrite(Men,(sizeof (struct ManPool))*106,1,fin);
+	     fwrite(Sov,(sizeof (struct ManPool))*106,1,fin);
 	     fclose(fin);
 	    }
-	 // delay(10);  
+	 // delay(10);
 	  OutBox(245,5,314,17);
-	  FadeOut(2,pal,10,0,0);       
+	  FadeOut(2,pal,10,0,0);
 	  delay(10);
 	  return;
 	 }
@@ -690,99 +699,99 @@ void EditAst(void)
        }
      if (((x>=27 && y>=49+BarA*8 && x<=153 && y<=57+BarA*8 && mousebuttons>0) || key==K_SPACE) && Cnt==0)
        {
-	     
-	     ChangeStat(now,0,Cnt);  
-	     ShBox(27,49+BarA*8,153,57+BarA*8);     
-	     First(now,BarA);  
-	     
+
+	     ChangeStat(now,0,Cnt);
+	     ShBox(27,49+BarA*8,153,57+BarA*8);
+	     First(now,BarA);
+
        }
      if (((x>=187 && y>=49+BarB*8 && x<=313 && y<=57+BarB*8 && mousebuttons>0) || key==K_SPACE) && Cnt==1)
        {
-	     
+
 	     ChangeStat(now2,0,Cnt);
-	     ShBox(187,49+BarB*8,313,57+BarB*8);   
+	     ShBox(187,49+BarB*8,313,57+BarB*8);
 	     Second(now2,BarB);
-	     
+
        }
      if ((x>=6 && y>=124 && x<=43 && y<=136 && mousebuttons>0) || key=='C')
 	   {
 	    InBox(6,124,43,136);
 	    if (Cur>0) OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));Cur=1;
       grSetColor(11);PrintAt(13,132,"CAP");
-      
+
 	    if (Cnt==0) ChangeStat(now,Cur,Cnt);
 	     else ChangeStat(now2,Cur,Cnt);
-       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);   
-	     else ShBox(187,49+BarB*8,313,57+BarB*8);      
+       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);
+	     else ShBox(187,49+BarB*8,313,57+BarB*8);
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
        OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
 	    WaitForMouseUp();
-	    
+
       }
      if ((x>=6 && y>=139 && x<=43 && y<=151 && mousebuttons>0) || key=='L')
 	   {
 	    InBox(6,139,43,151);
 	    if (Cur>0) OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));Cur=2;
       grSetColor(11);PrintAt(13,147,"L.M.");
-      
+
 	    if (Cnt==0) ChangeStat(now,Cur,Cnt);
 	     else ChangeStat(now2,Cur,Cnt);
-       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);   
-	     else ShBox(187,49+BarB*8,313,57+BarB*8);      
+       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);
+	     else ShBox(187,49+BarB*8,313,57+BarB*8);
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
 	    WaitForMouseUp();
-	    
+
       }
      if ((x>=6 && y>=154 && x<=43 && y<=166 && mousebuttons>0) || key=='E')
 	   {
 	    InBox(6,154,43,166);
 	    if (Cur>0) OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));Cur=3;
       grSetColor(11);PrintAt(13,162,"EVA");
-      
+
        if (Cnt==0) ChangeStat(now,Cur,Cnt);
 	     else ChangeStat(now2,Cur,Cnt);
-       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);   
-	     else ShBox(187,49+BarB*8,313,57+BarB*8);      
+       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);
+	     else ShBox(187,49+BarB*8,313,57+BarB*8);
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
 	    WaitForMouseUp();
-	    
+
       }
      if ((x>=6 && y>=169 && x<=43 && y<=181 && mousebuttons>0) || key=='D')
 	   {
 	    InBox(6,169,43,181);
 	    if (Cur>0) OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));Cur=4;
       grSetColor(11);PrintAt(13,177,"DOCK.");
-      
-	    if (Cnt==0) ChangeStat(now,Cur,Cnt);                           
+
+	    if (Cnt==0) ChangeStat(now,Cur,Cnt);
 	     else ChangeStat(now2,Cur,Cnt);
-       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);   
-	     else ShBox(187,49+BarB*8,313,57+BarB*8);      
+       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);
+	     else ShBox(187,49+BarB*8,313,57+BarB*8);
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
 	    WaitForMouseUp();
-	    
+
       }
      if ((x>=6 && y>=184 && x<=43 && y<=196 && mousebuttons>0) || key=='N')
 	   {
 	    InBox(6,184,43,196);
 	    if (Cur>0) OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));Cur=5;
       grSetColor(11);PrintAt(13,192,"ENDR.");
-      
+
 	    if (Cnt==0) ChangeStat(now,Cur,Cnt);
 	     else ChangeStat(now2,Cur,Cnt);
-       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);   
-	     else ShBox(187,49+BarB*8,313,57+BarB*8);      
+       if (Cnt==0) ShBox(27,49+BarA*8,153,57+BarA*8);
+	     else ShBox(187,49+BarB*8,313,57+BarB*8);
 	    if (Cnt==0) First(now,BarA);
 	     else Second(now2,BarB);
 	    OutBox(6,124+((Cur-1)*15),43,136+((Cur-1)*15));
 	    WaitForMouseUp();
-	    
+
       }
       //US SIDE
       if (Cnt==0)
@@ -795,7 +804,7 @@ void EditAst(void)
             key=0;
             GetMouse();
 	         delay(10);
-            
+
 	         if (BarA==0)
 	          if (now>=0)
               {
@@ -811,7 +820,7 @@ void EditAst(void)
 	          };
             WaitForMouseUp();
 	         DrawStats(now,0);
-	         
+
            }
          }
        }
@@ -825,7 +834,7 @@ void EditAst(void)
             key=0;
             GetMouse();
 	         delay(10);
-            
+
   	         if (BarB==0)
 	         if (now2>=0)
              {
@@ -841,7 +850,7 @@ void EditAst(void)
 	         };
            WaitForMouseUp();
 	        DrawStats(now2,1);
-	        
+
           }
         }
        }
@@ -855,7 +864,7 @@ void EditAst(void)
 	        GetMouse();
 	        delay(10);
 	        if (mousebuttons==0) {
-            
+
 	      if (BarA==0)
 	       if (now>0)
            {
@@ -872,14 +881,14 @@ void EditAst(void)
 	         First(now,BarA);
 	        };
 	      DrawStats(now,0);
-	      
+
          i=51;
   	    }
 	   }
       while (mousebuttons==1 || key==UP_ARROW)
        {
         delay(100);
-        
+
 	      if (BarA==0)
 	       if (now>0)
            {
@@ -896,7 +905,7 @@ void EditAst(void)
 	         First(now,BarA);
 	        };
 	      DrawStats(now,0);
-	      
+
          key=0;
          GetMouse();
          }
@@ -912,7 +921,7 @@ void EditAst(void)
 	        GetMouse();
 	        delay(10);
 	        if (mousebuttons==0) {
-           
+
     	     if (BarA==7)
 	         if (now < 105)
              {
@@ -930,14 +939,14 @@ void EditAst(void)
 	          First(now,BarA);
 	         };
 	        DrawStats(now,0);
-	      
+
         i=51;
 	    }
 	   }
       while (mousebuttons==1 || key==DN_ARROW)
        {
         delay(100);
-        
+
 	     if (BarA==7)
 	      if (now < 105)
           {
@@ -955,7 +964,7 @@ void EditAst(void)
 	        First(now,BarA);
 	       };
 	      DrawStats(now,0);
-	      
+
          key=0;
          GetMouse();
          }
@@ -971,7 +980,7 @@ void EditAst(void)
 	        GetMouse();
 	        delay(10);
 	        if (mousebuttons==0) {
-            
+
   	         if (BarB==0)
 	          if (now2 > 0)
               {
@@ -988,14 +997,14 @@ void EditAst(void)
 	           Second(now2,BarB);
 	          };
 	         DrawStats(now2,1);
-	         
+
             i=51;
   	      }
 	     }
       while (mousebuttons==1 || key==UP_ARROW)
        {
         delay(100);
-        
+
 	      if (BarB==0)
 	      if (now2 > 0)
            {
@@ -1012,7 +1021,7 @@ void EditAst(void)
 	         Second(now2,BarB);
 	        };
 	      DrawStats(now2,1);
-	      
+
          key=0;
          GetMouse();
         }
@@ -1028,7 +1037,7 @@ void EditAst(void)
 	        GetMouse();
 	        delay(10);
 	        if (mousebuttons==0) {
-           
+
   	        if (BarB==7)
 	         if (now2 < 105)
              {
@@ -1046,14 +1055,14 @@ void EditAst(void)
 	           Second(now2,BarB);
 	          };
 	        DrawStats(now2,1);
-	        
+
            i=51;
 	     }
 	   }
       while (mousebuttons==1 || key==DN_ARROW)
        {
         delay(100);
-        
+
 	     if (BarB==7)
 	      if (now2 < 105)
           {
@@ -1071,7 +1080,7 @@ void EditAst(void)
 	         Second(now2,BarB);
 	        };
 	      DrawStats(now2,1);
-	      
+
         key=0;
         GetMouse();
        }
@@ -1380,26 +1389,26 @@ ChangeStat(char mum, char Cur, char Cnt)	// Cur holds current setting
 
 void DrawStats(char mum,char chce)
 {
- RectFill(100,133,186,141,3);RectFill(122,151,186,190,3); 
+ RectFill(100,133,186,141,3);RectFill(122,151,186,190,3);
  grSetColor(6);
- if (chce==0) 
+ if (chce==0)
    {
     PrintAt(100,138,&Men[mum].Name[0]);
     grSetColor(11);
     DispNum(124,155,Men[mum].Cap);
-    DispNum(124,163,Men[mum].LM);  
-    DispNum(124,171,Men[mum].EVA);  
-    DispNum(124,179,Men[mum].Docking);  
+    DispNum(124,163,Men[mum].LM);
+    DispNum(124,171,Men[mum].EVA);
+    DispNum(124,179,Men[mum].Docking);
     DispNum(124,187,Men[mum].Endurance);
    }
-   else 
+   else
      {
       PrintAt(100,138,&Sov[mum].Name[0]);
       grSetColor(11);
       DispNum(124,155,Sov[mum].Cap);
-      DispNum(124,163,Sov[mum].LM);  
-      DispNum(124,171,Sov[mum].EVA);  
-      DispNum(124,179,Sov[mum].Docking);  
+      DispNum(124,163,Sov[mum].LM);
+      DispNum(124,171,Sov[mum].EVA);
+      DispNum(124,179,Sov[mum].Docking);
       DispNum(124,187,Sov[mum].Endurance);
      }
  return;
