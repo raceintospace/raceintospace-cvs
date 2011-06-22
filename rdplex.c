@@ -27,6 +27,7 @@
 
 #include <Buzz_inc.h>
 #include <externs.h>
+#include <options.h>
 
 int call,wh;
 GXHEADER but,mans;
@@ -676,10 +677,13 @@ void ShowUnit(char hw,char un,char player_index)
     else PrintAt(240,125,"N/A");
 
     grSetColor(20);
-    if (PL->MaxRD!=0)	{DispNum(242,139,PL->MaxRD);DispChr('%');
-    	PrintAt(0,0," / "); DispNum(0,0,PL->MSF); DispChr('%'); //Used to test if MSF was holding the right value
+    if (PL->MaxRD!=0)	{
+    	DispNum(242,139,PL->MaxRD);DispChr('%');
+    	if (options.want_debug)	{
+    		PrintAt(0,0," / "); DispNum(0,0,PL->MSF); DispChr('%'); //Used to test if MSF was holding the right value
+    		}
     	}
-    else PrintAt(242,139, "--")
+    else PrintAt(242,139, "--");
     grSetColor(11);DispNum(254,146,PL->MaxSafety);DispChr('%');
 
     if (hw!=2) PrintAt(268,132,"N/A"); /* Payload */
