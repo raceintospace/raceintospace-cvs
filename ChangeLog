@@ -1,3 +1,10 @@
+2011-06-22  Pace Willisson  <pace@alum.mit.edu>
+
+	* V266
+
+	* add make install-data target which will be used when
+	making the debian package
+
 2011-06-22	Nicolas Laplume <nikakd@users.sourceforge.net>
 
 	* V265

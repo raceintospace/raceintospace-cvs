@@ -77,6 +77,13 @@ install: $(PROG_NAME)
 	gzip < $(PROG_NAME).6 > ${mandir}/man6/$(PROG_NAME).6.gz
 	install -c -m 644 README ${docdir}/.
 
+# the file avdata-files comes from the sourceforge
+# git repository called "avdata" within the raceintospace project
+.PHONY: install-data
+install-data:
+	mkdir -p $(DATA_DIR)
+	tar -cf - `cat avdata-files` | (cd $(DATA_DIR); tar -xf -)
+
 # don't change the source of these copies ... they copy
 # data from the compilation environment into the build root
 rpm_install: install
