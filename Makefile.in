@@ -83,6 +83,7 @@ install: $(PROG_NAME)
 install-data:
 	mkdir -p $(DATA_DIR)
 	tar -cf - `cat avdata-files` | (cd $(DATA_DIR); tar -xf -)
+	tar -cf - `cat gamedata/gamedata-files` | (cd $(DATA_DIR); tar -xf -)
 
 # don't change the source of these copies ... they copy
 # data from the compilation environment into the build root
