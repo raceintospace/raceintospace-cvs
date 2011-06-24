@@ -27,7 +27,7 @@ fi
 cvs -z8 export -D now race
 cvs -z8 export -D now gamedat
 
-dir=raceintospace_${rel}
+dir=raceintospace-${rel}
 mv race ${dir}
 cd ${dir}
 mv ../gamedat gamedata
@@ -40,6 +40,7 @@ mv ../gamedat gamedata
 
 aclocal -I m4
 autoconf
+rm -rf autom4te.cache
 
 cd ..
 tar -czf ../${dir}.tar.gz ${dir}

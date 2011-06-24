@@ -84,6 +84,7 @@ install-data:
 	mkdir -p $(DATA_DIR)
 	tar -cf - `cat avdata-files` | (cd $(DATA_DIR); tar -xf -)
 	tar -cf - `cat gamedata/gamedata-files` | (cd $(DATA_DIR); tar -xf -)
+	find $(DATA_DIR) -type f -print | xargs chmod a-x
 
 # don't change the source of these copies ... they copy
 # data from the compilation environment into the build root
