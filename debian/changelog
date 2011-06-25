@@ -1,3 +1,9 @@
+raceintospace (1.0rc2-1) lucid; urgency=low
+
+  * change version number in order to make a new ppa package
+
+ -- Pace Willisson <pace@alum.mit.edu>  Sat, 25 Jun 2011 17:09:17 -0400
+
 raceintospace (1.0rc1-3) lucid; urgency=low
 
   * upstream cleanups

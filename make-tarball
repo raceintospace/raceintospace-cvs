@@ -44,6 +44,12 @@ then
     fi
 fi
 
+echo ""
+echo "making: ${outname}"
+echo "note - top of debian/changelog is:"
+head -1 race/debian/changelog
+echo ""
+
 rm -rf TMP.build
 mkdir TMP.build
 
