@@ -230,7 +230,7 @@ void EndGame(char win,char pad)
 	month   = Data->P[win].Mission[pad].Month;
   }
  else {
-	month   = Month[Data->Prestige[22].Month];
+	month   = Data->Prestige[22].Month;
    if (MAIL!=-1 || Option==win) strcpy(capName , Data->P[win].History[Data->Prestige[22].Indec].MissionName[0]);
    else {
      prog=Data->P[win].History[Data->Prestige[22].Indec].Hard[i][0]+1;

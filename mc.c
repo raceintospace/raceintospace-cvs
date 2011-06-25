@@ -385,7 +385,8 @@ void MissionPast(char plr,char pad,int prest)
   Rep.Qty=0;
   fout=sOpen("REPLAY.TMP","rt",1);
   while (!feof(fout)) {
-     fscanf(fout,"%u\n",&num);
+     if (fscanf(fout,"%u\n",&num) != 1)
+	     break;
      Rep.Off[Rep.Qty++]=num;
   };
   fclose(fout);

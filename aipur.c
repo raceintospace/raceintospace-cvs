@@ -691,8 +691,7 @@ int GenPur(char plr,int hardware_index,int unit_index)
 			if (Data->P[plr].Probe[unit_index].InitCost < Data->P[plr].Cash)
 			  {
 			   Data->P[plr].Cash = Data->P[plr].Cash - Data->P[plr].Probe[unit_index].InitCost;
-			   if (Data->P[plr].Probe[unit_index].Num == PROGRAM_NOT_STARTED) Data->P[plr].Probe[unit_index].Num=1;
-				else Data->P[plr].Probe[unit_index].Num = Data->P[plr].Probe[unit_index].Num = 1;
+			   Data->P[plr].Probe[unit_index].Num = 1;
 			   RT_value=1;newf=1;
 			  }
 		   }

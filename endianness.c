@@ -36,8 +36,12 @@ float _SwapFloat(float value)
 void _SwapGameDat(void)
 {
 	i16 i, j;
+	ui32 val_ui32;
 
-	*((ui32 *) & Data->EMark) = _Swap32bit(*((ui32 *) & Data->EMark));
+	memcpy (&val_ui32, Data->EMark, 4);
+	val_ui32 = _Swap32bit (val_ui32);
+	memcpy (Data->EMark, &val_ui32, 4);
+
 	Data->Checksum = _Swap32bit(Data->Checksum);
 
 	for (j = 0; j < 28; j++)

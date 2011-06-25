@@ -1,3 +1,10 @@
+2011-06-25  Pace Willisson  <pace@alum.mit.edu>
+
+	* V268
+
+	* fix a couple of compiler warnings - now compiles cleanly on
+	ubuntu 10.04 and 11.04
+
 2011-06-25  Pace Willisson <pace@alum.mit.edu>
 
 	* V267

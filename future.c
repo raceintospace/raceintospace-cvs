@@ -1099,8 +1099,13 @@ void Missions(char plr,int X,int Y,int val,char bub)
   
     
 	MSteps=sOpen("missSteps.dat","r",FT_DATA);
-	fgets(missStep, 1024, MSteps);
-	while (!feof(MSteps)&&((missStep[0]-0x30)*10+(missStep[1]-0x30))!=val) fgets(missStep, 1024, MSteps);
+	if (fgets(missStep, 1024, MSteps) == NULL)
+		memset (missStep, 0, sizeof missStep);
+
+	while (!feof(MSteps)&&((missStep[0]-0x30)*10+(missStep[1]-0x30))!=val) {
+		if (fgets(missStep, 1024, MSteps) == NULL)
+			break;
+	}
 	fclose(MSteps);
 
 	for (int n=2;missStep[n]!='Z';n++)
