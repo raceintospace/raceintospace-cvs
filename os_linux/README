@@ -1,0 +1,42 @@
+To set up the developement directory structure:
+
+$ mkdir race
+$ cd race
+$ cvs -d:ext:raceintospace.cvs.sourceforge.net:/cvsroot/raceintospace co race
+$ cvs -d:ext:raceintospace.cvs.sourceforge.net:/cvsroot/raceintospace co gamedat
+$ git clone ssh://raceintospace.git.sourceforge.net/gitroot/raceintospace/avdata
+
+================================================================
+To make a distribution tarball:
+
+cd race
+
+(now you're in the development directory, and have race gamedat and
+avdata subdirectories)
+
+$ ./race/make-tarball RELEASE-NUBMER
+
+(for example ./race/make-tarball 1.0rc1)
+
+this results in raceintospace-REL.tar.gz
+
+Note that make-tarball gets the cvs data
+
+================================================================
+To make a .deb:
+(watch out for switching between underlines and dashes in these names)
+
+cd race
+mkdir build
+cd build
+cp ../raceintospace-REL.tar.gz raceintospace_REL.orig.tar.gz
+tar xf raceintospace_REL.orig.tar.gz
+cd raceintospace-REL
+debuild
+
+create the .deb in the parent directory
+
+================================================================ 
+
+there are some remnants in the Makefile for making rpm files, but they
+probably don't work any more

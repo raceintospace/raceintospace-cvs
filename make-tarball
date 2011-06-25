@@ -1,9 +1,11 @@
-#! /bin/sh
+#! /bin/sh -e
 
 # this makes a tarball of the sources plus the media files
 
-# you probably want to be in a fresh directory (separate from the sources)
-# when you run it
+# the files for race and gamedat come from the sourceforge server,
+# so won't include any uncommitted changes you have locally
+
+# you need to be in a directory with subdirectories race gamedat and avdata
 
 if [ $# != 1 ]
 then
@@ -13,10 +15,39 @@ fi
 
 rel="$1"
 
-rm -rf TMP
-mkdir TMP
+if [ ! -d race -o ! -d gamedat -o ! -d avdata ]
+then
+    echo "bad directory structure - see os_linux/README"
+    exit 1
+fi
 
-cd TMP
+outname=raceintospace-${rel}.tar.gz
+if [ -f ${outname} ]
+then
+    echo -n "ok to remove and recreate ${outname}? (y/n) "
+    read x
+    if [ "$x" != "y" ]
+    then
+	echo "aborted"
+	exit 1
+    fi
+fi
+
+if [ -d TMP.build ]
+then
+    echo -n "ok to remove subdirectory TMP.build? (y/n) "
+    read x
+    if [ "$x" != "y" ]
+    then
+	echo "aborted"
+	exit 1
+    fi
+fi
+
+rm -rf TMP.build
+mkdir TMP.build
+
+cd TMP.build
 
 if [ -z "$CVSROOT" ]
 then
@@ -29,19 +60,16 @@ cvs -z8 export -D now gamedat
 
 dir=raceintospace-${rel}
 mv race ${dir}
-cd ${dir}
-mv ../gamedat gamedata
 
-# you need to already have done
-# git clone \
-#  ssh://SFNAME@raceintospace.git.sourceforge.net/gitroot/raceintospace/avdata
+mv gamedat ${dir}/gamedata
 
-(cd ~/race/avdata && git archive --format=tar HEAD) | tar -xf -
+(cd ../avdata && git archive --format=tar HEAD) | tar -C ${dir} -xf -
 
-aclocal -I m4
-autoconf
-rm -rf autom4te.cache
+(
+    cd ${dir}
+    aclocal -I m4
+    autoconf
+    rm -rf autom4te.cache
+)
 
-cd ..
-tar -czf ../${dir}.tar.gz ${dir}
-
+tar -czf ../${outname} ${dir}
