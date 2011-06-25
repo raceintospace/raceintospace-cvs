@@ -1,0 +1,109 @@
+#! /bin/sh
+
+# development directory configuration:
+#
+# DEVDIR/race/*.c, *.h, etc
+# DEVDIR/gamedat/gamedata-files
+# DEVDIR/avdata/avdata-files
+# DEVDIR/avdata/audio/
+# DEVDIR/avdata/video/
+#
+# when everything is packaged in one tar, and then used to build
+# the .deb file, the directory configuration is
+#
+# raceintospace-1.0/*.c, *.h, etc
+# raceintospace-1.0/gamedata-files
+# raceintospace-1.0/gamedata/
+# raceintospace-1.0/avdata-files
+# raceintospace-1.0/audio/
+# raceintospace-1.0/video/
+#
+# this script tracks down the gamedata and avdata locations, and copies
+# the files to the runtime location (/usr/local/share/raceintospace)
+
+if [ $# != 1 ]
+then
+    echo "usage: put-data DATA_DIR"
+    exit 1
+fi
+
+DATA_DIR=$1
+
+mkdir -p ${DATA_DIR}
+
+# ================================================================
+# install gamedata
+# careful: the source repository is "gamedat", but most uses are "gamedata"
+
+if [ -r gamedata/gamedata-files ]
+then
+    echo "installing gamedata from working directory"
+    gamedata_dir=.
+elif [ -r ../gamedat/gamedata-files ]
+then
+    echo "installing gamedata from ../gamedata"
+    gamedata_dir=../gamedat
+else
+    echo "put-data: can't find gamedata directory"
+    echo ""
+    echo "if you're trying to do development, you probably want"
+    echo "something like this:"
+    echo ""
+
+    cdir=`pwd`
+    pdir=`dirname $cdir`
+    echo "\$ cd $pdir"
+    echo "\$ cvs checkout -d:ext:raceintospace.cvs.sourceforge.net:/cvsroot/raceintospace co gamedat"
+    echo ""
+    echo "which will make the gamedat module a sibling"
+    echo "to the main source directory"
+    exit 1
+fi
+
+(
+    cd ${gamedata_dir}
+    mkdir -p ${DATA_DIR}/gamedata
+    cp --parents `cat gamedata-files` ${DATA_DIR}/gamedata
+    sed "s:^:${DATA_DIR}/gamedata/:" < gamedata-files | xargs chmod a=r,u+w
+)
+
+# ================================================================
+# install avdata
+
+if [ -r avdata-files ]
+then
+    echo "installing avdata files from working directory"
+    avdata_dir=.
+elif [ -r ../avdata/avdata-files ]
+then
+    echo "installing avdata files from ../avdata"
+    avdata_dir=../avdata
+else
+    echo "put-data: can't find avdata directory"
+    echo ""
+    echo "if you're trying to do development, you probably want"
+    echo "something like this:"
+    echo ""
+
+    cdir=`pwd`
+    pdir=`dirname $cdir`
+    echo "\$ cd $pdir"
+    echo "\$ git clone ssh://raceintospace.git.sourceforge.net/gitroot/raceintospace/avdata"
+    echo ""
+    echo "which will make the avdata module a sibling"
+    echo "to the main source directory"
+
+    exit 1
+fi
+
+( 
+    cd ${avdata_dir}
+    cp --parents `cat avdata-files` ${DATA_DIR}
+    sed "s:^:${DATA_DIR}/:" < avdata-files | xargs chmod a=r,u+w
+)
+
+echo "done"
+
+
+
+

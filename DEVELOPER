@@ -7,26 +7,33 @@
     libvorbis
     libtheora   all available at http://xiph.org/downloads/
 
-1. Building on Linux - easy
+1. Building on Linux
 
-    Notes: This requires autoconf, you may need to install this too.
+   Install the dependencies:
 
-    1)  Use your favorite package manager to get development libraries, ie:
-        # apt-get install libsdl-dev libtheora-dev libogg-dev libvorbis-dev
-    2)  $ ./configure
-    3)  $ make
+   # apt-get install autoconf libsdl-dev libtheora-dev libogg-dev libvorbis-dev
 
-    Notes: I needed to do these extra things before ./configure:
+   If you're working from the tar file, autoconf is already set up for you,
+   and the data files are in place.  Just do:
 
-        # cp m4/theora.m4 /usr/share/aclocal/.
-        $ aclocal -I m4
-        $ autoconf
+   $ ./configure
+   $ make
+   # make install
 
-    autoconf prints one error:
+   If you want to build from the source repository, check out the cvs
+   modules race and gamedat and the git repository avdata so they are
+   siblings to one another.
 
-        configure.in:51: error: possibly undefined macro: AC_TYPE_SSIZE_T
+   Then do:
 
-    which can be ignored
+   $ cd race
+   $ aclocal -I m4
+   $ autoconf
+   $ ./configure
+   $ make
+   # make install
+   
+   See the file os_linux/README for building a .deb
 
 2. Cross compiling: Linux - Windows: tested
 

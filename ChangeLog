@@ -1,4 +1,19 @@
-2011-06-22  Pace Willisson  pace@alum.mit.edu>
+2011-06-25  Pace Willisson <pace@alum.mit.edu>
+
+	* V267
+
+	* created fortify_workaround.[ch] to quiet 100+ new compiler
+	warnings from the new FORTIFY_SORUCE feature now enabled by
+	default in ubuntu
+
+	* added put-data script which figures out if the data files are
+	in the development configuration (siblings to the source
+	directory) or in the distribution tar file configuration (children
+	of the source directory).  Then, it installs them in in DATA_DIR
+
+	* updated DEVELOPER notes for compiling on linux
+
+2011-06-22  Pace Willisson  <pace@alum.mit.edu>
 
 	* add gamedata files to make install-data
 

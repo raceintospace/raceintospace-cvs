@@ -59,6 +59,8 @@ typedef int32_t i32;
 #include <math.h>
 #include <sys/stat.h>
 
+#include "fortify_workaround.h"
+
 // EMS Includes
 // #include <sv_lib.h>
 

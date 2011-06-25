@@ -57,7 +57,7 @@ BARIS_OBJS = $(addsuffix .@OBJEXT@, \
 	endianness futbub future hardef intel intro main mc2 mc mis_c mis_m museum \
 	newmis news news_sup news_suq place port prefs prest radar randomize rdplex records \
 	replay review rush start vab pace gx gr sdl music_vorbis gamedata mmfile options fs \
-	utils logging log4c log_default \
+	utils logging log4c log_default fortify_workaround \
 )
 
 .PHONY: clean doc extendeddoc
@@ -76,15 +76,7 @@ install: $(PROG_NAME)
 	install -c -m 755 $(PROG_NAME) ${bindir}
 	gzip < $(PROG_NAME).6 > ${mandir}/man6/$(PROG_NAME).6.gz
 	install -c -m 644 README ${docdir}/.
-
-# the file avdata-files comes from the sourceforge
-# git repository called "avdata" within the raceintospace project
-.PHONY: install-data
-install-data:
-	mkdir -p $(DATA_DIR)
-	tar -cf - `cat avdata-files` | (cd $(DATA_DIR); tar -xf -)
-	tar -cf - `cat gamedata/gamedata-files` | (cd $(DATA_DIR); tar -xf -)
-	find $(DATA_DIR) -type f -print | xargs chmod a-x
+	./put-data $(DATA_DIR)
 
 # don't change the source of these copies ... they copy
 # data from the compilation environment into the build root

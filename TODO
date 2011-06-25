@@ -65,6 +65,8 @@ Improvements that might change rules and/or gameplay balance.
 
  \todo * [5] Factor video display code out from mis_c.c and replay.c
 
+ \todo * [5] Fix need for fortify_workaround.h (check fread returns everywhere)
+
 \section other OTHER IDEAS
 
  \todo * Release checklist: valgrind, electric fence, CFLAGS=-O2 -DNDEBUG
