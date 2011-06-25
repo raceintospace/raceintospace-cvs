@@ -12,17 +12,7 @@ DESTDIR=$(CURDIR)/debian/raceintospace
 override_dh_auto_configure:
 	aclocal -I m4
 	autoconf
-	./configure --prefix=/usr --bindir=/usr/games
+	./configure --prefix=/usr --bindir=$(DESTDIR)/usr/games
 
 override_dh_auto_install:
-	install -d $(DESTDIR)/usr/games
-	install -d $(DESTDIR)/usr/share/man/man6
-	install -c -m 755 raceintospace $(DESTDIR)/usr/games
-	install -c -m 644 raceintospace.6 $(DESTDIR)/usr/share/man/man6
-	make DATA_DIR=$(DESTDIR)/usr/share/raceintospace install-data
-	install -d $(DESTDIR)/usr/share/applications
-	install -c -m 644 debian/raceintospace.desktop \
-		$(DESTDIR)/usr/share/applications
-	install -d $(DESTDIR)/usr/share/pixmaps
-	install -c -m 644 os_linux/raceintospace.xpm \
-		$(DESTDIR)/usr/share/pixmaps
+	make DESTDIR=$(DESTDIR) install

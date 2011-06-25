@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/sh -e
 
 # development directory configuration:
 #
@@ -38,7 +38,7 @@ mkdir -p ${DATA_DIR}
 if [ -r gamedata/gamedata-files ]
 then
     echo "installing gamedata from working directory"
-    gamedata_dir=.
+    gamedata_dir=gamedata
 elif [ -r ../gamedat/gamedata-files ]
 then
     echo "installing gamedata from ../gamedata"
