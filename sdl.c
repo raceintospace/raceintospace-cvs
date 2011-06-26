@@ -297,7 +297,7 @@ av_setup(void)
 		}
 		else
 		{
-			NOTICE1("audio subsystem initialized");
+			INFO1("audio subsystem initialized");
 			have_audio = 1;
 		}
 	}

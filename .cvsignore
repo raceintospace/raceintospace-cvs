@@ -31,3 +31,5 @@ aclocal.m4
 int_types.h
 *.tar.gz
 *.d
+mkrpm
+raceintospace.spec

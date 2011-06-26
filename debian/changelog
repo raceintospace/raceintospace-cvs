@@ -1,4 +1,10 @@
-raceintospace (1.0rc3-1) unstable; urgency=low
+raceintospace (1.0rc4-1) lucid; urgency=low
+
+  * more scripts for development
+
+ -- Pace Willisson <pace@alum.mit.edu>  Sat, 25 Jun 2011 23:15:55 -0400
+
+raceintospace (1.0rc3-1) lucid; urgency=low
 
   * insert into games menu; update icon
 

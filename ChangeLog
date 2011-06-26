@@ -1,8 +1,13 @@
 2011-06-25  Pace Willisson  <pace@alum.mit.edu>
 
+	* more linux development notes
+
+	* change "audio subsystem initialized" message to INFO instead of
+	NOTICE
+
 	* add ".desktop" file back into the deb; update icon;
 	improve make-tarball
-	
+
 	* V268
 
 	* fix a couple of compiler warnings - now compiles cleanly on

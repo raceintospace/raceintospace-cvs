@@ -1,14 +1,14 @@
 To set up the developement directory structure:
 
-$ mkdir race
-$ cd race
+$ mkdir YOUR-DEVEL-DIRECTORY
+$ cd YOUR-DEVEL-DIRECTORY
 $ cvs -d:ext:raceintospace.cvs.sourceforge.net:/cvsroot/raceintospace co race
 $ cvs -d:ext:raceintospace.cvs.sourceforge.net:/cvsroot/raceintospace co gamedat
 $ git clone ssh://raceintospace.git.sourceforge.net/gitroot/raceintospace/avdata
 
 For ordinary development
 
-$ cd race/race
+$ cd YOUR-DEVEL-DIRECTORY/race
 $ aclocal -I m4
 $ autoconf
 $ make
@@ -17,10 +17,7 @@ $ make
 ================================================================
 To make a distribution tarball:
 
-cd race
-
-(now you're in the development directory, and have race gamedat and
-avdata subdirectories)
+cd YOUR-DEVEL-DIRECTORY
 
 $ ./race/make-tarball RELEASE-NUMBER
 
@@ -28,10 +25,16 @@ $ ./race/make-tarball RELEASE-NUMBER
 
 this results in raceintospace-REL.tar.gz
 
-Note that make-tarball gets the cvs data
-
 ================================================================
 To make a .deb:
+
+update race/debian/* as needed, especially check the version number
+in debian/changelog, and set the series to "lucid" not "unstable"
+
+$ cd YOUR-DEVEL-DIRECTORY
+
+$ ./race/os-linux/build-setup
+
 (watch out for switching between underlines and dashes in these names)
 
 cd race
