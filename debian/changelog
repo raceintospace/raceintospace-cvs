@@ -1,3 +1,9 @@
+raceintospace (1.0rc3-1) unstable; urgency=low
+
+  * insert into games menu; update icon
+
+ -- Pace Willisson <pace@alum.mit.edu>  Sat, 25 Jun 2011 21:33:27 -0400
+
 raceintospace (1.0rc2-1) lucid; urgency=low
 
   * change version number in order to make a new ppa package

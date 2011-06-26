@@ -2,9 +2,6 @@
 
 # this makes a tarball of the sources plus the media files
 
-# the files for race and gamedat come from the sourceforge server,
-# so won't include any uncommitted changes you have locally
-
 # you need to be in a directory with subdirectories race gamedat and avdata
 
 if [ $# != 1 ]
@@ -61,8 +58,24 @@ then
     export CVSROOT
 fi
 
+# sure wish there was a way for cvs to tell me the list of files
+# that it is managing, but we can do it the hard way - do an export
+# to get the list of files, then copy the latest files to the 
+# staging area
+
 cvs -z8 export -D now race
+
+find race -type f -print > TMP.race
+rm -rf race
+(cd ..; cpio -pdvm TMP.build) < TMP.race
+
+
 cvs -z8 export -D now gamedat
+
+find gamedat -type f -print > TMP.gamedat
+rm -rf gamedat
+(cd ..; cpio -pdvm TMP.build) < TMP.gamedat
+
 
 dir=raceintospace-${rel}
 mv race ${dir}

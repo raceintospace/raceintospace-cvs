@@ -16,3 +16,9 @@ override_dh_auto_configure:
 
 override_dh_auto_install:
 	make DESTDIR=$(DESTDIR) install
+	install -d $(DESTDIR)/usr/share/applications
+	install -c -m 644 debian/raceintospace.desktop \
+		$(DESTDIR)/usr/share/applications
+	install -d $(DESTDIR)/usr/share/pixmaps
+	install -c -m 644 os_linux/raceintospace.xpm \
+		$(DESTDIR)/usr/share/pixmaps

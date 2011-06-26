@@ -1,11 +1,12 @@
 2011-06-25  Pace Willisson  <pace@alum.mit.edu>
 
+	* add ".desktop" file back into the deb; update icon;
+	improve make-tarball
+	
 	* V268
 
 	* fix a couple of compiler warnings - now compiles cleanly on
 	ubuntu 10.04 and 11.04
-
-2011-06-25  Pace Willisson <pace@alum.mit.edu>
 
 	* V267
 
@@ -23,8 +24,6 @@
 2011-06-22  Pace Willisson  <pace@alum.mit.edu>
 
 	* add gamedata files to make install-data
-
-2011-06-22  Pace Willisson  <pace@alum.mit.edu>
 
 	* V266
 
