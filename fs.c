@@ -234,6 +234,7 @@ try_find_file(const char *name, const char *mode, int type)
 			where = "game data";
 			break;
 		case FT_SAVE:
+		case FT_SAVE_CHECK:
 			f = s_open_helper(sd, name, newmode,
 					"",
 					NULL);
@@ -274,7 +275,7 @@ try_find_file(const char *name, const char *mode, int type)
 			assert("Unknown FT_* specified");
 	}
 
-	if (f.handle == NULL)
+	if (f.handle == NULL && type != FT_SAVE_CHECK)
 	{
 		int serrno = errno;
 		WARNING3("can't find file `%s' in %s dir(s)", name, where);
@@ -338,7 +339,7 @@ open_gamedat(const char *name)
 FILE *
 open_savedat(const char *name, const char *mode)
 {
-	return sOpen(name, mode, FT_SAVE);
+	return sOpen(name, mode, FT_SAVE_CHECK);
 }
 
 char *

@@ -15,7 +15,8 @@ enum {
     FT_AUDIO,
     FT_VIDEO,
     FT_IMAGE,
-		FT_MIDI
+    FT_MIDI,
+    FT_SAVE_CHECK, /* Ok for open to fail - don't print warning. */
 };
 
 /** used for saved games */

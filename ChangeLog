@@ -1,3 +1,10 @@
+2011-06-28  Pace Willisson  <Pace Willisson <pace@alum.mit.edu>>
+
+	* V269
+
+	* don't print warnings about not finding user config files
+	on first run; improve os_linux/README
+
 2011-06-25  Pace Willisson  <pace@alum.mit.edu>
 
 	* more linux development notes

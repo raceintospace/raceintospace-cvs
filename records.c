@@ -42,7 +42,7 @@ void MakeRecords(void)
  FILE *file;
  int i,j;
 
- if ((file = sOpen("RECORDS.DAT","rb",1))==NULL)
+ if ((file = sOpen("RECORDS.DAT","rb",FT_SAVE_CHECK))==NULL)
    {
     file=sOpen("RECORDS.DAT","wb",1);
     if (file == NULL) {

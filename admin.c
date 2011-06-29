@@ -571,7 +571,7 @@ void FileAccess(char mode)
             if (fin) fclose(fin);
 	         i++;
 			 sprintf(Name,"BUZZ%d.SAV",i);
-	         fin=sOpen(Name,"rb",1);
+	         fin=sOpen(Name,"rb",FT_SAVE_CHECK);
 	        } while (fin!=NULL);  // Find unique name
           fin=sOpen(Name,"wb",1);
 	      }

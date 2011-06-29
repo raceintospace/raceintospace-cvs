@@ -212,7 +212,7 @@ read_config_file(void)
 
 	if (!f)
 	{
-		WARNING1("could not open config file");
+		INFO1("could not open config file");
 		return -1;
 	}
 
