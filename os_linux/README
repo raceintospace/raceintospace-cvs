@@ -46,7 +46,7 @@ in debian/changelog, and set the series to "lucid" not "unstable"
 
 $ cd YOUR-DEVEL-DIRECTORY
 
-$ ./race/os-linux/build-setup
+$ ./race/os_linux/build-setup
 
 (watch out for switching between underlines and dashes in these names)
 
