@@ -60,6 +60,16 @@ debuild
 
 creates the .deb in the parent directory
 
+================================================================
+To make a .deb using launchpad:
+
+First make a normal deb.  Then make one using pdebuild to make sure 
+the dependencies are ok.  Finally
+
+cd race/build
+debuild -S
+dput ppa:pacew/raceintospace raceintospace_1.0rc5-1_source.changes
+
 ================================================================ 
 
 there are some remnants in the Makefile for making rpm files, but they

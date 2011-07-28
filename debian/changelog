@@ -1,3 +1,15 @@
+raceintospace (1.0) lucid; urgency=low
+
+  * same as 1.0rc5, just update version number
+
+ -- Pace Willisson <pace@alum.mit.edu>  Wed, 27 Jul 2011 21:12:56 -0400
+
+raceintospace (1.0rc5-1) unstable; urgency=low
+
+  * upstream V269
+
+ -- Pace Willisson <pace@alum.mit.edu>  Tue, 28 Jun 2011 21:03:10 -0400
+
 raceintospace (1.0rc4-1) lucid; urgency=low
 
   * more scripts for development
