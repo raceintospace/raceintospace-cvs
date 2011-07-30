@@ -1108,7 +1108,8 @@ void Missions(char plr,int X,int Y,int val,char bub)
 	}
 	fclose(MSteps);
 
-	for (int n=2;missStep[n]!='Z';n++)
+  int n;
+	for (n=2;missStep[n]!='Z';n++)
 		switch (missStep[n]) {
 			case 'A': Draw_IJ	(B_Mis(++n));	break;
 			case 'B': Draw_IJV	(B_Mis(++n));	break;
