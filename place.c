@@ -700,7 +700,7 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
   RectFill(10,34,205,44,9);InBox(9,33,206,45);
   RectFill(10,49,205,119,7);InBox(9,48,206,120);
   RectFill(10,124,205,164,7);InBox(9,123,206,165);
-  ShBox(62,117,154,127);grSetColor(1);PrintAt(80,124,"FLIGHT CREW");
+  ShBox(62,117,154,127);grSetColor(1);PrintAt(79,124,"FLIGHT CREW");
   grSetColor(11);PrintAt(58,41,"MISSION INFORMATION");
   PrintAt(12,104,"MISSION DURATION: ");
   Name[0]=(char)Data->P[plr].History[index].Duration+'A'-1;

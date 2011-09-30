@@ -1,3 +1,9 @@
+2011-09-29	Leon Baradat <peyre@users.sourceforge.net>
+
+	* V271
+
+	* place.c: Better centering of "FLIGHT CREW" in the Mission Review screen
+
 2011-07-29  Will Glynn <will@raceintospace.org>
 
     * V270
