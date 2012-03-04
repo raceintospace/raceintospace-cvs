@@ -214,7 +214,7 @@ void ShowPrest(char plr)
   PrintAt(175,120,"2ND:");
   PrintAt(212,120,"SUBS:");
   PrintAt(254,120,"FAIL:");
-  grSetColor(1);PrintAt(257,13,"CONTINUE");
+  grSetColor(1);PrintAt(255,13,"CONTINUE");
   PrintAt(17,39,"FIRST:");
   PrintAt(19,81,"DATE:");
   grSetColor(11);PrintAt(71,37,"# SPACE FIRSTS:");
@@ -477,7 +477,7 @@ void Mission_Data_Buttons(char plr, int *where)
     char index,yr,season,j,temp=0;
 
     /* Okay, now we have to decide whether there are any missions displayed
-    on the screen at this time. If there are any, parse the button. */ 
+       on the screen at this time. If there are any, parse the button. */ 
     if(Data->P[plr].PastMis==0) return;
     index=0;
     season =*where % 2;
@@ -745,8 +745,8 @@ void ShowAstrosHist(char plr)
   
   FadeOut(2,pal,5,0,0);
   RectFill(1,39,157,184,3);
-  DispBig(65,71,"NO",0,-1);
-  DispBig(42,90,"MISSION",0,-1);
+  DispBig(68,71,"NO",0,-1);
+  DispBig(46,90,"MISSION",0,-1);
   DispBig(27,109,"EXPERIENCE",0,-1);
   gxGetImage(&vhptr2,22,69,133,123,0);
   PatchMe(0,0,0,0,0,32);
@@ -761,7 +761,7 @@ void ShowAstrosHist(char plr)
   if(plr==0) FlagSm(0,4,4);
   else FlagSm(1,4,4); 
   grSetColor(1);
-  PrintAt(259,13,"CONTINUE");
+  PrintAt(257,13,"CONTINUE");
   ShBox(0,24,158,199);
   ShBox(161,24,319,199);
   InBox(233,29,314,80);

@@ -1,3 +1,17 @@
+2012-03-04  Leon Baradat <peyre@users.sourceforge.net>
+
+	* V272
+
+	* start.c: Advanced Training now gives +1 skill halfway through
+
+	* crew.c: Crew members' relevant skills now highlighted when assigning crews to missions
+
+	* options.c: Touched up grammar in config file
+
+	* museum.c: adjusted centering in 'Naut History screen
+
+	* future.c: adjusted centering of letters in CONTINUE button 
+
 2011-09-29	Leon Baradat <peyre@users.sourceforge.net>
 
 	* V271
