@@ -1,3 +1,9 @@
+2012-04-10  Leon Baradat <peyre@users.sourceforge.net>
+
+	* V275
+
+	* rdplex.c: Technology Transfer will now give partial credit if relevant hardware is below 75% Safety
+
 2012-03-30  Leon Baradat <peyre@users.sourceforge.net>
 
 	* V274
