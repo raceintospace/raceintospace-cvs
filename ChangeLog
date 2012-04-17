@@ -1,5 +1,12 @@
 2012-04-10  Leon Baradat <peyre@users.sourceforge.net>
 
+	* V276
+
+	* rdplex.c: R&D and Purchasing screens now indicate when research is stronger or weaker, 
+	            and when a component has an Avoid Failure card
+
+2012-04-10  Leon Baradat <peyre@users.sourceforge.net>
+
 	* V275
 
 	* rdplex.c: Technology Transfer will now give partial credit if relevant hardware is below 75% Safety

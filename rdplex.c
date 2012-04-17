@@ -30,6 +30,7 @@
 #include <options.h>
 
 int call,wh;
+int avoidf;
 GXHEADER but,mans;
 extern char HARD1,UNIT1,BUTLOAD;
 
@@ -429,12 +430,16 @@ char RD(char player_index)
 	  {           // b is the cost per roll
 	if (hardware==1)
 	 b=Data->P[player_index].Probe[unit-1].RDCost;
+	 if (Data->P[player_index].Probe[unit-1].SaveCard>0) PrintAt(170,90,"AVOID");
 	if (hardware==2)
 	 b=Data->P[player_index].Rocket[unit-1].RDCost;
+	 if (Data->P[player_index].Rocket[unit-1].SaveCard>0) PrintAt(170,90,"AVOID");
 	if (hardware==3)
 	 b=Data->P[player_index].Manned[unit-1].RDCost;
+	 if (Data->P[player_index].Manned[unit-1].SaveCard>0) PrintAt(50,10,"XX");
 	if (hardware==4)
 	 b=Data->P[player_index].Misc[unit-1].RDCost;
+	 if (Data->P[player_index].Misc[unit-1].SaveCard>0) PrintAt(170,90,"AVOID");
 	// Add to the expenditure data
 
 	if ( (b*roll <= Data->P[player_index].Cash) && QueryUnit(hardware,unit,player_index)
@@ -616,6 +621,38 @@ void ShowUnit(char hw,char un,char player_index)
   PrintAt(170,125,"UNIT WEIGHT:");
   PrintAt(170,132,"MAXIMUM PAYLOAD:");
   PrintAt(170,146,"MAXIMUM SAFETY:");
+
+  avoidf=0;
+  switch(hw) {
+   case 1: if (Data->P[player_index].Probe[un-1].SaveCard > 0) avoidf=1;break;
+   case 2: if (Data->P[player_index].Rocket[un-1].SaveCard > 0) avoidf=1;break;
+   case 3: if (Data->P[player_index].Manned[un-1].SaveCard > 0) avoidf=1;break;
+   case 4: if (Data->P[player_index].Misc[un-1].SaveCard > 0) avoidf=1;break;
+   }
+  if (avoidf>0)
+	{
+	 RectFill(286,91,316,91,5);RectFill(286,106,316,106,5);
+	 RectFill(286,92,286,105,5);RectFill(316,92,316,105,5);
+	 grSetColor(11);
+	 PrintAt(288,97,"AVOID");
+	 PrintAt(291,104,"FAIL");
+	 grSetColor(1);
+	}
+
+  if (Data->P[player_index].RDMods != 0)
+   { 
+    PrintAt(170,153,"RESEARCH ");
+    if (Data->P[player_index].RDMods > 0) 
+	 { PrintAt(0,0,"STRONG:   "); 
+	   RectFill(264,149,264,153,1); RectFill(262,151,266,151,1);  // This is to fake a plus sign, which the game apparently can't draw -Leon
+	 }
+	else
+	 { 
+	   PrintAt(0,0,"WEAK: ");
+	 }
+	DispNum(0,0,Data->P[player_index].RDMods);
+	PrintAt(0,0,"%/TEAM");
+   }
   grSetColor(20);PrintAt(170,139,"MAXIMUM R&D:");
 
 	char EqDmg=0;
