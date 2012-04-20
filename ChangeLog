@@ -1,3 +1,16 @@
+2012-04-19  Leon Baradat <peyre@users.sourceforge.net>
+
+	* V278
+
+	* ast2.c: If 'naut has a skill of 4, don't send to Adv Training for that skill
+		  If 'naut has a skill of 3 and is sent to Adv Training, send directly to Adv 
+		    Training III and charge 2MB insted of 3MB
+
+	* ast3.c: Properly erase Roman numerals after "ADV TRAINING"
+
+	* museum.c, hardef.c: Better centering of "CONTINUE" in Space History, Prestige Summary, 
+				& Hardware Efficiency
+
 2012-04-17  Leon Baradat <peyre@users.sourceforge.net>
 
 	* V277
