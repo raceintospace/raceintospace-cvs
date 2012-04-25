@@ -1,5 +1,11 @@
 2012-04-19  Leon Baradat <peyre@users.sourceforge.net>
 
+	* V279
+
+	* ast3.c: Refunds for early withdrawal from Adv Training: 3MB for Adv I, 2MB for II, 1MB for III
+
+2012-04-19  Leon Baradat <peyre@users.sourceforge.net>
+
 	* V278
 
 	* ast2.c: If 'naut has a skill of 4, don't send to Adv Training for that skill
