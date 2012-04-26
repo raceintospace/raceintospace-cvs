@@ -1,3 +1,10 @@
+2012-04-25  Leon Baradat <peyre@users.sourceforge.net>
+
+	* V280
+
+	* ast2.c, ast3.c: If you withdraw someone from Advanced I or II, you can send them to Advanced 
+			  training again later
+
 2012-04-19  Leon Baradat <peyre@users.sourceforge.net>
 
 	* V279

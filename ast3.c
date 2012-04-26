@@ -406,7 +406,10 @@ void Train(char plr,int level)
 	      if (Data->P[plr].Pool[M[now2]].Status==AST_ST_TRAIN_ADV_1) Data->P[plr].Cash+=3; // refunds
 	      if (Data->P[plr].Pool[M[now2]].Status==AST_ST_TRAIN_ADV_2) Data->P[plr].Cash+=2; // for early
 	      if (Data->P[plr].Pool[M[now2]].Status==AST_ST_TRAIN_ADV_3) Data->P[plr].Cash+=1; // withdrawal
-	      Data->P[plr].Pool[M[now2]].TrainingLevel=Data->P[plr].Pool[M[now2]].Status;
+	      if (Data->P[plr].Pool[M[now2]].Status==AST_ST_TRAIN_ADV_1 || Data->P[plr].Pool[M[now2]].Status==AST_ST_TRAIN_ADV_2)
+		{ Data->P[plr].Pool[M[now2]].TrainingLevel=0; }
+		else
+		{ Data->P[plr].Pool[M[now2]].TrainingLevel=Data->P[plr].Pool[M[now2]].Status; }
 	      Data->P[plr].Pool[M[now2]].Status=AST_ST_ACTIVE;
 	      Data->P[plr].Pool[M[now2]].Assign=0;
 	      if (Data->P[plr].Pool[M[now2]].Cap<0) Data->P[plr].Pool[M[now2]].Cap=0;
