@@ -1,3 +1,11 @@
+2012-08-19  Leon Baradat <peyre@users.sourceforge.net>
+
+	* V281
+
+	* endgame.c: Centered "CONTINUE" in end-game screen
+
+	* hardef.c, rdplex.c, vab.c: More/improved visual cues in R&D/Purchasing and VAB/VIB screens
+
 2012-04-25  Leon Baradat <peyre@users.sourceforge.net>
 
 	* V280
