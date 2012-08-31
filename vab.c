@@ -177,7 +177,7 @@ void DispVAB(char plr,char pad)
   PrintAt(42,160,"L.M.:");
   PrintAt(16,172,"PAYLOAD:");
   grSetColor(9); PrintAt(22,188,"R");
-  grSetColor(1); PrintAt(0,0,"ROCKET:     ");
+  grSetColor(1); PrintAt(0,0,"OCKET:     ");
 
   Name[0]='A'+pad; Name[1]=0x00;
   InBox(4,27,166,37);RectFill(5,28,165,36,10);

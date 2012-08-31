@@ -613,7 +613,7 @@ void writePrestigeFirst(char index) { ///index==plr
 	char w=0,i,draw=0;
 	extern char PF[29][40];
 	 for (i=0;i<28;i++)
-	  { //Preestige First
+	  { //Prestige Firsts
 	   if (w<6 && Data->Prestige[i].Place==index && Data->PD[index][i]==0)
 		{
 			if (draw==0) {
@@ -755,7 +755,8 @@ void Draw_Mis_Stats(char plr, char index, int *where,char mode)
 
   AbzFrame(plr,index,215,56,94,60,"OOOO",mode);
 
-  IOBox(214,134,310,148);grSetColor(1);PrintAt(224,143,"REPLAY MISSION");
+  IOBox(214,134,310,148); grSetColor(9);PrintAt(224,143,"R");
+    grSetColor(1);PrintAt(0,0,"EPLAY MISSION");
   if (mode==0) {
      IOBox(214,151,310,165);
      grSetColor(1);PrintAt(250,160,"EXIT");

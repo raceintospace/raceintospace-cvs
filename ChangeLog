@@ -1,3 +1,13 @@
+2012-08-30  Leon Baradat <peyre@users.sourceforge.net>
+
+	* V282
+
+	* vab.c: Corrected VAB/VIB showing "RROCKET" which was introduced in V281
+
+	* endgame.c: Small wording change: SPACEWALK
+
+	* ast4.c, place.c: More/improved visual cues
+
 2012-08-19  Leon Baradat <peyre@users.sourceforge.net>
 
 	* V281
